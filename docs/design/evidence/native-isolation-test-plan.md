@@ -1,6 +1,10 @@
 # Native process-isolation test plan
 
-Status: source reconnaissance only. No native tests implemented or executed for this plan; implementation awaits the root agent's clean-boot gate. This is an x86-64 vOS ring-3 ELF test, not a hosted Linux or WASM substitute.
+Status: the four direct CPU access cases are now implemented in a gated native ELF.
+See the [qualification report](native-isolation-qualification.md) for actual
+build/boot evidence and remaining scope. The original design below is retained;
+the final implementation forks attackers from the coordinator, which never maps
+the victim page, and obtains effective user-root permissions from fault diagnostics.
 
 ## Existing mechanisms and limits
 

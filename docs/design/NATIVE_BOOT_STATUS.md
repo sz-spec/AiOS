@@ -5,7 +5,8 @@ now passes BIOS and UEFI with both one and four CPUs against one ISO, with
 mandatory PMM/VMM initialization, scheduler entry and user-program output.
 It records the initial harness cleanup failure, corrected full rerun, exact
 hashes and independent security/evidence reviews. Direct adversarial process
-isolation and bit-for-bit ISO reproducibility remain open. The detailed
+isolation is now covered for [four direct CPU access cases](evidence/native-isolation-qualification.md);
+full isolation and bit-for-bit ISO reproducibility remain open. The detailed
 implementation and earlier runtime results below retain their original scope.
 
 **Native multi-CPU boot and the diskless setup workflow now work in QEMU.

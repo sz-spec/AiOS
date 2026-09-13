@@ -24,6 +24,20 @@ installed inputs; firmware defaults match the recorded macOS/Homebrew runner.
 See the [qualification report](evidence/native-clean-build-qualification.md)
 for exact identities, the initial harness failure and qualification limits.
 
+The separate native process-isolation gate uses the same clean-build entry:
+
+```sh
+python3 scripts/native_clean_qualification.py --isolation --output /tmp/vos5-isolation-run --seconds 40
+```
+
+This explicitly enables `NATIVE_ISOLATION_TEST=1 HEADLESS_AUDIT=1`, creates
+`dist/vos5-isolation.iso` with isolated kernel/user outputs, and launches the
+native diagnostic ELF through the normal loader. It tests four direct CPU
+access attempts and requires correlated kernel faults plus victim/parent
+progress. Normal builds exclude this ELF and the kernel diagnostic hooks.
+The flag combination `NATIVE_ISOLATION_TEST=1 HEADLESS_AUDIT=0` is rejected.
+See [isolation evidence and limits](evidence/native-isolation-qualification.md).
+
 `BUILD_DIR` is relative to `kernel/`, defaults to `build/native-unified`, and
 should be a relative path without whitespace. The repository itself may have
 spaces in its absolute path. Use distinct build directories for concurrent

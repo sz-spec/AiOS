@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "failures": [],
+  "cases_verified": 4,
+  "online_cpus": 1,
+  "parent_pid": 1,
+  "victim_pid": 100,
+  "scope": "four observed ring3 fault-containment cases; not universal process isolation",
+  "iso_sha256": "197c08069375fc356cdd8fdc7a41678f80b3c9e540cdd3c2b000000bb2bedd77",
+  "iso_sha256_after": "197c08069375fc356cdd8fdc7a41678f80b3c9e540cdd3c2b000000bb2bedd77",
+  "artifact_unchanged": true,
+  "firmware": "bios",
+  "cpu": "qemu64",
+  "smp": 1,
+  "observation_seconds": 40,
+  "exit_status": "observation_timeout"
+}

@@ -1,0 +1,709 @@
+multiboot2: Loading executable `boot():/boot/vos3.elf`...
+MB
+64
+LMOK
+HH
+
+ __      _____  _____ ____  
+ \ \    / / _ \/ ____|___ \ 
+  \ \  / / | | \___ \  __) |
+   \ \/ /| |_| |___) |/ __/ 
+    \__/  \___/|____/|_____|
+
+  VOS3 Kernel v3.1.0-GOLD-MASTER
+  Built: Nov 14 2023 22:13:20
+  Architecture: x86_64
+
+[INFO]  Kernel starting...
+[INFO]  Validating boot information
+[INFO]  Boot info validated: magic=0x564F5333, version=0x00010000
+[INFO]  Initializing GDT
+[INFO]  GDT: Initializing Global Descriptor Table
+[INFO]  GDT: Loaded at 0xFFFFFFFF8322F6C0, 4136 bytes
+[INFO]  GDT: BSP TSS loaded at selector 0x0028
+[INFO]  Initializing Per-CPU subsystem
+[INFO]  [PERCPU] x2APIC support: no (max 256 CPUs)
+[INFO]  [PERCPU] Initialized CPU 0 (APIC ID: 0)
+[INFO]  Initializing IDT
+[INFO]  IDT: Initializing Interrupt Descriptor Table
+[INFO]  IDT: Loaded at 0xFFFFFFFF83230F10, 256 entries
+[INFO]  Setting up IST stacks
+[INFO]  [GDT-AUDIT] GDTR: base=0xFFFFFFFF8322F6C0, limit=4135 (517 entries)
+[INFO]  [GDT-AUDIT] PASS: 0 errors (CR0=0x80010013, CR4=0x620, EFER=0xD00)
+[INFO]  Initializing PIC
+[INFO]  PIC: Initializing 8259 PIC
+[INFO]  PIC: Remapped IRQs to vectors 32-47
+[INFO]  Registering interrupt handlers
+[INFO]  INT: Registering default interrupt handlers
+[INFO]  INT: Default handlers registered
+[INFO]  Initializing KASLR (address randomization)
+[KASLR] Stack offset: +0x10000000 (2MB aligned)
+[KASLR] Heap offset:  +0x0 (4KB aligned)
+[INFO]  Initializing Physical Memory Manager
+[INFO]  PMM: kernel reserved 0x2000000 - 0x5E4B000 (63788 KiB)
+[INFO]  Memory Information:
+  Total RAM: 1023 MiB (1073212416 bytes)
+[INFO]  Kernel Layout:
+  Virtual:  0xFFFFFFFF82000000 - 0xFFFFFFFF85E4B000
+  Physical: 0x0000000002000000 - 0x0000000005E4B000
+  Size: 63788 KiB
+[INFO]  Sections:
+  .text:   0xFFFFFFFF82006000 - 0xFFFFFFFF82082CC9 (511177 bytes)
+  .rodata: 0xFFFFFFFF82083000 - 0xFFFFFFFF8287D5CE (8365518 bytes)
+  .data:   0xFFFFFFFF8287E000 - 0xFFFFFFFF8287E448 (1096 bytes)
+  .bss:    0xFFFFFFFF8287F000 - 0xFFFFFFFF85E2A7B0 (56276912 bytes)
+[INFO]  Memory Map (9 entries):
+  [0] 0x000000000000 - 0x00000009FC00  639 KiB  Usable
+  [1] 0x00000009FC00 - 0x0000000A0000  1 KiB  Reserved
+  [2] 0x0000000F0000 - 0x000000100000  64 KiB  Reserved
+  [3] 0x000000100000 - 0x00003FFDF000  1047420 KiB  Usable
+  [4] 0x00003FFDF000 - 0x000040000000  132 KiB  Reserved
+  [5] 0x0000B0000000 - 0x0000C0000000  262144 KiB  Reserved
+  [6] 0x0000FED1C000 - 0x0000FED20000  16 KiB  Reserved
+  [7] 0x0000FFFC0000 - 0x000100000000  256 KiB  Reserved
+  [8] 0x00FD00000000 - 0x010000000000  12582912 KiB  Reserved
+[INFO]  PMM Statistics:
+  Total: 1023 MiB, Free: 960 MiB, Used: 0 MiB
+[INFO]  [UEFI] Not booted via UEFI (legacy/Limine mode)
+[INFO]  Boot mode: Legacy/Limine
+[INFO]  PMM: reserved 240 HugePages (480 MB)
+[INFO]  Initializing Virtual Memory Manager
+[INFO]  VMM: Initializing Virtual Memory Manager
+[INFO]  VMM: PML4[0] identity map cleared (boot dual-address eliminated)
+[INFO]  VMM: PML4 at physical 0x0000000002001000, virtual 0xFFFF800002001000
+[INFO]  VMM: Initialization complete (TLB flush IPI: vector 0xFB)
+[INFO]  Initializing Kernel Heap
+[INFO]  Heap: Initializing kernel heap
+[INFO]  Heap: Initialization complete (8 size classes)
+[INFO]  Heap test: allocated 128 bytes at 0xFFFF80000000AF30
+[INFO]  Heap test: freed successfully
+[INFO]  Initializing CRC64-ECMA lookup table
+[INFO]  Scanning PCI bus (HAL Foundation)
+[PCI-ECAM] MCFG absent — Port-I/O fallback active
+[PCI] Scanning buses (recursive bridge enumeration)...
+[PCI] 00:00.0 8086:29C0 Bridge Device
+[PCI] 00:01.0 1234:1111 VGA Controller
+[PCI] 00:1F.0 8086:2918 Bridge Device
+[PCI] 00:1F.2 8086:2922 AHCI Controller
+[PCI] 00:1F.3 8086:2930 Unknown
+[PCI] Scan complete: 5 devices found
+[INFO]  Initializing ACPI subsystem
+[ACPI] Initializing ACPI subsystem (RSDP at phys 0x2880800)
+[ACPI] RSDP validated: revision=0, OEM='BOCHS '
+[ACPI] RSDP cross-check: contents match (diff addrs 0x2880800 vs 0xF52E0) — PASS
+[ACPI] Walking RSDT at phys 0x3FFE2340 (ACPI 1.0 fallback)
+[ACPI] Parsing FADT (length=244)
+[ACPI] Parsing MADT (length=120)
+[ACPI] ACPI init complete: 1 CPUs, 1 IOAPICs, 5 ISOs, 0 NMIs, 5 tables
+  ACPI Revision: 1.0
+  OEM: BOCHS 
+  RSDP Cross-Check: PASS
+  LAPIC Address: 0xFEE00000
+  CPUs: 1
+    CPU 0: APIC_ID=0 ProcID=0 enabled [BSP]
+  IOAPICs: 1
+    IOAPIC 0: addr=0xFEC00000, GSI base=0
+  IRQ Source Overrides: 5
+    IRQ 0 -> GSI 2 (flags=0x0000)
+    IRQ 5 -> GSI 5 (flags=0x000D)
+    IRQ 9 -> GSI 9 (flags=0x000D)
+    IRQ 10 -> GSI 10 (flags=0x000D)
+    IRQ 11 -> GSI 11 (flags=0x000D)
+  FADT: SCI_INT=9, SMI_CMD=0xB2, PM_Profile=0
+  ACPI Tables (5): FACP APIC HPET MCFG WAET
+[INFO]  [STORAGE-HAL] Scanning 5 PCI devices for storage controllers
+[INFO]  [STORAGE-HAL] AHCI controller at 0:31.2
+[INFO]  [AHCI] HBA v1.0, 6 ports, PI=0x3F, ABAR=0xFEBF1000
+[INFO]  [AHCI] Port 2: device present (sig=0xEB140101, det=3)
+[INFO]  [AHCI] No SATA drives found on any port
+[INFO]  [STORAGE-HAL] VirtIO-Block registered as fallback device
+[INFO]  [STORAGE-HAL] 1 devices found, primary=VirtIO
+[INFO]  Probing ivshmem (Warp Drive)
+[IVSHMEM] not found
+[INFO]  Warp Drive not available (VBus fallback)
+[INFO]  [DMA-WARP] Engine initialized: 8 pending slots, 64 KB chunk
+[INFO]  Warp-Drive DMA engine active
+[HDA] Initializing Intel HD Audio driver (Phase 8.5)
+[HDA] WARN: No HD Audio controller found (class 0x04/0x03)
+[HDA] WARN: No HDA controller found — audio disabled
+[INFO]  HD Audio not available (rc=-1)
+[SYNTH] Autonomous Driver Synthesis: scanning 5 PCI devices
+[SYNTH] Auto-probe complete: 0 unknown device(s) analyzed, 0 result(s) recorded
+[INFO]  Driver Synthesis: 0 unknown device(s) auto-probed
+[NPU-DISP] Temporal Multi-Slicing initialized (rotation=120 ms, max_slots=8, max_switch=15 us)
+[INFO]  NPU Temporal Multi-Slicing active (250ms PASID rotation)
+[KTEXT] Boot CRC32C: AEE5F8D7 (511177 bytes)
+[INFO]  Initializing Merkle Mountain Range audit ledger
+[INFO]  [MMR] Merkle Mountain Range audit ledger initialized
+[INFO]  [HYPERV] Not running under Hyper-V
+[INFO]  [TPM2] No ACPI TPM2 table — running without hardware TPM
+[INFO]  [TPM2] For swtpm: add -chardev socket -tpmdev emulator -device tpm-crb to QEMU
+[PCI-ECAM] available — buses 00..FF mapped MMIO@0x00000000B0000000 (PCD=1, NX=1)
+[INFO]  Detecting CPU features
+[INFO]  CPU Information:
+  Vendor: AMD (AuthenticAMD)
+  Model:  QEMU Virtual CPU version 2.5+
+  Family: 0x0F, Model: 0x6B, Stepping: 1
+  Address: 40-bit physical, 48-bit virtual
+  Features: FPU TSC MSR PAE APIC MTRR PGE PAT SSE SSE2 SSE3 [VM] SYSCALL NX LM 
+[MICROCODE] revision=0x01000065 baseline=unknown below_baseline=unchecked
+[KPTI] mode=LEGACY_KAISER pcid=no invpcid=no smep=no smap=no sha-ni=no budget=5-30%
+[KPTI] note: hardware predates 2010 PCID; syscall-heavy regression 5-30% documented; consider hardware refresh.
+[KPTI] process-root transitions enabled; isolation=partial; retained=PML4[256,511]; CR3 reload uses PCID 0 with flush
+[VMM] MAXPHYADDR=40 → large_addr_mask=0xFFFFE00000
+[INFO]  Initializing FPU subsystem (XSAVE/lazy switching)
+[INFO]  FPU: Using FXSAVE fallback (XSAVE not available)
+[INFO]  FPU: Lazy context switching initialized
+[INFO]  [XSAVE] boot_init skipped — VOS3_HW_XSAVE not defined
+[INFO]  [APIC] init_mmio skipped — VOS3_HW_LAPIC not defined
+[INFO]  [IOAPIC] init skipped — VOS3_HW_IOAPIC not defined
+[INFO]  Initializing CET (Indirect Branch Tracking)
+[INFO]  [CET] CPUID leaf 7: IBT=0 SHSTK=0
+[INFO]  [CET] IBT not available — ENDBR64 present but unenforced
+[INFO]  Initializing Prefetch Engine (Claw Protocol)
+[INFO]  [PREFETCH] Claw Protocol initialized (reserve=16 HP/prediction)
+[INFO]  Initializing entropy subsystem
+[INFO]  [ENTROPY] RDRAND: not available, RDSEED: not available
+[INFO]  [ENTROPY] CSPRNG initialized (ChaCha20, 256-bit key)
+[STACK-GUARD] Canary re-seeded from entropy subsystem
+[INFO]  Detecting NUMA topology
+[NUMA] Initializing NUMA subsystem
+[NUMA] Detected 2 nodes: 511 MB each
+[NUMA] 2 node(s) detected, 2 memory range(s)
+[INFO]  Initializing Scheduler
+[INFO]  Scheduler initialized
+[INFO]  Initializing SMP (waking Application Processors)
+[INFO]  [SMP] Initializing SMP subsystem
+[INFO]  [SMP] BSP LAPIC initialized
+[INFO]  [SMP] BSP APIC ID: 0
+[INFO]  [SMP] ACPI enumerated 1 CPUs
+[INFO]  [SMP] Single CPU system, SMP not needed
+[INFO]  SMP: 1 CPUs online
+[INFO]  [SCHED_CORE] topology table populated: 1 cpus
+[INFO]  [CYBER] SCHED_CORE sibling topology initialized
+[INFO]  Initializing Timer (PIT)
+[INFO]  Timer initialized: 100 Hz (divisor 11931)
+[INFO]  Initializing System Call Interface
+[INFO]  Initializing syscall interface
+[INFO]  Syscall interface initialized (LSTAR=0xFFFFFFFF82082A80)
+[WARN]  Syscall 470: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82044C30
+[WARN]  Syscall 471: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820452F0
+[WARN]  Syscall 472: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82044CC0
+[WARN]  Syscall 473: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82044D60
+[WARN]  Syscall 474: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82045AE0
+[INFO]  [CONFIG] Delegation syscalls registered (200-212)
+[INFO]  Initializing User Mode Support
+[INFO]  Initializing user mode support
+[INFO]  User mode support initialized
+[INFO]    User space: 0x400000 - 0x7FFFFFFFFFFF
+[INFO]    User CS: 0x001B, User DS: 0x0023
+[INFO]  Initializing IPC Subsystem
+[INFO]  Initializing IPC subsystem
+[WARN]  Syscall 400: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027D50
+[WARN]  Syscall 401: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027D30
+[WARN]  Syscall 402: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027C20
+[WARN]  Syscall 403: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820279F0
+[WARN]  Syscall 410: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027900
+[WARN]  Syscall 411: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278E0
+[WARN]  Syscall 412: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278D0
+[WARN]  Syscall 413: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278B0
+[WARN]  Syscall 414: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278A0
+[WARN]  Syscall 415: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820277D0
+[WARN]  Syscall 29: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027900
+[WARN]  Syscall 30: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278D0
+[WARN]  Syscall 31: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278E0
+[WARN]  Syscall 67: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820278B0
+[WARN]  Syscall 420: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820276C0
+[WARN]  Syscall 421: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820275E0
+[WARN]  Syscall 422: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027500
+[WARN]  Syscall 423: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820274E0
+[WARN]  Syscall 450: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820274C0
+[WARN]  Syscall 451: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820274B0
+[WARN]  Syscall 452: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027390
+[WARN]  Syscall 453: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027290
+[WARN]  Syscall 454: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82027200
+[WARN]  Syscall 490: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202BF60
+[WARN]  Syscall 491: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202BE60
+[WARN]  Syscall 492: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202C760
+[WARN]  Syscall 493: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202C310
+[WARN]  Syscall 494: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202BDA0
+[WARN]  Syscall 495: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202C170
+[WARN]  Syscall 496: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CAE0
+[WARN]  Syscall 497: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CA90
+[WARN]  Syscall 498: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202BD20
+[WARN]  Syscall 503: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202BD00
+[WARN]  Syscall 504: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202BCF0
+[INFO]  Dispatcher initialized: 64 agent slots
+[INFO]  IPC subsystem initialized
+[INFO]    Message queues: max 256
+[INFO]    Shared memory:  max 64 regions
+[INFO]    Pipes:          max 128
+[INFO]    Signals:        1-31
+[INFO]  Initializing Virtual File System
+[INFO]  Initializing Virtual File System
+[INFO]  Mounted 'none' on '/' (type=ramfs)
+[INFO]  procfs registered
+[INFO]  procfs mounted
+[INFO]  Mounted 'none' on '/proc' (type=procfs)
+[VBUS-FS] provenance side table initialized (1024 slots)
+[INFO]  VFS initialized
+[INFO]    Root filesystem: ramfs
+[INFO]    Max open files per task: 1024
+[INFO]  Initializing VirtIO Block Device
+[INFO]  [VIRTIO-BLK] Initializing VirtIO block driver...
+[WARN]  [VIRTIO-BLK] No VirtIO block device found on PCI bus
+[WARN]  VirtIO block device not available (error -1)
+[INFO]  Initializing vos3fs filesystem
+[vos3fs] Registering vos3fs filesystem type
+[vos3fs] ERROR: VirtIO block device not available
+[WARN]  vos3fs mount on /disk failed (error -5)
+[INFO]  Loading embedded user binaries
+[INFO]  Loading embedded binaries...
+[INFO]    Loaded: /bin/init (90208 bytes)
+[INFO]    Loaded: /bin/sh (130216 bytes)
+[INFO]    Loaded: /bin/cat (87312 bytes)
+[INFO]    Loaded: /bin/grep (92816 bytes)
+[INFO]    Loaded: /bin/wc (90088 bytes)
+[INFO]    Loaded: /bin/head (88632 bytes)
+[INFO]    Loaded: /bin/date (99128 bytes)
+[INFO]    Loaded: /bin/uptime (101488 bytes)
+[INFO]    Loaded: /bin/uname (98840 bytes)
+[INFO]    Loaded: /bin/ai_test (95016 bytes)
+[INFO]    Loaded: /bin/ai_diag (93608 bytes)
+[INFO]    Loaded: /bin/ai_stat (94424 bytes)
+[INFO]    Loaded: /bin/ai_top (99768 bytes)
+[INFO]    Loaded: /bin/ai_stress (102544 bytes)
+[INFO]    Loaded: /bin/ai_exploit (99136 bytes)
+[INFO]    Loaded: /bin/business_sim (121440 bytes)
+[INFO]    Loaded: /bin/setup_wizard (116432 bytes)
+[INFO]    Loaded: /bin/ws_switch (106944 bytes)
+[INFO]    Loaded: /bin/vos3_admin (111312 bytes)
+[INFO]    Loaded: /bin/ai_audit (107744 bytes)
+[INFO]    Loaded: /bin/udp_test (90336 bytes)
+[INFO]    Loaded: /bin/tcp_test (95480 bytes)
+[INFO]    Loaded: /bin/disk_test (88712 bytes)
+[INFO]    Loaded: /bin/bench_csw (90848 bytes)
+[INFO]    Loaded: /bin/bench_isolate (93360 bytes)
+[INFO]    Loaded: /bin/bench_persist (92712 bytes)
+[INFO]    Loaded: /bin/bench_overhead (92376 bytes)
+[INFO]    Loaded: /bin/bench_sigpipe_test (95920 bytes)
+[INFO]    Loaded: /bin/bench_bugfix_test (101272 bytes)
+[INFO]    Loaded: /bin/bench_phase13_test (112384 bytes)
+[INFO]    Loaded: /bin/bench_procfs_test (99056 bytes)
+[INFO]    Loaded: /bin/bench_poll_test (92664 bytes)
+[INFO]    Loaded: /bin/ps (90624 bytes)
+[INFO]    Loaded: /bin/bench_fs_test (112528 bytes)
+[INFO]    Loaded: /bin/bench_net_test (112136 bytes)
+[INFO]    Loaded: /bin/bench_stress_test (96744 bytes)
+[INFO]    Loaded: /bin/bench_fuzz_test (97536 bytes)
+[INFO]    Loaded: /bin/bench_sched_test (97360 bytes)
+[INFO]    Loaded: /bin/bench_app_isolation_test (98424 bytes)
+[INFO]    Loaded: /bin/test_posix_fs (116472 bytes)
+[INFO]    Loaded: /bin/test_epoll (107376 bytes)
+[INFO]    Loaded: /bin/bench_thread_test (90088 bytes)
+[INFO]    Loaded: /bin/stress_thread (99544 bytes)
+[INFO]    Loaded: /bin/test_posix_core (95816 bytes)
+[INFO]    Loaded: /bin/test_futex (94368 bytes)
+[INFO]    Loaded: /bin/test_net_dispatch (107736 bytes)
+[INFO]    Loaded: /bin/test_shm_dispatch (105752 bytes)
+[INFO]    Loaded: /bin/diag_shm_stress (111376 bytes)
+[INFO]    Loaded: /bin/fake_interp (4856 bytes)
+[INFO]    Loaded: /bin/hello_dyn (80256 bytes)
+[INFO]    Loaded: /bin/test_pt_interp (86040 bytes)
+[INFO]    Loaded: /bin/auxv_interp (16552 bytes)
+[INFO]    Loaded: /bin/hello_auxv (80256 bytes)
+[INFO]    Loaded: /bin/ld-musl-x86_64.so.1 (654440 bytes)
+[INFO]    Loaded: /bin/hello_musl (8944 bytes)
+[INFO]    Loaded: /bin/test_dynlink (114136 bytes)
+[INFO]    Loaded: /bin/test_signal_musl (11936 bytes)
+[INFO]    Loaded: /bin/test_env_musl (10928 bytes)
+[INFO]    Loaded: /bin/test_fileio_musl (10688 bytes)
+[INFO]    Loaded: /bin/test_malloc_musl (10856 bytes)
+[INFO]    Loaded: /bin/test_fork_musl (10152 bytes)
+[INFO]    Loaded: /bin/test_pipe_musl (11360 bytes)
+[INFO]    Loaded: /bin/test_stat_musl (12376 bytes)
+[INFO]    Loaded: /bin/test_pthread_musl (14232 bytes)
+[INFO]    Loaded: /bin/test_ai_guard (86744 bytes)
+[INFO]    Loaded: /bin/test_net_e2e (97144 bytes)
+[INFO]    Loaded: /bin/test_integration (117536 bytes)
+[INFO]    Loaded: /bin/test_sustained (98160 bytes)
+[INFO]    Loaded: /bin/test_stress_mt (24816 bytes)
+[INFO]    Loaded: /bin/bench_ai_throughput (99064 bytes)
+[INFO]    Loaded: /bin/bench_csw_1ms (101240 bytes)
+[INFO]    Loaded: /bin/bench_soak_5min (103040 bytes)
+[INFO]    Loaded: /bin/bench_hugepage_tlb (100608 bytes)
+[INFO]    Loaded: /bin/bench_ai_scale (112840 bytes)
+[INFO]    Loaded: /bin/test_npu_direct (92208 bytes)
+[INFO]    Loaded: /bin/test_ai_latency (100608 bytes)
+[INFO]    Loaded: /bin/bench_2026_frontier (132944 bytes)
+[INFO]    Loaded: /bin/test_agent_chaos (120280 bytes)
+[INFO]    Loaded: /bin/test_advanced_chaos (109224 bytes)
+[INFO]    Loaded: /bin/test_model_load (105696 bytes)
+[INFO]    Loaded: /bin/test_health_check (99160 bytes)
+[INFO]    Loaded: /bin/test_agent_cluster (116256 bytes)
+[INFO]    Loaded: /bin/test_torture (107744 bytes)
+[INFO]    Loaded: /bin/test_ai_exploit_v2 (109688 bytes)
+[INFO]    Loaded: /bin/test_max_saturation (101600 bytes)
+[INFO]    Loaded: /bin/test_vmm_soak (104024 bytes)
+[INFO]    Loaded: /bin/test_security_check (89464 bytes)
+[INFO]  Loaded 87 embedded binaries
+[INFO]  Registering file system syscalls
+[WARN]  Syscall 2: overwriting handler 0xFFFFFFFF82023640 with 0xFFFFFFFF8203CF50
+[WARN]  Syscall 3: overwriting handler 0xFFFFFFFF82023660 with 0xFFFFFFFF8203D090
+[WARN]  Syscall 0: overwriting handler 0xFFFFFFFF82023630 with 0xFFFFFFFF8203D730
+[WARN]  Syscall 1: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203D2C0
+[WARN]  Syscall 8: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EA70
+[WARN]  Syscall 4: overwriting handler 0xFFFFFFFF82023690 with 0xFFFFFFFF8203FC30
+[WARN]  Syscall 5: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F5A0
+[WARN]  Syscall 76: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F510
+[WARN]  Syscall 77: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203CA40
+[WARN]  Syscall 74: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F4F0
+[WARN]  Syscall 83: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F460
+[WARN]  Syscall 84: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F3E0
+[WARN]  Syscall 78: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E0E0
+[WARN]  Syscall 87: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F360
+[WARN]  Syscall 82: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F2A0
+[WARN]  Syscall 79: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F1C0
+[WARN]  Syscall 80: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F140
+[WARN]  Syscall 32: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EBC0
+[WARN]  Syscall 33: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203DD60
+[WARN]  Syscall 22: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203DBE0
+[WARN]  Syscall 165: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EFF0
+[WARN]  Syscall 166: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EF70
+[WARN]  Syscall 137: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EE50
+[WARN]  Syscall 7: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EC10
+[WARN]  Syscall 72: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203EA90
+[WARN]  Syscall 6: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F780
+[WARN]  Syscall 17: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E8F0
+[WARN]  Syscall 18: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E770
+[WARN]  Syscall 89: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E5C0
+[WARN]  Syscall 88: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E4F0
+[WARN]  Syscall 86: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E430
+[WARN]  Syscall 90: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E3A0
+[WARN]  Syscall 91: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E380
+[WARN]  Syscall 92: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E2E0
+[WARN]  Syscall 93: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203E2C0
+[WARN]  Syscall 217: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203DDC0
+[WARN]  Syscall 292: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203DC80
+[WARN]  Syscall 293: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203DAF0
+[WARN]  Syscall 16: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203D940
+[WARN]  Syscall 19: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203D4F0
+[WARN]  Syscall 20: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203D0B0
+[WARN]  Syscall 21: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203CFF0
+[WARN]  Syscall 257: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203CE90
+[WARN]  Syscall 262: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203F9C0
+[WARN]  Syscall 318: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203CD30
+[WARN]  Syscall 332: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203C860
+[WARN]  Syscall 280: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203CAF0
+[INFO]  Pipe subsystem initialized (64 max pipes)
+[INFO]  Registering epoll/select/eventfd syscalls (Task 1.3)
+[WARN]  Syscall 213: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203C730
+[WARN]  Syscall 232: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203B9C0
+[WARN]  Syscall 233: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203B740
+[WARN]  Syscall 291: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203C5F0
+[WARN]  Syscall 23: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203BCF0
+[WARN]  Syscall 284: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8203B5E0
+[INFO]  Registering process syscalls
+[WARN]  Syscall 12: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 9: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 10: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 11: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 35: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 56: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 57: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 158: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 218: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 273: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 59: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 60: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 231: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 61: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 39: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 110: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 186: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 102: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 104: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 105: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 106: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 112: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 121: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[WARN]  Syscall 109: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82042AE0
+[INFO]  Process syscalls registered
+[INFO]  Registering signal syscalls
+[WARN]  Syscall 62: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 13: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 14: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 34: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 37: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 15: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 200: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[WARN]  Syscall 234: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202AB80
+[INFO]  Signal syscalls registered (kill/sigaction/sigprocmask/pause/alarm/rt_sigreturn/tgkill)
+[INFO]  Registering time syscalls
+[WARN]  Syscall 202: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82043E20
+[WARN]  Syscall 96: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82043E20
+[WARN]  Syscall 228: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82043E20
+[WARN]  Syscall 63: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82043E20
+[INFO]  Boot time set to 1771113600
+[INFO]  Time syscalls registered
+[INFO]  Initializing futex subsystem (Task 1.5)
+[WARN]  Syscall 202: overwriting handler 0xFFFFFFFF82043E20 with 0xFFFFFFFF8202B800
+[INFO]  futex(202) registered — 64 slots, 16 hash buckets
+[INFO]  Registering POSIX core syscalls (Task 1.5)
+[WARN]  Syscall 36: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CD40
+[WARN]  Syscall 38: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CD40
+[WARN]  Syscall 97: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CD40
+[WARN]  Syscall 98: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CD40
+[WARN]  Syscall 99: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CD40
+[WARN]  Syscall 160: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8202CD40
+[INFO]  POSIX core syscalls registered (getrusage/getrlimit/setrlimit/setitimer/getitimer/sysinfo)
+[INFO]  Benchmark: TSC freq ~13567400 kHz (13567 MHz)
+[INFO]  Registering benchmark syscall (SYS_BENCH_READ=222)
+[WARN]  Syscall 222: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF8207D380
+[INFO]  Initializing AI Memory Guard
+[INFO]  [AI-GUARD] AI-KASLR v2: base=0xFFFF888540000000 (offset=0x440000000, entropy-subsystem)
+[INFO]  [AI-GUARD] Heartbeat page at VA=0xFFFFFFFFFFFFF000 phys=0x5FFE000 (PWT)
+[INFO]  [AI-GUARD] Completion Ring: 62 entries at heartbeat+16
+[INFO]  [AI-GUARD] Submission Queue: 31 entries at heartbeat+1024 (SNTL=0x534E544C)
+[INFO]  [AI-GUARD] Doorbell matrix at heartbeat+2048
+[INFO]  [AI-GUARD] ****************************************************
+[INFO]  [AI-GUARD] Processor Tier Detected: LEGACY TIER
+[INFO]  [AI-GUARD] ****************************************************
+[INFO]  [AI-GUARD] SIMD: AVX2=0 AVX-512F=0 OSXSAVE=0 path=ERMS
+[INFO]  [SILICON] CR4=0x620 CR0.WP=1 — hardened
+[AI-GUARD] Subsystem initialized
+[AI-GUARD] PTE bits: MONITORED=9 PROTECTED=10 GUARD=11
+[INFO]  AI Guard subsystem ready
+[INFO]  [AI-MONITOR] Access monitoring initialized
+[INFO]  [AI-MONITOR] Config: threshold=10000 window=10 ticks
+[INFO]  Initializing Guardian Seal (Immutable Source Lock)
+[INFO]  [GUARDIAN] Seal initialized: .text size=511177 bytes, hash=C121359D...
+[INFO]  [RECOVERY] Bridge initialized with sovereign key
+[INFO]  Initializing Vector VFS subsystem
+[INFO]  [VecVFS] Subsystem initialized (shards=1024, dim=64, payload=256B)
+[INFO]  Initializing Sovereign Neural Interface
+[INFO]  [SNI] Sovereign Neural Interface initialized (max_inject=3, sessions=4)
+[INFO]  Initializing vScreen Perception Layer
+[INFO]  [VSCREEN] Perception layer initialized (4 capture slots)
+[INFO]  Initializing Agentic Mesh Protocol
+[INFO]  [MESH] Agentic Mesh initialized (4 slots, trust=500 initial, SMP-safe)
+[INFO]  Initializing Sovereign Action Bridge
+[INFO]  [ACTION-BRIDGE] Sovereign Action Bridge initialized (16 slots, 64 audit ring, 15 default allowlist entries)
+[INFO]  Initializing vSpace Desktop Shell
+[INFO]  [vSpace] Desktop shell initialized (4 workspaces, 16 windows)
+[INFO]  Initializing Sovereign Clipboard
+[INFO]  [sClip] Sovereign Clipboard initialized (ring=16, 3-layer DLP)
+[INFO]  [SOVEREIGN] VOS3 Build Mode: GENESIS_RC1
+[INFO]  [SOVEREIGN] Guardian Seal: Runtime SHA-256 of .text
+[INFO]  [SOVEREIGN] Audit Suite: STRIPPED
+[INFO]  [SOVEREIGN] Optimization: -O3 (crypto/ai), -O2 (core)
+[INFO]  Initializing Device Subsystem
+[INFO]  Initializing device subsystem
+[INFO]  Initializing device subsystem
+[INFO]  Device subsystem initialized
+[INFO]    Max devices: 64
+[INFO]    Major range: 0-15
+[INFO]  Registering device syscalls
+[WARN]  Syscall 444: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82020500
+[INFO]  Initializing device drivers
+[INFO]  Registering memory devices
+[INFO]  Memory devices registered: null, zero, random, urandom
+[INFO]  Registering TTY devices
+[INFO]  TTY devices registered: console, tty
+[INFO]  Keyboard driver initialized (PS/2 Set 1, US QWERTY)
+[AI-TELEMETRY] Device initialized at /dev/ai_telemetry
+[AI-TELEMETRY] IOCTL commands: GET_STATS=0x4101 RESET=0x4102
+[INFO]  Device subsystem initialized
+[SMP-TELEMETRY] Device initialized at /dev/smp
+[INFO]  Initializing Network Subsystem (Phase 30)
+[INFO]  [VIRTIO-NET] Initializing hardened VirtIO network driver
+[INFO]  [VIRTIO-NET] Security: IRQ budget=32, MTU max=1522, Desc max=256
+[ERROR] [VIRTIO] Failed to map VirtQueue memory
+[ERROR] [VIRTIO-NET] Failed to initialize RX queue
+[WARN]  VirtIO-Net driver initialization failed (error -1)
+[INFO]  [NET] Initializing network subsystem
+[INFO]  [NET] Network subsystem initialized
+[INFO]  [NET] Security: Frame min=60 max=1522, IRQ budget=32
+[INFO]  [ARP] ARP subsystem initialized (cache size=64)
+[INFO]  [ARP-SEC] CVE-2026-25060: Strict ARP validation ENABLED
+[INFO]  [ARP-SEC]   - Gratuitous ARP: DROP (except gateway)
+[INFO]  [ARP-SEC]   - Unsolicited replies: DROP
+[INFO]  [IP] IPv4 subsystem initialized
+[INFO]  [IP] Security: Fragments=DROP, Checksum=VERIFY
+[INFO]  [ICMP] ICMP subsystem initialized
+[INFO]  [ICMP] Rate limit: 10 pings/sec (token bucket)
+[INFO]  [ICMP] Zero-allocation pool: 8 buffers x 1522 bytes
+[INFO]  [UDP] UDP subsystem initialized
+[INFO]  [UDP] Port hash table: 1024 entries (O(1) demux)
+[INFO]  [UDP] Max probe depth: 8
+[INFO]  [TCP] TCP subsystem initialized
+[INFO]  [TCP] PCB pool: 128 connections
+[INFO]  [TCP] MSS: 1460 bytes, Window: 65535 bytes
+[INFO]  [TCP-SEC] ISN randomization: ENABLED (RFC 6528)
+[INFO]  [SOCKET] Socket subsystem initialized
+[INFO]  [SOCKET] Pool size: 1024 sockets
+[INFO]  [SOCKET] FD range: 100-1123
+[INFO]  [SOCKET-SEC] Privileged ports (<1024): CAP_NET_ADMIN required
+[WARN]  Syscall 430: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82070F10
+[WARN]  Syscall 431: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820711B0
+[WARN]  Syscall 435: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820714B0
+[WARN]  Syscall 436: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071910
+[WARN]  Syscall 432: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071C90
+[WARN]  Syscall 433: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82070CC0
+[WARN]  Syscall 434: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071EB0
+[WARN]  Syscall 437: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82072130
+[WARN]  Syscall 438: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82072340
+[WARN]  Syscall 41: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82070F10
+[WARN]  Syscall 42: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071EB0
+[WARN]  Syscall 43: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82070CC0
+[WARN]  Syscall 44: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820714B0
+[WARN]  Syscall 45: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071910
+[WARN]  Syscall 46: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820714B0
+[WARN]  Syscall 47: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071910
+[WARN]  Syscall 49: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820711B0
+[WARN]  Syscall 50: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82071C90
+[WARN]  Syscall 441: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82070650
+[WARN]  Syscall 440: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820706F0
+[WARN]  Syscall 54: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF82070650
+[WARN]  Syscall 55: overwriting handler 0xFFFFFFFF820237E0 with 0xFFFFFFFF820706F0
+[INFO]  [SOCKET] Registered socket syscalls (VOS3: 150-162, Linux: 41-55)
+[INFO]  [SOCKET] Protocol dispatch via socket_ops vtable (UDP + TCP)
+[INFO]  [NET-SEC] ========================================
+[INFO]  [NET-SEC] Running 'Packet of Death' security tests
+[INFO]  [NET-SEC] Zero Trust Network Defense Active
+[INFO]  [NET-SEC] ========================================
+[WARN]  [NET-SEC] Ethernet RX: Oversized packet rejected (2522 > 1522)
+[INFO]  [NET-SEC] Test: Oversized packet correctly REJECTED
+[WARN]  [NET-SEC] Ethernet RX: Undersized packet rejected (10 < 60)
+[INFO]  [NET-SEC] Test: Undersized packet correctly REJECTED
+[WARN]  [NET-SEC] Ethernet RX: Buffer not validated
+[INFO]  [NET-SEC] Test: Unvalidated buffer correctly REJECTED
+[INFO]  [NET-SEC] Test: Simulating flood attack (1000 packets)...
+[ERROR] [FLOOD-TEST] Driver not initialized
+[WARN]  [NET-SEC] Test: Flood test skipped (driver not ready)
+[INFO]  [NET-SEC] ========================================
+[INFO]  [NET-SEC] All 4/4 security tests PASSED
+[INFO]  [NET-SEC] Network stack is CVE-hardened
+[INFO]  [NET-SEC] DoS attack throttling: ACTIVE
+[INFO]  [NET-SEC] MAC filtering: ENABLED (no promiscuous)
+[INFO]  [NET-SEC] ========================================
+[INFO]  [DAY4] ========================================
+[INFO]  [DAY4] Protocol Stack Tests (Fast AND Secure)
+[INFO]  [DAY4] ========================================
+[INFO]  [DAY4] Test 1: ICMP Ping Request -> Reply
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [DAY4]   [PASS] Echo Reply generated
+[INFO]  [DAY4] Test 2: ICMP Rate Limiting (Token Bucket)
+[INFO]  [ICMP-TEST] Sending 50 pings to test rate limiting...
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[INFO]  [ICMP-TEST] Result: 30/50 rate limited
+[INFO]  [DAY4]   [PASS] Rate limiting active: 30/50 throttled
+[INFO]  [DAY4] ========================================
+[INFO]  [DAY4] All 2/2 protocol tests PASSED
+[INFO]  [DAY4] Performance: likely()/unlikely() optimized
+[INFO]  [DAY4] Security: Fragments=DROP, Gratuitous ARP=DROP
+[INFO]  [DAY4] ========================================
+[INFO]  Enabling interrupts
+[INFO]  Creating kernel tasks
+[INFO]  Creating kernel tasks...
+[INFO]  Kernel tasks created
+[INFO]  Checking system configuration
+[INFO]  [CONFIG] System not provisioned - wizard required
+[INFO]  =================================================
+[INFO]    FIRST BOOT DETECTED - PROVISIONING REQUIRED    
+[INFO]  =================================================
+[INFO]  Starting Setup Wizard...
+[INFO]  Spawning setup wizard...
+[INFO]  Setup wizard task created (PID 1)
+[INFO]  Setup wizard launched - awaiting configuration...
+[INFO]  Kernel initialization complete!
+
+VOS3 Provisioning Mode.
+Complete the setup wizard to continue...
+[INFO]  Bridge polling task created
+[INFO]  Boot-secret scrub: skipped 1 unmapped page(s) (low identity / KPTI-stripped; TS-2026-PF_MEMSET_SCRUB)
+[INFO]  Boot secrets scrubbed (32-bit stack + 64KB boot stack)
+[INFO]  Starting scheduler (SMP-aware)
+[INFO]  First task: setup_wizard (CPU 0)
+[INFO]  SetupWizard: Provisioning task starting
+[INFO]  SetupWizard: Found wizard at '/bin/setup_wizard'
+[INFO]  SetupWizard: Executing '/bin/setup_wizard'
+[INFO]  exec: Loading '/bin/setup_wizard' (pid=1)
+[INFO]  exec: Starting 'setup_wizard' at 0x40113E (sp=0x7FFFFFEFFF50)
+[2J[H
+================================================================
+                                                                
+  ██╗   ██╗ ██████╗ ███████╗██████╗                             
+  ██║   ██║██╔═══██╗██╔════╝╚════██╗                            
+  ██║   ██║██║   ██║███████╗ █████╔╝                            
+  ╚██╗ ██╔╝██║   ██║╚════██║ ╚═══██╗                            
+   ╚████╔╝ ╚██████╔╝███████║██████╔╝                            
+    ╚═══╝   ╚═════╝ ╚══════╝╚═════╝                             
+                                                                
+         W E L C O M E   T O   V O S 3                          
+                                                                
+          The AI-Native Operating System                        
+                                                                
+================================================================
+
+  Welcome to the VOS3 First-Boot Setup Wizard!
+
+  This wizard will help you configure your system's identity.
+  This is a ONE-TIME configuration that cannot be changed later.
+
+  Please choose carefully.
+
+----------------------------------------------------------------
+
+  Press [ENTER] to continue...
+[INFO]  [BRIDGE] Task started — hybrid burst-poll, Phase 4.2.18
+

@@ -11,6 +11,11 @@ the keyboard-driven wizard. Full kernel isolation, concurrent user workloads
 on secondary CPUs, persistent installation, hosted workflows
 and remaining legacy capabilities still require work and validation.
 
+The [native isolation gate](docs/design/evidence/native-isolation-qualification.md)
+tests four direct user-mode read/write attempts against another process and a
+supervisor kernel page, with correlated faults and continued victim progress.
+Its bounded evidence does not certify every memory-isolation mechanism.
+
 The governing architecture is recorded in
 [core requirements](docs/design/CORE_REQUIREMENTS.md), alongside the supplied
 [historical technical brief](docs/design/vOS_Technical_Brief.pdf).

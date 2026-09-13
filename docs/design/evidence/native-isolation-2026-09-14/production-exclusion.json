@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "build_exit": 0,
+  "flags": {
+    "HEADLESS_AUDIT": 0,
+    "NATIVE_ISOLATION_TEST": 0
+  },
+  "diagnostic_symbols_absent": true,
+  "target_env_string_absent": true,
+  "test_elf_and_embedded_entry_absent": true,
+  "kernel_sha256": "137a383ef839840e1192b3d7f55b4944360597968b61ff76d5ef93e7c25ac610",
+  "iso_sha256": "1c405c4eb5ef96ffdb81407887ae55b729eeb794acd04569ad23966cfa4e57ea",
+  "scope": "separate output directory; bootloader reused from development; not a second clean-source qualification"
+}
