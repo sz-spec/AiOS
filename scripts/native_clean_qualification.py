@@ -22,10 +22,13 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--builder', default='vos5-builder:dependency-upgrade')
     parser.add_argument('--revision', default='HEAD')
+    parser.add_argument('--isolation', action='store_true', help='build and run the gated native process-isolation image')
     parser.add_argument('--seconds', type=int, default=35)
     parser.add_argument('--firmware-code', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-x86_64-code.fd'))
     parser.add_argument('--firmware-vars', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-i386-vars.fd'))
     args = parser.parse_args()
+    if args.seconds <= 0:
+        parser.error('seconds must be positive')
     repo = Path(__file__).resolve().parents[1]
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -36,6 +39,11 @@ def main():
     result = {'passed': False, 'build_container_name': container, 'build_command': ['make', 'native', '-j4'],
               'scope': 'fresh committed application sources with a prebuilt pinned compiler environment; emulator boot only',
               'network': 'none', 'source_date_epoch': 1700000000}
+    if args.isolation:
+        result['build_command'] += ['HEADLESS_AUDIT=1', 'NATIVE_ISOLATION_TEST=1',
+                                    'BUILD_DIR=build/native-isolation', 'INSTALLER_ISO=../dist/vos5-isolation.iso']
+        result['scope'] = 'fresh-source diagnostic image; four direct CPU isolation attempts in each emulator configuration'
+    result['harness_sha256'] = digest(Path(__file__))
 
     def call(cmd, timeout=30):
         return subprocess.check_output(cmd, cwd=repo, text=True, stderr=subprocess.STDOUT, timeout=timeout).strip()
@@ -80,13 +88,16 @@ def main():
         assert completed.returncode == 0, 'clean build failed; see build.log'
         assert all(digest(work / name) == value for name, value in inputs.items()), 'build mutated source inputs'
         result['source_inputs_unchanged'] = True
-        iso = work / 'dist/vos5.iso'
+        iso = work / ('dist/vos5-isolation.iso' if args.isolation else 'dist/vos5.iso')
         assert iso.is_file()
         iso.chmod(0o444)
         result['iso_sha256'] = digest(iso)
         result['iso_bytes'] = iso.stat().st_size
-        result['kernel_sha256'] = digest(work / 'kernel/build/native-unified/vos3.elf')
-        classifier = repo / 'scripts/native_boot_smoke.py'
+        build_dir = 'kernel/build/native-isolation' if args.isolation else 'kernel/build/native-unified'
+        result['kernel_sha256'] = digest(work / build_dir / 'vos3.elf')
+        if args.isolation:
+            result['user_test_sha256'] = digest(work / build_dir / 'user/bin/test_native_isolation')
+        classifier = repo / ('scripts/native_isolation_smoke.py' if args.isolation else 'scripts/native_boot_smoke.py')
         result['classifier_sha256'] = digest(classifier)
         result['qemu_version'] = call(['qemu-system-x86_64', '--version']).splitlines()[0]
         result['firmware_sha256'] = {'code': digest(args.firmware_code), 'vars_template': digest(args.firmware_vars)}

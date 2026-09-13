@@ -27,6 +27,9 @@
 #include "../../../include/vos/heap.h"
 #include "../../../include/arch/x86_64/cpu.h"
 #include "../../../include/vos/percpu.h"
+#ifdef NATIVE_ISOLATION_TEST
+#include "../../../include/vos/native_isolation_test.h"
+#endif
 
 /* AI Monitor functions */
 extern void vos3_ai_monitor_record_access(vos3_ai_guard_region_t* region,
@@ -418,6 +421,9 @@ static void handle_page_fault(vos3_int_frame_t* frame)
                     }
                     uint64_t flags = VOS3_PTE_PRESENT | VOS3_PTE_WRITABLE | VOS3_PTE_USER | VOS3_PTE_NO_EXECUTE;
                     if (vos3_vmm_map_user(aligned, page, flags) == 0) {
+#ifdef NATIVE_ISOLATION_TEST
+                        vos3_native_isolation_mapping(current, aligned, page);
+#endif
                         VOS3_DEBUG("[DEMAND] Lazy page allocated: addr=0x%llx phys=0x%llx",
                                    (unsigned long long)cr2, (unsigned long long)page);
                         return;  /* Retry faulting instruction */
@@ -450,6 +456,9 @@ static void handle_page_fault(vos3_int_frame_t* frame)
          * Uses fault_kill_current() which sets ZOMBIE and wakes parent for
          * waitpid() collection, avoiding deadlock with g_sched_lock.
          */
+#ifdef NATIVE_ISOLATION_TEST
+        vos3_native_isolation_fault(current, (uintptr_t)cr2);
+#endif
         VOS3_WARN("SIGSEGV: task '%s' (pid=%u) addr=0x%llx RIP=0x%llx err=0x%llx",
                   current ? current->name : "?",
                   current ? current->pid : 0,

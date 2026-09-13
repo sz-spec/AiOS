@@ -315,6 +315,11 @@ CFLAGS += -DVOS3_PROCESS_ROOTS_TEST
 endif
 
 # Assembly sources
+ifeq ($(NATIVE_ISOLATION_TEST),1)
+C_SOURCES += $(SRC_DIR)/tests/test_native_isolation.c
+endif
+
+# Assembly sources
 ASM_SOURCES := \
     $(SRC_DIR)/boot/multiboot2_entry.S \
     $(SRC_DIR)/boot/entry.S \
@@ -368,6 +373,14 @@ HEADLESS_AUDIT ?= 0
 endif
 ifneq ($(HEADLESS_AUDIT),0)
 CFLAGS += -DHEADLESS_AUDIT
+endif
+
+# Explicit diagnostic image; never enabled by a normal native build.
+ifeq ($(NATIVE_ISOLATION_TEST),1)
+ifneq ($(HEADLESS_AUDIT),1)
+$(error NATIVE_ISOLATION_TEST=1 requires HEADLESS_AUDIT=1)
+endif
+CFLAGS += -DNATIVE_ISOLATION_TEST
 endif
 
 ifdef PRODUCTION

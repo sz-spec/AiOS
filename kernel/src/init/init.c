@@ -21,6 +21,9 @@
 #include "../../include/vos/console.h"
 #include "../../include/vos/string.h"
 #include "../../include/vos/user.h"
+#ifdef NATIVE_ISOLATION_TEST
+#include "../../include/vos/native_isolation_test.h"
+#endif
 
 /* ============================================================================
  * CONFIGURATION
@@ -34,9 +37,13 @@
 
 /** @brief Fallback init paths */
 static const char* init_paths[] = {
+#ifdef NATIVE_ISOLATION_TEST
+    "/bin/test_native_isolation",
+#else
     "/bin/init",
     "/sbin/init",
     "/init",
+#endif
     NULL
 };
 
@@ -128,10 +135,20 @@ static void init_task_entry(void* arg)
     VOS3_INFO("Init: Executing '%s'", path);
 
     const char* argv[] = { path, NULL };
+#ifdef NATIVE_ISOLATION_TEST
+    const char* target_env = vos3_native_isolation_target();
+    if (target_env == NULL) {
+        VOS3_ERROR("NATIVE_ISOLATION FAIL target_setup");
+        for (;;) vos3_task_sleep_ms(1000U);
+    }
+#endif
     const char* envp[] = {
         "PATH=/bin:/sbin:/usr/bin:/usr/sbin",
         "HOME=/",
         "TERM=vt100",
+#ifdef NATIVE_ISOLATION_TEST
+        target_env,
+#endif
         NULL
     };
 
