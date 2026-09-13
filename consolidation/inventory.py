@@ -10,6 +10,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+SOURCE_ROOT = ROOT.parent
 SOURCES = ['VOS3', 'VOS3-Cyber', 'VOS-Cyber-Standard', 'vos.v1',
            'vos/vos4', 'vos/vos4-ci-triggers', 'vos/vos4-kernel-bugfix',
            'vos/vos4-track-1', 'vos/vos4-track-2', 'vos/vos4-track-5',
@@ -54,7 +55,7 @@ def main():
     paths = defaultdict(dict)
     source_counts, exclusions = {}, {}
     for source in SOURCES:
-        directory = ROOT / source
+        directory = SOURCE_ROOT / source
         if not directory.is_dir():
             raise FileNotFoundError(directory)
         files, exclusions[source] = scan(directory)

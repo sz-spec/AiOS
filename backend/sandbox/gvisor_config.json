@@ -1,0 +1,95 @@
+{
+  "_comment": "Sprint 15 / Item C6 — gVisor MAGI (Multi-Agent gVisor Isolation) policy for vOS agent runtimes. Source: https://gvisor.dev/blog/2026/04/15/magi-multi-agent-gvisor-isolation/  Loaded by backend/sandbox/gvisor_loader.py and consumed by infra/k8s/sandboxes/*.yaml at deploy time. Do NOT inline secrets here — this file is committed to git.",
+  "version": "1.0",
+  "spec_source": "https://gvisor.dev/blog/2026/04/15/magi-multi-agent-gvisor-isolation/",
+  "runtime": "runsc",
+  "magi": {
+    "enabled": true,
+    "_comment": "MAGI = Multi-Agent gVisor Isolation. Each agent gets its own sentry+kernel process pair, so a sentry-side compromise does not give cross-agent access. April-2026 gVisor feature.",
+    "isolation_mode": "per-agent",
+    "max_agents_per_node": 32,
+    "sentry_restart_on_panic": true,
+    "shared_sentry_for_same_user": false
+  },
+  "platform": {
+    "_comment": "ptrace is portable but slow; KVM is the production default. systrap is the new April-2026 path used by MAGI.",
+    "preferred": "systrap",
+    "fallback": "kvm",
+    "deny": ["ptrace"]
+  },
+  "network": {
+    "type": "sandbox",
+    "_comment": "Use the gVisor netstack ('sandbox') rather than host-passthrough. Closes the kernel-network attack surface. Each agent gets its own loopback + a host-NAT bridge for documented egress.",
+    "allow_host_loopback": false,
+    "egress_allowlist_env": "VOS3_EGRESS_ALLOWLIST",
+    "default_drop": true
+  },
+  "filesystem": {
+    "_comment": "Read-only root + writable scratch at /vos/agent/. Tmpfs by default; durable storage requires explicit operator opt-in.",
+    "root": {
+      "readonly": true,
+      "image": "gvisor.io/vos3-agent-base:stage15"
+    },
+    "writable_mounts": [
+      {
+        "destination": "/vos/agent/scratch",
+        "source": "tmpfs",
+        "options": ["size=512m", "mode=0700"]
+      },
+      {
+        "destination": "/vos/agent/state",
+        "source": "host-bind",
+        "options": ["ro=false", "noexec", "nosuid", "nodev"]
+      }
+    ],
+    "host_paths_allowed": [],
+    "host_paths_denied_default": true
+  },
+  "syscall_policy": {
+    "_comment": "gVisor's sentry already filters; this layer is the additional drop list for the kinds an agent should never need. Matches Sprint 14.1 RLIMIT_NPROC / RLIMIT_NOFILE caps.",
+    "deny_syscalls": [
+      "ptrace", "process_vm_readv", "process_vm_writev",
+      "init_module", "finit_module", "delete_module",
+      "kexec_load", "kexec_file_load",
+      "bpf",
+      "iopl", "ioperm",
+      "perf_event_open",
+      "settimeofday", "clock_settime", "clock_adjtime", "adjtimex",
+      "open_by_handle_at", "name_to_handle_at",
+      "pivot_root", "mount", "umount", "umount2",
+      "swapon", "swapoff",
+      "create_module", "query_module",
+      "personality"
+    ],
+    "audit_logged_syscalls": [
+      "execve", "execveat", "fork", "vfork", "clone",
+      "socket", "bind", "connect", "listen", "accept",
+      "openat", "open", "creat",
+      "ioctl"
+    ]
+  },
+  "limits": {
+    "_comment": "Mirror the Sprint 14.1 SystemManifest values so a kernel-side reviewer sees identical caps.",
+    "memory_mb": 4096,
+    "cpu_quota_percent": 200,
+    "wall_clock_seconds": 1800,
+    "open_files": 64,
+    "processes": 4,
+    "file_size_mb": 10
+  },
+  "attestation": {
+    "_comment": "Mandatory: every agent's gVisor instance writes its sentry config hash + kernel measurement chain to the compliance store at startup, so an auditor can verify the runtime configuration matches what's documented here.",
+    "compliance_store_endpoint": "/api/compliance/audit/sandbox-start",
+    "include_in_annex_iv_export": true,
+    "sentry_hash_to_rtmr_index": 3
+  },
+  "honest_scope_ceiling": {
+    "_comment": "Items deferred to Sprint 16-17 or later, by design.",
+    "deferred": [
+      "Confidential-VM-on-MAGI integration (waits for Intel TDX 2.0)",
+      "Per-agent cryptographic identity injection via WIMSE (Wave 2 — Agent 2)",
+      "Cross-agent A2A channel over gVisor netstack (Sprint 16+ — Wave 2 in the original roadmap shifted to Sprint 16 for the A2A item)",
+      "Live RTMR extension on sentry restart (today: rebuild RTMR from compliance log; ideal: kernel-coordinated extension)"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "// W7.2 note": "Convex backend code is checked by the Convex CLI (`npx convex dev`) which has its own type-inference path. The root tsconfig now excludes convex/**; this overlay relaxes implicit-any for explicit local typechecking via `tsc -p convex/`.",
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ES2021"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules"]
+}

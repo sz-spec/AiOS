@@ -1,0 +1,20 @@
+GNU xorriso 1.5.8.pl01 : RockRidge filesystem manipulator, libburnia project.
+
+xorriso : NOTE : Environment variable SOURCE_DATE_EPOCH encountered with value 1700000000
+xorriso : NOTE : Loading ISO image tree from LBA 0
+xorriso : UPDATE :      12 nodes read in 1 seconds
+xorriso : NOTE : Detected El-Torito boot information which currently is set to be discarded
+Drive current: -indev '/tmp/vos5-iso.LcYrkb/vos5.iso'
+Media current: stdio file, overwriteable
+Media status : is written , is appendable
+Boot record  : El Torito , MBR protective-msdos-label cyl-align-off GPT
+Media summary: 1 session, 6385 data blocks, 12.5m data, 1484g free
+Volume id    : 'ISOIMAGE'
+El Torito catalog  : 1482  1
+El Torito cat path : /boot.catalog
+El Torito images   :   N  Pltf  B   Emul  Ld_seg  Hdpt  Ldsiz         LBA
+El Torito boot img :   1  BIOS  y   none  0x0000  0x00      4        1483
+El Torito boot img :   2  UEFI  y   none  0x0000  0x00   5760          35
+El Torito img path :   1  /boot/limine/limine-bios-cd.bin
+El Torito img opts :   1  boot-info-table
+El Torito img path :   2  /boot/limine/limine-uefi-cd.bin

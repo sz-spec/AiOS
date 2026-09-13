@@ -1,0 +1,100 @@
+# Sprint 15 / Item C8 — sample Deployment referencing the Sandbox CRD
+# Source: https://kubernetes.io/blog/2026/03/20/running-agents-on-kubernetes-with-agent-sandbox/
+#
+# Apply after sandbox-crd.yaml + rbac.yaml + vos-agent-sandbox.yaml.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vos-agent
+  namespace: vos-agents
+  labels:
+    app: vos-agent
+    vos3.io/component: agent-runtime
+    vos3.io/sprint: "15"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vos-agent
+  template:
+    metadata:
+      labels:
+        app: vos-agent
+        vos3.io/component: agent-runtime
+        # CNCF agentic-standards labels (Sprint 15 H5 sets these too via mesh
+        # labels; included here so a kubelet without the mesh still gets them).
+        agentic.k8s.io/role: worker
+        agentic.k8s.io/tier: enterprise
+      annotations:
+        # The Sandbox CRD's admission webhook picks up this annotation and
+        # binds the pod to the named Sandbox resource.
+        apps.k8s.io/sandbox: vos-agent-default
+        # gVisor untrusted-workload annotation (legacy compat, harmless under MAGI).
+        io.kubernetes.cri.untrusted-workload: "true"
+    spec:
+      serviceAccountName: vos-agent-sa
+      runtimeClassName: gvisor
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: agent
+          image: ghcr.io/vos3-spec/vos-agent:stage-15
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+          env:
+            - name: VOS3_GVISOR_CONFIG_PATH
+              value: /etc/vos-gvisor/gvisor_config.json
+            - name: VOS3_ALLOW_DEV_MODE
+              value: "false"
+          ports:
+            - containerPort: 8000
+              name: api
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: gvisor-policy
+              mountPath: /etc/vos-gvisor
+              readOnly: true
+            - name: scratch
+              mountPath: /vos/agent/scratch
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: gvisor-policy
+          configMap:
+            name: vos-gvisor-policy
+        - name: scratch
+          emptyDir:
+            sizeLimit: 512Mi
+            medium: Memory
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
+            medium: Memory

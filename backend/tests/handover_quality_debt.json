@@ -1,0 +1,91 @@
+{
+  "$schema_note": "Honest broad-suite quality-debt ledger. NOT a moat artifact. Refined after the Phase B triage + the suite-wide network policy that made the suite cleanly measurable.",
+  "generated_for": "vOS v1.3.x broad-suite stabilization handover",
+  "generated_on": "2026-06-06",
+  "branches": {
+    "phase_a_b_branch": "fix-suite-network-policy",
+    "prior_merged": "fix-ci-residual (PR #14, merged at d17c6f1)"
+  },
+  "moat_tally": {
+    "value": "49/80",
+    "frozen": true,
+    "note": "Unchanged by ALL work here. None of these are security-enforcement rows; every item is test-infrastructure quality debt or real product/kernel/config state. No moat-ledger claims added or mutated. Test-pass count is NOT the moat."
+  },
+  "m3_secureboot": {
+    "row": "M3 — model-file SecureBoot (Ed25519-over-SHA-256 / OMS) at the vVFS slot ingestion path",
+    "branch": "feat-m3-ed25519-verify (PR #17)",
+    "status_moat": "STILL OPEN — counted as 49/80, NOT 50/80. Self-verification (host KAT + booted QEMU) does not close a moat row; Phase 6 independent external crypto audit is mandatory first.",
+    "phases": {
+      "1_primitives": "DONE — kernel SHA-512 + verify-only Ed25519 (RFC 8032, TweetNaCl port). Host KAT.",
+      "2_hardening": "DONE — S<L + non-canonical/small-order rejection; fixes proven CVE-2026-4115-class malleability. Host KAT.",
+      "3_provisioning_transport": "DONE — build-time trusted key (vvfs_trusted_key.h, no runtime VBus key-set) + MODEL_SIG OMS transport. Host E2E.",
+      "4_wiring": "DONE — SLOT_FINISH SHA-256 -> verify -> read-path gate; enforcement default-OFF (VOS3_VVFS_REQUIRE_MODEL_SIG).",
+      "5_qemu_matrix": "VERIFIED ON THIS HOST — booted QEMU cert run emits M3 certs 120-126 all PASS (67/67 cert points, 0 FAIL, 0 missing). Evidence: kernel/tests/results/m3_phase5_qemu_certs.txt. Required gating phase51 singularity 2MiB stack-overflow fix + skipping perf benchmarks under the cert harness.",
+      "6_external_audit": "PENDING — independent cryptanalysis of the ported Ed25519 (per roadmap §7). Until sign-off, M3 is NOT closed and the moat stays 49/80."
+    },
+    "verification_evidence": {
+      "host_kat": "kernel/tests/ed25519_kat.c — 21/21 (RFC8032 + malleability + OMS interop)",
+      "host_e2e": "kernel/tests/m3_e2e_test.c — 7/7 (provision/register/verify/negatives)",
+      "booted_qemu": "kernel/tests/results/m3_phase5_qemu_certs.txt — certs 120-126 PASS, DONE 67"
+    }
+  },
+  "measurement": {
+    "reliable_mode": "sequential (-p no:xdist)",
+    "sequential_baseline": "61 failed, 9263 passed, 278 skipped, 2 xfailed (360s, 0 crashes) — after Phase B2 (profile_dispatch + W5 contamination fixed). Prior baselines: 80 (Phase B), 89/134/273 earlier.",
+    "current_after_phase_b": "61 failed (sequential, reliable). All 61 are REPORT-category real product/kernel/config/security state; the test-infra contamination is now exhausted.",
+    "xdist_caveat": "Under -n auto --dist loadfile the suite retains a PARALLEL-ONLY flake: ~1 worker 'not properly terminated' near 99%, occasionally an xdist INTERNALERROR. NOT a deterministically-hanging test (sequential completes clean). Root cause is resource/timing contention across ~14 workers + a slow test tripping --timeout-method=thread. Recommended: run the broad suite sequentially or with reduced -n in CI; the core release gate is unaffected.",
+    "core_release_gate": "backend/tests/security/ + backend/tests/services/ = 931 passed, 0 failed (GREEN). The meaningful ship certification; intact throughout."
+  },
+  "network_policy": {
+    "what": "Root-conftest socket.socket replacement (_VOSLoopbackOnlySocket): permits loopback + AF_UNIX, fast-fails external connects (clean OSError; connect_ex returns ECONNREFUSED).",
+    "why": "The leaked W5/W6 import-time socket guards used to (accidentally) air-gap the whole suite. Once correctly scoped per-test, real external connects (HF/Stripe/Convex) began hanging and crashing xdist workers. This makes the no-internet expectation explicit and deterministic. Does NOT relax any security assertion."
+  },
+  "shipped_infra_wins": [
+    {"item": "suite-wide loopback-only network policy", "effect": "deterministic; removes the external-hang worker-crash class"},
+    {"item": "HF_HUB_OFFLINE / TRANSFORMERS_OFFLINE pin (hard set)", "effect": "no SentenceTransformer HF network"},
+    {"cluster": "test_stripe_connect", "before": 5, "after": 0, "cause": ".env STRIPE_SECRET_KEY leak -> available=True; fixture clears it for dev-mode contract"},
+    {"cluster": "test_convex_routing", "before": 3, "after": 0, "cause": ".env CONVEX_URL leak -> dev_mode=False; fixture clears it"},
+    {"cluster": "test_db_integrity", "before": 2, "after": 0, "cause": ".env CONVEX leak (dev-mode-without-credentials tests)"},
+    {"cluster": "test_profile_dispatch", "before": 10, "after": 0, "cause": "governance fixtures called importlib.reload(vos_profile), recreating the Profile enum class and breaking `is Profile.X` identity in tests that imported Profile earlier. Switched to the provided vos_profile.reload_for_test() re-read hook (no enum recreation). Branch: fix-suite-contamination-phase-b2."},
+    {"cluster": "test_w5_1_sqlite_local + test_w5_2_local_rag", "before": 4, "after": 0, "cause": "cached SQLite engine / Chroma client singletons leaked from the governance fortress/SQLCipher suite (manifested as 'no such table' + path mismatches, surfaced opaquely via _show()/sys.exit). Added per-test fixtures that re-pin the module env and rebuild via sqlite_setup._reset_for_tests / vector_setup._reset_chroma_for_tests + _reset_embedder_for_tests. Branch: fix-suite-contamination-phase-b2."},
+    {"note": "Previously merged on fix-ci-residual (PR #14): clerk_webhook 21, offline-auth contamination 77, storage_backend 18, api_chat 6, test_rag 19, p2p e2e 16, hitl_memory 15. And PR #15: network policy + stripe/convex_routing/db_integrity."}
+  ],
+  "reported_real_behavior_NOT_greened": {
+    "disposition": "These reflect real product / kernel / config / security state. Per integrity rules they are documented, NOT force-greened. Resolving them requires PRODUCT decisions (implement a feature, restore config, fix kernel source) or are intentional negation suites.",
+    "clusters": [
+      {"file": "test_titan_agent_loop.py", "count": 5, "category": "unimplemented-feature", "finding": "router.yaml has NO 'local-titan' slot (only a comment); tests assert a local-titan routing capability that is not wired. Faking the config would green an unimplemented feature."},
+      {"file": "test_open_core_split.py", "count": 5, "category": "architecture-state", "finding": "source-structure assertions: finetune engine relocation to backend_pro, pmm hugepage pro-gating, makefile build-type flag, honest-stub license check. Real open-core/enterprise split state."},
+      {"file": "test_finetune_rigor.py", "count": 5, "category": "kernel-source", "finding": "asserts kernel/source facts: MMR finetune tool-id (v20.2.1), four-u64-LE packing, TPM seal adapter PCR-11, VOS3_PUD size = 1 GiB, makefile NPU ops. Source-state, not test-infra."},
+      {"file": "test_memory_scaling.py", "count": 5, "category": "kernel-source-grep", "finding": "greps live kernel C for VOS3_KV_CACHE_MAX_BYTES ceiling guard etc. Real kernel-source drift."},
+      {"file": "test_vmm_security.py", "count": 3, "category": "kernel-source-grep", "finding": "kernel VMM source assertions (W^X quarantine handler, v205 sources, task-steering)."},
+      {"file": "test_kernel_compiler.py", "count": 1, "category": "kernel-toolchain", "finding": "cross-compiler / build assertion."},
+      {"file": "kernel_guards/test_kim_inference_caps.py", "count": 1, "category": "kernel-source", "finding": "KIM inference cap assertion."},
+      {"file": "test_api_billing.py", "count": 4, "category": "real-product-behavior", "finding": "route returns real 503 'Database unavailable — cannot verify prior deduction' in dev mode; credit refund requires a real DB-backed prior deduction. Tests expect seeded-DB success. Mocking to force 200 would fake financial logic."},
+      {"file": "test_full_stack_integration.py", "count": 4, "category": "integration-behavior", "finding": "V-Core entity/agent/memory CRUD roundtrips not satisfied by in-memory dev repos."},
+      {"file": "test_v32_stability.py", "count": 2, "category": "router-config", "finding": "router.yaml fallback chain / terminal tool-provider wiring expectations."},
+      {"file": "test_smart_routing.py", "count": 1, "category": "router-config", "finding": "assign_model unknown-role-raises expectation."},
+      {"file": "test_efficiency.py", "count": 1, "category": "router-config", "finding": "smart-router model assignment expectation (got claude-sonnet)."},
+      {"file": "test_api_terminal_extended.py", "count": 6, "category": "app-behavior", "finding": "terminal route behavior; fails in isolation (real, not contamination)."},
+      {"file": "test_api_terminal.py", "count": 1, "category": "app-behavior", "finding": "terminal route behavior."},
+      {"file": "test_mcp_bridge.py", "count": 4, "category": "app-behavior", "finding": "MCP bridge behavior; fails in isolation."},
+      {"file": "test_load_security.py", "count": 3, "category": "security-suite", "finding": "load-security; DO NOT force-green."},
+      {"file": "owasp/test_owasp_rate_limit.py", "count": 4, "category": "security-suite", "finding": "rate-limiter exhaustion/429 timing. Dedicated negation suite — DO NOT force-green."},
+      {"file": "security/test_dns_pinning.py", "count": 2, "category": "security-suite", "finding": "SSRF/DNS-pinning. DO NOT force-green."},
+      {"file": "red_team/test_hostile_tenant_leak.py", "count": 1, "category": "security-suite", "finding": "red-team tenant isolation. DO NOT force-green."},
+      {"file": "owasp/test_owasp_bola.py", "count": 1, "category": "security-suite", "finding": "BOLA. DO NOT force-green."},
+      {"file": "integration/test_middleware_chain.py", "count": 1, "category": "integration", "finding": "middleware chain ordering."},
+      {"file": "perf/test_memory_leaks.py", "count": 1, "category": "perf", "finding": "memory-leak threshold."}
+    ]
+  },
+  "deferred_contamination_needs_bisection": {
+    "status": "RESOLVED in Phase B2 — the test-infra/contamination backlog is now exhausted (see shipped_infra_wins). No remaining failure is a cross-test contamination bug.",
+    "resolved": [
+      {"file": "test_profile_dispatch.py", "count": 10, "root_cause": "importlib.reload(vos_profile) in governance recreated the Profile enum -> broke `is` identity. Fixed via reload_for_test()."},
+      {"file": "test_w5_1_sqlite_local.py + test_w5_2_local_rag.py", "count": 4, "root_cause": "cached SQLite engine / Chroma client leaked from governance fortress suite. Fixed via per-test rebuild hooks."}
+    ]
+  },
+  "recommended_followups_v1_3_1": [
+    "Run the broad suite sequentially (or reduced -n) in CI until the xdist parallel-flake is root-caused; core gate already runs clean. (The contamination that previously made parallel runs diverge is now fixed, but the worker-crash-under-load flake is separate.)",
+    "Product decisions for the remaining 61 (all real state, NOT test-infra): implement/wire local-titan in router.yaml (titan suite, 5); confirm open-core split (5) + finetune (5) + memory_scaling/vmm/kim kernel-source state (these tests ARE the spec-of-record — green them only by making the source true); decide whether billing dev-mode should support credit refund (4); triage app behavior (terminal_extended 6, mcp_bridge 4, full_stack 4); the security/red-team/owasp/dns-pinning suites (9) are negation suites — investigate as real, never force-green."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "Native process-root lifecycle selftest only; not user-space boot",
+  "elf_sha256": "7b43752d3dbf32b79f26f20f2bba08e562af688f7f1389022ba98d0390729e55",
+  "command": [
+    "qemu-system-x86_64",
+    "-machine",
+    "q35,accel=tcg",
+    "-cpu",
+    "qemu64",
+    "-m",
+    "1024",
+    "-smp",
+    "1",
+    "-display",
+    "none",
+    "-serial",
+    "stdio",
+    "-monitor",
+    "none",
+    "-nic",
+    "none",
+    "-no-reboot",
+    "-kernel",
+    "kernel/build/process-roots-test/vos3.elf"
+  ],
+  "exit_status": "observation_timeout",
+  "root_lifecycle_passed": true,
+  "later_user_space_fault": true
+}

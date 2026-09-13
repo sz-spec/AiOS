@@ -1,0 +1,105 @@
+{
+  "strategies": {
+    "clerk": {
+      "name": "clerk",
+      "display_name": "Clerk Authentication",
+      "description": "Managed auth with OAuth providers, user management UI, and session handling via Clerk",
+      "files": {
+        "frontend": [
+          {"src": "components/SignIn.tsx", "dest": "src/components/auth/SignIn.tsx"},
+          {"src": "components/SignUp.tsx", "dest": "src/components/auth/SignUp.tsx"},
+          {"src": "components/UserButton.tsx", "dest": "src/components/auth/UserButton.tsx"},
+          {"src": "middleware.ts", "dest": "middleware.ts"},
+          {"src": "app/sign-in/page.tsx", "dest": "src/app/sign-in/[[...sign-in]]/page.tsx"}
+        ],
+        "backend": [
+          {"src": "middleware.py", "dest": "middleware/auth.py"},
+          {"src": "routes/auth.py", "dest": "routes/auth.py"}
+        ]
+      },
+      "dependencies": {
+        "frontend": {"@clerk/nextjs": "^5.0.0"},
+        "backend": {"pyjwt": "^2.8.0"}
+      },
+      "env_vars": [
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+        "CLERK_SECRET_KEY",
+        "CLERK_ISSUER_URL"
+      ],
+      "test_scenarios": [
+        "ClerkProvider wraps the app in layout.tsx",
+        "Middleware protects non-public routes",
+        "GET /api/auth/me returns user identity with valid Clerk JWT",
+        "GET /api/auth/me returns 401 without token"
+      ]
+    },
+    "nextauth": {
+      "name": "nextauth",
+      "display_name": "NextAuth.js Authentication",
+      "description": "Flexible auth with Google/GitHub OAuth and credentials providers via NextAuth.js",
+      "files": {
+        "frontend": [
+          {"src": "app/api/auth/[...nextauth]/route.ts", "dest": "src/app/api/auth/[...nextauth]/route.ts"},
+          {"src": "lib/auth.ts", "dest": "src/lib/auth.ts"},
+          {"src": "components/AuthProvider.tsx", "dest": "src/components/auth/AuthProvider.tsx"}
+        ],
+        "backend": [
+          {"src": "middleware.py", "dest": "middleware/auth.py"},
+          {"src": "routes/auth.py", "dest": "routes/auth.py"}
+        ]
+      },
+      "dependencies": {
+        "frontend": {"next-auth": "^4.24.0"},
+        "backend": {"pyjwt": "^2.8.0"}
+      },
+      "env_vars": [
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ],
+      "test_scenarios": [
+        "SessionProvider wraps the app in layout.tsx",
+        "[...nextauth] catch-all route handles GET and POST",
+        "GET /api/auth/session returns session with valid JWT",
+        "GET /api/auth/session returns 401 without token"
+      ]
+    },
+    "custom_jwt": {
+      "name": "custom_jwt",
+      "display_name": "Custom JWT Authentication",
+      "description": "Email/password auth with JWT tokens, bcrypt hashing, and refresh token rotation",
+      "files": {
+        "frontend": [
+          {"src": "components/LoginForm.tsx", "dest": "src/components/auth/LoginForm.tsx"},
+          {"src": "components/RegisterForm.tsx", "dest": "src/components/auth/RegisterForm.tsx"},
+          {"src": "lib/auth-client.ts", "dest": "src/lib/auth.ts"},
+          {"src": "hooks/useAuth.ts", "dest": "src/hooks/useAuth.ts"}
+        ],
+        "backend": [
+          {"src": "middleware.py", "dest": "middleware/auth.py"},
+          {"src": "routes/auth.py", "dest": "routes/auth.py"},
+          {"src": "models/user.py", "dest": "models/user.py"},
+          {"src": "utils/tokens.py", "dest": "utils/tokens.py"}
+        ]
+      },
+      "dependencies": {
+        "frontend": {},
+        "backend": {"pyjwt": "^2.8.0", "bcrypt": "^4.1.0"}
+      },
+      "env_vars": [
+        "JWT_SECRET",
+        "JWT_REFRESH_SECRET",
+        "JWT_EXPIRY_MINUTES"
+      ],
+      "test_scenarios": [
+        "Login with valid credentials returns JWT token",
+        "Login with invalid credentials returns 401",
+        "Protected route without token returns 401",
+        "Protected route with valid token returns 200",
+        "Expired token triggers refresh flow",
+        "Registration with duplicate email returns 409"
+      ]
+    }
+  }
+}

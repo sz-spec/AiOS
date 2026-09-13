@@ -1,0 +1,38 @@
+VOS3 PRE-FREEZE MANIFEST
+=========================
+Date: 2026-04-14
+Branch: feat/10-10-all-capabilities
+Build: Release (make PRODUCTION=1, -O2, .comment stripped)
+
+Kernel Binary:
+  File: kernel/build/vos3.elf
+  SHA-256: 1ad08d7a029a0a6fc7938c51f143880a0790c186f7b371d458b1b2c8c33ef4c3
+  .text VMA: 0xffffffff80106000
+  .text Size: 0x00070ace (462,542 bytes)
+  .text File Offset: 0x00002000
+  .text Alignment: 2**6
+
+Assertion Census:
+  Phase test files: 22
+  Supplementary test files: 4
+  Boot-time inline assertions: 16
+  Total assertions: ~1,332
+  Total test code lines: ~25,847
+
+Guardian Seal:
+  Hash algorithm: SHA-256 (FIPS 180-4)
+  Scope: [_text_start, _text_end)
+  Verification: Constant-time XOR comparison
+  State: OPERATIONAL
+
+Build Toolchain:
+  Compiler: x86_64-elf-gcc (GCC 15)
+  Linker: x86_64-elf-ld
+  CFLAGS: -std=c11 -ffreestanding -fstack-protector-strong -fcf-protection=branch -ftrivial-auto-var-init=zero -fno-delete-null-pointer-checks -O2 -DVOS3_PRODUCTION_BUILD
+  LDFLAGS: -nostdlib -static -z max-page-size=0x1000 -T linker.ld
+
+Section Summary:
+  .text:   462,542 bytes (kernel code)
+  .rodata: 8,349,150 bytes (read-only data)
+  .data:   1,120 bytes (initialized data)
+  .bss:    57,279,488 bytes (zero-initialized)

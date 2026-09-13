@@ -1,0 +1,88 @@
+{
+  "source_head": "308e22fe63b1cc0fc06d837b11779e9cc59beadd",
+  "files": [
+    {
+      "path": "backend/ai/agents/_charclass.py",
+      "source": "vos/vos4",
+      "source_sha256": "128615d463fd999727ac5f5d44b2158ab4745a26e2fb9442c3aa72fb7d503ec9",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/ai/agents/prompt_sanitization.py",
+      "source": "vos/vos4",
+      "source_sha256": "e628803d865787add65a32085d8736d37fa71dcc95820ba056330871d393b3f2",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/ai/agents/tool_output_sanitization.py",
+      "source": "vos/vos4",
+      "source_sha256": "336470b100de33f4010cd03678f6a5d0403208ec88fcaafdeb8577bec26862a0",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/ai/agents/output_sanitization.py",
+      "source": "vos/vos4",
+      "source_sha256": "84e18c697f4e1232f9a62fce6d6e0e7b4cda717bcc237603e53ee9a4992e8d2c",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/ai/agents/inter_agent_provenance.py",
+      "source": "vos/vos4",
+      "source_sha256": "0ff741484dc7c46ab2cbbc6f5ce743dcf62fbc1a273c26a209f6d51b9fecc22a",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/ai/agents/multi_agent.py",
+      "source": "vos/vos4",
+      "source_sha256": "d7c4b157c800ff4316fd530197c83c7d85765a6135e43ffac3103b0719442df4",
+      "integration": "merged"
+    },
+    {
+      "path": "backend/ai/agents/tools_api.py",
+      "source": "vos/vos4",
+      "source_sha256": "77387fee24b96042ba19a861e8acb10080882d6714793672a340f528e0b1cf72",
+      "integration": "merged"
+    },
+    {
+      "path": "backend/tests/test_prompt_sanitization.py",
+      "source": "vos/vos4",
+      "source_sha256": "215eaddf82bb583497824d0ff9bf544a496a63331255af12f34052040c2b15e0",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/tests/test_tool_output_sanitization.py",
+      "source": "vos/vos4",
+      "source_sha256": "5202221ea70d3af6a5a60003a4069bdaa95b40d3db9706bcb9c10eb7f1a4def0",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "source": "vos/vos4",
+      "source_sha256": "5da6f4103bf83c12e400159624d097824b6b9a2af255217d710b9b696ea94e59",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/tests/test_inter_agent_provenance.py",
+      "source": "vos/vos4",
+      "source_sha256": "fce6f432d32d7bd8bb33a29fad74c3d773441bccdd0bff086139717437cc37b4",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/tests/test_agent_prompts_wrap_honoring.py",
+      "source": "vos/vos4",
+      "source_sha256": "5a387071bdddf1291f70d9672cc91e2261133a7a277810313f01db86bad8d001",
+      "integration": "imported"
+    },
+    {
+      "path": "backend/api/agents_routes.py",
+      "source": "vos/vos4",
+      "source_sha256": "aaa6f9a3f3ba788238a33eb513bc795b9e7c192bb144ca267435e6e64f65d08f",
+      "integration": "merged"
+    }
+  ],
+  "notes": [
+    "Preserved local-first routing in review retries.",
+    "Retained baseline chat API for separate egress integration.",
+    "Runtime handoff verification requires payload-binding fixes before verification."
+  ]
+}

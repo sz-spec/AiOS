@@ -1,0 +1,1400 @@
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01HCSM BBS Table full.
+BdsDxe: loading Boot0001 "UEFI Google PersistentDisk " from PciRoot(0x0)/Pci(0x3,0x0)/Scsi(0x1,0x0)
+BdsDxe: starting Boot0001 "UEFI Google PersistentDisk " from PciRoot(0x0)/Pci(0x3,0x0)/Scsi(0x1,0x0)
+
+UEFI: Attempting to start image.
+Description: UEFI Google PersistentDisk 
+FilePath: PciRoot(0x0)/Pci(0x3,0x0)/Scsi(0x1,0x0)
+OptionNumber: 1.
+
+[0m[30m[47mWelcome to GRUB!
+
+[0m[37m[40m[0m[30m[40m[2J[01;01H[0m[37m[40m[H[J[1;1H[H[J[1;1H[0m[30m[40m[2J[01;01H[0m[37m[40m    Booting `Debian GNU/Linux'Booting `Debian GNU/Linux'
+
+
+
+Loading Linux 6.1.0-47-cloud-amd64 ...Loading Linux 6.1.0-47-cloud-amd64 ...
+
+Loading initial ramdisk ...Loading initial ramdisk ...
+
+error: no suitable video mode found.
+error: no suitable video mode found.
+Booting in blind modeBooting in blind mode
+
+[    0.000000] Linux version 6.1.0-47-cloud-amd64 (debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.1.170-3 (2026-05-08)
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.1.0-47-cloud-amd64 root=PARTUUID=9e8eee69-528d-439d-9941-703f7759a2f2 ro console=tty0 console=ttyS0,115200 earlyprintk=ttyS0,115200 consoleblank=0 intel_iommu=off
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x0000000000000fff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000001000-0x0000000000054fff] usable
+[    0.000000] BIOS-e820: [mem 0x0000000000055000-0x000000000005ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000060000-0x0000000000097fff] usable
+[    0.000000] BIOS-e820: [mem 0x0000000000098000-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000bf8ecfff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000bf8ed000-0x00000000bf9ecfff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000bf9ed000-0x00000000bfaecfff] type 20
+[    0.000000] BIOS-e820: [mem 0x00000000bfaed000-0x00000000bfb6cfff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000bfb6d000-0x00000000bfb7efff] ACPI data
+[    0.000000] BIOS-e820: [mem 0x00000000bfb7f000-0x00000000bfbfefff] ACPI NVS
+[    0.000000] BIOS-e820: [mem 0x00000000bfbff000-0x00000000bffdffff] usable
+[    0.000000] BIOS-e820: [mem 0x00000000bffe0000-0x00000000bfffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000023fffffff] usable
+[    0.000000] printk: bootconsole [earlyser0] enabled
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] efi: EFI v2.70 by EDK II
+[    0.000000] efi: TPMFinalLog=0xbfbf7000 ACPI=0xbfb7e000 ACPI 2.0=0xbfb7e014 SMBIOS=0xbf9ca000 MEMATTR=0xbd31a018 MOKvar=0xbf9c6000 
+[    0.000000] secureboot: Secure boot disabled
+[    0.000000] SMBIOS 2.4 present.
+[    0.000000] DMI: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+[    0.000000] Hypervisor detected: KVM
+[    0.000000] kvm-clock: Using msrs 4b564d01 and 4b564d00
+[    0.000003] kvm-clock: using sched offset of 6805277723 cycles
+[    0.000700] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.002934] tsc: Detected 2800.170 MHz processor
+[    0.003669] last_pfn = 0x240000 max_arch_pfn = 0x400000000
+[    0.004426] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+Memory KASLR using RDRAND RDTSC...
+[    0.005733] last_pfn = 0xbffe0 max_arch_pfn = 0x400000000
+[    0.006460] Using GB pages for direct mapping
+[    0.007265] RAMDISK: [mem 0x363b3000-0x371d0fff]
+[    0.007936] ACPI: Early table checksum verification disabled
+[    0.008672] ACPI: RSDP 0x00000000BFB7E014 000024 (v02 Google)
+[    0.009405] ACPI: XSDT 0x00000000BFB7D0E8 00005C (v01 Google GOOGFACP 00000001      01000013)
+[    0.010492] ACPI: FACP 0x00000000BFB78000 0000F4 (v02 Google GOOGFACP 00000001 GOOG 00000001)
+[    0.011708] ACPI: DSDT 0x00000000BFB79000 001A64 (v01 Google GOOGDSDT 00000001 GOOG 00000001)
+[    0.012827] ACPI: FACS 0x00000000BFBF2000 000040
+[    0.013470] ACPI: SSDT 0x00000000BFB7C000 000316 (v02 GOOGLE Tpm2Tabl 00001000 INTL 20250807)
+[    0.015006] ACPI: TPM2 0x00000000BFB7B000 000034 (v04 GOOGLE          00000001 GOOG 00000001)
+[    0.016308] ACPI: SRAT 0x00000000BFB77000 0000C8 (v03 Google GOOGSRAT 00000001 GOOG 00000001)
+[    0.017538] ACPI: APIC 0x00000000BFB76000 000076 (v05 Google GOOGAPIC 00000001 GOOG 00000001)
+[    0.018725] ACPI: SSDT 0x00000000BFB75000 000980 (v01 Google GOOGSSDT 00000001 GOOG 00000001)
+[    0.019848] ACPI: WAET 0x00000000BFB74000 000028 (v01 Google GOOGWAET 00000001 GOOG 00000001)
+[    0.020985] ACPI: Reserving FACP table memory at [mem 0xbfb78000-0xbfb780f3]
+[    0.021968] ACPI: Reserving DSDT table memory at [mem 0xbfb79000-0xbfb7aa63]
+[    0.022867] ACPI: Reserving FACS table memory at [mem 0xbfbf2000-0xbfbf203f]
+[    0.023831] ACPI: Reserving SSDT table memory at [mem 0xbfb7c000-0xbfb7c315]
+[    0.024999] ACPI: Reserving TPM2 table memory at [mem 0xbfb7b000-0xbfb7b033]
+[    0.025971] ACPI: Reserving SRAT table memory at [mem 0xbfb77000-0xbfb770c7]
+[    0.027026] ACPI: Reserving APIC table memory at [mem 0xbfb76000-0xbfb76075]
+[    0.028173] ACPI: Reserving SSDT table memory at [mem 0xbfb75000-0xbfb7597f]
+[    0.029191] ACPI: Reserving WAET table memory at [mem 0xbfb74000-0xbfb74027]
+[    0.030680] SRAT: PXM 0 -> APIC 0x00 -> Node 0
+[    0.031328] SRAT: PXM 0 -> APIC 0x01 -> Node 0
+[    0.031919] ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+[    0.032686] ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0xbfffffff]
+[    0.033452] ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x23fffffff]
+[    0.034253] NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00000000-0xbfffffff]
+[    0.035656] NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x23fffffff] -> [mem 0x00000000-0x23fffffff]
+[    0.037147] NODE_DATA(0) allocated [mem 0x23ffd5000-0x23fffffff]
+[    0.038647] Zone ranges:
+[    0.039036]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.039836]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[    0.040637]   Normal   [mem 0x0000000100000000-0x000000023fffffff]
+[    0.041466]   Device   empty
+[    0.041976] Movable zone start for each node
+[    0.042655] Early memory node ranges
+[    0.043127]   node   0: [mem 0x0000000000001000-0x0000000000054fff]
+[    0.044067]   node   0: [mem 0x0000000000060000-0x0000000000097fff]
+[    0.044921]   node   0: [mem 0x0000000000100000-0x00000000bf8ecfff]
+[    0.045717]   node   0: [mem 0x00000000bfbff000-0x00000000bffdffff]
+[    0.046538]   node   0: [mem 0x0000000100000000-0x000000023fffffff]
+[    0.047365] Initmem setup node 0 [mem 0x0000000000001000-0x000000023fffffff]
+[    0.048729] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.048732] On node 0, zone DMA: 11 pages in unavailable ranges
+[    0.049536] On node 0, zone DMA: 104 pages in unavailable ranges
+[    0.065909] On node 0, zone DMA32: 786 pages in unavailable ranges
+[    0.067396] On node 0, zone Normal: 32 pages in unavailable ranges
+[    0.068565] ACPI: PM-Timer IO Port: 0xb008
+[    0.069896] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.070696] IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+[    0.071584] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.072429] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.073309] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.074216] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.075249] ACPI: Using ACPI (MADT) for SMP configuration information
+[    0.076091] smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+[    0.076809] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+[    0.077830] PM: hibernation: Registered nosave memory: [mem 0x00055000-0x0005ffff]
+[    0.078955] PM: hibernation: Registered nosave memory: [mem 0x00098000-0x000fffff]
+[    0.079919] PM: hibernation: Registered nosave memory: [mem 0xbf8ed000-0xbfbfefff]
+[    0.080885] PM: hibernation: Registered nosave memory: [mem 0xbffe0000-0xffffffff]
+[    0.081851] [mem 0xc0000000-0xffffffff] available for PCI devices
+[    0.082672] Booting paravirtualized kernel on KVM
+[    0.083272] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
+[    0.088622] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:2 nr_cpu_ids:2 nr_node_ids:1
+[    0.090238] percpu: Embedded 61 pages/cpu s212992 r8192 d28672 u1048576
+[    0.091197] kvm-guest: PV spinlocks enabled
+[    0.091828] PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+[    0.092770] Fallback order for Node 0: 0 
+[    0.092772] Built 1 zonelists, mobility grouping on.  Total pages: 2061304
+[    0.094168] Policy zone: Normal
+[    0.094568] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.1.0-47-cloud-amd64 root=PARTUUID=9e8eee69-528d-439d-9941-703f7759a2f2 ro console=tty0 console=ttyS0,115200 earlyprintk=ttyS0,115200 consoleblank=0 intel_iommu=off
+[    0.097149] DMAR: IOMMU disabled
+[    0.097600] random: crng init done
+[    0.100005] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+[    0.102042] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.103179] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.104064] software IO TLB: area num 2.
+[    0.134238] Memory: 3136012K/8384872K available (14343K kernel code, 2327K rwdata, 8328K rodata, 2596K init, 5460K bss, 322668K reserved, 0K cma-reserved)
+[    0.136372] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+Poking KASLR using RDRAND RDTSC...
+[    0.137942] ftrace: allocating 37609 entries in 147 pages
+[    0.145420] ftrace: allocated 147 pages with 4 groups
+[    0.146875] Dynamic Preempt: voluntary
+[    0.147832] rcu: Preemptible hierarchical RCU implementation.
+[    0.148588] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=2.
+[    0.149456] 	Trampoline variant of Tasks RCU enabled.
+[    0.150109] 	Rude variant of Tasks RCU enabled.
+[    0.150709] 	Tracing variant of Tasks RCU enabled.
+[    0.151321] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.152490] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+[    0.157646] NR_IRQS: 524544, nr_irqs: 440, preallocated irqs: 16
+[    0.158786] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.159810] Console: colour dummy device 80x25
+[    0.160755] printk: console [tty0] enabled
+[    0.161392] printk: console [ttyS0] enabled
+[    0.161392] printk: console [ttyS0] enabled
+[    0.162667] printk: bootconsole [earlyser0] disabled
+[    0.162667] printk: bootconsole [earlyser0] disabled
+[    0.164195] ACPI: Core revision 20220331
+[    0.164982] APIC: Switch to symmetric I/O mode setup
+[    0.166220] x2apic enabled
+[    0.169132] Switched APIC routing to physical x2apic.
+[    0.173667] ..TIMER: vector=0x30 apic1=0 pin1=0 apic2=-1 pin2=-1
+[    0.174815] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x285ce18fdb9, max_idle_ns: 440795334685 ns
+[    0.176353] Calibrating delay loop (skipped) preset value.. 5600.34 BogoMIPS (lpj=11200680)
+[    0.180511] Last level iTLB entries: 4KB 64, 2MB 8, 4MB 8
+[    0.181297] Last level dTLB entries: 4KB 64, 2MB 32, 4MB 32, 1GB 4
+[    0.182235] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+[    0.183507] Spectre V2 : Spectre BHI mitigation: SW BHB clearing on vm exit
+[    0.184353] Spectre V2 : Spectre BHI mitigation: SW BHB clearing on syscall
+[    0.185313] Spectre V2 : Mitigation: Enhanced / Automatic IBRS
+[    0.186121] Spectre V2 : Spectre v2 / PBRSB-eIBRS: Retire a single CALL on VMEXIT
+[    0.187213] RETBleed: Mitigation: Enhanced IBRS
+[    0.188358] Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+[    0.189748] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+[    0.191016] TAA: Vulnerable: Clear CPU buffers attempted, no microcode
+[    0.191942] MMIO Stale Data: Vulnerable: Clear CPU buffers attempted, no microcode
+[    0.192354] active return thunk: its_return_thunk
+[    0.192998] ITS: Mitigation: Aligned branch/return thunks
+[    0.193949] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[    0.195273] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+[    0.196354] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+[    0.197314] x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+[    0.198240] x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+[    0.199125] x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+[    0.200352] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[    0.201229] x86/fpu: xstate_offset[5]:  832, xstate_sizes[5]:   64
+[    0.202075] x86/fpu: xstate_offset[6]:  896, xstate_sizes[6]:  512
+[    0.202904] x86/fpu: xstate_offset[7]: 1408, xstate_sizes[7]: 1024
+[    0.203814] x86/fpu: Enabled xstate features 0xe7, context size is 2432 bytes, using 'compacted' format.
+[    0.226710] Freeing SMP alternatives memory: 36K
+[    0.227673] pid_max: default: 32768 minimum: 301
+[    0.235927] LSM: Security Framework initializing
+[    0.236366] landlock: Up and running.
+[    0.236872] Yama: disabled by default; enable with sysctl kernel.yama.*
+[    0.237841] AppArmor: AppArmor initialized
+[    0.238415] TOMOYO Linux initialized
+[    0.238930] LSM support for eBPF active
+[    0.239993] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.240363] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.350841] smpboot: CPU0: Intel(R) Xeon(R) CPU @ 2.80GHz (family: 0x6, model: 0x55, stepping: 0x7)
+[    0.352348] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.352348] cblist_init_generic: Setting shift to 1 and lim to 1.
+[    0.352348] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.352352] cblist_init_generic: Setting shift to 1 and lim to 1.
+[    0.353321] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.354405] cblist_init_generic: Setting shift to 1 and lim to 1.
+[    0.355255] Performance Events: unsupported p6 CPU model 85 no PMU driver, software events only.
+[    0.356376] signal: max sigframe size: 3632
+[    0.356989] rcu: Hierarchical SRCU implementation.
+[    0.357641] rcu: 	Max phase no-delay instances is 1000.
+[    0.358565] NMI watchdog: Perf NMI watchdog permanently disabled
+[    0.359449] smp: Bringing up secondary CPUs ...
+[    0.360455] x86: Booting SMP configuration:
+[    0.361096] .... node  #0, CPUs:      #1
+[    0.361499] TAA CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/tsx_async_abort.html for more details.
+[    0.364355] MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.
+[    0.366636] smp: Brought up 1 node, 2 CPUs
+[    0.367280] smpboot: Max logical packages: 1
+[    0.367898] smpboot: Total of 2 processors activated (11200.68 BogoMIPS)
+[    0.392033] node 0 deferred pages initialised in 20ms
+[    0.392794] devtmpfs: initialized
+[    0.392890] x86/mm: Memory block size: 128MB
+[    0.394016] ACPI: PM: Registering ACPI NVS region [mem 0xbfb7f000-0xbfbfefff] (524288 bytes)
+[    0.394016] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.396362] futex hash table entries: 512 (order: 3, 32768 bytes, linear)
+[    0.398118] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.399210] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+[    0.400995] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.402480] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.403687] audit: initializing netlink subsys (disabled)
+[    0.404382] audit: type=2000 audit(1779035177.274:1): state=initialized audit_enabled=0 res=1
+[    0.404444] thermal_sys: Registered thermal governor 'fair_share'
+[    0.405536] thermal_sys: Registered thermal governor 'bang_bang'
+[    0.408353] thermal_sys: Registered thermal governor 'step_wise'
+[    0.409234] thermal_sys: Registered thermal governor 'user_space'
+[    0.410078] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.410998] cpuidle: using governor ladder
+[    0.412365] cpuidle: using governor menu
+[    0.414303] efi: Freeing EFI boot services memory: 56236K
+[    0.415061] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+[    0.416467] PCI: Using configuration type 1 for base access
+[    0.418612] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+[    0.432368] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.433359] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+[    0.434285] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.435256] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[    0.440396] ACPI: Added _OSI(Module Device)
+[    0.441093] ACPI: Added _OSI(Processor Device)
+[    0.441721] ACPI: Added _OSI(Processor Aggregator Device)
+[    0.443414] ACPI: 3 ACPI AML tables successfully acquired and loaded
+[    0.445195] ACPI: Interpreter enabled
+[    0.445738] ACPI: PM: (supports S0 S3 S4 S5)
+[    0.446326] ACPI: Using IOAPIC for interrupt routing
+[    0.447091] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    0.448353] PCI: Ignoring E820 reservations for host bridge windows
+[    0.449361] ACPI: Enabled 16 GPEs in block 00 to 0F
+[    0.451763] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    0.452357] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments MSI HPX-Type3]
+[    0.453521] acpi PNP0A03:00: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+[    0.454985] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.
+[    0.456950] PCI host bridge to bus 0000:00
+[    0.457567] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    0.458492] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    0.459529] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    0.460353] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfefff window]
+[    0.461429] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.462321] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000
+[    0.465809] pci 0000:00:01.0: [8086:7110] type 00 class 0x060100
+[    0.483270] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000
+[    0.499226] pci 0000:00:01.3: quirk: [io  0xb000-0xb03f] claimed by PIIX4 ACPI
+[    0.500659] pci 0000:00:03.0: [1af4:1004] type 00 class 0x000000
+[    0.508356] pci 0000:00:03.0: BAR 0 [io  0xc040-0xc07f]
+[    0.514548] pci 0000:00:03.0: BAR 1 [mem 0xc0001000-0xc000107f]
+[    0.527479] pci 0000:00:04.0: [1af4:1000] type 00 class 0x020000
+[    0.534155] pci 0000:00:04.0: BAR 0 [io  0xc000-0xc03f]
+[    0.539241] pci 0000:00:04.0: BAR 1 [mem 0xc0000000-0xc000007f]
+[    0.550895] pci 0000:00:05.0: [1af4:1005] type 00 class 0x00ff00
+[    0.558205] pci 0000:00:05.0: BAR 0 [io  0xc080-0xc09f]
+[    0.563013] pci 0000:00:05.0: BAR 1 [mem 0xc0002000-0xc000203f]
+[    0.575524] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    0.577460] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    0.579407] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    0.581351] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    0.583250] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+[    0.584705] iommu: Default domain type: Translated 
+[    0.584705] iommu: DMA domain TLB invalidation policy: lazy mode 
+[    0.585413] pps_core: LinuxPPS API ver. 1 registered
+[    0.586117] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.587332] PTP clock support registered
+[    0.588568] Registered efivars operations
+[    0.588568] NetLabel: Initializing
+[    0.589011] NetLabel:  domain hash size = 128
+[    0.589682] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+[    0.590508] NetLabel:  unlabeled traffic allowed by default
+[    0.591321] PCI: Using ACPI for IRQ routing
+[    0.592477] vgaarb: loaded
+[    0.592823] clocksource: Switched to clocksource kvm-clock
+[    0.593797] VFS: Disk quotas dquot_6.6.0
+[    0.594736] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    0.596250] AppArmor: AppArmor Filesystem Enabled
+[    0.597290] pnp: PnP ACPI init
+[    0.598390] pnp: PnP ACPI: found 7 devices
+[    0.605225] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    0.606663] NET: Registered PF_INET protocol family
+[    0.607546] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.611154] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    0.612372] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.613493] TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.615194] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+[    0.616652] TCP: Hash tables configured (established 65536 bind 65536)
+[    0.617702] MPTCP token hash table entries: 8192 (order: 6, 196608 bytes, linear)
+[    0.618866] UDP hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    0.619815] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    0.620944] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.621809] NET: Registered PF_XDP protocol family
+[    0.622469] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+[    0.623401] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+[    0.624391] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+[    0.625466] pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfefff window]
+[    0.626433] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+[    0.627419] PCI: CLS 0 bytes, default 64
+[    0.628005] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+[    0.628106] Trying to unpack rootfs image as initramfs...
+[    0.628945] software IO TLB: mapped [mem 0x00000000b7f7f000-0x00000000bbf7f000] (64MB)
+[    0.629017] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x285ce18fdb9, max_idle_ns: 440795334685 ns
+[    0.633558] clocksource: Switched to clocksource tsc
+[    0.634662] Initialise system trusted keyrings
+[    0.635408] Key type blacklist registered
+[    0.636642] workingset: timestamp_bits=36 max_order=21 bucket_order=0
+[    0.640163] integrity: Platform Keyring initialized
+[    0.641049] integrity: Machine keyring initialized
+[    0.641772] Key type asymmetric registered
+[    0.642502] Asymmetric key parser 'x509' registered
+[    0.751022] Freeing initrd memory: 14456K
+[    0.756486] alg: self-tests for CTR-KDF (hmac(sha256)) passed
+[    0.757372] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 249)
+[    0.758679] io scheduler mq-deadline registered
+[    0.760908] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    0.762016] 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    0.763356] 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+[    0.764641] 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+[    0.765964] 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+[    0.768611] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x9009, rev-id 0)
+[    0.777175] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[    0.778482] i8042: Warning: Keylock active
+[    0.780772] serio: i8042 KBD port at 0x60,0x64 irq 1
+[    0.781508] serio: i8042 AUX port at 0x60,0x64 irq 12
+[    0.782366] rtc_cmos 00:00: RTC can wake from S4
+[    0.783878] rtc_cmos 00:00: registered as rtc0
+[    0.785032] rtc_cmos 00:00: setting system clock to 2026-05-17T16:26:17 UTC (1779035177)
+[    0.786418] rtc_cmos 00:00: alarms up to one day, 114 bytes nvram
+[    0.787331] intel_pstate: CPU model not supported
+[    0.788016] ledtrig-cpu: registered to indicate activity on CPUs
+[    0.798426] NET: Registered PF_INET6 protocol family
+[    0.804271] Segment Routing with IPv6
+[    0.805014] In-situ OAM (IOAM) with IPv6
+[    0.805685] mip6: Mobile IPv6
+[    0.806161] NET: Registered PF_PACKET protocol family
+[    0.807409] No MBM correction factor available
+[    0.808097] IPI shorthand broadcast: enabled
+[    0.808869] sched_clock: Marking stable (800246777, 8584796)->(810426957, -1595384)
+[    0.810222] registered taskstats version 1
+[    0.810909] Loading compiled-in X.509 certificates
+[    0.825960] Loaded X.509 cert 'Build time autogenerated kernel key: ace55436448ddecd4ac51f888b4bcff2770296a5'
+[    0.827544] Key type .fscrypt registered
+[    0.828163] Key type fscrypt-provisioning registered
+[    0.833118] Key type encrypted registered
+[    0.833816] AppArmor: AppArmor sha1 policy hashing enabled
+[    0.835019] integrity: Loading X.509 certificate: UEFI:db
+[    0.835889] integrity: Loaded X.509 cert 'Microsoft Corporation UEFI CA 2011: 13adbf4309bd82709c8cd54f316ed522988a1bd4'
+[    0.837412] integrity: Loading X.509 certificate: UEFI:db
+[    0.838215] integrity: Loaded X.509 cert 'Microsoft Windows Production PCA 2011: a92902398e16c49778cd90f99e4f9ae17c55af53'
+[    0.839885] integrity: Loading X.509 certificate: UEFI:db
+[    0.840813] integrity: Loaded X.509 cert 'Microsoft Corporation: Windows UEFI CA 2023: aefc5fbbbe055d8f8daa585473499417ab5a5272'
+[    0.842390] integrity: Loading X.509 certificate: UEFI:db
+[    0.843211] integrity: Loaded X.509 cert 'Microsoft UEFI CA 2023: 81aa6b3244c935bce0d6628af39827421e32497d'
+[    0.845273] ima: Allocated hash algorithm: sha256
+[    0.851600] ima: Can not allocate sha384 (reason: -2)
+[    0.881530] ima: No architecture policies found
+[    0.882819] evm: Initialising EVM extended attributes:
+[    0.883755] evm: security.selinux
+[    0.884277] evm: security.SMACK64 (disabled)
+[    0.885058] evm: security.SMACK64EXEC (disabled)
+[    0.885703] evm: security.SMACK64TRANSMUTE (disabled)
+[    0.886980] evm: security.SMACK64MMAP (disabled)
+[    0.887641] evm: security.apparmor
+[    0.888146] evm: security.ima
+[    0.888577] evm: security.capability
+[    0.889105] evm: HMAC attrs: 0x1
+[    0.965268] Freeing unused decrypted memory: 2036K
+[    0.966690] Freeing unused kernel image (initmem) memory: 2596K
+[    0.967506] Write protecting the kernel read-only data: 26624k
+[    0.969218] Freeing unused kernel image (text/rodata gap) memory: 2040K
+[    0.970605] Freeing unused kernel image (rodata/data gap) memory: 1912K
+[    0.972171] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+[    0.973073] Run /init as init process
+Loading, please wait...
+Starting systemd-udevd version 252.39-1~deb12u1
+[    0.984912] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
+[    1.047062] ACPI: \_SB_.LNKC: Enabled at IRQ 11
+[    1.047815] virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+[    1.052940] ACPI: \_SB_.LNKD: Enabled at IRQ 10
+[    1.055518] virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+[    1.060723] ACPI: \_SB_.LNKA: Enabled at IRQ 10
+[    1.061506] virtio-pci 0000:00:05.0: virtio_pci: leaving for legacy driver
+[    1.127194] SCSI subsystem initialized
+[    1.168239] virtio_net virtio1 ens4: renamed from eth0
+[    1.174601] scsi host0: Virtio SCSI HBA
+[    1.175267] blk-mq: reduced tag depth to 10240
+[    1.184749] scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
+[    1.202835] sd 0:0:1:0: [sda] 20971520 512-byte logical blocks: (10.7 GB/10.0 GiB)
+[    1.204101] sd 0:0:1:0: [sda] 4096-byte physical blocks
+[    1.204901] sd 0:0:1:0: [sda] Write Protect is off
+[    1.205692] sd 0:0:1:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    1.212478]  sda: sda1 sda14 sda15
+[    1.213297] sd 0:0:1:0: [sda] Attached SCSI disk
+Begin: Loading essential drivers ... done.
+Begin: Running /scripts/init-premount ... done.
+Begin: Mounting root file system ... Begin: Running /scripts/lo[    1.246298] gce-disk-expand: Resizing partition on 
+cal-top ... done.
+Begin: Running /scripts/local-premount ... [    1.297786]  sda: sda1 sda14 sda15
+[    1.299993] gce-disk-expand: Disk /dev/sda1 doesn't need resizing.
+done.
+Warning: fsck not present, so skipping root file system
+[    1.344649] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
+done.
+Begin: Running /scripts/local-bottom ... done.
+Begin: Running /scripts/init-bottom ... done.
+[    1.370326] Not activating Mandatory Access Control as /sbin/tomoyo-init does not exist.
+[    1.574929] systemd[1]: Inserted module 'autofs4'
+[    1.723742] systemd[1]: systemd 252.39-1~deb12u1 running in system mode (+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+[    1.728335] systemd[1]: Detected virtualization google.
+[    1.729228] systemd[1]: Detected architecture x86-64.
+
+Welcome to [1mDebian GNU/Linux 12 (bookworm)[0m!
+
+[    1.745512] systemd[1]: No hostname configured, using default hostname.
+[    1.746594] systemd[1]: Hostname set to <localhost>.
+[    1.754179] systemd[1]: Initializing machine ID from random generator.
+[    1.755154] systemd[1]: Installed transient /etc/machine-id file.
+[    2.630854] systemd[1]: Queued start job for default target graphical.target.
+[    2.649593] systemd[1]: Created slice system-getty.slice - Slice /system/getty.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-getty.slice[0m - Slice /system/getty.
+[    2.661143] systemd[1]: Created slice system-modprobe.slice - Slice /system/modprobe.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-modpr…lice[0m - Slice /system/modprobe.
+[    2.673158] systemd[1]: Created slice system-serial\x2dgetty.slice - Slice /system/serial-getty.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-seria…[0m - Slice /system/serial-getty.
+[    2.685104] systemd[1]: Created slice system-systemd\x2dgrowfs.slice - Slice /system/systemd-growfs.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-syste…0m - Slice /system/systemd-growfs.
+[    2.697103] systemd[1]: Created slice user.slice - User and Session Slice.
+[[0;32m  OK  [0m] Created slice [0;1;39muser.slice[0m - User and Session Slice.
+[    2.708865] systemd[1]: Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-ask-passwo…quests to Console Directory Watch.
+[    2.720853] systemd[1]: Started systemd-ask-password-wall.path - Forward Password Requests to Wall Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-ask-passwo… Requests to Wall Directory Watch.
+[    2.732966] systemd[1]: Set up automount proc-sys-fs-binfmt_misc.automount - Arbitrary Executable File Formats File System Automount Point.
+[[0;32m  OK  [0m] Set up automount [0;1;39mproc-sys-…rmats File System Automount Point.
+[    2.744780] systemd[1]: Expecting device dev-disk-by\x2dpartuuid-45ef6cb8\x2d4921\x2d44dd\x2d9e22\x2d46ddd53e43a6.device - /dev/disk/by-partuuid/45ef6cb8-4921-44dd-9e22-46ddd53e43a6...
+         Expecting device [0;1;39mdev-disk-…cb8-4921-44dd-9e22-46ddd53e43a6...
+[    2.756747] systemd[1]: Expecting device dev-ttyS0.device - /dev/ttyS0...
+         Expecting device [0;1;39mdev-ttyS0.device[0m - /dev/ttyS0...
+[    2.768752] systemd[1]: Reached target cryptsetup.target - Local Encrypted Volumes.
+[[0;32m  OK  [0m] Reached target [0;1;39mcryptsetup.…get[0m - Local Encrypted Volumes.
+[    2.780770] systemd[1]: Reached target integritysetup.target - Local Integrity Protected Volumes.
+[[0;32m  OK  [0m] Reached target [0;1;39mintegrityse…Local Integrity Protected Volumes.
+[    2.792816] systemd[1]: Reached target paths.target - Path Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mpaths.target[0m - Path Units.
+[    2.804777] systemd[1]: Reached target remote-fs.target - Remote File Systems.
+[[0;32m  OK  [0m] Reached target [0;1;39mremote-fs.target[0m - Remote File Systems.
+[    2.816748] systemd[1]: Reached target slices.target - Slice Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mslices.target[0m - Slice Units.
+[    2.828773] systemd[1]: Reached target swap.target - Swaps.
+[[0;32m  OK  [0m] Reached target [0;1;39mswap.target[0m - Swaps.
+[    2.840763] systemd[1]: Reached target veritysetup.target - Local Verity Protected Volumes.
+[[0;32m  OK  [0m] Reached target [0;1;39mveritysetup… - Local Verity Protected Volumes.
+[    2.852914] systemd[1]: Listening on syslog.socket - Syslog Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msyslog.socket[0m - Syslog Socket.
+[    2.864908] systemd[1]: Listening on systemd-fsckd.socket - fsck to fsckd communication Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-fsckd…sck to fsckd communication Socket.
+[    2.876867] systemd[1]: Listening on systemd-initctl.socket - initctl Compatibility Named Pipe.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-initc… initctl Compatibility Named Pipe.
+[    2.889247] systemd[1]: Listening on systemd-journald-audit.socket - Journal Audit Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-journ…socket[0m - Journal Audit Socket.
+[    2.904940] systemd[1]: Listening on systemd-journald-dev-log.socket - Journal Socket (/dev/log).
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-journ…t[0m - Journal Socket (/dev/log).
+[    2.916935] systemd[1]: Listening on systemd-journald.socket - Journal Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-journald.socket[0m - Journal Socket.
+[    2.929005] systemd[1]: Listening on systemd-networkd.socket - Network Service Netlink Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-netwo… - Network Service Netlink Socket.
+[    2.940985] systemd[1]: Listening on systemd-udevd-control.socket - udev Control Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-udevd….socket[0m - udev Control Socket.
+[    2.952930] systemd[1]: Listening on systemd-udevd-kernel.socket - udev Kernel Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-udevd…l.socket[0m - udev Kernel Socket.
+[    2.980844] systemd[1]: Mounting dev-hugepages.mount - Huge Pages File System...
+         Mounting [0;1;39mdev-hugepages.mount[0m - Huge Pages File System...
+[    2.993794] systemd[1]: Mounting dev-mqueue.mount - POSIX Message Queue File System...
+         Mounting [0;1;39mdev-mqueue.mount…POSIX Message Queue File System...
+[    3.009829] systemd[1]: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+         Mounting [0;1;39msys-kernel-debug.…[0m - Kernel Debug File System...
+[    3.021733] systemd[1]: Mounting sys-kernel-tracing.mount - Kernel Trace File System...
+         Mounting [0;1;39msys-kernel-tracin…[0m - Kernel Trace File System...
+[    3.034074] systemd[1]: Starting kmod-static-nodes.service - Create List of Static Device Nodes...
+         Starting [0;1;39mkmod-static-nodes…ate List of Static Device Nodes...
+[    3.045941] systemd[1]: Starting modprobe@configfs.service - Load Kernel Module configfs...
+         Starting [0;1;39mmodprobe@configfs…m - Load Kernel Module configfs...
+[    3.061833] systemd[1]: Starting modprobe@dm_mod.service - Load Kernel Module dm_mod...
+         Starting [0;1;39mmodprobe@dm_mod.s…[0m - Load Kernel Module dm_mod...
+[    3.074003] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+         Starting [0;1;39mmodpr[    3.075592] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+obe@drm.service[    3.077278] device-mapper: uevent: version 1.0.3
+[0m - Load Kernel Module drm...
+[    3.078536] device-mapper: ioctl: 4.47.0-ioctl (2022-07-28) initialised: dm-devel@redhat.com
+[    3.089830] systemd[1]: Starting modprobe@efi_pstore.service - Load Kernel Module efi_pstore...
+         Starting [0;1;39mmodprobe@efi_psto…- Load Kernel Module efi_pstore...
+[    3.095399] pstore: Using crash dump compression: deflate
+[    3.101809] systemd[1]: Starting modprobe@fuse.service - Load Kernel Module fuse...
+         Starting [0;1;39mmodpr[    3.103255] pstore: Registered efi as persistent store backend
+obe@fuse.ser…e[0m - Load Kernel Module fuse...
+[    3.114414] fuse: init (API version 7.38)
+[    3.117799] systemd[1]: Starting modprobe@loop.service - Load Kernel Module loop...
+         Starting [0;1;39mmodprobe@loop.ser…e[0m - Load Kernel Module loop...
+[    3.127935] loop: module loaded
+[    3.129312] systemd[1]: netplan-ovs-cleanup.service - OpenVSwitch configuration for cleanup was skipped because of an unmet condition check (ConditionFileIsExecutable=/usr/bin/ovs-vsctl).
+[    3.132891] systemd[1]: Starting systemd-fsck-root.service - File System Check on Root Device...
+         Starting [0;1;39msystemd-fsck-root…ile System Check on Root Device...
+[    3.146538] systemd[1]: Starting systemd-journald.service - Journal Service...
+         Starting [0;1;39msystemd-journald.service[0m - Journal Service...
+[    3.151693] systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+         Starting [0;1;39msystemd-modules-l…rvice[0m - Load Kernel Modules...
+[    3.155678] systemd[1]: Starting systemd-network-generator.service - Generate network units from Kernel command line...
+         Starting [0;1;39msystemd-network-g… units from Kernel command line...
+[    3.165795] systemd[1]: Starting systemd-udev-trigger.service - Coldplug All udev Devices...
+         Starting [0;1;39msystemd-udev-trig…[0m - Coldplug All udev Devices...
+[    3.170130] systemd[1]: Mounted dev-hugepages.mount - Huge Pages File System.
+[[0;32m  OK  [0m] Mounted [0;1;39mdev-hugepag[    3.171813] systemd[1]: Mounted dev-mqueue.mount - POSIX Message Queue File System.
+es.mount[0m - Huge Pages File System.
+[[0;32m  OK  [0m] Mounted [0;1;39mdev-mqueue.mount[…- POSIX Message Queue File System.
+[    3.176466] systemd[1]: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-debug.m…nt[0m - Kernel Debug File System.
+[    3.197010] systemd[1]: Mounted sys-kernel-tracing.mount - Kernel Trace File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-tracing…nt[0m - Kernel Trace File System.
+[    3.208860] systemd[1]: Started systemd-journald.service - Journal Service.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-journald.service[0m - Journal Service.
+[[0;32m  OK  [0m] Finished [0;1;39mkmod-static-nodes…reate List of Static Device Nodes.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@configfs…[0m - Load Kernel Module configfs.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@dm_mod.s…e[0m - Load Kernel Module dm_mod.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@drm.service[0m - Load Kernel Module drm.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@efi_psto…m - Load Kernel Module efi_pstore.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@fuse.service[0m - Load Kernel Module fuse.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@loop.service[0m - Load Kernel Module loop.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-fsck-root… File System Check on Root Device.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-modules-l…service[0m - Load Kernel Modules.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-network-g…rk units from Kernel command line.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-udev-trig…e[0m - Coldplug All udev Devices.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork-pre…get[0m - Preparation for Network.
+         Mounting [0;1;39msys-fs-fuse-conne…[0m - FUSE Control File System...
+         Mounting [0;1;39msys-kernel-config…ernel Configuration File System...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-fsckd.serv…tem Check Daemon to report status.
+         Starting [0;1;39msystemd-remount-f…nt Root and Kernel File Systems...
+         Starting [0;1;39msystemd-sysctl.se…c[    3.438589] EXT4-fs (sda1): re-mounted. Quota mode: none.
+e[0m - Apply Kernel Variables...
+[[0;32m  OK  [0m] Mounted [0;1;39msys-fs-fuse-connec…nt[0m - FUSE Control File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-config.… Kernel Configuration File System.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-remount-f…ount Root and Kernel File Systems.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-sysctl.service[0m - Apply Kernel Variables.
+         Starting [0;1;39msystemd-growfs@-.…ice[0m - Grow File System on /...
+         Starting [0;1;39msystemd-journal-f…h Journal to Persistent Storage...
+[    3.532849] systemd-journald[217]: Received client request to flush runtime journal.
+[    3.535871] EXT4-fs (sda1): resizing filesystem from 2588416 to 2588416 blocks
+         Starting [0;1;39msystemd-random-se…ice[0m - Load/Save Random Seed...
+         Starting [0;1;39msystemd-sysusers.…rvice[0m - Create System Users...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-growfs@-.…rvice[0m - Grow File System on /.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-journal-f…ush Journal to Persistent Storage.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-random-se…rvice[0m - Load/Save Random Seed.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-sysusers.service[0m - Create System Users.
+         Starting [0;1;39msystemd-tmpfiles-…ate Static Device Nodes in /dev...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-…reate Static Device Nodes in /dev.
+[[0;32m  OK  [0m] Reached target [0;1;39mlocal-fs-pr…reparation for Local File Systems.
+         Starting [0;1;39msystemd-udevd.ser…ger for Device Events and Files...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-udevd.serv…nager for Device Events and Files.
+         Starting [0;1;39msystemd-networkd.…ice[0m - Network Configuration...
+[[0;32m  OK  [0m] Found device [0;1;39mdev-ttyS0.device[0m - /dev/ttyS0.
+[    3.844366] sd 0:0:1:0: Attached scsi generic sg0 type 0
+[    3.851091] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input2
+[    3.864683] ACPI: button: Power Button [PWRF]
+[    3.865418] input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input3
+[    3.887700] ACPI: button: Sleep Button [SLPF]
+[[0;32m  OK  [0m] Found device [0;1;39mdev-disk-by\x…a6.device[0m - PersistentDisk 15.
+         Mounting [0;1;39mboot-efi.mount[0m - /boot/efi...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-networkd.service[0m - Network Configuration.
+         Starting [0;1;39msystemd-networkd-…it for Network to be Configured...
+[    4.006503] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+[    4.013042] cryptd: max_cpu_qlen set to 1000
+[    4.028770] AVX2 version of gcm_enc/dec engaged.
+[    4.029534] AES CTR mode by8 optimization enabled
+[[0;32m  OK  [0m] Mounted [0;1;39mboot-efi.mount[0m - /boot/efi.
+[[0;32m  OK  [0m] Reached target [0;1;39mlocal-fs.target[0m - Local File Systems.
+         Starting [0;1;39mapparmor.service[0m - Load AppArmor profiles...
+         Starting [0;1;39msystemd-binfmt.se…et Up Additional Binary Formats...
+         Starting [0;1;39msystemd-machine-i… a transient machine-id on disk...
+         Starting [0;1;39msystemd-tmpfiles-…te System Files and Directories...
+         Mounting [0;1;39mproc-sys-fs-binfm…utable File Formats File System...
+[[0;32m  OK  [0m] Mounted [0;1;39mproc-sys-fs-binfmt…ecutable File Formats File System.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-binfmt.se… Set Up Additional Binary Formats.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-…eate System Files and Directories.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-machine-i…it a transient machine-id on disk.
+         Starting [0;1;39msystemd-resolved.…e[0m - Network Name Resolution...
+         Starting [0;1;39msystemd-timesyncd… - Network Time Synchronization...
+         Starting [0;1;39msystemd-update-ut…rd System Boot/Shutdown in UTMP...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-update-ut…cord System Boot/Shutdown in UTMP.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-timesyncd.…0m - Network Time Synchronization.
+[[0;32m  OK  [0m] Reached target [0;1;39mtime-set.target[0m - System Time Set.
+[    4.584162] audit: type=1400 audit(1779035181.291:2): apparmor="STATUS" operation="profile_load" profile="unconfined" name="nvidia_modprobe" pid=369 comm="apparmor_parser"
+[    4.588595] audit: type=1400 audit(1779035181.299:3): apparmor="STATUS" operation="profile_load" profile="unconfined" name="nvidia_modprobe//kmod" pid=369 comm="apparmor_parser"
+[    4.593550] audit: type=1400 audit(1779035181.303:4): apparmor="STATUS" operation="profile_load" profile="unconfined" name="lsb_release" pid=368 comm="apparmor_parser"
+[[0;32m  OK  [0m] Started [0;1;39msystemd-resolved.s…ice[0m - Network Name Resolution.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork.target[0m - Network.
+[[0;32m  OK  [0m] Reached target [0;1;39mnss-lookup.…m - Host and Network Name Lookups.
+[    4.774742] audit: type=1400 audit(1779035181.483:5): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/bin/man" pid=376 comm="apparmor_parser"
+[    4.777921] audit: type=1400 audit(1779035181.487:6): apparmor="STATUS" operation="profile_load" profile="unconfined" name="man_filter" pid=376 comm="apparmor_parser"
+[    4.781464] audit: type=1400 audit(1779035181.491:7): apparmor="STATUS" operation="profile_load" profile="unconfined" name="man_groff" pid=376 comm="apparmor_parser"
+[    4.933106] audit: type=1400 audit(1779035181.643:8): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/NetworkManager/nm-dhcp-client.action" pid=375 comm="apparmor_parser"
+[    4.935627] audit: type=1400 audit(1779035181.643:9): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/NetworkManager/nm-dhcp-helper" pid=375 comm="apparmor_parser"
+[    4.938211] audit: type=1400 audit(1779035181.643:10): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/connman/scripts/dhclient-script" pid=375 comm="apparmor_parser"
+[[0;32m  OK  [0m] Finished [0;1;39mapparmor.service[0m - Load AppArmor profiles.
+[[0;32m  OK  [0m] Started [0;1;39mhaveged.service[0…mon based on the HAVEGE algorithm.
+[[0;32m  OK  [0m] Reached target [0;1;39msysinit.target[0m - System Initialization.
+[[0;32m  OK  [0m] Started [0;1;39mapt-daily.timer[0m - Daily apt download activities.
+[[0;32m  OK  [0m] Started [0;1;39mapt-daily-upgrade.… apt upgrade and clean activities.
+[[0;32m  OK  [0m] Started [0;1;39mdpkg-db-backup.tim… Daily dpkg database backup timer.
+[[0;32m  OK  [0m] Started [0;1;39me2scrub_all.timer…etadata Check for All Filesystems.
+[[0;32m  OK  [0m] Started [0;1;39mexim4-base.timer[0m - Daily exim4-base housekeeping.
+[[0;32m  OK  [0m] Started [0;1;39mfstrim.timer[0m - Discard unused blocks once a week.
+[[0;32m  OK  [0m] Started [0;1;39mgoogle-oslogin-cac…mer[0m - NSS cache refresh timer.
+[[0;32m  OK  [0m] Started [0;1;39mlogrotate.timer[0m - Daily rotation of log files.
+[[0;32m  OK  [0m] Started [0;1;39mman-db.timer[0m - Daily man-db regeneration.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-tmpfiles-c… Cleanup of Temporary Directories.
+[[0;32m  OK  [0m] Reached target [0;1;39mtimers.target[0m - Timer Units.
+[[0;32m  OK  [0m] Listening on [0;1;39mdbus.socket[…- D-Bus System Message Bus Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39muuidd.socket…m - UUID daemon activation socket.
+[[0;32m  OK  [0m] Reached target [0;1;39msockets.target[0m - Socket Units.
+         Starting [0;1;39mgoogle-disk-expan…esize root filesystem if needed...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-networkd-…Wait for Network to be Configured.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork-online.target[0m - Network is Online.
+[[0;32m  OK  [0m] Finished [0;1;39mgoogle-disk-expan… Resize root filesystem if needed.
+[[0;32m  OK  [0m] Reached target [0;1;39mbasic.target[0m - Basic System.
+[[0;32m  OK  [0m] Started [0;1;39mcron.service[0m -…kground program processing daemon.
+         Starting [0;1;39mdbus.service[0m - D-Bus System Message Bus...
+         Starting [0;1;39me2scrub_reap.serv…e ext4 Metadata Check Snapshots...
+         Starting [0;1;39mexim4.service[0m… LSB: exim Mail Transport Agent...
+[[0;32m  OK  [0m] Started [0;1;39mgoogle-osconfig-ag…rvice[0m - Google OSConfig Agent.
+         Starting [0;1;39mgoogle-oslogin-ca…service[0m - NSS cache refresh...
+         Starting [0;1;39mnetworkd-dispatch…her daemon for systemd-networkd...
+         Starting [0;1;39mnvmf-autoconnect.…stems automatically during boot...
+         Starting [0;1;39mrsyslog.service[0m - System Logging Service...
+         Starting [0;1;39msystemd-logind.se…ice[0m - User Login Management...
+         Starting [0;1;39msystemd-user-sess…vice[0m - Permit User Sessions...
+[[0;32m  OK  [0m] Started [0;1;39mdbus.service[0m - D-Bus System Message Bus.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-user-sess…ervice[0m - Permit User Sessions.
+[[0;32m  OK  [0m] Started [0;1;39mgetty@tty1.service[0m - Getty on tty1.
+[[0;32m  OK  [0m] Started [0;1;39mserial-getty@ttyS0…rvice[0m - Serial Getty on ttyS0.
+[[0;32m  OK  [0m] Reached target [0;1;39mgetty.target[0m - Login Prompts.
+         Starting [0;1;39msystemd-hostnamed.service[0m - Hostname Service...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-logind.service[0m - User Login Management.
+[[0;32m  OK  [0m] Started [0;1;39munattended-upgrade…0m - Unattended Upgrades Shutdown.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-hostnamed.service[0m - Hostname Service.
+         Starting [0;1;39mpolkit.service[0m - Authorization Manager...
+[[0;32m  OK  [0m] Finished [0;1;39mnvmf-autoconnect.…systems automatically during boot.
+[[0;32m  OK  [0m] Started [0;1;39mrsyslog.service[0m - System Logging Service.
+2026-05-17T16:26:22.934887+00:00 localhost systemd-fsck[220]: /dev/sda1: clean, 85884/647168 files, 613382/2588416 blocks
+2026-05-17T16:26:22.935701+00:00 localhost systemd[1]: Finished kmod-static-nodes.service - Create List of Static Device Nodes.
+2026-05-17T16:26:22.935719+00:00 localhost systemd[1]: modprobe@configfs.service: Deactivated successfully.
+2026-05-17T16:26:22.935723+00:00 localhost systemd[1]: Finished modprobe@configfs.service - Load Kernel Module configfs.
+2026-05-17T16:26:22.935727+00:00 localhost systemd[1]: modprobe@dm_mod.service: Deactivated successfully.
+2026-05-17T16:26:22.935731+00:00 localhost systemd[1]: Finished modprobe@dm_mod.service - Load Kernel Module dm_mod.
+2026-05-17T16:26:22.935735+00:00 localhost systemd[1]: modprobe@drm.service: Deactivated successfully.
+2026-05-17T16:26:22.935739+00:00 localhost systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+2026-05-17T16:26:22.935746+00:00 localhost systemd[1]: modprobe@efi_pstore.service: Deactivated successfully.
+2026-05-17T16:26:22.935750+00:00 localhost systemd[1]: Finished modprobe@efi_pstore.service - Load Kernel Module efi_pstore.
+2026-05-17T16:26:22.935754+00:00 localhost systemd[1]: modprobe@fuse.service: Deactivated successfully.
+2026-05-17T16:26:22.935758+00:00 localhost systemd[1]: Finished modprobe@fuse.service - Load Kernel Module fuse.
+2026-05-17T16:26:22.935762+00:00 localhost systemd[1]: modprobe@loop.service: Deactivated successfully.
+2026-05-17T16:26:22.935766+00:00 localhost systemd[1]: Finished modprobe@loop.service - Load Kernel Module loop.
+2026-05-17T16:26:22.935773+00:00 localhost systemd[1]: Finished systemd-fsck-root.service - File System Check on Root Device.
+2026-05-17T16:26:22.935777+00:00 localhost systemd[1]: Finished systemd-modules-load.service - Load Kernel Modules.
+2026-05-17T16:26:22.935780+00:00 localhost systemd[1]: Finished systemd-network-generator.service - Generate network units from Kernel command line.
+2026-05-17T16:26:22.935784+00:00 localhost systemd[1]: Finished systemd-udev-trigger.service - Coldplug All udev Devices.
+2026-05-17T16:26:22.935788+00:00 localhost systemd[1]: Reached target network-pre.target - Preparation for Network.
+2026-05-17T16:26:22.935792+00:00 localhost systemd[1]: Mounting sys-fs-fuse-connections.mount - FUSE Control File System...
+2026-05-17T16:26:22.935798+00:00 localhost systemd[1]: Mounting sys-kernel-config.mount - Kernel Configuration File System...
+2026-05-17T16:26:22.935802+00:00 localhost systemd[1]: Started systemd-fsckd.service - File System Check Daemon to report status.
+2026-05-17T16:26:22.935806+00:00 localhost systemd[1]: Starting systemd-remount-fs.service - Remount Root and Kernel File Systems...
+2026-05-17T16:26:22.935810+00:00 localhost systemd[1]: systemd-repart.service - Repartition Root Disk was skipped because no trigger condition checks were met.
+2026-05-17T16:26:22.935814+00:00 localhost systemd[1]: Starting systemd-sysctl.service - Apply Kernel Variables...
+2026-05-17T16:26:22.935819+00:00 localhost systemd[1]: Mounted sys-fs-fuse-connections.mount - FUSE Control File System.
+2026-05-17T16:26:22.935826+00:00 localhost systemd[1]: Mounted sys-kernel-config.mount - Kernel Configuration File System.
+2026-05-17T16:26:22.935830+00:00 localhost systemd[1]: Finished systemd-remount-fs.service - Remount Root and Kernel File Systems.
+2026-05-17T16:26:22.935834+00:00 localhost systemd[1]: Finished systemd-sysctl.service - Apply Kernel Variables.
+2026-05-17T16:26:22.935838+00:00 localhost systemd[1]: systemd-firstboot.service - First Boot Wizard was skipped because of an unmet condition check (ConditionFirstBoot=yes).
+2026-05-17T16:26:22.935843+00:00 localhost systemd[1]: Starting systemd-growfs@-.service - Grow File System on /...
+2026-05-17T16:26:22.935847+00:00 localhost systemd[1]: Starting systemd-journal-flush.service - Flush Journal to Persistent Storage...
+2026-05-17T16:26:22.935854+00:00 localhost systemd[1]: systemd-pstore.service - Platform Persistent Storage Archival was skipped because of an unmet condition check (ConditionDirectoryNotEmpty=/sys/fs/pstore).
+2026-05-17T16:26:22.935858+00:00 localhost systemd[1]: Starting systemd-random-seed.service - Load/Save Random Seed...
+2026-05-17T16:26:22.935862+00:00 localhost systemd-growfs[231]: Successfully resized "/" to 9.8G bytes.
+2026-05-17T16:26:22.935867+00:00 localhost systemd[1]: Starting systemd-sysusers.service - Create System Users...
+2026-05-17T16:26:22.935871+00:00 localhost systemd[1]: Finished systemd-growfs@-.service - Grow File System on /.
+2026-05-17T16:26:22.935875+00:00 localhost systemd[1]: Finished systemd-journal-flush.service - Flush Journal to Persistent Storage.
+2026-05-17T16:26:22.935883+00:00 localhost systemd[1]: Finished systemd-random-seed.service - Load/Save Random Seed.
+2026-05-17T16:26:22.935887+00:00 localhost systemd[1]: Finished systemd-sysusers.service - Create System Users.
+2026-05-17T16:26:22.935891+00:00 localhost systemd[1]: first-boot-complete.target - First Boot Complete was skipped because of an unmet condition check (ConditionFirstBoot=yes).
+2026-05-17T16:26:22.935896+00:00 localhost systemd[1]: Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
+2026-05-17T16:26:22.935900+00:00 localhost systemd[1]: Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
+2026-05-17T16:26:22.935907+00:00 localhost systemd[1]: Reached target local-fs-pre.target - Preparation for Local File Systems.
+2026-05-17T16:26:22.935911+00:00 localhost systemd[1]: Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
+2026-05-17T16:26:22.935914+00:00 localhost systemd-udevd[243]: Using default interface naming scheme 'v252'.
+2026-05-17T16:26:22.935919+00:00 localhost systemd[1]: Started systemd-udevd.service - Rule-based Manager for Device Events and Files.
+2026-05-17T16:26:22.935923+00:00 localhost systemd[1]: Starting systemd-networkd.service - Network Configuration...
+2026-05-17T16:26:22.935927+00:00 localhost systemd[1]: Found device dev-ttyS0.device - /dev/ttyS0.
+2026-05-17T16:26:22.935934+00:00 localhost systemd[1]: Found device dev-disk-by\x2dpartuuid-45ef6cb8\x2d4921\x2d44dd\x2d9e22\x2d46ddd53e43a6.device - PersistentDisk 15.
+2026-05-17T16:26:22.935939+00:00 localhost systemd-networkd[254]: lo: Link UP
+2026-05-17T16:26:22.935942+00:00 localhost systemd-networkd[254]: lo: Gained carrier
+2026-05-17T16:26:22.935947+00:00 localhost systemd-networkd[254]: Enumeration completed
+2026-05-17T16:26:22.935951+00:00 localhost systemd-networkd[254]: ens4: Configuring with /run/systemd/network/10-netplan-all-en.network.
+2026-05-17T16:26:22.935954+00:00 localhost systemd-networkd[254]: ens4: Link UP
+2026-05-17T16:26:22.935963+00:00 localhost systemd-networkd[254]: ens4: Gained carrier
+2026-05-17T16:26:22.935966+00:00 localhost systemd[1]: Mounting boot-efi.mount - /boot/efi...
+2026-05-17T16:26:22.935969+00:00 localhost systemd[1]: Started systemd-networkd.service - Network Configuration.
+2026-05-17T16:26:22.935973+00:00 localhost systemd-networkd[254]: ens4: Overlong DHCP hostname received, shortened from 'vos-kvm-verify-aeb3736-1779035162.us-central1-a.c.deft-strata-482321-d5.internal' to 'vos-kvm-verify-aeb3736-1779035162'
+2026-05-17T16:26:22.935977+00:00 localhost systemd-networkd[254]: ens4: DHCPv4 address 10.128.0.3/32, gateway 10.128.0.1 acquired from 169.254.169.254
+2026-05-17T16:26:22.935981+00:00 localhost systemd[1]: Starting systemd-networkd-wait-online.service - Wait for Network to be Configured...
+2026-05-17T16:26:22.935988+00:00 localhost systemd[1]: Mounted boot-efi.mount - /boot/efi.
+2026-05-17T16:26:22.935992+00:00 localhost systemd[1]: Reached target local-fs.target - Local File Systems.
+2026-05-17T16:26:22.935995+00:00 localhost systemd[1]: Starting apparmor.service - Load AppArmor profiles...
+2026-05-17T16:26:22.936000+00:00 localhost apparmor.systemd[329]: Restarting AppArmor
+2026-05-17T16:26:22.936005+00:00 localhost apparmor.systemd[329]: Reloading AppArmor profiles
+2026-05-17T16:26:22.936009+00:00 localhost systemd[1]: Starting systemd-binfmt.service - Set Up Additional Binary Formats.         Starting [0;1;39mgoogle-guest-agen…gine Guest Agent Plugin Manager...
+..
+2026-05-17T16:26:22.936016+00:00 localhost systemd[1]: Starting systemd-machine-id-commit.service - Commit a transient machine-id on disk...
+2026-05-17T16:26:22.936021+00:00 localhost systemd[1]: Starting systemd-tmpfiles-setup.service - Create System Files and Directories...
+2026-05-17T16:26:22.936025+00:00 localhost systemd[1]: proc-sys-fs-binfmt_misc.automount: Got automount request for /proc/sys/fs/binfmt_misc, triggered by 362 (systemd-binfmt)
+2026-05-17T16:26:22.936029+00:00 localhost systemd[1]: Mounting proc-sys-fs-binfmt_misc.mount - Arbitrary Executable File Formats File System...
+2026-05-17T16:26:22.936033+00:00 localhost systemd[1]: Mounted proc-sys-fs-binfmt_misc.mount - Arbitrary Executable File Formats File System.
+2026-05-17T16:26:22.936040+00:00 localhost systemd[1]: Finished systemd-binfmt.service - Set Up Additional Binary Formats.
+2026-05-17T16:26:22.936044+00:00 localhost systemd[1]: etc-machine\x2did.mount: Deactivated successfully.
+2026-05-17T16:26:22.936049+00:00 localhost systemd[1]: Finished systemd-tmpfiles-setup.service - Create System Files and Directories.
+2026-05-17T16:26:22.936053+00:00 localhost systemd[1]: Finished systemd-machine-id-commit.service - Commit a transient machine-id on disk.
+2026-05-17T16:26:22.936057+00:00 localhost systemd[1]: Starting systemd-resolved.service - Network Name Resolution...
+2026-05-17T16:26:22.936061+00:00 localhost systemd[1]: Starting systemd-timesyncd.service - Network Time Synchronization...
+2026-05-17T16:26:22.936068+00:00 localhost systemd[1]: Starting systemd-update-utmp.service - Record System Boot/Shutdown in UTMP...
+2026-05-17T16:26:22.936073+00:00 localhost systemd[1]: Finished systemd-update-utmp.service - Record System Boot/Shutdown in UTMP.
+2026-05-17T16:26:22.936077+00:00 localhost systemd[1]: Started systemd-timesyncd.service - Network Time Synchronization.
+2026-05-17T16:26:22.936081+00:00 localhost systemd-resolved[371]: Positive Trust Anchors:
+2026-05-17T16:26:22.936085+00:00 localhost systemd-resolved[371]: . IN DS 20326 8 2 e06d44b80b8f1d39a95c0b0d7c65d08458e880409bbc683457104237c7f8ec8d
+2026-05-17T16:26:22.936088+00:00 localhost systemd-resolved[371]: . IN DS 38696 8 2 683d2d0acb8c9b712a1948b27f741219298d0a450d612c483af444a4c0fb2b16
+2026-05-17T16:26:22.936095+00:00 localhost systemd-resolved[371]: Negative trust anchors: home.arpa 10.in-addr.arpa 16.172.in-addr.arpa 17.172.in-addr.arpa 18.172.in-addr.arpa 19.172.in-addr.arpa 20.172.in-addr.arpa 21.172.in-addr.arpa 22.172.in-addr.arpa 23.172.in-addr.arpa 24.172.in-addr.arpa 25.172.in-addr.arpa 26.172.in-addr.arpa 27.172.in-addr.arpa 28.172.in-addr.arpa 29.172.in-addr.arpa 30.172.in-addr.arpa 31.172.in-addr.arpa 170.0.0.192.in-addr.arpa 171.0.0.192.in-addr.arpa 168.192.in-addr.arpa d.f.ip6.arpa ipv4only.arpa corp home internal intranet lan local private test
+2026-05-17T16:26:22.936108+00:00 localhost systemd[1]: Reached target time-set.target - System Time Set.
+2026-05-17T16:26:22.936112+00:00 localhost systemd-resolved[371]: Defaulting to hostname 'linux'.
+2026-05-17T16:26:22.936120+00:00 localhost systemd[1]: Started systemd-resolved.service - Network Name Resolution.
+2026-05-17T16:26:22.936124+00:00 localhost systemd[1]: Reached target network.target - Network.
+2026-05-17T16:26:22.936128+00:00 localhost systemd[1]: Reached target nss-lookup.target - Host and Network Name Lookups.
+2026-05-17T16:26:22.936133+00:00 localhost systemd[1]: Finished apparmor.service - Load AppArmor profiles.
+2026-05-17T16:26:22.936137+00:00 localhost systemd[1]: Started haveged.service - Entropy Daemon based on the HAVEGE algorithm.
+2026-05-17T16:26:22.936141+00:00 localhost systemd[1]: Reached target sysinit.target - System Initialization.
+2026-05-17T16:26:22.936147+00:00 localhost haveged[379]: haveged: command socket is listening at fd 3
+2026-05-17T16:26:22.936151+00:00 localhost systemd-networkd[254]: ens4: Gained IPv6LL
+2026-05-17T16:26:22.936155+00:00 localhost systemd[1]: Started apt-daily.timer - Daily apt download activities.
+2026-05-17T16:26:22.936159+00:00 localhost systemd[1]: Started apt-daily         Starting [0;1;39mgoogle-guest-comp…ute Engine Guest Compat Manager...
+-upgrade.timer - Daily apt upgrade and clean activities.
+2026-05-17T16:26:22.936163+00:00 localhost systemd[1]: Started dpkg-db-backup.timer - Daily dpkg database backup timer.
+2026-05-17T16:26:22.936167+00:00 localhost systemd[1]: Started e2scrub_all.timer - Periodic ext4 Online Metadata Check for All Filesystems.
+2026-05-17T16:26:22.936174+00:00 localhost systemd[1]: Started exim4-base.timer - Daily exim4-base housekeeping.
+2026-05-17T16:26:22.936177+00:00 localhost systemd[1]: Started fstrim.timer - Discard unused blocks once a week.
+2026-05-17T16:26:22.936181+00:00 localhost systemd[1]: Started google-oslogin-cache.timer - NSS cache refresh timer.
+2026-05-17T16:26:22.936185+00:00 localhost systemd[1]: Started logrotate.timer - Daily rotation of log files.
+2026-05-17T16:26:22.936189+00:00 localhost systemd[1]: Started man-db.timer - Daily man-db regeneration.
+2026-05-17T16:26:22.936193+00:00 localhost systemd[1]: Started systemd-tmpfiles-clean.timer - Daily Cleanup of Temporary Directories.
+2026-05-17T16:26:22.936199+00:00 localhost systemd[1]: Reached target timers.target - Timer Units.
+2026-05-17T16:26:22.936203+00:00 localhost systemd[1]: Listening on dbus.socket - D-Bus System Message Bus Socket.
+2026-05-17T16:26:22.936207+00:00 localhost systemd[1]: Listening on uuidd.socket - UUID daemon activation socket.
+2026-05-17T16:26:22.936211+00:00 localhost systemd[1]: Reached target sockets.target - Socket Units.
+2026-05-17T16:26:22.936215+00:00 localhost haveged[379]: haveged: ver: 1.9.14; arch: x86; vend: GenuineIntel; build: (gcc 12.2.0 ITV); collect: 128K
+2026-05-17T16:26:22.936218+00:00 localhost haveged[379]: haveged: cpu: (L4 VC); data: 32K (L4 V); inst: 32K (L4 V); idx: 24/40; sz: 32010/53875
+2026-05-17T16:26:22.936225+00:00 localhost haveged[379]: haveged: tot tests(BA8): A:1/1 B:1/1 continuous tests(B):  last entropy estimate 8.0005
+2026-05-17T16:26:22.936229+00:00 localhost haveged[379]: haveged: fills: 0, generated: 0
+2026-05-17T16:26:22.936232+00:00 localhost systemd[1]: Starting google-disk-expand.service - Resize root filesystem if needed...
+2026-05-17T16:26:22.936236+00:00 localhost systemd[1]: systemd-pcrphase-sysinit.service - TPM2 PCR Barrier (Initialization) was skipped because of an unmet condition check (ConditionPathExists=/sys/firmware/efi/efivars/StubPcrKernelImage-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f).
+2026-05-17T16:26:22.936241+00:00 localhost systemd[1]: Finished systemd-networkd-wait-online.service - Wait for Network to be Configured.
+2026-05-17T16:26:22.936248+00:00 localhost google_disk_expand[380]: Checking if filesystem on /dev/sda1 needs resizing
+2026-05-17T16:26:22.936252+00:00 localhost systemd[1]: Reached target network-online.target - Network is Online.
+2026-05-17T16:26:22.936257+00:00 localhost google_disk_expand[383]: resize2fs 1.47.0 (5-Feb-2023)
+2026-05-17T16:26:22.936261+00:00 localhost google_disk_expand[383]: The filesystem is already 2588416 (4k) blocks long.  Nothing to do!
+2026-05-17T16:26:22.936266+00:00 localhost google_disk_expand[380]: Done.
+2026-05-17T16:26:22.936271+00:00 localhost systemd[1]: google-disk-expand.service: Deactivated successfully.
+2026-05-17T16:26:22.936274+00:00 localhost systemd[1]: Finished google-disk-expand.service - Resize root filesystem if needed.
+2026-05-17T16:26:22.936281+00:00 localhost systemd[1]: Reached target basic.target - Basic System.
+2026-05-17T16:26:22.936285+00:00 localhost systemd[1]: Started cron.service - Regular background program processing daemon.
+2026-05-17T16:26:22.936297+00:00 localhost systemd[1]: Starting dbus.service - D-Bus System Message Bus...
+2026-05-17T16:26:22.936301+00:00 localhost systemd[1]: Starting e2scrub_reap.service - Remove Stale Online ext4 Metadata Check Snapshots...
+2026-05-17T16:26:22.936307+00:00 localhost systemd[1]: Starting exim4.service - LSB: exim Mail Transport Agent...
+2026-05-17T16:26:22.936311+00:00 localhost dbus-daemon[386]: [system] Activating systemd to hand-off: service name='org.freedesktop.hostname1' unit='dbus-org.freedesktop.hostname1.service' requested by ':1.1' (uid=998 pid=254 comm="/lib/systemd/systemd-networkd")
+2026-05-17T16:26:22.936315+00:00 localhost systemd[1]: getty-static.service - getty on tty2-tty6 if dbus and logind are not available was skipped because of an unmet condition check (ConditionPathExists=!/usr/bin/dbus-daemon).
+2026-05-17T16:26:22.936320+00:00 localhost systemd[1]: Started google-osconfig-agent.service - Google OSConfig Agent.
+2026-05-17T16:26:22.935302+00:00 localhost kernel: [    0.000000] Linux version 6.1.0-47-cloud-amd64 (debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.1.170-3 (2026-05-08)
+         Starting [0;1;39mgoogle-shutdown-s…Compute Engine Shutdown Scripts...
+2026-05-17T16:26:22.936419+00:00 localhost kernel: [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.1.0-47-cloud-amd64 root=PARTUUID=9e8eee69-528d-439d-9941-703f7759a2f2 ro console=tty0 console=ttyS0,115200 earlyprintk=ttyS0,115200 consoleblank=0 intel_iommu=off
+2026-05-17T16:26:22.936422+00:00 localhost kernel: [    0.000000] BIOS-provided physical RAM map:
+2026-05-17T16:26:22.936422+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x0000000000000fff] reserved
+2026-05-17T16:26:22.936423+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000000001000-0x0000000000054fff] usable
+2026-05-17T16:26:22.936423+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000000055000-0x000000000005ffff] reserved
+2026-05-17T16:26:22.936424+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000000060000-0x0000000000097fff] usable
+2026-05-17T16:26:22.936429+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000000098000-0x000000000009ffff] reserved
+2026-05-17T16:26:22.936429+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000bf8ecfff] usable
+2026-05-17T16:26:22.936430+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bf8ed000-0x00000000bf9ecfff] reserved
+2026-05-17T16:26:22.936431+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bf9ed000-0x00000000bfaecfff] type 20
+2026-05-17T16:26:22.936431+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bfaed000-0x00000000bfb6cfff] reserved
+2026-05-17T16:26:22.936432+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bfb6d000-0x00000000bfb7efff] ACPI data
+2026-05-17T16:26:22.936435+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bfb7f000-0x00000000bfbfefff] ACPI NVS
+2026-05-17T16:26:22.936435+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bfbff000-0x00000000bffdffff] usable
+2026-05-17T16:26:22.936436+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x00000000bffe0000-0x00000000bfffffff] reserved
+2026-05-17T16:26:22.936436+00:00 localhost kernel: [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000023fffffff] usable
+2026-05-17T16:26:22.936437+00:00 localhost kernel: [    0.000000] printk: bootconsole [earlyser0] enabled
+2026-05-17T16:26:22.936438+00:00 localhost kernel: [    0.000000] NX (Execute Disable) protection: active
+2026-05-17T16:26:22.936438+00:00 localhost kernel: [    0.000000] efi: EFI v2.70 by EDK II
+2026-05-17T16:26:22.936446+00:00 localhost kernel: [    0.000000] efi: TPMFinalLog=0xbfbf7000 ACPI=0xbfb7e000 ACPI 2.0=0xbfb7e014 SMBIOS=0xbf9ca000 MEMATTR=0xbd31a018 MOKvar=0xbf9c6000 
+2026-05-17T16:26:22.936447+00:00 localhost kernel: [    0.000000] secureboot: Secure boot disabled
+2026-05-17T16:26:22.936447+00:00 localhost kernel: [    0.000000] SMBIOS 2.4 present.
+2026-05-17T16:26:22.936448+00:00 localhost kernel: [    0.000000] DMI: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+2026-05-17T16:26:22.936448+00:00 localhost kernel: [    0.000000] Hypervisor detected: KVM
+2026-05-17T16:26:22.936449+00:00 localhost kernel: [    0.000000] kvm-clock: Using msrs 4b564d01 and 4b564d00
+2026-05-17T16:26:22.936452+00:00 localhost kernel: [    0.000003] kvm-clock: using sched offset of 6805277723 cycles
+2026-05-17T16:26:22.936452+00:00 localhost kernel: [    0.000700] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+2026-05-17T16:26:22.936453+00:00 localhost kernel: [    0.002934] tsc: Detected 2800.170 MHz processor
+2026-05-17T16:26:22.936453+00:00 localhost kernel: [    0.003658] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+2026-05-17T16:26:22.936454+00:00 localhost kernel: [    0.003662] e820: remove [mem 0x000a0000-0x000fffff] usable
+2026-05-17T16:26:22.936455+00:00 localhost kernel: [    0.003669] last_pfn = 0x240000 max_arch_pfn = 0x400000000
+2026-05-17T16:26:22.936457+00:00 localhost kernel: [    0.004426] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+2026-05-17T16:26:22.936458+00:00 localhost kernel: [    0.005733] last_pfn = 0xbffe0 max_arch_pfn = 0x400000000
+2026-05-17T16:26:22.936459+00:00 localhost kernel: [    0.006460] Using GB pages for direct mapping
+2026-05-17T16:26:22.936459+00:00 localhost kernel: [    0.007265] RAMDISK: [mem 0x363b3000-0x371d0fff]
+2026-05-17T16:26:22.936460+00:00 localhost kernel: [    0.007936] ACPI: Early table checksum verification disabled
+2026-05-17T16:26:22.936460+00:00 localhost kernel: [    0.008672] ACPI: RSDP 0x00000000BFB7E014 000024 (v02 Google)
+2026-05-17T16:26:22.936461+00:00 localhost kernel: [    0.009405] ACPI: XSDT 0x00000000BFB7D0E8 00005C (v01 Google GOOGFACP 00000001      01000013)
+2026-05-17T16:26:22.936464+00:00 localhost kernel: [    0.010492] ACPI: FACP 0x00000000BFB78000 0000F4 (v02 Google GOOGFACP 00000001 GOOG 00000001)
+2026-05-17T16:26:22.936464+00:00 localhost kernel: [    0.011708] ACPI: DSDT 0x00000000BFB79000 001A64 (v01 Google GOOGDSDT 00000001 GOOG 00000001)
+2026-05-17T16:26:22.936465+00:00 localhost kernel: [    0.012827] ACPI: FACS 0x00000000BFBF2000 000040
+2026-05-17T16:26:22.936466+00:00 localhost kernel: [    0.013470] ACPI: SSDT 0x00000000BFB7C000 000316 (v02 GOOGLE Tpm2Tabl 00001000 INTL 20250807)
+2026-05-17T16:26:22.936466+00:00 localhost kernel: [    0.015006] ACPI: TPM2 0x00000000BFB7B000 000034 (v04 GOOGLE          00000001 GOOG 00000001)
+2026-05-17T16:26:22.936467+00:00 localhost kernel: [    0.016308] ACPI: SRAT 0x00000000BFB77000 0000C8 (v03 Google GOOGSRAT 00000001 GOOG 00000001)
+2026-05-17T16:26:22.936470+00:00 localhost kernel: [    0.017538] ACPI: APIC 0x00000000BFB76000 000076 (v05 Google GOOGAPIC 00000001 GOOG 00000001)
+2026-05-17T16:26:22.936470+00:00 localhost kernel: [    0.018725] ACPI: SSDT 0x00000000BFB75000 000980 (v01 Google GOOGSSDT 00000001 GOOG 00000001)
+2026-05-17T16:26:22.936471+00:00 localhost kernel: [    0.019848] ACPI: WAET 0x00000000BFB74000 000028 (v01 Google GOOGWAET 00000001 GOOG 00000001)
+2026-05-17T16:26:22.936471+00:00 localhost kernel: [    0.020985] ACPI: Reserving FACP table memory at [mem 0xbfb78000-0xbfb780f3]
+2026-05-17T16:26:22.936472+00:00 localhost kernel: [    0.021968] ACPI: Reserving DSDT table memory at [mem 0xbfb79000-0xbfb7aa63]
+2026-05-17T16:26:22.936472+00:00 localhost kernel: [    0.022867] ACPI: Reserving FACS table memory at [mem 0xbfbf2000-0xbfbf203f]
+2026-05-17T16:26:22.936475+00:00 localhost kernel: [    0.023831] ACPI: Reserving SSDT table memory at [mem 0xbfb7c000-0xbfb7c315]
+2026-05-17T16:26:22.936476+00:00 localhost kernel: [    0.024999] ACPI: Reserving TPM2 table memory at [mem 0xbfb7b000-0xbfb7b033]
+2026-05-17T16:26:22.936476+00:00 localhost kernel: [    0.025971] ACPI: Reserving SRAT table memory at [mem 0xbfb77000-0xbfb770c7]
+2026-05-17T16:26:22.936477+00:00 localhost kernel: [    0.027026] ACPI: Reserving APIC table memory at [mem 0xbfb76000-0xbfb76075]
+2026-05-17T16:26:22.936478+00:00 localhost kernel: [    0.028173] ACPI: Reserving SSDT table memory at [mem 0xbfb75000-0xbfb7597f]
+2026-05-17T16:26:22.936478+00:00 localhost kernel: [    0.029191] ACPI: Reserving WAET table memory at [mem 0xbfb74000-0xbfb74027]
+2026-05-17T16:26:22.936479+00:00 localhost kernel: [    0.030680] SRAT: PXM 0 -> APIC 0x00 -> Node 0
+2026-05-17T16:26:22.936481+00:00 localhost kernel: [    0.031328] SRAT: PXM 0 -> APIC 0x01 -> Node 0
+2026-05-17T16:26:22.936482+00:00 localhost kernel: [    0.031919] ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+2026-05-17T16:26:22.936483+00:00 localhost kernel: [    0.032686] ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0xbfffffff]
+2026-05-17T16:26:22.936483+00:00 localhost kernel: [    0.033452] ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x23fffffff]
+2026-05-17T16:26:22.936484+00:00 localhost kernel: [    0.034253] NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00000000-0xbfffffff]
+2026-05-17T16:26:22.936484+00:00 localhost kernel: [    0.035656] NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x23fffffff] -> [mem 0x00000000-0x23fffffff]
+2026-05-17T16:26:22.936488+00:00 localhost kernel: [    0.0[[0;32m  OK  [0m] Finished [0;1;39mgoogle-shutdown-s…e Compute Engine Shutdown Scripts.
+37147] NODE_DATA(0) allocated [mem 0x23ffd5000-0x23fffffff]
+2026-05-17T16:26:22.936488+00:00 localhost kernel: [    0.038647] Zone ranges:
+2026-05-17T16:26:22.936489+00:00 localhost kernel: [    0.039036]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+2026-05-17T16:26:22.936489+00:00 localhost kernel: [    0.039836]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+2026-05-17T16:26:22.936490+00:00 localhost kernel: [    0.040637]   Normal   [mem 0x0000000100000000-0x000000023fffffff]
+2026-05-17T16:26:22.936490+00:00 localhost kernel: [    0.041466]   Device   empty
+2026-05-17T16:26:22.936493+00:00 localhost kernel: [    0.041976] Movable zone start for each node
+2026-05-17T16:26:22.936494+00:00 localhost kernel: [    0.042655] Early memory node ranges
+2026-05-17T16:26:22.936494+00:00 localhost kernel: [    0.043127]   node   0: [mem 0x0000000000001000-0x0000000000054fff]
+2026-05-17T16:26:22.936495+00:00 localhost kernel: [    0.044067]   node   0: [mem 0x0000000000060000-0x0000000000097fff]
+2026-05-17T16:26:22.936495+00:00 localhost kernel: [    0.044921]   node   0: [mem 0x0000000000100000-0x00000000bf8ecfff]
+2026-05-17T16:26:22.936496+00:00 localhost kernel: [    0.045717]   node   0: [mem 0x00000000bfbff000-0x00000000bffdffff]
+2026-05-17T16:26:22.936496+00:00 localhost kernel: [    0.046538]   node   0: [mem 0x0000000100000000-0x000000023fffffff]
+2026-05-17T16:26:22.936499+00:00 localhost kernel: [    0.047365] Initmem setup node 0 [mem 0x0000000000001000-0x000000023fffffff]
+2026-05-17T16:26:22.936500+00:00 localhost kernel: [    0.048729] On node 0, zone DMA: 1 pages in unavailable ranges
+2026-05-17T16:26:22.936500+00:00 localhost kernel: [    0.048732] On node 0, zone DMA: 11 pages in unavailable ranges
+2026-05-17T16:26:22.936501+00:00 localhost kernel: [    0.049536] On node 0, zone DMA: 104 pages in unavailable ranges
+2026-05-17T16:26:22.936501+00:00 localhost kernel: [    0.065909] On node 0, zone DMA32: 786 pages in unavailable ranges
+2026-05-17T16:26:22.936502+00:00 localhost kernel: [    0.067396] On node 0, zone Normal: 32 pages in unavailable ranges
+2026-05-17T16:26:22.936505+00:00 localhost kernel: [    0.068565] ACPI: PM-Timer IO Port: 0xb008
+2026-05-17T16:26:22.936505+00:00 localhost kernel: [    0.069896] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+2026-05-17T16:26:22.936506+00:00 localhost kernel: [    0.070696] IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+2026-05-17T16:26:22.936506+00:00 localhost kernel: [    0.071584] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+2026-05-17T16:26:22.936507+00:00 localhost kernel: [    0.072429] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+2026-05-17T16:26:22.936507+00:00 localhost kernel: [    0.073309] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+2026-05-17T16:26:22.936510+00:00 localhost kernel: [    0.074216] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+2026-05-17T16:26:22.936511+00:00 localhost kernel: [    0.075249] ACPI: Using ACPI (MADT) for SMP configuration information
+2026-05-17T16:26:22.936512+00:00 localhost kernel: [    0.076091] smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+2026-05-17T16:26:22.936512+00:00 localhost kernel: [    0.076809] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+2026-05-17T16:26:22.936513+00:00 localhost kernel: [    0.077830] PM: hibernation: Registered nosave memory: [mem 0x00055000-0x0005ffff]
+2026-05-17T16:26:22.936513+00:00 localhost kernel: [    0.078955] PM: hibernation: Registered nosave memory: [mem 0x00098000-0x000fffff]
+2026-05-17T16:26:22.936514+00:00 localhost kernel: [    0.079919] PM: hibernation: Registered nosave memory: [mem 0xbf8ed000-0xbfbfefff]
+2026-05-17T16:26:22.936517+00:00 localhost kernel: [    0.080885] PM: hibernation: Registered nosave memory: [mem 0xbffe0000-0xffffffff]
+2026-05-17T16:26:22.936517+00:00 localhost kernel: [    0.081851] [mem 0xc0000000-0xffffffff] available for PCI devices
+2026-05-17T16:26:22.936518+00:00 localhost kernel: [    0.082672] Booting paravirtualized kernel on KVM
+2026-05-17T16:26:22.936518+00:00 localhost kernel: [    0.083272] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
+2026-05-17T16:26:22.936519+00:00 localhost kernel: [    0.088622] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:2 nr_cpu_ids:2 nr_node_ids:1
+2026-05-17T16:26:22.936599+00:00 localhost kernel: [    0.090238] percpu: Embedded 61 pages/cpu s212992 r8192 d28672 u1048576
+2026-05-17T16:26:22.936604+00:00 localhost kernel: [    0.091166] pcpu-alloc: s212992 r8192 d28672 u1048576 alloc=1*2097152
+2026-05-17T16:26:22.936604+00:00 localhost kernel: [    0.091170] pcpu-alloc: [0] 0 1 
+2026-05-17T16:26:22.936605+00:00 localhost kernel: [    0.091197] kvm-guest: PV spinlocks enabled
+2026-05-17T16:26:22.936605+00:00 localhost kernel: [    0.091828] PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+2026-05-17T16:26:22.936606+00:00 localhost kernel: [    0.092770] Fallback order for Node 0: 0 
+2026-05-17T16:26:22.936606+00:00 localhost kernel: [    0.092772] Built 1 zonelists, mobility grouping on.  Total pages: 2061304
+2026-05-17T16:26:22.936609+00:00 localhost kernel: [    0.094168] Policy zone: Normal
+2026-05-17T16:26:22.936609+00:00 localhost kernel: [    0.094568] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.1.0-47-cloud-amd64 root=PARTUUID=9e8eee69-528d-439d-9941-703f7759a2f2 ro console=tty0 console=ttyS0,115200 earlyprintk=ttyS0,115200 consoleblank=0 intel_iommu=off
+2026-05-17T16:26:22.936610+00:00 localhost kernel: [    0.097149] DMAR: IOMMU disabled
+2026-05-17T16:26:22.936610+00:00 localhost kernel: [    0.097600] random: crng init done
+2026-05-17T16:26:22.936611+00:00 localhost kernel: [    0.100005] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+2026-05-17T16:26:22.936611+00:00 localhost kernel: [    0.102042] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+2026-05-17T16:26:22.936615+00:00 localhost kernel: [    0.103179] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+2026-05-17T16:26:22.936615+00:00 localhost kernel: [    0.104064] software IO TLB: area num 2.
+2026-05-17T16:26:22.936616+00:00 localhost kernel: [    0.134238] Memory: 3136012K/8384872K available (14343K kernel code, 2327K rwdata, 8328K rodata, 2596K init, 5460K bss, 322668K reserved, 0K cma-reserved)
+2026-05-17T16:26:22.936616+00:00 localhost kernel: [    0.136372] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+2026-05-17T16:26:22.936617+00:00 localhost kernel: [    0.137942] ftrace: allocating 37609 entries in 147 pages
+2026-05-17T16:26:22.936617+00:00 localhost kernel: [    0.145420] ftrace: allocated 147 pages with 4 groups
+2026-05-17T16:26:22.936620+00:00 localhost kernel: [    0.146875] Dynamic Preempt: voluntary
+2026-05-17T16:26:22.936620+00:00 localhost kernel: [    0.147832] rcu: Preemptible hierarchical RCU implementation.
+2026-05-17T16:26:22.936621+00:00 localhost kernel: [    0.148588] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=2.
+2026-05-17T16:26:22.936621+00:00 localhost kernel: [    0.149456] 	Trampoline variant of Tasks RCU enabled.
+2026-05-17T16:26:22.936622+00:00 localhost kernel: [    0.150109] 	Rude variant of Tasks RCU enabled.
+2026-05-17T16:26:22.936622+00:00 localhost kernel: [    0.150709] 	Tracing variant of Tasks RCU enabled.
+2026-05-17T16:26:22.936623+00:00 localhost kernel: [    0.151321] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+2026-05-17T16:26:22.936626+00:00 localhost kernel: [    0.152490] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+2026-05-17T16:26:22.936627+00:00 localhost kernel: [    0.157646] NR_IRQS: 524544, nr_irqs: 440, preallocated irqs: 16
+2026-05-17T16:26:22.936628+00:00 localhost kernel: [    0.158786] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+2026-05-17T16:26:22.936628+00:00 localhost kernel: [    0.159810] Console: colour dummy device 80x25
+2026-05-17T16:26:22.936629+00:00 localhost kernel: [    0.160755] printk: console [tty0] enabled
+2026-05-17T16:26:22.936629+00:00 localhost kernel: [    0.161392] printk: console [ttyS0] enabled
+2026-05-17T16:26:22.936632+00:00 localhost kernel: [    0.162667] printk: bootconsole [earlyser0] disabled
+2026-05-17T16:26:22.936633+00:00 localhost kernel: [    0.164195] ACPI: Core revision 20220331
+2026-05-17T16:26:22.936633+00:00 localhost kernel: [    0.164982] APIC: Switch to symmetric I/O mode setup
+2026-05-17T16:26:22.936634+00:00 localhost kernel: [    0.166220] x2apic enabled
+2026-05-17T16:26:22.936634+00:00 localhost kernel: [    0.169132] Switched APIC routing to physical x2apic.
+2026-05-17T16:26:22.936635+00:00 localhost kernel: [    0.173667] ..TIMER: vector=0x30 apic1=0 pin1=0 apic2=-1 pin2=-1
+2026-05-17T16:26:22.936635+00:00 localhost kernel: [    0.174815] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x285ce18fdb9, max_idle_ns: 440795334685 ns
+2026-05-17T16:26:22.936638+00:00 localhost kernel: [    0.176353] Calibrating delay loop (skipped) preset value.. 5600.34 BogoMIPS (lpj=11200680)
+2026-05-17T16:26:22.936638+00:00 localhost kernel: [    0.180511] Last level iTLB entries: 4KB 64, 2MB 8, 4MB 8
+2026-05-17T16:26:22.936639+00:00 localhost kernel: [    0.181297] Last level dTLB entries: 4KB 64, 2MB 32, 4MB 32, 1GB 4
+2026-05-17T16:26:22.936639+00:00 localhost kernel: [    0.182235] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+2026-05-17T16:26:22.936640+00:00 localhost kernel: [    0.183507] Spectre V2 : Spectre BHI mitigation: SW BHB clearing on vm exit
+2026-05-17T16:26:22.936640+00:00 localhost kernel: [    0.184353] Spectre V2 : Spectre BHI mitigation: SW BHB clearing on syscall
+2026-05-17T16:26:22.936643+00:00 localhost kernel: [    0.185313] Spectre V2 : Mitigation: Enhanced / Automatic IBRS
+2026-05-17T16:26:22.936643+00:00 localhost kernel: [    0.186121] Spectre V2 : Spectre v2 / PBRSB-eIBRS: Retire a single CALL on VMEXIT
+2026-05-17T16:26:22.936644+00:00 localhost kernel: [    0.187213] RETBleed: Mitigation: Enhanced IBRS
+2026-05-17T16:26:22.936644+00:00 localhost kernel: [    0.188358] Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+2026-05-17T16:26:22.936644+00:00 localhost kernel: [    0.189748] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+2026-05-17T16:26:22.936645+00:00 localhost kernel: [    0.191016] TAA: Vulnerable: Clear CPU buffers attempted, no microcode
+2026-05-17T16:26:22.936655+00:00 localhost kernel: [    0.191942] MMIO Stale Data: Vulnerable: Clear CPU buffers attempted, no microcode
+2026-05-17T16:26:22.936656+00:00 localhost kernel: [    0.192354] active return thunk: its_return_thunk
+2026-05-17T16:26:22.936656+00:00 localhost kernel: [    0.192998] ITS: Mitigation: Aligned branch/return thunks
+2026-05-17T16:26:22.936657+00:00 localhost kernel: [    0.193949] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+2026-05-17T16:26:22.936657+00:00 localhost kernel: [    0.195273] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+2026-05-17T16:26:22.936658+00:00 localhost kernel: [    0.196354] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+2026-05-17T16:26:22.936658+00:00 localhost kernel: [    0.197314] x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+2026-05-17T16:26:22.936661+00:00 localhost kernel: [    0.198240] x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+2026-05-17T16:26:22.936662+00:00 localhost kernel: [    0.199125] x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+2026-05-17T16:26:22.936662+00:00 localhost kernel: [    0.200352] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+2026-05-17T16:26:22.936662+00:00 localhost kernel: [    0.201229] x86/fpu: xstate_offset[5]:  832, xstate_sizes[5]:   64
+2026-05-17T16:26:22.936662+00:00 localhost kernel: [    0.202075] x86/fpu: xstate_offset[6]:  896, xstate_sizes[6]:  512
+2026-05-17T16:26:22.936663+00:00 localhost kernel: [    0.202904] x86/fpu: xstate_offset[7]: 1408, xstate_sizes[7]: 1024
+2026-05-17T16:26:22.936665+00:00 localhost kernel: [    0.203814] x86/fpu: Enabled xstate features 0xe7, context size is 2432 bytes, using 'compacted' format.
+2026-05-17T16:26:22.936665+00:00 localhost kernel: [    0.226710] Freeing SMP alternatives memory: 36K
+2026-05-17T16:26:22.936665+00:00 localhost kernel: [    0.227673] pid_max: default: 32768 minimum: 301
+2026-05-17T16:26:22.936666+00:00 localhost kernel: [    0.235927] LSM: Security Framework initializing
+2026-05-17T16:26:22.936666+00:00 localhost kernel: [    0.236366] landlock: Up and running.
+2026-05-17T16:26:22.936666+00:00 localhost kernel: [    0.236872] Yama: disabled by default; enable with sysctl kernel.yama.*
+2026-05-17T16:26:22.936668+00:00 localhost kernel: [    0.237841] AppArmor: AppArmor initialized
+2026-05-17T16:26:22.936669+00:00 localhost kernel: [    0.238415] TOMOYO Linux initialized
+2026-05-17T16:26:22.936669+00:00 localhost kernel: [    0.238930] LSM support for eBPF active
+2026-05-17T16:26:22.936669+00:00 localhost kernel: [    0.239993] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+2026-05-17T16:26:22.936670+00:00 localhost kernel: [    0.240363] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+2026-05-17T16:26:22.936670+00:00 localhost kernel: [    0.350841] smpboot: CPU0: Intel(R) Xeon(R) CPU @ 2.80GHz (family: 0x6, model: 0x55, stepping: 0x7)
+2026-05-17T16:26:22.936672+00:00 localhost kernel: [    0.352348] cblist_init_generic: Setting adjustable number of callback queues.
+2026-05-17T16:26:22.936672+00:00 localhost kernel: [    0.352348] cblist_init_generic: Setting shift to 1 and lim to 1.
+2026-05-17T16:26:22.936673+00:00 localhost kernel: [    0.352348] cblist_init_generic: Setting adjustable number of callback queues.
+2026-05-17T16:26:22.936673+00:00 localhost kernel: [    0.352352] cblist_init_generic: Setting shift to 1 and lim to 1.
+2026-05-17T16:26:22.936673+00:00 localhost kernel: [    0.353321] cblist_init_generic: Setting adjustable number of callback queues.
+2026-05-17T16:26:22.936674+00:00 localhost kernel: [    0.354405] cblist_init_generic: Setting shift to 1 and lim to 1.
+2026-05-17T16:26:22.936674+00:00 localhost kernel: [    0.355255] Performance Events: unsupported p6 CPU model 85 no PMU driver, software events only.
+2026-05-17T16:26:22.936676+00:00 localhost kernel: [    0.356376] signal: max sigframe size: 3632
+2026-05-17T16:26:22.936676+00:00 localhost kernel: [    0.356989] rcu: Hierarchical SRCU implementation.
+2026-05-17T16:26:22.936677+00:00 localhost kernel: [    0.357641] rcu: 	Max phase no-delay instances is 1000.
+2026-05-17T16:26:22.936677+00:00 localhost kernel: [    0.358565] NMI watchdog: Perf NMI watchdog permanently disabled
+2026-05-17T16:26:22.936677+00:00 localhost kernel: [    0.359449] smp: Bringing up secondary CPUs ...
+2026-05-17T16:26:22.936678+00:00 localhost kernel: [    0.360455] x86: Booting SMP configuration:
+2026-05-17T16:26:22.936680+00:00 localhost kernel: [    0.361096] .... node  #0, CPUs:      #1
+2026-05-17T16:26:22.936680+00:00 localhost kernel: [    0.361499] TAA CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/tsx_async_abort.html for more details.
+2026-05-17T16:26:22.936680+00:00 localhost kernel: [    0.364355] MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.
+2026-05-17T16:26:22.936681+00:00 localhost kernel: [    0.366636] smp: Brought up 1 node, 2 CPUs
+2026-05-17T16:26:22.936681+00:00 localhost kernel: [    0.367280] smpboot: Max logical packages: 1
+2026-05-17T16:26:22.936681+00:00 localhost kernel: [    0.367898] smpboot: Total of 2 processors activated (11200.68 BogoMIPS)
+2026-05-17T16:26:22.936684+00:00 localhost kernel: [    0.392033] node 0 deferred pages initialised in 20ms
+2026-05-17T16:26:22.936685+00:00 localhost kernel: [    0.392794] devtmpfs: initialized
+2026-05-17T16:26:22.936685+00:00 localhost kernel: [    0.392890] x86/mm: Memory block size: 128MB
+2026-05-17T16:26:22.936685+00:00 localhost kernel: [    0.394016] ACPI: PM: Registering ACPI NVS region [mem 0xbfb7f000-0xbfbfefff] (524288 bytes)
+2026-05-17T16:26:22.936686+00:00 localhost kernel: [    0.394016] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+2026-05-17T16:26:22.936686+00:00 localhost kernel: [    0.396362] futex hash table entries: 512 (order: 3, 32768 bytes, linear)
+2026-05-17T16:26:22.936323+00:00 localhost systemd[1]: Starting google-oslogin-cache.service - NSS cache refresh...
+2026-05-17T16:26:22.936713+00:00 localhost systemd[1]: Starting networkd-dispatcher.service - Dispatcher daemon for systemd-networkd...
+2026-05-17T16:26:22.936720+00:00 localhost systemd[1]: nvmefc-boot-connections.service - Auto-connect to subsystems on FC-NVME devices found during boot was skipped because of an unmet condition check (ConditionPathExists=/sys/class/fc/fc_udev_device/nvme_discovery).
+2026-05-17T16:26:22.936724+00:00 localhost systemd[1]: Starting nvmf-autoconnect.service - Connect NVMe-oF subsystems automatically during boot...
+2026-05-17T16:26:22.936728+00:00 localhost systemd[1]: Starting rsyslog.service - System Logging Service...
+2026-05-17T16:26:22.936731+00:00 localhost kernel: [    0.398118] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+2026-05-17T16:26:22.936732+00:00 localhost systemd[1]: Starting systemd-logind.service - User Login Management...
+2026-05-17T16:26:22.936734+00:00 localhost kernel: [    0.399210] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+2026-05-17T16:26:22.936735+00:00 localhost kernel: [    0.400995] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+2026-05-17T16:26:22.936736+00:00 localhost kernel: [    0.402480] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+2026-05-17T16:26:22.936736+00:00 localhost kernel: [    0.403687] audit: initializing netlink subsys (disabled)
+2026-05-17T16:26:22.936736+00:00 localhost kernel: [    0.404382] audit: type=2000 audit(1779035177.274:1): state=initialized audit_enabled=0 res=1
+2026-05-17T16:26:22.936737+00:00 localhost kernel: [    0.404444] thermal_sys: Registered thermal governor 'fair_share'
+2026-05-17T16:26:22.936736+00:00 localhost systemd[1]: systemd-pcrphase.service - TPM2 PCR Barrier (User) was skipped because of an unmet condition check (ConditionPathExists=/sys/firmware/efi/efivars/StubPcrKernelImage-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f).
+2026-05-17T16:26:22.936744+00:00 localhost systemd[1]: Starting systemd-user-sessions.service - Permit User Sessions...
+2026-05-17T16:26:22.936748+00:00 localhost systemd[1]: Started dbus.service - D-Bus System Message Bus.
+2026-05-17T16:26:22.936752+00:00 localhost systemd[1]: Finished systemd-user-sessions.service - Permit User Sessions.
+2026-05-17T16:26:22.936756+00:00 localhost dbus-daemon[386]: [system] Successfully activated service 'org.freedesktop.systemd1'
+2026-05-17T16:26:22.936760+00:00 localhost systemd[1]: Started getty@tty1.service - Getty on tty1.
+2026-05-17T16:26:22.936782+00:00 localhost systemd[1]: Started serial-getty@ttyS0.service - Serial Getty on ttyS0.
+2026-05-17T16:26:22.936786+00:00 localhost systemd[1]: Reached target getty.target - Login Prompts.
+2026-05-17T16:26:22.936789+00:00 localhost systemd[1]: Starting systemd-hostnamed.service - Hostname Service...
+2026-05-17T16:26:22.936796+00:00 localhost systemd[1]: Started systemd-logind.service - User Login Management.
+2026-05-17T16:26:22.936800+00:00 localhost systemd[1]: Started unattended-upgrades.service - Unattended Upgrades Shutdown.
+2026-05-17T16:26:22.936803+00:00 localhost dbus-daemon[386]: [system] Successfully activated service 'org.freedesktop.hostname1'
+2026-05-17T16:26:22.936807+00:00 localhost systemd[1]: Started systemd-hostnamed.service - Hostname Service.
+2026-05-17T16:26:22.936811+00:00 localhost dbus-daemon[386]: [system] Activating via systemd: service name='org.freedesktop.PolicyKit1' unit='polkit.service' requested by ':1.5' (uid=0 pid=403 comm="/lib/systemd/systemd-hostnamed")
+2026-05-17T16:26:22.936815+00:00 localhost systemd[1]: Starting polkit.service - Authorization Manager...
+2026-05-17T16:26:22.936821+00:00 localhost systemd[1]: nvmf-autoconnect.service: Deactivated successfully.
+2026-05-17T16:26:22.936825+00:00 localhost systemd[1]: Finished nvmf-autoconnect.service - Connect NVMe-oF subsystems automatically during boot.
+2026-05-17T16:26:22.936829+00:00 localhost kernel: [    0.405536] thermal_sys: Registered thermal governor 'bang_bang'
+2026-05-17T16:26:22.936830+00:00 localhost kernel: [    0.408353] thermal_sys: Registered thermal governor 'step_wise'
+2026-05-17T16:26:22.936831+00:00 localhost kernel: [    0.409234] thermal_sys: Registered thermal governor 'user_space'
+2026-05-17T16:26:22.936830+00:00 localhost exim4[388]: Starting MTA:
+2026-05-17T16:26:22.936832+00:00 localhost kernel: [    0.410078] thermal_sys: Registered thermal governor 'power_allocator'
+2026-05-17T16:26:22.936834+00:00 localhost kernel: [    0.410998] cpuidle: using governor ladder
+2026-05-17T16:26:22.936835+00:00 localhost kernel: [    0.412365] cpuidle: using governor menu
+2026-05-17T16:26:22.936835+00:00 localhost exim4[417]: /usr/sbin/update-exim4.conf: 154: cannot open /etc/mailname: No such file
+2026-05-17T16:26:22.936840+00:00 localhost kernel: [    0.414303] efi: Freeing EFI boot services memory: 56236K
+2026-05-17T16:26:22.936841+00:00 localhost kernel: [    0.415061] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+2026-05-17T16:26:22.936841+00:00 localhost kernel: [    0.416467] PCI: Using configuration type 1 for base access
+2026-05-17T16:26:22.936842+00:00 localhost kernel: [    0.418612] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+2026-05-17T16:26:22.936843+00:00 localhost kernel: [    0.432368] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+2026-05-17T16:26:22.936843+00:00 localhost kernel: [    0.433359] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+2026-05-17T16:26:22.936850+00:00 localhost kernel: [    0.434285] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+2026-05-17T16:26:22.936851+00:00 localhost kernel: [    0.435256] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+2026-05-17T16:26:22.936852+00:00 localhost kernel: [    0.440396] ACPI: Added _OSI(Module Device)
+2026-05-17T16:26:22.936853+00:00 localhost kernel: [    0.441093] ACPI: Added _OSI(Processor Device)
+2026-05-17T16:26:22.936853+00:00 localhost kernel: [    0.441721] ACPI: Added _OSI(Processor Aggregator Device)
+2026-05-17T16:26:22.936854+00:00 localhost kernel: [    0.443414] ACPI: 3 ACPI AML tables successfully acquired and loaded
+2026-05-17T16:26:22.936854+00:00 localhost kernel: [    0.445195] ACPI: Interpreter enabled
+2026-05-17T16:26:22.936212+00:00 localhost systemd[1]: Started rsyslog.service - System Logging Service.
+2026-05-17T16:26:22.936860+00:00 localhost kernel: [    0.445738] ACPI: PM: (supports S0 S3 S4 S5)
+2026-05-17T16:26:22.936861+00:00 localhost kernel: [    0.446326] ACPI: Using IOAPIC for interrupt routing
+2026-05-17T16:26:22.936861+00:00 localhost kernel: [    0.447091] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+2026-05-17T16:26:22.936862+00:00 localhost kernel: [    0.448353] PCI: Ignoring E820 reservations for host bridge windows
+2026-05-17T16:26:22.936862+00:00 localhost kernel: [    0.449361] ACPI: Enabled 16 GPEs in block 00 to 0F
+2026-05-17T16:26:22.936863+00:00 localhost kernel: [    0.451763] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+2026-05-17T16:26:22.936870+00:00 localhost kernel: [    0.452357] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments MSI HPX-Type3]
+2026-05-17T16:26:22.936870+00:00 localhost kernel: [    0.453521] acpi PNP0A03:00: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+2026-05-17T16:26:22.936871+00:00 localhost kernel: [    0.454985] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.
+2026-05-17T16:26:22.936872+00:00 localhost kernel: [    0.456950] PCI host bridge to bus 0000:00
+2026-05-17T16:26:22.936872+00:00 localhost kernel: [    0.457567] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+2026-05-17T16:26:22.936873+00:00 localhost kernel: [    0.458492] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+2026-05-17T16:26:22.936878+00:00 localhost kernel: [    0.459529] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+2026-05-17T16:26:22.936879+00:00 localhost kernel: [    0.460353] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfefff window]
+2026-05-17T16:26:22.936879+00:00 localhost kernel: [    0.461429] pci_bus 0000:00: root bus resource [bus 00-ff]
+2026-05-17T16:26:22.936880+00:00 localhost kernel: [    0.462321] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000
+2026-05-17T16:26:22.936881+00:00 localhost kernel: [    0.465809] pci 0000:00:01.0: [8086:7110] type 00 class 0x060100
+2026-05-17T16:26:22.936881+00:00 localhost kernel: [    0.483270] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000
+2026-05-17T16:26:22.936887+00:00 localhost kernel: [    0.499226] pci 0000:00:01.3: quirk: [io  0xb000-0xb03f] claimed by PIIX4 ACPI
+2026-05-17T16:26:22.936888+00:00 localhost kernel: [    0.500659] pci 0000:00:03.0: [1af4:1004] type 00 class 0x000000
+2026-05-17T16:26:22.936888+00:00 localhost kernel: [    0.508356] pci 0000:00:03.0: BAR 0 [io  0xc040-0xc07f]
+2026-05-17T16:26:22.936889+00:00 localhost kernel: [    0.514548] pci 0000:00:03.0: BAR 1 [mem 0xc0001000-0xc000107f]
+2026-05-17T16:26:22.936889+00:00 localhost kernel: [    0.527479] pci 0000:00:04.0: [1af4:1000] type 00 class 0x020000
+2026-05-17T16:26:22.936890+00:00 localhost kernel: [    0.534155] pci 0000:00:04.0: BAR 0 [io  0xc000-0xc03f]
+2026-05-17T16:26:22.936891+00:00 localhost kernel: [    0.539241] pci 0000:00:04.0: BAR 1 [mem 0xc0000000-0xc000007f]
+2026-05-17T16:26:22.936896+00:00 localhost kernel: [    0.550895] pci 0000:00:05.0: [1af4:1005] type 00 class 0x00ff00
+2026-05-17T16:26:22.936897+00:00 localhost kernel: [    0.558205] pci 0000:00:05.0: BAR 0 [io  0xc080-0xc09f]
+2026-05-17T16:26:22.936897+00:00 localhost kernel: [    0.563013] pci 0000:00:05.0: BAR 1 [mem 0xc0002000-0xc000203f]
+2026-05-17T16:26:22.936898+00:00 localhost kernel: [    0.575524] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+2026-05-17T16:26:22.936898+00:00 localhost kernel: [    0.577460] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+2026-05-17T16:26:22.936899+00:00 localhost kernel: [    0.579407] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+2026-05-17T16:26:22.936910+00:00 localhost kernel: [    0.581351] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+2026-05-17T16:26:22.936911+00:00 localhost kernel: [    0.583250] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+2026-05-17T16:26:22.936911+00:00 localhost kernel: [    0.584705] iommu: Default domain type: Translated 
+2026-05-17T16:26:22.936912+00:00 localhost kernel: [    0.584705] iommu: DMA domain TLB invalidation policy: lazy mode 
+2026-05-17T16:26:22.936912+00:00 localhost kernel: [    0.585413] pps_core: LinuxPPS API ver. 1 registered
+2026-05-17T16:26:22.936913+00:00 localhost kernel: [    0.586117] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+2026-05-17T16:26:22.936917+00:00 localhost kernel: [    0.587332] PTP clock support registered
+2026-05-17T16:26:22.936918+00:00 localhost kernel: [    0.588568] Registered efivars operations
+2026-05-17T16:26:22.936918+00:00 localhost kernel: [    0.588568] NetLabel: Initializing
+2026-05-17T16:26:22.936918+00:00 localhost kernel: [    0.589011] NetLabel:  domain hash size = 128
+2026-05-17T16:26:22.936918+00:00 localhost kernel: [    0.589682] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+2026-05-17T16:26:22.936919+00:00 localhost kernel: [    0.590508] NetLabel:  unlabeled traffic allowed by default
+2026-05-17T16:26:22.936919+00:00 localhost kernel: [    0.591321] PCI: Using ACPI for IRQ routing
+2026-05-17T16:26:22.936923+00:00 localhost kernel: [    0.592353] PCI: pci_cache_line_size set to 64 bytes
+2026-05-17T16:26:22.936924+00:00 localhost kernel: [    0.592446] e820: reserve RAM buffer [mem 0x00055000-0x0005ffff]
+2026-05-17T16:26:22.936924+00:00 localhost kernel: [    0.592448] e820: reserve RAM buffer [mem 0x00098000-0x0009ffff]
+2026-05-17T16:26:22.936924+00:00 localhost kernel: [    0.592450] e820: reserve RAM buffer [mem 0xbf8ed000-0xbfffffff]
+2026-05-17T16:26:22.936925+00:00 localhost kernel: [    0.592451] e820: reserve RAM buffer [mem 0xbffe0000-0xbfffffff]
+2026-05-17T16:26:22.936925+00:00 localhost kernel: [    0.592477] vgaarb: loaded
+2026-05-17T16:26:22.936931+00:00 localhost kernel: [    0.592823] clocksource: Switched to clocksource kvm-clock
+2026-05-17T16:26:22.936931+00:00 localhost kernel: [    0.593797] VFS: Disk quotas dquot_6.6.0
+2026-05-17T16:26:22.936931+00:00 localhost kernel: [    0.594736] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+2026-05-17T16:26:22.936932+00:00 localhost kernel: [    0.596250] AppArmor: AppArmor Filesystem Enabled
+2026-05-17T16:26:22.936932+00:00 localhost kernel: [    0.597290] pnp: PnP ACPI init
+2026-05-17T16:26:22.936932+00:00 localhost kernel: [    0.598390] pnp: PnP ACPI: found 7 devices
+2026-05-17T16:26:22.936933+00:00 localhost kernel: [    0.605225] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+2026-05-17T16:26:22.936936+00:00 localhost kernel: [    0.606663] NET: Registered PF_INET protocol family
+2026-05-17T16:26:22.936937+00:00 localhost kernel: [    0.607546] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+2026-05-17T16:26:22.936937+00:00 localhost kernel: [    0.611154] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, linear)
+2026-05-17T16:26:22.936937+00:00 localhost kernel: [    0.612372] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+2026-05-17T16:26:22.936938+00:00 localhost kernel: [    0.613493] TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+2026-05-17T16:26:22.936938+00:00 localhost kernel: [    0.615194] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+2026-05-17T16:26:22.936942+00:00 localhost kernel: [    0.616652] TCP: Hash tables configured (established 65536 bind 65536)
+2026-05-17T16:26:22.936942+00:00 localhost kernel: [    0.617702] MPTCP token hash table entries: 8192 (order: 6, 196608 bytes, linear)
+2026-05-17T16:26:22.936942+00:00 localhost kernel: [    0.618866] UDP hash table entries: 4096 (order: 5, 131072 bytes, linear)
+2026-05-17T16:26:22.936943+00:00 localhost kernel: [    0.619815] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, linear)
+2026-05-17T16:26:22.936943+00:00 localhost kernel: [    0.620944] NET: Registered PF_UNIX/PF_LOCAL protocol family
+2026-05-17T16:26:22.936943+00:00 localhost kernel: [    0.621809] NET: Registered PF_XDP protocol family
+2026-05-17T16:26:22.936947+00:00 localhost kernel: [    0.622469] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+2026-05-17T16:26:22.936947+00:00 localhost kernel: [    0.623401] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+2026-05-17T16:26:22.936947+00:00 localhost kernel: [    0.624391] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+2026-05-17T16:26:22.936948+00:00 localhost kernel: [    0.625466] pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfefff window]
+2026-05-17T16:26:22.936948+00:00 localhost kernel: [    0.626433] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+2026-05-17T16:26:22.936948+00:00 localhost kernel: [    0.627419] PCI: CLS 0 bytes, default 64
+2026-05-17T16:26:22.936949+00:00 localhost kernel: [    0.628005] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+2026-05-17T16:26:22.936952+00:00 localhost kernel: [    0.628106] Trying to unpack rootfs image as initramfs...
+2026-05-17T16:26:22.936953+00:00 localhost kernel: [    0.628945] software IO TLB: mapped [mem 0x00000000b7f7f000-0x00000000bbf7f000] (64MB)
+2026-05-17T16:26:22.936953+00:00 localhost kernel: [    0.629017] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x285ce18fdb9, max_idle_ns: 440795334685 ns
+2026-05-17T16:26:22.936953+00:00 localhost kernel: [    0.633558] clocksource: Switched to clocksource tsc
+2026-05-17T16:26:22.936954+00:00 localhost kernel: [    0.634662] Initialise system trusted keyrings
+2026-05-17T16:26:22.936954+00:00 localhost kernel: [    0.635408] Key type blacklist registered
+2026-05-17T16:26:22.936958+00:00 localhost kernel: [    0.636642] workingset: timestamp_bits=36 max_order=21 bucket_order=0
+2026-05-17T16:26:22.936958+00:00 localhost kernel: [    0.640163] integrity: Platform Keyring initialized
+2026-05-17T16:26:22.936958+00:00 localhost kernel: [    0.641049] integrity: Machine keyring initialized
+2026-05-17T16:26:22.936959+00:00 localhost kernel: [    0.641772] Key type asymmetric registered
+2026-05-17T16:26:22.936959+00:00 localhost kernel: [    0.642502] Asymmetric key parser 'x509' registered
+2026-05-17T16:26:22.936959+00:00 localhost kernel: [    0.751022] Freeing initrd memory: 14456K
+2026-05-17T16:26:22.936963+00:00 localhost kernel: [    0.756486] alg: self-tests for CTR-KDF (hmac(sha256)) passed
+2026-05-17T16:26:22.936963+00:00 localhost kernel: [    0.757372] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 249)
+2026-05-17T16:26:22.936964+00:00 localhost kernel: [    0.758679] io scheduler mq-deadline registered
+2026-05-17T16:26:22.936964+00:00 localhost kernel: [    0.760908] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+2026-05-17T16:26:22.936964+00:00 localhost kernel: [    0.762016] 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+2026-05-17T16:26:22.936965+00:00 localhost kernel: [    0.763356] 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+2026-05-17T16:26:22.936965+00:00 localhost kernel: [    0.764641] 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+2026-05-17T16:26:22.937012+00:00 localhost kernel: [    0.765964] 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+2026-05-17T16:26:22.937013+00:00 localhost kernel: [    0.768611] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x9009, rev-id 0)
+2026-05-17T16:26:22.937013+00:00 localhost kernel: [    0.777175] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+2026-05-17T16:26:22.937013+00:00 localhost kernel: [    0.778482] i8042: Warning: Keylock active
+2026-05-17T16:26:22.937014+00:00 localhost kernel: [    0.780772] serio: i8042 KBD port at 0x60,0x64 irq 1
+2026-05-17T16:26:22.937014+00:00 localhost kernel: [    0.781508] serio: i8042 AUX port at 0x60,0x64 irq 12
+2026-05-17T16:26:22.937018+00:00 localhost kernel: [    0.782366] rtc_cmos 00:00: RTC can wake from S4
+2026-05-17T16:26:22.937018+00:00 localhost kernel: [    0.783878] rtc_cmos 00:00: registered as rtc0
+2026-05-17T16:26:22.937019+00:00 localhost kernel: [    0.785032] rtc_cmos 00:00: setting system clock to 2026-05-17T16:26:17 UTC (1779035177)
+2026-05-17T16:26:22.937019+00:00 localhost kernel: [    0.786418] rtc_cmos 00:00: alarms up to one day, 114 bytes nvram
+2026-05-17T16:26:22.937019+00:00 localhost kernel: [    0.787331] intel_pstate: CPU model not supported
+2026-05-17T16:26:22.937020+00:00 localhost kernel: [    0.788016] ledtrig-cpu: registered to indicate activity on CPUs
+2026-05-17T16:26:22.937020+00:00 localhost kernel: [    0.798426] NET: Registered PF_INET6 protocol family
+2026-05-17T16:26:22.937024+00:00 localhost kernel: [    0.804271] Segment Routing with IPv6
+2026-05-17T16:26:22.937024+00:00 localhost kernel: [    0.805014] In-situ OAM (IOAM) with IPv6
+2026-05-17T16:26:22.937024+00:00 localhost kernel: [    0.805685] mip6: Mobile IPv6
+2026-05-17T16:26:22.937025+00:00 localhost kernel: [    0.806161] NET: Registered PF_PACKET protocol family
+2026-05-17T16:26:22.937025+00:00 localhost kernel: [    0.807409] No MBM correction factor available
+2026-05-17T16:26:22.937030+00:00 localhost kernel: [    0.808097] IPI shorthand broadcast: enabled
+2026-05-17T16:26:22.937035+00:00 localhost kernel: [    0.808869] sched_clock: Marking stable (800246777, 8584796)->(810426957, -1595384)
+2026-05-17T16:26:22.937035+00:00 localhost kernel: [    0.810222] registered taskstats version 1
+2026-05-17T16:26:22.937037+00:00 localhost kernel: [    0.810909] Loading compiled-in X.509 certificates
+2026-05-17T16:26:22.937038+00:00 localhost kernel: [    0.825960] Loaded X.509 cert 'Build time autogenerated kernel key: ace55436448ddecd4ac51f888b4bcff2770296a5'
+2026-05-17T16:26:22.937038+00:00 localhost kernel: [    0.827544] Key type .fscrypt registered
+2026-05-17T16:26:22.937039+00:00 localhost kernel: [    0.828163] Key type fscrypt-provisioning registered
+2026-05-17T16:26:22.937043+00:00 localhost kernel: [    0.833118] Key type encrypted registered
+2026-05-17T16:26:22.937043+00:00 localhost kernel: [    0.833816] AppArmor: AppArmor sha1 policy hashing enabled
+2026-05-17T16:26:22.937043+00:00 localhost kernel: [    0.835019] integrity: Loading X.509 certificate: UEFI:db
+2026-05-17T16:26:22.937044+00:00 localhost kernel: [    0.835889] integrity: Loaded X.509 cert 'Microsoft Corporation UEFI CA 2011: 13adbf4309bd82709c8cd54f316ed522988a1bd4'
+2026-05-17T16:26:22.937044+00:00 localhost kernel: [    0.837412] integrity: Loading X.509 certificate: UEFI:db
+2026-05-17T16:26:22.937044+00:00 localhost kernel: [    0.838215] integrity: Loaded X.509 cert 'Microsoft Windows Production PCA 2011: a92902398e16c49778cd90f99e4f9ae17c55af53'
+2026-05-17T16:26:22.937048+00:00 localhost kernel: [    0.839885] integrity: Loading X.509 certificate: UEFI:db
+2026-05-17T16:26:22.937049+00:00 localhost kernel: [    0.840813] integrity: Loaded X.509 cert 'Microsoft Corporation: Windows UEFI CA 2023: aefc5fbbbe055d8f8daa585473499417ab5a5272'
+2026-05-17T16:26:22.937049+00:00 localhost kernel: [    0.842390] integrity: Loading X.509 certificate: UEFI:db
+2026-05-17T16:26:22.937049+00:00 localhost kernel: [    0.843211] integrity: Loaded X.509 cert 'Microsoft UEFI CA 2023: 81aa6b3244c935bce0d6628af39827421e32497d'
+2026-05-17T16:26:22.937050+00:00 localhost kernel: [    0.845273] ima: Allocated hash algorithm: sha256
+2026-05-17T16:26:22.937050+00:00 localhost kernel: [    0.851600] ima: Can not allocate sha384 (reason: -2)
+2026-05-17T16:26:22.937054+00:00 localhost kernel: [    0.881530] ima: No architecture policies found
+2026-05-17T16:26:22.937054+00:00 localhost kernel: [    0.882819] evm: Initialising EVM extended attributes:
+2026-05-17T16:26:22.937054+00:00 localhost kernel: [    0.883755] evm: security.selinux
+2026-05-17T16:26:22.937055+00:00 localhost kernel: [    0.884277] evm: security.SMACK64 (disabled)
+2026-05-17T16:26:22.937055+00:00 localhost kernel: [    0.885058] evm: security.SMACK64EXEC (disabled)
+2026-05-17T16:26:22.937055+00:00 localhost kernel: [    0.885703] evm: security.SMACK64TRANSMUTE (disabled)
+2026-05-17T16:26:22.937055+00:00 localhost kernel: [    0.886980] evm: security.SMACK64MMAP (disabled)
+2026-05-17T16:26:22.937060+00:00 localhost kernel: [    0.887641] evm: security.apparmor
+2026-05-17T16:26:22.937061+00:00 localhost kernel: [    0.888146] evm: security.ima
+2026-05-17T16:26:22.937061+00:00 localhost kernel: [    0.888577] evm: security.capability
+2026-05-17T16:26:22.937061+00:00 localhost kernel: [    0.889105] evm: HMAC attrs: 0x1
+2026-05-17T16:26:22.937062+00:00 localhost kernel: [    0.965268] Freeing unused decrypted memory: 2036K
+2026-05-17T16:26:22.937062+00:00 localhost kernel: [    0.966690] Freeing unused kernel image (initmem) memory: 2596K
+2026-05-17T16:26:22.937066+00:00 localhost kernel: [    0.967506] Write protecting the kernel read-only data: 26624k
+2026-05-17T16:26:22.937066+00:00 localhost kernel: [    0.969218] Freeing unused kernel image (text/rodata gap) memory: 2040K
+2026-05-17T16:26:22.937067+00:00 localhost kernel: [    0.970605] Freeing unused kernel image (rodata/data gap) memory: 1912K
+2026-05-17T16:26:22.937067+00:00 localhost kernel: [    0.972171] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+2026-05-17T16:26:22.937067+00:00 localhost kernel: [    0.973073] Run /init as init process
+2026-05-17T16:26:22.937067+00:00 localhost kernel: [    0.973612]   with arguments:
+2026-05-17T16:26:22.937072+00:00 localhost kernel: [    0.973614]     /init
+2026-05-17T16:26:22.937072+00:00 localhost kernel: [    0.973614]   with environment:
+2026-05-17T16:26:22.937072+00:00 localhost kernel: [    0.973615]     HOME=/
+2026-05-17T16:26:22.937073+00:00 localhost kernel: [    0.973616]     TERM=linux
+2026-05-17T16:26:22.937073+00:00 localhost kernel: [    0.984912] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
+2026-05-17T16:26:22.937073+00:00 localhost kernel: [    1.047062] ACPI: \_SB_.LNKC: Enabled at IRQ 11
+2026-05-17T16:26:22.937074+00:00 localhost kernel: [    1.047815] virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+2026-05-17T16:26:22.937078+00:00 localhost kernel: [    1.052940] ACPI: \_SB_.LNKD: Enabled at IRQ 10
+2026-05-17T16:26:22.937078+00:00 localhost kernel: [    1.055518] virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+2026-05-17T16:26:22.937078+00:00 localhost kernel: [    1.060723] ACPI: \_SB_.LNKA: Enabled at IRQ 10
+2026-05-17T16:26:22.937079+00:00 localhost kernel: [    1.061506] virtio-pci 0000:00:05.0: virtio_pci: leaving for legacy driver
+2026-05-17T16:26:22.937079+00:00 localhost kernel: [    1.127194] SCSI subsystem initialized
+2026-05-17T16:26:22.937079+00:00 localhost kernel: [    1.168239] virtio_net virtio1 ens4: renamed from eth0
+2026-05-17T16:26:22.937084+00:00 localhost kernel: [    1.174601] scsi host0: Virtio SCSI HBA
+2026-05-17T16:26:22.937084+00:00 localhost kernel: [    1.175267] blk-mq: reduced tag depth to 10240
+2026-05-17T16:26:22.937084+00:00 localhost kernel: [    1.184749] scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
+2026-05-17T16:26:22.937085+00:00 localhost kernel: [    1.202835] sd 0:0:1:0: [sda] 20971520 512-byte logical blocks: (10.7 GB/10.0 GiB)
+2026-05-17T16:26:22.937085+00:00 localhost kernel: [    1.204101] sd 0:0:1:0: [sda] 4096-byte physical blocks
+2026-05-17T16:26:22.937085+00:00 localhost kernel: [    1.204901] sd 0:0:1:0: [sda] Write Protect is off
+2026-05-17T16:26:22.937086+00:00 localhost kernel: [    1.205605] sd 0:0:1:0: [sda] Mode Sense: 1f 00 00 08
+2026-05-17T16:26:22.937089+00:00 localhost kernel: [    1.205692] sd 0:0:1:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+2026-05-17T16:26:22.937090+00:00 localhost kernel: [    1.212478]  sda: sda1 sda14 sda15
+2026-05-17T16:26:22.937090+00:00 localhost kernel: [    1.213297] sd 0:0:1:0: [sda] Attached SCSI disk
+2026-05-17T16:26:22.937090+00:[[0;32m  OK  [0m] Started [0;1;39mpolkit.service[0m - Authorization Manager.
+00 localhost kernel: [    1.297786]  sda: sda1 sda14 sda15
+2026-05-17T16:26:22.937091+00:00 localhost kernel: [    1.344649] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
+2026-05-17T16:26:22.937091+00:00 localhost kernel: [    1.370326] Not activating Mandatory Access Control as /sbin/tomoyo-init does not exist.
+2026-05-17T16:26:22.937122+00:00 localhost kernel: [    3.075592] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+2026-05-17T16:26:22.937123+00:00 localhost kernel: [    3.077278] device-mapper: uevent: version 1.0.3
+2026-05-17T16:26:22.937123+00:00 localhost kernel: [    3.078536] device-mapper: ioctl: 4.47.0-ioctl (2022-07-28) initialised: dm-devel@redhat.com
+2026-05-17T16:26:22.937123+00:00 localhost kernel: [    3.095399] pstore: Using crash dump compression: deflate
+2026-05-17T16:26:22.937124+00:00 localhost kernel: [    3.103255] pstore: Registered efi as persistent store backend
+2026-05-17T16:26:22.937124+00:00 localhost kernel: [    3.114414] fuse: init (API version 7.38)
+2026-05-17T16:26:22.937128+00:00 localhost kernel: [    3.127935] loop: module loaded
+2026-05-17T16:26:22.937129+00:00 localhost kernel: [    3.438589] EXT4-fs (sda1): re-mounted. Quota mode: none.
+2026-05-17T16:26:22.937129+00:00 localhost kernel: [    3.535871] EXT4-fs (sda1): resizing filesystem from 2588416 to 2588416 blocks
+2026-05-17T16:26:22.937129+00:00 localhost kernel: [    3.844366] sd 0:0:1:0: Attached scsi generic sg0 type 0
+2026-05-17T16:26:22.937130+00:00 localhost kernel: [    3.851091] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input2
+2026-05-17T16:26:22.937130+00:00 localhost kernel: [    3.864683] ACPI: button: Power Button [PWRF]
+2026-05-17T16:26:22.937134+00:00 localhost kernel: [    3.865418] input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input3
+2026-05-17T16:26:22.937135+00:00 localhost kernel: [    3.887700] ACPI: button: Sleep Button [SLPF]
+2026-05-17T16:26:22.937135+00:00 localhost kernel: [    4.006503] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+2026-05-17T16:26:22.937135+00:00 localhost kernel: [    4.013042] cryptd: max_cpu_qlen set to 1000
+2026-05-17T16:26:22.937135+00:00 localhost kernel: [    4.028770] AVX2 version of gcm_enc/dec engaged.
+2026-05-17T16:26:22.937136+00:00 localhost kernel: [    4.029534] AES CTR mode by8 optimization enabled
+2026-05-17T16:26:22.937136+00:00 localhost kernel: [    4.584162] audit: type=1400 audit(1779035181.291:2): apparmor="STATUS" operation="profile_load" profile="unconfined" name="nvidia_modprobe" pid=369 comm="apparmor_parser"
+2026-05-17T16:26:22.937141+00:00 localhost kernel: [    4.588595] audit: type=1400 audit(1779035181.299:3): apparmor="STATUS" operation="profile_load" profile="unconfined" name="nvidia_modprobe//kmod" pid=369 comm="apparmor_parser"
+2026-05-17T16:26:22.937142+00:00 localhost kernel: [    4.593550] audit: type=1400 audit(1779035181.303:4): apparmor="STATUS" operation="profile_load" profile="unconfined" name="lsb_release" pid=368 comm="apparmor_parser"
+2026-05-17T16:26:22.937142+00:00 localhost kernel: [    4.774742] audit: type=1400 audit(1779035181.483:5): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/bin/man" pid=376 comm="apparmor_parser"
+2026-05-17T16:26:22.937142+00:00 localhost kernel: [    4.777921] audit: type=1400 audit(1779035181.487:6): apparmor="STATUS" operation="profile_load" profile="unconfined" name="man_filter" pid=376 comm="apparmor_parser"
+2026-05-17T16:26:22.937143+00:00 localhost kernel: [    4.781464] audit: type=1400 audit(1779035181.491:7): apparmor="STATUS" operation="profile_load" profile="unconfined" name="man_groff" pid=376 comm="apparmor_parser"
+2026-05-17T16:26:22.937147+00:00 localhost kernel: [    4.933106] audit: type=1400 audit(1779035181.643:8): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/NetworkManager/nm-dhcp-client.action" pid=375 comm="apparmor_parser"
+2026-05-17T16:26:22.937148+00:00 localhost kernel: [    4.935627] audit: type=1400 audit(1779035181.643:9): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/NetworkManager/nm-dhcp-helper" pid=375 comm="apparmor_parser"
+2026-05-17T16:26:22.937148+00:00 localhost kernel: [    4.938211] audit: type=1400 audit(1779035181.643:10): apparmor="STATUS" operation="profile_load" profile="unconfined" name="/usr/lib/connman/scripts/dhclient-script" pid=375 comm="apparmor_parser"
+2026-05-17T16:26:22.972682+00:00 localhost systemd[1]: Starting google-guest-agent-manager.service - Google Compute Engine Guest Agent Plugin Manager...
+2026-05-17T16:26:23.078304+00:00 localhost systemd[1]: Starting google-guest-compat-manager.service - Google Compute Engine Guest Compat Manager...
+2026-05-17T16:26:23.124666+00:00 localhost systemd[1]: Starting google-shutdown-scripts.service - Google Compute Engine Shutdown Scripts...
+2026-05-17T16:26:23.169721+00:00 localhost polkitd[406]: Started polkitd version 122
+2026-05-17T16:26:23.230081+00:00 localhost systemd[1]: Finished google-shutdown-scripts.service - Google Compute Engine Shutdown Scripts.
+2026-05-17T16:26:23.566695+00:00 localhost google_oslogin_nss_cache[392]: oslogin_cache_refresh[392]: Refreshing passwd entry cache
+[[0;32m  OK  [0m] Finished [0;1;39mgoogle-oslogin-ca…e.service[0m - NSS cache refresh.
+2026-05-17T16:26:23.736920+00:00 localhost google_oslogin_nss_cache[392]: oslogin_cache_refresh[392]: Refreshing group entry cache
+2026-05-17T16:26:23.892390+00:00 localhost dbus-daemon[386]: [system] Successfully activated service 'org.freedesktop.PolicyKit1'
+2026-05-17T16:26:23.892467+00:00 localhost systemd[1]: Started polkit.service - Authorization Manager.
+2026-05-17T16:26:23.939751+00:00 localhost systemd[1]: google-oslogin-cache.service: Deactivated successfully.
+2026-05-17T16:26:23.939866+00:00 localhost systemd[1]: Finished google-oslogin-cache.service - NSS cache refresh.
+2026-05-17T16:26:24.224603+00:00 localhost systemd-hostnamed[403]: Hostname set to <vos-kvm-verify-aeb3736-1779035162> (transient)
+2026-05-17T16:26:24.225186+00:00 localhost systemd-resolved[371]: System hostname changed to 'vos-kvm-verify-aeb3736-1779035162'.
+[[0;32m  OK  [0m] Started [0;1;39mexim4.service[0m - LSB: exim Mail Transport Agent.
+2026-05-17T16:26:25.516394+00:00 localhost exim4[388]:  exim4.
+2026-05-17T16:26:25.517782+00:00 localhost systemd[1]: Started exim4.service - LSB: exim Mail Transport Agent.
+2026-05-17T16:26:25.992920+00:00 localhost networkd-dispatcher[393]: No valid path found for iwconfig
+2026-05-17T16:26:25.993047+00:00 localhost networkd-dispatcher[393]: No valid path found for iw
+2026-05-17T16:26:26.619794+00:00 localhost networkd-dispatcher[679]:   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-05-17T16:26:26.619969+00:00 localhost networkd-dispatcher[679]:                                  Dload  Upload   Total   Spent    Left  Speed
+2026-05-17T16:26:26.621037+00:00 localhost networkd-dispatcher[679]: #015  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0#015100  1790  100  1790    0     0  1084k      0 --:--:-- --:--:-- --:--:-- 1748k
+[[0;32m  OK  [0m] Started [0;1;39mnetworkd-dispatche…tcher daemon for systemd-networkd.
+2026-05-17T16:26:27.149771+00:00 localhost systemd[1]: Started networkd-dispatcher.service - Dispatcher daemon for systemd-networkd.
+2026-05-17T16:26:27.750748+00:00 localhost google_guest_agent_manager[425]: Initializing Google Guest Agent...
+2026-05-17T16:26:27.752549+00:00 localhost google_guest_agent_manager[425]: Running Guest Agent setup with config: {Version:20260423.01 EnableACSWatcher:true CorePluginPath:/usr/lib/google/guest_agent/GuestAgentCorePlugin/core_plugin SkipCorePlugin:false EnableLocalPlugins:true}, runtime config: {id:4468267906574340851 svcActPresent:true}
+2026-05-17T16:26:27.752653+00:00 localhost google_guest_agent_manager[425]: Registered ACS watcher and handler
+2026-05-17T16:26:27.752703+00:00 localhost google_guest_agent_manager[425]: Initializing plugin manager for instance "4468267906574340851", agent version: "20260423.01"
+2026-05-17T16:26:27.752775+00:00 localhost google_guest_agent_manager[425]: Plugin manager initialized
+2026-05-17T16:26:27.752818+00:00 localhost google_guest_agent_manager[425]: Starting local plugins
+2026-05-17T16:26:27.753155+00:00 localhost google_guest_agent_manager[425]: Creating metric registry for "scheduled-job-manager" with flush interval: 1m0s, max records: 10
+2026-05-17T16:26:27.767181+00:00 localhost google_guest_compat_manager[429]: Setting up guest compat manager
+2026-05-17T16:26:27.767335+00:00 localhost google_guest_compat_manager[429]: Compat manager created with core plugin already enabled: true
+2026-05-17T16:26:27.772253+00:00 localhost systemd[1]: Started google-guest-compat-manager.service - Google Compute Engine Guest Compat Manager.
+2026-05-17T16:26:27.773360+00:00 localhost google_guest_compat_manager[429]: Google Guest Compat Manager (version: "20260423.01") Initialized...
+2026-05-17T16:26:27.773445+00:00 localhost google_guest_compat_manager[429]: Creating metric registry for "events_manager" with flush interval: 1m0s, max records: 10
+2026-05-17T16:26:27.840889+00:00 localhost google_guest_agent_manager[425]: Installing local plugins: [GuestAgentCorePlugin GuestTelemetryExtension]
+2026-05-17T16:26:27.841188+00:00 localhost google_guest_agent_manager[425]: Installing plugin "GuestAgentCorePlugin", revision "20260423.01"
+2026-05-17T16:26:27.841336+00:00 localhost google_guest_agent_manager[425]: No config provided for plugin "GuestAgentCorePlugin", setting empty config
+2026-05-17T16:26:27.842718+00:00 localhost google_guest_agent_manager[425]: Instance has service account: true, setting ACS client isEnabled to true
+
+Debian GNU/Linux 12 vos-kvm-verify-aeb3736-1779035162 ttyS0
+
+vos-kvm-verify-aeb3736-1779035162 login: 2026-05-17T16:26:29.839492+00:00 localhost google_guest_agent[706]: Initializing core plugin server...
+2026-05-17T16:26:29.839633+00:00 localhost google_guest_agent[706]: Core plugin server listening on "/run/google-guest-agent/plugin-connections/GuestAgentCorePlugin_20260423.01.sock" using "unix"
+2026-05-17T16:26:29.839703+00:00 localhost google_guest_agent[706]: Core plugin server registered. Starting to serve requests...
+2026-05-17T16:26:29.899806+00:00 localhost google_guest_agent[706]: Running core plugin...
+2026-05-17T16:26:29.913008+00:00 localhost google_guest_agent_manager[425]: Successfully started plugin "GuestAgentCorePlugin_20260423.01"
+2026-05-17T16:26:29.913117+00:00 localhost google_guest_agent_manager[425]: Successfully installed plugin "GuestAgentCorePlugin_20260423.01"
+2026-05-17T16:26:29.913167+00:00 localhost google_guest_agent_manager[425]: No local plugins to install
+2026-05-17T16:26:29.913215+00:00 localhost google_guest_agent_manager[425]: Creating metric registry for "events_manager" with flush interval: 1m0s, max records: 10
+2026-05-17T16:26:29.913253+00:00 localhost google_guest_agent_manager[425]: Installing plugin "GuestTelemetryExtension", revision "1.0"
+2026-05-17T16:26:29.914131+00:00 localhost google_guest_agent_manager[425]: No config provided for plugin "GuestTelemetryExtension", setting empty config
+2026-05-17T16:26:29.914223+00:00 localhost google_guest_agent_manager[425]: Starting plugin monitor job for plugin "GuestAgentCorePlugin_20260423.01"
+2026-05-17T16:26:29.916222+00:00 localhost google_guest_agent_manager[425]: Running in GDU universe: true
+2026-05-17T16:26:29.918221+00:00 localhost google_guest_agent_manager[425]: Cloud logging initialized (google_guest_agent_manager)
+2026-05-17T16:26:29.921578+00:00 localhost google_guest_agent_manager[425]: Starting plugin metrics monitor job for plugin "GuestAgentCorePlugin_20260423.01"
+2026-05-17T16:26:29.951688+00:00 localhost google_guest_agent[706]: Running firstboot setup...
+2026-05-17T16:26:30.662805+00:00 localhost OSConfigAgent[391]: 2026-05-17T16:26:30.6617Z OSConfigAgent Info: OSConfig Agent (version 20260427.03-g1) started.
+2026-05-17T16:26:30.756605+00:00 localhost google_guest_agent[706]: Successfully generated rsa type public key at "/etc/ssh/ssh_host_rsa_key.pub"
+2026-05-17T16:26:30.770701+00:00 localhost google_guest_agent[706]: Successfully generated ecdsa type public key at "/etc/ssh/ssh_host_ecdsa_key.pub"
+2026-05-17T16:26:30.786857+00:00 localhost google_guest_agent[706]: Successfully generated ed25519 type public key at "/etc/ssh/ssh_host_ed25519_key.pub"
+2026-05-17T16:26:30.788085+00:00 localhost google_guest_agent[706]: Finished firstboot setup.
+2026-05-17T16:26:30.935556+00:00 localhost google_guest_agent[706]: Running linux network management module setup.
+2026-05-17T16:26:30.969025+00:00 localhost google_guest_agent[706]: Rolling back changes for netplan with reload [false]
+2026-05-17T16:26:30.969138+00:00 localhost google_guest_agent[706]: Rolling back changes for NetworkManager with reload [true].
+2026-05-17T16:26:30.974373+00:00 localhost google_guest_agent[706]: Rolling back changes for systemd-networkd with reload [true].
+2026-05-17T16:26:30.974686+00:00 localhost google_guest_agent[706]: Rolling back changes for wicked with reload [true].
+2026-05-17T16:26:30.974775+00:00 localhost google_guest_agent[706]: Rolling back changes for dhclient.
+2026-05-17T16:26:30.977847+00:00 localhost google_guest_agent[706]: Rolled back network configuration for [netplan NetworkManager systemd-networkd wicked dhclient].
+2026-05-17T16:26:30.977930+00:00 localhost google_guest_agent[706]: Setting up netplan interfaces.
+2026-05-17T16:26:30.982939+00:00 localhost systemd[1]: e2scrub_reap.service: Deactivated successfully.
+2026-05-17T16:26:30.983028+00:00 localhost systemd[1]: Finished e2scrub_reap.service - Remove Stale Online ext4 Metadata Check Snapshots.
+2026-05-17T16:26:31.351518+00:00 localhost systemd-networkd[254]: ens4: Reconfiguring with /run/systemd/network/10-netplan-all-en.network.
+2026-05-17T16:26:31.351642+00:00 localhost systemd-networkd[254]: ens4: DHCP lease lost
+2026-05-17T16:26:31.355665+00:00 localhost systemd-hostnamed[403]: Hostname set to <localhost> (default)
+2026-05-17T16:26:31.355870+00:00 localhost systemd-resolved[371]: Failed to determine the local hostname and LLMNR/mDNS names, ignoring: No such device or address
+2026-05-17T16:26:31.363934+00:00 localhost systemd-networkd[254]: ens4: DHCPv6 lease lost
+2026-05-17T16:26:31.403846+00:00 localhost systemd-networkd[254]: ens4: Overlong DHCP hostname received, shortened from 'vos-kvm-verify-aeb3736-1779035162.us-central1-a.c.deft-strata-482321-d5.internal' to 'vos-kvm-verify-aeb3736-1779035162'
+2026-05-17T16:26:31.404085+00:00 localhost systemd-networkd[254]: ens4: DHCPv4 address 10.128.0.3/32, gateway 10.128.0.1 acquired from 169.254.169.254
+2026-05-17T16:26:31.410475+00:00 localhost systemd-hostnamed[403]: Hostname set to <vos-kvm-verify-aeb3736-1779035162> (transient)
+2026-05-17T16:26:31.420039+00:00 localhost google_guest_agent[706]: Finished setting up netplan interfaces.
+2026-05-17T16:26:31.427239+00:00 localhost google_guest_agent[706]: Finished linux network management module setup.
+2026-05-17T16:26:31.431132+00:00 localhost networkd-dispatcher[747]:   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-05-17T16:26:31.431322+00:00 localhost networkd-dispatcher[747]:                                  Dload  Upload   Total   Spent    Left  Speed
+2026-05-17T16:26:31.432247+00:00 localhost networkd-dispatcher[747]: #015  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0#015100  1790  100  1790    0     0  1229k      0 --:--:-- --:--:-- --:--:-- 1748k
+2026-05-17T16:26:31.452180+00:00 localhost google_guest_agent[706]: Initialized (version: "20260423.01")
+2026-05-17T16:26:31.455910+00:00 localhost google_guest_agent[706]: Adjtime file "/etc/adjtime" does not exist, checking timedatectl status for rtc mode
+2026-05-17T16:26:31.456022+00:00 localhost google_guest_agent[706]: Instance id is already set, no update required.
+2026-05-17T16:26:31.458268+00:00 localhost google_guest_agent[706]: Creating metric registry for "scheduled-job-manager" with flush interval: 1m0s, max records: 10
+2026-05-17T16:26:31.470622+00:00 localhost google_guest_agent[706]: Skipping schedule job request for "gce-workload-cert-refresher"
+2026-05-17T16:26:31.471802+00:00 localhost google_guest_agent[706]: Instance has service account: true, setting ACS client isEnabled to true
+2026-05-17T16:26:31.472010+00:00 localhost google_guest_agent[706]: Bootstrapping MDS mTLS credentials
+2026-05-17T16:26:31.472199+00:00 localhost google_guest_agent[706]: Installing Root CA cert...
+2026-05-17T16:26:31.474013+00:00 localhost google_guest_agent[706]: Successfully installed Root CA cert
+2026-05-17T16:26:31.474096+00:00 localhost google_guest_agent[706]: Installing client credentials...
+2026-05-17T16:26:31.492279+00:00 localhost dbus-daemon[386]: [system] Activating via systemd: service name='org.freedesktop.timedate1' unit='dbus-org.freedesktop.timedate1.service' requested by ':1.14' (uid=0 pid=755 comm="timedatectl status")
+2026-05-17T16:26:31.547435+00:00 localhost systemd[1]: Starting systemd-timedated.service - Time & Date Service...
+2026-05-17T16:26:31.636212+00:00 localhost dbus-daemon[386]: [system] Successfully activated service 'org.freedesktop.timedate1'
+2026-05-17T16:26:31.636933+00:00 localhost systemd[1]: Started systemd-timedated.service - Time & Date Service.
+2026-05-17T16:26:31.643240+00:00 localhost google_guest_agent[706]: Identified RTC mode isUTC to be: [true] from "/etc/adjtime"
+2026-05-17T16:26:31.643326+00:00 localhost google_guest_agent[706]: Clock drift token has changed, resetting clock skew.
+2026-05-17T16:26:31.752498+00:00 localhost google_guest_agent[706]: Successfully installed client credentials
+2026-05-17T16:26:31.752653+00:00 localhost google_guest_agent[706]: Successfully bootstrapped MDS mTLS credentials
+2026-05-17T16:26:31.926730+00:00 localhost google_guest_agent_manager[425]: Successfully started plugin "GuestTelemetryExtension_1.0"
+2026-05-17T16:26:31.926828+00:00 localhost google_guest_agent_manager[425]: Successfully installed plugin "GuestTelemetryExtension_1.0"
+2026-05-17T16:26:31.926886+00:00 localhost google_guest_agent_manager[425]: Starting plugin monitor job for plugin "GuestTelemetryExtension_1.0"
+2026-05-17T16:26:31.927839+00:00 localhost google_guest_agent_manager[425]: Starting plugin metrics monitor job for plugin "GuestTelemetryExtension_1.0"
+2026-05-17T16:26:31.930834+00:00 localhost systemd[1]: Started google-guest-agent-manager.service - Google Compute Engine Guest Agent Plugin Manager.
+2026-05-17T16:26:31.944288+00:00 localhost systemd[1]: Starting google-startup-scripts.service - Google Compute Engine Startup Scripts...
+2026-05-17T16:26:31.947958+00:00 localhost systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+2026-05-17T16:26:31.950325+00:00 localhost google_guest_agent_manager[425]: Google Guest Agent (version: "20260423.01") Initialized...
+2026-05-17T16:26:32.000421+00:00 localhost systemd-resolved[371]: Clock change detected. Flushing caches.
+2026-05-17T16:26:32.003032+00:00 localhost google_guest_agent[706]: Creating metric registry for "events_manager" with flush interval: 1m0s, max records: 10
+2026-05-17T16:26:32.007806+00:00 localhost google_guest_agent[706]: Cloud logging initialized (core_plugin)
+2026-05-17T16:26:32.065936+00:00 localhost systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+2026-05-17T16:26:32.114048+00:00 localhost google_compat_metadata_script_runner[853]: Initialized Metadata Script Runner Compat (version 20260423.01)
+2026-05-17T16:26:32.116310+00:00 localhost google_compat_metadata_script_runner[853]: Enable core plugin set to: [true], launching script runner for event "startup" from "/usr/bin/gce_metadata_script_runner"
+2026-05-17T16:26:32.853818+00:00 localhost google_metadata_script_runner[865]: Running metadata script runner (version 20260423.01) for "startup" event
+2026-05-17T16:26:32.854637+00:00 localhost google_metadata_script_runner[865]: No startup scripts to run
+2026-05-17T16:26:32.917901+00:00 localhost systemd[1]: google-startup-scripts.service: Deactivated successfully.
+2026-05-17T16:26:32.917988+00:00 localhost systemd[1]: Finished google-startup-scripts.service - Google Compute Engine Startup Scripts.
+2026-05-17T16:26:32.918063+00:00 localhost systemd[1]: Reached target multi-user.target - Multi-User System.
+2026-05-17T16:26:32.918115+00:00 localhost systemd[1]: Reached target graphical.target - Graphical Interface.
+2026-05-17T16:26:32.936545+00:00 localhost systemd[1]: Starting systemd-update-utmp-runlevel.service - Record Runlevel Change in UTMP...
+2026-05-17T16:26:32.944488+00:00 localhost systemd[1]: systemd-update-utmp-runlevel.service: Deactivated successfully.
+2026-05-17T16:26:32.944795+00:00 localhost systemd[1]: Finished systemd-update-utmp-runlevel.service - Record Runlevel Change in UTMP.
+2026-05-17T16:26:32.945213+00:00 localhost systemd[1]: Startup finished in 1.467s (kernel) + 14.710s (userspace) = 16.177s.
+2026-05-17T16:26:33.465022+00:00 localhost google_guest_agent[706]: Interface(lo) - State: {Index:1 MTU:65536 Name:lo HardwareAddr: Flags:up|loopback|running}, Addrs: [127.0.0.1/8 ::1/128]
+2026-05-17T16:26:33.465123+00:00 localhost google_guest_agent[706]: Interface(ens4) - State: {Index:2 MTU:1460 Name:ens4 HardwareAddr:42:01:0a:80:00:03 Flags:up|broadcast|multicast|running}, Addrs: [10.128.0.3/32 fe80::4001:aff:fe80:3/64]
+2026-05-17T16:26:33.467764+00:00 localhost google_guest_agent[706]: Local Routes: local 10.128.0.3 dev ens4 proto kernel scope host src 10.128.0.3 #012local 127.0.0.0/8 dev lo proto kernel scope host src 127.0.0.1 #012local 127.0.0.1 dev lo proto kernel scope host src 127.0.0.1 #012broadcast 127.255.255.255 dev lo proto kernel scope link src 127.0.0.1 
+2026-05-17T16:26:35.021511+00:00 localhost google_guest_agent_manager[425]: Cloud Logging Client Error: rpc error: code = PermissionDenied desc = Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist).#012error details: name = ErrorInfo reason = IAM_PERMISSION_DENIED domain = iam.googleapis.com metadata = map[permission:logging.logEntries.create resource:projects/deft-strata-482321-d5/logs/GCEGuestAgentManager]#012error details: name = Unknown  desc = log_entry_errors:{key:0 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:1 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/diagnostic-log' (or it may not exist)."}} log_entry_errors:{key:2 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:3 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:4 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:5 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:6 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:7 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:8 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:9 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:10 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:11 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:12 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:13 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:14 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:15 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:16 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:17 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:18 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:19 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:20 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:21 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:22 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:23 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:24 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:25 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}} log_entry_errors:{key:26 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgentManager' (or it may not exist)."}}
+2026-05-17T16:26:37.120249+00:00 localhost google_guest_agent[706]: Cloud Logging Client Error: rpc error: code = PermissionDenied desc = Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist).#012error details: name = ErrorInfo reason = IAM_PERMISSION_DENIED domain = iam.googleapis.com metadata = map[permission:logging.logEntries.create resource:projects/deft-strata-482321-d5/logs/GCEGuestAgent]#012error details: name = Unknown  desc = log_entry_errors:{key:0 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:1 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/diagnostic-log' (or it may not exist)."}} log_entry_errors:{key:2 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:3 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:4 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:5 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:6 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:7 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:8 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:9 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:10 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:11 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:12 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:13 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:14 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:15 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:16 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:17 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:18 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:19 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:20 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:21 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:22 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:23 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:24 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:25 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:26 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:27 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:28 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:29 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:30 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:31 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:32 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:33 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:34 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:35 value:{code:7 message:"Permission 'logging.logEntries.create' denied on resource '//logging.googleapis.com/projects/deft-strata-482321-d5/logs/GCEGuestAgent' (or it may not exist)."}} log_entry_errors:{key:36 value:{code:7 message:"Permission
+2026-05-17T16:26:50.209571+00:00 localhost systemd[1]: systemd-fsckd.service: Deactivated successfully.
+2026-05-17T16:27:01.486430+00:00 localhost systemd[1]: systemd-hostnamed.service: Deactivated successfully.
+2026-05-17T16:27:01.717694+00:00 localhost systemd[1]: systemd-timedated.service: Deactivated successfully.
+

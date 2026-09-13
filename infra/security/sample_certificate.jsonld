@@ -1,0 +1,47 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    {
+      "vos3": "https://vos-shield.example/schema/",
+      "euaiact": "https://artificialintelligenceact.eu/annex/",
+      "nist": "https://www.nist.gov/itl/ai-risk-management-framework#",
+      "IntegrityCertificate": "vos3:IntegrityCertificate",
+      "teeMeasurements": "vos3:teeMeasurements",
+      "modelSha384": "vos3:modelSha384",
+      "intentManifestSha384": "vos3:intentManifestSha384",
+      "annexIV": "euaiact:annex/4"
+    }
+  ],
+  "id": "urn:vos3:attestation:demo-session-2026:1776790960",
+  "session_id": "demo-session-2026",
+  "tenant_id": "tenant-acme-corp",
+  "issued_at": "2026-04-21T17:02:40Z",
+  "tee_measurements": {
+    "platform": "MOCK",
+    "mrtd": "056b93020682dfd40098d0e1d43346cd4ee469d8b3db4022423cf2e9f9e44ad18536638b249dbf5d691b2dddc2c79fb7",
+    "rtmr_0": "db2187bad4b2c6462d2f25cad41ac2addb2ecf3d800030ce581182567f27c7f47690c8ecdc1fb464f3ac5c4445f877c5",
+    "rtmr_1": "5c343d6d7f68b79a83505168baafe8de6f10c91fadcf2917c4b8896ee0b66940abe35ccb4375ec944c55e46ac1a3dfac",
+    "rtmr_2": "25114e1c3e3b9385a37a0aaa2a822ae6d99af70e91f042804f3c1d9022e7b26c551401bace3fce0b6ea0ea58ef1ff746",
+    "rtmr_3": "326fcc820a7e89d4d8153d8fa8c0bf6a873635399478cc42deda45ea8afe41ac076ca1e14ecb25bfdd782a971adef04d",
+    "tee_quote_available": false,
+    "measurement_time_ns": 1776790960919024000
+  },
+  "model_sha384": "08ab5b48670629ded90de99a5d47f3a9de4cfc90c12ae6f6933d2d53596f7df7b233d99d2820428ab4643292da21f631",
+  "intent_manifest_sha384": "206b092d3c1f507529cf4822b7c2a184f92fa031f2bd6e61b93cb6afdd92c17a37d77b20d1247755ec5c7c89f3387532",
+  "policy_invariants": {
+    "sched_core.no_cross_domain_smt_co_execution": "backend/tests/benchmarks/sched_core_z3_proof.py   (236196 states, Z3 UNSAT)",
+    "egress.no_public_ip_bypass": "backend/tests/benchmarks/egress_policy_z3_proof.py (2^32 IPv4 space, Z3 UNSAT \u00d7 3)",
+    "oom_guard.overflow_safe": "backend/tests/benchmarks/ai_oom_z3_proof.py        (2^64 size_t space, Z3 UNSAT \u00d7 6)"
+  },
+  "harmonised_standards": [
+    "FIPS 180-4 (SHA-384 used for RTMR extension)",
+    "NIST SP 800-132 (PBKDF2-SHA512 256k iter, SQLCipher vault)",
+    "RFC 2104 (HMAC used for session binding)",
+    "Intel SDM Vol 4 (MSR-defined HCS sequence)",
+    "CycloneDX 1.7 (SBOM format)"
+  ],
+  "signing_tier": "dev",
+  "certificate_sha256": "a95915da99719b13963e1adb1a04efc44f8826405825b92f8141a7392f344381",
+  "signature_b64": "MEUCICkF9E8ip5jCJWpOmxuJ6UksnhFDAfXhJBbcGr8fsHnhAiEA1Mzp0cT1GB6B6onsN3QsZp6kYeWnn8pbzAfB3G9u0GA=",
+  "signer_public_key_fp": "5924626667d28722"
+}

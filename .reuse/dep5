@@ -1,0 +1,28 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: VOS3
+Upstream-Contact: sz@aidg.com
+Source: https://github.com/sz-spec/vos4
+
+Files: *
+Copyright: 2026 VOS3 Project
+License: MIT
+
+Files: kernel/src/crypto/sha256.c kernel/src/crypto/sha256.h
+Copyright: 2026 VOS3 Project
+License: MIT
+Comment: Freestanding SHA-256 (FIPS 180-4), GPR-only, no SIMD dependency
+
+Files: frontend/convex/*
+Copyright: 2026 VOS3 Project
+License: MIT
+Comment: Convex schema, queries, and mutations
+
+Files: docs/*
+Copyright: 2026 VOS3 Project
+License: MIT
+Comment: Technical documentation and market entry materials
+
+Files: kernel/build/*
+Copyright: 2026 VOS3 Project
+License: MIT
+Comment: Build artifacts — generated files, not source

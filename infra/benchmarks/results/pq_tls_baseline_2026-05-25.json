@@ -1,0 +1,104 @@
+{
+  "schema_version": "vos3.pq_tls_bench.v1",
+  "timestamp_utc": "2026-05-24T20:57:14Z",
+  "host": {
+    "python_version": "3.12.13",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "processor": "arm",
+    "arch": "arm64"
+  },
+  "backends": {
+    "cryptography": true,
+    "kyber_py": true
+  },
+  "operations": [
+    {
+      "operation": "x25519_keygen",
+      "backend": "cryptography(rust)",
+      "iterations": 200,
+      "min_ms": 0.0585,
+      "p50_ms": 0.0602,
+      "p95_ms": 0.0681,
+      "p99_ms": 0.0715,
+      "max_ms": 0.0737,
+      "mean_ms": 0.0618,
+      "stddev_ms": 0.0037
+    },
+    {
+      "operation": "x25519_dh",
+      "backend": "cryptography(rust)",
+      "iterations": 200,
+      "min_ms": 0.1203,
+      "p50_ms": 0.1231,
+      "p95_ms": 0.1425,
+      "p99_ms": 0.1508,
+      "max_ms": 0.1563,
+      "mean_ms": 0.1262,
+      "stddev_ms": 0.008
+    },
+    {
+      "operation": "mlkem_768_keygen",
+      "backend": "kyber-py(pure-python)",
+      "iterations": 20,
+      "min_ms": 1.2617,
+      "p50_ms": 1.3342,
+      "p95_ms": 1.3945,
+      "p99_ms": 1.3945,
+      "max_ms": 1.4595,
+      "mean_ms": 1.3367,
+      "stddev_ms": 0.0417
+    },
+    {
+      "operation": "mlkem_768_encaps",
+      "backend": "kyber-py(pure-python)",
+      "iterations": 20,
+      "min_ms": 1.7157,
+      "p50_ms": 1.8045,
+      "p95_ms": 1.9278,
+      "p99_ms": 1.9278,
+      "max_ms": 1.9415,
+      "mean_ms": 1.8236,
+      "stddev_ms": 0.0618
+    },
+    {
+      "operation": "mlkem_768_decaps",
+      "backend": "kyber-py(pure-python)",
+      "iterations": 20,
+      "min_ms": 2.3961,
+      "p50_ms": 2.4573,
+      "p95_ms": 2.6035,
+      "p99_ms": 2.6035,
+      "max_ms": 2.6676,
+      "mean_ms": 2.4697,
+      "stddev_ms": 0.0732
+    },
+    {
+      "operation": "hybrid_keygen",
+      "backend": "x25519+mlkem768",
+      "iterations": 20,
+      "min_ms": 1.3444,
+      "p50_ms": 1.4165,
+      "p95_ms": 1.5363,
+      "p99_ms": 1.5363,
+      "max_ms": 1.6173,
+      "mean_ms": 1.4254,
+      "stddev_ms": 0.0635
+    },
+    {
+      "operation": "hybrid_encap",
+      "backend": "x25519+mlkem768",
+      "iterations": 20,
+      "min_ms": 1.9908,
+      "p50_ms": 2.0074,
+      "p95_ms": 2.0888,
+      "p99_ms": 2.0888,
+      "max_ms": 2.1035,
+      "mean_ms": 2.0286,
+      "stddev_ms": 0.036
+    }
+  ],
+  "notes": [
+    "kyber-py is a pure-Python reference implementation \u2014 NOT constant-time, NOT side-channel safe. Use for benchmarking + educational purposes only. Production deployments use the kernel ML-KEM-768 C path.",
+    "Per-operation iterations=200 (after a 10-call warmup discard). Wall-clock via time.perf_counter_ns()."
+  ]
+}

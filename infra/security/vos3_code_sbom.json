@@ -1,0 +1,299 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "serialNumber": "urn:uuid:vos3-v20.1.4-20260421T100643",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-04-21T10:06:43.770052+00:00",
+    "component": {
+      "type": "application",
+      "name": "vos3-cyber",
+      "version": "20.1.4",
+      "description": "VOS-Cyber v20.1.4 \u2014 hash-anchored code SBOM"
+    },
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "vos3-build-sbom",
+          "version": "1.0.0"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "file",
+      "name": "hcs.h",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/include/vos/hcs.h",
+      "path": "kernel/include/vos/hcs.h",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "668923403792e6efebb23c64295d6740ef17f123149b477b1a79b4107e7f9526"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "tee.h",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/include/vos/tee.h",
+      "path": "kernel/include/vos/tee.h",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c4b3935703a4f6859d4c72c3952bd7747cce30b9a20d1fa9dc49f4fc3324893a"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "sha384.h",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/include/vos/sha384.h",
+      "path": "kernel/include/vos/sha384.h",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "14fc08eef0531e4c4b67bd584460beca13f75e966767a918abd4f6f07213e982"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "hcs.c",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/src/mm/hcs.c",
+      "path": "kernel/src/mm/hcs.c",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fee25f7437388cc3308e33fe0ed2e64d788531e9137047cb63fcae816f38b834"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "tee.c",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/src/mm/tee.c",
+      "path": "kernel/src/mm/tee.c",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "541775ace3e5f059798d166c4bb46e98053055693ddcf298750c92808226bf98"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "sha384.c",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/src/crypto/sha384.c",
+      "path": "kernel/src/crypto/sha384.c",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8ab7222d801a660ab566205d61f9a79a6248ca212c42a3a19532fd91fb5a898a"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "core_cookie.c",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/src/sched/core_cookie.c",
+      "path": "kernel/src/sched/core_cookie.c",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a3845304b5d10de7bd7a58a974997c19bd905e5275bed7ed79b1cf728ddc241a"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "harness.c",
+      "version": "20.1.4",
+      "bom-ref": "vos3:kernel/src/tests/harness.c",
+      "path": "kernel/src/tests/harness.c",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5faf20d67aa10a4ed2b83d53153543e3ec63b82b64cb5d956b93681b7b07e6b3"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "vcore_bridge.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/core/vcore_bridge.py",
+      "path": "backend/core/vcore_bridge.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b87f912a152b20222c69a23f58790b011da53ccae5efcb3d4c3ba204facd34a9"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "leak_detector.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/core/observability/leak_detector.py",
+      "path": "backend/core/observability/leak_detector.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "53b49c657612f7c7f8e2d614cf3ea75f5d17f2e3efb159d2d44dd3ef60674c90"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "__init__.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/core/observability/__init__.py",
+      "path": "backend/core/observability/__init__.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a95a9a4a61bd89674b89525a7b8aca9e7934d52905662724d81e1d521bab2cfd"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "local_vault.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/core/repositories/local_vault.py",
+      "path": "backend/core/repositories/local_vault.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6aa3fe6f1b89b94679cd18f52a6d5c8a882afbff6a155aabb0250dac88448dfb"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "sigstore_verify.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:infra/security/sigstore_verify.py",
+      "path": "infra/security/sigstore_verify.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9c1265a6a6eaeacc1d360df34fbee372ca822970cbbb84205568ed75a6bb5b5c"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "sbom_verify.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:infra/security/sbom_verify.py",
+      "path": "infra/security/sbom_verify.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3f256444c19e44832f9abd3c9d61fc46b3b020cf04647e2c0f18f74bed3e1984"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "build_sbom.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:infra/security/build_sbom.py",
+      "path": "infra/security/build_sbom.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3be089d73f171253824ab2decfd917f6bcc852994a2853ae0ddba8681822de6c"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "scheduler_jitter_sim.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/tests/benchmarks/scheduler_jitter_sim.py",
+      "path": "backend/tests/benchmarks/scheduler_jitter_sim.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e48de4ff62cb56b2057ad50aae56ae441ffd3a25ea1ade390d673886aa2c53d6"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "native_audit_bench.c",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/tests/benchmarks/native_audit_bench.c",
+      "path": "backend/tests/benchmarks/native_audit_bench.c",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4b3b47cea6e418147c01e8c7eb8b4413baaf01afb551a1ad6fa51504b756c7a7"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "ioctl_fuzz.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/tests/benchmarks/ioctl_fuzz.py",
+      "path": "backend/tests/benchmarks/ioctl_fuzz.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "117d97633989885ab7b673b5f3265846a4d2315a546b7fb2d29f9ffd2f7eda02"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "sched_core_z3_proof.py",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/tests/benchmarks/sched_core_z3_proof.py",
+      "path": "backend/tests/benchmarks/sched_core_z3_proof.py",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "62f92ddd99f5ac76a4015f319e0abc6887060a09300b9396346f0347a3f36479"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "pyproject.toml",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/pyproject.toml",
+      "path": "backend/pyproject.toml",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "dac6d575db584772c1b044512239376f52ba8b518ceeae2e8aa693796a0a4a06"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "uv.lock",
+      "version": "20.1.4",
+      "bom-ref": "vos3:backend/uv.lock",
+      "path": "backend/uv.lock",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "717da1cfc2def6931d80c4dea4888bea09238cf521c81249f0a96f976b71cecd"
+        }
+      ]
+    }
+  ]
+}

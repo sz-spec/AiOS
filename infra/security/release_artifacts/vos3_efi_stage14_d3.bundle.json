@@ -1,0 +1,53 @@
+{
+  "mediaType": "application/vnd.dev.sigstore.bundle.v3+json",
+  "artifact": {
+    "path": "kernel/build/vos3.efi",
+    "sha256_hex": "773c58aaedc222277cf8b43d435ac03519251288c847f14cef25d3c6c1a1f623"
+  },
+  "dsseEnvelope": {
+    "payloadType": "application/vnd.vos3.artifact.v1+sha256",
+    "payload": "eyJfdHlwZSI6ICJodHRwczovL2luLXRvdG8uaW8vU3RhdGVtZW50L3YwLjEiLCAicHJlZGljYXRlIjogeyJzaWduZWRBdCI6ICIyMDI2LTA1LTA5VDA3OjIxOjM2LjkzNjUwNSswMDowMCIsICJ0aWVyIjogImRldiIsICJ0b29sIjogImluZnJhL3NlY3VyaXR5L3NpZ3N0b3JlX3YzX2J1bmRsZS5weSJ9LCAicHJlZGljYXRlVHlwZSI6ICJodHRwczovL3ZvczMuc2VjdXJpdHkvc2lnc3RvcmUtdjMtc2hhcGVkL3YxIiwgInN1YmplY3QiOiBbeyJkaWdlc3QiOiB7InNoYTI1NiI6ICI3NzNjNThhYWVkYzIyMjI3N2NmOGI0M2Q0MzVhYzAzNTE5MjUxMjg4Yzg0N2YxNGNlZjI1ZDNjNmMxYTFmNjIzIn0sICJuYW1lIjogImtlcm5lbC9idWlsZC92b3MzLmVmaSJ9XX0=",
+    "signatures": [
+      {
+        "sig": "MEYCIQCLVG9HxHExIARNgn/afonB/VlbKTMXbRLldpayl8uUTwIhAP+jv6Dj1ZKlKhgGEhLLHBKl684caXBVl9TvtKfvJkAr",
+        "keyid": ""
+      }
+    ]
+  },
+  "verificationMaterial": {
+    "publicKey": {
+      "pem": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEjZcSYeryCbNePQk6AMaO0ySdBi5U\nhk2IZLeScbubZOtrGgtwLOLHciHaVE1xEZmcCVNlrfayOcHvLuQp++KUBg==\n-----END PUBLIC KEY-----\n"
+    },
+    "x509CertificateChain": {
+      "certificates": [
+        {
+          "pem": "-----BEGIN CERTIFICATE-----\nMIIBeDCCAR6gAwIBAgIUIH8L6cGkz2i34aGSA18ML6Lk4rgwCgYIKoZIzj0EAwIw\nOzEcMBoGA1UEAwwTVk9TMy1ERVYtTk9ULUZVTENJTzEbMBkGA1UECgwSdk9TLUN5\nYmVyIGRldiB0aWVyMCAXDTI2MDUwOTA3MjEzNloYDzIwOTkwMTAxMDAwMDAwWjA7\nMRwwGgYDVQQDDBNWT1MzLURFVi1OT1QtRlVMQ0lPMRswGQYDVQQKDBJ2T1MtQ3li\nZXIgZGV2IHRpZXIwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASNlxJh6vIJs149\nCToAxo7TJJ0GLlSGTYhkt5Jxu5tk62saC3As4sdyIdpUTXERmZwJU2Wt9rI5we8u\n5Cn74pQGMAoGCCqGSM49BAMCA0gAMEUCIQC6P3mZVW1QGGsUifTvG4rAIrTNxL4p\n0fH7jn2I8U/bgQIgLFq75WNJBfZlEJlKkHNlZGSDGm5EAQ5I+hbMM29udZ8=\n-----END CERTIFICATE-----\n"
+        }
+      ]
+    }
+  },
+  "tlogEntries": [
+    {
+      "kind": "vos3.sigstore.v3+dsse",
+      "leaf_index": 6,
+      "appended_at": "2026-05-09T07:21:36.936584+00:00",
+      "leaf_hash_sha256": "c899edea5c7b5ab1506e3ca11d020d09dc2fe46707e4b6052276d93e1fcde60f",
+      "tree_size": 7,
+      "root_hash_sha256": "7d9a2bcbfbdddc31fcca621bccca76750a0e3c7572b1066f37b9cd40ed4151df",
+      "inclusion_proof": {
+        "leaf_index": 6,
+        "tree_size": 7,
+        "root_hash": "7d9a2bcbfbdddc31fcca621bccca76750a0e3c7572b1066f37b9cd40ed4151df",
+        "audit_path": [
+          "11ddb8c7b2f9fde03d5b9d830c7688530e77af7da6027170f4d75ec9c8813619",
+          "57b0e7fceae69dd6bd656494c4b8c058f5f54c947ed40c55ab0b52be6e8be9c5"
+        ]
+      }
+    }
+  ],
+  "vos3_meta": {
+    "stage": "11",
+    "tier": "dev",
+    "spec_v3_byte_compatibility": "pending \u2014 see docs/SIGSTORE_V3_GAP.md"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "vos3-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:clean": "rimraf .next && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf .next",
+    "clean:all": "rimraf .next node_modules/.cache",
+    "test": "npx vitest run",
+    "convex:dev": "npx convex dev --typecheck=disable",
+    "convex:deploy": "npx convex deploy",
+    "convex:codegen": "npx convex codegen",
+    "test:idor": "node convex/_test/idor_fuzz.mjs",
+    "test:input-validation": "node convex/_test/input_validation_fuzz.mjs",
+    "test:convex-fuzz": "npm run test:idor && npm run test:input-validation",
+    "test:all-fuzz": "npm run test:convex-fuzz"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^7.2.3",
+    "@codesandbox/sandpack-react": "^2.19.0",
+    "@codesandbox/sandpack-themes": "^2.0.21",
+    "@dagrejs/dagre": "^3.0.0",
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@tauri-apps/api": "^2.10.1",
+    "@xyflow/react": "^12.10.2",
+    "cmdk": "^1.1.1",
+    "convex": "^1.13.0",
+    "framer-motion": "^12.38.0",
+    "immer": "^11.1.4",
+    "lucide-react": "^1.8.0",
+    "next": "^16.2.3",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "sonner": "^2.0.7",
+    "yjs": "^13.6.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@playwright/test": "^1.58.0",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^24.13.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "convex-test": "^0.0.58",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.3.5",
+    "jsdom": "^25.0.0",
+    "postcss": "^8.5.9",
+    "rimraf": "^5.0.10",
+    "tailwindcss": "^4.2.2",
+    "typescript": "5.3.3",
+    "vite": "^7.3.6",
+    "vitest": "^4.1.4"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.10"
+    }
+  }
+}

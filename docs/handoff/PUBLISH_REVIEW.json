@@ -1,0 +1,166 @@
+{
+  "date": "2026-09-13",
+  "target": "https://github.com/sz-spec/AiOS.git",
+  "visibility": "public",
+  "scope": "All Git candidate source files, scanned via isolated copy before staging. No real credential found in the 26 reported matches. This is not a full security audit.",
+  "findings": [
+    {
+      "path": "backend/mcp-server/SECURITY.md",
+      "line": 88,
+      "rule": "generic-api-key",
+      "review": "Documentation placeholder, not a deployed credential"
+    },
+    {
+      "path": "backend/mcp-server/docs/INTEGRATION.md",
+      "line": 495,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential"
+    },
+    {
+      "path": "backend/mcp-server/docs/INTEGRATION.md",
+      "line": 514,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential"
+    },
+    {
+      "path": "backend/mcp-server/docs/INTEGRATION.md",
+      "line": 526,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential"
+    },
+    {
+      "path": "backend/services/hybrid_kex.py",
+      "line": 80,
+      "rule": "generic-api-key",
+      "review": "Integer key-length expression; no key material"
+    },
+    {
+      "path": "backend/tests/api/test_chat_routes.py",
+      "line": 34,
+      "rule": "stripe-access-token",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/api/test_chat_routes.py",
+      "line": 39,
+      "rule": "jwt",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/governance/test_telemetry_genai.py",
+      "line": 38,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/governance/test_telemetry_genai.py",
+      "line": 228,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/security/test_ifc_engine.py",
+      "line": 313,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_code_review.py",
+      "line": 51,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_code_review.py",
+      "line": 72,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_api_clerk_webhook.py",
+      "line": 197,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 189,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 191,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 249,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 260,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 278,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 477,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 206,
+      "rule": "stripe-access-token",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 195,
+      "rule": "github-pat",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential"
+    },
+    {
+      "path": "infra/verify/reports/GCP_EVIDENCE_AAA.summary.txt",
+      "line": 364,
+      "rule": "generic-api-key",
+      "review": "Public X.509 certificate fingerprint in historical boot log; not private key material"
+    },
+    {
+      "path": "infra/verify/reports/GCP_EVIDENCE_AAA.summary.txt",
+      "line": 1176,
+      "rule": "generic-api-key",
+      "review": "Public X.509 certificate fingerprint in historical boot log; not private key material"
+    },
+    {
+      "path": "sdk/docs/getting-started.md",
+      "line": 307,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential"
+    },
+    {
+      "path": "sdk/docs/getting-started.md",
+      "line": 336,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential"
+    },
+    {
+      "path": "sdk/docs/getting-started.md",
+      "line": 353,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential"
+    }
+  ],
+  "excluded": "Ignored environments, local credentials/configuration, dependencies, generated builds and musl debug library. Historical handoff Git status describes the pre-publication snapshot.",
+  "github_push_protection": "Initial push rejected two synthetic Stripe fixtures. Replaced literal examples with generated dummy strings, retaining redaction-test behavior; no bypass requested."
+}

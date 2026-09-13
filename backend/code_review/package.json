@@ -1,0 +1,32 @@
+{
+  "name": "ai-code-review-webhook",
+  "version": "1.0.0",
+  "description": "AI Code Review Webhook Server - Multi-provider support with GitHub integration",
+  "main": "dist/webhook_server.js",
+  "scripts": {
+    "dev": "tsx watch webhook_server.ts",
+    "build": "tsc",
+    "start": "node dist/webhook_server.js",
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@octokit/rest": "^20.0.2",
+    "bull": "^4.12.0",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/bull": "^4.10.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

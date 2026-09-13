@@ -1,0 +1,378 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:02904b96-1bae-4b39-8ca7-1f3378c412ee",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-04-06T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "VOS3",
+        "name": "manual-sbom-gen",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "vos3-backend",
+      "version": "3.2.0",
+      "purl": "pkg:pypi/vos3-backend@3.2.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "fastapi",
+      "version": "0.109.0",
+      "purl": "pkg:pypi/fastapi@0.109.0"
+    },
+    {
+      "type": "library",
+      "name": "uvicorn",
+      "version": "0.27.0",
+      "purl": "pkg:pypi/uvicorn@0.27.0"
+    },
+    {
+      "type": "library",
+      "name": "websockets",
+      "version": "12.0",
+      "purl": "pkg:pypi/websockets@12.0"
+    },
+    {
+      "type": "library",
+      "name": "python-multipart",
+      "version": "0.0.7",
+      "purl": "pkg:pypi/python-multipart@0.0.7"
+    },
+    {
+      "type": "library",
+      "name": "pydantic",
+      "version": "2.6.0",
+      "purl": "pkg:pypi/pydantic@2.6.0"
+    },
+    {
+      "type": "library",
+      "name": "uvloop",
+      "version": "0.19.0",
+      "purl": "pkg:pypi/uvloop@0.19.0"
+    },
+    {
+      "type": "library",
+      "name": "httptools",
+      "version": "0.6.0",
+      "purl": "pkg:pypi/httptools@0.6.0"
+    },
+    {
+      "type": "library",
+      "name": "gunicorn",
+      "version": "21.2.0",
+      "purl": "pkg:pypi/gunicorn@21.2.0"
+    },
+    {
+      "type": "library",
+      "name": "python-socketio",
+      "version": "5.10.0",
+      "purl": "pkg:pypi/python-socketio@5.10.0"
+    },
+    {
+      "type": "library",
+      "name": "strawberry-graphql",
+      "version": "0.219.0",
+      "purl": "pkg:pypi/strawberry-graphql@0.219.0"
+    },
+    {
+      "type": "library",
+      "name": "PyJWT",
+      "version": "2.8.0",
+      "purl": "pkg:pypi/PyJWT@2.8.0"
+    },
+    {
+      "type": "library",
+      "name": "passlib",
+      "version": "1.7.4",
+      "purl": "pkg:pypi/passlib@1.7.4"
+    },
+    {
+      "type": "library",
+      "name": "slowapi",
+      "version": "0.1.9",
+      "purl": "pkg:pypi/slowapi@0.1.9"
+    },
+    {
+      "type": "library",
+      "name": "stripe",
+      "version": "8.0.0",
+      "purl": "pkg:pypi/stripe@8.0.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain",
+      "version": "0.3.0",
+      "purl": "pkg:pypi/langchain@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain-core",
+      "version": "0.3.0",
+      "purl": "pkg:pypi/langchain-core@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain-openai",
+      "version": "0.2.0",
+      "purl": "pkg:pypi/langchain-openai@0.2.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain-anthropic",
+      "version": "0.2.0",
+      "purl": "pkg:pypi/langchain-anthropic@0.2.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain-community",
+      "version": "0.3.0",
+      "purl": "pkg:pypi/langchain-community@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "langgraph",
+      "version": "0.2.60",
+      "purl": "pkg:pypi/langgraph@0.2.60"
+    },
+    {
+      "type": "library",
+      "name": "langchainhub",
+      "version": "0.1.20",
+      "purl": "pkg:pypi/langchainhub@0.1.20"
+    },
+    {
+      "type": "library",
+      "name": "langchain-google-genai",
+      "version": "2.0.0",
+      "purl": "pkg:pypi/langchain-google-genai@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain-ollama",
+      "version": "0.1.0",
+      "purl": "pkg:pypi/langchain-ollama@0.1.0"
+    },
+    {
+      "type": "library",
+      "name": "crewai-tools",
+      "version": "0.14.0",
+      "purl": "pkg:pypi/crewai-tools@0.14.0"
+    },
+    {
+      "type": "library",
+      "name": "langchain-tavily",
+      "version": "0.1.0",
+      "purl": "pkg:pypi/langchain-tavily@0.1.0"
+    },
+    {
+      "type": "library",
+      "name": "tavily-python",
+      "version": "0.3.0",
+      "purl": "pkg:pypi/tavily-python@0.3.0"
+    },
+    {
+      "type": "library",
+      "name": "faiss-cpu",
+      "version": "1.7.4",
+      "purl": "pkg:pypi/faiss-cpu@1.7.4"
+    },
+    {
+      "type": "library",
+      "name": "chromadb",
+      "version": "0.4.22",
+      "purl": "pkg:pypi/chromadb@0.4.22"
+    },
+    {
+      "type": "library",
+      "name": "psycopg2-binary",
+      "version": "2.9.9",
+      "purl": "pkg:pypi/psycopg2-binary@2.9.9"
+    },
+    {
+      "type": "library",
+      "name": "pgvector",
+      "version": "0.2.4",
+      "purl": "pkg:pypi/pgvector@0.2.4"
+    },
+    {
+      "type": "library",
+      "name": "sentence-transformers",
+      "version": "2.2.2",
+      "purl": "pkg:pypi/sentence-transformers@2.2.2"
+    },
+    {
+      "type": "library",
+      "name": "networkx",
+      "version": "3.0",
+      "purl": "pkg:pypi/networkx@3.0"
+    },
+    {
+      "type": "library",
+      "name": "beautifulsoup4",
+      "version": "4.12.0",
+      "purl": "pkg:pypi/beautifulsoup4@4.12.0"
+    },
+    {
+      "type": "library",
+      "name": "lxml",
+      "version": "5.0.0",
+      "purl": "pkg:pypi/lxml@5.0.0"
+    },
+    {
+      "type": "library",
+      "name": "tiktoken",
+      "version": "0.5.0",
+      "purl": "pkg:pypi/tiktoken@0.5.0"
+    },
+    {
+      "type": "library",
+      "name": "redis",
+      "version": "5.0.0",
+      "purl": "pkg:pypi/redis@5.0.0"
+    },
+    {
+      "type": "library",
+      "name": "langfuse",
+      "version": "2.0.0",
+      "purl": "pkg:pypi/langfuse@2.0.0"
+    },
+    {
+      "type": "library",
+      "name": "langsmith",
+      "version": "0.1.0",
+      "purl": "pkg:pypi/langsmith@0.1.0"
+    },
+    {
+      "type": "library",
+      "name": "sentry-sdk",
+      "version": "1.39.0",
+      "purl": "pkg:pypi/sentry-sdk@1.39.0"
+    },
+    {
+      "type": "library",
+      "name": "opentelemetry-api",
+      "version": "1.22.0",
+      "purl": "pkg:pypi/opentelemetry-api@1.22.0"
+    },
+    {
+      "type": "library",
+      "name": "opentelemetry-sdk",
+      "version": "1.22.0",
+      "purl": "pkg:pypi/opentelemetry-sdk@1.22.0"
+    },
+    {
+      "type": "library",
+      "name": "aiohttp",
+      "version": "3.9.0",
+      "purl": "pkg:pypi/aiohttp@3.9.0"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": "0.27.0",
+      "purl": "pkg:pypi/httpx@0.27.0"
+    },
+    {
+      "type": "library",
+      "name": "requests",
+      "version": "2.31.0",
+      "purl": "pkg:pypi/requests@2.31.0"
+    },
+    {
+      "type": "library",
+      "name": "aiofiles",
+      "version": "23.2.0",
+      "purl": "pkg:pypi/aiofiles@23.2.0"
+    },
+    {
+      "type": "library",
+      "name": "boto3",
+      "version": "1.34.0",
+      "purl": "pkg:pypi/boto3@1.34.0"
+    },
+    {
+      "type": "library",
+      "name": "python-dotenv",
+      "version": "1.0.0",
+      "purl": "pkg:pypi/python-dotenv@1.0.0"
+    },
+    {
+      "type": "library",
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "purl": "pkg:pypi/defusedxml@0.7.1"
+    },
+    {
+      "type": "library",
+      "name": "typing-extensions",
+      "version": "4.10.0",
+      "purl": "pkg:pypi/typing-extensions@4.10.0"
+    },
+    {
+      "type": "library",
+      "name": "pytest",
+      "version": "8.0.0",
+      "purl": "pkg:pypi/pytest@8.0.0"
+    },
+    {
+      "type": "library",
+      "name": "pytest-asyncio",
+      "version": "0.23.0",
+      "purl": "pkg:pypi/pytest-asyncio@0.23.0"
+    },
+    {
+      "type": "library",
+      "name": "pytest-cov",
+      "version": "4.1.0",
+      "purl": "pkg:pypi/pytest-cov@4.1.0"
+    },
+    {
+      "type": "library",
+      "name": "pytest-timeout",
+      "version": "2.2.0",
+      "purl": "pkg:pypi/pytest-timeout@2.2.0"
+    },
+    {
+      "type": "library",
+      "name": "pytest-benchmark",
+      "version": "4.0.0",
+      "purl": "pkg:pypi/pytest-benchmark@4.0.0"
+    },
+    {
+      "type": "library",
+      "name": "black",
+      "version": "24.1.0",
+      "purl": "pkg:pypi/black@24.1.0"
+    },
+    {
+      "type": "library",
+      "name": "ruff",
+      "version": "0.1.0",
+      "purl": "pkg:pypi/ruff@0.1.0"
+    },
+    {
+      "type": "library",
+      "name": "ragas",
+      "version": "0.1.0",
+      "purl": "pkg:pypi/ragas@0.1.0"
+    },
+    {
+      "type": "library",
+      "name": "datasets",
+      "version": "2.14.0",
+      "purl": "pkg:pypi/datasets@2.14.0"
+    },
+    {
+      "type": "library",
+      "name": "memory-profiler",
+      "version": "0.61.0",
+      "purl": "pkg:pypi/memory-profiler@0.61.0"
+    }
+  ]
+}

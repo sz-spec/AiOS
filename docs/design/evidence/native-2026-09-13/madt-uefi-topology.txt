@@ -1,0 +1,15 @@
+[ACPI] Initializing ACPI subsystem (RSDP at phys 0x286A800)
+[ACPI] RSDP validated: revision=2, OEM='BOCHS '
+[ACPI] RSDP cross-check: no legacy RSDP (pure-UEFI) — PASS
+[ACPI] Walking XSDT at phys 0x3F77D0E8
+[ACPI] Parsing FADT (length=244)
+[ACPI] Parsing MADT (length=128)
+[ACPI] ACPI init complete: 2 CPUs, 1 IOAPICs, 5 ISOs, 0 NMIs, 6 tables
+[INFO]  [SMP] Initializing SMP subsystem
+[INFO]  [SMP] BSP LAPIC initialized
+[INFO]  [SMP] BSP APIC ID: 0
+[INFO]  [SMP] ACPI enumerated 2 CPUs
+[INFO]  [SMP] Waking CPU 1 (APIC ID: 1)...
+[[INFO]  [SMP] CPU 1 entering scheduler — fully hardened
+INFO]  [SMP] CPU 1 Online (APIC ID: 1)
+[INFO]  [SMP] Initialization complete: 2 CPUs online

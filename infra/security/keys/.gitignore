@@ -1,0 +1,4 @@
+# Never commit private signing keys.
+# Each dev/CI environment regenerates its own keypair.
+*.key
+vos3_dev_signing.key

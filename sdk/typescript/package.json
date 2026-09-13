@@ -1,0 +1,14 @@
+{
+  "name": "@vos3/sdk",
+  "version": "0.1.0",
+  "description": "VOS3 App Platform SDK for TypeScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Tests placeholder\" && exit 0"
+  },
+  "files": ["dist"],
+  "keywords": ["vos3", "sdk", "app-platform"],
+  "license": "MIT"
+}

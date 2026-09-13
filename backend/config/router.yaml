@@ -1,0 +1,235 @@
+default_model: claude-sonnet
+
+complexity_threshold: 9
+
+models:
+  claude-opus:
+    name: claude-opus
+    provider: anthropic
+    model_id: claude-opus-4-6
+    api_key_env: ANTHROPIC_API_KEY
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 10
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+
+  claude-sonnet:
+    name: claude-sonnet
+    provider: anthropic
+    model_id: claude-sonnet-4-6
+    api_key_env: ANTHROPIC_API_KEY
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 8
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+
+  gpt:
+    name: gpt
+    provider: openai
+    model_id: gpt-4o
+    api_key_env: OPENAI_API_KEY
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 7
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: false
+      streaming: true
+
+  gemini:
+    name: gemini
+    provider: google
+    model_id: gemini-2.5-flash
+    api_key_env: GOOGLE_API_KEY
+    max_tokens: 1048576
+    temperature: 0.7
+    priority: 7
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: false
+      streaming: true
+
+  gemini-pro:
+    name: gemini-pro
+    provider: google
+    model_id: gemini-2.5-pro
+    api_key_env: GOOGLE_API_KEY
+    max_tokens: 1048576
+    temperature: 0.7
+    priority: 9
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: false
+      streaming: true
+
+  gpt-codex:
+    name: gpt-codex
+    provider: openai
+    model_id: o3-mini
+    api_key_env: OPENAI_API_KEY
+    max_tokens: 8192
+    temperature: 0.3
+    priority: 8
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: false
+      streaming: false
+
+  claude-opus-low-temp:
+    name: claude-opus-low-temp
+    provider: anthropic
+    model_id: claude-opus-4-6
+    api_key_env: ANTHROPIC_API_KEY
+    max_tokens: 8192
+    temperature: 0.2
+    priority: 6
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+
+  local-snappy:
+    name: local-snappy
+    provider: ollama
+    model_id: gemma-4-27b
+    api_key_env: OLLAMA_BASE_URL
+    max_tokens: 8192
+    temperature: 0.3
+    priority: 1
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+      tier: 2
+      context_window: 32768
+      processing_latency: ultra-low
+      structured_json: true
+
+  local-default:
+    name: local-default
+    provider: ollama
+    model_id: llama-3.3-70b
+    api_key_env: OLLAMA_BASE_URL
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 3
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+      min_params_b: 70
+
+  local-code:
+    name: local-code
+    provider: ollama
+    model_id: qwen2.5-coder:72b
+    api_key_env: OLLAMA_BASE_URL
+    max_tokens: 8192
+    temperature: 0.3
+    priority: 4
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: false
+      streaming: true
+      min_params_b: 70
+
+  local-light:
+    name: local-light
+    provider: ollama
+    model_id: codestral:22b
+    api_key_env: OLLAMA_BASE_URL
+    max_tokens: 4096
+    temperature: 0.3
+    priority: 5
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: false
+      streaming: true
+      tier: 1
+
+  # v20.5 — local-titan: the flagship sovereign local lane. Routing policy
+  # (src.efficiency.router.get_optimal_model) sends non-critical roles here
+  # under VOS3_DEFAULT_LOCAL_FIRST when the Ollama daemon is reachable, and
+  # forces every role here under a privacy mandate / LOCAL_ONLY. Served by the
+  # local Ollama daemon at OLLAMA_TITAN_ENDPOINT (falls back to OLLAMA_BASE_URL,
+  # see services.agent_orchestration._titan_endpoint). Never a cloud provider —
+  # a privacy-mandate request with this lane down raises 503, never silent cloud.
+  local-titan:
+    name: local-titan
+    provider: ollama
+    model_id: llama-3.3-70b
+    api_key_env: OLLAMA_TITAN_ENDPOINT
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 2
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+      min_params_b: 70
+      sovereign_local: true
+
+  # W2.1e — kernel-resident GGUF inference. The slot ID is bound at runtime
+  # by services.model_manager.load_to_kernel() via
+  # ai.llm.kernel_provider.register_kernel_slot. priority=0 puts this lane
+  # ahead of every Ollama and cloud route under VOS3_LOCALITY_PREFERENCE=
+  # local-first.
+  kernel-default:
+    name: kernel-default
+    provider: kernel
+    model_id: kernel-resident-gguf
+    api_key_env: VOS3_KERNEL_BRIDGE_SOCKET
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 0
+    enabled: true
+    params:
+      thinking_mode: false
+      tool_search: true
+      streaming: true
+      attestation_required: true
+      vbus_dispatch: true
+      slot_alias: kernel-default
+
+role_mappings:
+  # Development Agents
+  architect: gpt              # gpt-4o
+  frontend: claude-sonnet     # claude-sonnet-4-6
+  backend: claude-sonnet      # claude-sonnet-4-6
+  tester: gemini              # gemini-2.5-flash
+  reviewer: claude-opus       # claude-opus-4-6
+  # Fallback roles
+  coding: claude-sonnet
+  coding-complex: gpt-codex
+  researcher: gemini-pro
+  researcher-deep: claude-opus
+
+fallback_chain:
+  - kernel-default     # W2.1e: kernel-resident slot, only used when bound
+  - local-default      # W2.1b: 70B Ollama lane, only used when daemon reachable
+  - claude-opus
+  - gpt
+  - gemini
+
+spending_caps:
+  per_request_max_usd: 0.50
+  per_minute_max_usd: 5.00
+  per_hour_max_usd: 50.00

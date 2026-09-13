@@ -1,0 +1,75 @@
+/**
+ * GhostStream CSS Animations
+ * ==========================
+ * Cursor blink and other animations for streaming visualization.
+ */
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Cursor animation */
+.animate-caret {
+  animation: blink 1s step-end infinite;
+}
+
+/* Stream panel hover effects */
+.stream-panel {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stream-panel:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+/* Scrollbar styling for stream panels */
+.stream-panel pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.stream-panel pre::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.stream-panel pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.stream-panel pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Status indicator animations */
+.status-streaming {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Grid layout for parallel streams */
+.ghost-stream-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .ghost-stream-grid {
+    grid-template-columns: 1fr;
+  }
+}

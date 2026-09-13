@@ -1,0 +1,264 @@
+# Makefile.vos3 — Full musl libc.so for VOS3
+# Builds unified ld-musl-x86_64.so.1 (libc.so == dynamic linker)
+
+CROSS   := x86_64-elf-
+CC      := $(CROSS)gcc
+AS      := $(CROSS)gcc
+LD      := $(CROSS)ld
+AR      := $(CROSS)ar
+SIZE    := $(CROSS)size
+NM      := $(CROSS)nm
+OBJCOPY := $(CROSS)objcopy
+
+GCC_INC := $(shell $(CC) -print-file-name=include)
+MUSL    := .
+
+# ============================================================================
+# Source collection
+# ============================================================================
+
+# Directories to include (core libc)
+SRC_DIRS := src/conf src/ctype src/dirent src/env src/errno \
+            src/exit src/fcntl src/fenv src/internal src/ldso \
+            src/legacy src/locale src/malloc src/math src/misc \
+            src/mman src/multibyte src/prng src/process src/regex \
+            src/sched src/search src/select src/setjmp src/signal \
+            src/stat src/stdio src/stdlib src/string src/temp \
+            src/termios src/thread src/time src/unistd src/crypt \
+            src/complex
+
+# ldso directory (dynlink.c, dlstart.c, dlerror.c)
+LDSO_DIR := ldso
+
+# Collect all .c files from included directories
+C_SRCS := $(foreach d,$(SRC_DIRS),$(wildcard $(d)/*.c) $(wildcard $(d)/mallocng/*.c))
+C_SRCS += $(wildcard $(LDSO_DIR)/*.c)
+
+# Arch-specific x86_64 assembly files (override generic C versions)
+ASM_SRCS := $(wildcard src/setjmp/x86_64/*.s) \
+            $(wildcard src/fenv/x86_64/*.s) \
+            $(wildcard src/math/x86_64/*.s) \
+            $(wildcard src/signal/x86_64/*.s) \
+            src/thread/x86_64/__set_thread_area.s \
+            src/thread/x86_64/clone.s \
+            $(wildcard src/string/x86_64/*.s) \
+            $(wildcard src/process/x86_64/*.s) \
+            $(wildcard src/ldso/x86_64/*.s) \
+            src/thread/x86_64/syscall_cp.s
+
+# Remove generic C files that have arch-specific assembly replacements
+# For each x86_64/*.s, find matching *.c in parent dir
+ASM_OVERRIDE_C := $(foreach f,$(ASM_SRCS),\
+    $(wildcard $(patsubst %/x86_64/,%/,$(dir $(f)))$(notdir $(basename $(f))).c))
+C_SRCS := $(filter-out $(ASM_OVERRIDE_C),$(C_SRCS))
+# Exclude old ldso_stub.c (replaced by real dynlink.c)
+# Note: __syscall_cp.c is kept — provides __syscall_cp_c (needed by dynlink.c)
+# The arch-specific src/thread/x86_64/syscall_cp.s overrides the C __syscall_cp
+C_SRCS := $(filter-out ldso/ldso_stub.c,$(C_SRCS))
+
+# ============================================================================
+# Exclusions (files with deep Linux dependencies or not needed)
+# ============================================================================
+
+EXCLUDE_SRCS := \
+    src/linux/% \
+    src/aio/% \
+    src/mq/% \
+    src/network/% \
+    src/ipc/% \
+    src/passwd/% \
+    src/misc/syslog.c \
+    src/misc/ptrace.c \
+    src/misc/ioperm.c \
+    src/misc/iopl.c \
+    src/misc/mount.c \
+    src/misc/umount.c \
+    src/misc/chroot.c \
+    src/misc/pivot_root.c \
+    src/misc/swapon.c \
+    src/misc/swapoff.c \
+    src/misc/reboot.c \
+    src/misc/initgroups.c \
+    src/misc/nftw.c \
+    src/misc/get_current_dir_name.c \
+    src/process/posix_spawn.c \
+    src/process/posix_spawnp.c \
+    src/process/posix_spawn_file_actions_addchdir.c \
+    src/process/posix_spawn_file_actions_addfchdir.c \
+    src/process/posix_spawn_file_actions_addclose.c \
+    src/process/posix_spawn_file_actions_adddup2.c \
+    src/process/posix_spawn_file_actions_addopen.c \
+    src/process/posix_spawn_file_actions_destroy.c \
+    src/process/posix_spawn_file_actions_init.c \
+    src/process/posix_spawnattr_destroy.c \
+    src/process/posix_spawnattr_getflags.c \
+    src/process/posix_spawnattr_getpgroup.c \
+    src/process/posix_spawnattr_getsigdefault.c \
+    src/process/posix_spawnattr_getsigmask.c \
+    src/process/posix_spawnattr_getschedparam.c \
+    src/process/posix_spawnattr_getschedpolicy.c \
+    src/process/posix_spawnattr_init.c \
+    src/process/posix_spawnattr_setflags.c \
+    src/process/posix_spawnattr_setpgroup.c \
+    src/process/posix_spawnattr_setsigdefault.c \
+    src/process/posix_spawnattr_setsigmask.c \
+    src/process/posix_spawnattr_setschedparam.c \
+    src/process/posix_spawnattr_setschedpolicy.c \
+    src/signal/sigqueue.c \
+    src/temp/mkostemps.c \
+    src/temp/mkostemp.c \
+    src/temp/mkdtemp.c \
+    src/thread/thrd_create.c \
+    src/thread/thrd_exit.c \
+    src/thread/thrd_join.c \
+    src/thread/thrd_sleep.c \
+    src/thread/thrd_yield.c \
+    src/thread/sem_open.c \
+    src/thread/sem_close.c \
+    src/thread/sem_unlink.c \
+    src/thread/tss_create.c \
+    src/thread/tss_delete.c \
+    src/thread/tss_get.c \
+    src/thread/tss_set.c \
+    src/thread/call_once.c \
+    src/thread/cnd_broadcast.c \
+    src/thread/cnd_destroy.c \
+    src/thread/cnd_init.c \
+    src/thread/cnd_signal.c \
+    src/thread/cnd_timedwait.c \
+    src/thread/cnd_wait.c \
+    src/thread/mtx_destroy.c \
+    src/thread/mtx_init.c \
+    src/thread/mtx_lock.c \
+    src/thread/mtx_timedlock.c \
+    src/thread/mtx_trylock.c \
+    src/thread/mtx_unlock.c \
+    src/thread/clone.c \
+    src/unistd/setxid.c
+
+# Apply exclusions
+C_SRCS := $(filter-out $(EXCLUDE_SRCS),$(C_SRCS))
+
+# ============================================================================
+# Build directories and objects
+# ============================================================================
+
+BUILD   := obj
+LIB_DIR := lib
+
+# Generate object paths in obj/ tree
+C_OBJS  := $(patsubst %.c,$(BUILD)/%.o,$(C_SRCS))
+ASM_OBJS := $(patsubst %.s,$(BUILD)/%.o,$(ASM_SRCS))
+ALL_OBJS := $(C_OBJS) $(ASM_OBJS)
+
+# ============================================================================
+# Compiler flags
+# ============================================================================
+
+CFLAGS := -std=c99 -nostdinc -ffreestanding -fno-stack-protector \
+          -fpic -fno-plt \
+          -mno-red-zone \
+          -pipe -fomit-frame-pointer \
+          -fno-unwind-tables -fno-asynchronous-unwind-tables \
+          -Wa,--noexecstack \
+          -I$(BUILD)/include \
+          -I$(MUSL)/obj/include \
+          -I$(MUSL)/arch/x86_64 \
+          -I$(MUSL)/arch/generic \
+          -I$(MUSL)/src/include \
+          -I$(MUSL)/src/internal \
+          -I$(MUSL)/include \
+          -isystem $(GCC_INC) \
+          -I$(MUSL)/obj/src/internal \
+          -Dhidden='__attribute__((__visibility__("hidden")))' \
+          -Dweak='__attribute__((__weak__))' \
+          -D_XOPEN_SOURCE=700 \
+          -O2 -g \
+          -Wno-return-type -Wno-unused-value -Wno-parentheses
+
+ASFLAGS := -nostdinc -ffreestanding -fpic \
+           -mno-red-zone \
+           -Wa,--noexecstack \
+           -I$(MUSL)/arch/x86_64
+
+LDFLAGS := -shared -Bsymbolic -nostdlib \
+           -e _dlstart \
+           -z max-page-size=0x1000 \
+           -z pack-relative-relocs=none --hash-style=sysv \
+           --sort-section=alignment -z relro -z now
+
+# ============================================================================
+# Targets
+# ============================================================================
+
+.PHONY: all clean headers crt count
+
+all: headers $(LIB_DIR)/libc.so crt
+
+count:
+	@echo "C sources:   $(words $(C_SRCS))"
+	@echo "ASM sources: $(words $(ASM_SRCS))"
+	@echo "Total objs:  $(words $(ALL_OBJS))"
+
+headers: $(MUSL)/obj/include/bits/alltypes.h $(MUSL)/obj/include/bits/syscall.h $(MUSL)/obj/src/internal/version.h
+
+$(MUSL)/obj/include/bits/alltypes.h: arch/x86_64/bits/alltypes.h.in include/alltypes.h.in
+	@mkdir -p $(MUSL)/obj/include/bits
+	@sed -f tools/mkalltypes.sed $^ > $@
+
+$(MUSL)/obj/include/bits/syscall.h: arch/x86_64/bits/syscall.h.in
+	@mkdir -p $(MUSL)/obj/include/bits
+	@cp $< $@
+	@sed -n -e 's/__NR_/SYS_/p' < $< >> $@
+
+$(MUSL)/obj/src/internal/version.h:
+	@mkdir -p $(MUSL)/obj/src/internal
+	@printf '#define VERSION "%s"\n' "1.2.5-vos3" > $@
+
+# Compile C sources
+$(BUILD)/%.o: %.c | headers
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile assembly sources
+$(BUILD)/%.o: %.s
+	@mkdir -p $(dir $@)
+	@$(AS) $(ASFLAGS) -c $< -o $@
+
+# Link libc.so (then strip for deployment)
+$(LIB_DIR)/libc.so: $(ALL_OBJS)
+	@mkdir -p $(LIB_DIR)
+	@echo "  LD    libc.so ($(words $(ALL_OBJS)) objects)"
+	@$(LD) $(LDFLAGS) -T ldso/libc.ld -o $@.debug $(ALL_OBJS) \
+		-L$(shell $(CC) -print-libgcc-file-name | xargs dirname) -lgcc
+	@$(OBJCOPY) --strip-all $@.debug $@
+	@$(SIZE) $@
+
+# ============================================================================
+# CRT objects
+# ============================================================================
+
+crt: $(LIB_DIR)/crt1.o $(LIB_DIR)/Scrt1.o $(LIB_DIR)/crti.o $(LIB_DIR)/crtn.o
+
+$(LIB_DIR)/crt1.o: crt/crt1.c | headers
+	@mkdir -p $(LIB_DIR)
+	@echo "  CC    crt1.o"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIB_DIR)/Scrt1.o: crt/crt1.c | headers
+	@mkdir -p $(LIB_DIR)
+	@echo "  CC    Scrt1.o (PIC)"
+	@$(CC) $(CFLAGS) -fPIC -DCRT -c $< -o $@
+
+$(LIB_DIR)/crti.o: crt/x86_64/crti.s
+	@mkdir -p $(LIB_DIR)
+	@echo "  AS    crti.o"
+	@$(AS) $(ASFLAGS) -c $< -o $@
+
+$(LIB_DIR)/crtn.o: crt/x86_64/crtn.s
+	@mkdir -p $(LIB_DIR)
+	@echo "  AS    crtn.o"
+	@$(AS) $(ASFLAGS) -c $< -o $@
+
+clean:
+	rm -rf $(BUILD)/src $(BUILD)/ldso $(LIB_DIR)

@@ -1,0 +1,74 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:a3f1b9c4-7e2d-4a8f-b6d1-9c3e5f7a2b04",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-04-11T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "VOS3",
+        "name": "manual-sbom-gen",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "operating-system",
+      "name": "vos3-kernel",
+      "version": "3.3.1-phase8.7",
+      "description": "VOS3 AI Operating System Kernel (x86_64)",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "342a358d31423b8826624cac3cecf87c378f98692c434ff61c620d1a5568a38f"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "musl",
+      "version": "1.2.5",
+      "description": "musl libc - lightweight C standard library",
+      "purl": "pkg:generic/musl@1.2.5",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://musl.libc.org/"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "limine",
+      "version": "7.0.0",
+      "description": "Limine bootloader protocol",
+      "purl": "pkg:generic/limine@7.0.0",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://limine-bootloader.org/"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "vos3-wpg",
+      "version": "1.0.0",
+      "description": "Weight Purity Guard — background SHA-256 validator for AI model slot HugePages (Phase 8.6)"
+    },
+    {
+      "type": "library",
+      "name": "vos3-npu-dispatch",
+      "version": "2.1.0",
+      "description": "Temporal Multi-Slicing Dispatcher — 8-slot PASID rotation at 120ms interval, error recovery (Phase 8.7)"
+    },
+    {
+      "type": "library",
+      "name": "vos3-acoustic-privacy",
+      "version": "2.1.0",
+      "description": "Acoustic Fingerprint Masking — adaptive 2-4 bit noise, spectral shaping, full-range silence padding (Phase 8.7)"
+    }
+  ]
+}

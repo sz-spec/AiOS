@@ -1,0 +1,12 @@
+# M3 Phase 5 — booted-kernel QEMU cert proof (VOS3_ASSERT_HARNESS=1 BENCH_MODE=1)
+# qemu-system-x86_64 -kernel build/vos3.elf -m 4096M -smp 1 -cpu max ... -serial stdio
+# runner: 67/67 cert points emitted, 0 FAIL, 0 missing.
+
+~~CERT~~ 120 PASS src/boot/kmain.c:1107 vvfs_verify_model_slot(0, m3_dg) == 0
+~~CERT~~ 121 PASS src/boot/kmain.c:1109 vvfs_model_slot_is_verified(0) == 1
+~~CERT~~ 122 PASS src/boot/kmain.c:1116 vvfs_verify_model_slot(1, m3_dg) != 0
+~~CERT~~ 123 PASS src/boot/kmain.c:1122 vvfs_verify_model_slot(0, tmp) != 0
+~~CERT~~ 124 PASS src/boot/kmain.c:1129 vvfs_verify_model_slot(2, m3_dg) != 0
+~~CERT~~ 125 PASS src/boot/kmain.c:1133 vvfs_verify_model_slot(3, m3_dg) != 0
+~~CERT~~ 126 PASS src/boot/kmain.c:1145 vvfs_verify_model_slot(1, m3_dg) != 0
+~~CERT~~ DONE 67

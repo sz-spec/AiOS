@@ -1,0 +1,4 @@
+# Boot serial logs are verbose — keep them local. Commit only the
+# *.summary.txt evidence files.
+*.log
+kvm_qemu.pid

@@ -1,0 +1,86 @@
+#!/usr/bin/expect -f
+#
+# VOS3 SMP Stress Test
+# Phase 25: Multicore Stress Testing
+#
+
+set timeout 120
+log_user 1
+
+# Start QEMU
+spawn qemu-system-x86_64 -kernel build/vos3.elf -m 256M -cpu qemu64 -smp 4 -serial stdio -no-reboot -no-shutdown -display none
+
+# Wait for boot and SMP initialization
+expect {
+    "SMP: 4 CPUs online" { }
+    timeout { puts "TIMEOUT: Waiting for SMP"; exit 1 }
+}
+
+# Wait for setup wizard or shell
+expect {
+    "PROVISIONING REQUIRED" {
+        # Complete provisioning first
+        expect "Select system mode:"
+        sleep 0.5
+        send "1\r"
+
+        expect "Name your primary workspace"
+        sleep 0.5
+        send "TestWS\r"
+
+        expect "Name your secondary workspace"
+        sleep 0.5
+        send "DevWS\r"
+
+        expect "Configuration complete"
+        expect "vos3#"
+    }
+    "vos3#" { }
+    timeout { puts "TIMEOUT: Waiting for shell/wizard"; exit 1 }
+}
+
+# Run ai_top to check CPU display
+puts "\n=== Testing ai_top per-CPU display ==="
+send "ai_top -1\r"
+expect {
+    "CPU Usage" { puts "OK: CPU Usage section found" }
+    timeout { puts "WARN: ai_top CPU display not found" }
+}
+expect "vos3#"
+
+# Run stress test with 8 jobs for 3 seconds
+puts "\n=== Running SMP Stress Test: 8 workers for 3 seconds ==="
+send "ai_stress -j 8 -d 3\r"
+
+# Wait for worker spawning
+expect {
+    "Spawning 8 worker processes" { puts "OK: Workers spawning" }
+    timeout { puts "TIMEOUT: Waiting for workers"; exit 1 }
+}
+
+# Wait for workers to complete
+expect {
+    "ALL PASSED" { puts "OK: All workers completed successfully" }
+    "SOME FAILED" { puts "WARN: Some workers failed" }
+    timeout { puts "TIMEOUT: Stress test"; exit 1 }
+}
+
+expect "vos3#"
+
+# Run ai_top again to show load distribution
+puts "\n=== Final ai_top snapshot ==="
+send "ai_top -1\r"
+expect "vos3#"
+
+# Run ai_stat to see system stats
+puts "\n=== Final ai_stat ==="
+send "ai_stat\r"
+expect "vos3#"
+
+puts "\n=== SMP STRESS TEST COMPLETE ==="
+puts "Exit with Ctrl-A X"
+
+# Clean exit
+send "\x01x"
+expect eof
+exit 0

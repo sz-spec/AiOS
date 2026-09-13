@@ -1,0 +1,201 @@
+# docker-compose.yml
+# V OS MCP Agent Server - Development & Testing Stack
+
+version: '3.9'
+
+services:
+  # ==========================================================================
+  # Main MCP Server
+  # ==========================================================================
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vos-mcp-server
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - CACHE_ENABLED=true
+      # Security
+      - ALLOWED_HOSTS=127.0.0.1,localhost,mcp-server
+      - ALLOWED_ORIGINS=http://localhost:3000
+      # Providers (use secrets in production!)
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT:-}
+      - LM_STUDIO_ENDPOINT=http://lm-studio:1234
+      # Redis for distributed caching
+      - REDIS_URL=redis://redis:6379
+      # Observability
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    networks:
+      - vos-network
+    restart: unless-stopped
+    # Security: read-only filesystem where possible
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+  # ==========================================================================
+  # Redis for Distributed Caching (L3 Cache)
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: vos-redis
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - vos-network
+    restart: unless-stopped
+
+  # ==========================================================================
+  # Jaeger for Distributed Tracing
+  # ==========================================================================
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    container_name: vos-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "127.0.0.1:16686:16686"  # UI
+      - "127.0.0.1:4317:4317"    # OTLP gRPC
+      - "127.0.0.1:4318:4318"    # OTLP HTTP
+    networks:
+      - vos-network
+    restart: unless-stopped
+
+  # ==========================================================================
+  # Prometheus for Metrics
+  # ==========================================================================
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: vos-prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - vos-network
+    restart: unless-stopped
+
+  # ==========================================================================
+  # Grafana for Dashboards
+  # ==========================================================================
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: vos-grafana
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - jaeger
+    networks:
+      - vos-network
+    restart: unless-stopped
+
+  # ==========================================================================
+  # LM Studio (Local LLM) - Optional
+  # ==========================================================================
+  # Uncomment if using local models
+  # lm-studio:
+  #   image: ghcr.io/lm-studio/lm-studio:latest
+  #   container_name: vos-lm-studio
+  #   ports:
+  #     - "1234:1234"
+  #   volumes:
+  #     - lm-studio-models:/models
+  #   networks:
+  #     - vos-network
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]
+
+  # ==========================================================================
+  # Load Testing Container
+  # ==========================================================================
+  load-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: vos-load-test
+    command: npx tsx scripts/load-test.ts --url=http://mcp-server:8080/mcp
+    environment:
+      - MCP_SERVER_URL=http://mcp-server:8080/mcp
+      - MCP_API_KEY=test-api-key
+      - CONCURRENCY=20
+      - DURATION=60
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    networks:
+      - vos-network
+    profiles:
+      - test
+
+# ==========================================================================
+# Networks
+# ==========================================================================
+networks:
+  vos-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# ==========================================================================
+# Volumes
+# ==========================================================================
+volumes:
+  redis-data:
+  prometheus-data:
+  grafana-data:
+  # lm-studio-models:

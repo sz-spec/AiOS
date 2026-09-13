@@ -1,0 +1,106 @@
+# =============================================================================
+# VOS3 Kernel Build Environment
+#
+# Multi-stage Dockerfile for reproducible x86_64-elf cross-compilation.
+# Produces identical vos3.elf regardless of host OS (macOS, Linux, Windows).
+#
+# Usage:
+#   docker build -f Dockerfile.kernel -t vos3-builder .
+#   docker run --rm -v $(pwd):/vos3 vos3-builder make -C /vos3/kernel
+#   docker run --rm -v $(pwd):/vos3 vos3-builder /vos3/kernel/run_tests.sh
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Stage 1: Build x86_64-elf cross-compiler (binutils + GCC)
+# -----------------------------------------------------------------------------
+FROM debian:bookworm-slim AS toolchain
+
+ARG BINUTILS_VERSION=2.42
+ARG GCC_VERSION=13.2.0
+ARG PREFIX=/opt/cross
+ARG TARGET=x86_64-elf
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="${PREFIX}/bin:${PATH}"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    bison \
+    flex \
+    libgmp-dev \
+    libmpc-dev \
+    libmpfr-dev \
+    texinfo \
+    wget \
+    ca-certificates \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp/build
+
+# Build binutils
+RUN wget -q https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz \
+    && tar xf binutils-${BINUTILS_VERSION}.tar.xz \
+    && mkdir build-binutils && cd build-binutils \
+    && ../binutils-${BINUTILS_VERSION}/configure \
+        --target=${TARGET} \
+        --prefix=${PREFIX} \
+        --with-sysroot \
+        --disable-nls \
+        --disable-werror \
+    && make -j$(nproc) \
+    && make install \
+    && cd /tmp/build && rm -rf build-binutils binutils-${BINUTILS_VERSION}*
+
+# Build GCC (C only, freestanding)
+RUN wget -q https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
+    && tar xf gcc-${GCC_VERSION}.tar.xz \
+    && mkdir build-gcc && cd build-gcc \
+    && ../gcc-${GCC_VERSION}/configure \
+        --target=${TARGET} \
+        --prefix=${PREFIX} \
+        --disable-nls \
+        --enable-languages=c \
+        --without-headers \
+        --disable-hosted-libstdcxx \
+        --disable-libssp \
+        --disable-libquadmath \
+        --disable-libgomp \
+        --disable-libatomic \
+    && make -j$(nproc) all-gcc all-target-libgcc \
+    && make install-gcc install-target-libgcc \
+    && cd /tmp/build && rm -rf build-gcc gcc-${GCC_VERSION}*
+
+# -----------------------------------------------------------------------------
+# Stage 2: Runtime image with build tools + QEMU for testing
+# -----------------------------------------------------------------------------
+FROM debian:bookworm-slim AS runtime
+
+ARG PREFIX=/opt/cross
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="${PREFIX}/bin:${PATH}"
+
+# Copy cross-compiler from stage 1
+COPY --from=toolchain ${PREFIX} ${PREFIX}
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    make \
+    bash \
+    xxd \
+    grub-pc-bin \
+    grub-common \
+    xorriso \
+    mtools \
+    qemu-system-x86 \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify toolchain
+RUN x86_64-elf-gcc --version && x86_64-elf-ld --version
+
+WORKDIR /vos3
+
+# Default: build the kernel
+CMD ["make", "-C", "/vos3/kernel"]

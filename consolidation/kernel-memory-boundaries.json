@@ -1,0 +1,375 @@
+{
+  "status": "in_progress",
+  "purpose": "Reconcile native memory and privilege-transition boundaries without dropping the baseline mitigation capability.",
+  "baseline": "vos.v1",
+  "decisions": [
+    "Retain KPTI as a core isolation requirement. Earlier sources without kpti.c do not provide a replacement mitigation.",
+    "Keep the canonical NX ELF copy alias and CPU-conditional SMAP instructions; native boot exposed failures in inherited code.",
+    "Do not import old syscall entry wholesale: boot-global CR3 and syscall stack state require a per-process/per-CPU redesign, not removal of page-table isolation."
+  ],
+  "evidence": "docs/design/evidence/native-2026-09-13/cr3-diagnostic.txt",
+  "files": [
+    {
+      "path": "kernel/src/arch/x86_64/kpti.c",
+      "variants": [
+        {
+          "source": "VOS3",
+          "present": false
+        },
+        {
+          "source": "VOS3-Cyber",
+          "present": false
+        },
+        {
+          "source": "VOS-Cyber-Standard",
+          "present": false
+        },
+        {
+          "source": "vos.v1",
+          "present": true,
+          "sha256": "d6f6a11658e30e1704ceff49448c2de4ae488ec2933c10997d2b9b7cd7b414e0"
+        },
+        {
+          "source": "vos/vos4-track-1",
+          "present": false
+        },
+        {
+          "source": "vos/vos4-track-7",
+          "present": false
+        },
+        {
+          "source": "vos/vos4-kernel-bugfix",
+          "present": false
+        },
+        {
+          "source": "vos/vos4",
+          "present": false
+        },
+        {
+          "source": "vos/vos4-track-5",
+          "present": false
+        },
+        {
+          "source": "vos/vos4-track-2",
+          "present": false
+        },
+        {
+          "source": "vos/vos4-ci-triggers",
+          "present": false
+        }
+      ]
+    },
+    {
+      "path": "kernel/src/arch/x86_64/syscall_entry.S",
+      "variants": [
+        {
+          "source": "VOS3",
+          "present": true,
+          "sha256": "061834fbd51feda43e164ad6e2ef193b57d8d1ed21d89fb2f754332e07310d55"
+        },
+        {
+          "source": "VOS3-Cyber",
+          "present": true,
+          "sha256": "061834fbd51feda43e164ad6e2ef193b57d8d1ed21d89fb2f754332e07310d55"
+        },
+        {
+          "source": "VOS-Cyber-Standard",
+          "present": true,
+          "sha256": "061834fbd51feda43e164ad6e2ef193b57d8d1ed21d89fb2f754332e07310d55"
+        },
+        {
+          "source": "vos.v1",
+          "present": true,
+          "sha256": "93a44d0b61e3ea525f2556b4bfcffdd67a90d74fdcc731db0804cf8bd9439ee1"
+        },
+        {
+          "source": "vos/vos4-track-1",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        },
+        {
+          "source": "vos/vos4-track-7",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        },
+        {
+          "source": "vos/vos4-kernel-bugfix",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        },
+        {
+          "source": "vos/vos4",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        },
+        {
+          "source": "vos/vos4-track-5",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        },
+        {
+          "source": "vos/vos4-track-2",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        },
+        {
+          "source": "vos/vos4-ci-triggers",
+          "present": true,
+          "sha256": "b3b96026a98f4456fdac8b69d7cbbd1a34feb44d7d76ce6c10de9cb53614d000"
+        }
+      ]
+    },
+    {
+      "path": "kernel/src/arch/x86_64/isr_stubs.S",
+      "variants": [
+        {
+          "source": "VOS3",
+          "present": true,
+          "sha256": "a2699af56df26907cb3a342e61f23d1c8fe79550872b3dd84d4ec439f20153f9"
+        },
+        {
+          "source": "VOS3-Cyber",
+          "present": true,
+          "sha256": "a2699af56df26907cb3a342e61f23d1c8fe79550872b3dd84d4ec439f20153f9"
+        },
+        {
+          "source": "VOS-Cyber-Standard",
+          "present": true,
+          "sha256": "a2699af56df26907cb3a342e61f23d1c8fe79550872b3dd84d4ec439f20153f9"
+        },
+        {
+          "source": "vos.v1",
+          "present": true,
+          "sha256": "3479cf3862ef5b90b14b92bc8a8a45d889a6b6ee5a7e60e697fb5b806c59246c"
+        },
+        {
+          "source": "vos/vos4-track-1",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        },
+        {
+          "source": "vos/vos4-track-7",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        },
+        {
+          "source": "vos/vos4-kernel-bugfix",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        },
+        {
+          "source": "vos/vos4",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        },
+        {
+          "source": "vos/vos4-track-5",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        },
+        {
+          "source": "vos/vos4-track-2",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        },
+        {
+          "source": "vos/vos4-ci-triggers",
+          "present": true,
+          "sha256": "9f0718b9e4df83e3f324975be47a5caaf604e08d147108ae926b7d34d763e1fd"
+        }
+      ]
+    },
+    {
+      "path": "kernel/src/mm/user_copy.c",
+      "variants": [
+        {
+          "source": "VOS3",
+          "present": true,
+          "sha256": "7e92eb1a801ebe9bef371652fa0662c0bf2c8c9abe8f7927019c5336ac23fb5e"
+        },
+        {
+          "source": "VOS3-Cyber",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "VOS-Cyber-Standard",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos.v1",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4-track-1",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4-track-7",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4-kernel-bugfix",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4-track-5",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4-track-2",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        },
+        {
+          "source": "vos/vos4-ci-triggers",
+          "present": true,
+          "sha256": "b4bc55d01e2c7ce1ab7c14fd925a7a3049b7768217a4bca9248115f24ff19b7c"
+        }
+      ]
+    },
+    {
+      "path": "kernel/src/exec/elf.c",
+      "variants": [
+        {
+          "source": "VOS3",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "VOS3-Cyber",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "VOS-Cyber-Standard",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos.v1",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4-track-1",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4-track-7",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4-kernel-bugfix",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4-track-5",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4-track-2",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        },
+        {
+          "source": "vos/vos4-ci-triggers",
+          "present": true,
+          "sha256": "8da1d61e15344fbde0d5845a8dc7eb64064794173a2b88d8b1ee1183aaf3d7ee"
+        }
+      ]
+    },
+    {
+      "path": "kernel/src/arch/x86_64/percpu.c",
+      "variants": [
+        {
+          "source": "VOS3",
+          "present": true,
+          "sha256": "9bda5a018c52581da2468e578d9ace6542502dad34401f526b405e81a8f0d24d"
+        },
+        {
+          "source": "VOS3-Cyber",
+          "present": true,
+          "sha256": "9bda5a018c52581da2468e578d9ace6542502dad34401f526b405e81a8f0d24d"
+        },
+        {
+          "source": "VOS-Cyber-Standard",
+          "present": true,
+          "sha256": "9bda5a018c52581da2468e578d9ace6542502dad34401f526b405e81a8f0d24d"
+        },
+        {
+          "source": "vos.v1",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4-track-1",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4-track-7",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4-kernel-bugfix",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4-track-5",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4-track-2",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        },
+        {
+          "source": "vos/vos4-ci-triggers",
+          "present": true,
+          "sha256": "aa289eca86aa6d312b5e568c917912003fedffa0b5bd3d5f2c14aaf83073c939"
+        }
+      ]
+    }
+  ],
+  "integrated_changes": [
+    "Private full/restricted roots per process with native lifecycle and injected allocation-failure checks.",
+    "CPU-local GS entry state and VMM bindings; no boot-global CR3 pair.",
+    "Shared user-return trampoline and task-stack IRQ frame transfer; BIOS/UEFI and diskless keyboard setup verified.",
+    "Production root synchronizer tested as compiled C on host; obsolete global-CR3 source-string tests replaced."
+  ],
+  "remaining_gates": [
+    "Minimal restricted-root mappings and full TLB/PCID isolation",
+    "Nested faults/NMI/SWAPGS edge cases and multi-process/shared-VM execution",
+    "SMP startup and broad physical hardware validation"
+  ],
+  "current_evidence": "docs/design/evidence/native-2026-09-13/kpti-final-*.json"
+}

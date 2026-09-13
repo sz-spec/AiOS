@@ -1,0 +1,6 @@
+{
+  "context_switch_p50_us": 0.416,
+  "context_switch_p99_us": 0.5,
+  "context_switch_mean_us": 0.408,
+  "context_switch_samples": 10000
+}

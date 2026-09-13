@@ -34,3 +34,21 @@ target/
 build/
 dist/
 *.log
+
+# Runtime state and generated kernel/user-space binaries
+/data/
+/backend/data/
+/backend/logs/
+/backend/generated/
+/generated/
+/logs/
+/kernel/src/init/embedded_bins.c
+*.o
+*.a
+*.elf
+*.img
+*.iso
+*.tsbuildinfo
+
+# Generated musl debug library
+/user/musl/lib/libc.so.debug

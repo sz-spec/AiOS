@@ -1,0 +1,15 @@
+{
+  "firmware": "bios",
+  "cpu": "qemu64",
+  "smp": 2,
+  "ram_mb": 1024,
+  "acceleration": "tcg",
+  "iso_sha256": "918acd1143557edfe1b04b01000cf9da496c120d24b048493180cef880e7a4f5",
+  "observation_seconds": 15,
+  "exit_status": 0,
+  "scheduler": false,
+  "wizard_output": false,
+  "failures": [],
+  "passed": false,
+  "scope": "VM boot to user-space setup; not installation, AI inference, or physical hardware qualification"
+}

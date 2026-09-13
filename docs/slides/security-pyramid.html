@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOS3 — Defense-in-Depth Security Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    background: #0a0e1a;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99, 179, 237, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 179, 237, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+  }
+
+  /* Radial glow behind pyramid */
+  body::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -45%);
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(ellipse, rgba(56, 189, 248, 0.06) 0%, transparent 70%);
+    z-index: 0;
+  }
+
+  .slide {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 80px 40px;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .header-left h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, #94dbf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.15;
+  }
+
+  .header-left .subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(148, 219, 248, 0.7);
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .header-right {
+    text-align: right;
+    padding-top: 6px;
+  }
+
+  .header-right .logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #38bdf8;
+  }
+
+  .header-right .version {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 2px;
+  }
+
+  /* ─── Main content ─── */
+  .content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+  }
+
+  /* ─── Pyramid ─── */
+  .pyramid-container {
+    position: relative;
+    width: 680px;
+    height: 780px;
+    flex-shrink: 0;
+  }
+
+  .pyramid-layer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: default;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    /* Trapezoid shape via clip-path */
+    clip-path: polygon(var(--inset) 0%, calc(100% - var(--inset)) 0%, 100% 100%, 0% 100%);
+    border-radius: 2px;
+  }
+
+  .pyramid-layer:hover {
+    transform: translateX(-50%) scale(1.02);
+    filter: brightness(1.15);
+  }
+
+  .layer-content {
+    padding: 0 40px;
+    z-index: 2;
+  }
+
+  .layer-content .layer-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 2px;
+  }
+
+  .layer-content .layer-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.25;
+  }
+
+  .layer-content .layer-desc {
+    font-size: 12.5px;
+    font-weight: 400;
+    opacity: 0.75;
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  /* Layer positions and sizes — 7 layers */
+  .layer-7 { --inset: 37%;  top:   0px; width: 260px; height: 96px;  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); }
+  .layer-6 { --inset: 22%;  top: 100px; width: 340px; height: 96px;  background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%); }
+  .layer-5 { --inset: 16%;  top: 200px; width: 420px; height: 96px;  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+  .layer-4 { --inset: 12%;  top: 300px; width: 498px; height: 96px;  background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%); }
+  .layer-3 { --inset: 9%;   top: 400px; width: 565px; height: 96px;  background: linear-gradient(135deg, #0e7490 0%, #06b6d4 100%); }
+  .layer-2 { --inset: 6%;   top: 500px; width: 625px; height: 96px;  background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
+  .layer-1 { --inset: 3.5%; top: 600px; width: 680px; height: 96px;  background: linear-gradient(135deg, #1e3a5f 0%, #1e6091 100%); box-shadow: 0 8px 40px rgba(30,96,145,0.3); }
+
+  /* Glow line between layers */
+  .pyramid-layer::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 5%;
+    right: 5%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  }
+
+  /* ─── Right sidebar — key stats ─── */
+  .sidebar {
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px 24px;
+    backdrop-filter: blur(12px);
+  }
+
+  .stat-card .stat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .stat-card .stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .stat-card .stat-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .stat-card .stat-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.8);
+  }
+
+  .stat-tag .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .green  { background-color: #22c55e; box-shadow: 0 0 6px #22c55e88; }
+  .blue   { background-color: #3b82f6; box-shadow: 0 0 6px #3b82f688; }
+  .purple { background-color: #a855f7; box-shadow: 0 0 6px #a855f788; }
+  .cyan   { background-color: #06b6d4; box-shadow: 0 0 6px #06b6d488; }
+
+  .icon-shield  { background: rgba(34,197,94,0.15); }
+  .icon-lock    { background: rgba(59,130,246,0.15); }
+  .icon-cert    { background: rgba(168,85,247,0.15); }
+  .icon-test    { background: rgba(6,182,212,0.15); }
+
+  /* ─── Bottom bar ─── */
+  .bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: auto;
+  }
+
+  .bottom-bar .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    color: #4ade80;
+  }
+
+  .bottom-bar .badge .pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .bottom-bar .note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Shield icon top of pyramid */
+  .pyramid-crown {
+    position: absolute;
+    top: -52px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pyramid-crown svg {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.5));
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Defense-in-Depth Security</h1>
+      <div class="subtitle">7 independent security layers — every layer stops a different class of attack</div>
+    </div>
+    <div class="header-right">
+      <div class="logo">VOS3</div>
+      <div class="version">Sovereign AI Operating System</div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+
+    <!-- Pyramid -->
+    <div class="pyramid-container">
+
+      <!-- Crown icon -->
+      <div class="pyramid-crown">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5">
+          <path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z"/>
+          <path d="M9 12l2 2 4-4" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Layer 7 — Top -->
+      <div class="pyramid-layer layer-7">
+        <div class="layer-content">
+          <div class="layer-num">Layer 7</div>
+          <div class="layer-title">Application Shield</div>
+          <div class="layer-desc">Input validation &middot; CSP &middot; CSRF</div>
+        </div>
+      </div>
+
+      <!-- Layer 6 -->
+      <div class="pyramid-layer layer-6">
+        <div class="layer-content">
+          <div class="layer-num">Layer 6</div>
+          <div class="layer-title">Identity &amp; Access Control</div>
+          <div class="layer-desc">JWT auth &middot; RBAC &middot; Ownership verification</div>
+        </div>
+      </div>
+
+      <!-- Layer 5 -->
+      <div class="pyramid-layer layer-5">
+        <div class="layer-content">
+          <div class="layer-num">Layer 5</div>
+          <div class="layer-title">Execution Sandbox</div>
+          <div class="layer-desc">5-layer command allowlist &middot; Resource limits &middot; SSRF block</div>
+        </div>
+      </div>
+
+      <!-- Layer 4 -->
+      <div class="pyramid-layer layer-4">
+        <div class="layer-content">
+          <div class="layer-num">Layer 4</div>
+          <div class="layer-title">Transport Security</div>
+          <div class="layer-desc">HMAC-SHA256 signed frames &middot; Per-session keys &middot; Anti-replay</div>
+        </div>
+      </div>
+
+      <!-- Layer 3 -->
+      <div class="pyramid-layer layer-3">
+        <div class="layer-content">
+          <div class="layer-num">Layer 3</div>
+          <div class="layer-title">Cryptographic Engine</div>
+          <div class="layer-desc">TLS 1.3 &middot; SHA-256 &middot; HKDF key derivation &middot; Constant-time ops</div>
+        </div>
+      </div>
+
+      <!-- Layer 2 -->
+      <div class="pyramid-layer layer-2">
+        <div class="layer-content">
+          <div class="layer-num">Layer 2</div>
+          <div class="layer-title">Kernel Memory Protection</div>
+          <div class="layer-desc">AI Guard isolation &middot; Stack canaries &middot; W^X enforcement &middot; Live integrity</div>
+        </div>
+      </div>
+
+      <!-- Layer 1 — Bottom -->
+      <div class="pyramid-layer layer-1">
+        <div class="layer-content">
+          <div class="layer-num">Layer 1 — Foundation</div>
+          <div class="layer-title">Hardware Root of Trust</div>
+          <div class="layer-desc">KASLR &middot; SMAP/SMEP &middot; CPU-enforced page protection &middot; Read-only AI weights</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar stats -->
+    <div class="sidebar">
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon icon-shield">🛡</div>
+          <div class="stat-title">What Each Layer Protects Against</div>
+        </div>
+        <div class="stat-items">
+          <span class="stat-tag"><span class="dot green"></span>Code Injection</span>
+          <span class="stat-tag"><span class="dot green"></span>Data Theft</span>
+          <span class="stat-tag"><span class="dot green"></span>AI Model Tampering</span>
+          <span class="stat-tag"><span class="dot green"></span>Privilege Escalation</span>
+          <span class="stat-tag"><span class="dot green"></span>Man-in-the-Middle</span>
+          <span class="stat-tag"><span class="dot green"></span>Memory Corruption</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon icon-lock">🔐</div>
+          <div class="stat-title">Key Security Numbers</div>
+        </div>
+        <div class="stat-items">
+          <span class="stat-tag"><span class="dot blue"></span>394 Stack Guard Points</span>
+          <span class="stat-tag"><span class="dot blue"></span>73 Memory Fences</span>
+          <span class="stat-tag"><span class="dot blue"></span>60/60 Endpoints Authenticated</span>
+          <span class="stat-tag"><span class="dot blue"></span>Zero shell=True Calls</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon icon-cert">📋</div>
+          <div class="stat-title">Standards Compliance</div>
+        </div>
+        <div class="stat-items">
+          <span class="stat-tag"><span class="dot purple"></span>OWASP API Top 10</span>
+          <span class="stat-tag"><span class="dot purple"></span>NIST SP 800-53</span>
+          <span class="stat-tag"><span class="dot purple"></span>FIPS 180-4 (SHA-256)</span>
+          <span class="stat-tag"><span class="dot purple"></span>TLS 1.3 (RFC 8446)</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon icon-test">✅</div>
+          <div class="stat-title">Verified &amp; Tested</div>
+        </div>
+        <div class="stat-items">
+          <span class="stat-tag"><span class="dot cyan"></span>1,340 Security Assertions</span>
+          <span class="stat-tag"><span class="dot cyan"></span>8/8 Penetration Tests Passed</span>
+          <span class="stat-tag"><span class="dot cyan"></span>Binary Hash Certified</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <div class="badge">
+      <span class="pulse"></span>
+      All 7 Layers Active — Production Hardened
+    </div>
+    <div style="display:flex; gap:32px; align-items:center;">
+      <div class="note">Even if one layer is breached, the remaining six still protect the system</div>
+      <div class="note" style="color:rgba(255,255,255,0.2);">VOS3 v20.0 &middot; April 2026</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

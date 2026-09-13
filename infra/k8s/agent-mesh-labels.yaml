@@ -1,0 +1,168 @@
+# Sprint 15 / Item H5 — CNCF agentic-standards mesh labels
+# Source: https://www.cncf.io/blog/2026/03/23/cloud-native-agentic-standards/
+#
+# Applies the canonical agentic.k8s.io/* labels to a service-mesh policy
+# so Istio / Linkerd / Cilium can route + authorize on agent-role +
+# trust-tier instead of just URL prefix. Sprint 15 H5 / Wave 2.
+#
+# Apply with:
+#   kubectl apply -f agent-mesh-labels.yaml -n vos-agents
+#
+# Operators on a different service mesh (Cilium / Linkerd) translate
+# the same label semantics to their CRD shape — see the README in
+# infra/k8s/sandboxes/ for the canonical attribute names.
+
+# ---------------------------------------------------------------------
+# 1. Istio AuthorizationPolicy — agentic-aware default-deny
+# ---------------------------------------------------------------------
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: vos-agent-default-deny
+  namespace: vos-agents
+  labels:
+    vos3.io/component: agent-mesh-policy
+    vos3.io/sprint: "15"
+spec:
+  # Empty selector + DENY action = baseline deny-all. Each downstream
+  # rule below carves an explicit ALLOW. CNCF agentic-standards
+  # recommend this default-deny posture for AI agent meshes.
+  action: DENY
+  rules:
+    - {}
+
+---
+# ---------------------------------------------------------------------
+# 2. Allow worker→supervisor up-channel (agent-to-agent comm)
+# ---------------------------------------------------------------------
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: vos-agent-worker-to-supervisor
+  namespace: vos-agents
+spec:
+  action: ALLOW
+  selector:
+    matchLabels:
+      agentic.k8s.io/role: supervisor
+  rules:
+    - from:
+        - source:
+            principals:
+              # SPIFFE workload identity — Sprint 15 / Item F1
+              - "cluster.local/ns/vos-agents/sa/vos-agent-sa"
+            namespaces: ["vos-agents"]
+      to:
+        - operation:
+            paths:
+              - /api/v1/agent/report
+              - /api/v1/agent/checkpoint
+            methods: ["POST"]
+      when:
+        - key: request.headers[x-vos3-actor-type]
+          values: ["agent", "agent_chain"]
+
+---
+# ---------------------------------------------------------------------
+# 3. Allow human-tier callers into supervisor API surface
+# ---------------------------------------------------------------------
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: vos-agent-human-to-supervisor
+  namespace: vos-agents
+spec:
+  action: ALLOW
+  selector:
+    matchLabels:
+      agentic.k8s.io/role: supervisor
+  rules:
+    - from:
+        - source:
+            requestPrincipals: ["https://*.clerk.accounts.dev/*"]
+      to:
+        - operation:
+            paths: ["/api/compliance/*", "/api/agents/*"]
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+      when:
+        - key: request.headers[x-vos3-actor-type]
+          values: ["human"]
+
+---
+# ---------------------------------------------------------------------
+# 4. PeerAuthentication — mTLS strict, no plaintext
+# ---------------------------------------------------------------------
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: vos-agent-mtls-strict
+  namespace: vos-agents
+spec:
+  mtls:
+    mode: STRICT
+
+---
+# ---------------------------------------------------------------------
+# 5. RequestAuthentication — accept either Clerk JWT (human) or SPIFFE
+# WIT-SVID (workload). Sprint 15 / Item F1 cross-link.
+# ---------------------------------------------------------------------
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: vos-agent-request-auth
+  namespace: vos-agents
+spec:
+  jwtRules:
+    # Clerk JWT — human users.
+    - issuer: "https://clerk.vos3.dev"
+      jwksUri: "https://clerk.vos3.dev/.well-known/jwks.json"
+      audiences: ["vos3://api/agents"]
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "x-vos3-actor-type"
+          claim: "actor_type"   # Clerk metadata field; defaults to "human" if absent
+    # SPIFFE WIT-SVID — workload identity.
+    - issuer: "spiffe://vos.dev"
+      jwksUri: "https://spiffe.vos3.dev/.well-known/jwks.json"
+      audiences: ["vos3://api/agents"]
+      outputClaimToHeaders:
+        - header: "x-vos3-actor-type"
+          claim: "wit.actor_type"   # "agent" | "agent_chain"
+        - header: "x-vos3-spiffe-id"
+          claim: "sub"
+
+---
+# ---------------------------------------------------------------------
+# 6. Telemetry — sample 100% of agent traffic into the GenAI OTel
+# pipeline (Sprint 15 / G1). Production tunes the rate.
+# ---------------------------------------------------------------------
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: vos-agent-otel-genai
+  namespace: vos-agents
+  labels:
+    vos3.io/component: agent-telemetry
+    vos3.io/sprint: "15"
+spec:
+  selector:
+    matchLabels:
+      agentic.k8s.io/role: worker
+  tracing:
+    - randomSamplingPercentage: 100.0
+      customTags:
+        gen_ai.agent.name:
+          header:
+            name: x-vos3-agent-name
+        gen_ai.operation.name:
+          header:
+            name: x-vos3-operation
+        vos3.actor.type:
+          header:
+            name: x-vos3-actor-type
+        vos3.spiffe.id:
+          header:
+            name: x-vos3-spiffe-id
+  accessLogging:
+    - providers:
+        - name: otel

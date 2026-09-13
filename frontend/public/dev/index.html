@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOS3 - Product User Stories & Development Kanban</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-kanban: #1a1a24;
+      --border: #2a2a3a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b0;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-orange: #f59e0b;
+      --accent-pink: #ec4899;
+      --accent-cyan: #06b6d4;
+      --todo: #ef4444;
+      --progress: #f59e0b;
+      --done: #10b981;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 40px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+
+    .header p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .story-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .card-header h2 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .card-header .tag {
+      margin-left: auto;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      padding: 24px 32px;
+    }
+
+    .user-story {
+      background: var(--bg-kanban);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .user-story h3 {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .user-story p {
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .value-props {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .value-prop {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-kanban);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .value-prop .check {
+      color: var(--accent-green);
+    }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .kanban-column {
+      background: var(--bg-kanban);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .kanban-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .kanban-header .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .kanban-header.todo .dot { background: var(--todo); }
+    .kanban-header.progress .dot { background: var(--progress); }
+    .kanban-header.done .dot { background: var(--done); }
+
+    .kanban-header h4 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .kanban-header .count {
+      margin-left: auto;
+      background: var(--border);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .kanban-task {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .kanban-task:last-child {
+      margin-bottom: 0;
+    }
+
+    .kanban-task .task-title {
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .kanban-task .task-meta {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .kanban-task .task-tag {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .tag-frontend { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+    .tag-backend { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+    .tag-ai { background: rgba(236, 72, 153, 0.2); color: var(--accent-pink); }
+    .tag-db { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+    .tag-infra { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+    .tag-ux { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+
+    .icon-blue { background: rgba(59, 130, 246, 0.2); }
+    .icon-purple { background: rgba(139, 92, 246, 0.2); }
+    .icon-green { background: rgba(16, 185, 129, 0.2); }
+    .icon-orange { background: rgba(245, 158, 11, 0.2); }
+    .icon-pink { background: rgba(236, 72, 153, 0.2); }
+    .icon-cyan { background: rgba(6, 182, 212, 0.2); }
+
+    .tag-core { background: var(--accent-blue); color: white; }
+    .tag-enterprise { background: var(--accent-purple); color: white; }
+    .tag-ai-feature { background: var(--accent-pink); color: white; }
+
+    @media (max-width: 900px) {
+      .kanban {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>VOS3 User Stories</h1>
+    <p>AI Operating System - Product Development Roadmap with Kanban Tasks</p>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- Card 1: AI Chat -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-blue">💬</div>
+        <h2>AI Chat with Multi-Model Support</h2>
+        <span class="tag tag-core">Core Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> developer or business user, <strong>I want to</strong> chat with AI using different models (GPT-4, Claude, Gemini), <strong>so that</strong> I can choose the best AI for my specific task and control costs.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> Multi-provider support</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Streaming responses</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Voice input (11 languages)</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Conversation history</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Add conversation export (JSON/MD)</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Implement chat branching</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Add image upload support</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Implement chat search</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Persist conversations to DB</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Add Ollama local model support</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">OpenAI/Claude/Gemini integration</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Streaming response UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Voice input component</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Model selector dropdown</div>
+              <div class="task-meta"><span class="task-tag tag-ux">UX</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Chat API routes</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Code Generation -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-purple">⚡</div>
+        <h2>AI Code Generation</h2>
+        <span class="tag tag-core">Core Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> developer, <strong>I want to</strong> describe what I need in plain English and get production-ready code, <strong>so that</strong> I can build features 10x faster without writing boilerplate.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> 8+ languages supported</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Syntax validation</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Project scaffolding</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Copy/Download code</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Add code diff view</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Implement code refactoring mode</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Add unit test generation</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">GitHub Copilot-style inline suggestions</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Code explanation feature</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Multi-file project generation</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Code templates library</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span><span class="task-tag tag-db">Database</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Natural language to code API</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Language selector UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Syntax highlighting</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Copy to clipboard</div>
+              <div class="task-meta"><span class="task-tag tag-ux">UX</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Code validation endpoint</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Multi-Agent System -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-pink">🤖</div>
+        <h2>Multi-Agent AI System</h2>
+        <span class="tag tag-ai-feature">AI Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> team lead, <strong>I want</strong> specialized AI agents (Architect, Developer, Tester, Reviewer) to collaborate on my tasks, <strong>so that</strong> I get complete, tested, production-ready solutions instead of code snippets.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> 5 specialized agents</div>
+          <div class="value-prop"><span class="check">&#10003;</span> LangGraph orchestration</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Task decomposition</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Quality review loop</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Add DevOps agent</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Agent collaboration visualization</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Custom agent creation UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Agent performance metrics</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">3</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Agent state persistence</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Human-in-the-loop approval flow</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Agent execution logging</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">LangGraph agent orchestration</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Architect agent implementation</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Frontend/Backend developer agents</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Tester & Reviewer agents</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Agent management API</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Smart Router & Cost Optimization -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-green">💰</div>
+        <h2>Smart Router & Cost Optimization</h2>
+        <span class="tag tag-core">Core Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> budget-conscious team, <strong>I want</strong> the system to automatically route simple queries to cheap models and complex tasks to premium models, <strong>so that</strong> I save 40-60% on AI costs without sacrificing quality.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> 40-60% cost reduction</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Automatic model selection</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Complexity scoring</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Cost tracking dashboard</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Budget alerts & limits</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Cost forecasting</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Per-user cost tracking</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Cost optimization recommendations</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Semantic caching (Redis)</div>
+              <div class="task-meta"><span class="task-tag tag-infra">Infra</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Router config UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Smart router implementation</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Complexity scoring algorithm</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Router YAML configuration</div>
+              <div class="task-meta"><span class="task-tag tag-infra">Infra</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Metrics tracking</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Cost breakdown API</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Learning Memory -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-cyan">🧠</div>
+        <h2>Persistent Learning Memory</h2>
+        <span class="tag tag-ai-feature">AI Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> returning user, <strong>I want</strong> the AI to remember my codebase, preferences, and past decisions, <strong>so that</strong> I don't have to re-explain context every session and get personalized responses.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> ChromaDB vector storage</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Context retrieval</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Decision tracking</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Error pattern learning</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Memory search UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Memory export/import</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Team shared memory</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Memory analytics dashboard</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Memory management UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Automatic context injection</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">ChromaDB integration</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Memory CRUD API</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">remember() / recall() functions</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Memory types (conversation, decision, error)</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Vector similarity search</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6: V-Core Business OS -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-orange">🏢</div>
+        <h2>V-Core Business OS</h2>
+        <span class="tag tag-enterprise">Enterprise</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> business owner, <strong>I want</strong> to create custom entities, workflows, and approval processes without coding, <strong>so that</strong> I can automate my business operations and have full control over my data.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> Custom entities</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Workflow automation</div>
+          <div class="value-prop"><span class="check">&#10003;</span> RBAC permissions</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Mission control</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Visual workflow builder</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Entity relationship diagrams</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Audit trail logging</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Role templates</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Webhook triggers</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">3</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Convex database persistence</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Entity CRUD UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Workflow execution engine</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">6</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Control plane (orgs, users, roles)</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Business core (entities, fields)</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Workflow engine (triggers, actions)</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Mission control (monitoring)</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">V-Core API routes</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Dashboard UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 7: Settings & Configuration -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-blue">⚙️</div>
+        <h2>Runtime Configuration</h2>
+        <span class="tag tag-core">Core Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As an</strong> admin, <strong>I want to</strong> configure API keys, model preferences, and system settings through the UI, <strong>so that</strong> I can manage the system without editing config files or restarting services.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> Runtime API key updates</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Key validation</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Service status display</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Voice language selection</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Theme customization</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Model preference settings</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Notification preferences</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Export/import settings</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">1</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Persist settings to database</div>
+              <div class="task-meta"><span class="task-tag tag-db">Database</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">6</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Settings API (CRUD)</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">API key management UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Key validation endpoint</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Service status display</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">useSettings hook</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Voice language selector</div>
+              <div class="task-meta"><span class="task-tag tag-ux">UX</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 8: Team Collaboration -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-purple">👥</div>
+        <h2>Team Collaboration</h2>
+        <span class="tag tag-enterprise">Enterprise</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> team member, <strong>I want to</strong> share AI conversations, code snippets, and workflows with my team, <strong>so that</strong> we can collaborate effectively and build on each other's work.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> Team workspaces</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Shared conversations</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Role-based access</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Activity feed</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">5</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Real-time collaboration</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span><span class="task-tag tag-infra">Infra</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Team activity feed</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Shared code library</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Comment & annotation system</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Team notifications</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Team management UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Invitation system</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">3</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Team API routes</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Clerk authentication</div>
+              <div class="task-meta"><span class="task-tag tag-infra">Infra</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">RBAC middleware</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 9: Billing & Subscriptions -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-green">💳</div>
+        <h2>Billing & Subscriptions</h2>
+        <span class="tag tag-enterprise">Enterprise</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> paying customer, <strong>I want to</strong> manage my subscription, view usage, and update payment methods, <strong>so that</strong> I have full control over my billing and can scale as needed.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> Stripe integration</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Usage-based billing</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Plan management</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Invoice history</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Usage dashboard</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Invoice PDF generation</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Upgrade/downgrade flow</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Usage alerts</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Billing page UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Webhook handlers</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Stripe integration</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Billing API routes</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Plan definitions</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Subscription management</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 10: GitHub Integration -->
+    <div class="story-card">
+      <div class="card-header">
+        <div class="card-icon icon-cyan">🔗</div>
+        <h2>GitHub Integration</h2>
+        <span class="tag tag-core">Core Feature</span>
+      </div>
+      <div class="card-body">
+        <div class="user-story">
+          <h3>User Story</h3>
+          <p><strong>As a</strong> developer, <strong>I want to</strong> sync generated code directly to my GitHub repositories, <strong>so that</strong> I can integrate AI-generated code into my existing workflow seamlessly.</p>
+        </div>
+        <div class="value-props">
+          <div class="value-prop"><span class="check">&#10003;</span> Repository sync</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Branch management</div>
+          <div class="value-prop"><span class="check">&#10003;</span> Commit history</div>
+          <div class="value-prop"><span class="check">&#10003;</span> PR creation</div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-column">
+            <div class="kanban-header todo">
+              <span class="dot"></span>
+              <h4>To Do</h4>
+              <span class="count">4</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">GitHub Actions integration</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Code review from PR</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Issue tracking sync</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Codebase indexing for RAG</div>
+              <div class="task-meta"><span class="task-tag tag-ai">AI</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header progress">
+              <span class="dot"></span>
+              <h4>In Progress</h4>
+              <span class="count">2</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">GitHub OAuth flow</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Repository browser UI</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <div class="kanban-header done">
+              <span class="dot"></span>
+              <h4>Done</h4>
+              <span class="count">3</span>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">GitHub sync API routes</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">GitHub page placeholder</div>
+              <div class="task-meta"><span class="task-tag tag-frontend">Frontend</span></div>
+            </div>
+            <div class="kanban-task">
+              <div class="task-title">Repository model</div>
+              <div class="task-meta"><span class="task-tag tag-backend">Backend</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer style="text-align: center; margin-top: 60px; padding: 40px; color: var(--text-secondary); font-size: 14px;">
+    <p>VOS3 - AI Operating System | Development Roadmap</p>
+    <p style="margin-top: 8px; font-size: 12px;">Generated for internal development use</p>
+  </footer>
+
+</body>
+</html>

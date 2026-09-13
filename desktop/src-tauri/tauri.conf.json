@@ -1,0 +1,47 @@
+{
+  "productName": "VOS3 Enclave",
+  "version": "1.0.0",
+  "identifier": "com.vos3.enclave",
+  "build": {
+    "devUrl": "http://localhost:3000",
+    "frontendDist": "http://localhost:3000"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "VOS3 Enclave",
+        "width": 1400,
+        "height": 900,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' http://localhost:3000 http://localhost:8000 https://*.convex.cloud https://*.clerk.accounts.dev; img-src 'self' data: blob: https://*.clerk.accounts.dev; font-src 'self' data:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "category": "DeveloperTool",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "externalBin": [
+      "binaries/vos-backend"
+    ],
+    "resources": [],
+    "shortDescription": "VOS3 sovereign AI desktop",
+    "longDescription": "VOS3 Enclave bundles the FastAPI backend, local SQLite store, ChromaDB vector index, and Ollama-routed LLM dispatcher into a single sovereign desktop application."
+  },
+  "plugins": {
+    "shell": {
+      "open": true
+    }
+  }
+}

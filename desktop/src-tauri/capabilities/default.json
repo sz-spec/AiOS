@@ -1,0 +1,13 @@
+{
+  "identifier": "default",
+  "description": "VOS3 Enclave default capabilities",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "shell:default",
+    "shell:allow-open",
+    "process:default",
+    "process:allow-exit",
+    "process:allow-restart"
+  ]
+}

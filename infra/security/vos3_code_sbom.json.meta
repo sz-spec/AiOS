@@ -1,0 +1,9 @@
+{
+  "artifact": "security/vos3_code_sbom.json",
+  "artifact_sha256": "0085892e0e649fe45c0ad5c9740cb9de08d58430de4bc0b1131799457235d760",
+  "alg": "ECDSA-P256-SHA256",
+  "tier": "dev",
+  "signed_at": "2026-04-21T10:14:56.280233+00:00",
+  "key_fingerprint": "d8c73ee9c0858946",
+  "note": "Development-tier signature. Production release signing goes through cosign >= 2.6.2 + GitHub-Actions OIDC identity + Rekor v2 transparency log. See infra/security/sigstore_verify.py."
+}

@@ -1,0 +1,16 @@
+{
+  "_disclaimer": "SELF-COLLECTED runtime evidence for external-audit INPUT. NOT an external audit. Does NOT by itself advance the moat tally.",
+  "generated_utc": "2026-06-15T21:43:02Z",
+  "kernel": "6.12.68-linuxkit",
+  "active_lsm_list": "capability,bpf,landlock",
+  "bpf_lsm_active": true,
+  "object_sha256": "bfa81463da03844af585ee65b9f1e01a02734664465539e7f4ccbffd822bdec8",
+  "verifier_loadall_rc": 0,
+  "lsm_links_attached": 3,
+  "taint_maps_loaded": 5,
+  "btf_struct_sizes": { "vos3_taint_color_entry": 65568, "vos3_taint_map_key": 8 },
+  "g5_contract_ok": true,
+  "taint_maps_schema_sha256": "c48dccc51eb14b6048c2c1403c32054ad0579a98cb5429e1acf4737bf4db856f",
+  "external_audit_status": "PENDING — no independent third-party audit performed",
+  "moat_impact": "none (self-certification does not advance the 49/80 tally)"
+}

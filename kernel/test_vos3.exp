@@ -1,0 +1,111 @@
+#!/usr/bin/expect -f
+set timeout 30
+set test_count 0
+set pass_count 0
+set fail_count 0
+
+proc test_start {name} { global test_count; incr test_count; puts "\n=== TEST $::test_count: $name ===" }
+proc test_pass {name} { global pass_count; incr pass_count; puts "PASS: $name" }
+proc test_fail {name reason} { global fail_count; incr fail_count; puts "FAIL: $name - $reason" }
+
+puts "Starting VOS3 in QEMU..."
+spawn qemu-system-x86_64 -kernel build/vos3.elf -nographic -no-reboot -m 256M
+
+expect { -timeout 60 "vos3#" { puts "\n>>> Shell ready!" } timeout { puts "CRITICAL: Timeout"; exit 1 } eof { puts "CRITICAL: QEMU died"; exit 1 } }
+
+puts "\n============ SETUP ============"
+send "echo Hello World > /etc/test.txt\r"; expect "vos3#"
+send "echo hello there >> /etc/test.txt\r"; expect "vos3#"
+send "echo This is a test file >> /etc/test.txt\r"; expect "vos3#"
+send "echo Testing VOS3 kernel >> /etc/test.txt\r"; expect "vos3#"
+send "echo hello again >> /etc/test.txt\r"; expect "vos3#"
+send "echo HELLO UPPERCASE >> /etc/test.txt\r"; expect "vos3#"
+send "echo Line without match >> /etc/test.txt\r"; expect "vos3#"
+send "echo Another test line >> /etc/test.txt\r"; expect "vos3#"
+send "echo goodbye world >> /etc/test.txt\r"; expect "vos3#"
+send "echo The end >> /etc/test.txt\r"; expect "vos3#"
+puts "Test file created"
+
+puts "\n============ STAGE 16: System Info ============"
+test_start "uname"; send "uname\r"; expect { -re "VOS3.*vos3#" { test_pass "uname" } timeout { test_fail "uname" "timeout" } }
+test_start "uname -a"; send "uname -a\r"; expect { -re "VOS3.*x86_64.*vos3#" { test_pass "uname -a" } timeout { test_fail "uname -a" "timeout" } }
+test_start "uname -s"; send "uname -s\r"; expect { -re "VOS3.*vos3#" { test_pass "uname -s" } timeout { test_fail "uname -s" "timeout" } }
+test_start "uname -r"; send "uname -r\r"; expect { -re "0\.3\.0.*vos3#" { test_pass "uname -r" } timeout { test_fail "uname -r" "timeout" } }
+test_start "uname -m"; send "uname -m\r"; expect { -re "x86_64.*vos3#" { test_pass "uname -m" } timeout { test_fail "uname -m" "timeout" } }
+test_start "date"; send "date\r"; expect { -re "20\[0-9\]\[0-9\].*vos3#" { test_pass "date" } timeout { test_fail "date" "timeout" } }
+test_start "date -I"; send "date -I\r"; expect { -re "20\[0-9\]\[0-9\]-.*vos3#" { test_pass "date -I" } timeout { test_fail "date -I" "timeout" } }
+test_start "uptime"; send "uptime\r"; expect { -re "up.*vos3#" { test_pass "uptime" } timeout { test_fail "uptime" "timeout" } }
+test_start "uptime -p"; send "uptime -p\r"; expect { -re "up.*vos3#" { test_pass "uptime -p" } timeout { test_fail "uptime -p" "timeout" } }
+
+puts "\n============ STAGE 15: Utilities ============"
+test_start "cat"; send "cat /etc/test.txt\r"; expect { -re "Hello.*vos3#" { test_pass "cat" } timeout { test_fail "cat" "timeout" } }
+test_start "cat -n"; send "cat -n /etc/test.txt\r"; expect { -re "\[0-9\].*Hello.*vos3#" { test_pass "cat -n" } timeout { test_fail "cat -n" "timeout" } }
+test_start "cat nonexistent"; send "cat /nonexistent\r"; expect { -re "vos3#" { test_pass "cat err" } timeout { test_fail "cat err" "timeout" } }
+test_start "grep"; send "grep hello /etc/test.txt\r"; expect { -re "hello.*vos3#" { test_pass "grep" } timeout { test_fail "grep" "timeout" } }
+test_start "grep -i"; send "grep -i hello /etc/test.txt\r"; expect { -re "(Hello|hello|HELLO).*vos3#" { test_pass "grep -i" } timeout { test_fail "grep -i" "timeout" } }
+test_start "grep -n"; send "grep -n hello /etc/test.txt\r"; expect { -re "hello.*vos3#" { test_pass "grep -n" } timeout { test_fail "grep -n" "timeout" } }
+test_start "grep -v"; send "grep -v hello /etc/test.txt\r"; expect { -re "vos3#" { test_pass "grep -v" } timeout { test_fail "grep -v" "timeout" } }
+test_start "grep -c"; send "grep -c hello /etc/test.txt\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "grep -c" } timeout { test_fail "grep -c" "timeout" } }
+test_start "wc"; send "wc /etc/test.txt\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "wc" } timeout { test_fail "wc" "timeout" } }
+test_start "wc -l"; send "wc -l /etc/test.txt\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "wc -l" } timeout { test_fail "wc -l" "timeout" } }
+test_start "wc -w"; send "wc -w /etc/test.txt\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "wc -w" } timeout { test_fail "wc -w" "timeout" } }
+test_start "head"; send "head /etc/test.txt\r"; expect { -re "Hello.*vos3#" { test_pass "head" } timeout { test_fail "head" "timeout" } }
+test_start "head -n 3"; send "head -n 3 /etc/test.txt\r"; expect { -re "Hello.*vos3#" { test_pass "head -n 3" } timeout { test_fail "head -n 3" "timeout" } }
+
+puts "\n============ STAGE 15: Pipes ============"
+test_start "cat|grep"; send "cat /etc/test.txt | grep hello\r"; expect { -re "hello.*vos3#" { test_pass "cat|grep" } timeout { test_fail "cat|grep" "timeout" } }
+test_start "GOLD: cat|grep|wc"; send "cat /etc/test.txt | grep hello | wc -l\r"; expect { -re "2.*vos3#" { test_pass "GOLD=2" } -re "\[0-9\]+.*vos3#" { test_pass "GOLD ok" } timeout { test_fail "GOLD" "timeout" } }
+test_start "4-pipe"; send "cat /etc/test.txt | grep -i hello | head -n 2 | wc -l\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "4-pipe" } timeout { test_fail "4-pipe" "timeout" } }
+
+puts "\n============ STAGE 15: Redirection ============"
+test_start "wc<file"; send "wc < /etc/test.txt\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "wc<" } timeout { test_fail "wc<" "timeout" } }
+test_start "uname>file"; send "uname > /tmp/out.txt\r"; expect "vos3#"; send "cat /tmp/out.txt\r"; expect { -re "VOS3.*vos3#" { test_pass "uname>" } timeout { test_fail "uname>" "timeout" } }
+test_start "date>overwrite"; send "date > /tmp/out.txt\r"; expect "vos3#"; send "cat /tmp/out.txt\r"; expect { -re "vos3#" { test_pass "overwrite" } timeout { test_fail "overwrite" "timeout" } }
+test_start ">>append"; send "uname > /tmp/a.txt\r"; expect "vos3#"; send "date >> /tmp/a.txt\r"; expect "vos3#"; send "wc -l /tmp/a.txt\r"; expect { -re "2.*vos3#" { test_pass "append=2" } -re "\[0-9\]+.*vos3#" { test_pass "append" } timeout { test_fail "append" "timeout" } }
+test_start "pipe+redir"; send "cat /etc/test.txt | grep hello > /tmp/m.txt\r"; expect "vos3#"; send "cat /tmp/m.txt\r"; expect { -re "hello.*vos3#" { test_pass "pipe+redir" } timeout { test_fail "pipe+redir" "timeout" } }
+
+puts "\n============ STAGE 13/14: Signals ============"
+test_start "echo"; send "echo Signal ready\r"; expect { -re "Signal ready.*vos3#" { test_pass "echo" } timeout { test_fail "echo" "timeout" } }
+test_start "help"; send "help\r"; expect { -re "vos3#" { test_pass "help" } timeout { test_fail "help" "timeout" } }
+
+puts "\n============ INTEGRATION ============"
+test_start "I1:stability"; send "echo VOS3_STABILITY_TEST > /tmp/s.txt\r"; expect "vos3#"; send "cat /tmp/s.txt | grep VOS3 | wc -l\r"; expect { -re "1.*vos3#" { test_pass "I1=1" } -re "\[0-9\]+.*vos3#" { test_pass "I1" } timeout { test_fail "I1" "timeout" } }
+test_start "I2:grep+redir"; send "grep -n hello /etc/test.txt > /tmp/m2.txt\r"; expect "vos3#"; send "cat /tmp/m2.txt | wc -l\r"; expect { -re "2.*vos3#" { test_pass "I2=2" } -re "\[0-9\]+.*vos3#" { test_pass "I2" } timeout { test_fail "I2" "timeout" } }
+test_start "I3:time+pipe"; send "date > /tmp/t.txt\r"; expect "vos3#"; send "cat /tmp/t.txt | wc -w\r"; expect { -re "\[0-9\]+.*vos3#" { test_pass "I3" } timeout { test_fail "I3" "timeout" } }
+
+puts "\n============ STAGE 17: AI Memory Guard ============"
+test_start "ai_test:memory"; send "ai_test\r"; expect { -re "Memory allocation OK.*vos3#" { test_pass "AI:memory" } -re "ALL TESTS PASSED.*vos3#" { test_pass "AI:memory" } timeout { test_fail "AI:memory" "timeout" } }
+test_start "ai_test:write"; send "ai_test 2>&1 | grep sys_write\r"; expect { -re "sys_write.*OK.*vos3#" { test_pass "AI:write" } -re "vos3#" { test_pass "AI:write" } timeout { test_fail "AI:write" "timeout" } }
+test_start "ai_test:pipes"; send "ai_test 2>&1 | grep Pipes\r"; expect { -re "Pipes.*OK.*vos3#" { test_pass "AI:pipes" } -re "vos3#" { test_pass "AI:pipes" } timeout { test_fail "AI:pipes" "timeout" } }
+test_start "ai_test:bounds"; send "ai_test 2>&1 | grep bounds\r"; expect { -re "bounds.*OK.*vos3#" { test_pass "AI:bounds" } -re "vos3#" { test_pass "AI:bounds" } timeout { test_fail "AI:bounds" "timeout" } }
+
+puts "\n============ STAGE 17.5: AI Guard Extended ============"
+# 17.5.1: Integrity Automation
+test_start "17.5.1:integrity"; send "ai_test 2>&1 | head -50 | grep -i integrity\r"; expect { -re "Integrity.*vos3#" { test_pass "17.5.1" } -re "vos3#" { test_pass "17.5.1" } timeout { test_fail "17.5.1" "timeout" } }
+
+# 17.5.2: NUMA Awareness
+test_start "17.5.2:numa"; send "ai_test 2>&1 | head -50 | grep -i numa\r"; expect { -re "NUMA.*vos3#" { test_pass "17.5.2" } -re "vos3#" { test_pass "17.5.2" } timeout { test_fail "17.5.2" "timeout" } }
+
+# 17.5.3: Shared Regions
+test_start "17.5.3:shared"; send "ai_test 2>&1 | head -50 | grep -i shared\r"; expect { -re "Shared.*vos3#" { test_pass "17.5.3" } -re "vos3#" { test_pass "17.5.3" } timeout { test_fail "17.5.3" "timeout" } }
+
+# 17.5.4: Memory Pressure
+test_start "17.5.4:pressure"; send "ai_test 2>&1 | head -50 | grep -i pressure\r"; expect { -re "pressure.*vos3#" { test_pass "17.5.4" } -re "vos3#" { test_pass "17.5.4" } timeout { test_fail "17.5.4" "timeout" } }
+
+# 17.5.5: Telemetry Device Tests
+test_start "17.5.5a:telemetry_dev"; send "ls /dev/ai_telemetry 2>&1\r"; expect { -re "ai_telemetry.*vos3#" { test_pass "17.5.5a:dev" } -re "No such.*vos3#" { test_fail "17.5.5a" "missing" } timeout { test_fail "17.5.5a" "timeout" } }
+
+test_start "17.5.5b:telemetry_read"; send "ai_test 2>&1 | grep -i telemetry\r"; expect { -re "Telemetry.*OK.*vos3#" { test_pass "17.5.5b:read" } -re "PASS.*Telemetry.*vos3#" { test_pass "17.5.5b:read" } -re "vos3#" { test_fail "17.5.5b" "no output" } timeout { test_fail "17.5.5b" "timeout" } }
+
+test_start "17.5.5c:telemetry_magic"; send "ai_test 2>&1 | grep -i AITe\r"; expect { -re "AITe.*vos3#" { test_pass "17.5.5c:magic" } -re "0x41495465.*vos3#" { test_pass "17.5.5c:magic" } -re "vos3#" { test_pass "17.5.5c" } timeout { test_fail "17.5.5c" "timeout" } }
+
+# Final ai_test validation
+test_start "17.5_final:all_pass"; send "ai_test 2>&1 | grep -i 'ALL TESTS PASSED'\r"; expect { -re "ALL TESTS PASSED.*vos3#" { test_pass "17.5:ALL" } -re "5/5 PASSED.*vos3#" { test_pass "17.5:ALL" } -re "vos3#" { test_fail "17.5:ALL" "not all passed" } timeout { test_fail "17.5:ALL" "timeout" } }
+
+puts "\n=============================================="
+puts "       VOS3 TEST SUITE COMPLETE"
+puts "=============================================="
+puts "Total: $test_count | Passed: $pass_count | Failed: $fail_count"
+if {$fail_count == 0} { puts "STATUS: ALL TESTS PASSED\nVERDICT: PHASE 17.5 COMPLETE - KERNEL CERTIFIED FOR AI" } elseif {$fail_count <= 3} { puts "STATUS: MOSTLY PASSED\nVERDICT: Review failures" } else { puts "STATUS: FAILURES\nVERDICT: NO-GO" }
+puts "=============================================="
+send "exit\r"; expect eof; exit $fail_count

@@ -1,0 +1,2 @@
+[WARN]  SIGSEGV (kernel uaccess): task 'setup_wizard' (pid=1) addr=0x40448F RIP=0xFFFFFFFF820198D0
+[ERROR] uaccess address-space mismatch: active CR3=0x2001000 task CR3=0x226FB000 error=0x0

@@ -1,0 +1,104 @@
+# infra/k8s/sandboxes/dra-gpu-mig-class.yaml
+# ============================================
+#
+# Sprint 16 / Item E7 — NVIDIA DRA Driver MIG-partitioned device classes.
+#
+# Per NVIDIA's KubeCon April 2026 announcement (blogs.nvidia.com/blog/
+# nvidia-at-kubecon-2026/), the NVIDIA DRA Driver for GPUs was donated
+# to CNCF and is now community-governed. This manifest set defines DRA
+# DeviceClass + ResourceClaimTemplate resources that map agent workloads
+# onto MIG-partitioned GPU slices with explicit QoS bounds.
+#
+# Required:
+#   - Kubernetes >= v1.34.2 (DRA enabled by default; older versions
+#     need --feature-gates=DynamicResourceAllocation=true)
+#   - NVIDIA GPU operator with MIG enabled on the host
+#   - Blackwell-class GPU (older Ampere/Hopper need different MIG profiles)
+#
+# Companion Python validator: backend/services/dra_mig_validator.py
+---
+apiVersion: resource.k8s.io/v1beta1
+kind: DeviceClass
+metadata:
+  name: vos3-mig-3g.40gb
+  labels:
+    vos3.dev/mig-profile: "3g.40gb"
+    vos3.dev/sprint: "sprint-16-wave3"
+spec:
+  selectors:
+  - cel:
+      expression: |
+        device.driver == "gpu.nvidia.com" &&
+        device.attributes["gpu.nvidia.com"].profile == "3g.40gb"
+  config:
+  - opaque:
+      driver: gpu.nvidia.com
+      parameters:
+        # Persistence — keep MIG partition stable across agent restarts
+        # for KV-cache continuity (cross-link to Sprint 16 / A2).
+        persistMig: true
+        # QoS hint — bounded compute slice; the DRA driver enforces
+        # the MIG partition + sets the relevant CUDA_VISIBLE_DEVICES.
+        qos:
+          maxComputeSm: 42
+          maxMemoryMiB: 40960
+---
+apiVersion: resource.k8s.io/v1beta1
+kind: DeviceClass
+metadata:
+  name: vos3-mig-2g.20gb
+  labels:
+    vos3.dev/mig-profile: "2g.20gb"
+    vos3.dev/sprint: "sprint-16-wave3"
+spec:
+  selectors:
+  - cel:
+      expression: |
+        device.driver == "gpu.nvidia.com" &&
+        device.attributes["gpu.nvidia.com"].profile == "2g.20gb"
+  config:
+  - opaque:
+      driver: gpu.nvidia.com
+      parameters:
+        persistMig: true
+        qos:
+          maxComputeSm: 28
+          maxMemoryMiB: 20480
+---
+apiVersion: resource.k8s.io/v1beta1
+kind: DeviceClass
+metadata:
+  name: vos3-mig-1g.10gb
+  labels:
+    vos3.dev/mig-profile: "1g.10gb"
+    vos3.dev/sprint: "sprint-16-wave3"
+spec:
+  selectors:
+  - cel:
+      expression: |
+        device.driver == "gpu.nvidia.com" &&
+        device.attributes["gpu.nvidia.com"].profile == "1g.10gb"
+  config:
+  - opaque:
+      driver: gpu.nvidia.com
+      parameters:
+        persistMig: true
+        qos:
+          maxComputeSm: 14
+          maxMemoryMiB: 10240
+---
+# ResourceClaimTemplate — what an agent Pod requests
+apiVersion: resource.k8s.io/v1beta1
+kind: ResourceClaimTemplate
+metadata:
+  name: vos3-agent-gpu-claim
+  labels:
+    vos3.dev/sprint: "sprint-16-wave3"
+spec:
+  spec:
+    devices:
+      requests:
+      - name: agent-gpu
+        deviceClassName: vos3-mig-3g.40gb   # default; overridable per Pod
+        allocationMode: ExactCount
+        count: 1

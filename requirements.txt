@@ -1,0 +1,206 @@
+# VOS3 - AI Operating System Dependencies
+# =========================================
+
+# ==============================================
+# API Server
+# ==============================================
+
+# FastAPI
+# NOTE: Phase 0 security pins (April 2026)
+#   fastapi >=0.136.0 — supports Python 3.14t free-threaded
+#   starlette >=0.49.3 — CVE-2025-54121 multipart DoS
+#   pydantic >=2.13.0 — polymorphic_serialization regressions fix
+fastapi>=0.136.0
+starlette>=0.49.3
+uvicorn[standard]>=0.27.0
+websockets>=12.0
+python-multipart>=0.0.7
+pydantic>=2.13.0
+pydantic-settings>=2.2.0
+
+# Production Performance
+uvloop>=0.19.0; sys_platform != "win32"
+httptools>=0.6.0
+gunicorn>=21.2.0; sys_platform != "win32"
+
+# Socket.io (reduces polling by 80%)
+python-socketio>=5.10.0
+
+# GraphQL (reduces over-fetching by 40%)
+strawberry-graphql[fastapi]>=0.219.0
+
+# Authentication
+PyJWT>=2.12.1
+cryptography>=48.0.0,<49.0
+SQLAlchemy>=2.0.20
+rank-bm25>=0.2.2
+psutil>=5.9.0
+passlib[bcrypt]>=1.7.4
+# authlib >=1.6.7 — CVE-2026-28802 JWT alg:none bypass (defense-in-depth constraint)
+authlib>=1.6.7
+
+# Rate Limiting (slowapi storage: Redis in prod; in-memory breaks across 4 workers)
+slowapi>=0.1.9
+
+# Stripe Payments
+# BREAKING: v15.0.0 (March 2026) — StripeObject no longer inherits from dict.
+# .get()/.items()/.update() removed. See stripe_service.py _sget/_smeta helpers.
+# API version pinned in stripe_service.py: "2026-03-25.dahlia".
+stripe>=15.0.0
+
+# ==============================================
+# LLM & AI
+# ==============================================
+
+# Core LangChain ecosystem
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-anthropic>=0.2.0
+langchain-community>=0.3.0
+langgraph>=0.2.60
+langchainhub>=0.1.20
+
+# Google Gemini support
+langchain-google-genai>=2.0.0
+
+# Ollama support
+langchain-ollama>=0.1.0
+
+# CrewAI tools for Serper search
+crewai-tools>=0.14.0
+
+# Web search
+langchain-tavily>=0.1.0
+tavily-python>=0.3.0
+
+# ==============================================
+# RAG & Vector Stores
+# ==============================================
+
+# FAISS
+faiss-cpu>=1.7.4
+
+# ChromaDB
+chromadb>=0.4.22
+
+# PostgreSQL Store with pgvector
+psycopg2-binary>=2.9.9
+pgvector>=0.2.4
+
+# Local embeddings (HuggingFace)
+sentence-transformers>=2.2.2
+
+# NetworkX for GraphRAG
+networkx>=3.0
+
+# Document loading
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Token counting
+tiktoken>=0.5.0
+
+# ==============================================
+# Memory & Caching
+# ==============================================
+
+# LangMem SDK - Long-term Memory (requires Python 3.11+)
+# langmem>=0.0.5
+
+# Redis
+redis>=5.0.0
+
+# ==============================================
+# Observability
+# ==============================================
+
+# Langfuse Profiling
+langfuse>=2.0.0
+
+# LangSmith Debugging
+langsmith>=0.1.0
+
+# Sentry
+sentry-sdk[fastapi]>=1.39.0
+
+# OpenTelemetry
+opentelemetry-api>=1.22.0
+opentelemetry-sdk>=1.22.0
+
+# ==============================================
+# HTTP & Async
+# ==============================================
+
+aiohttp>=3.9.0
+httpx>=0.27.0
+requests>=2.31.0
+aiofiles>=23.2.0
+
+# ==============================================
+# AWS Deployment
+# ==============================================
+
+boto3>=1.34.0
+
+# ==============================================
+# Utilities
+# ==============================================
+
+python-dotenv>=1.0.0
+defusedxml>=0.7.1
+typing-extensions>=4.10.0
+
+# ==============================================
+# Compliance store (Zero-Gap Task 5)
+# ==============================================
+# SQLCipher is REQUIRED under VOS_PROFILE=fortress for encrypted-at-rest
+# storage of kernel compliance events (EU AI Act Annex IV §V.1 evidence).
+# sqlcipher3-binary ships portable wheels with SQLCipher 4.x bundled —
+# no system libsqlcipher dependency on dev workstations or in CI.
+# Patch-pinned per the gap-closure plan.
+# sqlcipher3-binary==0.5.4 ; python_version >= "3.11"  # TODO: non-existent PyPI package; deferred for fortress profile
+
+# ==============================================
+# Post-quantum signing — Track 3 (AAA plan revision quirky-foraging-bachman)
+# ==============================================
+# Hybrid Ed25519 + ML-DSA-65 (FIPS 204) signing for workflow runs.
+# dilithium-py is the pure-Python FALLBACK backend — ~5 ms verify on
+# Apple M-series, ~25-50 ms on 2010-Westmere class hardware. For the
+# directive's 2 ms / 4 ms verify/sign budget on a 2010-era CPU,
+# production deployments must additionally install oqs-python (system
+# liboqs required) which compiles with AVX2/AVX-512 fastpaths.
+# The pqc_sign.py dispatcher prefers oqs at runtime if available;
+# this line guarantees the fallback path always works in CI.
+dilithium-py>=1.4.0
+
+# ==============================================
+# WASM agent isolation (Zero-Gap Task 6 — Phase 1 POC)
+# ==============================================
+# Wasmtime is the runtime backing the Phase-1 WASM agent isolation
+# sandbox in backend/sandbox/wasm/. Pinned to 44.0.2 per
+# migration_plan.md (May-2026 Spectre-V4 mitigation).
+wasmtime==44.0.0  # TODO: docs/SPEC_ERRATA.md Item 1 anticipates 44.0.2 (Spectre-V4); not yet on PyPI
+
+# ==============================================
+# Development & Testing
+# ==============================================
+
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+pytest-timeout>=2.2.0
+pytest-benchmark>=4.0.0
+pytest-xdist>=3.0.0
+black>=24.1.0
+ruff>=0.1.0
+
+# Benchmarking
+ragas>=0.1.0
+datasets>=2.14.0
+memory-profiler>=0.61.0
+
+# Formal proofs (Z3 SMT solver — backs the Stage-12 UNSAT proofs:
+# merkle_inclusion / egress_policy / sched_core / ai_oom). Required for
+# TestMerkleInclusionZ3 in the killer-feature attestation suite.
+z3-solver==4.16.0.0

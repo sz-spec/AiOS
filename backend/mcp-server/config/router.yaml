@@ -1,0 +1,70 @@
+default_model: claude-sonnet
+
+complexity_threshold: 9
+
+models:
+  claude-opus:
+    name: claude-opus
+    provider: anthropic
+    model_id: claude-3-opus-20260210
+    api_key_env: ANTHROPIC_API_KEY
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 10
+    enabled: true
+
+  claude-sonnet:
+    name: claude-sonnet
+    provider: anthropic
+    model_id: claude-sonnet-4-5-20250929
+    api_key_env: ANTHROPIC_API_KEY
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 8
+    enabled: true
+
+  gpt:
+    name: gpt
+    provider: openai
+    model_id: gpt-5.2-pro
+    api_key_env: OPENAI_API_KEY
+    max_tokens: 8192
+    temperature: 0.7
+    priority: 7
+    enabled: true
+
+  gemini:
+    name: gemini
+    provider: google
+    model_id: gemini-3-flash-preview
+    api_key_env: GOOGLE_API_KEY
+    max_tokens: 1048576
+    temperature: 0.7
+    priority: 6
+    enabled: true
+
+  gemini-pro:
+    name: gemini-pro
+    provider: google
+    model_id: gemini-3-pro-preview
+    api_key_env: GOOGLE_API_KEY
+    max_tokens: 1048576
+    temperature: 0.7
+    priority: 9
+    enabled: true
+
+role_mappings:
+  # Development Agents
+  architect: gpt              # gpt-5.2-pro
+  frontend: claude-sonnet     # claude-sonnet-4-5-20250929
+  backend: claude-sonnet      # claude-sonnet-4-5-20250929
+  tester: gemini              # gemini-3-flash-preview
+  reviewer: claude-opus       # claude-3-opus-20260210
+  # Fallback roles
+  coding: claude-sonnet
+  researcher: gemini
+
+fallback_chain:
+  - claude-opus
+  - gpt
+  - gemini

@@ -1,0 +1,100 @@
+{
+  "strategies": {
+    "custom_jwt": {
+      "files": {
+        "frontend": [
+          {"src": "LoginForm.tsx", "dest": "src/components/auth/LoginForm.tsx"},
+          {"src": "RegisterForm.tsx", "dest": "src/components/auth/RegisterForm.tsx"},
+          {"src": "auth.ts", "dest": "src/lib/auth.ts"},
+          {"src": "useAuth.ts", "dest": "src/hooks/useAuth.ts"}
+        ],
+        "backend": [
+          {"src": "auth_middleware.py", "dest": "middleware/auth.py"},
+          {"src": "auth_routes.py", "dest": "routes/auth.py"},
+          {"src": "user_model.py", "dest": "models/user.py"},
+          {"src": "tokens.py", "dest": "utils/tokens.py"}
+        ]
+      },
+      "dependencies": {
+        "frontend": {},
+        "backend": {
+          "pyjwt": ">=2.8.0",
+          "bcrypt": ">=4.0.0"
+        }
+      },
+      "env_vars": [
+        "JWT_SECRET_KEY",
+        "JWT_ALGORITHM",
+        "JWT_EXPIRATION_MINUTES"
+      ],
+      "test_scenarios": [
+        "Login with valid credentials returns JWT token",
+        "Login with invalid credentials returns 401",
+        "Register new user with valid data returns 201",
+        "Register with duplicate email returns 409",
+        "Access protected route without token returns 401",
+        "Access protected route with expired token returns 401"
+      ]
+    },
+    "clerk": {
+      "files": {
+        "frontend": [
+          {"src": "SignIn.tsx", "dest": "src/components/auth/SignIn.tsx"},
+          {"src": "SignUp.tsx", "dest": "src/components/auth/SignUp.tsx"},
+          {"src": "UserButton.tsx", "dest": "src/components/auth/UserButton.tsx"},
+          {"src": "middleware.ts", "dest": "middleware.ts"},
+          {"src": "ClerkProvider.tsx", "dest": "src/providers/ClerkProvider.tsx"}
+        ],
+        "backend": [
+          {"src": "clerk_middleware.py", "dest": "middleware/auth.py"},
+          {"src": "clerk_webhook.py", "dest": "routes/auth.py"}
+        ]
+      },
+      "dependencies": {
+        "frontend": {
+          "@clerk/nextjs": ">=4.0.0"
+        },
+        "backend": {
+          "clerk-backend-api": ">=1.0.0"
+        }
+      },
+      "env_vars": [
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+        "CLERK_SECRET_KEY"
+      ],
+      "test_scenarios": [
+        "ClerkProvider wraps the app in layout.tsx",
+        "Middleware protects non-public routes",
+        "SignIn component renders without errors",
+        "Webhook endpoint processes user.created event"
+      ]
+    },
+    "nextauth": {
+      "files": {
+        "frontend": [
+          {"src": "SessionProvider.tsx", "dest": "src/providers/SessionProvider.tsx"},
+          {"src": "SignInButton.tsx", "dest": "src/components/auth/SignInButton.tsx"},
+          {"src": "api_auth.ts", "dest": "src/app/api/auth/[...nextauth]/route.ts"}
+        ],
+        "backend": [
+          {"src": "nextauth_config.py", "dest": "config/nextauth.py"}
+        ]
+      },
+      "dependencies": {
+        "frontend": {
+          "next-auth": ">=4.0.0"
+        },
+        "backend": {}
+      },
+      "env_vars": [
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL"
+      ],
+      "test_scenarios": [
+        "SessionProvider wraps application root",
+        "Sign in button triggers OAuth flow",
+        "API route handles callback correctly"
+      ]
+    }
+  }
+}

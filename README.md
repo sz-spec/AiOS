@@ -1,32 +1,63 @@
-# VOS
+# VOS 5
 
-The canonical repository for consolidating the VOS projects into one AI operating system.
+The canonical VOS AI operating system project, assembled in `vos 5/` with its
+own local Git repository. It contains the native x86_64 kernel, user-space
+programs, backend, frontend, desktop shell, SDKs and deployment tools.
 
-This repository is being assembled. It does not yet contain the integrated runtime.
-Existing repositories in `VOS3/`, `VOS3-Cyber/`, `VOS-Cyber-Standard/`,
-`vos.v1/`, and `vos/` are local migration inputs and are excluded from this Git
-repository. Their histories and uncommitted work remain in place.
+**Status: integration and release qualification in progress. This is not yet
+a final release.** Native BIOS/UEFI boot reaches user-space setup in QEMU,
+including two CPUs on UEFI and four on BIOS; a disposable two-CPU VM completes
+the keyboard-driven wizard. Full kernel isolation, concurrent user workloads
+on secondary CPUs, persistent installation, hosted workflows
+and remaining legacy capabilities still require work and validation.
 
-The final runtime code will live directly in this repository. Legacy projects
-must be reconciled into that code, with their unique capabilities accounted for.
+The governing architecture is recorded in
+[core requirements](docs/design/CORE_REQUIREMENTS.md), alongside the supplied
+[historical technical brief](docs/design/vOS_Technical_Brief.pdf).
+Native operation without Linux, coexistence with Windows, local-first AI,
+permission enforcement, cryptographic identity and tenant isolation are release
+requirements. Hardware coverage must be demonstrated with actual tests.
 
-## Consolidation
+## Native build
 
-Run `python3 consolidation/inventory.py` to compare the eleven local source
-trees by relative path and SHA-256. The generated `consolidation/inventory.json`
-is local and ignored by Git. The scanner excludes dependencies, common build
-outputs, environment files, key files and symlinks; it is a comparison aid,
-not a secret scanner or proof that migration is complete.
+From this directory, with `x86_64-elf-gcc`/binutils, Make, Python 3, NASM,
+mtools and xorriso installed:
 
-The initial inventory found 1,147 paths present in only one source, 5,965 paths
-with identical copies, and 2,086 paths with differing contents. Different
-contents require review before choosing or merging implementations.
+```sh
+bash infra/build_limine.sh
+make -C kernel BUILD_DIR=build/native PRODUCTION=1 HEADLESS_AUDIT=0 iso
+```
 
-Next steps:
+The bootloader builds offline from vendored source. `dist/vos5.iso` contains
+BIOS and IA32/x64 UEFI boot images, verified through its El Torito catalog.
+This verifies packaging, not successful installation. The current kernel uses
+Limine's Multiboot2 loading path at a fixed physical address; its separate
+Limine-protocol/KASLR entry remains unqualified. A 32-bit UEFI bootloader does
+not make the x86_64 kernel support a 32-bit-only CPU.
 
-1. Reconcile backend, frontend, kernel and desktop implementations and their tests.
-2. Establish one dependency configuration and startup flow for the integrated system.
-3. Verify agent execution, identity, isolation, persistence and user-facing flows together.
-4. Retire legacy copies only after their code and capabilities have been accounted for.
+Kernel objects track the effective compiler/linker options and source list in
+`build-config.json`; changing those options invalidates the affected build.
+Use separate build directories for concurrent configurations.
 
-No remote repository or deployment is configured by this initialization.
+```sh
+python3 scripts/native_boot_smoke.py --iso dist/vos5.iso --output /tmp/vos5-bios-check
+```
+
+The smoke gate requires output from the actual user-space setup program and
+rejects panics, process faults and exec failures. Multi-CPU gates also verify the requested online CPU count; see the evidence and hardware scope below.
+For UEFI, also supply `--firmware-code` and `--firmware-vars`; the variables
+template is copied before use. No physical disk is attached by the smoke test.
+
+## Consolidation and evidence
+
+`consolidation/baseline.json` records the initial 5,072-path import from
+`vos.v1`; additional manifests record reconciled agent boundaries and Limine
+build dependencies. Legacy repositories remain in the parent directory and
+are not runtime dependencies. Full capability reconciliation is still open.
+
+`python3 consolidation/inventory.py` compares the eleven historical source
+trees by path and SHA-256. Its ignored JSON output is a comparison aid, not a
+secret scan or proof of completed migration.
+
+See [native boot evidence](docs/design/NATIVE_BOOT_STATUS.md) for current
+results and remaining release gates. No remote repository is configured.

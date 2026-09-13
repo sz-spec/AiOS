@@ -1,0 +1,1227 @@
+{
+  "source": "VOS3/kernel/boot/limine",
+  "source_commit": "7cddb61183685d9bddd2eb13d42223d929c2abe6",
+  "note": "Build dependencies already fetched by the historical source bootstrap; source files and licenses only, no repository metadata or compiled objects. Upstream pinned dependency revisions are in bootstrap.",
+  "files": [
+    {
+      "path": "kernel/boot/limine/configure",
+      "sha256": "eec9c4841e96afd03b525c79c91f38ca8f9af22300c2b4dde15abd1f36f1a9ee"
+    },
+    {
+      "path": "kernel/boot/limine/build-aux/install-sh",
+      "sha256": "9953cae3336e4effe0ffb962a52b0b483ca73de77ad94375279a927ba18f6a86"
+    },
+    {
+      "path": "kernel/boot/limine/build-aux/config.guess",
+      "sha256": "ec2577614252326f889df1de97b9a457c03a9a94811048563c211a44496d8ba3"
+    },
+    {
+      "path": "kernel/boot/limine/build-aux/config.sub",
+      "sha256": "465c5fe67c7d36b72e808812716445d4d38d4b94734ca8d36a8639d12323878b"
+    },
+    {
+      "path": "kernel/boot/limine/build-aux/freestanding-toolchain",
+      "sha256": "620f782587bef7435db7a95b10104011d2ffb94c313b1c873d9bb0bdcaef5bd8"
+    },
+    {
+      "path": "kernel/boot/limine/timestamps",
+      "sha256": "4c7758b098b371e04f5946ff2d7036a1f3a357d2fc25a1b1471ab8a8c0ed8952"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extendsftf2.c",
+      "sha256": "fb80b41322099273a81ebe8334588041e81a25043fc4d99959a613676cfeab87"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixdfti.c",
+      "sha256": "93eaf8c2c35528535f1963a0812f6e3d69bd0d2b4671ffc7632277593449838c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extendhftf2.c",
+      "sha256": "074e8e885050f62e347e4376a91dfc163b2a105e2bae26cf89d90afa176808a1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/lshrdi3.c",
+      "sha256": "b8c43f0df0c6136f017ffc18123e74677a52c893dbb166e216804756578a1eab"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divmoddi4.c",
+      "sha256": "f85b721b92892ba571c85b15ad4ed4f59ac51d5a52d551a5a28e7f09a5ba3bfc"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/clzti2.c",
+      "sha256": "70c9c2896ae9282850e9b6425dab8bc53c3ef68bef5f0ff2f8fd7bef4434fd79"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divmodsi4.c",
+      "sha256": "600350324bb5f69053dfa93550ecb54c0110ec95a394cc307d5da0405a8860fa"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/adddf3.c",
+      "sha256": "4d3d934be9ffdb77d94ebe2dcbc2d18a0effb9aa81a3a0276ce5c89945982b37"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/addsf3.c",
+      "sha256": "58bcef2f633319d64d21e20b0f9552809238458409add439cc24513aa07cf160"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatunditf.c",
+      "sha256": "486fbf1fd3579847a1922a7ddbc59f7a8bbca76f878ca907d0b68e396dee6b7e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/udivmodsi4.c",
+      "sha256": "7076fde23185eb4f60a7ff19402d6864bc3e5d105a56bab8bd1af27feb40f36f"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/udivmoddi4.c",
+      "sha256": "e963fd1418909bb0f43603a7846edf568d4c8bae0670bd3b13a3e754a104e2fe"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunsxfdi.c",
+      "sha256": "6fcc4e6fbe66b37d73f33c2385b234b05fec66f86436e7f1d2d0805c4a712ced"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/powitf2.c",
+      "sha256": "c40e11dccbeb1a21796528f88dae5f7944a248bcd0104dc65bc860e3284d5647"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/multi3.c",
+      "sha256": "b2e133764668e78119f7c76facbb11f0b4b7c0c6b279fb0b97a589da11d1d060"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/cmpti2.c",
+      "sha256": "b6950bc60c69bd1b3839754e6661afaff86b60870e56ad03c3778b104b484948"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divsc3.c",
+      "sha256": "c76d6bc4456d40051bbd35bdd277bee439147ac3f12a4c8ed71707b6cccdc1a5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divdc3.c",
+      "sha256": "5fb170dad36baf671198eea6d6eb907897731e1f99024c180f2322def081ecd4"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatsitf.c",
+      "sha256": "1eaba998a718d4ff67f1ebe6ba93b614b1f9437b57f13923dd0043d55c9f3378"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/umodti3.c",
+      "sha256": "3d88088419d87b486858a4bf54ff08209944ae526c77b8dc5e0c0b6b8001c1e9"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divtf3.c",
+      "sha256": "513aa4d30a49cf40b76cb37044d3d763c6d5e78630bd4050b1b954563fd7bdaa"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunssfsi.c",
+      "sha256": "bc6a5e545513cbfc8e912b737566a20233a70f80631d8c0ce9b02e5617cf26c5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_lib.h",
+      "sha256": "5f91500b16aa8fa609aedb3b2c69d2be968ba35aa79b493a66c1b961f47c67ef"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_mode.h",
+      "sha256": "874aa9eee8990ae2a6f48127ddb48c3198a8fa741f634f93053ebac3f89e1e83"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/addvsi3.c",
+      "sha256": "36ad0fa5e9a6c26ea0e5fd9cfece1699bc8904cc7af8e6034138f2193cd88ae0"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/addvdi3.c",
+      "sha256": "60c8121c6ca71ff698704b9ee1e5124a86197de4480674d781edd2e4a076d262"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunstfdi.c",
+      "sha256": "db9e239602d480ab86ac8b89659cb0791d897c08670fb6abd3b892fa8b518bae"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/udivmodti4.c",
+      "sha256": "2cfaca7399d1392c92ec4dd6458da22933b4ad2e0cd58769f22b52be98116760"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_mulo_impl.inc",
+      "sha256": "59f40cf894c0bc39915698f449322343a22f752ced0f72f5900664b89a2e745c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatuntixf.c",
+      "sha256": "f5a5409c23f94b972e510db4ca386c0a119cb3dd0beaa15528a13189515eea92"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatdisf.c",
+      "sha256": "017fda31d8ca271af73597e00fdb4b31c20e2b8e2120e3358e9d72f4cdcce3b9"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixxfdi.c",
+      "sha256": "6b8e7eb0d5e1f8b84f74d17b3c8a14219300fc923ac4d791c147a8be57556739"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/addtf3.c",
+      "sha256": "c3d975bccdea516b390d87c0ee4e256dcfaf8d67c1b9a9f5f0521a028f54a883"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/clzdi2.c",
+      "sha256": "6171e0da0532e5f53860a83dc616466c174751f3e104996443d1398ecb8bf85f"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/clzsi2.c",
+      "sha256": "3524233af4d8de1efe7e486ee84d24924f3f6154157b544791b1a8b927b8846f"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divmodti4.c",
+      "sha256": "bcf5210b5534ab118d836fc8dd015519f5622c3238e0d526706a7848c5a4a144"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/lshrti3.c",
+      "sha256": "89da91e31e33c3c62128c32ed1c740856a413c17ac1e7cd75702da37d1cf9fa4"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunsdfti.c",
+      "sha256": "be79b5143784f487020a835e5fb9550ba72048bdb3e27337d448fb5cfcd27974"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extendhfsf2.c",
+      "sha256": "68fe478029188effbd95399bee3a4d3669b3b32072701383480c94f1513e6f7f"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/assembly.h",
+      "sha256": "04d5a4dc04dcf6a6f17a0f8d83750813fe761b05d39f7628e5900156fced7e58"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extendsfdf2.c",
+      "sha256": "e7600ad700bd55bf8a3b41d84b13659e23b5f1fde9d07709f12d4d69ee4c470c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/addvti3.c",
+      "sha256": "8bb4138eaa9a5580fc27e7f9e8512f08091be3ba469e64382b853e2a7ce01c3c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixsfsi.c",
+      "sha256": "f4e2612859118a85f585a35995cd4d24c6369f71ba4cd4934403807250664cf8"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixtfdi.c",
+      "sha256": "5d76fe584c58e6d3892c5fd245671c4f969353f74b4d1cc544b462a9dc78f9bd"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/umodsi3.c",
+      "sha256": "1404beb2eb5904b8b68cf46de4f08d232d4813dad319c167b4a3a8ed5afdb7bb"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divdf3.c",
+      "sha256": "076f2ad1a5911bedc81dbc76d750d44eaf0b6db9487aeb1446ce72a05bbd3b79"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/umoddi3.c",
+      "sha256": "d812aa1e62d6179f9013e38bc040ba69d905be128fa25e104645a9da0841d209"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divsf3.c",
+      "sha256": "8afa8fea3b01c5de5f5100b84d990675abde87a9419e52351017148e761012d4"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/trunctfsf2.c",
+      "sha256": "190d97ce7b807804cfe27259b0979fa1b30ec8997bfdbc4fddaf9d1d87c26ba8"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/trunctfdf2.c",
+      "sha256": "dcd400910047c82e292cd4e1070d2e5e3ff7e28f74af615da0c3f73631a8a18c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatunsisf.c",
+      "sha256": "ecc35d150e2198805ba07c0c4bd802fc158c313909f421d787e79ad0f3745782"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divtc3.c",
+      "sha256": "a631c78b898cc71a53ca08eb6f1d642d3c3e00e443e3dbdeffe671afd8706912"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/cmpdi2.c",
+      "sha256": "18cb3b389cd9735b62db41476334e9a8f4cc84960e46c828a30c2e0a3dd7240c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatuntidf.c",
+      "sha256": "6c3d7479504ea5bd9dd711544247f1fdef86c1999a39af1ce748b95f5cfaa0c8"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/muldi3.c",
+      "sha256": "76a80699855619040b053078ab246adacb060fcc15b4e3431b76ee053032a8b9"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/powisf2.c",
+      "sha256": "ee202e15683cfc711d064ffe424ebe5de27f338edaccd5be3b81880cce9458d2"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/powidf2.c",
+      "sha256": "5956c5f7ab607e598238f912e89e6c2ccdafc84578d4d1a167ada4346225d78d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/truncdfhf2.c",
+      "sha256": "be01ef3c8328ea72db82716573f2f4a4815e71f1f02bdcb8eb41e4e50e6c62fd"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ctzti2.c",
+      "sha256": "967dde517d93a8ff50384b8f938bb480121b0bc188f2aad25241282fd052e5aa"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatdidf.c",
+      "sha256": "aaa37268bb035f8f87c20bc64bf2def386edbde873209fa3569a5075d3209c1e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divsi3.c",
+      "sha256": "d6fc80648fefadc1997eda1e7570587e9f5287ccf7e57a8b75797a21938b123e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatdixf.c",
+      "sha256": "c12b32e7fb341e656172de44fca9b4617d8d94931a0e4216d1eee3141e40afcc"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divdi3.c",
+      "sha256": "668b6a3f19fd40fbdb079d0e88073364f88ec1b5e4b1cb38a2c721051c66efbd"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatunsidf.c",
+      "sha256": "e92eb37ac69b9ad229e91ccbf8405f3eebc35156470689f6eec8a4892befca95"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_util.h",
+      "sha256": "63d06198ab720a75c20bfd84be895c2746581b129168bae6201e7384bbb0473b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/absvti2.c",
+      "sha256": "d7b75e01b9450ddb6cfeb2fa0aa85ca32ffc1018ea2e7edfbac6ac7e265aa776"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/multc3.c",
+      "sha256": "3bf10f0af1e50e6e9a2672ea0105cb6e2417a5feef5c477d65c83501c48b91a1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatuntisf.c",
+      "sha256": "81f3bc7a7c652c9158f0215b3868223bc4ac5d128bbf04553a3c530f727089c8"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulsf3.c",
+      "sha256": "df3f688adfbf94f170f4d0a434359396a9e2ac4dfd20eb1b1c44b26606b2b4f3"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/muldf3.c",
+      "sha256": "acad67357304f8679ef99ea3f64a56db47ae17538bc38f29bcb616b8c049ecbc"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/paritysi2.c",
+      "sha256": "a41f4394c711c949d64c408de6b9e8d34836faf9f1fc624a861df3194e256be5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/paritydi2.c",
+      "sha256": "7dac1a60368bbf47abf5247cb558d1545098434b17026fadf486d0c74e91acbe"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixsfdi.c",
+      "sha256": "dac7d991aff87e9813011bb7ad361c1c061eb90671daa56dca8b316633764384"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/subvdi3.c",
+      "sha256": "87c709b9eae4cfa4c81ffad2967964ee55452d6bac32ea074e4706b839f2e863"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_math.h",
+      "sha256": "42d83ee41543909de016379a8251e211a6890cbc7945c433bb30f4ba29d7b10c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/subvsi3.c",
+      "sha256": "c40d701faa479e0b947abb669fcb87625d98f9e4fbe54474e4c08b4e048ef56b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixtfsi.c",
+      "sha256": "b1ee73031edec94a6abc641bc4d87879555722a0118d1b3f28a725b6a86dbba0"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_extend.h",
+      "sha256": "b3da60a65ab5aca4b93ddd36df8af90051912d1c455c4cea2de0e50ce37c526d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ctzdi2.c",
+      "sha256": "945cd8765de0c267f5ff93d53817687d53365edbfea21529f390318e46597d69"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ctzsi2.c",
+      "sha256": "f1f912dc5f9f40e4cefadc0aefc7fea5f6848657c7cf970e64d9a0220b2952c5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_fixuint_impl.inc",
+      "sha256": "fc0d0b1b6fd1b3ec61ed3cd96e634de9f380eb76b7161fea91ddbddece71ac09"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunsxfsi.c",
+      "sha256": "a52cd1933b31b100789243fa88d7e56884158a23d62e111083e421e7029197f3"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/truncsfbf2.c",
+      "sha256": "7a235af08704648139015149b68844c7412ccabcfab319288bf41468d4c4e7aa"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_mul_impl.inc",
+      "sha256": "5fd5ec9eaf57c983ed521f3501346660221d6f2d49d48d186b2046702b54d8c3"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunssfdi.c",
+      "sha256": "48425610973daf461e8063941cc5b1d5b82b468cd48d74f2a09222a7ad2a703d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_endianness.h",
+      "sha256": "ad9b712afd909d29de28a48314547e9b3b4af598cf524cdf4eac4829085220f2"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/subvti3.c",
+      "sha256": "781bce9495ca7f1d2bc703a76b15700809ebac7b5ad1ae7adb86cfba9d1aece2"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunstfsi.c",
+      "sha256": "562f9eae54f065a8b687d13c3d9b7967bcc2e40cbaf87dee3cc3f107acb6cefc"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/parityti2.c",
+      "sha256": "19127d1c904bfa9f1752bf02b003deb4935c279839fd04464aac4d00a04f1105"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/multf3.c",
+      "sha256": "fd62536f2aed860e4362651c0c5481b5929cef5e4c603fbf875d776d4a60a3c1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_mulv_impl.inc",
+      "sha256": "32ea5403907d722e371e3255efc230a6cc8df7a9cd5522af0c1354959c1f89b2"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/muldc3.c",
+      "sha256": "bc5c64f1eea021edc8b168dd4d0d97454a851a7908a5af3dc2d43681a23c43b3"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulsc3.c",
+      "sha256": "f6895cb86aa9a79b8171e79500e55135e08abd0526246c13f8f45ea33951be0e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/cc-runtime.mk",
+      "sha256": "9d1e15b83f79be522becf0977f34a9831a1de21dabcf68ae272644ed76b8b93d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_types.h",
+      "sha256": "97f26e313b3d6a69b26f3174dc97f336eddfe1b0cba1d2d9358b2768305ce4e6"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floattitf.c",
+      "sha256": "f25230e4e618a7429a83c7b5703c4ef8e55a9b3802c14aba98aa6b6278a39fa8"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/absvdi2.c",
+      "sha256": "92d89adc501e3f8aba30f49f68e99df1ecfb5941569d7f213331700836f5b467"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_fixint_impl.inc",
+      "sha256": "9f783582b31c028721a14561f2c5741b5bb19befa557a4575e1436381f966f4e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/absvsi2.c",
+      "sha256": "d84648b8427d3dd5d56c29b722af46e7ffa80e59ac1bc040633d29214e317d89"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/README",
+      "sha256": "cfcd7ca8fe1953fdec93fe4f67b05e84f4588aad85baa3bbc782414a2bb7e395"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divti3.c",
+      "sha256": "b8392be2b070cda2a01bc33c7912e06ab83ce9a1ec7995fe0acbe44540cf92ae"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulodi4.c",
+      "sha256": "55b3b4195f026a96f809823f3b5de6a66e0a0a9469e69f6e5494b987cf8dd579"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulosi4.c",
+      "sha256": "770bf722616411be0aea4b72f9d49fc7e4a6bb383fcc1007bf2df84f48315abf"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_to_fp_impl.inc",
+      "sha256": "5bb2fa67db4fc0c35038240189c23ef94f005d14676f2a5e4deab4085ad05a55"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/CREDITS.TXT",
+      "sha256": "a9901f47a089da41e4690682d00ce4cedaa2baf41fedbe79beee366d43ac2461"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/udivdi3.c",
+      "sha256": "e250263dcb27261e969db4228a479b2f3bde2b06e59baa2f2c595ac752b17643"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/udivsi3.c",
+      "sha256": "c41c76d2e44362a662f26411b0f1b5bfdabe40d1d624fe335b601663a7a313ef"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ashlti3.c",
+      "sha256": "39afba4710d9b24c9c27cccdc8e18a18db10ce3616dc60cdcfa494f0a49a3a60"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_trunc.h",
+      "sha256": "90626a0811dcf96be507daa5d7fe872d1efae2c388af4c48eaba45101856be23"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_extend_impl.inc",
+      "sha256": "63f9cd801c0c2a04e8becbd22f189eaaa47b5466bc098acc214fe69fd525f92a"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunstfti.c",
+      "sha256": "459ecff68eca03e17bf63b62e769dfae6f56337c49e12963a9a9629d84301c61"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_mode.c",
+      "sha256": "32d294b7b4fa174e8a78d32c7e5e3bcebd6267c46a12fd4858b24ae5a2da4475"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_lib.h",
+      "sha256": "8edc3d7debe27cb64355bbcd1d3d18390da20f7bf1358586ece770714bcfdc5e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floattisf.c",
+      "sha256": "85ae4d8277d49921da8e330a09031b601ccdf04b333116ce39cde9d9ea1d8dac"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negti2.c",
+      "sha256": "5ed863c89848453e48be85ca4c91be7a1fbbe1b80f12a6fdf17402c010b1cc3f"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/bswapdi2.c",
+      "sha256": "a330569afdc24b4b03983ea196e99f22b1e9e25a58149e1a969b9757eb18b71a"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extendxftf2.c",
+      "sha256": "d0e5c4855fd1ad7725b8a769b1be97217c930bd09fe7df2e178ebdeea9915f26"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatsidf.c",
+      "sha256": "3508353ff13dcaf10691013e209605f3ec104ee4a3bcd2c0d8ffe86ef72392b1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/bswapsi2.c",
+      "sha256": "f921d32911960a0700e22191fef4756b672653a7a0ab351d77f2fb4dc1d891f1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/comparesf2.c",
+      "sha256": "b2c9fb43110020c57ecad29f04fac8b407518642e3d666271b4ed11b26c1e00b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/comparedf2.c",
+      "sha256": "ae388d4c277ccfaceba1342da9b2c84d40a37ae811dd24ca44762ac1428b1d32"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatundixf.c",
+      "sha256": "f42f7d7ae56474f3cc5dd8d80a641f556b27a97921a61afd3bf55fa2de569e46"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_to_fp.h",
+      "sha256": "9ac8fd0650f1560e6c910979e0004c5956ae7da6e3bded7eab0b0270c51bf400"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatundidf.c",
+      "sha256": "b073584bd00935518f769f55722a0b055de2c23ba535fb5686e1990d0c88bfb7"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunsxfti.c",
+      "sha256": "7d250dba039ec168fca57e48bc33a8e0ce71978137503d46562f247f4e4a636d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ffsti2.c",
+      "sha256": "80e3b51c072773cf848559eb66b15b74424dad26bcd077d43987766eb992ebe5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/truncdfbf2.c",
+      "sha256": "332a982dab89a07be499fd090957fb595583e2723b6f0ba531a5064c6b14248b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixdfdi.c",
+      "sha256": "7040aff2a5b14406177c11f2b19d0a6cbeb91e8186b0c5c2f407a015544bfe3e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/.gitignore",
+      "sha256": "81c6da8b6089a30896168e4f16ff9f85edf99ee861835fa5a129e335c0d18b13"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negvti2.c",
+      "sha256": "fa30f03177dfd64510531742c17bb9d5bbc1c23ca2d264a2c2a104bb143e2227"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/comparetf2.c",
+      "sha256": "172d5aad16e7d978bcfb90f33db61d1017f41c12f223259a364448f90b4ce060"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negdi2.c",
+      "sha256": "6f163c11ac47518ee82f136e2664c6e11a76e40da21eb511ddf09ab099d84efa"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatuntitf.c",
+      "sha256": "f26477259994ee5bd346e5afdebd6810c49bf6c57e53d9d456ee865382c8ffb1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulxc3.c",
+      "sha256": "c0d39899315fec0fa202d0aed221cf6de26726e3d5cbcfe4befad75658d3c596"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ashldi3.c",
+      "sha256": "7982c05b8a139ab662ac1a88be061669d7ee838d2153b42e4b0f4ec410bdf5a5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/udivti3.c",
+      "sha256": "c0b20f06f6e0e8a6b5423ca6674cf0c57219d07554f6f35c9ecc36bf28915355"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixtfti.c",
+      "sha256": "f68619f14e2cb5dee4d0be5975c951dcf2471079d5da8f85c5c79958aa827368"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/muloti4.c",
+      "sha256": "a116475e0f4e98e16054e3e0492d55cc911691a0fac6dfedbe024eae9b0e02bc"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negvdi2.c",
+      "sha256": "cef1901164610459f0d22bd10717412bf492b758652466ca2479bec40f5f6b32"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunsdfdi.c",
+      "sha256": "7b87212f8896434b1d45ebed9d205ced7e9d41369648b7298074e6d8b1db0e8b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negvsi2.c",
+      "sha256": "89cb0f85dc13ea577aaa0a9d7124ae22350cd3eda51e7b61eb26d33481444b2d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/truncsfhf2.c",
+      "sha256": "2b9506cccc6a87d92bbf7612dd09d525eb8ecb78fdf58555aa49014e0dbc3653"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ffssi2.c",
+      "sha256": "b1328621e08cad6486189652073f94589759e738c00cbfe3a922d4f3ede792f2"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ffsdi2.c",
+      "sha256": "c4c554b314a20641164d4bb084d9f7bb99513fce93ff310742bce02ab11e2b9d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_div_impl.inc",
+      "sha256": "833906405d418f0f421d6155acc5abf79d9902ed37a44903d01c95ff55d3a010"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/truncdfsf2.c",
+      "sha256": "fd9660965daabe47b6243fcee6b6f7f14c49c81153728902f4615e43eaf3b75a"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixxfti.c",
+      "sha256": "02c4d2e7a6261b20bf43ecc094bfe5c775b365f98c713958a182a8c3a966280b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_div_impl.inc",
+      "sha256": "3f11a70cfba89f7f444da2b615bf9d507ab9db05ccd93a304843f2bb5b450d7e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ucmpti2.c",
+      "sha256": "c74d7be5038666f1e845e9c3e327295065de5779b8619b0c754e97a161d62618"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixsfti.c",
+      "sha256": "24d026566e84b6291e68d8a5eef535abb5722cb645ddb6ded3c32e93429740a1"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negsf2.c",
+      "sha256": "73c3edef010c52baa399fa4d904bb2f1c66257096940f1a887f92671ff347538"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/negdf2.c",
+      "sha256": "fdbb86d750d2f9ed40e3793a43938a8da584ab60ca361e6ebba6ad765aa09e62"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/popcountti2.c",
+      "sha256": "1cfc511d395a8af1ca45bace24f8fe1e40324bd6b23a58bc16539e8472de2d1c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/trunctfhf2.c",
+      "sha256": "04c941dc97745d3532f09eb4d98a11fd85416e7ae86e480c110422343d2cd26e"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/int_util.c",
+      "sha256": "8c60546463090745a66770b89cb04f607d4e29872e6d39f2a39c91013155ff75"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulvdi3.c",
+      "sha256": "f9200755b7c4b1c396a91bc473f641ee985a8651e55009108be2d624fd744402"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulvsi3.c",
+      "sha256": "8dd946a05cbd7b1fc0cbd009cc1e2988339eefd7303e302f12dcdd8e1408b5c9"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatunsitf.c",
+      "sha256": "00cd74e9fd10baa1348770c968aa82c7d61fecb7daa65aca49de178a7f8bb2c7"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/divxc3.c",
+      "sha256": "1c4e94a641f7b27eb2002e12e68633c98d55cb32390e6aca8325d8be66e172c3"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/modti3.c",
+      "sha256": "23b5f5af57a8a3ccdab785eec6e486bffef932cee87ff1152b3beedaa6296414"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/subdf3.c",
+      "sha256": "8c06ec6159102dffe2fe98c07047c1d0c78d4c56eb905513297282bb5763753a"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/subsf3.c",
+      "sha256": "ff070ad16bb3a8be3c347a0200953ddda22377f509f8543b7aaf1b3e34293e4d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_add_impl.inc",
+      "sha256": "327276adbb45d7e2cb2da1cf98b508da00b43b0cb84d4883d07878a0a9a1cd07"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/LICENSE.TXT",
+      "sha256": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatditf.c",
+      "sha256": "46e78b24a6971095eb811012894dc8a9748fd8ac7fef1c870679a2c2ee42263c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunsdfsi.c",
+      "sha256": "f93cb176086d0fd5e312bb8c6f89c1ab76da68f7c61dc68fc3b856d781778dbf"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_trunc_impl.inc",
+      "sha256": "17098ba776ada9f2cc568a02cf34317bb0b59b8a603ff8a92ea909b7bc8c214b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ashrdi3.c",
+      "sha256": "7aea539b6160c9439733fafc631d553ba2969aa15ebeba9fac12cd7027eedb4a"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/powixf2.c",
+      "sha256": "d101a1b910c419f4ce44d2b8aec53d99183d3fe7241c070b3210d56d5d567cbb"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floattidf.c",
+      "sha256": "d54eddafeb7f7f45ebf402dd9913356b353c269e5f5d044a58fcf6edc65ff759"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/moddi3.c",
+      "sha256": "ec2261d7e4bf7b04583c17933a7fd370be4de10418c1d75929e0dc382694f820"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/modsi3.c",
+      "sha256": "120fb67478b98cd78ac8c5f3e8aa6e760d184ece60fa96e9f0672379e3c57aa5"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/mulvti3.c",
+      "sha256": "3372782348a85ae38441419f5a570c45cc26ea79c32d807fb7c76d4f60cd3b1b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatsisf.c",
+      "sha256": "c8b4fb692071ac6462fc99492a38243fa17bb50fa27281df73e8b69cde1c46bb"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/trunctfxf2.c",
+      "sha256": "b99b6abb02f9c048272701018654ceefc1d8c372d6f941acfaa8fa0d95cbc8b0"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixunssfti.c",
+      "sha256": "f050658d0b1d182a5ef02300e8027bf0b4e0f65393b7e169a74fc02e8c4f8b78"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/truncxfbf2.c",
+      "sha256": "1e8c5884086400a071e0b87ef0ca07984cc2fd433c9ef232e4cc4a01300c2179"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/popcountdi2.c",
+      "sha256": "9c4e3828d94046d00aa66835dca4158ae097abfca27515de07b732b8fc1c887c"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/popcountsi2.c",
+      "sha256": "5ad8cb98cfb67fa4ffb25dc0592962fac006781dcf72039fed5174a0cb51a1cd"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fp_compare_impl.inc",
+      "sha256": "b3a602d7e840571537aef20a2ad57ad124f2efc7f0a456a37bece30e9dde6394"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ucmpdi2.c",
+      "sha256": "7ff381dcbdb4d10a93093e39a915c50206c73583d37b9cd2906f58f33982a856"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/fixdfsi.c",
+      "sha256": "1f6da8e8b66df21c4884561dd5ec7997e5771a6263d61f015c01635343b32890"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/ashrti3.c",
+      "sha256": "a6da2dc32167fbf369bbb0d185daeaf1b23aa13fda72f832e2097926c9fb2d74"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extendbfsf2.c",
+      "sha256": "68f98e6d0b044e22c2d06d7873b34df444eb82eb9235e381fe00583720f73a3b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floatundisf.c",
+      "sha256": "76b78e5b7b62e457ae6167324bedf23326751dbbe03166775bf9f16bb95b4d80"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/floattixf.c",
+      "sha256": "c229c6f5a7952aea78d94201bc57aaa8e4a717d2bbbf69491c794b5fbe37453b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/extenddftf2.c",
+      "sha256": "c2842acc80e86b8da7e8b7c29f8771102b7cac52313a9d26c3f6e1580e7e962b"
+    },
+    {
+      "path": "kernel/boot/limine/cc-runtime/subtf3.c",
+      "sha256": "cbcce7e7aac50ef3f703b3c0a43c30dcd532be097472848cb337020ed48ae1e1"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/stdalign.h",
+      "sha256": "5f3fcc4613651958b2062f557a8b174040b69e015e38115b071cc4a9410c16bb"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/stdnoreturn.h",
+      "sha256": "d3f93616775d1aaedeeeea3a4664a4347e26d03182edbe1085798a2440057d10"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/float.h",
+      "sha256": "b8c48dfaf02a1236e76da83dac0365be69e2d4a85a789b1c60fdb3394ba133b9"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/LICENSE",
+      "sha256": "63c571bce52c75959b83112b017ed721b564df47a079b10549a3456e70776751"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/limits.h",
+      "sha256": "08bb0b62e68e44b5445d9925bb94b4a15ea3c3ab8ece9f4dc2f951402f6f7ef7"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/stddef.h",
+      "sha256": "bc0c6efd61dcd5d8cae353013aeac61b7759d1e6265fa0658313638d09a6a518"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/README",
+      "sha256": "26a5ad293414b060cbc9dfcff2a9bd2f46a7676cfe358ffdc9d20ee52ed438ed"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/stdbool.h",
+      "sha256": "723d669fbf68ec1dbcc3a4cbe5deac19b5034fa87c4ae860261fb5c4e031eb3a"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/iso646.h",
+      "sha256": "ac53cc4e50f3d416e8d17e2aa4b11790889116240d5cd1ec55f399cf2c15a14e"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/stdarg.h",
+      "sha256": "db64a56129ba1ff854f5be18222bf3a7832688e583eaddb0b300c98d15bdd999"
+    },
+    {
+      "path": "kernel/boot/limine/freestnd-c-hdrs-0bsd/stdint.h",
+      "sha256": "9009b67381d715bddb5b7d82da0c19b1e0e220f86ace00fa33d8a6f7c9c49697"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/README.efilib",
+      "sha256": "05ac08e3c5cc83f2bc60606114471aeb5b3c76989c933c6766e2b5dd112ba0ec"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/README",
+      "sha256": "76d7c7889294c8142c0b3bd0391577510e01029e1acba8fdc4b3b48af44c8e0d"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/COPYING",
+      "sha256": "aa67461d5ed9c456e0482afad3f224dc2c20b57e0bf50bf84746f1c06b7f72b7"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/.gitignore",
+      "sha256": "8f2ed58c9717460348817440944c752eb61b274e81746e8e02ae80fddfa770fa"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi.h",
+      "sha256": "71fb41de7780582698f4262b1a80bf238e868c863c50813deb879150bd3f8272"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/crt0-efi-loongarch64.S",
+      "sha256": "e3e7b10356d11c4bcb45155d0a61af89cceb0c63a2abb9498c9ebb99b5b547cb"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/elf_x86_64_efi.lds",
+      "sha256": "354b8bb082f60eac50ca3e286730667f2a6b9d707e3be099dbf1c38fdc228d02"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/reloc_loongarch64.c",
+      "sha256": "02f1c5472ea1ebe2975d010b3d4b5bc2621c0095039e7eddfe218f101f75ac81"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/crt0-efi-riscv64.S",
+      "sha256": "e2d83b1259a7adaa921b6aec58d4a16d6cf3437bc7bf6b13673ba53197c5d674"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/reloc_x86_64.c",
+      "sha256": "b0e3fe53d18da7361c3a0729439af51dbff48762cb94a292f7e17a0291b976c3"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/reloc_aarch64.c",
+      "sha256": "045d1b16ac48c1e005399d98cbfe943e908dcdb45b14875b29ea691459dedd01"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/elf_aarch64_efi.lds",
+      "sha256": "e250484e144d34831bbd5f21d1a33e12a09ea850508243639eca30996bcc556b"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/crt0-efi-x86_64.S",
+      "sha256": "f2279708b11d76bd7679f3a3ebb2b8d8a32a6f79a1acc2d39bdb527a298c405e"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/crt0-efi-aarch64.S",
+      "sha256": "a342a8e9f190dcb32a87a8ad62ddfe828a0042804a0f024f3df95a02655eb25e"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/nyu-efi.mk",
+      "sha256": "6f2adde982bc2d6df8495fda0f7f239f8e38ff51505f2be3f38bf50f678528b4"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/crt0-efi-ia32.S",
+      "sha256": "cd78e01880e03311d6d42c084e7ebed2c9dae82facbcc492a1c9e31da66396e0"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/reloc_riscv64.c",
+      "sha256": "64c5394340633035ecb89bd7db25c7c98e4708da4fcb515d4f12d15fda061a42"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/elf_ia32_efi.lds",
+      "sha256": "7ff110ffe8ddb52939e203e2bd55ef4993d25a599aaa1690663e660dffc49de9"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/reloc_ia32.c",
+      "sha256": "5d9063cb256ce256b922697287e0f1b588159e7fc21f7b695092e0fdd0ec4378"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/elf_loongarch64_efi.lds",
+      "sha256": "5ccb11b07b30df6e267892411d421739ba93288da462f2f046dbb5788ba76016"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/src/elf_riscv64_efi.lds",
+      "sha256": "46cef459c6b552dec2a582f225d0fd24a6d676414b28c2a94e2482464fb8b901"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/elf_common.h",
+      "sha256": "bfa4f72f5f238ebf8e0563ccead2b014a58905345ba4b9d7978fa78b5e0386c5"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efierr.h",
+      "sha256": "db030af0b5302c9dd38cd87f7dbe15299e323f70f5bda47efc2dec400dd3cddf"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efitcp.h",
+      "sha256": "9c93062114c662b5671e2736f47d209cd92bb01524af368d47d838310f55b9b9"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/eficon.h",
+      "sha256": "be27628d6c744533199e56be2d8de4d7ef5e7c2fed07d3d71e04b8a4e42651d8"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efinet.h",
+      "sha256": "85ca6473b5708d38289e192d027c651335a402812f0276f260495e277f428a3f"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/elf64.h",
+      "sha256": "f0366f31b6c2be4327fc2aa90ef7f3ad3ee0fdef2f25b8772178740e2f946772"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efipciio.h",
+      "sha256": "1cc83fa135df08e11a9d239bdf0f5918031fe9de2970c54e9f008c65abf01ccb"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efigpt.h",
+      "sha256": "b597e0bbdfa885c7e49de2f7c2ece721f8febbb891f3c14f8e96d8ec4b1ca727"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/pci22.h",
+      "sha256": "58a6134cef56bd1da3dd0c5c866ac908948dd8abd3c187303a463e72ab106dcf"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efi_nii.h",
+      "sha256": "7866c20a4c71f9b544cc31de5df7bde88979ff357bf90fcede3f3e9e569b970c"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efiser.h",
+      "sha256": "cd340eee6bd0cbab0a87a3b490aab543b844b22baf15a7384587a383475b7b2d"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/elf.h",
+      "sha256": "1627ad0b6f5c2f93605fff7d64a2fe37f946d65265f54c8899721e0225a3e8f7"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efiui.h",
+      "sha256": "24159efe913e20fba7a1e0c160ca0063827b837054d009709b39da3f2605b337"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efilink.h",
+      "sha256": "45a75ab6aaa19685f4cc0c85a658d3837494844ac6016e21d6cdda4d37f9c64d"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/elf32.h",
+      "sha256": "269e2433eb64f4659f72af3fff401fda2a3eecda3d3e025bc20c167ac07e5e36"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efiprot.h",
+      "sha256": "104f00eeb44ddb9e19219fb0f058e8773a80924805a3ed465ce73c6466bbe67e"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efiip.h",
+      "sha256": "f1210733219ea1892e4d110ccc6f3ce5e29403b87de9a9b72e1d34887896cfac"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efidevp.h",
+      "sha256": "c5ff1f97cb25ae68c2e61b0c422a7b075e97acfc0edbf0e42230f686885aba52"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efipart.h",
+      "sha256": "f07dfa8796bd87faaca38f5e64959014fbed232c6af8e5c89ff78e4174ceb47d"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efiapi.h",
+      "sha256": "e4f9eb5027d64d4d9e9106d53c094364c9e022bea9441e7438877a75751fcb5b"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efidebug.h",
+      "sha256": "0e265df3cb8357f9606c10b90f0f6354a9e2b21675ecbc1c044174257c0c7db8"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efishell.h",
+      "sha256": "913606e768d612b520aada45c188045cf439287b22ba8d849ec6f0b6d684b512"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efimp.h",
+      "sha256": "ad7aee189d85c919ef40424a963d5145c9b7ee91cc1e6613e65be1b318ce5e7f"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efi_pxe.h",
+      "sha256": "5ef4e0d99d56561417a37427279f00b8cf8e267654bbfda1ff0e2b1d141b799a"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efifs.h",
+      "sha256": "6542126a07cdd70d1954230b11e4ed9ecbe18c2e0eb6ce7d4af81ea2a14143c7"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efipoint.h",
+      "sha256": "b68186c7b6b407097589c39f1d28790f84a0128a870160bdb3bbd5d9253a53a6"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/libsmbios.h",
+      "sha256": "02b162f8a851f85ac57880723e39f2305799d0efa345cc3cc4a61558c37f01d8"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/romload.h",
+      "sha256": "5e87e6afab9a355fdd614be9e4e448967dc73a135068bc1a62485ba03fa87d34"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/eficonex.h",
+      "sha256": "1cb2108efe07e8d57e0f7ecb8f5b06060dc3b63919013a9d6c81b587d2d997c1"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efidef.h",
+      "sha256": "35d3dd768d2d20e7e323b272e926f0197db9eacc26a241478a98ce15d4021069"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efishellintf.h",
+      "sha256": "ecde3702c1c1bf895d7791e865c5ff3ce8112f8afa3b586807a2107086241bc0"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efiudp.h",
+      "sha256": "9086354958e3dc4002e072dd26e3df314352f07fa5eb08b1cce53e78dc203f62"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/efipxebc.h",
+      "sha256": "951468bf70864073c6daa03dea1bd4003614561d32577101338fa97f68c307e2"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/eficompiler.h",
+      "sha256": "6552a58e95f022c525f091e0ee30e8bd231bed247e776205d38aa26ccc4f2c2c"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/riscv64/efibind.h",
+      "sha256": "85fc9316320b00170ae8907db250273b9413dd2f532cb6763149ca337b9f9795"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/loongarch64/efibind.h",
+      "sha256": "caa202b077372fcb6d059104daf288c610ae3496764d78f3457eee275716c8b7"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/eficonsplit.h",
+      "sha256": "54dfea87161432f61248639d9e2b10a6c03c207e125a81bc57156520d4b44020"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/vgaclass.h",
+      "sha256": "a2b586e115af7673d39749078d39d2edf24b9b5aaab64a2c6f05dd286e24cfbe"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/adapterdebug.h",
+      "sha256": "66eae30aeb780f193f7c75db6272a7b4e1464f5f6f067681b8136fc84e06f1e7"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/legacyboot.h",
+      "sha256": "c33156b3dd9ec7c3d0fccc07f6888e250e8af4d167a986323395ce8efe12d653"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/efivar.h",
+      "sha256": "27737da72ed706758c17be64b927d438be0f0fa5337a3fcb994ad48a79c3d8b8"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/intload.h",
+      "sha256": "b1e0cd8d4b62e8d7c3a53b5a9b14e43659908852a6d7cedd34ce7e58e08e4047"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/readme.txt",
+      "sha256": "1b4c732ced4fe37239b32a75e2846a4d0c32df9a199ae530e0c8d30ec3a914a3"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/piflash64.h",
+      "sha256": "bd13d24390c18b65e3467192a343b40fb78a19e9e5e062217a920a50400ca8e4"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/efidbg.h",
+      "sha256": "76c3f769cfbcf4aa0ff058e085a2128c263d442bd359d5e9409463b828fb95d1"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/ia32/efibind.h",
+      "sha256": "8354acc37fb0a6616d96275635bbede1b472c4eb729e5613b202ac141bae8642"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/ia32/pe.h",
+      "sha256": "e5e17eef2e82dd3c13ce2d28434b7499cdab4d7a611d63dea09623bc61cef35e"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/aarch64/efibind.h",
+      "sha256": "9c0dec4347b719562a2bbfc1e9b415fbdfbb5177eb4567d8d91721bf47ea4070"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/x86_64/efibind.h",
+      "sha256": "1e3a6fd7e65e4240f663d11ac825af51332085fac5f28d312e82f95c42352504"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/x86_64/pe.h",
+      "sha256": "a8126999ee62c0c46e37b383d30063cdc3a4e40289d108d4b2999c5b738cb8f7"
+    },
+    {
+      "path": "kernel/boot/limine/nyu-efi/inc/efi/protocol/riscv/efiboot.h",
+      "sha256": "6b2b471c406fde86c70c54545a413dd6ea574fb37ec8d9ced15d334c190684a2"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/flanterm.c",
+      "sha256": "efcacd21c56277d314ad40545e3375863050ef349770de2c59245876a67f8eab"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/LICENSE",
+      "sha256": "201cea7095834beb9eed543928cd74ee90d456489a42aa05d6201fac0c5e36c6"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/README.md",
+      "sha256": "4eb0ef2cf916b01d701cf6ed1d6ec6906647716b2b9062baac2853e99698310b"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/flanterm.h",
+      "sha256": "43e010138e809ed0b6b0dd11d9c48d3a098249815b19b9590aa0c2f8f893f083"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/.gitignore",
+      "sha256": "563ced079ec0a6beb9c19fe4188aa3df5041d6ab8408d56cf1876669f7bedd01"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/backends/fb.c",
+      "sha256": "afa66d37240a395bd08a9c4e3158d9a68f085d88631978bfbe1f899f6146d6b8"
+    },
+    {
+      "path": "kernel/boot/limine/common/flanterm/backends/fb.h",
+      "sha256": "97ea4958dac2dba571bead0d9f4b5b12395bb0f8673be45ebd7c7a93260f4348"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_empty_tree.c",
+      "sha256": "f3cdbfa1bcc86cc841544fee5a16c2f66a4da86b1065eaadab9700addb858369"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_overlay.c",
+      "sha256": "7090d1ecd02dcb31c34e300ee2c7ca5d6bdd031cd913d8275670c6d817c14a0e"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/libfdt_env.h",
+      "sha256": "273bb264cacd60bb005cfa558bee084558469b9107eaf40d7e1362571ed1bc94"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt.c",
+      "sha256": "3cbcd38b08f16025a81086dbf24fb920fb752435dcb9d852595d407b1d09dd9e"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_strerror.c",
+      "sha256": "4a1de9eb7eadefe07cfe53c238785aa9bdd54e5387903c2faa7e42006027c137"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_wip.c",
+      "sha256": "a26966b2d991b432473f5c7f6740a3db97ae51313da0ad9eba56048d56c06c73"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_rw.c",
+      "sha256": "dd7c00cd8c23638a934b20f902ac94dbd75c752455549f55b6a7baf30d51daea"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/libfdt_internal.h",
+      "sha256": "7c29a6e30115cdd0a30fb4014c7674ead0d4bd39b9989bed46acb4f838bbd4e8"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_addresses.c",
+      "sha256": "11ac9fb9f20f798483bc1e9e2835b79ef110e55ed7114e20337e59a1b6f4125f"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt.h",
+      "sha256": "60269146c0f49a3da5e260763f4c59ff3257bc1ca01d0b11784ded6d2cb07492"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_ro.c",
+      "sha256": "69e99486680db4aa7abc9e8a4bc64025084e84f1fb565f6efe8a9246f61fd936"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_sw.c",
+      "sha256": "e9d193f023880f4359c3ed9954d678b51a87b1d66b783318a9d69a8122378122"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/libfdt.h",
+      "sha256": "80896cd91605fc60703328b2422f6bd29b1e2cba13a72d5953c934c0b28108a8"
+    },
+    {
+      "path": "kernel/boot/limine/common/libfdt/fdt_check.c",
+      "sha256": "17475451c6fece9b27097b3a3709540299e2316ca33a1c37605b97230ff31c7e"
+    },
+    {
+      "path": "kernel/boot/limine/common/lib/stb_image.h",
+      "sha256": "7fbd5e0075020712b60cd4f58808fae88d656188e3d88c28b4493e35491b821f"
+    },
+    {
+      "path": "kernel/boot/limine/decompressor/tinf/tinfgzip.c",
+      "sha256": "2bc4d96e6b74dbb6d04e5bee8ed24e5094f83b41b9e4fc08bbcb292f7e3a5bab"
+    },
+    {
+      "path": "kernel/boot/limine/decompressor/tinf/tinflate.c",
+      "sha256": "0762452ff6f5e7382780344d03035bf2ff75fb4cfda4d9b356c09e4683566569"
+    },
+    {
+      "path": "kernel/boot/limine/decompressor/tinf/tinf.h",
+      "sha256": "842419f5718223128f59a666e4dedf4e0049a8a70295bdf93434cd41b700d6e3"
+    },
+    {
+      "path": "kernel/boot/limine/tinf/LICENSE",
+      "sha256": "f39b507b81b9ba1edce7fe742bbd68fda4b852063ce7299274ae97991d48814b"
+    },
+    {
+      "path": "kernel/boot/limine/dtc/GPL",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    },
+    {
+      "path": "kernel/boot/limine/dtc/BSD-2-Clause",
+      "sha256": "6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd"
+    }
+  ]
+}

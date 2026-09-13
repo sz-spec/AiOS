@@ -1,0 +1,143 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:a3e7b1c4-9f2d-4e8a-b6d1-7c3f5a0e9d42",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-04-06T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "VOS3",
+        "name": "manual-sbom-gen",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "vos3-frontend",
+      "version": "1.0.0",
+      "purl": "pkg:npm/vos3-frontend@1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "next",
+      "version": "14.2.25",
+      "purl": "pkg:npm/next@14.2.25",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "react",
+      "version": "18.3.1",
+      "purl": "pkg:npm/react@18.3.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "react-dom",
+      "version": "18.3.1",
+      "purl": "pkg:npm/react-dom@18.3.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "convex",
+      "version": "1.13.0",
+      "purl": "pkg:npm/convex@1.13.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "@clerk/nextjs",
+      "version": "5.0.0",
+      "purl": "pkg:npm/%40clerk/nextjs@5.0.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "yjs",
+      "version": "13.6.0",
+      "purl": "pkg:npm/yjs@13.6.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "y-monaco",
+      "version": "0.1.6",
+      "purl": "pkg:npm/y-monaco@0.1.6",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "@monaco-editor/react",
+      "version": "4.6.0",
+      "purl": "pkg:npm/%40monaco-editor/react@4.6.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "@codesandbox/sandpack-react",
+      "version": "2.19.0",
+      "purl": "pkg:npm/%40codesandbox/sandpack-react@2.19.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "@codesandbox/sandpack-themes",
+      "version": "2.0.21",
+      "purl": "pkg:npm/%40codesandbox/sandpack-themes@2.0.21",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "@types/node",
+      "version": "20.11.0",
+      "purl": "pkg:npm/%40types/node@20.11.0",
+      "scope": "optional"
+    },
+    {
+      "type": "library",
+      "name": "@types/react",
+      "version": "18.2.48",
+      "purl": "pkg:npm/%40types/react@18.2.48",
+      "scope": "optional"
+    },
+    {
+      "type": "library",
+      "name": "@types/react-dom",
+      "version": "18.2.18",
+      "purl": "pkg:npm/%40types/react-dom@18.2.18",
+      "scope": "optional"
+    },
+    {
+      "type": "library",
+      "name": "eslint",
+      "version": "8.56.0",
+      "purl": "pkg:npm/eslint@8.56.0",
+      "scope": "optional"
+    },
+    {
+      "type": "library",
+      "name": "eslint-config-next",
+      "version": "14.2.25",
+      "purl": "pkg:npm/eslint-config-next@14.2.25",
+      "scope": "optional"
+    },
+    {
+      "type": "library",
+      "name": "rimraf",
+      "version": "5.0.10",
+      "purl": "pkg:npm/rimraf@5.0.10",
+      "scope": "optional"
+    },
+    {
+      "type": "library",
+      "name": "typescript",
+      "version": "5.3.3",
+      "purl": "pkg:npm/typescript@5.3.3",
+      "scope": "optional"
+    }
+  ]
+}

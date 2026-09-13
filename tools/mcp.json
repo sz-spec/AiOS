@@ -1,0 +1,39 @@
+{
+  "$schema": "https://spec.modelcontextprotocol.io/schemas/2025-06-18/mcp.json",
+  "name": "vos3-sovereignty",
+  "version": "1.0.0",
+  "description": "VOS3 kernel sovereignty primitives as MCP tools. Provides transparency (MMR audit chain), attestation (X-VOS3-Attestation), isolation (slot ZOMBIE quarantine), and routing decisions to any MCP-compatible client.",
+  "vendor": "VOS3 Project",
+  "license": "MIT",
+  "homepage": "https://github.com/sz-spec/vos4",
+  "transport": "stdio",
+  "command": "python3",
+  "args": ["-u", "tools/vos3_mcp_bridge.py"],
+  "tools": [
+    "vos3_mmr_root",
+    "vos3_kernel_status",
+    "vos3_npu_topology",
+    "vos3_driver_pressure",
+    "vos3_ktext_hash",
+    "vos3_attest_request",
+    "vos3_optimal_model",
+    "vos3_eu_compliance_check",
+    "vos3_isolate_zone",
+    "vos3_seal_adapter",
+    "vos3_memory_status",
+    "vos3_transparency_proof"
+  ],
+  "claude_desktop_install_snippet": {
+    "mcpServers": {
+      "vos3": {
+        "command": "python3",
+        "args": ["-u", "/path/to/VOS3/tools/vos3_mcp_bridge.py"]
+      }
+    }
+  },
+  "documentation": {
+    "kill_list_priority": "P0-A",
+    "spec_reference": "docs/strategy/COMPETITIVE_LANDSCAPE_APRIL_2026.md",
+    "rationale": "MCP won the universal AI driver standard war. VOS3 cannot afford to be locked out of an ecosystem with 10,000+ MCP servers under Linux Foundation governance. This bridge surfaces VOS3's sovereignty primitives to that ecosystem with no native dependency."
+  }
+}

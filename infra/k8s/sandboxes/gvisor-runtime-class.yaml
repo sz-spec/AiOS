@@ -1,0 +1,18 @@
+# Sprint 15 / Item C8 — RuntimeClass for the gVisor runtime
+# Apply once per cluster.
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: gvisor
+  labels:
+    vos3.io/component: agent-runtime
+    vos3.io/sprint: "15"
+handler: runsc
+scheduling:
+  nodeSelector:
+    kubernetes.io/os: linux
+    vos3.io/gvisor-installed: "true"
+overhead:
+  podFixed:
+    memory: "128Mi"
+    cpu: "100m"

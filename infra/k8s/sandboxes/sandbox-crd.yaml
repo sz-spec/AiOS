@@ -1,0 +1,157 @@
+# Sprint 15 / Item C8 — Agent Sandbox CRD
+# Source: https://kubernetes.io/blog/2026/03/20/running-agents-on-kubernetes-with-agent-sandbox/
+# Spec status: draft (SIG Apps, March 2026; final expected late Q3 2026)
+#
+# Apply once per cluster:
+#   kubectl apply -f sandbox-crd.yaml
+#
+# Fields mirror the SIG-Apps documented schema. If the upstream spec
+# changes before final release, update this file and bump the version
+# field. The vOS gvisor_loader.py validates per-deployment overrides
+# against backend/sandbox/gvisor_config.json's baseline policy.
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: sandboxes.apps.k8s.io
+  labels:
+    vos3.io/component: agent-sandbox
+    vos3.io/sprint: "15"
+spec:
+  group: apps.k8s.io
+  scope: Namespaced
+  names:
+    plural: sandboxes
+    singular: sandbox
+    kind: Sandbox
+    shortNames:
+      - sb
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              required:
+                - runtime
+              properties:
+                runtime:
+                  type: string
+                  description: "Sandbox runtime selector. vOS uses 'gvisor-magi' for MAGI-isolated per-agent sentries."
+                  enum:
+                    - gvisor
+                    - gvisor-magi
+                    - kata
+                    - kata-cc
+                isolationMode:
+                  type: string
+                  enum:
+                    - per-agent
+                    - per-user
+                    - shared
+                  default: per-agent
+                policyConfigMapRef:
+                  type: object
+                  description: "Optional ConfigMap holding the gVisor policy JSON (mirror of backend/sandbox/gvisor_config.json)."
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                    key:
+                      type: string
+                      default: "gvisor_config.json"
+                networkPolicy:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum: [sandbox, host, none]
+                      default: sandbox
+                    egressAllowlistEnv:
+                      type: string
+                      default: "VOS3_EGRESS_ALLOWLIST"
+                limits:
+                  type: object
+                  properties:
+                    memoryMB:
+                      type: integer
+                      minimum: 64
+                      maximum: 65536
+                    cpuQuotaPercent:
+                      type: integer
+                      minimum: 10
+                      maximum: 1600
+                    wallClockSeconds:
+                      type: integer
+                      minimum: 1
+                    openFiles:
+                      type: integer
+                      minimum: 1
+                    processes:
+                      type: integer
+                      minimum: 1
+                attestation:
+                  type: object
+                  properties:
+                    rtmrIndex:
+                      type: integer
+                      minimum: 0
+                      maximum: 3
+                      description: "Which RTMR index the sentry-hash extends. vOS default = 3 (custom platform measurements)."
+                    complianceStoreEndpoint:
+                      type: string
+                      default: "/api/compliance/audit/sandbox-start"
+            status:
+              type: object
+              properties:
+                phase:
+                  type: string
+                  enum:
+                    - Pending
+                    - Ready
+                    - Degraded
+                    - Failed
+                sentryHashSHA256:
+                  type: string
+                  description: "Hex SHA-256 of the sentry binary + policy hash. Cross-references the RTMR extend."
+                lastTransitionTime:
+                  type: string
+                  format: date-time
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                        enum: ["True", "False", "Unknown"]
+                      reason:
+                        type: string
+                      message:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+      additionalPrinterColumns:
+        - name: Runtime
+          type: string
+          jsonPath: .spec.runtime
+        - name: Isolation
+          type: string
+          jsonPath: .spec.isolationMode
+        - name: Status
+          type: string
+          jsonPath: .status.phase
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      subresources:
+        status: {}

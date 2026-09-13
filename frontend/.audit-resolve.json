@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "GHSA-qx2v-qp2m-jg93": {
+      "decision": "ignore",
+      "madeAt": 1746316800000,
+      "expiresAt": 1751587200000,
+      "reason": "Bundled inside next@16.2.4. VOS4 processes only trusted project CSS at build-time. CVE-2026-41305 requires attacker-controlled CSS re-stringification, which is not applicable to our pipeline. Will upgrade to next@16.3.0 GA once released."
+    }
+  }
+}
