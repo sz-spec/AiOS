@@ -1,0 +1,5 @@
+{
+  "scripts/native_clean_qualification.py": "a0a94e463ad3a8b85884566c90394c48cb78fb75a7cc7c7796432088056a148e",
+  "scripts/native_boot_smoke.py": "49dec33814bc218c227f6342656d65365f424c3b3526df73e79c734172fb5d15",
+  "scripts/test_native_boot_smoke.py": "399e886848e26f418f26a113db4b196b9c46572ef5771c4b8c3dacf11ff418a5"
+}

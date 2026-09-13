@@ -6,7 +6,7 @@ programs, backend, frontend, desktop shell, SDKs and deployment tools.
 
 **Status: integration and release qualification in progress. This is not yet
 a final release.** Native BIOS/UEFI boot reaches user-space setup in QEMU,
-including two CPUs on UEFI and four on BIOS; a disposable two-CPU VM completes
+including one and four CPUs on both firmware paths; a disposable two-CPU VM completes
 the keyboard-driven wizard. Full kernel isolation, concurrent user workloads
 on secondary CPUs, persistent installation, hosted workflows
 and remaining legacy capabilities still require work and validation.
@@ -28,8 +28,7 @@ From this directory, with `x86_64-elf-gcc`/binutils, Make, Python 3, NASM,
 mtools and xorriso installed:
 
 ```sh
-bash infra/build_limine.sh
-make -C kernel BUILD_DIR=build/native PRODUCTION=1 HEADLESS_AUDIT=0 iso
+make native -j4
 ```
 
 The bootloader builds offline from vendored source. `dist/vos5.iso` contains
@@ -47,8 +46,10 @@ Use separate build directories for concurrent configurations.
 python3 scripts/native_boot_smoke.py --iso dist/vos5.iso --output /tmp/vos5-bios-check
 ```
 
-The smoke gate requires output from the actual user-space setup program and
-rejects panics, process faults and exec failures. Multi-CPU gates also verify the requested online CPU count; see the evidence and hardware scope below.
+The smoke gate requires physical/virtual memory initialization, the scheduler
+transition and output from the actual user-space setup program. It rejects
+panics, process faults and exec failures, verifies the exact online CPU count
+and checks ISO identity before and after observation.
 For UEFI, also supply `--firmware-code` and `--firmware-vars`; the variables
 template is copied before use. No physical disk is attached by the smoke test.
 
@@ -67,7 +68,10 @@ trees by path and SHA-256. Its ignored JSON output is a comparison aid, not a
 secret scan or proof of completed migration.
 
 See [native boot evidence](docs/design/NATIVE_BOOT_STATUS.md) for current
-results and remaining release gates. No remote repository is configured.
+results and remaining release gates, and the
+[clean-build qualification](docs/design/evidence/native-clean-build-qualification.md)
+for the fresh-source BIOS/UEFI matrix. The canonical remote is
+`https://github.com/sz-spec/AiOS.git`.
 
 ### Unified build and dependency maintenance
 

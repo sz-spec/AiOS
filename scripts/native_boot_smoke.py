@@ -9,17 +9,37 @@ import subprocess
 from pathlib import Path
 
 
-def classify_serial(raw, exit_status):
-    """Do not confuse kernel progress messages or a reboot with a live wizard."""
+def classify_serial(raw, exit_status, requested_cpus=1):
+    """Require every observed boot stage; this is not an isolation classifier."""
     clean = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', raw)
     failures = [marker for marker in ('PANIC', 'SIGSEGV', 'SetupWizard: Failed to exec',
                                       'uaccess address-space mismatch')
                 if marker in clean]
-    wizard_output = 'The AI-Native Operating System' in clean
-    return dict(scheduler='Starting scheduler' in clean,
-                wizard_output=wizard_output, failures=failures,
-                passed=(exit_status == 'observation_timeout' and wizard_output
-                        and not failures))
+    stages = {
+        'pmm': 'PMM Statistics:' in clean,
+        'vmm': 'VMM: Initialization complete' in clean,
+        'scheduler': 'Starting scheduler' in clean,
+        'wizard_output': 'The AI-Native Operating System' in clean,
+    }
+    online = re.findall(r'(?:Initialization complete:|SMP:)\s*(\d+) CPUs online', clean)
+    online_cpus = int(online[-1]) if online else None
+    for stage, present in stages.items():
+        if not present:
+            failures.append('missing boot evidence: ' + stage)
+    if online_cpus != requested_cpus:
+        failures.append('requested CPUs did not all report online')
+    return dict(**stages, online_cpus=online_cpus, failures=failures,
+                passed=(exit_status == 'observation_timeout' and not failures))
+
+
+def bind_artifact_identity(result, before, after):
+    """Prevent a log being attributed to an ISO changed during observation."""
+    result.update(iso_sha256=before, iso_sha256_after=after,
+                  artifact_unchanged=before == after)
+    if before != after:
+        result['passed'] = False
+        result['failures'].append('ISO changed during observation')
+    return result
 
 
 def main():
@@ -46,6 +66,7 @@ def main():
         shutil.copyfile(args.firmware_vars, variables)
         cmd += ['-drive', 'if=pflash,format=raw,readonly=on,file=' + str(args.firmware_code.resolve()),
                 '-drive', 'if=pflash,format=raw,file=' + str(variables)]
+    iso_before = hashlib.sha256(args.iso.read_bytes()).hexdigest()
     with (args.output / 'serial.log').open('wb') as log:
         try:
             proc = subprocess.run(cmd, stdin=subprocess.DEVNULL, stdout=log,
@@ -56,15 +77,10 @@ def main():
     raw = (args.output / 'serial.log').read_text(errors='replace')
     result = dict(firmware='uefi' if args.firmware_code else 'bios',
                   cpu=args.cpu, smp=args.smp, ram_mb=1024, acceleration='tcg',
-                  iso_sha256=hashlib.sha256(args.iso.read_bytes()).hexdigest(),
                   observation_seconds=args.seconds, exit_status=exit_status,
-                  **classify_serial(raw, exit_status),
+                  **classify_serial(raw, exit_status, args.smp),
                   scope='VM boot to user-space setup; not installation, AI inference, or physical hardware qualification')
-    online = re.findall(r'(?:Initialization complete:|SMP:)\s*(\d+) CPUs online', raw)
-    result['online_cpus'] = int(online[-1]) if online else None
-    if args.smp > 1 and result['online_cpus'] != args.smp:
-        result['passed'] = False
-        result['failures'].append('requested CPUs did not all report online')
+    bind_artifact_identity(result, iso_before, hashlib.sha256(args.iso.read_bytes()).hexdigest())
     (args.output / 'result.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result, indent=2))
     return 0 if result['passed'] else 1

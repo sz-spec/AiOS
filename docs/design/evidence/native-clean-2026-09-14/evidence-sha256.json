@@ -1,0 +1,18 @@
+{
+  "bios1/result.json": "bbf27747e9755d2484867d88456570c108f51c47e57c874a47d107b0188763be",
+  "bios1/serial.txt": "7b68ff51ac31d0d5cd586eb72492d22e56f95063efc71fee850f3b81c99c7ee2",
+  "bios4/result.json": "cee315d4844d47045555c7a2a9927ed6cc32731239abdecb44587de1100034a6",
+  "bios4/serial.txt": "6076b76ab6cec6c2f184e9b791c60d3a37f73e782cf819ffd5f6e74aab47a83b",
+  "build.txt": "629b60504a6106081215b7548e1af2bb4842156891053f1710cef6e58647fe96",
+  "harness-manifest.json": "839ab91a0b05c823a5256d4856886091dd153f1b287c341002c98b0bb2109db2",
+  "initial-build.txt": "7c8f1cafb5aeabaa0f7e966c782db4990c2391e2e2bdb98d63a02df2801fbe9a",
+  "initial-failed-result.json": "65ee3fdcac612a193e13934a8488b561dcf33d986d7a8cf10f81611e238bc168",
+  "result.json": "387150b151697cec87bcd8048b603fe115b4ab5f45c55174440242a43600c448",
+  "secret-scan-review.json": "fbf4fc106fb44acef6915b0df2e0ab3a6039aa5b66dae7bb25563ed6350fea50",
+  "source-manifest.json": "7a9c519539c95d3e4e060070ffcecbd004ccc469db1f6993562cbbe8d15c188a",
+  "tool-versions.txt": "9c7ddbd55d3f5eb73aafebe79394b304da86628e878e5ccb6c3ed9962095ac20",
+  "uefi1/result.json": "38f1560d660aec78e18f5e77e8c89da1b5734e193ccc7d35c7972c0ef25f076a",
+  "uefi1/serial.txt": "06706a56c1bdfdcf3c096f81378722d594e814905afe87d75bd3b88c55f01dde",
+  "uefi4/result.json": "d1894f54b15694f03b335740d75f61062c3cd1fd4e2e5a8ca11da6aeb149bec0",
+  "uefi4/serial.txt": "1de476cb8c412cc93b8b34a1e4cc5dbcdeff60ff5f73ba1844da78bef6e85ca4"
+}

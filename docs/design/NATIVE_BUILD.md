@@ -7,6 +7,23 @@ explicitly rebuilds Limine after changing its source. Install the documented
 cross compiler, NASM, Python, xorriso and mtools first; this command does not
 install host dependencies or download them automatically.
 
+For the complete fresh-source build and BIOS/UEFI × 1/4 CPU qualification,
+with Docker, the prepared builder image, host QEMU and firmware installed:
+
+```sh
+python3 scripts/native_clean_qualification.py --output /tmp/vos5-clean-run
+```
+
+The output directory must not exist. The command archives committed `HEAD`
+(uncommitted edits are excluded), verifies absent project build outputs,
+resolves the builder to its immutable image ID, and executes `make native -j4`
+without network access. It boots the resulting ISO in four disposable VMs and
+writes source hashes, build output, serial logs and results under that directory.
+Use `--builder`, `--revision`, `--firmware-code` and `--firmware-vars` to select
+installed inputs; firmware defaults match the recorded macOS/Homebrew runner.
+See the [qualification report](evidence/native-clean-build-qualification.md)
+for exact identities, the initial harness failure and qualification limits.
+
 `BUILD_DIR` is relative to `kernel/`, defaults to `build/native-unified`, and
 should be a relative path without whitespace. The repository itself may have
 spaces in its absolute path. Use distinct build directories for concurrent
