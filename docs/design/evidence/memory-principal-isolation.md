@@ -39,3 +39,9 @@ Final combined run passed **73 tests** (68 existing API tests plus 5 isolation/t
 Legacy/internal DevMemory now resolves storage in this order: explicit `persist_dir`, trusted `VOS_DEV_MEMORY_DIR`, then the unchanged source-tree legacy default. The container must explicitly configure writable persistent storage; with the backend installed directly at `/app`, relying on source-tree-relative parent traversal would select `/data`. Root deployment configuration uses `VOS_DEV_MEMORY_DIR=/app/data/memory` and `VOS_MEMORY_TENANT_ROOT=/app/data/memory-tenants/v1`; a read-only image requires a writable owner-controlled mount at the configured data location. No data is migrated by setting these paths.
 
 The additional resolution test verifies environment precedence, explicit-path precedence and the unchanged fallback, without downloading an embedding model.
+
+## Persistence success signaling
+
+`DevMemory.add` now returns `None` when an initialized Chroma write throws, and does not silently write to JSON or return an apparently successful entry. JSON fallback remains available when the vector backend was not initialized. An inconsistent initialized/no-collection state also cannot return success.
+
+The focused seven-test suite passed after this correction (`/private/tmp/vos5-memory-write-failure-tests.log`). A new test uses an actual initialized Chroma collection, preserves an existing successful record, injects a write exception, verifies direct return `None` and actual HTTP 500, unchanged stored count, no JSON fallback file, and no private document/exception canary in logs. Restoring writes successfully persists another record. This proves failure signaling for the tested exception path, not transactional rollback if an external storage system commits and then reports failure.

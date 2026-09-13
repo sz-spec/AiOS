@@ -163,3 +163,32 @@ def test_explicit_memory_path_precedes_operator_environment(memory_api, monkeypa
     assert explicit.is_dir()
     monkeypatch.delenv("VOS_DEV_MEMORY_DIR")
     assert dev_memory._resolve_dev_memory_dir(None) == str(Path(dev_memory.__file__).parent.parent.parent / "data" / "memory")
+
+
+def test_chroma_write_failure_never_reports_success_or_falls_back(memory_api, monkeypatch, caplog):
+    pytest.importorskip("chromadb")
+    client, _ = memory_api
+    monkeypatch.setattr(dev_memory, "CHROMADB_AVAILABLE", True)
+    monkeypatch.setattr(dev_memory.DevMemory, "_get_embedding", lambda self, text: [1.0, 0.0, 0.0])
+    memory = dev_memory.get_user_dev_memory("alice")
+    assert memory._initialized and memory._collection is not None
+    first = memory.add("successful initial record")
+    assert first is not None and memory._collection.count() == 1
+    canary = "private failed document canary"
+    caplog.set_level("ERROR", logger="memory.dev_memory")
+
+    def reject_write(*args, **kwargs):
+        raise RuntimeError(canary)
+
+    with monkeypatch.context() as failing:
+        failing.setattr(type(memory._collection), "add", reject_write)
+        assert memory.add(canary) is None
+        response = call(client, "POST", "/store", json={"content": canary})
+        assert response.status_code == 500
+        assert memory._collection.count() == 1
+        assert memory.get_by_id(first.id)["content"] == "successful initial record"
+        assert not (Path(memory.persist_dir) / "memories.json").exists()
+        assert canary not in caplog.text
+        assert "RuntimeError" in caplog.text
+    final = memory.add("successful recovered record")
+    assert final is not None and memory._collection.count() == 2

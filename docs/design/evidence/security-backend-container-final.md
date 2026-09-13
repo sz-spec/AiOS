@@ -1,5 +1,10 @@
 # Independent backend container configuration review — 2026-09-14
 
+**Follow-up status:** the previously pending offline runtime gate is now closed
+on the corrected image, with independent security and invariant review. See
+[final runtime qualification](backend-runtime-qualification.md). The failed and
+interrupted attempts below are retained as history, not current gate status.
+
 Scope: final backend image and root Compose configuration, production JWT initialization, and integration of previously reviewed memory namespaces. Reviewer did not author the Docker/Compose, JWT production guard, or memory implementation. The earlier direct bcrypt migration was authored by this reviewer and is **not** independently audited by this document; its separate reviewer supplied that assessment. No production files were changed during this review. No applicable AGENTS.md was found in the workspace search.
 
 ## Configuration assessment

@@ -55,12 +55,13 @@ fix adds Socket.IO/Strawberry and required transitives without changing any
 previously resolved version. Actual final backend runtime qualification is
 tracked in the [container review](security-backend-container-final.md).
 
-The rebuilt backend image includes the corrected minimal profile and completed
-successfully with manifest-list digest
-`0bab617c63145ed5eedf11368f250f055d25dee63f446ef2aeae86cde1e3dd50`.
-The previous image's missing-Socket.IO failure is retained as discovery
-evidence. A successful strict startup of this replacement image has not yet
-been established; image construction alone does not close that gate.
+The final backend image includes the corrected minimal profile and fail-closed
+Chroma write handling. Image `4c9b1fe4be4ea44e9c86fe9b062dd67286a4bb137e8d01e4fa6d915972b91982`
+passed actual Uvicorn startup, authentication refusal, strict route discovery
+and SQLite/Chroma persistence across two different containers in 84.35 seconds.
+Independent reviewers accepted this bounded gate; 75 memory regressions and
+three runner cleanup tests passed. See [runtime qualification](backend-runtime-qualification.md)
+for exact inputs, evidence and cloud/model limitations.
 
 ## Remaining gates
 

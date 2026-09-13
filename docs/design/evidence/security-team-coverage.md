@@ -14,6 +14,7 @@ Reviews rotate between authors rather than creating a fictitious larger team.
 | Password migration | MCP agent | Rust agent | [Authentication review](independent-auth-migration-security.md) |
 | Production JWT configuration | Math/build agent | MCP agent and coordinator | Container review and focused startup tests |
 | Memory principal isolation and provenance | Rust agent | MCP agent | [Memory review](independent-memory-security.md) |
+| Backend runtime and restart persistence | Coordinator; Rust agent fixes write-failure signaling | MCP agent for security; math/build agent for invariants | [Final runtime qualification](backend-runtime-qualification.md) |
 | MCP authentication and cache | Rust and MCP agents | Coordinator and math/build agent, with existing independent review | [MCP independent review](security-mcp-independent.md) |
 | Frontend state and tests | Math/build agent and coordinator | Rust agent | [Frontend independent review](security-frontend-independent.md), [hosted final review](security-hosted-final-review.md) |
 | Rust desktop dependencies and cryptography | Rust agent | MCP agent | [Rust security review](dependency-security-rust.md) |
@@ -34,8 +35,8 @@ Neither task assignment nor a passing test closes an unrelated finding.
 
 ## Results from this review round
 
-- Memory: 74 tests passed after independent inspection of tenant paths, HTTP
-  provenance enforcement and content-log removal.
+- Memory: 75 tests passed after independent inspection of tenant paths, HTTP
+  provenance enforcement, content-log removal and failed-write signaling.
 - Production JWT configuration: 10 focused startup/password tests passed; a
   separate reviewer also checked real token verification between processes
   and wrong-key rejection.
@@ -43,8 +44,9 @@ Neither task assignment nor a passing test closes an unrelated finding.
   checked preserved port files and matched boot reports to the qualified ISO.
 - Backend: writable data/cache paths, explicit production mode and one worker
   address the observed read-only path and process-local JSON-lock constraints.
-  The final image built successfully; runtime status belongs to the linked
-  container report, not to the fact that a reviewer was assigned.
+  The corrected image passed actual startup, authentication refusal and local
+  SQLite/Chroma persistence across two containers. The linked runtime report
+  records independent review and limits; cloud/model operation is unqualified.
 - Dependency checks: five Python lock fingerprints and eight Node manifest/lock
   pairs pass. Known advisories remain open.
 - Frontend: current-source production compilation passed using the supported

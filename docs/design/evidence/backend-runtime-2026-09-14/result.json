@@ -1,0 +1,177 @@
+{
+  "run_id": "vos5-runtime-015890cb52ba",
+  "requested_image": "vos5-backend:runtime-qualified",
+  "passed": true,
+  "checks": [
+    {
+      "health": {
+        "services": {
+          "agent_registry": true,
+          "business_core": true,
+          "control_plane": true,
+          "mission_control": true,
+          "redis_checkpointer": false,
+          "workflow_engine": true
+        },
+        "status": "healthy",
+        "version": "3.1.0"
+      },
+      "phase": "http",
+      "protected_denials": [
+        403,
+        401,
+        401
+      ]
+    },
+    {
+      "dev_auth": false,
+      "openapi_paths": 457,
+      "phase": "inventory",
+      "read_only_root": true,
+      "router_groups": [
+        "agents",
+        "aiva",
+        "analytics",
+        "app_platform",
+        "billing",
+        "blueprints",
+        "bmad",
+        "chat",
+        "clerk",
+        "codegen",
+        "comments",
+        "compliance",
+        "design_system",
+        "developer_ecosystem",
+        "expert",
+        "feature_flags",
+        "files",
+        "gateway",
+        "github",
+        "inbox",
+        "kernel",
+        "memory",
+        "metrics",
+        "models",
+        "native_deploy",
+        "plugin",
+        "proactive",
+        "prompt",
+        "settings",
+        "team",
+        "template",
+        "terminal",
+        "theme",
+        "transparency",
+        "v_core",
+        "vcreator",
+        "version_control",
+        "vision",
+        "voice",
+        "vos"
+      ],
+      "source_sha256": {
+        "Dockerfile": "dfa55f4e61ff0968cd2b540614348529327dcf894fba2f185dc29c4cfa99c8e5",
+        "api/memory_routes.py": "6a774b79b965e6578349394ddb969eb315bbb7ab6938d5c2d4baafb3a114854b",
+        "app.py": "6c40e1392024a02ab5984a0de66270ce0cb98ed92e4a0cd6c614b92d48cfd430",
+        "config/secrets.py": "820691c00682854f7771224304b7953d768c503f4e3daa4c7b50651050a1b17b",
+        "core/database/sqlite_setup.py": "ed583e60827a6a326a5fa86427f1396a97ea5c794917f1ee34dedc38f6ffb52b",
+        "db/convex.py": "88f833d49689bb94cdf72edf048c95f463eec6b2932ae5d4469cf7bc13b3050b",
+        "memory/dev_memory.py": "f48e589ad371915ce24ae11e44edfda9cbe237fef5459d381e62fb81666faade",
+        "middleware/auth.py": "936142ab8e0a6f757f761eadc8aebcbfe44e1c983f1140ac842525045eb4512c",
+        "middleware/csrf.py": "04369cf59341f7f21bf7c45eefee59326b9e471ed9335b2d360dc4714768398f",
+        "requirements.lock": "ba2257b311d5039d8da6222f9b452adea23ffac79d1e574ef10063760bf269ee",
+        "router_registry.py": "286ae835dc8e3c3e8164e3b416eb303f50ae9778d83aa2a0908b616a75d61d84",
+        "startup.py": "808ba4a43ec95cbaa8cd1c5da69d13fadbd5b4990034c6e7b29edc8c2e88ae6c",
+        "tools/auth.py": "4d972415d8328b1829c878b7743afda1275af390044c24d19661490c8d61cd8b"
+      },
+      "uid": 1000
+    },
+    {
+      "missing_secret_refusals": [
+        "JWT_SECRET",
+        "VOS3_TAURI_IPC_SECRET",
+        "CLERK_SECRET_KEY",
+        "VOS_API_SECRET"
+      ],
+      "phase": "negative"
+    },
+    {
+      "chroma_persistence": true,
+      "embedding": "deterministic test adapter",
+      "marker_sha256": "130bc573d850afda9167c5e094730db054437cdeaf2a71a8bca3f662a8ffb6b0",
+      "memory_id": "2cf06e49a7dabc20",
+      "phase": "write",
+      "sqlite_row_verified": true,
+      "store_principal_noninterference": true
+    },
+    {
+      "health": {
+        "services": {
+          "agent_registry": true,
+          "business_core": true,
+          "control_plane": true,
+          "mission_control": true,
+          "redis_checkpointer": false,
+          "workflow_engine": true
+        },
+        "status": "healthy",
+        "version": "3.1.0"
+      },
+      "phase": "http",
+      "protected_denials": [
+        403,
+        401,
+        401
+      ]
+    },
+    {
+      "chroma_persistence": true,
+      "embedding": "deterministic test adapter",
+      "marker_sha256": "130bc573d850afda9167c5e094730db054437cdeaf2a71a8bca3f662a8ffb6b0",
+      "memory_id": "2cf06e49a7dabc20",
+      "phase": "read",
+      "sqlite_row_verified": true,
+      "store_principal_noninterference": true
+    }
+  ],
+  "cleanup": [
+    {
+      "container": "vos5-runtime-015890cb52ba-1",
+      "removed": true
+    },
+    {
+      "container": "vos5-runtime-015890cb52ba-2",
+      "removed": true
+    },
+    {
+      "volume": "vos5-runtime-015890cb52ba-data",
+      "removed": true
+    }
+  ],
+  "scope": "offline production startup and local persistence; no live cloud/model qualification",
+  "source_sha256": {
+    "Dockerfile": "dfa55f4e61ff0968cd2b540614348529327dcf894fba2f185dc29c4cfa99c8e5",
+    "requirements.lock": "ba2257b311d5039d8da6222f9b452adea23ffac79d1e574ef10063760bf269ee",
+    "app.py": "6c40e1392024a02ab5984a0de66270ce0cb98ed92e4a0cd6c614b92d48cfd430",
+    "startup.py": "808ba4a43ec95cbaa8cd1c5da69d13fadbd5b4990034c6e7b29edc8c2e88ae6c",
+    "router_registry.py": "286ae835dc8e3c3e8164e3b416eb303f50ae9778d83aa2a0908b616a75d61d84",
+    "memory/dev_memory.py": "f48e589ad371915ce24ae11e44edfda9cbe237fef5459d381e62fb81666faade",
+    "middleware/auth.py": "936142ab8e0a6f757f761eadc8aebcbfe44e1c983f1140ac842525045eb4512c",
+    "middleware/csrf.py": "04369cf59341f7f21bf7c45eefee59326b9e471ed9335b2d360dc4714768398f",
+    "tools/auth.py": "4d972415d8328b1829c878b7743afda1275af390044c24d19661490c8d61cd8b",
+    "api/memory_routes.py": "6a774b79b965e6578349394ddb969eb315bbb7ab6938d5c2d4baafb3a114854b",
+    "core/database/sqlite_setup.py": "ed583e60827a6a326a5fa86427f1396a97ea5c794917f1ee34dedc38f6ffb52b",
+    "config/secrets.py": "820691c00682854f7771224304b7953d768c503f4e3daa4c7b50651050a1b17b",
+    "db/convex.py": "88f833d49689bb94cdf72edf048c95f463eec6b2932ae5d4469cf7bc13b3050b"
+  },
+  "probe_sha256": "2451bccfa09747be27cedb13ddb98ed38fabe5abc15b534909d7b3bfb11087d2",
+  "phase_timeout_seconds": 240,
+  "docker_version": "29.2.1",
+  "image_id": "sha256:4c9b1fe4be4ea44e9c86fe9b062dd67286a4bb137e8d01e4fa6d915972b91982",
+  "distinct_container_ids": [
+    "95460818bb587f58bfcb5af27c15a16084af64c217a90d94adfb38d4e710a101",
+    "244a4e7d9d1ad6bb05e8a0f248f5ce2a839f09be19a3fc29e9c0a732a7a20475"
+  ],
+  "elapsed_seconds": 84.35
+}

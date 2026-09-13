@@ -402,12 +402,13 @@ class DevMemory:
                 return entry
             except Exception as e:
                 logger.error(f"Failed to add to ChromaDB: {type(e).__name__}")
+                return None
 
-        # Fallback: save to JSON file if nothing else worked
+        # JSON is only for a store that never initialized its vector backend.
         if not self._initialized:
             return self._save_to_json(entry)
 
-        return entry
+        return None
 
     def _read_json_memories(self) -> List[Dict[str, Any]]:
         path = Path(self.persist_dir) / "memories.json"
