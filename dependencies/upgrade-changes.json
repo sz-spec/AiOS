@@ -1,0 +1,1072 @@
+[
+  {
+    "ecosystem": "python",
+    "name": "fastapi",
+    "old": "fastapi>=0.136.0",
+    "new": "fastapi==0.141.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "starlette",
+    "old": "starlette>=0.49.3",
+    "new": "starlette==1.6.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "uvicorn",
+    "old": "uvicorn[standard]>=0.27.0",
+    "new": "uvicorn[standard]==0.52.4"
+  },
+  {
+    "ecosystem": "python",
+    "name": "websockets",
+    "old": "websockets>=12.0",
+    "new": "websockets==17.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "python-multipart",
+    "old": "python-multipart>=0.0.7",
+    "new": "python-multipart==0.0.32"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pydantic",
+    "old": "pydantic>=2.13.0",
+    "new": "pydantic==2.13.5"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pydantic-settings",
+    "old": "pydantic-settings>=2.2.0",
+    "new": "pydantic-settings==2.15.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "uvloop",
+    "old": "uvloop>=0.19.0; sys_platform != \"win32\"",
+    "new": "uvloop==0.22.1; sys_platform != \"win32\""
+  },
+  {
+    "ecosystem": "python",
+    "name": "httptools",
+    "old": "httptools>=0.6.0",
+    "new": "httptools==0.8.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "gunicorn",
+    "old": "gunicorn>=21.2.0; sys_platform != \"win32\"",
+    "new": "gunicorn==26.2.0; sys_platform != \"win32\""
+  },
+  {
+    "ecosystem": "python",
+    "name": "python-socketio",
+    "old": "python-socketio>=5.10.0",
+    "new": "python-socketio==5.16.4"
+  },
+  {
+    "ecosystem": "python",
+    "name": "strawberry-graphql",
+    "old": "strawberry-graphql[fastapi]>=0.219.0",
+    "new": "strawberry-graphql[fastapi]==0.327.7"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pyjwt",
+    "old": "PyJWT>=2.12.1",
+    "new": "PyJWT==2.14.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "cryptography",
+    "old": "cryptography<49.0,>=48.0.0",
+    "new": "cryptography==50.0.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "sqlalchemy",
+    "old": "SQLAlchemy>=2.0.20",
+    "new": "SQLAlchemy==2.0.52"
+  },
+  {
+    "ecosystem": "python",
+    "name": "rank-bm25",
+    "old": "rank-bm25>=0.2.2",
+    "new": "rank-bm25==0.2.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "psutil",
+    "old": "psutil>=5.9.0",
+    "new": "psutil==7.2.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "passlib",
+    "old": "passlib[bcrypt]>=1.7.4",
+    "new": "passlib[bcrypt]==1.7.4"
+  },
+  {
+    "ecosystem": "python",
+    "name": "authlib",
+    "old": "authlib>=1.6.7",
+    "new": "authlib==1.8.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "slowapi",
+    "old": "slowapi>=0.1.9",
+    "new": "slowapi==0.1.10"
+  },
+  {
+    "ecosystem": "python",
+    "name": "stripe",
+    "old": "stripe>=15.0.0",
+    "new": "stripe==15.6.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain",
+    "old": "langchain<2.0,>=1.0",
+    "new": "langchain==1.4.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-core",
+    "old": "langchain-core<2.0,>=1.0",
+    "new": "langchain-core==1.6.3"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-openai",
+    "old": "langchain-openai<2.0,>=1.0",
+    "new": "langchain-openai==1.6.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-anthropic",
+    "old": "langchain-anthropic<2.0,>=1.0",
+    "new": "langchain-anthropic==1.7.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-community",
+    "old": "langchain-community<1.0,>=0.4",
+    "new": "langchain-community==0.4.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langgraph",
+    "old": "langgraph<2.0,>=1.0",
+    "new": "langgraph==1.2.11"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchainhub",
+    "old": "langchainhub>=0.1.20",
+    "new": "langchainhub==0.1.21"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-google-genai",
+    "old": "langchain-google-genai<5.0,>=4.0",
+    "new": "langchain-google-genai==4.4.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-ollama",
+    "old": "langchain-ollama>=0.1.0",
+    "new": "langchain-ollama==1.1.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "crewai-tools",
+    "old": "crewai-tools>=0.14.0",
+    "new": "crewai-tools==1.15.21"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langchain-tavily",
+    "old": "langchain-tavily>=0.1.0",
+    "new": "langchain-tavily==0.2.18"
+  },
+  {
+    "ecosystem": "python",
+    "name": "tavily-python",
+    "old": "tavily-python>=0.3.0",
+    "new": "tavily-python==0.8.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "faiss-cpu",
+    "old": "faiss-cpu>=1.7.4",
+    "new": "faiss-cpu==1.15.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "chromadb",
+    "old": "chromadb>=0.5.0",
+    "new": "chromadb==1.5.9"
+  },
+  {
+    "ecosystem": "python",
+    "name": "psycopg2-binary",
+    "old": "psycopg2-binary>=2.9.9",
+    "new": "psycopg2-binary==2.9.13"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pgvector",
+    "old": "pgvector>=0.2.4",
+    "new": "pgvector==0.5.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "sentence-transformers",
+    "old": "sentence-transformers>=2.7.0",
+    "new": "sentence-transformers==6.0.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "networkx",
+    "old": "networkx>=3.0",
+    "new": "networkx==3.6.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "beautifulsoup4",
+    "old": "beautifulsoup4>=4.12.0",
+    "new": "beautifulsoup4==4.15.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "lxml",
+    "old": "lxml>=5.0.0",
+    "new": "lxml==6.1.3"
+  },
+  {
+    "ecosystem": "python",
+    "name": "tiktoken",
+    "old": "tiktoken<1.0,>=0.8",
+    "new": "tiktoken==0.14.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "redis",
+    "old": "redis>=5.0.0",
+    "new": "redis==8.1.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langfuse",
+    "old": "langfuse>=2.0.0",
+    "new": "langfuse==4.15.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langsmith",
+    "old": "langsmith>=0.1.0",
+    "new": "langsmith==0.12.4"
+  },
+  {
+    "ecosystem": "python",
+    "name": "sentry-sdk",
+    "old": "sentry-sdk[fastapi]>=1.39.0",
+    "new": "sentry-sdk[fastapi]==2.69.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "opentelemetry-api",
+    "old": "opentelemetry-api>=1.22.0",
+    "new": "opentelemetry-api==1.44.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "opentelemetry-sdk",
+    "old": "opentelemetry-sdk>=1.22.0",
+    "new": "opentelemetry-sdk==1.44.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "aiohttp",
+    "old": "aiohttp>=3.9.0",
+    "new": "aiohttp==3.14.3"
+  },
+  {
+    "ecosystem": "python",
+    "name": "httpx",
+    "old": "httpx>=0.27.0",
+    "new": "httpx==0.28.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "requests",
+    "old": "requests>=2.31.0",
+    "new": "requests==2.34.2"
+  },
+  {
+    "ecosystem": "python",
+    "name": "aiofiles",
+    "old": "aiofiles>=23.2.0",
+    "new": "aiofiles==25.1.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "boto3",
+    "old": "boto3>=1.34.0",
+    "new": "boto3==1.43.93"
+  },
+  {
+    "ecosystem": "python",
+    "name": "python-dotenv",
+    "old": "python-dotenv>=1.0.0",
+    "new": "python-dotenv==1.2.3"
+  },
+  {
+    "ecosystem": "python",
+    "name": "defusedxml",
+    "old": "defusedxml>=0.7.1",
+    "new": "defusedxml==0.7.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "typing-extensions",
+    "old": "typing-extensions>=4.12.2",
+    "new": "typing-extensions==4.16.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "dilithium-py",
+    "old": "dilithium-py>=1.4.0",
+    "new": "dilithium-py==1.4.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "wasmtime",
+    "old": "wasmtime==44.0.0",
+    "new": "wasmtime==48.0.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pytest",
+    "old": "pytest>=8.0.0",
+    "new": "pytest==9.1.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pytest-asyncio",
+    "old": "pytest-asyncio>=0.23.0",
+    "new": "pytest-asyncio==1.4.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pytest-cov",
+    "old": "pytest-cov>=4.1.0",
+    "new": "pytest-cov==7.1.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pytest-timeout",
+    "old": "pytest-timeout>=2.2.0",
+    "new": "pytest-timeout==2.4.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pytest-benchmark",
+    "old": "pytest-benchmark>=4.0.0",
+    "new": "pytest-benchmark==5.3.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "pytest-xdist",
+    "old": "pytest-xdist>=3.5.0",
+    "new": "pytest-xdist==3.8.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "black",
+    "old": "black>=24.1.0",
+    "new": "black==26.5.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "ruff",
+    "old": "ruff>=0.1.0",
+    "new": "ruff==0.16.7"
+  },
+  {
+    "ecosystem": "python",
+    "name": "ragas",
+    "old": "ragas>=0.1.0",
+    "new": "ragas==0.4.3"
+  },
+  {
+    "ecosystem": "python",
+    "name": "datasets",
+    "old": "datasets>=2.14.0",
+    "new": "datasets==5.0.1"
+  },
+  {
+    "ecosystem": "python",
+    "name": "memory-profiler",
+    "old": "memory-profiler>=0.61.0",
+    "new": "memory-profiler==0.61.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "z3-solver",
+    "old": "z3-solver==4.16.0.0",
+    "new": "z3-solver==5.1.0.0"
+  },
+  {
+    "ecosystem": "python",
+    "name": "langgraph-checkpoint-redis",
+    "old": "langgraph-checkpoint-redis>=0.3,<0.6",
+    "new": "langgraph-checkpoint-redis==0.5.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@clerk/nextjs",
+    "old": "^7.2.3",
+    "new": "7.9.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@codesandbox/sandpack-react",
+    "old": "^2.19.0",
+    "new": "2.20.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@codesandbox/sandpack-themes",
+    "old": "^2.0.21",
+    "new": "2.0.21"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@dagrejs/dagre",
+    "old": "^3.0.0",
+    "new": "3.1.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@radix-ui/react-context-menu",
+    "old": "^2.2.16",
+    "new": "2.3.7"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@radix-ui/react-dialog",
+    "old": "^1.1.15",
+    "new": "1.1.23"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@tauri-apps/api",
+    "old": "^2.10.1",
+    "new": "2.11.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@xyflow/react",
+    "old": "^12.10.2",
+    "new": "12.11.6"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "cmdk",
+    "old": "^1.1.1",
+    "new": "1.1.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "convex",
+    "old": "^1.13.0",
+    "new": "1.45.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "framer-motion",
+    "old": "^12.38.0",
+    "new": "13.2.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "immer",
+    "old": "^11.1.4",
+    "new": "11.1.18"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "lucide-react",
+    "old": "^1.8.0",
+    "new": "1.45.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "next",
+    "old": "^16.2.3",
+    "new": "16.3.5"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "next-themes",
+    "old": "^0.4.6",
+    "new": "0.4.6"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "react",
+    "old": "^19.2.5",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "react-dom",
+    "old": "^19.2.5",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "sonner",
+    "old": "^2.0.7",
+    "new": "2.0.8"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "yjs",
+    "old": "^13.6.0",
+    "new": "13.6.32"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "zustand",
+    "old": "^5.0.12",
+    "new": "5.0.15"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@eslint/eslintrc",
+    "old": "^3.3.0",
+    "new": "3.3.7"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@playwright/test",
+    "old": "^1.58.0",
+    "new": "1.63.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@tailwindcss/postcss",
+    "old": "^4.2.2",
+    "new": "4.3.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@testing-library/jest-dom",
+    "old": "^6.9.1",
+    "new": "7.0.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@testing-library/react",
+    "old": "^16.3.2",
+    "new": "16.3.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@types/node",
+    "old": "^24.13.4",
+    "new": "26.5.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@types/react",
+    "old": "^19.0.0",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "@types/react-dom",
+    "old": "^19.0.0",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "convex-test",
+    "old": "^0.0.58",
+    "new": "0.0.58"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "eslint",
+    "old": "^9.39.4",
+    "new": "10.10.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "eslint-config-next",
+    "old": "^16.3.5",
+    "new": "16.3.5"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "jsdom",
+    "old": "^25.0.0",
+    "new": "30.0.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "postcss",
+    "old": "^8.5.9",
+    "new": "8.5.28"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "rimraf",
+    "old": "^5.0.10",
+    "new": "6.1.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "tailwindcss",
+    "old": "^4.2.2",
+    "new": "4.3.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "typescript",
+    "old": "5.3.3",
+    "new": "7.0.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "vite",
+    "old": "^7.3.6",
+    "new": "8.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "frontend/package.json",
+    "name": "vitest",
+    "old": "^4.1.4",
+    "new": "5.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "desktop/package.json",
+    "name": "@tauri-apps/cli",
+    "old": "^2",
+    "new": "2.11.4"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/package.json",
+    "name": "convex",
+    "old": "^1.17.0",
+    "new": "1.45.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/package.json",
+    "name": "typescript",
+    "old": "^5.3.0",
+    "new": "7.0.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@modelcontextprotocol/sdk",
+    "old": "^1.22.0",
+    "new": "1.30.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "fastmcp",
+    "old": "^3.23.0",
+    "new": "4.20.11"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "zod",
+    "old": "^3.25.0",
+    "new": "4.6.4"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "express",
+    "old": "^4.21.0",
+    "new": "5.2.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "openai",
+    "old": "^4.77.0",
+    "new": "7.15.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@anthropic-ai/sdk",
+    "old": "^0.36.0",
+    "new": "0.125.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@azure/openai",
+    "old": "^2.0.0",
+    "new": "2.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@opentelemetry/api",
+    "old": "^1.9.0",
+    "new": "1.9.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@opentelemetry/sdk-node",
+    "old": "^0.211.0",
+    "new": "0.222.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@opentelemetry/auto-instrumentations-node",
+    "old": "^0.69.0",
+    "new": "0.80.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@opentelemetry/exporter-trace-otlp-grpc",
+    "old": "^0.211.0",
+    "new": "0.222.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "pino",
+    "old": "^9.6.0",
+    "new": "10.3.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "pino-pretty",
+    "old": "^13.0.0",
+    "new": "13.1.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "ioredis",
+    "old": "^5.4.0",
+    "new": "6.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "ws",
+    "old": "^8.18.0",
+    "new": "8.21.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "dotenv",
+    "old": "^16.4.0",
+    "new": "17.4.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@types/node",
+    "old": "^22.0.0",
+    "new": "26.5.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@types/express",
+    "old": "^5.0.0",
+    "new": "5.0.6"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@types/ws",
+    "old": "^8.5.0",
+    "new": "8.18.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "typescript",
+    "old": "^5.7.0",
+    "new": "7.0.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "tsx",
+    "old": "^4.19.0",
+    "new": "4.23.13"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "vitest",
+    "old": "^2.1.0",
+    "new": "5.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@vitest/coverage-v8",
+    "old": "^2.1.0",
+    "new": "5.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "eslint",
+    "old": "^9.17.0",
+    "new": "10.10.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@typescript-eslint/eslint-plugin",
+    "old": "^8.18.0",
+    "new": "8.70.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/mcp-server/package.json",
+    "name": "@typescript-eslint/parser",
+    "old": "^8.18.0",
+    "new": "8.70.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "@anthropic-ai/sdk",
+    "old": "^0.32.1",
+    "new": "0.125.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "@octokit/rest",
+    "old": "^20.0.2",
+    "new": "22.0.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "bull",
+    "old": "^4.12.0",
+    "new": "4.16.5"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "express",
+    "old": "^4.18.2",
+    "new": "5.2.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "ioredis",
+    "old": "^5.3.2",
+    "new": "6.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "@types/bull",
+    "old": "^4.10.0",
+    "new": "4.10.4"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "@types/express",
+    "old": "^4.17.21",
+    "new": "5.0.6"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "@types/node",
+    "old": "^20.10.0",
+    "new": "26.5.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "eslint",
+    "old": "^8.55.0",
+    "new": "10.10.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "jest",
+    "old": "^29.7.0",
+    "new": "30.5.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "tsx",
+    "old": "^4.6.2",
+    "new": "4.23.13"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/code_review/package.json",
+    "name": "typescript",
+    "old": "^5.3.3",
+    "new": "7.0.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "lucide-react",
+    "old": "^0.564.0",
+    "new": "1.45.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "next",
+    "old": "16.1.6",
+    "new": "16.3.5"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "react",
+    "old": "19.2.3",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "react-dom",
+    "old": "19.2.3",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "@tailwindcss/postcss",
+    "old": "^4",
+    "new": "4.3.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "@types/node",
+    "old": "^20",
+    "new": "26.5.1"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "@types/react",
+    "old": "^19",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "@types/react-dom",
+    "old": "^19",
+    "new": "19.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "eslint",
+    "old": "^9",
+    "new": "10.10.0"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "eslint-config-next",
+    "old": "16.1.6",
+    "new": "16.3.5"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "tailwindcss",
+    "old": "^4",
+    "new": "4.3.3"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "name": "typescript",
+    "old": "^5",
+    "new": "7.0.2"
+  },
+  {
+    "ecosystem": "npm",
+    "manifest": "backend/projects/OmniStock_Enterprise/backend/package.json",
+    "name": "convex",
+    "old": "^1.31.7",
+    "new": "1.45.0"
+  }
+]

@@ -5,8 +5,6 @@
 # - Redis for job queue
 # - Optional: Ollama for local AI
 
-version: '3.8'
-
 services:
   # Webhook Server
   webhook-server:
@@ -14,11 +12,11 @@ services:
       context: .
       dockerfile: Dockerfile.webhook
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"
     environment:
       - PORT=3001
       - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET:?Configure GITHUB_WEBHOOK_SECRET}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - OLLAMA_URL=http://ollama:11434
       - REDIS_URL=redis://redis:6379
@@ -26,16 +24,16 @@ services:
       - redis
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   # Redis for job queue
   redis:
-    image: redis:7-alpine
+    image: redis:8.10.1-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
@@ -48,9 +46,9 @@ services:
 
   # Ollama for local AI (optional)
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.34.0
     ports:
-      - "11434:11434"
+      - "127.0.0.1:11434:11434"
     volumes:
       - ollama-data:/root/.ollama
     restart: unless-stopped
@@ -66,12 +64,16 @@ services:
 
   # Bull Board UI for queue monitoring
   bull-board:
-    image: deadly0/bull-board:latest
+    image: ghcr.io/felixmosh/bull-board:9.10.1
     ports:
-      - "3002:3000"
+      - "127.0.0.1:3002:3000"
     environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - BULL_BOARD_REDIS_URL=redis://redis:6379
+      - BULL_BOARD_PREFIX=bull
+      - BULL_BOARD_HOST=0.0.0.0
+      - BULL_BOARD_OPEN=false
+      - BULL_BOARD_USER=${BULL_BOARD_USER:?Set BULL_BOARD_USER}
+      - BULL_BOARD_PASSWORD=${BULL_BOARD_PASSWORD:?Set BULL_BOARD_PASSWORD}
     depends_on:
       - redis
     restart: unless-stopped

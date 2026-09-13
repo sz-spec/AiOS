@@ -1,7 +1,7 @@
 // src/orchestration/router/smart-orchestrator.ts
 // Integration with SmartRouter for intelligent agent selection
 
-import { SmartRouterBridge, createSmartRouter, type SmartRouterModel } from "../smart-router-bridge";
+import { createSmartRouter, type SmartRouterModel } from "../smart-router-bridge.js";
 
 // Create singleton SmartRouter instance
 const smartRouter = createSmartRouter();
@@ -34,7 +34,7 @@ export interface RoutingResult {
  */
 export async function determineOptimalAgent(
   message: string,
-  context?: { preferredAgent?: string; maxComplexity?: number }
+  _context?: { preferredAgent?: string; maxComplexity?: number }
 ): Promise<string> {
   try {
     const result = await smartRouter.routeMessage(message);

@@ -1,0 +1,174 @@
+{
+  "native.boot": {
+    "selected": "VOS 5 Multiboot2 entry/parser + Limine packaging",
+    "decision": "Keep corrected boot magic, firmware memory map/RSDP, 32 MiB ELF layout. Evaluate VOS3 baremetal_preflight feature checks without importing obsolete boot assumptions; BIOS/UEFI evidence exists, installation remains open."
+  },
+  "native.architecture": {
+    "selected": "VOS 5 CPU-local entry, SMP handshake and partial KPTI",
+    "decision": "Retain current fixes over older global-CR3 implementations. VOS3-Cyber platform stubs are API references, not operational Windows/Linux backends. Full KPTI, x2APIC and AP user workload qualification remain open."
+  },
+  "native.memory": {
+    "selected": "VOS 5 per-process roots and CPU-local VMM",
+    "decision": "Do not replace with VOS3 PCID scaffolding explicitly assuming a shared address space. Evaluate Cyber ai_oom bounds logic for integration into real allocation paths; require failure accounting and concurrent isolation tests."
+  },
+  "native.scheduler": {
+    "selected": "VOS 5 scheduler and AP readiness fixes",
+    "decision": "Keep CPU-local task/entry binding. Compare unretained scheduling policies and qualify actual AP workloads, not only online counts."
+  },
+  "native.execution": {
+    "selected": "VOS 5 ELF loader and provisioning/init path",
+    "decision": "Preserve writable-NX copying and user-frame fixes. Review remaining exec/init differences; require fork/clone/signals and program lifecycle evidence."
+  },
+  "native.filesystems": {
+    "selected": "VOS 5 filesystem + model verification/VBus FS",
+    "decision": "Keep signed-model and trusted-key hooks from vos.v1; qualify real storage, path isolation and persistent reboot. Do not confuse boot filesystem diagnostics with installation."
+  },
+  "native.drivers": {
+    "selected": "VOS 5 driver tree; VOS3 Hyper-V donor is conditional candidate",
+    "decision": "Retain native drivers; do not import Hyper-V loopback as a real host transport. Review device initialization and transport differences, then require real device tests."
+  },
+  "native.network": {
+    "selected": "VOS 5 network stack plus reviewed policy integration candidate",
+    "decision": "Cyber egress_policy.c is missing as a separate module: candidate for scoped deny-first enforcement, not blanket private-network permission. Its port argument is ignored; actual socket/connect linkage must be proven."
+  },
+  "native.ipc": {
+    "selected": "VOS 5 IPC and signals",
+    "decision": "Retain frame-owned user stack state and current IPC contracts; validate cross-process isolation and wakeup/fork interactions."
+  },
+  "native.security": {
+    "selected": "VOS 5 capability and taint enforcement",
+    "decision": "Retain vos.v1 scope/credential controls. Host policy tests do not establish native enforcement; audit syscall/driver entry paths and revocation."
+  },
+  "native.crypto": {
+    "selected": "VOS 5 crypto; VOS3 MMR as additive candidate",
+    "decision": "Retain current Ed25519/ML-KEM/SHA code pending audit. Review MMR wire format, bounds, key trust and licensing before connecting native and backend evidence ledgers."
+  },
+  "native.ai": {
+    "selected": "VOS 5 native AI and slot subsystem",
+    "decision": "Retain canonical, assess donor model/allocator additions without weakening slot ownership. Actual isolated offline inference remains open."
+  },
+  "native.tests": {
+    "selected": "VOS 5 native/host kernel tests plus reviewed donor cases",
+    "decision": "Keep actual runtime and production-function tests. Reject obsolete string checks that require broken global roots; missing donor regression cases remain review work."
+  },
+  "native.abi": {
+    "selected": "Headers matching selected VOS 5 implementations",
+    "decision": "Do not copy donor headers independently of implementation and call sites. Missing PCID/MMR/platform headers are paired candidates, not merge-ready ABI additions."
+  },
+  "native.bootloader": {
+    "selected": "Vendored Limine from recorded VOS3 donor",
+    "decision": "Use consolidation/limine-dependencies.json provenance and existing BIOS/UEFI build. Review any remaining donor bootloader variants separately; preserve license files."
+  },
+  "native.build-and-support": {
+    "selected": "VOS 5 isolated BUILD_DIR and build-config tracking",
+    "decision": "Retain atomic embedding and option invalidation. Alternate donor flavors must not clean shared output or restore placeholder platform claims."
+  },
+  "user.libc": {
+    "selected": "VOS 5 imported musl/libc baseline",
+    "decision": "Large byte divergence is not automatically functional divergence. Compare upstream provenance, local patches and generated files; preserve runtime ABI compatibility before replacing any libc source."
+  },
+  "user.programs": {
+    "selected": "VOS 5 native user programs",
+    "decision": "Retain baseline tools/tests; finish compiler-option/header/library dependency tracking. Validate actual binaries in native runtime."
+  },
+  "backend.agents": {
+    "selected": "VOS 5 merged vos.v1 + vos/vos4 agent boundaries",
+    "decision": "Keep local-first routing, sanitation and active-run payload-bound provenance. agent-boundaries.json and focused tests document merged changes; unrelated donor variants remain open."
+  },
+  "backend.security": {
+    "selected": "vos.v1 security modules retained in VOS 5",
+    "decision": "Preserve deny precedence, model integrity, scope and DMA/GPU gates. Verify real native/host enforcement rather than accepting host-model tests as hardware proof."
+  },
+  "backend.sandbox": {
+    "selected": "VOS 5 canonical sandbox",
+    "decision": "Compare missing/differing isolation helpers; require native Windows and resource-boundary tests. Keep fail-closed behavior."
+  },
+  "backend.services": {
+    "selected": "VOS 5 services; VOS3 evidence/MMR additions are candidates",
+    "decision": "Keep identity/keyring/P2P/host bridge/local inference service baseline. Evidence bundle, MMR and kernel translator from VOS3 need format, trust, persistence and license review; no duplicate service stack."
+  },
+  "backend.core": {
+    "selected": "VOS 5 core",
+    "decision": "Retain baseline permission/configuration contracts; compare donor policy/store changes against one identity and storage model."
+  },
+  "backend.api": {
+    "selected": "VOS 5 API with merged agents routes",
+    "decision": "Keep existing baseline API contracts and merged agent routes. Review unretained endpoints and local/offline auth; avoid cloud-only mandatory startup."
+  },
+  "backend.tests": {
+    "selected": "VOS 5 tests plus donor regressions selected by capability",
+    "decision": "Keep imported tests but do not equate test-file retention with coverage. Missing donor tests are required review inputs for the corresponding implementations."
+  },
+  "backend.mcp": {
+    "selected": "VOS 5 MCP server",
+    "decision": "Unify versions, dependencies, authentication and transport with canonical backend; donor SDK/server protocol compatibility remains a gate."
+  },
+  "backend.convex": {
+    "selected": "Canonical shared contract; frontend Convex is product data target",
+    "decision": "Resolve duplicate backend/frontend Convex schema ownership before claiming one data model. Mandatory hosted authentication is incompatible with offline mode."
+  },
+  "backend.kernel-bridge": {
+    "selected": "VOS 5 kernel bridge",
+    "decision": "Retain authenticated VBus direction; compare donor protocol/transport variants and test actual host-to-kernel dispatch."
+  },
+  "backend.middleware": {
+    "selected": "VOS 5 middleware",
+    "decision": "Keep tenant, authentication and egress boundaries; trace API routes through selected middleware and reconcile donor deltas."
+  },
+  "backend.example-projects": {
+    "selected": "Archive/reference only unless explicitly integrated",
+    "decision": "Do not treat embedded example applications as required OS runtime services. Preserve their source pending scope/provenance review."
+  },
+  "backend.extensions": {
+    "selected": "VOS 5 extension modules, individually inventoried",
+    "decision": "Retain canonical modules; missing plugins, tools, templates, analytics and workflow variants are explicit per-file review items, not silently rejected."
+  },
+  "frontend.data": {
+    "selected": "VOS 5 generated Convex code and membership fixes",
+    "decision": "Keep real codegen and owner/member authorization fixes. Compare VOS3 local schema edits and other donors; resolve canonical/offline schema before merging."
+  },
+  "frontend.product": {
+    "selected": "VOS 5 frontend baseline",
+    "decision": "Do not copy VOS3 local package/config changes blindly. Fix recorded failing suite and align wizard contracts; offline identity/product integration remains open."
+  },
+  "desktop.host": {
+    "selected": "VOS 5 desktop shell",
+    "decision": "Compare Rust/Tauri/config variants; qualify Windows APIs, native/host lifecycle and authenticated transport before release."
+  },
+  "sdk.clients": {
+    "selected": "VOS 5 SDKs; VOS3 Windows bridge candidate",
+    "decision": "Review missing C# HyperVSocket/client as Windows-specific transport source, with paired driver/protocol validation. Never infer Windows support from loopback tests."
+  },
+  "infra.security": {
+    "selected": "VOS 5 security definitions; old reports are historical",
+    "decision": "Regenerate SBOM/scans for selected current dependencies. Old reports/hashes/certification labels do not certify this build."
+  },
+  "infra.operations": {
+    "selected": "VOS 5 infrastructure as integration target",
+    "decision": "Compare runner, Kubernetes, provisioning and verification additions. Choose one installation/startup flow; deployment changes require concrete validation."
+  },
+  "ci.workflows": {
+    "selected": "Selected AiOS workflows to be integrated explicitly",
+    "decision": "Donor CI files missing from canonical are open; reconcile checks with actual build paths and required permissions, not old repository triggers."
+  },
+  "documentation": {
+    "selected": "Current design docs plus relocated historical docs",
+    "decision": "Preserve historical content/provenance; current CORE_REQUIREMENTS governs release claims. Source release-note local changes need explicit preservation."
+  },
+  "system.tests": {
+    "selected": "VOS 5 system test collection",
+    "decision": "Map missing donor integration/performance tests to retained capabilities; record real target and artifact scope."
+  },
+  "tooling": {
+    "selected": "VOS 5 tooling",
+    "decision": "Keep reproducible build/evidence scripts; reconcile missing source utilities and remove runtime dependence on legacy trees."
+  },
+  "licensing": {
+    "selected": "Preserve each selected source license and provenance",
+    "decision": "VOS3 includes LicenseRef-VOS3-Sovereign-1.0. Do not relabel donor modules MIT or import them without their applicable license; review mixed licensing before distribution."
+  },
+  "root.configuration": {
+    "selected": "VOS 5 root configuration",
+    "decision": "Unify startup and dependency locks; do not restore conflicting donor deployment defaults."
+  }
+}

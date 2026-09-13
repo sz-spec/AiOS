@@ -8,10 +8,12 @@
 #include <lib/uri.h>
 #include <lib/fb.h>
 #include <lib/image.h>
+#include <lib/rand.h>
 #include <mm/pmm.h>
-#include <flanterm/flanterm.h>
-#include <flanterm/backends/fb.h>
+#include <flanterm.h>
+#include <flanterm_backends/fb.h>
 #include <lib/term.h>
+#include <sys/cpu.h>
 
 // Builtin font originally taken from:
 // https://github.com/viler-int10h/vga-text-mode-fonts/raw/master/FONTS/PC-OTHER/TOSH-SAT.F16
@@ -274,6 +276,8 @@ static const uint8_t builtin_font[] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+#define FONT_MAX 16384
+
 static struct image *background;
 
 static size_t margin = 64;
@@ -289,7 +293,7 @@ static uint32_t *bg_canvas;
 #define R(rgb) (uint8_t)(rgb >> 16)
 #define G(rgb) (uint8_t)(rgb >> 8)
 #define B(rgb) (uint8_t)(rgb)
-#define ARGB(a, r, g, b) (a << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF)
+#define ARGB(a, r, g, b) (((a) << 24) | (((r) & 0xFF) << 16) | (((g) & 0xFF) << 8) | ((b) & 0xFF))
 
 static inline uint32_t colour_blend(uint32_t fg, uint32_t bg) {
     unsigned alpha = 255 - A(fg);
@@ -302,34 +306,45 @@ static inline uint32_t colour_blend(uint32_t fg, uint32_t bg) {
     return ARGB(0, r, g, b);
 }
 
-static uint32_t blend_gradient_from_box(struct fb_info *fb, size_t x, size_t y, uint32_t bg_px, uint32_t hex) {
-    size_t distance, x_distance, y_distance;
-    size_t gradient_stop_x = fb->framebuffer_width - margin;
-    size_t gradient_stop_y = fb->framebuffer_height - margin;
+// Clamp the margin to half the framebuffer to prevent underflow.
+static size_t effective_margin_for(struct fb_info *fb, size_t m) {
+    size_t max_margin = fb->framebuffer_width / 2;
+    if (fb->framebuffer_height / 2 < max_margin) {
+        max_margin = fb->framebuffer_height / 2;
+    }
+    return m > max_margin ? max_margin : m;
+}
 
-    if (x < margin)
-        x_distance = margin - x;
+static uint32_t blend_gradient_from_box(struct fb_info *fb, size_t x, size_t y, uint32_t bg_px, uint32_t hex) {
+    size_t effective_margin = effective_margin_for(fb, margin);
+    size_t effective_margin_gradient = margin_gradient > effective_margin ? effective_margin : margin_gradient;
+    size_t distance, x_distance, y_distance;
+    size_t gradient_stop_x = fb->framebuffer_width - effective_margin;
+    size_t gradient_stop_y = fb->framebuffer_height - effective_margin;
+
+    if (x < effective_margin)
+        x_distance = effective_margin - x;
     else
         x_distance = x - gradient_stop_x;
 
-    if (y < margin)
-        y_distance = margin - y;
+    if (y < effective_margin)
+        y_distance = effective_margin - y;
     else
         y_distance = y - gradient_stop_y;
 
-    if (x >= margin && x < gradient_stop_x) {
+    if (x >= effective_margin && x < gradient_stop_x) {
         distance = y_distance;
-    } else if (y >= margin && y < gradient_stop_y) {
+    } else if (y >= effective_margin && y < gradient_stop_y) {
         distance = x_distance;
     } else {
         distance = sqrt((uint64_t)x_distance * (uint64_t)x_distance
                       + (uint64_t)y_distance * (uint64_t)y_distance);
     }
 
-    if (distance > margin_gradient)
+    if (distance > effective_margin_gradient)
         return bg_px;
 
-    uint8_t gradient_step = (0xff - A(hex)) / margin_gradient;
+    uint8_t gradient_step = (0xff - A(hex)) / effective_margin_gradient;
     uint8_t new_alpha     = A(hex) + gradient_step * distance;
 
     return colour_blend((hex & 0xffffff) | (new_alpha << 24), bg_px);
@@ -365,28 +380,32 @@ __attribute__((always_inline)) static inline void genloop(struct fb_info *fb, si
                 uint32_t img_pixel = *(uint32_t*)(img + image_x * colsize + off);
                 uint32_t i = blend(fb, x, y, img_pixel);
                 bg_canvas[canvas_off + x] = i;
-                if (image_x++ == img_width) image_x = 0; // image_x = x % img_width, but modulo is too expensive
+                if (++image_x == img_width) image_x = 0; // image_x = x % img_width, but modulo is too expensive
             }
         }
         break;
 
     case IMAGE_CENTERED:
         for (size_t y = ystart; y < yend; y++) {
-            size_t image_y = y - background->y_displacement;
-            const size_t off = img_pitch * image_y;
+            int64_t image_y = (int64_t)y - background->y_displacement;
             size_t canvas_off = fb->framebuffer_width * y;
-            if (image_y >= background->y_size) { /* external part */
+            if (image_y < 0 || (uint64_t)image_y >= background->y_size) { /* external part */
                 for (size_t x = xstart; x < xend; x++) {
                     uint32_t i = blend(fb, x, y, background->back_colour);
                     bg_canvas[canvas_off + x] = i;
                 }
             }
             else { /* internal part */
+                const size_t off = img_pitch * (size_t)image_y;
                 for (size_t x = xstart; x < xend; x++) {
-                    size_t image_x = (x - background->x_displacement);
-                    bool x_external = image_x >= background->x_size;
-                    uint32_t img_pixel = *(uint32_t*)(img + image_x * colsize + off);
-                    uint32_t i = blend(fb, x, y, x_external ? background->back_colour : img_pixel);
+                    uint32_t pixel;
+                    int64_t image_x = (int64_t)x - background->x_displacement;
+                    if (image_x < 0 || (uint64_t)image_x >= background->x_size) {
+                        pixel = background->back_colour;
+                    } else {
+                        pixel = *(uint32_t*)(img + (size_t)image_x * colsize + off);
+                    }
+                    uint32_t i = blend(fb, x, y, pixel);
                     bg_canvas[canvas_off + x] = i;
                 }
             }
@@ -424,10 +443,20 @@ static void loop_internal(struct fb_info *fb, size_t xstart, size_t xend, size_t
 
 static void generate_canvas(struct fb_info *fb) {
     if (background) {
-        bg_canvas_size = fb->framebuffer_width * fb->framebuffer_height * sizeof(uint32_t);
+        // Free previous canvas if it exists
+        if (bg_canvas != NULL) {
+            pmm_free(bg_canvas, bg_canvas_size);
+        }
+        bg_canvas_size = CHECKED_MUL(fb->framebuffer_width, fb->framebuffer_height,
+            panic(false, "gterm: canvas size overflow"));
+        bg_canvas_size = CHECKED_MUL(bg_canvas_size, sizeof(uint32_t),
+            panic(false, "gterm: canvas size overflow"));
         bg_canvas = ext_mem_alloc(bg_canvas_size);
 
-        int64_t margin_no_gradient = (int64_t)margin - margin_gradient;
+        size_t effective_margin = effective_margin_for(fb, margin);
+        size_t effective_margin_gradient = margin_gradient > effective_margin ? effective_margin : margin_gradient;
+
+        int64_t margin_no_gradient = (int64_t)effective_margin - effective_margin_gradient;
 
         if (margin_no_gradient < 0) {
             margin_no_gradient = 0;
@@ -441,135 +470,106 @@ static void generate_canvas(struct fb_info *fb) {
         loop_external(fb, 0, margin_no_gradient, margin_no_gradient, scan_stop_y);
         loop_external(fb, scan_stop_x, fb->framebuffer_width, margin_no_gradient, scan_stop_y);
 
-        size_t gradient_stop_x = fb->framebuffer_width - margin;
-        size_t gradient_stop_y = fb->framebuffer_height - margin;
+        size_t gradient_stop_x = fb->framebuffer_width - effective_margin;
+        size_t gradient_stop_y = fb->framebuffer_height - effective_margin;
 
-        if (margin_gradient) {
-            loop_margin(fb, margin_no_gradient, scan_stop_x, margin_no_gradient, margin);
+        if (effective_margin_gradient) {
+            loop_margin(fb, margin_no_gradient, scan_stop_x, margin_no_gradient, effective_margin);
             loop_margin(fb, margin_no_gradient, scan_stop_x, gradient_stop_y, scan_stop_y);
-            loop_margin(fb, margin_no_gradient, margin, margin, gradient_stop_y);
-            loop_margin(fb, gradient_stop_x, scan_stop_x, margin, gradient_stop_y);
+            loop_margin(fb, margin_no_gradient, effective_margin, effective_margin, gradient_stop_y);
+            loop_margin(fb, gradient_stop_x, scan_stop_x, effective_margin, gradient_stop_y);
         }
 
-        loop_internal(fb, margin, gradient_stop_x, margin, gradient_stop_y);
+        loop_internal(fb, effective_margin, gradient_stop_x, effective_margin, gradient_stop_y);
     } else {
         bg_canvas = NULL;
+        bg_canvas_size = 0;
     }
 }
 
-bool gterm_init(struct fb_info **_fbs, size_t *_fbs_count,
-                char *config, size_t width, size_t height) {
-    static struct fb_info *fbs;
-    static size_t fbs_count;
 
-    static bool prev_valid = false;
-    static char *prev_config;
-    static size_t prev_width, prev_height;
-
-    if (prev_valid && config == prev_config && width == prev_width && height == prev_height) {
-        *_fbs = fbs;
-        *_fbs_count = fbs_count;
-        reset_term();
-        return true;
+static void parse_palette(const char *str, uint32_t *colours) {
+    const char *first = str;
+    for (size_t i = 0; i < 8; i++) {
+        const char *last;
+        uint32_t col = strtoui(first, &last, 16);
+        if (first == last)
+            break;
+        colours[i] = col & 0xffffff;
+        if (*last == 0)
+            break;
+        first = last + 1;
     }
+}
 
-    prev_valid = false;
-
-    if (quiet) {
-        term_notready();
-        return false;
-    }
-
-#if defined (UEFI)
-    if (serial || COM_OUTPUT) {
-        term_fallback();
-        return true;
-    }
-#endif
-
-    term_notready();
-
-    // We force bpp to 32
-    fb_init(&fbs, &fbs_count, width, height, 32);
-
-    if (_fbs != NULL) {
-        *_fbs = fbs;
-    }
-    if (_fbs_count != NULL) {
-        *_fbs_count = fbs_count;
-    }
-
-    if (fbs_count == 0) {
-        return false;
-    }
-
-    // default scheme
-    margin = 64;
-    margin_gradient = 4;
-
+struct gterm_config {
+    int fb_rotation;
     uint32_t ansi_colours[8];
+    uint32_t ansi_bright_colours[8];
+    char *theme_background;
+    uint8_t *font;
+    size_t font_width;
+    size_t font_height;
+    size_t font_size;
+    size_t font_spacing;
+    size_t font_scale_x;
+    size_t font_scale_y;
+    bool font_scale_is_default;
+};
 
-    ansi_colours[0] = 0x00000000; // black
-    ansi_colours[1] = 0x00aa0000; // red
-    ansi_colours[2] = 0x0000aa00; // green
-    ansi_colours[3] = 0x00aa5500; // brown
-    ansi_colours[4] = 0x000000aa; // blue
-    ansi_colours[5] = 0x00aa00aa; // magenta
-    ansi_colours[6] = 0x0000aaaa; // cyan
-    ansi_colours[7] = 0x00aaaaaa; // grey
+int gterm_get_rotation(char *config) {
+    char *rotation_str = config_get_value(config, 0, "INTERFACE_ROTATION");
+    if (rotation_str != NULL) {
+        int rotation_val = strtoui(rotation_str, NULL, 10);
+        switch (rotation_val) {
+            case 90: return FLANTERM_FB_ROTATE_90;
+            case 180: return FLANTERM_FB_ROTATE_180;
+            case 270: return FLANTERM_FB_ROTATE_270;
+        }
+    }
+
+    return FLANTERM_FB_ROTATE_0;
+}
+
+static void gterm_parse_config(char *config, struct gterm_config *cfg) {
+    cfg->fb_rotation = gterm_get_rotation(config);
+
+    cfg->ansi_colours[0] = 0x00000000;
+    cfg->ansi_colours[1] = 0x00aa0000;
+    cfg->ansi_colours[2] = 0x0000aa00;
+    cfg->ansi_colours[3] = 0x00aa5500;
+    cfg->ansi_colours[4] = 0x000000aa;
+    cfg->ansi_colours[5] = 0x00aa00aa;
+    cfg->ansi_colours[6] = 0x0000aaaa;
+    cfg->ansi_colours[7] = 0x00aaaaaa;
 
     char *colours = config_get_value(config, 0, "TERM_PALETTE");
     if (colours != NULL) {
-        const char *first = colours;
-        size_t i;
-        for (i = 0; i < 8; i++) {
-            const char *last;
-            uint32_t col = strtoui(first, &last, 16);
-            if (first == last)
-                break;
-            ansi_colours[i] = col & 0xffffff;
-            if (*last == 0)
-                break;
-            first = last + 1;
-        }
+        parse_palette(colours, cfg->ansi_colours);
     }
 
-    uint32_t ansi_bright_colours[8];
-
-    ansi_bright_colours[0] = 0x00555555; // black
-    ansi_bright_colours[1] = 0x00ff5555; // red
-    ansi_bright_colours[2] = 0x0055ff55; // green
-    ansi_bright_colours[3] = 0x00ffff55; // brown
-    ansi_bright_colours[4] = 0x005555ff; // blue
-    ansi_bright_colours[5] = 0x00ff55ff; // magenta
-    ansi_bright_colours[6] = 0x0055ffff; // cyan
-    ansi_bright_colours[7] = 0x00ffffff; // grey
+    cfg->ansi_bright_colours[0] = 0x00555555;
+    cfg->ansi_bright_colours[1] = 0x00ff5555;
+    cfg->ansi_bright_colours[2] = 0x0055ff55;
+    cfg->ansi_bright_colours[3] = 0x00ffff55;
+    cfg->ansi_bright_colours[4] = 0x005555ff;
+    cfg->ansi_bright_colours[5] = 0x00ff55ff;
+    cfg->ansi_bright_colours[6] = 0x0055ffff;
+    cfg->ansi_bright_colours[7] = 0x00ffffff;
 
     char *bright_colours = config_get_value(config, 0, "TERM_PALETTE_BRIGHT");
     if (bright_colours != NULL) {
-        const char *first = bright_colours;
-        size_t i;
-        for (i = 0; i < 8; i++) {
-            const char *last;
-            uint32_t col = strtoui(first, &last, 16);
-            if (first == last)
-                break;
-            ansi_bright_colours[i] = col & 0xffffff;
-            if (*last == 0)
-                break;
-            first = last + 1;
-        }
+        parse_palette(bright_colours, cfg->ansi_bright_colours);
     }
 
-    default_bg = 0x00000000; // background (black)
-    default_fg = 0x00aaaaaa; // foreground (grey)
+    default_bg = 0x00000000;
+    default_fg = 0x00aaaaaa;
+    default_bg_bright = 0x00555555;
+    default_fg_bright = 0x00ffffff;
 
-    default_bg_bright = 0x00555555; // background (black)
-    default_fg_bright = 0x00ffffff; // foreground (grey)
-
-    char *theme_background = config_get_value(config, 0, "TERM_BACKGROUND");
-    if (theme_background != NULL) {
-        default_bg = strtoui(theme_background, NULL, 16);
+    cfg->theme_background = config_get_value(config, 0, "TERM_BACKGROUND");
+    if (cfg->theme_background != NULL) {
+        default_bg = strtoui(cfg->theme_background, NULL, 16);
     }
 
     char *theme_foreground = config_get_value(config, 0, "TERM_FOREGROUND");
@@ -587,21 +587,40 @@ bool gterm_init(struct fb_info **_fbs, size_t *_fbs_count,
         default_fg_bright = strtoui(theme_foreground_bright, NULL, 16);
     }
 
+    size_t wallpaper_count = 0;
+    while (config_get_value(config, wallpaper_count, "WALLPAPER") != NULL)
+        wallpaper_count++;
+
     background = NULL;
-    char *background_path = config_get_value(config, 0, "WALLPAPER");
-    if (background_path != NULL) {
-        struct file_handle *bg_file;
-        if ((bg_file = uri_open(background_path)) != NULL) {
-            background = image_open(bg_file);
-            fclose(bg_file);
+    if (wallpaper_count > 0) {
+        char *background_path = config_get_value(config, rand32() % wallpaper_count, "WALLPAPER");
+        if (background_path != NULL) {
+            if (secure_boot_active && strchr(background_path, '#') == NULL) {
+                print("Wallpaper skipped: Secure Boot is active and no hash is associated.\n");
+            } else {
+                struct file_handle *bg_file;
+                if ((bg_file = uri_open(background_path, MEMMAP_BOOTLOADER_RECLAIMABLE,
+#if defined (__i386__)
+                    false, NULL, NULL
+#else
+                    true
+#endif
+                )) != NULL) {
+                    background = image_open(bg_file);
+                    fclose(bg_file);
+                }
+            }
         }
     }
+
+    margin = 64;
+    margin_gradient = 4;
 
     if (background == NULL) {
         margin = 0;
         margin_gradient = 0;
     } else {
-        if (theme_background == NULL) {
+        if (cfg->theme_background == NULL) {
             default_bg = 0x80000000;
         }
     }
@@ -616,120 +635,229 @@ bool gterm_init(struct fb_info **_fbs, size_t *_fbs_count,
         margin_gradient = strtoui(theme_margin_gradient, NULL, 10);
     }
 
-    size_t font_width = 8;
-    size_t font_height = 16;
-    size_t font_size = (font_width * font_height * FLANTERM_FB_FONT_GLYPHS) / 8;
+    if (margin_gradient > margin) {
+        margin_gradient = margin;
+    }
 
-#define FONT_MAX 16384
-    uint8_t *font = ext_mem_alloc(FONT_MAX);
+    cfg->font_width = 8;
+    cfg->font_height = 16;
+    cfg->font_size = (cfg->font_width * cfg->font_height * FLANTERM_FB_FONT_GLYPHS) / 8;
 
-    memcpy(font, builtin_font, 4096);
+    cfg->font = ext_mem_alloc(FONT_MAX);
+    memcpy(cfg->font, builtin_font, 4096);
 
     size_t tmp_font_width, tmp_font_height;
 
     char *menu_font_size = config_get_value(config, 0, "TERM_FONT_SIZE");
     if (menu_font_size != NULL) {
-        parse_resolution(&tmp_font_width, &tmp_font_height, NULL, menu_font_size);
-
-        size_t tmp_font_size = (tmp_font_width * tmp_font_height * FLANTERM_FB_FONT_GLYPHS) / 8;
-
-        if (tmp_font_size > FONT_MAX) {
-            print("Font would be too large (%u bytes, %u bytes allowed). Not loading.\n", tmp_font_size, FONT_MAX);
-            goto no_load_font;
+        if (!parse_resolution(&tmp_font_width, &tmp_font_height, NULL, menu_font_size)) {
+            print("Could not parse TERM_FONT_SIZE. Using default font.\n");
+            goto config_no_load_font;
         }
 
-        font_size = tmp_font_size;
+        if (tmp_font_width != 8) {
+            print("Font width must be 8, got %u. Using default font.\n", tmp_font_width);
+            goto config_no_load_font;
+        }
+
+        size_t tmp_font_size = CHECKED_MUL(tmp_font_width, tmp_font_height,
+            goto config_no_load_font);
+        tmp_font_size = CHECKED_MUL(tmp_font_size, FLANTERM_FB_FONT_GLYPHS,
+            goto config_no_load_font) / 8;
+
+        if (tmp_font_size > FONT_MAX) {
+            print("Font would be too large (%U bytes, %u bytes allowed). Not loading.\n", (uint64_t)tmp_font_size, FONT_MAX);
+            goto config_no_load_font;
+        }
+
+        cfg->font_size = tmp_font_size;
     }
 
     char *menu_font = config_get_value(config, 0, "TERM_FONT");
     if (menu_font != NULL) {
+        if (secure_boot_active && strchr(menu_font, '#') == NULL) {
+            print("Font skipped: Secure Boot is active and no hash is associated.\n");
+            goto config_no_load_font;
+        }
         struct file_handle *f;
-        if ((f = uri_open(menu_font)) == NULL) {
+        if ((f = uri_open(menu_font, MEMMAP_BOOTLOADER_RECLAIMABLE,
+#if defined (__i386__)
+            false, NULL, NULL
+#else
+            true
+#endif
+        )) == NULL) {
             print("menu: Could not open font file.\n");
         } else {
-            fread(f, font, 0, font_size);
+            if (cfg->font_size > f->size) {
+                print("Font size too large for provided font file. Not loading.\n");
+                fclose(f);
+                goto config_no_load_font;
+            }
+            fread(f, cfg->font, 0, cfg->font_size);
             if (menu_font_size != NULL) {
-                font_width = tmp_font_width;
-                font_height = tmp_font_height;
+                cfg->font_width = tmp_font_width;
+                cfg->font_height = tmp_font_height;
             }
             fclose(f);
         }
     }
 
-no_load_font:;
-    size_t font_spacing = 1;
+config_no_load_font:;
+    cfg->font_spacing = 1;
     char *font_spacing_str = config_get_value(config, 0, "TERM_FONT_SPACING");
     if (font_spacing_str != NULL) {
-        font_spacing = strtoui(font_spacing_str, NULL, 10);
-    }
-
-    size_t font_scale_x = 1;
-    size_t font_scale_y = 1;
-    bool font_scale_is_default = true;
-
-    char *menu_font_scale = config_get_value(config, 0, "TERM_FONT_SCALE");
-    if (menu_font_scale != NULL) {
-        parse_resolution(&font_scale_x, &font_scale_y, NULL, menu_font_scale);
-        if (font_scale_x > 8 || font_scale_y > 8) {
-            font_scale_x = 1;
-            font_scale_y = 1;
-        } else {
-            font_scale_is_default = false;
+        // 640 is the narrowest framebuffer the fallback chain picks and menu.c
+        // wants 40 columns, so a glyph has 16 dots and the font is 8 of them.
+        const char *last;
+        uint64_t spacing = strtoui(font_spacing_str, &last, 10);
+        if (font_spacing_str != last && *last == 0 && spacing <= 8) {
+            cfg->font_spacing = spacing;
         }
     }
 
+    cfg->font_scale_x = 1;
+    cfg->font_scale_y = 1;
+    cfg->font_scale_is_default = true;
+
+    char *menu_font_scale = config_get_value(config, 0, "TERM_FONT_SCALE");
+    if (menu_font_scale != NULL) {
+        if (!parse_resolution(&cfg->font_scale_x, &cfg->font_scale_y, NULL, menu_font_scale)
+         || cfg->font_scale_x > 8 || cfg->font_scale_y > 8) {
+            cfg->font_scale_x = 1;
+            cfg->font_scale_y = 1;
+        } else {
+            cfg->font_scale_is_default = false;
+        }
+    }
+}
+
+static void gterm_fb_setup(struct fb_info *fb, char *config,
+                           struct gterm_config *cfg,
+                           size_t *out_scale_x, size_t *out_scale_y) {
+    if (cfg->fb_rotation == FLANTERM_FB_ROTATE_90 || cfg->fb_rotation == FLANTERM_FB_ROTATE_270) {
+        uint64_t tmp = fb->framebuffer_width;
+        fb->framebuffer_width = fb->framebuffer_height;
+        fb->framebuffer_height = tmp;
+    }
+
+    if (background != NULL) {
+        char *background_layout = config_get_value(config, 0, "WALLPAPER_STYLE");
+        if (background_layout != NULL && strcmp(background_layout, "centered") == 0) {
+            char *background_colour = config_get_value(config, 0, "BACKDROP");
+            if (background_colour == NULL)
+                background_colour = "0";
+            uint32_t bg_col = strtoui(background_colour, NULL, 16);
+            image_make_centered(background, fb->framebuffer_width, fb->framebuffer_height, bg_col);
+        } else if (background_layout != NULL && strcmp(background_layout, "tiled") == 0) {
+        } else {
+            image_make_stretched(background, fb->framebuffer_width, fb->framebuffer_height);
+        }
+    }
+
+    generate_canvas(fb);
+
+    *out_scale_x = cfg->font_scale_x;
+    *out_scale_y = cfg->font_scale_y;
+    if (cfg->font_scale_is_default) {
+        *out_scale_x = 1;
+        *out_scale_y = 1;
+        if (fb->framebuffer_width >= (1920 + 1920 / 3) && fb->framebuffer_height >= (1080 + 1080 / 3)) {
+            *out_scale_x = 2;
+            *out_scale_y = 2;
+        }
+        if (fb->framebuffer_width >= (3840 + 3840 / 3) && fb->framebuffer_height >= (2160 + 2160 / 3)) {
+            *out_scale_x = 4;
+            *out_scale_y = 4;
+        }
+    }
+
+    if (cfg->fb_rotation == FLANTERM_FB_ROTATE_90 || cfg->fb_rotation == FLANTERM_FB_ROTATE_270) {
+        uint64_t tmp = fb->framebuffer_width;
+        fb->framebuffer_width = fb->framebuffer_height;
+        fb->framebuffer_height = tmp;
+    }
+}
+
+bool gterm_init(struct fb_info **_fbs, size_t *_fbs_count,
+                char *config, size_t width, size_t height) {
+    static struct fb_info *fbs;
+    static size_t fbs_count;
+
+    static bool prev_valid = false;
+    static char *prev_config;
+    static size_t prev_width, prev_height;
+
+    if (prev_valid && config == prev_config && width == prev_width && height == prev_height) {
+        if (_fbs != NULL) {
+            *_fbs = fbs;
+        }
+        if (_fbs_count != NULL) {
+            *_fbs_count = fbs_count;
+        }
+        reset_term();
+        return true;
+    }
+
+    prev_valid = false;
+
+    if (quiet) {
+        term_notready();
+        return false;
+    }
+
+#if defined (UEFI)
+    if (serial || COM_OUTPUT || !fb_flush_reliable()) {
+        return false;
+    }
+#endif
+
+    term_notready();
+
+    // We force bpp to 32
+    fb_init(&fbs, &fbs_count, width, height, 32, true, true);
+
+    if (_fbs != NULL) {
+        *_fbs = fbs;
+    }
+    if (_fbs_count != NULL) {
+        *_fbs_count = fbs_count;
+    }
+
+    if (fbs_count == 0) {
+        return false;
+    }
+
+    struct gterm_config cfg;
+    gterm_parse_config(config, &cfg);
+
     terms_i = 0;
-    terms = ext_mem_alloc(fbs_count * sizeof(void *));
+    terms = ext_mem_alloc_counted(fbs_count, sizeof(void *));
 
     for (size_t i = 0; i < fbs_count; i++) {
         struct fb_info *fb = &fbs[i];
 
-        // Ensure that this framebuffer uses 32-bits per pixel.
         if (fb->framebuffer_bpp != 32) {
             continue;
         }
 
-        if (background != NULL) {
-            char *background_layout = config_get_value(config, 0, "WALLPAPER_STYLE");
-            if (background_layout != NULL && strcmp(background_layout, "centered") == 0) {
-                char *background_colour = config_get_value(config, 0, "BACKDROP");
-                if (background_colour == NULL)
-                    background_colour = "0";
-                uint32_t bg_col = strtoui(background_colour, NULL, 16);
-                image_make_centered(background, fb->framebuffer_width, fb->framebuffer_height, bg_col);
-            } else if (background_layout != NULL && strcmp(background_layout, "tiled") == 0) {
-            } else {
-                image_make_stretched(background, fb->framebuffer_width, fb->framebuffer_height);
-            }
-        }
+        size_t font_scale_x, font_scale_y;
+        gterm_fb_setup(fb, config, &cfg, &font_scale_x, &font_scale_y);
 
-        generate_canvas(fb);
-
-        if (font_scale_is_default) {
-            if (fb->framebuffer_width >= (1920 + 1920 / 3) && fb->framebuffer_height >= (1080 + 1080 / 3)) {
-                font_scale_x = 2;
-                font_scale_y = 2;
-            }
-            if (fb->framebuffer_width >= (3840 + 3840 / 3) && fb->framebuffer_height >= (2160 + 2160 / 3)) {
-                font_scale_x = 4;
-                font_scale_y = 4;
-            }
-        }
-
-        terms[terms_i] = flanterm_fb_init(ext_mem_alloc,
-                            pmm_free,
+        terms[terms_i] = flanterm_fb_init(ext_mem_alloc_size_t,
+                            pmm_free_size_t,
                             (void *)(uintptr_t)fb->framebuffer_addr,
                             fb->framebuffer_width, fb->framebuffer_height, fb->framebuffer_pitch,
                             fb->red_mask_size, fb->red_mask_shift,
                             fb->green_mask_size, fb->green_mask_shift,
                             fb->blue_mask_size, fb->blue_mask_shift,
                             bg_canvas,
-                            ansi_colours, ansi_bright_colours,
+                            cfg.ansi_colours, cfg.ansi_bright_colours,
                             &default_bg, &default_fg,
                             &default_bg_bright, &default_fg_bright,
-                            font, font_width, font_height, font_spacing,
+                            cfg.font, cfg.font_width, cfg.font_height, cfg.font_spacing,
                             font_scale_x, font_scale_y,
-                            margin);
+                            margin, cfg.fb_rotation, true);
 
         if (terms[terms_i] != NULL) {
             terms_i++;
@@ -737,10 +865,11 @@ no_load_font:;
 
         if (bg_canvas != NULL) {
             pmm_free(bg_canvas, bg_canvas_size);
+            bg_canvas = NULL;
         }
     }
 
-    pmm_free(font, FONT_MAX);
+    pmm_free(cfg.font, FONT_MAX);
 
     if (background != NULL) {
         image_close(background);
@@ -748,13 +877,15 @@ no_load_font:;
     }
 
     if (terms_i == 0) {
+        pmm_free(terms, fbs_count * sizeof(void *));
+        terms = NULL;
         return false;
     }
 
     for (size_t i = 0; i < terms_i; i++) {
         struct flanterm_context *term = terms[i];
 
-        if (serial) {
+        if (SERIAL_CONSOLE) {
             term->cols = term->cols > 80 ? 80 : term->cols;
             term->rows = term->rows > 24 ? 24 : term->rows;
         }
@@ -782,6 +913,7 @@ no_load_font:;
         term->rows = min_rows;
 
         flanterm_context_reinit(term);
+        flanterm_fb_set_flush_callback(term, fb_flush_cb);
     }
 
     term_backend = GTERM;
@@ -792,4 +924,56 @@ no_load_font:;
     prev_valid = true;
 
     return true;
+}
+
+size_t gterm_prepare_flanterm_params(struct fb_info *fbs, size_t fbs_count,
+                                     struct flanterm_params *out, size_t out_max) {
+    struct gterm_config cfg;
+    gterm_parse_config(NULL, &cfg);
+
+    uint32_t configured_default_bg = default_bg;
+
+    size_t count = 0;
+
+    for (size_t i = 0; i < fbs_count && count < out_max; i++) {
+        struct fb_info *fb = &fbs[i];
+
+        if (fb->framebuffer_bpp != 32) {
+            continue;
+        }
+
+        size_t font_scale_x, font_scale_y;
+        gterm_fb_setup(fb, NULL, &cfg, &font_scale_x, &font_scale_y);
+
+        struct flanterm_params *p = &out[count];
+
+        p->canvas = bg_canvas;
+        p->canvas_size = bg_canvas_size;
+        bg_canvas = NULL;
+
+        memcpy(p->ansi_colours, cfg.ansi_colours, sizeof(cfg.ansi_colours));
+        memcpy(p->ansi_bright_colours, cfg.ansi_bright_colours, sizeof(cfg.ansi_bright_colours));
+        p->default_bg = configured_default_bg;
+        p->default_fg = default_fg;
+        p->default_bg_bright = default_bg_bright;
+        p->default_fg_bright = default_fg_bright;
+
+        p->font = cfg.font;
+        p->font_width = cfg.font_width;
+        p->font_height = cfg.font_height;
+        p->font_spacing = cfg.font_spacing;
+        p->font_scale_x = font_scale_x;
+        p->font_scale_y = font_scale_y;
+        p->margin = margin;
+        p->rotation = cfg.fb_rotation;
+
+        count++;
+    }
+
+    if (background != NULL) {
+        image_close(background);
+        background = NULL;
+    }
+
+    return count;
 }

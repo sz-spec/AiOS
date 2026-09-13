@@ -11,12 +11,34 @@ Supports:
 
 import json
 import hashlib
+import os
+import tempfile
+from threading import RLock
+from collections import OrderedDict
+from functools import lru_cache
 import time as _time
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, asdict
 import logging
+
+def _resolve_dev_memory_dir(persist_dir: Optional[str]) -> str:
+    if persist_dir is not None:
+        return persist_dir
+    return os.environ.get("VOS_DEV_MEMORY_DIR") or str(
+        Path(__file__).parent.parent.parent / "data" / "memory"
+    )
+
+
+_embedding_model_lock = RLock()
+
+
+@lru_cache(maxsize=4)
+def _shared_embedding_model(model_name: str):
+    # Cache only model weights/configuration, never prompts or embedding results.
+    return SentenceTransformer(model_name)
+
 
 logger = logging.getLogger(__name__)
 
@@ -188,9 +210,8 @@ class DevMemory:
         collection_name: str = "dev_memory",
         embedding_model: str = "all-MiniLM-L6-v2",
     ):
-        self.persist_dir = persist_dir or str(
-            Path(__file__).parent.parent.parent / "data" / "memory"
-        )
+        self.persist_dir = _resolve_dev_memory_dir(persist_dir)
+        self._json_lock = RLock()
         self.collection_name = collection_name
         self.embedding_model_name = embedding_model
 
@@ -211,7 +232,7 @@ class DevMemory:
         if EMBEDDINGS_AVAILABLE:
             self._init_embeddings()
 
-        self._initialized = CHROMADB_AVAILABLE
+        self._initialized = self._collection is not None
 
         if self._initialized:
             logger.info("DevMemory initialized with: ChromaDB")
@@ -230,16 +251,17 @@ class DevMemory:
             )
             logger.info(f"ChromaDB collection '{self.collection_name}' ready")
         except Exception as e:
-            logger.error(f"Failed to initialize ChromaDB: {e}")
+            logger.error(f"Failed to initialize ChromaDB: {type(e).__name__}")
             self._initialized = False
 
     def _init_embeddings(self):
         """Initialize embedding model."""
         try:
-            self._embedding_model = SentenceTransformer(self.embedding_model_name)
+            with _embedding_model_lock:
+                self._embedding_model = _shared_embedding_model(self.embedding_model_name)
             logger.info(f"Embedding model '{self.embedding_model_name}' loaded")
         except Exception as e:
-            logger.error(f"Failed to load embedding model: {e}")
+            logger.error(f"Failed to load embedding model: {type(e).__name__}")
 
     # ------------------------------------------------------------------
     # BM25 Index (Hybrid Retrieval)
@@ -259,7 +281,7 @@ class DevMemory:
                 self._bm25_index = None
                 self._bm25_corpus_ids = []
         except Exception as e:
-            logger.warning(f"Failed to rebuild BM25 index: {e}")
+            logger.warning(f"Failed to rebuild BM25 index: {type(e).__name__}")
             self._bm25_index = None
             self._bm25_corpus_ids = []
 
@@ -317,7 +339,7 @@ class DevMemory:
             PermissionError: If model_origin lacks write access to the specified wing.
         """
         if memory_type not in self.MEMORY_TYPES:
-            logger.warning(f"Unknown memory type '{memory_type}', using 'conversation'")
+            logger.warning("Unknown memory type; using conversation")
             memory_type = "conversation"
 
         # Auto-detect spatial metadata
@@ -375,11 +397,11 @@ class DevMemory:
                 # Keep BM25 index in sync
                 self._rebuild_bm25()
                 logger.info(
-                    f"Added memory [{memory_type}] wing={resolved_wing}: {content[:50]}..."
+                    "Added memory id=%s", entry_id
                 )
                 return entry
             except Exception as e:
-                logger.error(f"Failed to add to ChromaDB: {e}")
+                logger.error(f"Failed to add to ChromaDB: {type(e).__name__}")
 
         # Fallback: save to JSON file if nothing else worked
         if not self._initialized:
@@ -387,19 +409,27 @@ class DevMemory:
 
         return entry
 
+    def _read_json_memories(self) -> List[Dict[str, Any]]:
+        path = Path(self.persist_dir) / "memories.json"
+        return json.loads(path.read_text()) if path.exists() else []
+
+    def _write_json_memories(self, memories: List[Dict[str, Any]]) -> None:
+        # Atomic replacement prevents concurrent readers seeing partial JSON.
+        descriptor, temporary = tempfile.mkstemp(dir=self.persist_dir, prefix=".memories-")
+        try:
+            with os.fdopen(descriptor, "w") as stream:
+                json.dump(memories, stream, indent=2)
+            os.replace(temporary, Path(self.persist_dir) / "memories.json")
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
+
     def _save_to_json(self, entry: MemoryEntry) -> MemoryEntry:
         """Fallback: save to JSON file."""
-        json_path = Path(self.persist_dir) / "memories.json"
-
-        memories = []
-        if json_path.exists():
-            with open(json_path, "r") as f:
-                memories = json.load(f)
-
-        memories.append(entry.to_dict())
-
-        with open(json_path, "w") as f:
-            json.dump(memories, f, indent=2)
+        with self._json_lock:
+            memories = self._read_json_memories()
+            memories.append(entry.to_dict())
+            self._write_json_memories(memories)
 
         return entry
 
@@ -521,7 +551,7 @@ class DevMemory:
                                     except Exception:
                                         pass
                     except Exception as e:
-                        logger.warning(f"BM25 search failed: {e}")
+                        logger.warning(f"BM25 search failed: {type(e).__name__}")
 
                 # RRF fusion
                 if bm25_ranks:
@@ -540,7 +570,7 @@ class DevMemory:
                 return memories
 
             except Exception as e:
-                logger.error(f"ChromaDB query failed: {e}")
+                logger.error(f"ChromaDB query failed: {type(e).__name__}")
 
         # Fallback: JSON file
         return self._query_json(query, top_k, memory_type)
@@ -612,7 +642,7 @@ class DevMemory:
                 return memories[:limit]
 
             except Exception as e:
-                logger.error(f"Failed to get recent memories: {e}")
+                logger.error(f"Failed to get recent memories: {type(e).__name__}")
 
         return self._get_recent_json(limit, memory_type)
 
@@ -664,7 +694,7 @@ class DevMemory:
                     )
 
             except Exception as e:
-                logger.error(f"Failed to get stats: {e}")
+                logger.error(f"Failed to get stats: {type(e).__name__}")
         else:
             # Fallback stats from JSON
             json_path = Path(self.persist_dir) / "memories.json"
@@ -682,14 +712,25 @@ class DevMemory:
         """Delete a single memory by ID."""
         success = False
 
+        if not self._initialized or not self._collection:
+            with self._json_lock:
+                memories = self._read_json_memories()
+                retained = [m for m in memories if m.get("id") != memory_id]
+                if len(retained) == len(memories):
+                    return False
+                self._write_json_memories(retained)
+                return True
+
         # Delete from ChromaDB
         if self._initialized and self._collection:
             try:
+                if not self._collection.get(ids=[memory_id], include=[])["ids"]:
+                    return False
                 self._collection.delete(ids=[memory_id])
                 success = True
                 logger.info(f"Deleted memory from ChromaDB: {memory_id}")
             except Exception as e:
-                logger.error(f"Failed to delete from ChromaDB: {e}")
+                logger.error(f"Failed to delete from ChromaDB: {type(e).__name__}")
 
         return success
 
@@ -702,7 +743,19 @@ class DevMemory:
     ) -> bool:
         """Update an existing memory."""
         if not self._initialized or not self._collection:
-            return False
+            with self._json_lock:
+                memories = self._read_json_memories()
+                for entry in memories:
+                    if entry.get("id") != memory_id:
+                        continue
+                    if content is not None:
+                        entry["content"] = content
+                    if memory_type is not None:
+                        entry["memory_type"] = memory_type
+                    entry.setdefault("metadata", {}).update(metadata or {})
+                    self._write_json_memories(memories)
+                    return True
+                return False
 
         try:
             # Get existing memory
@@ -740,7 +793,7 @@ class DevMemory:
             return True
 
         except Exception as e:
-            logger.error(f"Failed to update memory: {e}")
+            logger.error(f"Failed to update memory: {type(e).__name__}")
             return False
 
     def get_by_id(self, memory_id: str) -> Optional[Dict[str, Any]]:
@@ -759,14 +812,16 @@ class DevMemory:
                         ),
                     }
             except Exception as e:
-                logger.error(f"Failed to get memory from ChromaDB: {e}")
+                logger.error(f"Failed to get memory from ChromaDB: {type(e).__name__}")
 
+        if not self._initialized or not self._collection:
+            return next((m for m in self._read_json_memories() if m.get("id") == memory_id), None)
         return None
 
     def export_all(self) -> List[Dict[str, Any]]:
         """Export all memories."""
         if not self._initialized or not self._collection:
-            return []
+            return self._read_json_memories()
 
         try:
             results = self._collection.get(include=["documents", "metadatas"])
@@ -784,7 +839,7 @@ class DevMemory:
                     )
             return memories
         except Exception as e:
-            logger.error(f"Failed to export memories: {e}")
+            logger.error(f"Failed to export memories: {type(e).__name__}")
             return []
 
     def import_memories(self, memories: List[Dict[str, Any]]) -> int:
@@ -805,19 +860,27 @@ class DevMemory:
     def delete_bulk(self, memory_ids: List[str]) -> int:
         """Delete multiple memories. Returns count of deleted."""
         if not self._initialized or not self._collection:
-            return 0
+            return sum(self.delete(memory_id) for memory_id in set(memory_ids))
 
         try:
-            self._collection.delete(ids=memory_ids)
-            logger.info(f"Bulk deleted {len(memory_ids)} memories")
-            return len(memory_ids)
+            existing = self._collection.get(ids=list(set(memory_ids)), include=[])["ids"]
+            if existing:
+                self._collection.delete(ids=existing)
+            return len(existing)
         except Exception as e:
-            logger.error(f"Failed to bulk delete: {e}")
+            logger.error(f"Failed to bulk delete: {type(e).__name__}")
             return 0
 
     def clear(self, memory_type: Optional[str] = None) -> bool:
         """Clear memories (optionally by type)."""
         success = False
+
+        if not self._initialized or not self._collection:
+            with self._json_lock:
+                retained = [m for m in self._read_json_memories()
+                            if memory_type and m.get("memory_type") != memory_type]
+                self._write_json_memories(retained)
+            return True
 
         # Clear from ChromaDB
         if self._initialized and self._collection:
@@ -838,7 +901,7 @@ class DevMemory:
                     )
                 success = True
             except Exception as e:
-                logger.error(f"Failed to clear ChromaDB: {e}")
+                logger.error(f"Failed to clear ChromaDB: {type(e).__name__}")
 
         return success
 
@@ -853,6 +916,39 @@ def get_dev_memory() -> DevMemory:
     if _memory_instance is None:
         _memory_instance = DevMemory()
     return _memory_instance
+
+
+_USER_MEMORY_CACHE_LIMIT = 16
+_user_memory_instances: OrderedDict[tuple[str, str], DevMemory] = OrderedDict()
+_user_memory_lock = RLock()
+
+
+def get_user_dev_memory(user_id: str) -> DevMemory:
+    """Return a principal-isolated store; never adopt unowned legacy memories.
+
+    Caller must pass the authenticated server-derived principal, not request
+    metadata. Trusted internal callers retain get_dev_memory() explicitly.
+    """
+    if not isinstance(user_id, str) or not user_id.strip():
+        raise ValueError("Authenticated memory principal required")
+    namespace = hashlib.sha256(user_id.encode("utf-8")).hexdigest()
+    root = Path(os.environ.get("VOS_MEMORY_TENANT_ROOT") or
+                Path(__file__).parent.parent.parent / "data" / "memory-tenants" / "v1")
+    root = root.expanduser().resolve()
+    directory = root / namespace
+    with _user_memory_lock:
+        root.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if directory.is_symlink():
+            raise ValueError("Memory namespace must not be a symlink")
+        directory.mkdir(exist_ok=True, mode=0o700)
+        key = (str(root), namespace)
+        if key not in _user_memory_instances:
+            _user_memory_instances[key] = DevMemory(
+                persist_dir=str(directory), collection_name=f"memory_{namespace}")
+        _user_memory_instances.move_to_end(key)
+        while len(_user_memory_instances) > _USER_MEMORY_CACHE_LIMIT:
+            _user_memory_instances.popitem(last=False)
+        return _user_memory_instances[key]
 
 
 # Convenience functions

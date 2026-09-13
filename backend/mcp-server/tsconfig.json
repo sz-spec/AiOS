@@ -45,13 +45,12 @@
     "preserveConstEnums": true,
     
     // Path Aliases
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@framework/*": ["src/framework/*"],
-      "@orchestration/*": ["src/orchestration/*"],
-      "@tools/*": ["src/framework/tools/*"],
-      "@types/*": ["src/types/*"]
+      "@/*": ["./src/*"],
+      "@framework/*": ["./src/framework/*"],
+      "@orchestration/*": ["./src/orchestration/*"],
+      "@tools/*": ["./src/framework/tools/*"],
+      "@types/*": ["./src/types/*"]
     },
     
     // Experimental (for decorators if needed)

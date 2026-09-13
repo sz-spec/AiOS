@@ -84,6 +84,7 @@ export function useKernel() {
   }, [store.isDesktop, store.qemuAlive, getToken]);
 
   // ---- Local state for HTTP-only operations ----
+  const [processError, setProcessError] = useState<string | null>(null);
   const [processes, setProcesses] = useState<KernelProcess[]>([]);
   const [filesystem, setFilesystem] = useState<FilesystemInfo | null>(null);
 
@@ -96,13 +97,14 @@ export function useKernel() {
   // ---- HTTP-only operations (no Tauri equivalent yet) ----
 
   const fetchProcesses = useCallback(async () => {
+    setProcessError(null);
     try {
       const res = await apiFetch(getToken, `${API_BASE}/api/kernel/processes`);
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const data = await res.json();
       setProcesses(data.processes || []);
-    } catch {
-      // Process list unavailable
+    } catch (error) {
+      setProcessError(error instanceof Error ? error.message : 'Process list unavailable');
     }
   }, [getToken]);
 
@@ -179,8 +181,8 @@ export function useKernel() {
   const status: KernelStatus | null = store.connected || store.qemuAlive
     ? {
         connected: store.connected,
-        ping: store.vbusConnected,
-        data: '',
+        ping: store.statusPing,
+        data: store.statusData,
         sysinfo: store.sysinfo,
       }
     : null;
@@ -191,7 +193,7 @@ export function useKernel() {
     processes,
     filesystem,
     loading: store.loading,
-    error: store.error,
+    error: processError ?? store.error,
     fetchStatus,
     fetchProcesses,
     fetchFilesystem,

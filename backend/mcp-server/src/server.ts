@@ -1,24 +1,31 @@
+#!/usr/bin/env node
 // src/server-with-cost-optimization.ts
 // V OS MCP Agent Server with Full Cost Optimization
 
 import { FastMCP } from "fastmcp";
+import { createAuth, requireAdmin, quotaSubject, type Principal } from "./security/mcp-auth.js";
 import { z } from "zod";
 import { randomUUID } from "crypto";
 import fs from "node:fs";
 import path from "node:path";
 
 // Cost optimization imports
-import { CostAwareRouter, MODEL_REGISTRY, type RoutingDecision } from "./orchestration/cost-aware-router";
-import { SemanticCache, createSemanticCache } from "./framework/caching/semantic-cache";
-import { QuotaManager, quotaManager, type QuotaCheckResult } from "./framework/quotas/quota-manager";
-import { CostTracker, costTracker } from "./observability/cost-tracker";
+import { CostAwareRouter, MODEL_REGISTRY, type RoutingDecision } from "./orchestration/cost-aware-router.js";
+import { createSemanticCache } from "./framework/caching/semantic-cache.js";
+import { quotaManager } from "./framework/quotas/quota-manager.js";
+import { costTracker } from "./observability/cost-tracker.js";
 
 // SmartRouter integration
-import { SmartRouterBridge, createSmartRouter, type SmartRouterModel } from "./orchestration/smart-router-bridge";
+import { createSmartRouter, type SmartRouterModel } from "./orchestration/smart-router-bridge.js";
 
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
+
+// Validate identity configuration before creating services or opening a listener.
+const auth = createAuth(process.env);
+// stdout belongs exclusively to MCP JSON-RPC when using stdio.
+if (auth.transport === "stdio") console.log = console.error.bind(console);
 
 const config = {
   port: parseInt(process.env.PORT || "8080"),
@@ -58,7 +65,7 @@ const smartRouter = createSmartRouter({
 });
 
 // Semantic cache (requires OpenAI API key for embeddings)
-const semanticCache = config.openaiApiKey
+const semanticCache = auth.transport === "stdio" && config.openaiApiKey
   ? createSemanticCache(config.openaiApiKey, {
       similarityThreshold: 0.92,
       ttlMs: 24 * 60 * 60 * 1000, // 24 hours
@@ -71,16 +78,16 @@ const semanticCache = config.openaiApiKey
 const simpleCache = new Map<string, { response: string; model: string; timestamp: number }>();
 const SIMPLE_CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
-function getSimpleCacheKey(message: string): string {
-  // Simple hash for exact match caching
-  return message.trim().toLowerCase();
+function getSimpleCacheKey(userId: string, message: string, agentId?: string, model?: string): string {
+  // Exact inputs and authenticated principal prevent cross-user/context hits.
+  return JSON.stringify([userId, agentId ?? null, model ?? null, message]);
 }
 
 // ============================================================================
 // PERSISTENT CACHE
 // ============================================================================
 
-const CACHE_FILE = path.join(process.cwd(), "cache", "simple-cache.json");
+const CACHE_FILE = path.join(process.env.MCP_CACHE_DIR || path.join(process.cwd(), "cache"), "simple-cache-v2-principals.json");
 
 function loadCache(): void {
   try {
@@ -131,8 +138,10 @@ loadCache();
 // MCP SERVER
 // ============================================================================
 
-const mcp = new FastMCP({
+const mcp = new FastMCP<Principal>({
   name: "v-os-mcp-cost-optimized",
+  health: { enabled: true, path: "/health", message: "ok" },
+  authenticate: auth.transport === "httpStream" ? auth.authenticate : undefined,
   version: "1.1.0",
 });
 
@@ -154,10 +163,10 @@ mcp.addTool({
     streamingHint: true,
     readOnlyHint: false,
   },
-  execute: async (args, { reportProgress }) => {
+  execute: async (args, { reportProgress, session }) => {
     const startTime = Date.now();
     const requestId = randomUUID();
-    const userId = "default-user"; // In production, get from session
+    const userId = auth.principal(session).userId;
     
     try {
       // ========================================
@@ -235,7 +244,7 @@ mcp.addTool({
       // Step 2b: Check simple cache (fallback when no semantic cache)
       // ========================================
       if (!semanticCache) {
-        const cacheKey = getSimpleCacheKey(args.message);
+        const cacheKey = getSimpleCacheKey(userId, args.message, args.agentId, args.forceModel);
         const cached = simpleCache.get(cacheKey);
 
         if (cached && (Date.now() - cached.timestamp) < SIMPLE_CACHE_TTL) {
@@ -376,7 +385,7 @@ mcp.addTool({
         });
       } else {
         // Use simple cache when semantic cache is not available
-        const cacheKey = getSimpleCacheKey(args.message);
+        const cacheKey = getSimpleCacheKey(userId, args.message, args.agentId, args.forceModel);
         simpleCache.set(cacheKey, {
           response: response.text,
           model: routingDecision.model.id,
@@ -427,7 +436,8 @@ mcp.addTool({
   parameters: z.object({
     format: z.enum(["summary", "detailed", "json"]).default("summary"),
   }),
-  execute: async (args) => {
+  execute: async (args, { session }) => {
+    requireAdmin(auth.principal(session));
     const todayStats = costTracker.getTodayStats();
     const projection = costTracker.getProjection();
     const cacheStats = semanticCache?.getStats();
@@ -496,8 +506,8 @@ mcp.addTool({
   parameters: z.object({
     userId: z.string().optional().describe("User ID to check (admin only)"),
   }),
-  execute: async (args) => {
-    const userId = args.userId || "default-user";
+  execute: async (args, { session }) => {
+    const userId = quotaSubject(auth.principal(session), args.userId);
     const usage = quotaManager.getUsage(userId);
     const quota = quotaManager.getQuota(userId);
     
@@ -541,7 +551,8 @@ mcp.addTool({
     userId: z.string().describe("User ID"),
     tier: z.enum(["free", "pro", "enterprise"]).describe("Quota tier"),
   }),
-  execute: async (args) => {
+  execute: async (args, { session }) => {
+    requireAdmin(auth.principal(session));
     quotaManager.setQuota(args.userId, args.tier);
     
     return {
@@ -563,7 +574,8 @@ mcp.addTool({
   name: "v_cache_stats",
   description: "Get semantic cache statistics",
   parameters: z.object({}),
-  execute: async () => {
+  execute: async (_args, { session }) => {
+    requireAdmin(auth.principal(session));
     if (!semanticCache) {
       return {
         content: [
@@ -609,7 +621,8 @@ mcp.addTool({
   name: "v_health",
   description: "Server health and cost optimization status",
   parameters: z.object({}),
-  execute: async () => {
+  execute: async (_args, { session }) => {
+    requireAdmin(auth.principal(session));
     const projection = costTracker.getProjection();
     const cacheStats = semanticCache?.getStats();
     
@@ -649,7 +662,6 @@ async function callLLM(
   message: string,
   provider: string
 ): Promise<{ text: string; inputTokens: number; outputTokens: number }> {
-  const startTime = Date.now();
 
   try {
     if (provider === "anthropic") {
@@ -809,12 +821,14 @@ async function main() {
   });
 
   // Start server
-  await mcp.start({
+  await mcp.start(auth.transport === "stdio" ? { transportType: "stdio" } : {
     transportType: "httpStream",
     httpStream: {
       port: config.port,
-      // Note: DNS rebinding protection handled at reverse proxy level
-      // allowedHosts: config.allowedHosts,
+      host: auth.host,
+      cors: false,
+      stateless: true,
+      enableJsonResponse: true,
     },
   });
 
@@ -827,4 +841,7 @@ async function main() {
   }, 60 * 60 * 1000); // Every hour
 }
 
-main().catch(console.error);
+main().catch((error) => {
+  console.error("MCP startup failed:", error instanceof Error ? error.message : "unknown error");
+  process.exitCode = 1;
+});

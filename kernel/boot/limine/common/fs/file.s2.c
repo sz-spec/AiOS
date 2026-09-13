@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <fs/file.h>
-#include <fs/ext2.h>
 #include <fs/fat32.h>
 #include <fs/iso9660.h>
 #include <lib/print.h>
@@ -17,7 +16,8 @@ char *fs_get_label(struct volume *part) {
     if ((ret = fat32_get_label(part)) != NULL) {
         return ret;
     }
-    if ((ret = ext2_get_label(part)) != NULL) {
+
+    if ((ret = iso9660_get_label(part)) != NULL) {
         return ret;
     }
 
@@ -25,9 +25,7 @@ char *fs_get_label(struct volume *part) {
 }
 
 bool fs_get_guid(struct guid *guid, struct volume *part) {
-    if (ext2_get_guid(guid, part) == true) {
-        return true;
-    }
+    (void)guid; (void)part;
 
     return false;
 }
@@ -51,14 +49,12 @@ struct file_handle *fopen(struct volume *part, const char *filename) {
 
     if (part->pxe) {
         if ((ret = tftp_open(part, "", filename)) == NULL) {
-            return NULL;
+            goto err;
         }
+        pmm_free(filename_new, filename_new_len);
         return ret;
     }
 
-    if ((ret = ext2_open(part, filename)) != NULL) {
-        goto success;
-    }
     if ((ret = iso9660_open(part, filename)) != NULL) {
         goto success;
     }
@@ -66,6 +62,8 @@ struct file_handle *fopen(struct volume *part, const char *filename) {
         goto success;
     }
 
+err:
+    pmm_free(filename_new, filename_new_len);
     return NULL;
 
 success:
@@ -87,89 +85,20 @@ void fclose(struct file_handle *fd) {
     pmm_free(fd, sizeof(struct file_handle));
 }
 
-void fread(struct file_handle *fd, void *buf, uint64_t loc, uint64_t count) {
+uint64_t fread(struct file_handle *fd, void *buf, uint64_t loc, uint64_t count) {
+    if (loc > fd->size || count > fd->size - loc) {
+        panic(false, "fread: attempted out of bounds read");
+    }
+
     if (fd->is_memfile) {
+#if defined (__i386__)
+        if (fd->is_high_mem) {
+            panic(false, "fread: memfile resides above 4 GiB; caller must use load_addr_64 directly");
+        }
+#endif
         memcpy(buf, fd->fd + loc, count);
+        return count;
     } else {
-        fd->read(fd, buf, loc, count);
-    }
-}
-
-void *freadall(struct file_handle *fd, uint32_t type) {
-    return freadall_mode(fd, type, false
-#if defined (__i386__)
-        , NULL
-#endif
-    );
-}
-
-void *freadall_mode(struct file_handle *fd, uint32_t type, bool allow_high_allocs
-#if defined (__i386__)
-    , void (*memcpy_to_64)(uint64_t dst, void *src, size_t count)
-#endif
-) {
-#if defined (__i386__)
-    static uint64_t high_ret;
-
-    if (memcpy_to_64 == NULL) {
-        allow_high_allocs = false;
-    }
-#endif
-
-    if (fd->is_memfile) {
-        if (fd->readall) {
-#if defined (__i386__)
-            if (allow_high_allocs == true) {
-                high_ret = (uintptr_t)fd->fd;
-                return &high_ret;
-            }
-#endif
-            return fd->fd;
-        }
-        memmap_alloc_range((uint64_t)(size_t)fd->fd, ALIGN_UP(fd->size, 4096), type, 0, true, false, false);
-        fd->readall = true;
-#if defined (__i386__)
-        if (allow_high_allocs == true) {
-            high_ret = (uintptr_t)fd->fd;
-            return &high_ret;
-        }
-#endif
-        return fd->fd;
-    } else {
-        void *ret = ext_mem_alloc_type_aligned_mode(fd->size, type, 4096, allow_high_allocs);
-#if defined (__i386__)
-        if (allow_high_allocs == true) {
-            high_ret = *(uint64_t *)ret;
-            if (high_ret < 0x100000000) {
-                ret = (void *)(uintptr_t)high_ret;
-                goto low_ret;
-            }
-            void *pool = ext_mem_alloc(0x100000);
-            for (size_t i = 0; i < fd->size; i += 0x100000) {
-                size_t count;
-                if (fd->size - i < 0x100000) {
-                    count = fd->size - i;
-                } else {
-                    count = 0x100000;
-                }
-                fd->read(fd, pool, i, count);
-                memcpy_to_64(high_ret + i, pool, count);
-            }
-            pmm_free(pool, 0x100000);
-            return &high_ret;
-        }
-low_ret:
-#endif
-        fd->read(fd, ret, 0, fd->size);
-        fd->close(fd);
-        fd->fd = ret;
-        fd->readall = true;
-        fd->is_memfile = true;
-#if defined (__i386__)
-        if (allow_high_allocs == true) {
-            return &high_ret;
-        }
-#endif
-        return ret;
+        return fd->read(fd, buf, loc, count);
     }
 }

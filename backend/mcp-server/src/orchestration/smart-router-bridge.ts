@@ -8,7 +8,7 @@ import { spawn, execSync, ChildProcess } from "child_process";
 import { EventEmitter } from "events";
 import path from "path";
 import { fileURLToPath } from "url";
-import { MODEL_REGISTRY, ModelConfig, getModelForRole } from "./model-registry.js";
+import { MODEL_REGISTRY, getModelForRole } from "./model-registry.js";
 
 // ============================================================================
 // PATH CONFIGURATION
@@ -45,7 +45,7 @@ const ALLOWED_WRITE_PATHS = [
 // ============================================================================
 // Human-readable names for UI display
 
-const MODEL_DISPLAY_NAMES: Record<string, string> = {
+export const MODEL_DISPLAY_NAMES: Record<string, string> = {
   "liquid-lfm-2.5-1.2b": "Liquid LFM 2.5 (Turbo)",
   "mistral-7b-v4-instruct": "Mistral 7B v4 (Long Context)",
   "claude-3-opus-20260210": "Claude Opus 4.6 (Premium Coding)",
@@ -102,7 +102,7 @@ interface StreamChunk {
 
 interface PythonResponse {
   status: "ready" | "ok" | "error" | "stream" | "exit";
-  data?: any;
+  data?: Partial<Omit<SmartRouterResult, "source"> & StreamChunk> & { confidence?: number; source?: RoutingDecision["source"] };
   message?: string;
 }
 
@@ -244,7 +244,7 @@ export class SmartRouterBridge extends EventEmitter {
         } else if (response.status === "exit") {
           this.cleanup();
         }
-      } catch (e) {
+      } catch (_e) {
         console.warn("[SmartRouterBridge] Failed to parse response:", line);
       }
     }

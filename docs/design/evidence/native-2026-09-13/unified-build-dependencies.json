@@ -1,0 +1,9 @@
+{
+  "no_op_preserves_kernel_embedding_init_musl": true,
+  "init_sha256": "0d17df8c6f3f3122c504a6daf194e5b0781802f9d5439362d87216ba568044e0",
+  "embedding_sha256": "6d57eee46b1623f0b7db4333a037671ea2212741e8cc583c0a0be7791946556c",
+  "musl_mtime_ns": 1789330991728739463,
+  "benchmark_flag_reaches_embedding": true,
+  "restored_default_matches_initial_binaries": true,
+  "user_flags_do_not_rebuild_musl": true
+}

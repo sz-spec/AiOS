@@ -15,7 +15,12 @@ for artifact in limine limine-bios.sys limine-bios-cd.bin limine-uefi-cd.bin BOO
 done
 # Never erase an arbitrary user-supplied staging path.
 staging="$(mktemp -d /tmp/vos5-iso.XXXXXX)"
-trap 'rm -rf "$staging"' EXIT
+publication=''
+cleanup() {
+    rm -rf "$staging"
+    if [[ -n "$publication" ]]; then rm -rf "$publication"; fi
+}
+trap cleanup EXIT
 mkdir -p "$staging/root/boot/limine" "$staging/root/EFI/BOOT"
 cp "$kernel_elf" "$staging/root/boot/vos3.elf"
 cp "$limine_bin/limine-bios.sys" "$limine_bin/limine-bios-cd.bin" \
@@ -41,7 +46,12 @@ xorriso -indev "$staging/vos5.iso" -report_el_torito plain > "$staging/boot-cata
 grep -Eq 'El Torito boot img.*BIOS' "$staging/boot-catalog.txt"
 grep -Eq 'El Torito boot img.*UEFI' "$staging/boot-catalog.txt"
 mkdir -p "$(dirname "$output_iso")"
-cp "$staging/vos5.iso" "$output_iso"
-cp "$staging/boot-catalog.txt" "$output_iso.boot-catalog.txt"
+# Stage publication on the destination filesystem. Only rename the verified,
+# fully copied image over the old output; interruption cannot truncate it.
+publication="$(mktemp -d "$output_iso.publish.XXXXXX")"
+cp "$staging/vos5.iso" "$publication/image.iso"
+cp "$staging/boot-catalog.txt" "$publication/boot-catalog.txt"
+mv -f "$publication/boot-catalog.txt" "$output_iso.boot-catalog.txt"
+mv -f "$publication/image.iso" "$output_iso"
 echo "Built BIOS + UEFI image: $output_iso"
 shasum -a 256 "$output_iso"

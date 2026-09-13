@@ -10,7 +10,7 @@ start:
     mov ds, ax
     mov es, ax
     mov ss, ax
-    mov sp, 0x7c00
+    mov esp, 0x7c00
 
     lgdt [gdt]
 
@@ -54,7 +54,7 @@ incbin DECOMPRESSOR_PATH
 
 align 16
 stage2:
-%strcat STAGE2_PATH BUILDDIR, '/common-bios/stage2.bin.gz'
+%strcat STAGE2_PATH BUILDDIR, '/common-bios/stage2.bin.limlz'
 incbin STAGE2_PATH
 .size: equ $ - stage2
 .fullsize: equ $ - decompressor

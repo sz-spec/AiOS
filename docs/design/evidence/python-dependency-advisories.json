@@ -1,0 +1,70 @@
+{
+  "scan_date": "2026-09-14",
+  "scanner": "pip-audit",
+  "scope": "Installed macOS ARM64 Python 3.12 upgrade environment",
+  "reported_findings": 9,
+  "unique_findings": 6,
+  "affected_packages": 3,
+  "findings": [
+    {
+      "package": "chromadb",
+      "version": "1.1.1",
+      "id": "PYSEC-2026-311",
+      "aliases": [
+        "GHSA-f4j7-r4q5-qw2c",
+        "CVE-2026-45829"
+      ],
+      "fix_versions": []
+    },
+    {
+      "package": "chromadb",
+      "version": "1.1.1",
+      "id": "PYSEC-2026-3814",
+      "aliases": [
+        "GHSA-36p7-vc44-83pf",
+        "CVE-2026-45833"
+      ],
+      "fix_versions": []
+    },
+    {
+      "package": "chromadb",
+      "version": "1.1.1",
+      "id": "PYSEC-2026-3815",
+      "aliases": [
+        "CVE-2026-45831",
+        "GHSA-xph7-9rjv-w5fr"
+      ],
+      "fix_versions": []
+    },
+    {
+      "package": "chromadb",
+      "version": "1.1.1",
+      "id": "PYSEC-2026-3813",
+      "aliases": [
+        "CVE-2026-45830",
+        "GHSA-2wm9-hf6c-p5cr"
+      ],
+      "fix_versions": []
+    },
+    {
+      "package": "diskcache",
+      "version": "5.6.3",
+      "id": "PYSEC-2026-2447",
+      "aliases": [
+        "CVE-2025-69872",
+        "GHSA-w8v5-vhqr-4h9v"
+      ],
+      "fix_versions": []
+    },
+    {
+      "package": "ragas",
+      "version": "0.4.3",
+      "id": "PYSEC-2026-3046",
+      "aliases": [
+        "GHSA-95ww-475f-pr4f",
+        "CVE-2026-6587"
+      ],
+      "fix_versions": []
+    }
+  ]
+}

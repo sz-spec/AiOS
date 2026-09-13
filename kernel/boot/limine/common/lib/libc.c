@@ -5,9 +5,15 @@
 #include <string.h>
 #include <lib/libc.h>
 #include <lib/misc.h>
+#include <mm/pmm.h>
 
-// Slightly adapted strtoul() implementation from FreeBSD.
+// Adapted from FreeBSD's strtoul(), and covered by the terms it carries there
+// rather than by COPYING.
 // https://github.com/freebsd/freebsd-src/blob/de1aa3dab23c06fec962a14da3e7b4755c5880cf/lib/libc/stdlib/strtoul.c
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 1990, 1993 The Regents of the University of California.
+// Copyright (c) 2011 The FreeBSD Foundation; portions were developed by David
+// Chisnall under sponsorship from the FreeBSD Foundation.
 unsigned long strtoul(const char *nptr, char **endptr, int base) {
     const char *s;
     unsigned long acc;
@@ -97,23 +103,34 @@ void *memchr(const void *ptr, int ch, size_t n) {
 }
 
 char *strchr(const char *str, int ch) {
-    for (size_t i = 0; str[i]; i++) {
-        if (str[i] == ch) {
+    for (size_t i = 0; ; i++) {
+        if (str[i] == (char)ch) {
             return (char *)str + i;
         }
+        if (str[i] == '\0') {
+            return NULL;
+        }
     }
-
-    return NULL;
 }
 
 char *strrchr(const char *str, int ch) {
     char *p = NULL;
 
-    for (size_t i = 0; str[i]; i++) {
-        if (str[i] == ch) {
+    for (size_t i = 0; ; i++) {
+        if (str[i] == (char)ch) {
             p = (char *)str + i;
+        }
+        if (str[i] == '\0') {
+            break;
         }
     }
 
     return p;
+}
+
+char *strdup(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *buf = ext_mem_alloc(len);
+    memcpy(buf, s, len);
+    return buf;
 }

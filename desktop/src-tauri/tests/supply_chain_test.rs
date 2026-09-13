@@ -10,9 +10,9 @@ use std::fs;
 use std::path::Path;
 
 /// Expected checksums from known-good Cargo.lock (pinned supply chain)
-const MEMMAP2_VERSION: &str = "0.9.10";
+const MEMMAP2_VERSION: &str = "0.9.11";
 const MEMMAP2_CHECKSUM: &str =
-    "714098028fe011992e1c3962653c96b2d578c4b4bce9036e15ff220319b1e0e3";
+    "d1219ed1b7f229ee7104d281dd01d6802fe28bb6e95d292942c4daacdeb798c0";
 
 const SUBTLE_VERSION: &str = "2.6.1";
 const SUBTLE_CHECKSUM: &str =

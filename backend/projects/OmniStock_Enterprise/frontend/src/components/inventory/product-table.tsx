@@ -12,6 +12,15 @@ interface ProductTableProps {
   onRestock?: (product: Product) => void;
 }
 
+function SortIcon({ field, sortField, sortDirection }: {
+  field: keyof Product;
+  sortField: keyof Product;
+  sortDirection: 'asc' | 'desc';
+}) {
+  if (sortField !== field) return <span className="text-gray-300 ml-1">↕</span>;
+  return <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
+}
+
 export function ProductTable({ products, onEdit, onRestock }: ProductTableProps) {
   const [sortField, setSortField] = useState<keyof Product>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -39,10 +48,7 @@ export function ProductTable({ products, onEdit, onRestock }: ProductTableProps)
     }
   };
 
-  const SortIcon = ({ field }: { field: keyof Product }) => {
-    if (sortField !== field) return <span className="text-gray-300 ml-1">↕</span>;
-    return <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
-  };
+
 
   return (
     <div className="overflow-x-auto">
@@ -53,31 +59,31 @@ export function ProductTable({ products, onEdit, onRestock }: ProductTableProps)
               className="px-4 py-3 text-left text-sm font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
               onClick={() => handleSort('sku')}
             >
-              SKU <SortIcon field="sku" />
+              SKU <SortIcon sortField={sortField} sortDirection={sortDirection} field="sku" />
             </th>
             <th
               className="px-4 py-3 text-left text-sm font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
               onClick={() => handleSort('name')}
             >
-              Product <SortIcon field="name" />
+              Product <SortIcon sortField={sortField} sortDirection={sortDirection} field="name" />
             </th>
             <th
               className="px-4 py-3 text-left text-sm font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
               onClick={() => handleSort('category')}
             >
-              Category <SortIcon field="category" />
+              Category <SortIcon sortField={sortField} sortDirection={sortDirection} field="category" />
             </th>
             <th
               className="px-4 py-3 text-right text-sm font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
               onClick={() => handleSort('quantity')}
             >
-              Qty <SortIcon field="quantity" />
+              Qty <SortIcon sortField={sortField} sortDirection={sortDirection} field="quantity" />
             </th>
             <th
               className="px-4 py-3 text-right text-sm font-semibold text-gray-600 cursor-pointer hover:text-gray-900"
               onClick={() => handleSort('price')}
             >
-              Price <SortIcon field="price" />
+              Price <SortIcon sortField={sortField} sortDirection={sortDirection} field="price" />
             </th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600">
               Status

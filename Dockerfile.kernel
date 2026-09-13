@@ -1,8 +1,8 @@
 # =============================================================================
 # VOS3 Kernel Build Environment
 #
-# Multi-stage Dockerfile for reproducible x86_64-elf cross-compilation.
-# Produces identical vos3.elf regardless of host OS (macOS, Linux, Windows).
+# Multi-stage Dockerfile with pinned, hash-checked cross-compiler sources.
+# Cross-host byte reproducibility is not established; base packages remain mutable.
 #
 # Usage:
 #   docker build -f Dockerfile.kernel -t vos3-builder .
@@ -13,10 +13,12 @@
 # -----------------------------------------------------------------------------
 # Stage 1: Build x86_64-elf cross-compiler (binutils + GCC)
 # -----------------------------------------------------------------------------
-FROM debian:bookworm-slim AS toolchain
+FROM debian:trixie-slim AS toolchain
 
-ARG BINUTILS_VERSION=2.42
-ARG GCC_VERSION=13.2.0
+ARG BINUTILS_VERSION=2.47
+ARG BINUTILS_SHA256=154ab23b60070e8f27013c22977f1129425d67d1e8acd6e13010e617811e4cff
+ARG GCC_VERSION=16.2.0
+ARG GCC_SHA256=e6738e29597f733270731aa90600f37ffdc045079dfc27ec7e8192cc81085c3e
 ARG PREFIX=/opt/cross
 ARG TARGET=x86_64-elf
 
@@ -40,6 +42,7 @@ WORKDIR /tmp/build
 
 # Build binutils
 RUN wget -q https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz \
+    && echo "${BINUTILS_SHA256}  binutils-${BINUTILS_VERSION}.tar.xz" | sha256sum -c - \
     && tar xf binutils-${BINUTILS_VERSION}.tar.xz \
     && mkdir build-binutils && cd build-binutils \
     && ../binutils-${BINUTILS_VERSION}/configure \
@@ -54,6 +57,7 @@ RUN wget -q https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz
 
 # Build GCC (C only, freestanding)
 RUN wget -q https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz \
+    && echo "${GCC_SHA256}  gcc-${GCC_VERSION}.tar.xz" | sha256sum -c - \
     && tar xf gcc-${GCC_VERSION}.tar.xz \
     && mkdir build-gcc && cd build-gcc \
     && ../gcc-${GCC_VERSION}/configure \
@@ -74,7 +78,7 @@ RUN wget -q https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.ta
 # -----------------------------------------------------------------------------
 # Stage 2: Runtime image with build tools + QEMU for testing
 # -----------------------------------------------------------------------------
-FROM debian:bookworm-slim AS runtime
+FROM debian:trixie-slim AS runtime
 
 ARG PREFIX=/opt/cross
 
@@ -86,16 +90,32 @@ COPY --from=toolchain ${PREFIX} ${PREFIX}
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    clang \
+    lld \
+    nasm \
+    autoconf \
+    automake \
+    libtool \
+    pkg-config \
+    libgmp10 \
+    libmpfr6 \
+    libmpc3 \
     make \
     bash \
     xxd \
-    grub-pc-bin \
     grub-common \
     xorriso \
     mtools \
     qemu-system-x86 \
+    ovmf \
     python3 \
     && rm -rf /var/lib/apt/lists/*
+
+# Preserve legacy GRUB PC tooling on its supported container architecture.
+RUN if [ "$(dpkg --print-architecture)" = amd64 ]; then \
+        apt-get update && apt-get install -y --no-install-recommends grub-pc-bin \
+        && rm -rf /var/lib/apt/lists/*; fi
 
 # Verify toolchain
 RUN x86_64-elf-gcc --version && x86_64-elf-ld --version

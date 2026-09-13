@@ -141,3 +141,25 @@ Limine-protocol/KASLR path remains unqualified.
 Windows coexistence, Secure Boot/key enrollment, persistent storage/network
 support, air-gap AI inference, broad physical-hardware coverage and the full
 cross-source consolidation remain open release requirements.
+
+## AP readiness and allocation-failure containment
+
+AP startup now uses a per-CPU atomic handshake: starting, prepared, released,
+failed or canceled. Readiness is published only after IST stacks, local syscall
+MSRs, LAPIC and scheduler initialization succeed. The BSP counts/releases only
+a prepared AP. A canceled late AP cannot enter its scheduler. Missing critical
+IST storage parks the CPU with interrupts disabled instead of continuing.
+Firmware topology indices are preserved after startup failure.
+
+`ap-ready-*.json` records BIOS4, UEFI2 and keyboard2 regression tests. The
+injection build uses `EXTRA_CFLAGS=-DVOS3_TEST_AP_IST_FAILURE_CPU=1` in a separate
+build directory and ISO. Its ordinary two-CPU smoke fails as expected;
+`ap-ready-negative-check.json` verifies that CPU 1 is parked, never reported
+online or entering its scheduler, while BSP user-space setup still runs.
+This does not simulate every allocation failure or prove concurrent AP user
+workloads. Shared bootstrap parameters still require stopping further startup
+after any failure. Some acquired resources remain reserved for parked CPUs.
+
+Concurrent serial writes can interleave the SMP initialization summary. Smoke
+tools also accept the kernel-main online-count summary, which reads the same
+SMP count; they still require the requested CPU count and real user output.

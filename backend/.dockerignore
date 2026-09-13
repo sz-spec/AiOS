@@ -5,6 +5,13 @@ __pycache__
 .env.*
 !.env.example
 node_modules
+**/node_modules
+**/.next
+**/.venv*
+**/__pycache__
+**/.env
+**/.env.*
+!**/.env.example
 .pytest_cache
 .coverage
 htmlcov

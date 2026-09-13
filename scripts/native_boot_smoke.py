@@ -60,7 +60,7 @@ def main():
                   observation_seconds=args.seconds, exit_status=exit_status,
                   **classify_serial(raw, exit_status),
                   scope='VM boot to user-space setup; not installation, AI inference, or physical hardware qualification')
-    online = re.findall(r'Initialization complete:\s*(\d+) CPUs online', raw)
+    online = re.findall(r'(?:Initialization complete:|SMP:)\s*(\d+) CPUs online', raw)
     result['online_cpus'] = int(online[-1]) if online else None
     if args.smp > 1 and result['online_cpus'] != args.smp:
         result['passed'] = False

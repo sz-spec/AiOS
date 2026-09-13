@@ -4,17 +4,22 @@
 .global riscv_spinup
 riscv_spinup:
 .option norelax
-        csrci   sstatus, 0x2
-        csrw    sie, zero
-
         lla     t0, 0f
         add     t0, t0, a3
         csrw    stvec, t0
-        csrw    satp, a2
+        // A fence after the switch would never execute: the next fetch traps.
         sfence.vma
+        csrw    satp, a2
         unimp
 .align 4
 0:
+        // The manual asks for one after every `satp` write too.
+        sfence.vma
+
+        // The trap above sets SPP, so the handoff state is written after it.
+        li      t0, (2 << 32)
+        csrw    sstatus, t0
+        csrw    sie, zero
         csrw    stvec, zero
 
         mv      t0, a0
@@ -51,5 +56,3 @@ riscv_spinup:
         mv      ra, zero
 
         jr      t0
-
-.section .note.GNU-stack,"",%progbits

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include <drivers/edid.h>
 
 struct resolution {
@@ -36,8 +37,17 @@ extern struct fb_info *fb_fbs;
 extern size_t fb_fbs_count;
 
 void fb_init(struct fb_info **ret, size_t *_fbs_count,
-             uint64_t target_width, uint64_t target_height, uint16_t target_bpp);
+             uint64_t target_width, uint64_t target_height, uint16_t target_bpp,
+             bool preserve_screen, bool keep_wc);
 
 void fb_clear(struct fb_info *fb);
+
+bool fb_flush_reliable(void);
+
+// False means no mechanism exists, not that a flush was attempted and failed.
+bool fb_flush(volatile void *base, size_t length);
+
+// flanterm's callback type has no return value.
+void fb_flush_cb(volatile void *base, size_t length);
 
 #endif

@@ -15,8 +15,8 @@
 ///
 /// No `unsafe` code is used anywhere in this module.
 
-use hmac::{Hmac, Mac};
-use rand::RngCore;
+use hmac::{Hmac, KeyInit, Mac};
+use rand::Rng;
 use sha2::Sha256;
 use subtle::ConstantTimeEq;
 
@@ -48,10 +48,10 @@ impl HmacAuth {
 
     /// Creates a new `HmacAuth` with a cryptographically random 32-byte key.
     ///
-    /// Uses `rand::thread_rng()` as the entropy source.
+    /// Uses `rand::rng()` as the entropy source.
     pub fn from_random() -> Self {
         let mut key = [0u8; 32];
-        rand::thread_rng().fill_bytes(&mut key);
+        rand::rng().fill_bytes(&mut key);
         Self { key }
     }
 
@@ -115,6 +115,34 @@ mod tests {
     /// Helper: creates a zeroed 64-byte header.
     fn blank_header() -> [u8; 64] {
         [0u8; 64]
+    }
+
+    #[test]
+    fn test_rfc4231_hmac_sha256_vector() {
+        // RFC 4231 case 1: independent known-answer check of the upgraded crypto API.
+        let mut mac = HmacSha256::new_from_slice(&[0x0b; 20]).unwrap();
+        mac.update(b"Hi There");
+        let actual = mac.finalize().into_bytes();
+        let expected = [
+            0xb0, 0x34, 0x4c, 0x61, 0xd8, 0xdb, 0x38, 0x53,
+            0x5c, 0xa8, 0xaf, 0xce, 0xaf, 0x0b, 0xf1, 0x2b,
+            0x88, 0x1d, 0xc2, 0x00, 0xc9, 0x83, 0x3d, 0xa7,
+            0x26, 0xe9, 0x37, 0x6c, 0x2e, 0x32, 0xcf, 0xf7,
+        ];
+        assert_eq!(actual.as_slice(), expected);
+    }
+
+    #[test]
+    fn test_every_authenticated_header_byte_rejects_tampering() {
+        let auth = HmacAuth::new([0x42; 32]);
+        let mut original = blank_header();
+        auth.sign(&mut original, b"routing integrity");
+        for i in 0..16 {
+            let mut modified = original;
+            modified[i] ^= 1;
+            assert!(!auth.verify(&modified, b"routing integrity"), "byte {i}");
+        }
+        assert!(!HmacAuth::new([0x43; 32]).verify(&original, b"routing integrity"));
     }
 
     /// A signed frame must pass verification with the same key.

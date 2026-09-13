@@ -57,6 +57,7 @@ pxe_call:
     add sp, 6
 
     cli
+    cld
 
     ; Restore GDT
     o32 lgdt [cs:.gdt]
@@ -95,5 +96,3 @@ align 16
   .idt:      dq 0
   .rm_idt:   dw 0x3ff
              dd 0
-
-section .note.GNU-stack noalloc noexec nowrite progbits

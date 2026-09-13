@@ -4,7 +4,7 @@
 # ============================================================================
 # Stage 1: Dependencies
 # ============================================================================
-FROM node:22-alpine AS deps
+FROM node:26.8.2-alpine AS deps
 
 # Security: Add non-root user early
 RUN addgroup -g 1001 -S nodejs && \
@@ -16,14 +16,14 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies with security audit
-RUN npm ci --only=production && \
-    npm audit --audit-level=high || echo "Audit warnings found" && \
+RUN npm ci --omit=dev && \
+    npm audit --omit=dev --audit-level=high && \
     npm cache clean --force
 
 # ============================================================================
 # Stage 2: Builder
 # ============================================================================
-FROM node:22-alpine AS builder
+FROM node:26.8.2-alpine AS builder
 
 WORKDIR /app
 
@@ -41,7 +41,7 @@ RUN npm run build
 # ============================================================================
 # Stage 3: Production Runtime
 # ============================================================================
-FROM node:22-alpine AS runner
+FROM node:26.8.2-alpine AS runner
 
 # ============================================================================
 # Security Hardening
@@ -61,10 +61,10 @@ RUN addgroup -g 1001 -S nodejs && \
 
 # 3. Set secure environment defaults
 ENV NODE_ENV=production \
+    MCP_HOST=0.0.0.0 \
+    MCP_CACHE_DIR=/tmp/vos-mcp-cache \
     # Disable npm update notifier
     NPM_CONFIG_UPDATE_NOTIFIER=false \
-    # Reduce information exposure
-    NODE_OPTIONS="--no-deprecation --no-warnings" \
     # Security headers
     npm_config_audit=true
 
@@ -107,7 +107,7 @@ EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/health || exit 1
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]

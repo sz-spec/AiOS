@@ -5,13 +5,67 @@
 #include <lib/misc.h>
 #include <lib/term.h>
 #include <lib/print.h>
+#include <menu.h>
 #if defined (BIOS)
 #  include <lib/real.h>
 #elif defined (UEFI)
 #  include <efi.h>
 #endif
+#include <drivers/mouse.h>
 #include <drivers/serial.h>
 #include <sys/cpu.h>
+
+static const char qwerty_to_dvorak[128] = {
+    ['q']='\'', ['w']=',', ['e']='.', ['r']='p', ['t']='y',
+    ['y']='f', ['u']='g', ['i']='c', ['o']='r', ['p']='l',
+    ['[']='/', [']']='=', ['\\']='\\', ['a']='a', ['s']='o',
+    ['d']='e', ['f']='u', ['g']='i', ['h']='d', ['j']='h',
+    ['k']='t', ['l']='n', [';']='s', ['\'']='-', ['z']=';', ['x']='q',
+    ['c']='j', ['v']='k', ['b']='x', ['n']='b', ['m']='m',
+    [',']='w', ['.']='v', ['/']='z',
+
+    ['Q']='\"', ['W']='<', ['E']='>', ['R']='P', ['T']='Y',
+    ['Y']='F', ['U']='G', ['I']='C', ['O']='R', ['P']='L',
+    ['{']='?', ['}']='+', ['|']='|', ['A']='A', ['S']='O',
+    ['D']='E', ['F']='U', ['G']='I', ['H']='D', ['J']='H',
+    ['K']='T', ['L']='N', [':']='S', ['"']='_', ['Z']=':', ['X']='Q',
+    ['C']='J', ['V']='K', ['B']='X', ['N']='B', ['M']='M',
+    ['<']='W', ['>']='V', ['?']='Z',
+
+    ['`']='`', ['1']='1', ['2']='2', ['3']='3', ['4']='4',
+    ['5']='5', ['6']='6', ['7']='7', ['8']='8', ['9']='9',
+    ['0']='0', ['-']='[', ['=']=']',
+
+    ['~']='~', ['!']='!', ['@']='@', ['#']='#', ['$']='$',
+    ['%']='%', ['^']='^', ['&']='&', ['*']='*', ['(']='(',
+    [')']=')', ['_']='{', ['+']='}',
+};
+
+static const unsigned char qwerty_to_azerty[128] = {
+    ['q']='a', ['w']='z', ['e']='e', ['r']='r', ['t']='t',
+    ['y']='y', ['u']='u', ['i']='i', ['o']='o', ['p']='p',
+    ['[']='^', [']']='$', ['\\']='\\', ['a']='q', ['s']='s',
+    ['d']='d', ['f']='f', ['g']='g', ['h']='h', ['j']='j',
+    ['k']='k', ['l']='l', [';']='m', ['\'']='\xF9', ['z']='w', ['x']='x',
+    ['c']='c', ['v']='v', ['b']='b', ['n']='n', ['m']=',',
+    [',']=';', ['.']=':', ['/']='!',
+
+    ['Q']='A', ['W']='Z', ['E']='E', ['R']='R', ['T']='T',
+    ['Y']='Y', ['U']='U', ['I']='I', ['O']='O', ['P']='P',
+    ['|']='|', ['A']='Q', ['S']='S',
+    ['D']='D', ['F']='F', ['G']='G', ['H']='H', ['J']='J',
+    ['K']='K', ['L']='L', [':']='M', ['"']='%', ['Z']='W', ['X']='X',
+    ['C']='C', ['V']='V', ['B']='B', ['N']='N', ['M']='?',
+    ['<']='.', ['>']='/', ['?']='\xA7',
+
+    ['`']='\xB2', ['1']='&', ['2']='\xE9', ['3']='\"', ['4']='\'',
+    ['5']='(', ['6']='-', ['7']='\xE8', ['8']='_', ['9']='\xE7',
+    ['0']='\xE0', ['-']=')', ['=']='=',
+
+    ['!']='1', ['@']='2', ['#']='3', ['$']='4', ['%']='5',
+    ['^']='6', ['&']='7', ['*']='8', ['(']='9', [')']='0',
+    ['_']='\xB0', ['+']='+',
+};
 
 int getchar(void) {
     for (;;) {
@@ -82,27 +136,48 @@ int getchar_internal(uint8_t scancode, uint8_t ascii, uint32_t shift_state) {
             return '\t';
     }
 
-    if (shift_state & (GETCHAR_LCTRL | GETCHAR_RCTRL)) {
-        switch (ascii) {
-        case 'a': return GETCHAR_HOME;
-        case 'e': return GETCHAR_END;
-        case 'p': return GETCHAR_CURSOR_UP;
-        case 'n': return GETCHAR_CURSOR_DOWN;
-        case 'b': return GETCHAR_CURSOR_LEFT;
-        case 'f': return GETCHAR_CURSOR_RIGHT;
-        default: break;
-        }
+    // Ctrl+<letter> arrives either as the letter plus a Ctrl shift state, or
+    // (commonly) as the bare control code 0x01-0x1a; handle both.
+    uint8_t ctrl_char = 0;
+    if (ascii >= 0x01 && ascii <= 0x1a) {
+        ctrl_char = ascii | 0x60;
+    } else if (shift_state & (GETCHAR_LCTRL | GETCHAR_RCTRL)) {
+        ctrl_char = ascii;
+    }
+    switch (ctrl_char) {
+    case 'a': return GETCHAR_HOME;
+    case 'e': return GETCHAR_END;
+    case 'p': return GETCHAR_CURSOR_UP;
+    case 'n': return GETCHAR_CURSOR_DOWN;
+    case 'b': return GETCHAR_CURSOR_LEFT;
+    case 'f': return GETCHAR_CURSOR_RIGHT;
+    case 'x': return GETCHAR_F10;
+    default: break;
     }
 
     // Guard against non-printable values
     if (ascii < 0x20 || ascii > 0x7e) {
         return -1;
     }
+
+    if (current_keyboard_layout == KEYBOARD_LAYOUT_DVORAK && qwerty_to_dvorak[(uint8_t)ascii] != 0) {
+        return qwerty_to_dvorak[(uint8_t)ascii];
+    } else if (current_keyboard_layout == KEYBOARD_LAYOUT_AZERTY && qwerty_to_azerty[(uint8_t)ascii] != 0) {
+        return qwerty_to_azerty[(uint8_t)ascii];
+    }
+
     return ascii;
 }
 
 #if defined (BIOS)
-int _pit_sleep_and_quit_on_keypress(uint32_t ticks);
+int _pit_sleep_and_quit_on_keypress(uint32_t ticks, uint32_t aux_poll,
+                                    uint64_t tsc_deadline);
+
+// XXX: sync with lib/sleep.asm_bios_ia32.
+#define PIT_SLEEP_AUX_BREAK (-100)
+
+// BDA tick counter at 0x46c wraps at midnight.
+#define BDA_TICKS_PER_DAY 0x1800b0
 
 static int input_sequence(void) {
     int val = 0;
@@ -156,44 +231,109 @@ static int input_sequence(void) {
     return 0;
 }
 
-int pit_sleep_and_quit_on_keypress(int seconds) {
-    if (!serial) {
-        return _pit_sleep_and_quit_on_keypress(seconds * 18);
+static int serial_input(void) {
+    int ret = serial_in();
+
+    if (ret == -1) {
+        return 0;
     }
 
-    for (int i = 0; i < seconds * 18; i++) {
-        int ret = _pit_sleep_and_quit_on_keypress(1);
-
-        if (ret != 0) {
-            return ret;
-        }
-
-        ret = serial_in();
-
-        if (ret != -1) {
 again:
-            switch (ret) {
-                case '\r':
-                    return '\n';
-                case 0x1b:
-                    delay(10000);
-                    ret = serial_in();
-                    if (ret == -1) {
-                        return GETCHAR_ESCAPE;
-                    }
-                    if (ret == '[') {
-                        return input_sequence();
-                    }
-                    goto again;
-                case 0x7f:
-                    return '\b';
+    switch (ret) {
+        case '\r':
+            return '\n';
+        case 0x1b:
+            stall(10);
+            ret = serial_in();
+            if (ret == -1) {
+                return GETCHAR_ESCAPE;
             }
-
-            return ret;
-        }
+            if (ret == '[') {
+                return input_sequence();
+            }
+            goto again;
+        case 0x7f:
+            return '\b';
     }
 
-    return 0;
+    return ret;
+}
+
+static int sleep_ms_core(uint64_t milliseconds, bool deliver_mouse) {
+    uint64_t ticks64 = milliseconds > (UINT64_MAX - 999) / 18
+                     ? UINT64_MAX
+                     : (milliseconds * 18 + 999) / 1000;
+    uint32_t ticks = ticks64 > UINT32_MAX ? UINT32_MAX : ticks64;
+
+    if (ticks == 0) {
+        return 0;
+    }
+
+    uint64_t tsc_deadline = rdtsc_deadline(milliseconds > UINT64_MAX / 1000
+                                         ? UINT64_MAX
+                                         : milliseconds * 1000);
+
+    // Hand over mouse state accumulated while nobody was listening (e.g. a
+    // pointer position preserved across a menu re-entry) before blocking.
+    if (deliver_mouse && mouse_state_pending()) {
+        return GETCHAR_MOUSE;
+    }
+
+    // When the mouse is active its packets are always consumed, even for
+    // keyboard-only waits.
+    bool aux_poll = mouse_present();
+
+    if (!serial && !aux_poll) {
+        return _pit_sleep_and_quit_on_keypress(ticks, 0, tsc_deadline);
+    }
+
+    uint32_t start = mmind(0x46c);
+    uint32_t elapsed = 0;
+
+    for (;;) {
+        uint32_t remaining = ticks - elapsed;
+        int ret = _pit_sleep_and_quit_on_keypress(serial && remaining > 1 ? 1 : remaining,
+                                                  aux_poll, tsc_deadline);
+
+        if (ret == PIT_SLEEP_AUX_BREAK) {
+            int ev = mouse_process_pending();
+            if (deliver_mouse && ev != 0) {
+                return GETCHAR_MOUSE;
+            }
+        } else if (ret != 0) {
+            return ret;
+        }
+
+        if (serial) {
+            ret = serial_input();
+            if (ret != 0) {
+                return ret;
+            }
+        }
+
+        if (rdtsc_deadline_expired(tsc_deadline)) {
+            return 0;
+        }
+
+        uint32_t now = mmind(0x46c);
+        elapsed = now >= start ? now - start
+                : now + (uint32_t)(BDA_TICKS_PER_DAY - start);
+        if (elapsed >= ticks) {
+            return 0;
+        }
+    }
+}
+
+int pit_sleep_ms_and_quit_on_keypress(uint64_t milliseconds) {
+    return sleep_ms_core(milliseconds, false);
+}
+
+int pit_sleep_ms_and_quit_on_input(uint64_t milliseconds) {
+    return sleep_ms_core(milliseconds, true);
+}
+
+int pit_sleep_and_quit_on_keypress(int seconds) {
+    return pit_sleep_ms_and_quit_on_keypress((uint64_t)seconds * 1000);
 }
 #endif
 
@@ -254,12 +394,20 @@ static int input_sequence(bool ext,
     return 0;
 }
 
-int pit_sleep_and_quit_on_keypress(int seconds) {
+static int sleep_ms_core(uint64_t milliseconds, bool deliver_mouse) {
     EFI_KEY_DATA kd;
 
     UINTN which;
 
-    EFI_EVENT events[2];
+    EFI_EVENT events[18];
+
+    size_t pointer_count = 0;
+
+    // Hand over mouse state accumulated while nobody was listening (e.g. a
+    // pointer position preserved across a menu re-entry) before blocking.
+    if (deliver_mouse && mouse_state_pending()) {
+        return GETCHAR_MOUSE;
+    }
 
     EFI_GUID exproto_guid = EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_GUID;
     EFI_GUID sproto_guid = EFI_SIMPLE_TEXT_INPUT_PROTOCOL_GUID;
@@ -284,17 +432,33 @@ int pit_sleep_and_quit_on_keypress(int seconds) {
         events[0] = exproto->WaitForKeyEx;
     }
 
+    if (deliver_mouse) {
+        pointer_count = mouse_get_efi_events(&events[2], 16);
+    }
+
+restart:
     gBS->CreateEvent(EVT_TIMER, TPL_CALLBACK, NULL, NULL, &events[1]);
 
-    gBS->SetTimer(events[1], TimerRelative, 10000000 * seconds);
+    gBS->SetTimer(events[1], TimerRelative,
+                  milliseconds > UINT64_MAX / 10000 ? UINT64_MAX : milliseconds * 10000);
 
 again:
     memset(&kd, 0, sizeof(EFI_KEY_DATA));
 
-    gBS->WaitForEvent(2, events, &which);
+    gBS->WaitForEvent(2 + pointer_count, events, &which);
 
     if (which == 1) {
+        gBS->CloseEvent(events[1]);
         return 0;
+    }
+
+    if (which >= 2) {
+        int ev = mouse_handle_efi_event(which - 2);
+        if (ev != 0) {
+            gBS->CloseEvent(events[1]);
+            return GETCHAR_MOUSE;
+        }
+        goto again;
     }
 
     EFI_STATUS status;
@@ -313,10 +477,13 @@ again:
     }
 
     if (serial == true && kd.Key.ScanCode == 0x08) {
+        gBS->CloseEvent(events[1]);
         return '\b';
     }
 
     if (kd.Key.ScanCode == SCAN_ESC) {
+        gBS->CloseEvent(events[1]);
+
         gBS->CreateEvent(EVT_TIMER, TPL_CALLBACK, NULL, NULL, &events[1]);
 
         gBS->SetTimer(events[1], TimerRelative, 100000);
@@ -324,6 +491,7 @@ again:
         gBS->WaitForEvent(2, events, &which);
 
         if (which == 1) {
+            gBS->CloseEvent(events[1]);
             return GETCHAR_ESCAPE;
         }
 
@@ -333,13 +501,17 @@ again:
             status = exproto->ReadKeyStrokeEx(exproto, &kd);
         }
 
+        gBS->CloseEvent(events[1]);
+
         if (status != EFI_SUCCESS) {
-            goto again;
+            goto restart;
         }
 
         if (kd.Key.UnicodeChar == '[') {
             return input_sequence(!use_sproto, exproto, sproto);
         }
+
+        goto restart;
     }
 
     int ret = getchar_internal(kd.Key.ScanCode, kd.Key.UnicodeChar,
@@ -349,6 +521,19 @@ again:
         goto again;
     }
 
+    gBS->CloseEvent(events[1]);
     return ret;
+}
+
+int pit_sleep_ms_and_quit_on_keypress(uint64_t milliseconds) {
+    return sleep_ms_core(milliseconds, false);
+}
+
+int pit_sleep_ms_and_quit_on_input(uint64_t milliseconds) {
+    return sleep_ms_core(milliseconds, true);
+}
+
+int pit_sleep_and_quit_on_keypress(int seconds) {
+    return pit_sleep_ms_and_quit_on_keypress((uint64_t)seconds * 1000);
 }
 #endif

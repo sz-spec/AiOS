@@ -33,7 +33,7 @@ use std::process::{Child, Command, Stdio};
 use std::thread;
 use std::time::{Duration, Instant};
 
-use rand::RngCore;
+use rand::Rng;
 
 // ---------------------------------------------------------------------------
 // Error type
@@ -209,7 +209,7 @@ fn generate_handshake_secret() -> String {
     // round-trip through env vars, HTTP headers, and JSON without
     // worrying about padding chars.
     let mut buf = [0u8; 32];
-    rand::thread_rng().fill_bytes(&mut buf);
+    rand::rng().fill_bytes(&mut buf);
     buf.iter().map(|b| format!("{:02x}", b)).collect()
 }
 

@@ -21,6 +21,10 @@ static uint64_t get_unix_epoch(uint8_t seconds, uint8_t minutes, uint8_t  hours,
     uint64_t jdn_current = get_jdn(days, months, years);
     uint64_t jdn_1970    = get_jdn(1, 1, 1970);
 
+    if (jdn_current < jdn_1970) {
+        return 0;
+    }
+
     uint64_t jdn_diff = jdn_current - jdn_1970;
 
     return (jdn_diff * (60 * 60 * 24)) + hours * 3600 + minutes * 60 + seconds;
@@ -34,6 +38,9 @@ again:
     r = (struct rm_regs){0};
     r.eax = 0x0400;
     rm_int(0x1a, &r, &r);
+    if (r.eflags & EFLAGS_CF) {
+        return 0;
+    }
 
     uint8_t  day    = bcd_to_int( r.edx & 0x00ff);
     uint8_t  month  = bcd_to_int((r.edx & 0xff00) >> 8);
@@ -43,6 +50,9 @@ again:
     r = (struct rm_regs){0};
     r.eax = 0x0200;
     rm_int(0x1a, &r, &r);
+    if (r.eflags & EFLAGS_CF) {
+        return 0;
+    }
 
     uint8_t second  = bcd_to_int((r.edx & 0xff00) >> 8);
     uint8_t minute  = bcd_to_int( r.ecx & 0x00ff);
@@ -52,6 +62,9 @@ again:
     r = (struct rm_regs){0};
     r.eax = 0x0400;
     rm_int(0x1a, &r, &r);
+    if (r.eflags & EFLAGS_CF) {
+        return 0;
+    }
     if (bcd_to_int(r.edx & 0x00ff) != day) {
         goto again;
     }

@@ -39,6 +39,8 @@ SECTIONS
 
         __data_start = ABSOLUTE(.);
         *(.rodata .rodata.*)
+        *(.srodata .srodata.*)
+        *(.sdata2 .sdata2.*)
 
 #ifdef LINKER_NOMAP
    full_map = .;
@@ -47,21 +49,39 @@ SECTIONS
 #endif
     } :rodata
 
-    .data : {
-   data_begin = .;
-        *(.data .data.*)
-        *(.sdata .sdata.*)
-        *(.sbss .sbss.*)
-        *(.bss .bss.*)
-        *(COMMON)
-   data_end = .;
-
-   *(.no_unwind)
+    .no_unwind : {
+        *(.no_unwind)
     } :data
 
     .dynamic : {
         *(.dynamic)
     } :data :dynamic
+
+    .data : {
+   data_begin = .;
+        *(.data .data.*)
+        *(.sdata .sdata.*)
+    } :data
+
+    /* .bss must come last: nothing with file contents may follow it. Anchor the
+       raw end to __bss_start so linker-placed orphans cannot fall above it. */
+    __data_rawend = ABSOLUTE(ALIGN(__bss_start, 0x1000));
+    __data_rawsize = ABSOLUTE(__data_rawend - __data_start);
+
+    .bss : {
+        __bss_start = ABSOLUTE(.);
+        *(.bss .bss.*)
+        *(.sbss .sbss.*)
+        *(COMMON)
+   data_end = .;
+    } :data
+
+    /* The image is padded to a 4096 multiple of the last byte with file
+       contents, so a coarser .bss would push __data_rawend past the file. */
+    ASSERT(ALIGNOF(.bss) <= 0x1000, ".bss alignment exceeds 4096")
+
+    __bss_end = ABSOLUTE(ALIGN(0x1000));
+    __bss_size = ABSOLUTE(__bss_end - __bss_start);
 
     __data_end = ABSOLUTE(ALIGN(0x1000));
     __data_size = ABSOLUTE(__data_end - __data_start);

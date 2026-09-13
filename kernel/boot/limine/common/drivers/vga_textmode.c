@@ -54,12 +54,11 @@ static void text_scroll(struct flanterm_context *_ctx) {
 static void text_revscroll(struct flanterm_context *_ctx) {
     struct textmode_context *ctx = (void *)_ctx;
 
-    // move the text up by one row
-    for (size_t i = (_ctx->scroll_bottom_margin - 1) * VD_COLS - 2; ; i--) {
+    // move the text down by one row
+    for (size_t i = (_ctx->scroll_bottom_margin - 1) * VD_COLS;
+         i > _ctx->scroll_top_margin * VD_COLS; ) {
+        i--;
         ctx->back_buffer[i + VD_COLS] = ctx->back_buffer[i];
-        if (i == _ctx->scroll_top_margin * VD_COLS) {
-            break;
-        }
     }
     // clear the first line of the screen
     for (size_t i = _ctx->scroll_top_margin * VD_COLS;
@@ -141,6 +140,7 @@ static void text_move_character(struct flanterm_context *_ctx, size_t new_x, siz
     }
 
     ctx->back_buffer[new_y * VD_COLS + new_x * 2] = ctx->back_buffer[old_y * VD_COLS + old_x * 2];
+    ctx->back_buffer[new_y * VD_COLS + new_x * 2 + 1] = ctx->back_buffer[old_y * VD_COLS + old_x * 2 + 1];
 }
 
 static void text_set_cursor_pos(struct flanterm_context *_ctx, size_t x, size_t y) {
@@ -161,6 +161,7 @@ static void text_set_cursor_pos(struct flanterm_context *_ctx, size_t x, size_t 
         }
     }
     ctx->cursor_offset = y * VD_COLS + x * 2;
+    ctx->cursor_overflow = false;
 }
 
 static uint8_t ansi_colours[] = { 0, 4, 2, 6, 1, 5, 3, 7 };
@@ -218,17 +219,32 @@ static void text_set_text_bg_default_bright(struct flanterm_context *_ctx) {
 static void text_putchar(struct flanterm_context *_ctx, uint8_t c) {
     struct textmode_context *ctx = (void *)_ctx;
 
+    // Handle overflow from previous putchar
+    if (ctx->cursor_overflow) {
+        ctx->cursor_overflow = false;
+        if (_ctx->wrap_enabled
+         && (ctx->cursor_offset / VD_COLS < _ctx->scroll_bottom_margin - 1
+             || _ctx->scroll_enabled)) {
+            ctx->cursor_offset -= ctx->cursor_offset % VD_COLS;
+            ctx->cursor_offset += VD_COLS;
+            if (ctx->cursor_offset / VD_COLS == _ctx->scroll_bottom_margin) {
+                ctx->cursor_offset -= VD_COLS;
+                text_scroll(_ctx);
+            }
+            if (ctx->cursor_offset >= VD_ROWS * VD_COLS) {
+                ctx->cursor_offset = (VD_ROWS - 1) * VD_COLS;
+            }
+        } else {
+            ctx->cursor_offset = ctx->cursor_offset - (ctx->cursor_offset % VD_COLS) + VD_COLS - 2;
+        }
+    }
+
     ctx->back_buffer[ctx->cursor_offset] = c;
     ctx->back_buffer[ctx->cursor_offset + 1] = ctx->text_palette;
-    if (ctx->cursor_offset / VD_COLS == _ctx->scroll_bottom_margin - 1
-     && ctx->cursor_offset % VD_COLS == VD_COLS - 2) {
-        if (_ctx->scroll_enabled) {
-            text_scroll(_ctx);
-            ctx->cursor_offset -= ctx->cursor_offset % VD_COLS;
-        }
-    } else if (ctx->cursor_offset >= (VIDEO_BOTTOM - 1)) {
-        ctx->cursor_offset -= ctx->cursor_offset % VD_COLS;
-    } else {
+    if (ctx->cursor_offset % VD_COLS == VD_COLS - 2) {
+        // At last column - flag overflow for next putchar
+        ctx->cursor_overflow = true;
+    } else if (ctx->cursor_offset < (VIDEO_BOTTOM - 1)) {
         ctx->cursor_offset += 2;
     }
 }
@@ -284,6 +300,7 @@ void vga_textmode_init(bool managed) {
     }
 
     ctx->cursor_offset = 0;
+    ctx->cursor_overflow = false;
     ctx->text_palette = 0x07;
 
     ctx->video_mem = (volatile uint8_t *)0xb8000;
@@ -314,7 +331,7 @@ void vga_textmode_init(bool managed) {
 
     text_double_buffer_flush(term);
 
-    if (managed && serial) {
+    if (managed && SERIAL_CONSOLE) {
         term->cols = 80;
         term->rows = 24;
     } else {
@@ -355,7 +372,7 @@ void vga_textmode_init(bool managed) {
     term->full_refresh(term);
 
     if (!managed) {
-        term->deinit(term, pmm_free);
+        term->deinit(term, pmm_free_size_t);
         pmm_free(terms, sizeof(void *));
         terms_i = 0;
         terms = NULL;

@@ -1,0 +1,41 @@
+{
+  "python": "3.12",
+  "macos_deployment_target": "14.0",
+  "inputs": {
+    "dependencies/python-dependencies.json": "484d1e0ee04b18ae8eb15381ba1ed5eb5386788fb7253ed9050dc7dcad8e36ff",
+    "backend/constraints.txt": "e9d227f39d5c84a0812e4b9f305fe2a8732151944046cfaca69ea42551cb2da9",
+    "scripts/sync_python_requirements.py": "102a9cae126d129d3f6c0ed5985dfd4095cef8553093a149409bb1bbf916ebae",
+    "scripts/lock_python_dependencies.py": "f72d42b2ea1c733e38246170dccbced2c475e991581e38f8a69067d9e59c7598",
+    "backend/requirements-full.txt": "f2164412af8c75497a3838824555b2ff10637090b1990bdaa4fefc06a247b5a4",
+    "requirements.txt": "70f27fd873460fd1490abfe5ea2bd3dec8b620186d36d7fcfd093686d285b7e3",
+    "backend/requirements.txt": "9f7eaea01c1a345fcf663a26e1ca63ad26981de102ec45312d8005eb4cefb0df",
+    "requirements_win.txt": "70f27fd873460fd1490abfe5ea2bd3dec8b620186d36d7fcfd093686d285b7e3"
+  },
+  "locks": {
+    "backend/requirements-full.lock": {
+      "input": "backend/requirements-full.txt",
+      "platform": "x86_64-unknown-linux-gnu",
+      "sha256": "fc8796732e2dcf86748540c20908db97c956d7499b20a65611604a02d39483b6"
+    },
+    "requirements.lock": {
+      "input": "requirements.txt",
+      "platform": "x86_64-unknown-linux-gnu",
+      "sha256": "512a920f1c4df803b8f822321933227e50949d7a5726ebe3eaa18aaf48bd47c4"
+    },
+    "backend/requirements.lock": {
+      "input": "backend/requirements.txt",
+      "platform": "x86_64-unknown-linux-gnu",
+      "sha256": "ba2257b311d5039d8da6222f9b452adea23ffac79d1e574ef10063760bf269ee"
+    },
+    "requirements_win.lock": {
+      "input": "requirements_win.txt",
+      "platform": "x86_64-pc-windows-msvc",
+      "sha256": "0052604f9db20e090306ea7a3c1a6d3475910390db8765d8cf46e66ab057d91d"
+    },
+    "dependencies/requirements-macos-arm64.lock": {
+      "input": "requirements.txt",
+      "platform": "aarch64-apple-darwin",
+      "sha256": "3d2cc036d2b9eea8332e1386d7e658f9c7b9b880874e80ae4ceec212ca0c8a24"
+    }
+  }
+}

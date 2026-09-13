@@ -1,7 +1,7 @@
-version: "3.8"
-
 services:
   backend:
+    # Matches backend/requirements.lock's qualified Linux x86_64 profile.
+    platform: linux/amd64
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -11,6 +11,7 @@ services:
       - .env
     environment:
       - PORT=8000
+      - ENVIRONMENT=production
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -20,8 +21,11 @@ services:
       - backend_net
       - frontend_net
     read_only: true
+    volumes:
+      - backend_data:/app/data
     tmpfs:
       - /tmp:size=256M
+      - /app/.cache:size=256M,uid=1000,gid=1000,mode=0700
     user: "1000:1000"
     security_opt:
       - no-new-privileges:true
@@ -52,15 +56,15 @@ services:
     networks:
       - frontend_net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
     read_only: true
     tmpfs:
       - /tmp:size=128M
-      - /app/.next/cache:size=256M
-    user: "1000:1000"
+      - /app/.next/cache:size=256M,uid=1001,gid=1001,mode=0700
+    user: "1001:1001"
     security_opt:
       - no-new-privileges:true
     cap_drop:
@@ -72,6 +76,9 @@ services:
           cpus: "1.0"
         reservations:
           memory: 256M
+
+volumes:
+  backend_data:
 
 networks:
   frontend_net:

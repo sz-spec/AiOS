@@ -1,21 +1,16 @@
-MAKEFLAGS += -rR
 .SUFFIXES:
-
-include $(TOOLCHAIN_FILE)
-export AR_FOR_TARGET
-export CC_FOR_TARGET
-export LD_FOR_TARGET
-export OBJDUMP_FOR_TARGET
-export OBJCOPY_FOR_TARGET
-export READELF_FOR_TARGET
+.DELETE_ON_ERROR:
 
 override SRCDIR := $(shell pwd -P)
 
 override SPACE := $(subst ,, )
+override TAB := $(subst ,,	)
 
-override MKESCAPE = $(subst $(SPACE),\ ,$(1))
+override MKESCAPE = $(subst $(TAB),\$(TAB),$(subst $(SPACE),\ ,$(1)))
 override SHESCAPE = $(subst ','\'',$(1))
 override OBJESCAPE = $(subst .a ,.a' ',$(subst .o ,.o' ',$(call SHESCAPE,$(1))))
+
+override CC_FOR_TARGET_IS_CLANG := $(shell ! $(CC_FOR_TARGET) --version 2>/dev/null | $(GREP) -q '^Target: '; echo $$?)
 
 COM_OUTPUT := false
 E9_OUTPUT := false
@@ -36,131 +31,182 @@ override CFLAGS_FOR_TARGET += \
     -ffreestanding \
     -ffunction-sections \
     -fdata-sections \
-    -fno-stack-protector \
+    -fstack-protector-strong \
     -fno-stack-check \
     -fno-omit-frame-pointer \
     -fno-strict-aliasing \
     -fno-lto
 
 override CPPFLAGS_FOR_TARGET := \
+    -I . \
     -I libc-compat \
-    -isystem ../freestnd-c-hdrs-0bsd \
-    -I'$(call SHESCAPE,$(BUILDDIR))/..' \
-    -I. \
-    -I libfdt \
+    -I ../limine-protocol/include \
+    -I ../flanterm/src \
+    -I ../libfdt/src \
+    -I '$(call SHESCAPE,$(BUILDDIR))/..' \
+    -isystem ../freestanding-c-hdrs/include \
     $(CPPFLAGS_FOR_TARGET) \
     -DCOM_OUTPUT=$(COM_OUTPUT) \
     -DE9_OUTPUT=$(E9_OUTPUT) \
-    -DLIMINE_API_REVISION=2 \
+    -DFLANTERM_IN_FLANTERM \
     -MMD \
     -MP
 
-$(call MKESCAPE,$(BUILDDIR))/./libfdt/fdt_overlay.o: override CFLAGS_FOR_TARGET += \
+$(call MKESCAPE,$(BUILDDIR))/libfdt/src/fdt_overlay.o: override CFLAGS_FOR_TARGET += \
     -Wno-unused-parameter
 
-$(call MKESCAPE,$(BUILDDIR))/./flanterm/backends/fb.o: override CPPFLAGS_FOR_TARGET += \
+$(call MKESCAPE,$(BUILDDIR))/flanterm/src/flanterm_backends/fb.o: override CPPFLAGS_FOR_TARGET += \
     -DFLANTERM_FB_DISABLE_BUMP_ALLOC
 
 override NASMFLAGS_FOR_TARGET += \
+    -g \
     -Wall \
     -w-unknown-warning \
     -w-reloc \
     $(WERROR_FLAG)
 
+override NASMFLAGS_FOR_TARGET := \
+    $(patsubst -g,-g -F dwarf,$(NASMFLAGS_FOR_TARGET))
+
 ifeq ($(TARGET),bios)
+    ifeq ($(CC_FOR_TARGET_IS_CLANG),1)
+        override CC_FOR_TARGET += \
+            -target i686-unknown-none-elf
+    else
+        # GCC puts the x86 canary in the TLS block by default, and there is no
+        # TLS here. Clang already uses the global on the bare metal targets.
+        override CFLAGS_FOR_TARGET += \
+            -mstack-protector-guard=global
+    endif
     override CFLAGS_FOR_TARGET += \
         -fno-PIC \
         -m32 \
         -march=i686 \
-        -mno-80387
+        -mabi=sysv \
+        -mno-80387 \
+        -mno-mmx
     override CPPFLAGS_FOR_TARGET := \
         $(CPPFLAGS_FOR_TARGET) \
         -DBIOS
-    override NASMFLAGS_FOR_TARGET += \
+    override NASMFLAGS_FOR_TARGET := \
         -f elf32 \
+        $(NASMFLAGS_FOR_TARGET) \
         -DIA32_TARGET \
         -DBIOS
 endif
 
 ifeq ($(TARGET),uefi-x86-64)
+    ifeq ($(CC_FOR_TARGET_IS_CLANG),1)
+        override CC_FOR_TARGET += \
+            -target x86_64-unknown-none-elf
+    else
+        # GCC puts the x86 canary in the TLS block by default, and there is no
+        # TLS here. Clang already uses the global on the bare metal targets.
+        override CFLAGS_FOR_TARGET += \
+            -mstack-protector-guard=global
+    endif
     override CFLAGS_FOR_TARGET += \
         -fPIE \
         -fshort-wchar \
         -m64 \
         -march=x86-64 \
+        -mabi=sysv \
         -mno-80387 \
         -mno-mmx \
         -mno-sse \
         -mno-sse2 \
         -mno-red-zone
     override CPPFLAGS_FOR_TARGET := \
-        -I'$(call SHESCAPE,$(BUILDDIR))/nyu-efi/inc' \
+        -I ../picoefi/inc \
         $(CPPFLAGS_FOR_TARGET) \
         -DUEFI
-    override NASMFLAGS_FOR_TARGET += \
+    override NASMFLAGS_FOR_TARGET := \
         -f elf64 \
+        $(NASMFLAGS_FOR_TARGET) \
         -DX86_64_TARGET \
         -DUEFI
 endif
 
 ifeq ($(TARGET),uefi-ia32)
+    ifeq ($(CC_FOR_TARGET_IS_CLANG),1)
+        override CC_FOR_TARGET += \
+            -target i686-unknown-none-elf
+    else
+        # GCC puts the x86 canary in the TLS block by default, and there is no
+        # TLS here. Clang already uses the global on the bare metal targets.
+        override CFLAGS_FOR_TARGET += \
+            -mstack-protector-guard=global
+    endif
     override CFLAGS_FOR_TARGET += \
         -fPIE \
         -fshort-wchar \
         -m32 \
         -march=i686 \
-        -mno-80387
+        -malign-double \
+        -mabi=sysv \
+        -mno-80387 \
+        -mno-mmx
     override CPPFLAGS_FOR_TARGET := \
-        -I'$(call SHESCAPE,$(BUILDDIR))/nyu-efi/inc' \
+        -I ../picoefi/inc \
         $(CPPFLAGS_FOR_TARGET) \
         -DUEFI
-    override NASMFLAGS_FOR_TARGET += \
+    override NASMFLAGS_FOR_TARGET := \
         -f elf32 \
+        $(NASMFLAGS_FOR_TARGET) \
         -DIA32_TARGET \
         -DUEFI
 endif
 
 ifeq ($(TARGET),uefi-aarch64)
+    ifeq ($(CC_FOR_TARGET_IS_CLANG),1)
+        override CC_FOR_TARGET += \
+            -target aarch64-unknown-none-elf
+    endif
     override CFLAGS_FOR_TARGET += \
         -fPIE \
         -fshort-wchar \
+        -mcpu=generic \
+        -march=armv8-a+nofp+nosimd \
+        -mno-outline-atomics \
         -mgeneral-regs-only
     override CPPFLAGS_FOR_TARGET := \
-        -I'$(call SHESCAPE,$(BUILDDIR))/nyu-efi/inc' \
+        -I ../picoefi/inc \
         $(CPPFLAGS_FOR_TARGET) \
         -DUEFI
 endif
 
 ifeq ($(TARGET),uefi-riscv64)
+    ifeq ($(CC_FOR_TARGET_IS_CLANG),1)
+        override CC_FOR_TARGET += \
+            -target riscv64-unknown-none-elf
+    endif
     override CFLAGS_FOR_TARGET += \
         -fPIE \
-        -fshort-wchar
-
-    ifeq ($(CC_FOR_TARGET_IS_CLANG),yes)
-        override CFLAGS_FOR_TARGET += -march=rv64imac
-    else
-        override CFLAGS_FOR_TARGET += -march=rv64imac_zicsr_zifencei
-    endif
-
-    override CFLAGS_FOR_TARGET += \
+        -fshort-wchar \
+        -march=rv64imac_zicsr_zifencei \
         -mabi=lp64 \
         -mno-relax
-
     override CPPFLAGS_FOR_TARGET := \
-        -I'$(call SHESCAPE,$(BUILDDIR))/nyu-efi/inc' \
+        -I ../picoefi/inc \
         $(CPPFLAGS_FOR_TARGET) \
         -DUEFI
 endif
 
 ifeq ($(TARGET),uefi-loongarch64)
+    ifeq ($(CC_FOR_TARGET_IS_CLANG),1)
+        override CC_FOR_TARGET += \
+            -target loongarch64-unknown-none-elf
+    endif
     override CFLAGS_FOR_TARGET += \
         -fPIE \
         -fshort-wchar \
         -march=loongarch64 \
-        -mabi=lp64s
-
+        -mabi=lp64s \
+        -mno-relax \
+        -mfpu=none \
+        -msimd=none
     override CPPFLAGS_FOR_TARGET := \
-        -I'$(call SHESCAPE,$(BUILDDIR))/nyu-efi/inc' \
+        -I ../picoefi/inc \
         $(CPPFLAGS_FOR_TARGET) \
         -DUEFI
 endif
@@ -168,13 +214,20 @@ endif
 override LDFLAGS_FOR_TARGET += \
     -nostdlib \
     -z max-page-size=0x1000 \
-    -gc-sections
+    -z noexecstack \
+    --gc-sections
 
 ifeq ($(TARGET),bios)
     override LDFLAGS_FOR_TARGET += \
         -m elf_i386 \
         -static \
         --build-id=sha1
+
+    override LD_FOR_TARGET_HAS_NO_PIE := $(shell ! $(LD_FOR_TARGET) --help 2>/dev/null | $(GREP) -qE '(^|[[:space:]])--?no-pie([[:space:]]|$$)'; echo $$?)
+
+    ifeq ($(LD_FOR_TARGET_HAS_NO_PIE),1)
+        override LDFLAGS_FOR_TARGET += -no-pie
+    endif
 endif
 
 ifeq ($(TARGET),uefi-x86-64)
@@ -214,54 +267,72 @@ ifeq ($(TARGET),uefi-loongarch64)
         -z text
 endif
 
-override C_FILES := $(shell find . -type f -name '*.c' | LC_ALL=C sort)
 ifeq ($(TARGET),bios)
-    override ASMX86_FILES := $(shell find . -type f -name '*.asm_x86' | LC_ALL=C sort)
-    override ASM32_FILES := $(shell find . -type f -name '*.asm_ia32' | LC_ALL=C sort)
-    override ASMB_FILES := $(shell find . -type f -name '*.asm_bios_ia32' | LC_ALL=C sort)
+    override C_FILES := $(shell cd .. && find common flanterm/src libfdt/src -type f -name '*.c' | LC_ALL=C sort)
+    override S_FILES := $(shell cd .. && find common -type f -name '*.S' | LC_ALL=C sort)
 
-    override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.o) $(ASM32_FILES:.asm_ia32=.o) $(ASMB_FILES:.asm_bios_ia32=.o) $(ASMX86_FILES:.asm_x86=.o))
-    override OBJ_S2 := $(filter %.s2.o,$(OBJ))
+    override ASMX86_FILES := $(shell cd .. && find common -type f -name '*.asm_x86' | LC_ALL=C sort)
+    override ASM32_FILES := $(shell cd .. && find common -type f -name '*.asm_ia32' | LC_ALL=C sort)
+    override ASMB_FILES := $(shell cd .. && find common -type f -name '*.asm_bios_ia32' | LC_ALL=C sort)
+
+    override OBJ_REL := $(C_FILES:.c=.o) $(S_FILES:.S=.o) $(ASM32_FILES:.asm_ia32=.o) $(ASMB_FILES:.asm_bios_ia32=.o) $(ASMX86_FILES:.asm_x86=.o)
 endif
 ifeq ($(TARGET),uefi-x86-64)
-    override ASMX86_FILES := $(shell find . -type f -name '*.asm_x86' | LC_ALL=C sort)
-    override ASM64_FILES := $(shell find . -type f -name '*.asm_x86_64' | LC_ALL=C sort)
-    override ASM64U_FILES := $(shell find . -type f -name '*.asm_uefi_x86_64' | LC_ALL=C sort)
+    override C_FILES := $(shell cd .. && find common picoefi/x86_64 flanterm/src libfdt/src -type f -name '*.c' | LC_ALL=C sort)
+    override S_FILES := $(shell cd .. && find common picoefi/x86_64 -type f -name '*.S' | LC_ALL=C sort)
 
-    override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.o) $(ASM64_FILES:.asm_x86_64=.o) $(ASM64U_FILES:.asm_uefi_x86_64=.o) $(ASMX86_FILES:.asm_x86=.o))
+    override ASMX86_FILES := $(shell cd .. && find common -type f -name '*.asm_x86' | LC_ALL=C sort)
+    override ASM64_FILES := $(shell cd .. && find common -type f -name '*.asm_x86_64' | LC_ALL=C sort)
+    override ASM64U_FILES := $(shell cd .. && find common -type f -name '*.asm_uefi_x86_64' | LC_ALL=C sort)
+
+    override OBJ_REL := $(C_FILES:.c=.o) $(S_FILES:.S=.o) $(ASM64_FILES:.asm_x86_64=.o) $(ASM64U_FILES:.asm_uefi_x86_64=.o) $(ASMX86_FILES:.asm_x86=.o)
 endif
 ifeq ($(TARGET),uefi-ia32)
-    override ASMX86_FILES := $(shell find . -type f -name '*.asm_x86' | LC_ALL=C sort)
-    override ASM32_FILES := $(shell find . -type f -name '*.asm_ia32' | LC_ALL=C sort)
-    override ASM32U_FILES := $(shell find . -type f -name '*.asm_uefi_ia32' | LC_ALL=C sort)
+    override C_FILES := $(shell cd .. && find common picoefi/ia32 flanterm/src libfdt/src -type f -name '*.c' | LC_ALL=C sort)
+    override S_FILES := $(shell cd .. && find common picoefi/ia32 -type f -name '*.S' | LC_ALL=C sort)
 
-    override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.o) $(ASM32_FILES:.asm_ia32=.o) $(ASM32U_FILES:.asm_uefi_ia32=.o) $(ASMX86_FILES:.asm_x86=.o))
+    override ASMX86_FILES := $(shell cd .. && find common -type f -name '*.asm_x86' | LC_ALL=C sort)
+    override ASM32_FILES := $(shell cd .. && find common -type f -name '*.asm_ia32' | LC_ALL=C sort)
+    override ASM32U_FILES := $(shell cd .. && find common -type f -name '*.asm_uefi_ia32' | LC_ALL=C sort)
+
+    override OBJ_REL := $(C_FILES:.c=.o) $(S_FILES:.S=.o) $(ASM32_FILES:.asm_ia32=.o) $(ASM32U_FILES:.asm_uefi_ia32=.o) $(ASMX86_FILES:.asm_x86=.o)
 endif
 ifeq ($(TARGET),uefi-aarch64)
-    override ASM64_FILES := $(shell find . -type f -name '*.asm_aarch64' | LC_ALL=C sort)
-    override ASM64U_FILES := $(shell find . -type f -name '*.asm_uefi_aarch64' | LC_ALL=C sort)
+    override C_FILES := $(shell cd .. && find common picoefi/aarch64 flanterm/src libfdt/src -type f -name '*.c' | LC_ALL=C sort)
+    override S_FILES := $(shell cd .. && find common picoefi/aarch64 -type f -name '*.S' | LC_ALL=C sort)
 
-    override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.o) $(ASM64_FILES:.asm_aarch64=.o) $(ASM64U_FILES:.asm_uefi_aarch64=.o))
+    override ASM64_FILES := $(shell cd .. && find common -type f -name '*.asm_aarch64' | LC_ALL=C sort)
+    override ASM64U_FILES := $(shell cd .. && find common -type f -name '*.asm_uefi_aarch64' | LC_ALL=C sort)
+
+    override OBJ_REL := $(C_FILES:.c=.o) $(S_FILES:.S=.o) $(ASM64_FILES:.asm_aarch64=.o) $(ASM64U_FILES:.asm_uefi_aarch64=.o)
 endif
 ifeq ($(TARGET),uefi-riscv64)
-    override ASM64_FILES := $(shell find . -type f -name '*.asm_riscv64' | LC_ALL=C sort)
-    override ASM64U_FILES := $(shell find . -type f -name '*.asm_uefi_riscv64' | LC_ALL=C sort)
+    override C_FILES := $(shell cd .. && find common picoefi/riscv64 flanterm/src libfdt/src -type f -name '*.c' | LC_ALL=C sort)
+    override S_FILES := $(shell cd .. && find common picoefi/riscv64 -type f -name '*.S' | LC_ALL=C sort)
 
-    override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.o) $(ASM64_FILES:.asm_riscv64=.o) $(ASM64U_FILES:.asm_uefi_riscv64=.o))
+    override ASM64_FILES := $(shell cd .. && find common -type f -name '*.asm_riscv64' | LC_ALL=C sort)
+    override ASM64U_FILES := $(shell cd .. && find common -type f -name '*.asm_uefi_riscv64' | LC_ALL=C sort)
+
+    override OBJ_REL := $(C_FILES:.c=.o) $(S_FILES:.S=.o) $(ASM64_FILES:.asm_riscv64=.o) $(ASM64U_FILES:.asm_uefi_riscv64=.o)
 endif
 ifeq ($(TARGET),uefi-loongarch64)
-    override ASM64_FILES := $(shell find . -type f -name '*.asm_loongarch64' | LC_ALL=C sort)
-    override ASM64U_FILES := $(shell find . -type f -name '*.asm_uefi_loongarch64' | LC_ALL=C sort)
+    override C_FILES := $(shell cd .. && find common picoefi/loongarch64 flanterm/src libfdt/src -type f -name '*.c' | LC_ALL=C sort)
+    override S_FILES := $(shell cd .. && find common picoefi/loongarch64 -type f -name '*.S' | LC_ALL=C sort)
 
-    override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.o) $(ASM64_FILES:.asm_loongarch64=.o) $(ASM64U_FILES:.asm_uefi_loongarch64=.o))
+    override ASM64_FILES := $(shell cd .. && find common -type f -name '*.asm_loongarch64' | LC_ALL=C sort)
+    override ASM64U_FILES := $(shell cd .. && find common -type f -name '*.asm_uefi_loongarch64' | LC_ALL=C sort)
+
+    override OBJ_REL := $(C_FILES:.c=.o) $(S_FILES:.S=.o) $(ASM64_FILES:.asm_loongarch64=.o) $(ASM64U_FILES:.asm_uefi_loongarch64=.o)
 endif
 
-override HEADER_DEPS := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(C_FILES:.c=.d))
+override OBJ := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(OBJ_REL))
+override OBJ_S2 := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(filter %.s2.o,$(OBJ_REL)))
+override HEADER_DEPS := $(addprefix $(call MKESCAPE,$(BUILDDIR))/, $(OBJ_REL:.o=.d))
 
 .PHONY: all
 
 ifeq ($(TARGET),bios)
-all: $(call MKESCAPE,$(BUILDDIR))/limine-bios.sys $(call MKESCAPE,$(BUILDDIR))/stage2.bin.gz
+all: $(call MKESCAPE,$(BUILDDIR))/limine-bios.sys $(call MKESCAPE,$(BUILDDIR))/stage2.bin.limlz
 endif
 ifeq ($(TARGET),uefi-x86-64)
 all: $(call MKESCAPE,$(BUILDDIR))/BOOTX64.EFI
@@ -279,20 +350,10 @@ ifeq ($(TARGET),uefi-loongarch64)
 all: $(call MKESCAPE,$(BUILDDIR))/BOOTLOONGARCH64.EFI
 endif
 
-$(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a: ../cc-runtime/*
-	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))/cc-runtime'
-	cp -r ../cc-runtime '$(call SHESCAPE,$(BUILDDIR))/'
-	$(MAKE) -C '$(call SHESCAPE,$(BUILDDIR))/cc-runtime' -f cc-runtime.mk \
-		CC="$(CC_FOR_TARGET)" \
-		AR="$(AR_FOR_TARGET)" \
-		CFLAGS="$(CFLAGS_FOR_TARGET)" \
-		CPPFLAGS='-isystem $(call SHESCAPE,$(SRCDIR))/../freestnd-c-hdrs-0bsd -DCC_RUNTIME_NO_FLOAT'
-
 ifeq ($(TARGET),bios)
 
-$(call MKESCAPE,$(BUILDDIR))/stage2.bin.gz: $(call MKESCAPE,$(BUILDDIR))/stage2.bin
-	gzip -n -9 < '$(call SHESCAPE,$<)' > '$(call SHESCAPE,$@)'
+$(call MKESCAPE,$(BUILDDIR))/stage2.bin.limlz: $(call MKESCAPE,$(BUILDDIR))/stage2.bin $(call MKESCAPE,$(LIMLZPACK))
+	'$(call SHESCAPE,$(LIMLZPACK))' '$(call SHESCAPE,$<)' '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/stage2.bin: $(call MKESCAPE,$(BUILDDIR))/limine-bios.sys
 	dd if='$(call SHESCAPE,$<)' bs=$$(( 0x$$("$(READELF_FOR_TARGET)" -S '$(call SHESCAPE,$(BUILDDIR))/limine.elf' | $(GREP) '\.text\.stage3' | $(SED) 's/^.*] //' | $(AWK) '{print $$3}' | $(SED) 's/^0*//') - 0xf000 )) count=1 of='$(call SHESCAPE,$@)' 2>/dev/null
@@ -317,9 +378,9 @@ $(call MKESCAPE,$(BUILDDIR))/linker_stage2only.ld: linker_bios.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_STAGE2ONLY linker_bios.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_stage2only.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_stage2only.elf: $(OBJ_S2) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
+$(call MKESCAPE,$(BUILDDIR))/limine_stage2only.elf: $(OBJ_S2)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_stage2only.ld'
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker_stage2only.ld' -o '$(call SHESCAPE,$@)' || \
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -T'$(call SHESCAPE,$(BUILDDIR))/linker_stage2only.ld' -o '$(call SHESCAPE,$@)' || \
 		( echo "This error may mean that stage 2 was trying to use stage 3 symbols before loading stage 3" && \
 		  false )
 
@@ -327,64 +388,48 @@ $(call MKESCAPE,$(BUILDDIR))/linker_nos2map.ld: linker_bios.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP -DLINKER_NOS2MAP linker_bios.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nos2map.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/empty:
-	touch '$(call SHESCAPE,$@)'
-
-$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
-	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/empty'
+$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nos2map.ld'
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker_nos2map.ld' -o '$(call SHESCAPE,$@)'
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -T'$(call SHESCAPE,$(BUILDDIR))/linker_nos2map.ld' -o '$(call SHESCAPE,$@)'
 	$(OBJCOPY_FOR_TARGET) -O binary --only-section=.note.gnu.build-id '$(call SHESCAPE,$@)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.bin'
 	cd '$(call SHESCAPE,$(BUILDDIR))' && \
-		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s2.bin build-id.s2.o && \
-		$(OBJCOPY_FOR_TARGET) --add-section .note.GNU-stack='$(call SHESCAPE,$(BUILDDIR))/empty' --set-section-flags .note.GNU-stack=noload,readonly build-id.s2.o
+		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s2.bin build-id.s2.o
 	$(OBJCOPY_FOR_TARGET) -O binary --only-section=.note.gnu.build-id '$(call SHESCAPE,$@)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.bin'
 	cd '$(call SHESCAPE,$(BUILDDIR))' && \
-		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s3.bin build-id.s3.o && \
-		$(OBJCOPY_FOR_TARGET) --add-section .note.GNU-stack='$(call SHESCAPE,$(BUILDDIR))/empty' --set-section-flags .note.GNU-stack=noload,readonly build-id.s3.o
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.o' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.o' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker_nos2map.ld' -o '$(call SHESCAPE,$@)'
+		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s3.bin build-id.s3.o
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.o' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.o' -T'$(call SHESCAPE,$(BUILDDIR))/linker_nos2map.ld' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker_nomap.ld: linker_bios.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP linker_bios.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_nos3map.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/stage2.map.o
-	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/empty'
+$(call MKESCAPE,$(BUILDDIR))/limine_nos3map.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/stage2.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' -o '$(call SHESCAPE,$@)'
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' -o '$(call SHESCAPE,$@)'
 	$(OBJCOPY_FOR_TARGET) -O binary --only-section=.note.gnu.build-id '$(call SHESCAPE,$@)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.bin'
 	cd '$(call SHESCAPE,$(BUILDDIR))' && \
-		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s2.bin build-id.s2.o && \
-		$(OBJCOPY_FOR_TARGET) --add-section .note.GNU-stack='$(call SHESCAPE,$(BUILDDIR))/empty' --set-section-flags .note.GNU-stack=noload,readonly build-id.s2.o
+		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s2.bin build-id.s2.o
 	$(OBJCOPY_FOR_TARGET) -O binary --only-section=.note.gnu.build-id '$(call SHESCAPE,$@)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.bin'
 	cd '$(call SHESCAPE,$(BUILDDIR))' && \
-		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s3.bin build-id.s3.o && \
-		$(OBJCOPY_FOR_TARGET) --add-section .note.GNU-stack='$(call SHESCAPE,$(BUILDDIR))/empty' --set-section-flags .note.GNU-stack=noload,readonly build-id.s3.o
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.o' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.o' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' -o '$(call SHESCAPE,$@)'
+		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s3.bin build-id.s3.o
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.o' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.o' -T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker.ld: linker_bios.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef linker_bios.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/stage2.map.o $(call MKESCAPE,$(BUILDDIR))/full.map.o
-	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/empty'
+$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/stage2.map.o $(call MKESCAPE,$(BUILDDIR))/full.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' -o '$(call SHESCAPE,$@)'
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' -o '$(call SHESCAPE,$@)'
 	$(OBJCOPY_FOR_TARGET) -O binary --only-section=.note.gnu.build-id '$(call SHESCAPE,$@)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.bin'
 	cd '$(call SHESCAPE,$(BUILDDIR))' && \
-		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s2.bin build-id.s2.o && \
-		$(OBJCOPY_FOR_TARGET) --add-section .note.GNU-stack='$(call SHESCAPE,$(BUILDDIR))/empty' --set-section-flags .note.GNU-stack=noload,readonly build-id.s2.o
+		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s2.bin build-id.s2.o
 	$(OBJCOPY_FOR_TARGET) -O binary --only-section=.note.gnu.build-id '$(call SHESCAPE,$@)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.bin'
 	cd '$(call SHESCAPE,$(BUILDDIR))' && \
-		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s3.bin build-id.s3.o && \
-		$(OBJCOPY_FOR_TARGET) --add-section .note.GNU-stack='$(call SHESCAPE,$(BUILDDIR))/empty' --set-section-flags .note.GNU-stack=noload,readonly build-id.s3.o
-	$(LD_FOR_TARGET) '$(call OBJESCAPE,$^)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.o' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.o' $(LDFLAGS_FOR_TARGET) -T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' -o '$(call SHESCAPE,$@)'
+		$(OBJCOPY_FOR_TARGET) -I binary -B i386 -O elf32-i386 build-id.s3.bin build-id.s3.o
+	$(LD_FOR_TARGET) $(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' '$(call SHESCAPE,$(BUILDDIR))/build-id.s2.o' '$(call SHESCAPE,$(BUILDDIR))/build-id.s3.o' -T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' -o '$(call SHESCAPE,$@)'
 
 endif
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi: ../nyu-efi/*
-	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
-	cp -r ../nyu-efi '$(call SHESCAPE,$(BUILDDIR))/'
 
 ifeq ($(TARGET),uefi-x86-64)
 
@@ -397,39 +442,27 @@ $(call MKESCAPE,$(BUILDDIR))/full.map.o: $(call MKESCAPE,$(BUILDDIR))/limine_nom
 $(call MKESCAPE,$(BUILDDIR))/BOOTX64.EFI: $(call MKESCAPE,$(BUILDDIR))/limine.elf
 	$(OBJCOPY_FOR_TARGET) -O binary '$(call SHESCAPE,$<)' '$(call SHESCAPE,$@)'
 	chmod -x '$(call SHESCAPE,$@)'
-	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 ))
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-x86_64.S.o: nyu-efi
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_x86_64.c.o: nyu-efi
-
-.PHONY: nyu-efi
-nyu-efi: $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MAKE) -C '$(call SHESCAPE,$(BUILDDIR))/nyu-efi/src' -f nyu-efi.mk \
-		CC="$(CC_FOR_TARGET)" \
-		CFLAGS="$(BASE_CFLAGS)" \
-		CPPFLAGS='-nostdinc -isystem $(call SHESCAPE,$(SRCDIR))/../freestnd-c-hdrs-0bsd' \
-		ARCH=x86_64
+	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 )) 2>/dev/null
 
 $(call MKESCAPE,$(BUILDDIR))/linker_nomap.ld: linker_uefi_x86_64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP linker_uefi_x86_64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-x86_64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_x86_64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
+$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker.ld: linker_uefi_x86_64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef linker_uefi_x86_64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-x86_64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_x86_64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/full.map.o
+$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/full.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 endif
 
@@ -444,39 +477,27 @@ $(call MKESCAPE,$(BUILDDIR))/full.map.o: $(call MKESCAPE,$(BUILDDIR))/limine_nom
 $(call MKESCAPE,$(BUILDDIR))/BOOTAA64.EFI: $(call MKESCAPE,$(BUILDDIR))/limine.elf
 	$(OBJCOPY_FOR_TARGET) -O binary '$(call SHESCAPE,$<)' '$(call SHESCAPE,$@)'
 	chmod -x '$(call SHESCAPE,$@)'
-	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 ))
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-aarch64.S.o: nyu-efi
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_aarch64.c.o: nyu-efi
-
-.PHONY: nyu-efi
-nyu-efi: $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MAKE) -C '$(call SHESCAPE,$(BUILDDIR))/nyu-efi/src' -f nyu-efi.mk \
-		CC="$(CC_FOR_TARGET)" \
-		CFLAGS="$(BASE_CFLAGS)" \
-		CPPFLAGS='-nostdinc -isystem $(call SHESCAPE,$(SRCDIR))/../freestnd-c-hdrs-0bsd' \
-		ARCH=aarch64
+	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 )) 2>/dev/null
 
 $(call MKESCAPE,$(BUILDDIR))/linker_nomap.ld: linker_uefi_aarch64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP linker_uefi_aarch64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-aarch64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_aarch64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
+$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker.ld: linker_uefi_aarch64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef linker_uefi_aarch64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-aarch64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_aarch64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/full.map.o
+$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/full.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-riscv64)
@@ -490,39 +511,27 @@ $(call MKESCAPE,$(BUILDDIR))/full.map.o: $(call MKESCAPE,$(BUILDDIR))/limine_nom
 $(call MKESCAPE,$(BUILDDIR))/BOOTRISCV64.EFI: $(call MKESCAPE,$(BUILDDIR))/limine.elf
 	$(OBJCOPY_FOR_TARGET) -O binary '$(call SHESCAPE,$<)' '$(call SHESCAPE,$@)'
 	chmod -x '$(call SHESCAPE,$@)'
-	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 ))
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-riscv64.S.o: nyu-efi
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_riscv64.c.o: nyu-efi
-
-.PHONY: nyu-efi
-nyu-efi: $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MAKE) -C '$(call SHESCAPE,$(BUILDDIR))/nyu-efi/src' -f nyu-efi.mk \
-		CC="$(CC_FOR_TARGET)" \
-		CFLAGS="$(BASE_CFLAGS)" \
-		CPPFLAGS='-nostdinc -isystem $(call SHESCAPE,$(SRCDIR))/../freestnd-c-hdrs-0bsd' \
-		ARCH=riscv64
+	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 )) 2>/dev/null
 
 $(call MKESCAPE,$(BUILDDIR))/linker_nomap.ld: linker_uefi_riscv64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP linker_uefi_riscv64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-riscv64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_riscv64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
+$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker.ld: linker_uefi_riscv64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef linker_uefi_riscv64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-riscv64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_riscv64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/full.map.o
+$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/full.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-loongarch64)
@@ -536,39 +545,27 @@ $(call MKESCAPE,$(BUILDDIR))/full.map.o: $(call MKESCAPE,$(BUILDDIR))/limine_nom
 $(call MKESCAPE,$(BUILDDIR))/BOOTLOONGARCH64.EFI: $(call MKESCAPE,$(BUILDDIR))/limine.elf
 	$(OBJCOPY_FOR_TARGET) -O binary '$(call SHESCAPE,$<)' '$(call SHESCAPE,$@)'
 	chmod -x '$(call SHESCAPE,$@)'
-	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 ))
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-loongarch64.S.o: nyu-efi
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_loongarch64.c.o: nyu-efi
-
-.PHONY: nyu-efi
-nyu-efi: $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MAKE) -C '$(call SHESCAPE,$(BUILDDIR))/nyu-efi/src' -f nyu-efi.mk \
-		CC="$(CC_FOR_TARGET)" \
-		CFLAGS="$(BASE_CFLAGS)" \
-		CPPFLAGS='-nostdinc -isystem $(call SHESCAPE,$(SRCDIR))/../freestnd-c-hdrs-0bsd' \
-		ARCH=loongarch64
+	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 )) 2>/dev/null
 
 $(call MKESCAPE,$(BUILDDIR))/linker_nomap.ld: linker_uefi_loongarch64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP linker_uefi_loongarch64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-loongarch64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_loongarch64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
+$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker.ld: linker_uefi_loongarch64.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef linker_uefi_loongarch64.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-loongarch64.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_loongarch64.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/full.map.o
+$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/full.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-ia32)
@@ -582,158 +579,116 @@ $(call MKESCAPE,$(BUILDDIR))/full.map.o: $(call MKESCAPE,$(BUILDDIR))/limine_nom
 $(call MKESCAPE,$(BUILDDIR))/BOOTIA32.EFI: $(call MKESCAPE,$(BUILDDIR))/limine.elf
 	$(OBJCOPY_FOR_TARGET) -O binary '$(call SHESCAPE,$<)' '$(call SHESCAPE,$@)'
 	chmod -x '$(call SHESCAPE,$@)'
-	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 ))
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-ia32.S.o: nyu-efi
-
-$(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_ia32.c.o: nyu-efi
-
-.PHONY: nyu-efi
-nyu-efi: $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MAKE) -C '$(call SHESCAPE,$(BUILDDIR))/nyu-efi/src' -f nyu-efi.mk \
-		CC="$(CC_FOR_TARGET)" \
-		CFLAGS="$(BASE_CFLAGS)" \
-		CPPFLAGS='-nostdinc -isystem $(call SHESCAPE,$(SRCDIR))/../freestnd-c-hdrs-0bsd' \
-		ARCH=ia32
+	dd if=/dev/zero of='$(call SHESCAPE,$@)' bs=4096 count=0 seek=$$(( ($$(wc -c < '$(call SHESCAPE,$@)') + 4095) / 4096 )) 2>/dev/null
 
 $(call MKESCAPE,$(BUILDDIR))/linker_nomap.ld: linker_uefi_ia32.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef -DLINKER_NOMAP linker_uefi_ia32.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-ia32.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_ia32.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a
+$(call MKESCAPE,$(BUILDDIR))/limine_nomap.elf: $(OBJ)
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker_nomap.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 $(call MKESCAPE,$(BUILDDIR))/linker.ld: linker_uefi_ia32.ld.in
 	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'
 	$(CC_FOR_TARGET) -x c -E -P -undef linker_uefi_ia32.ld.in -o '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 
-$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/crt0-efi-ia32.S.o $(call MKESCAPE,$(BUILDDIR))/nyu-efi/src/reloc_ia32.c.o $(OBJ) $(call MKESCAPE,$(BUILDDIR))/cc-runtime/cc-runtime.a $(call MKESCAPE,$(BUILDDIR))/full.map.o
+$(call MKESCAPE,$(BUILDDIR))/limine.elf: $(OBJ) $(call MKESCAPE,$(BUILDDIR))/full.map.o
 	$(MAKE) -f common.mk '$(call SHESCAPE,$(BUILDDIR))/linker.ld'
 	$(LD_FOR_TARGET) \
 		-T'$(call SHESCAPE,$(BUILDDIR))/linker.ld' \
-		'$(call OBJESCAPE,$^)' $(LDFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
+		$(LDFLAGS_FOR_TARGET) '$(call OBJESCAPE,$^)' -o '$(call SHESCAPE,$@)'
 
 endif
 
 -include $(HEADER_DEPS)
 
-ifeq ($(TARGET),uefi-x86-64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.c $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
-	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
-endif
-
-ifeq ($(TARGET),uefi-aarch64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.c $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
-	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
-endif
-
-ifeq ($(TARGET),uefi-riscv64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.c $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
-	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
-endif
-
-ifeq ($(TARGET),uefi-loongarch64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.c $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
-	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
-endif
-
-ifeq ($(TARGET),uefi-ia32)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.c $(call MKESCAPE,$(BUILDDIR))/nyu-efi
-	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
-	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
-endif
-
+# Must precede the generic .c rule: make before 3.82 picks the first matching
+# pattern rule rather than the shortest stem, and both match a .s2.o target.
 ifeq ($(TARGET),bios)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.c
-	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
-	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
-endif
-
--include $(HEADER_DEPS)
-
-ifeq ($(TARGET),bios)
-$(call MKESCAPE,$(BUILDDIR))/%.s2.o: %.s2.c
+$(call MKESCAPE,$(BUILDDIR))/%.s2.o: ../%.s2.c
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(S2CFLAGS) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 endif
 
--include $(HEADER_DEPS)
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.c
+	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
+	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
+
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.S
+	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
+	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 
 ifeq ($(TARGET),bios)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_ia32
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_ia32
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_bios_ia32
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_bios_ia32
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_x86
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_x86
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-x86-64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_x86_64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_x86_64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_uefi_x86_64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_uefi_x86_64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_x86
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_x86
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-aarch64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_aarch64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_aarch64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -x assembler-with-cpp -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_uefi_aarch64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_uefi_aarch64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -x assembler-with-cpp -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-riscv64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_riscv64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_riscv64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -x assembler-with-cpp -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_uefi_riscv64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_uefi_riscv64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -x assembler-with-cpp -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-loongarch64)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_loongarch64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_loongarch64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -x assembler-with-cpp -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_uefi_loongarch64
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_uefi_loongarch64
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	$(CC_FOR_TARGET) $(CFLAGS_FOR_TARGET) $(CPPFLAGS_FOR_TARGET) -x assembler-with-cpp -c '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 endif
 
 ifeq ($(TARGET),uefi-ia32)
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_ia32
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_ia32
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_uefi_ia32
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_uefi_ia32
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 
-$(call MKESCAPE,$(BUILDDIR))/%.o: %.asm_x86
+$(call MKESCAPE,$(BUILDDIR))/%.o: ../%.asm_x86
 	$(MKDIR_P) "$$(dirname '$(call SHESCAPE,$@)')"
 	nasm '$(call SHESCAPE,$<)' $(NASMFLAGS_FOR_TARGET) -o '$(call SHESCAPE,$@)'
 endif

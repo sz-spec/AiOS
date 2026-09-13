@@ -1,0 +1,52 @@
+{
+  "reviewed": "2026-09-14",
+  "gcc": {
+    "old": "13.2.0",
+    "new": "16.2.0",
+    "source": "https://gcc.gnu.org/releases.html",
+    "archive": "https://ftp.gnu.org/gnu/gcc/gcc-16.2.0/gcc-16.2.0.tar.xz",
+    "sha256": "e6738e29597f733270731aa90600f37ffdc045079dfc27ec7e8192cc81085c3e"
+  },
+  "binutils": {
+    "old": "2.42",
+    "new": "2.47",
+    "source": "https://sourceware.org/binutils/",
+    "archive": "https://ftp.gnu.org/gnu/binutils/binutils-2.47.tar.xz",
+    "sha256": "154ab23b60070e8f27013c22977f1129425d67d1e8acd6e13010e617811e4cff"
+  },
+  "base_images": {
+    "kernel": "debian:trixie-slim",
+    "ebpf": "ubuntu:26.04",
+    "sources": [
+      "https://www.debian.org/releases/stable/",
+      "https://releases.ubuntu.com/"
+    ]
+  },
+  "host_observed": {
+    "gcc": "15.2.0",
+    "binutils": "2.46.0.20260210",
+    "docker": "linux/aarch64"
+  },
+  "verification": {
+    "archive_source": "downloaded from GNU HTTPS; SHA256 computed locally; build verifies before extraction",
+    "detached_signatures": "not verified",
+    "kernel_container_build": "passed GCC16.2.0 / GNU ld2.47.20260726",
+    "ebpf_container_build": "passed; /private/tmp/vos5-ebpf-docker-build.log",
+    "gcc_hash": "two completed independent HTTPS downloads agree; initial partial-file digest was rejected by build and corrected",
+    "ebpf_compile": "passed zero warnings; taint_gate.o SHA256 de1266da0983a55ec84d0794269405fc01625e871484ed936703e285d444e6cc",
+    "native_iso": {
+      "path": "dist/vos5-toolchain-latest.iso",
+      "sha256": "929643fae8662cb9d794ad7028bca0ede27c1457b4e3ab35ea88cbd0c151e412",
+      "bios4": "passed",
+      "uefi2": "passed",
+      "repeat_build": "passed; unchanged ISO SHA256, no rebuild or clock warning"
+    }
+  },
+  "limits": [
+    "Host installed crosscompiler not replaced",
+    "Source pins do not establish cross-host binary reproducibility",
+    "Base tags and distro packages are mutable",
+    "eBPF compile requires runtime BTF; load/attach needs suitable Linux kernel",
+    "Container toolchain requires native compile and boot tests before production qualification"
+  ]
+}

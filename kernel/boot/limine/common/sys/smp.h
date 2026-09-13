@@ -10,6 +10,8 @@
 
 #if defined (__x86_64__) || defined (__i386__)
 
+extern bool smp_configure_apic;
+
 struct limine_mp_info *init_smp(size_t   *cpu_count,
                                  uint32_t *_bsp_lapic_id,
                                  int       paging_mode,
@@ -21,13 +23,15 @@ struct limine_mp_info *init_smp(size_t   *cpu_count,
 
 #elif defined (__aarch64__)
 
-struct limine_mp_info *init_smp(size_t   *cpu_count,
+struct limine_mp_info *init_smp(void     *dtb,
+                                 size_t   *cpu_count,
                                  uint64_t *bsp_mpidr,
                                  pagemap_t pagemap,
                                  uint64_t  mair,
                                  uint64_t  tcr,
                                  uint64_t  sctlr,
-                                 uint64_t  hhdm_offset);
+                                 uint64_t  hhdm_offset,
+                                 bool      drop_to_el1);
 
 #elif defined (__riscv)
 
@@ -36,6 +40,11 @@ struct limine_mp_info *init_smp(size_t   *cpu_count,
                                  uint64_t  hhdm_offset);
 
 #elif defined (__loongarch64)
+
+struct limine_mp_info *init_smp(void *dtb, size_t *cpu_count,
+                                uint32_t *bsp_phys_id, pagemap_t pagemap,
+                                uint64_t hhdm_offset);
+
 #else
 #error Unknown architecture
 #endif

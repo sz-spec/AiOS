@@ -1,0 +1,11 @@
+{
+  "scope": "Ephemeral diskless VM setup; not persistent installation or physical hardware",
+  "smp": 2,
+  "online_cpus": 2,
+  "iso_sha256": "ec9bc932c251cb73f6da7eb3f8da55fef48fcdf9b3d7d57c24834fa0a2cb7dda",
+  "prompts_answered": 6,
+  "setup_completed": true,
+  "fault": false,
+  "error": null,
+  "passed": true
+}

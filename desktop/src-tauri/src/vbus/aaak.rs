@@ -27,7 +27,7 @@
 /// sessions (extremely unlikely but possible), the derived key differs
 /// because the kernel provides a fresh salt in each handshake response.
 
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::Sha256;
 
 type HmacSha256 = Hmac<Sha256>;
@@ -219,6 +219,19 @@ pub fn extract_handshake_salt(response_payload: &[u8]) -> (bool, [u8; 32]) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_rfc5869_case1_first_32_bytes() {
+        let salt: Vec<u8> = (0x00..=0x0c).collect();
+        let info: Vec<u8> = (0xf0..=0xf9).collect();
+        let key = hkdf_sha256_derive(&[0x0b; 22], &salt, &info);
+        assert_eq!(key, [
+            0x3c, 0xb2, 0x5f, 0x25, 0xfa, 0xac, 0xd5, 0x7a,
+            0x90, 0x43, 0x4f, 0x64, 0xd0, 0x36, 0x2f, 0x2a,
+            0x2d, 0x2d, 0x0a, 0x90, 0xcf, 0x1a, 0x5a, 0x4c,
+            0x5d, 0xb0, 0x2d, 0x56, 0xec, 0xc4, 0xc5, 0xbf,
+        ]);
+    }
 
     #[test]
     fn test_hkdf_derive_produces_32_bytes() {

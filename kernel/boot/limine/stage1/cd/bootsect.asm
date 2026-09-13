@@ -25,7 +25,7 @@ skip_bpb:
     mov ds, si
     mov es, si
     mov ss, si
-    mov sp, 0x7c00
+    mov esp, 0x7c00
     sti
 
     ; int 13h?
@@ -100,7 +100,7 @@ incbin DECOMPRESSOR_PATH
 
 align 16
 stage2:
-%strcat STAGE2_PATH BUILDDIR, '/common-bios/stage2.bin.gz'
+%strcat STAGE2_PATH BUILDDIR, '/common-bios/stage2.bin.limlz'
 incbin STAGE2_PATH
 .size: equ $ - stage2
 

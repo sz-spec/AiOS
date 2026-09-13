@@ -3,8 +3,10 @@
 #include <stdnoreturn.h>
 #include <protos/chainload.h>
 #include <lib/part.h>
+#include <lib/guid.h>
 #include <lib/config.h>
 #include <lib/misc.h>
+#include <lib/acpi.h>
 #include <drivers/disk.h>
 #include <lib/term.h>
 #include <lib/fb.h>
@@ -12,6 +14,7 @@
 #include <lib/print.h>
 #include <lib/libc.h>
 #include <sys/idt.h>
+#include <lib/bli.h>
 #include <drivers/vga_textmode.h>
 #include <mm/pmm.h>
 #if defined (UEFI)
@@ -80,6 +83,16 @@ noreturn static void spinup(uint8_t drive, void *buf) {
     __builtin_unreachable();
 }
 
+// Defined in spinup_freebsd.asm_bios_ia32.
+noreturn void spinup_freebsd(uint32_t drive, uint32_t buf, uint32_t count);
+
+// FreeBSD's freebsd-boot partition contains gptboot, a multi-sector binary with
+// no MBR signature that FreeBSD's pmbr loads whole to 0x7C00. pmbr stops the
+// load at 0x90000 and truncates rather than failing.
+#define FREEBSD_BOOT_TYPE_GUID "83bd6b9d-7f41-11dc-be0b-001560b84f0f"
+#define FREEBSD_BOOT_LOAD_ADDR 0x7c00
+#define FREEBSD_BOOT_LOAD_TOP 0x90000
+
 noreturn void chainload(char *config, char *cmdline) {
     (void)cmdline;
 
@@ -92,7 +105,7 @@ noreturn void chainload(char *config, char *cmdline) {
         } else {
             val = strtoui(part_config, NULL, 10);
             if (val > 256) {
-                panic(true, "chainload: BIOS partition number outside range 0-256");
+                panic(true, "bios: BIOS partition number outside range 0-256");
             }
             part = val;
         }
@@ -104,13 +117,18 @@ noreturn void chainload(char *config, char *cmdline) {
         } else {
             val = strtoui(drive_config, NULL, 10);
             if (val < 1 || val > 256) {
-                panic(true, "chainload: BIOS drive number outside range 1-256");
+                panic(true, "bios: BIOS drive number outside range 1-256");
             }
             drive = val;
         }
     }
 
     struct volume *p = volume_get_by_coord(false, drive, part);
+    if (p == NULL && config_get_value(config, 0, "GPT_GUID") == NULL
+                  && config_get_value(config, 0, "GPT_UUID") == NULL
+                  && config_get_value(config, 0, "MBR_ID") == NULL) {
+        panic(true, "bios: Specified drive/partition not found");
+    }
 
     char *gpt_guid_s = config_get_value(config, 0, "GPT_GUID");
     if (gpt_guid_s == NULL) {
@@ -119,30 +137,30 @@ noreturn void chainload(char *config, char *cmdline) {
     if (gpt_guid_s != NULL) {
         struct guid guid;
         if (!string_to_guid_be(&guid, gpt_guid_s)) {
-            panic(true, "chainload: Malformed GUID");
+            panic(true, "bios: Malformed GUID");
         }
 
         p = volume_get_by_guid(&guid);
         if (p == NULL) {
             if (!string_to_guid_mixed(&guid, gpt_guid_s)) {
-                panic(true, "chainload: Malformed GUID");
+                panic(true, "bios: Malformed GUID");
             }
 
             p = volume_get_by_guid(&guid);
         }
 
         if (p == NULL) {
-            panic(true, "chainload: No matching GPT drive for GPT_GUID found");
+            panic(true, "bios: No matching GPT drive for GPT_GUID found");
         }
 
         if (p->partition != 0) {
-            panic(true, "chainload: GPT_GUID is that of a partition, not a drive");
+            panic(true, "bios: GPT_GUID is that of a partition, not a drive");
         }
 
         p = volume_get_by_coord(false, p->index, part);
 
         if (p == NULL) {
-            panic(true, "chainload: Partition specified is not valid");
+            panic(true, "bios: Partition specified is not valid");
         }
 
         goto load;
@@ -160,39 +178,63 @@ noreturn void chainload(char *config, char *cmdline) {
             }
 
             uint32_t mbr_id_1;
-            volume_read(p, &mbr_id_1, 0x1b8, sizeof(uint32_t));
+            if (!volume_read(p, &mbr_id_1, 0x1b8, sizeof(uint32_t))) {
+                continue;
+            }
 
             if (mbr_id_1 == mbr_id) {
                 p = volume_get_by_coord(false, p->index, part);
 
                 if (p == NULL) {
-                    panic(true, "chainload: Partition specified is not valid");
+                    panic(true, "bios: Partition specified is not valid");
                 }
 
                 goto load;
             }
         }
 
-        panic(true, "chainload: No matching MBR ID found");
+        panic(true, "bios: No matching MBR ID found");
     }
 
 load:
-    bios_chainload_volume(p);
-
-    panic(true, "chainload: Volume is not bootable");
-}
-
-void bios_chainload_volume(struct volume *p) {
     vga_textmode_init(false);
+
+    // A freebsd-boot partition is not a normal boot record, it holds
+    // gptboot, which has no 0xAA55 signature and is loaded whole by FreeBSD's
+    // pmbr. Detect it by GPT type GUID and emulate the handoff.
+    struct guid freebsd_boot_guid;
+    if (p->part_type_guid_valid
+     && string_to_guid_mixed(&freebsd_boot_guid, FREEBSD_BOOT_TYPE_GUID)
+     && memcmp(&p->part_type_guid, &freebsd_boot_guid, sizeof(struct guid)) == 0) {
+        // sect_count is always in 512-byte sectors, regardless of sector_size.
+        uint64_t load_size = (uint64_t)p->sect_count * 512;
+        // pmbr's ceiling is fixed, so it clobbers an EBDA sitting below it.
+        uint64_t load_top = MIN((uint64_t)FREEBSD_BOOT_LOAD_TOP, (uint64_t)EBDA);
+        if (load_size > load_top - FREEBSD_BOOT_LOAD_ADDR) {
+            load_size = load_top - FREEBSD_BOOT_LOAD_ADDR;
+        }
+        if (load_size == 0) {
+            panic(true, "bios: freebsd-boot partition has zero size");
+        }
+
+        void *fbuf = ext_mem_alloc(load_size);
+        if (!volume_read(p, fbuf, 0, load_size)) {
+            panic(true, "bios: Failed to read freebsd-boot partition");
+        }
+
+        spinup_freebsd(p->drive, (uint32_t)(uintptr_t)fbuf, (uint32_t)load_size);
+    }
 
     void *buf = ext_mem_alloc(512);
 
-    volume_read(p, buf, 0, 512);
+    if (!volume_read(p, buf, 0, 512)) {
+        panic(true, "bios: Failed to read boot sector");
+    }
 
     uint16_t *boot_sig = (uint16_t *)(buf + 0x1fe);
 
     if (*boot_sig != 0xaa55) {
-        return;
+        panic(true, "bios: Volume is not bootable");
     }
 
     spinup(p->drive, buf);
@@ -200,32 +242,101 @@ void bios_chainload_volume(struct volume *p) {
 
 #elif defined (UEFI)
 
-noreturn void chainload(char *config, char *cmdline) {
-    char *image_path = config_get_value(config, 0, "IMAGE_PATH");
-    if (image_path == NULL)
-        panic(true, "chainload: IMAGE_PATH not specified");
+static EFI_DEVICE_PATH_PROTOCOL *build_relative_efi_file_path(struct file_handle *image) {
+    // The file path stored in EFI_LOADED_IMAGE_PROTOCOL::FilePath is
+    // expected to be relative to the EFI_LOADED_IMAGE_PROTOCOL::DeviceHandle.
+    // For this reason the EFI_DEVICE_PATH_PROTOCOL of the efi_part_handle
+    // is not used as a prefix. This likely also means that the returned
+    // path cannot be given to gBS->LoadImage() directly.
 
-    struct file_handle *image;
-    if ((image = uri_open(image_path)) == NULL)
-        panic(true, "chainload: Failed to open image with path `%s`. Is the path correct?", image_path);
+    size_t original_path_chars = strlen(image->path);
 
-    efi_chainload_file(config, cmdline, image);
+    size_t efi_file_path_alloc_len = (original_path_chars + 1) * sizeof(CHAR16);
+    CHAR16 *efi_file_path = ext_mem_alloc(efi_file_path_alloc_len);
+
+    bool leading_slash = true;
+    size_t j = 0;
+    for (size_t i = 0; i < original_path_chars; i++) {
+        if (image->path[i] == '/' && leading_slash) {
+            continue;
+        }
+        leading_slash = false;
+        efi_file_path[j++] = image->path[i] == '/' ? '\\' : image->path[i];
+    }
+    efi_file_path[j] = 0;
+
+
+    size_t efi_file_path_len = ((j + 1) * sizeof(CHAR16));
+    size_t path_item_len     = sizeof(EFI_DEVICE_PATH_PROTOCOL) + efi_file_path_len;
+    size_t end_item_len      = sizeof(EFI_DEVICE_PATH_PROTOCOL);
+    size_t alloc_len         = path_item_len + end_item_len;
+
+    if (path_item_len > 0xffff) {
+        panic(true, "efi: Image path too long for device path node");
+    }
+
+    EFI_DEVICE_PATH_PROTOCOL *device_path;
+    EFI_STATUS status = gBS->AllocatePool(EfiLoaderData, alloc_len, (void **)&device_path);
+    if (status) {
+        panic(true, "efi: AllocatePool() failure (%x)", status);
+    }
+
+    FILEPATH_DEVICE_PATH *path_item = (FILEPATH_DEVICE_PATH *)device_path;
+    path_item->Header.Type      = MEDIA_DEVICE_PATH;
+    path_item->Header.SubType   = MEDIA_FILEPATH_DP;
+    path_item->Header.Length[0] = path_item_len;
+    path_item->Header.Length[1] = path_item_len >> 8;
+    memcpy(&path_item->PathName, efi_file_path, efi_file_path_len);
+
+    EFI_DEVICE_PATH_PROTOCOL *end_item = (void *)device_path + path_item_len;
+    end_item->Type      = END_DEVICE_PATH_TYPE;
+    end_item->SubType   = END_ENTIRE_DEVICE_PATH_SUBTYPE;
+    end_item->Length[0] = end_item_len;
+    end_item->Length[1] = end_item_len >> 8;
+
+    pmm_free(efi_file_path, efi_file_path_alloc_len);
+    return device_path;
 }
 
-noreturn void efi_chainload_file(char *config, char *cmdline, struct file_handle *image) {
+noreturn void chainload(char *config, char *cmdline) {
+    char *image_path = config_get_value(config, 0, "PATH");
+    if (image_path == NULL) {
+        image_path = config_get_value(config, 0, "IMAGE_PATH");
+    }
+    if (image_path == NULL) {
+        panic(true, "efi: Image path not specified");
+    }
+
+    // The firmware's LoadImage will verify the Secure Boot signature of the
+    // chainloaded EFI application, so Limine does not need to enforce its
+    // own hash check here.
+    bool saved_secure_boot_active = secure_boot_active;
+    secure_boot_active = false;
+
+    struct file_handle *image;
+    if ((image = uri_open(image_path, MEMMAP_RESERVED, false
+#if defined (__i386__)
+        , NULL, NULL
+#endif
+    )) == NULL)
+        panic(true, "efi: Failed to open image with path `%s`. Is the path correct?", image_path);
+
+    secure_boot_active = saved_secure_boot_active;
+
     EFI_STATUS status;
 
     EFI_HANDLE efi_part_handle = image->efi_part_handle;
 
-    void *ptr = freadall(image, MEMMAP_RESERVED);
+    void *ptr = image->fd;
     size_t image_size = image->size;
 
     memmap_alloc_range_in(untouched_memmap, &untouched_memmap_entries,
-                          (uintptr_t)ptr, ALIGN_UP(image_size, 4096),
+                          (uintptr_t)ptr, ALIGN_UP(image_size, 4096, panic(true, "chainload: Alignment overflow")),
                           MEMMAP_RESERVED, MEMMAP_USABLE, true, false, true);
 
-    fclose(image);
+    EFI_DEVICE_PATH_PROTOCOL *efi_file_path = build_relative_efi_file_path(image);
 
+    fclose(image);
     term_notready();
 
     size_t req_width = 0, req_height = 0, req_bpp = 0;
@@ -236,13 +347,14 @@ noreturn void efi_chainload_file(char *config, char *cmdline, struct file_handle
 
     struct fb_info *fbinfo;
     size_t fb_count;
-    fb_init(&fbinfo, &fb_count, req_width, req_height, req_bpp);
+    fb_init(&fbinfo, &fb_count, req_width, req_height, req_bpp,
+            !fb_flush_reliable(), false);
 
     size_t cmdline_len = strlen(cmdline);
     CHAR16 *new_cmdline;
-    status = gBS->AllocatePool(EfiLoaderData, (cmdline_len + 1) * sizeof(CHAR16), (void **)&new_cmdline);
+    status = gBS->AllocatePool(EfiLoaderData, CHECKED_MUL(cmdline_len + 1, sizeof(CHAR16), panic(true, "efi: Allocation size overflow")), (void **)&new_cmdline);
     if (status) {
-        panic(true, "chainload: Allocation failure");
+        panic(true, "efi: Allocation failure");
     }
     for (size_t i = 0; i < cmdline_len + 1; i++) {
         new_cmdline[i] = cmdline[i];
@@ -272,26 +384,28 @@ noreturn void efi_chainload_file(char *config, char *cmdline, struct file_handle
                             (EFI_DEVICE_PATH *)memdev_path,
                             ptr, image_size, &new_handle);
     if (status) {
-        panic(false, "chainload: LoadImage failure (%x)", status);
+        panic(false, "efi: LoadImage failure (%X)", (uint64_t)status);
     }
 
-    // Apparently we need to make sure that the DeviceHandle field is the same
-    // as us (the loader) for some EFI images to properly work (Windows for instance)
     EFI_GUID loaded_img_prot_guid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
 
     EFI_LOADED_IMAGE_PROTOCOL *new_handle_loaded_image = NULL;
     status = gBS->HandleProtocol(new_handle, &loaded_img_prot_guid,
                                  (void **)&new_handle_loaded_image);
     if (status) {
-        panic(false, "chainload: HandleProtocol failure (%x)", status);
+        panic(false, "efi: HandleProtocol failure (%X)", (uint64_t)status);
     }
 
     if (efi_part_handle != 0) {
         new_handle_loaded_image->DeviceHandle = efi_part_handle;
     }
 
-    new_handle_loaded_image->LoadOptionsSize = cmdline_len * sizeof(CHAR16);
+    new_handle_loaded_image->FilePath = efi_file_path;
+
+    new_handle_loaded_image->LoadOptionsSize = (cmdline_len + 1) * sizeof(CHAR16);
     new_handle_loaded_image->LoadOptions = new_cmdline;
+
+    bli_on_boot();
 
     UINTN exit_data_size = 0;
     CHAR16 *exit_data = NULL;
@@ -299,7 +413,7 @@ noreturn void efi_chainload_file(char *config, char *cmdline, struct file_handle
 
     status = gBS->Exit(efi_image_handle, exit_status, exit_data_size, exit_data);
     if (status) {
-        panic(false, "chainload: Exit failure (%x)", status);
+        panic(false, "efi: Exit failure (%X)", (uint64_t)status);
     }
 
     __builtin_unreachable();

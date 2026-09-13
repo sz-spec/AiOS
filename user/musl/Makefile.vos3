@@ -10,6 +10,9 @@ SIZE    := $(CROSS)size
 NM      := $(CROSS)nm
 OBJCOPY := $(CROSS)objcopy
 
+SOURCE_DATE_EPOCH ?= 1700000000
+export SOURCE_DATE_EPOCH
+
 GCC_INC := $(shell $(CC) -print-file-name=include)
 MUSL    := .
 
@@ -143,8 +146,8 @@ C_SRCS := $(filter-out $(EXCLUDE_SRCS),$(C_SRCS))
 # Build directories and objects
 # ============================================================================
 
-BUILD   := obj
-LIB_DIR := lib
+BUILD   ?= obj
+LIB_DIR ?= lib
 
 # Generate object paths in obj/ tree
 C_OBJS  := $(patsubst %.c,$(BUILD)/%.o,$(C_SRCS))
@@ -162,14 +165,14 @@ CFLAGS := -std=c99 -nostdinc -ffreestanding -fno-stack-protector \
           -fno-unwind-tables -fno-asynchronous-unwind-tables \
           -Wa,--noexecstack \
           -I$(BUILD)/include \
-          -I$(MUSL)/obj/include \
+          -I$(BUILD)/include \
           -I$(MUSL)/arch/x86_64 \
           -I$(MUSL)/arch/generic \
           -I$(MUSL)/src/include \
           -I$(MUSL)/src/internal \
           -I$(MUSL)/include \
           -isystem $(GCC_INC) \
-          -I$(MUSL)/obj/src/internal \
+          -I$(BUILD)/src/internal \
           -Dhidden='__attribute__((__visibility__("hidden")))' \
           -Dweak='__attribute__((__weak__))' \
           -D_XOPEN_SOURCE=700 \
@@ -200,25 +203,25 @@ count:
 	@echo "ASM sources: $(words $(ASM_SRCS))"
 	@echo "Total objs:  $(words $(ALL_OBJS))"
 
-headers: $(MUSL)/obj/include/bits/alltypes.h $(MUSL)/obj/include/bits/syscall.h $(MUSL)/obj/src/internal/version.h
+headers: $(BUILD)/include/bits/alltypes.h $(BUILD)/include/bits/syscall.h $(BUILD)/src/internal/version.h
 
-$(MUSL)/obj/include/bits/alltypes.h: arch/x86_64/bits/alltypes.h.in include/alltypes.h.in
-	@mkdir -p $(MUSL)/obj/include/bits
-	@sed -f tools/mkalltypes.sed $^ > $@
+$(BUILD)/include/bits/alltypes.h: arch/x86_64/bits/alltypes.h.in include/alltypes.h.in tools/mkalltypes.sed
+	@mkdir -p $(BUILD)/include/bits
+	@sed -f tools/mkalltypes.sed $(filter %.in,$^) > $@
 
-$(MUSL)/obj/include/bits/syscall.h: arch/x86_64/bits/syscall.h.in
-	@mkdir -p $(MUSL)/obj/include/bits
+$(BUILD)/include/bits/syscall.h: arch/x86_64/bits/syscall.h.in
+	@mkdir -p $(BUILD)/include/bits
 	@cp $< $@
 	@sed -n -e 's/__NR_/SYS_/p' < $< >> $@
 
-$(MUSL)/obj/src/internal/version.h:
-	@mkdir -p $(MUSL)/obj/src/internal
-	@printf '#define VERSION "%s"\n' "1.2.5-vos3" > $@
+$(BUILD)/src/internal/version.h: Makefile.vos3
+	@mkdir -p $(BUILD)/src/internal
+	@printf '#define VERSION "%s"\n' "1.2.6-vos3" > $@
 
 # Compile C sources
 $(BUILD)/%.o: %.c | headers
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 # Compile assembly sources
 $(BUILD)/%.o: %.s
@@ -226,7 +229,7 @@ $(BUILD)/%.o: %.s
 	@$(AS) $(ASFLAGS) -c $< -o $@
 
 # Link libc.so (then strip for deployment)
-$(LIB_DIR)/libc.so: $(ALL_OBJS)
+$(LIB_DIR)/libc.so: $(ALL_OBJS) ldso/libc.ld
 	@mkdir -p $(LIB_DIR)
 	@echo "  LD    libc.so ($(words $(ALL_OBJS)) objects)"
 	@$(LD) $(LDFLAGS) -T ldso/libc.ld -o $@.debug $(ALL_OBJS) \
@@ -243,12 +246,12 @@ crt: $(LIB_DIR)/crt1.o $(LIB_DIR)/Scrt1.o $(LIB_DIR)/crti.o $(LIB_DIR)/crtn.o
 $(LIB_DIR)/crt1.o: crt/crt1.c | headers
 	@mkdir -p $(LIB_DIR)
 	@echo "  CC    crt1.o"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 $(LIB_DIR)/Scrt1.o: crt/crt1.c | headers
 	@mkdir -p $(LIB_DIR)
 	@echo "  CC    Scrt1.o (PIC)"
-	@$(CC) $(CFLAGS) -fPIC -DCRT -c $< -o $@
+	@$(CC) $(CFLAGS) -MMD -MP -fPIC -DCRT -c $< -o $@
 
 $(LIB_DIR)/crti.o: crt/x86_64/crti.s
 	@mkdir -p $(LIB_DIR)
@@ -262,3 +265,23 @@ $(LIB_DIR)/crtn.o: crt/x86_64/crtn.s
 
 clean:
 	rm -rf $(BUILD)/src $(BUILD)/ldso $(LIB_DIR)
+
+export VOS_MUSL_EPOCH := $(SOURCE_DATE_EPOCH)
+export VOS_MUSL_CC := $(CC)
+export VOS_MUSL_AS := $(AS)
+export VOS_MUSL_LD := $(LD)
+export VOS_MUSL_OBJCOPY := $(OBJCOPY)
+export VOS_MUSL_LD_VERSION := $(shell $(LD) --version | head -n 1)
+export VOS_MUSL_AS_VERSION := $(shell $(AS) --version | head -n 1)
+export VOS_MUSL_OBJCOPY_VERSION := $(shell $(OBJCOPY) --version | head -n 1)
+export VOS_MUSL_CFLAGS := $(CFLAGS)
+export VOS_MUSL_ASFLAGS := $(ASFLAGS)
+export VOS_MUSL_LDFLAGS := $(LDFLAGS)
+export VOS_MUSL_SOURCES := $(C_SRCS) $(ASM_SRCS)
+export VOS_MUSL_TOOLCHAIN := $(shell $(CC) --version | head -n 1)
+.PHONY: FORCE_MUSL_CONFIG
+FORCE_MUSL_CONFIG:
+$(BUILD)/build-config.json: FORCE_MUSL_CONFIG
+	@python3 ../../kernel/tools/build_config.py "$@" VOS_MUSL_
+$(ALL_OBJS) $(LIB_DIR)/crt1.o $(LIB_DIR)/Scrt1.o $(LIB_DIR)/crti.o $(LIB_DIR)/crtn.o: $(BUILD)/build-config.json Makefile.vos3
+-include $(C_OBJS:.o=.d) $(LIB_DIR)/crt1.d $(LIB_DIR)/Scrt1.d

@@ -1,0 +1,47 @@
+{
+  "before": {
+    "kernel/build/native-unified/vos3.elf": {
+      "sha256": "6e6c0e8f566d26eda910b70f8517c0f118740a5c603556d5d62e81075ebf2143",
+      "mtime_ns": 1789333066133869464
+    },
+    "kernel/build/native-unified/generated/embedded_bins.c": {
+      "sha256": "b011319dec7d4c58c8857b9392dc0ae7879fd1824b4ab2e099bdad1a109990dc",
+      "mtime_ns": 1789333064844315744
+    },
+    "kernel/build/native-unified/user/bin/init": {
+      "sha256": "0d17df8c6f3f3122c504a6daf194e5b0781802f9d5439362d87216ba568044e0",
+      "mtime_ns": 1789333045609226951
+    },
+    "kernel/build/native-unified/user/musl/lib/libc.so": {
+      "sha256": "fde9ee720224826ad03f4631f6271754d8d80ca1c60a466ee734c3f358d16cbc",
+      "mtime_ns": 1789333061632657290
+    },
+    "dist/vos5.iso": {
+      "sha256": "f53617d8b6c9ef4bbec4790562a539cde992b1a632c1b8b926a9815fa0748e2e",
+      "mtime_ns": 1789333066575977241
+    }
+  },
+  "after": {
+    "kernel/build/native-unified/vos3.elf": {
+      "sha256": "6e6c0e8f566d26eda910b70f8517c0f118740a5c603556d5d62e81075ebf2143",
+      "mtime_ns": 1789333066133869464
+    },
+    "kernel/build/native-unified/generated/embedded_bins.c": {
+      "sha256": "b011319dec7d4c58c8857b9392dc0ae7879fd1824b4ab2e099bdad1a109990dc",
+      "mtime_ns": 1789333064844315744
+    },
+    "kernel/build/native-unified/user/bin/init": {
+      "sha256": "0d17df8c6f3f3122c504a6daf194e5b0781802f9d5439362d87216ba568044e0",
+      "mtime_ns": 1789333045609226951
+    },
+    "kernel/build/native-unified/user/musl/lib/libc.so": {
+      "sha256": "fde9ee720224826ad03f4631f6271754d8d80ca1c60a466ee734c3f358d16cbc",
+      "mtime_ns": 1789333061632657290
+    },
+    "dist/vos5.iso": {
+      "sha256": "f53617d8b6c9ef4bbec4790562a539cde992b1a632c1b8b926a9815fa0748e2e",
+      "mtime_ns": 1789333066575977241
+    }
+  },
+  "unchanged": true
+}

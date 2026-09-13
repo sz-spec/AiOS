@@ -93,7 +93,10 @@ class CopilotReviewer {
       repo,
       pull_number: prNumber,
       mediaType: { format: 'diff' },
-    }) as { data: string };
+    });
+    if (typeof diff !== 'string') {
+      throw new TypeError('GitHub did not return a textual PR diff');
+    }
 
     // Get changed files
     const { data: files } = await this.octokit.pulls.listFiles({

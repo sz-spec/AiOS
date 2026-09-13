@@ -14,25 +14,42 @@ static uint16_t linear_masks_to_bpp(uint32_t red_mask, uint32_t green_mask,
                                     uint32_t blue_mask, uint32_t alpha_mask) {
     uint32_t compound_mask = red_mask | green_mask | blue_mask | alpha_mask;
     uint16_t ret = 32;
-    while ((compound_mask & (1 << 31)) == 0) {
+    while ((compound_mask & (1U << 31)) == 0) {
         ret--;
         compound_mask <<= 1;
     }
-    return ret;
+    // Round up to whole bytes: a 5/5/5 mask occupies 2 bytes, not 15 bits.
+    return (ret + 7) & ~7;
 }
 
 static void linear_mask_to_mask_shift(
                 uint8_t *mask, uint8_t *shift, uint32_t linear_mask) {
     *shift = 0;
+    *mask = 0;
+    if (linear_mask == 0) {
+        return;
+    }
     while ((linear_mask & 1) == 0) {
         (*shift)++;
         linear_mask >>= 1;
     }
-    *mask = 0;
     while ((linear_mask & 1) == 1) {
         (*mask)++;
         linear_mask >>= 1;
     }
+}
+
+static bool validate_pitch(struct fb_info *ret, size_t mode) {
+    uint64_t bytes_per_pixel = ret->framebuffer_bpp / 8;
+    if (bytes_per_pixel == 0
+     || ret->framebuffer_pitch % bytes_per_pixel != 0
+     || ret->framebuffer_pitch < ret->framebuffer_width * bytes_per_pixel) {
+        printv("gop: Mode %u has invalid pitch %u (width=%u, bpp=%u), skipping.\n",
+               (uint32_t)mode, (uint32_t)ret->framebuffer_pitch,
+               (uint32_t)ret->framebuffer_width, (uint32_t)ret->framebuffer_bpp);
+        return false;
+    }
+    return true;
 }
 
 // Most of this code taken from https://wiki.osdev.org/GOP
@@ -48,6 +65,8 @@ static bool mode_to_fb_info(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *g
     if (status) {
         return false;
     }
+
+    bool ok = false;
 
     switch (mode_info->PixelFormat) {
         case PixelBlueGreenRedReserved8BitPerColor:
@@ -69,6 +88,12 @@ static bool mode_to_fb_info(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *g
             ret->blue_mask_shift = 16;
             break;
         case PixelBitMask:
+            if ((mode_info->PixelInformation.RedMask
+               | mode_info->PixelInformation.GreenMask
+               | mode_info->PixelInformation.BlueMask
+               | mode_info->PixelInformation.ReservedMask) == 0) {
+                goto out;
+            }
             ret->framebuffer_bpp = linear_masks_to_bpp(
                                       mode_info->PixelInformation.RedMask,
                                       mode_info->PixelInformation.GreenMask,
@@ -85,7 +110,7 @@ static bool mode_to_fb_info(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *g
                                       mode_info->PixelInformation.BlueMask);
             break;
         default:
-            return false;
+            goto out;
     }
 
     ret->memory_model = 0x06;
@@ -93,7 +118,15 @@ static bool mode_to_fb_info(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *g
     ret->framebuffer_width = mode_info->HorizontalResolution;
     ret->framebuffer_height = mode_info->VerticalResolution;
 
-    return true;
+    ok = validate_pitch(ret, mode);
+
+out:
+    // UEFI calls this buffer callee allocated and says nothing about freeing
+    // it, so leave one the protocol is still pointing at alone.
+    if (gop->Mode == NULL || mode_info != gop->Mode->Info) {
+        gBS->FreePool(mode_info);
+    }
+    return ok;
 }
 
 bool gop_force_16 = false;
@@ -129,7 +162,7 @@ static bool try_mode(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *gop,
         }
     }
 
-    printv("gop: Found matching mode %x, attempting to set...\n", mode);
+    printv("gop: Found matching mode %X, attempting to set...\n", (uint64_t)mode);
 
     if (mode == gop->Mode->Mode) {
         printv("gop: Mode was already set, perfect!\n");
@@ -137,14 +170,20 @@ static bool try_mode(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *gop,
         status = gop->SetMode(gop, mode);
 
         if (status) {
-            printv("gop: Failed to set video mode %x, moving on...\n", mode);
+            printv("gop: Failed to set video mode %X, moving on...\n", (uint64_t)mode);
             return false;
         }
     }
 
-    ret->framebuffer_addr = gop->Mode->FrameBufferBase;
+    // Recalculate pitch from gop->Mode->Info, as some firmware (e.g. Apple
+    // Macs) report incorrect PixelsPerScanLine via QueryMode.
+    ret->framebuffer_pitch = gop->Mode->Info->PixelsPerScanLine * (ret->framebuffer_bpp / 8);
 
-    fb_clear(ret);
+    if (!validate_pitch(ret, mode)) {
+        return false;
+    }
+
+    ret->framebuffer_addr = gop->Mode->FrameBufferBase;
 
     return true;
 }
@@ -152,7 +191,7 @@ static bool try_mode(struct fb_info *ret, EFI_GRAPHICS_OUTPUT_PROTOCOL *gop,
 static struct fb_info *get_mode_list(size_t *count, EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
     UINTN modes_count = gop->Mode->MaxMode;
 
-    struct fb_info *ret = ext_mem_alloc(modes_count * sizeof(struct fb_info));
+    struct fb_info *ret = ext_mem_alloc_counted(modes_count, sizeof(struct fb_info));
 
     size_t actual_count = 0;
     for (size_t i = 0; i < modes_count; i++) {
@@ -161,13 +200,13 @@ static struct fb_info *get_mode_list(size_t *count, EFI_GRAPHICS_OUTPUT_PROTOCOL
         }
     }
 
-    struct fb_info *tmp = ext_mem_alloc(actual_count * sizeof(struct fb_info));
+    struct fb_info *tmp = ext_mem_alloc_counted(actual_count, sizeof(struct fb_info));
     memcpy(tmp, ret, actual_count * sizeof(struct fb_info));
 
     pmm_free(ret, modes_count * sizeof(struct fb_info));
     ret = tmp;
 
-    *count = modes_count;
+    *count = actual_count;
     return ret;
 }
 
@@ -195,22 +234,25 @@ void init_gop(struct fb_info **ret, size_t *_fbs_count,
     status = gBS->LocateHandle(ByProtocol, &gop_guid, NULL, &handles_size, handles);
 
     if (status != EFI_SUCCESS && status != EFI_BUFFER_TOO_SMALL) {
+        *ret = NULL;
         *_fbs_count = 0;
         return;
     }
 
-    handles = ext_mem_alloc(handles_size);
+    UINTN handles_alloc = handles_size;
+    handles = ext_mem_alloc(handles_alloc);
 
     status = gBS->LocateHandle(ByProtocol, &gop_guid, NULL, &handles_size, handles);
     if (status != EFI_SUCCESS) {
-        pmm_free(handles, handles_size);
+        pmm_free(handles, handles_alloc);
+        *ret = NULL;
         *_fbs_count = 0;
         return;
     }
 
     size_t handles_count = handles_size / sizeof(EFI_HANDLE);
 
-    *ret = ext_mem_alloc(handles_count * sizeof(struct fb_info));
+    *ret = ext_mem_alloc_counted(handles_count, sizeof(struct fb_info));
 
     const struct resolution fallback_resolutions[] = {
         { 0,    0,   0  },   // Overridden by EDID
@@ -248,6 +290,9 @@ void init_gop(struct fb_info **ret, size_t *_fbs_count,
                                 &mode_info_size, &mode_info);
 
         if (status == EFI_NOT_STARTED) {
+            if (fbs_count > 0) {
+                continue;
+            }
             status = gop->SetMode(gop, 0);
             if (status) {
                 continue;
@@ -258,6 +303,12 @@ void init_gop(struct fb_info **ret, size_t *_fbs_count,
 
         if (status) {
             continue;
+        }
+
+        uint32_t mode_width = mode_info->HorizontalResolution;
+        uint32_t mode_height = mode_info->VerticalResolution;
+        if (gop->Mode == NULL || mode_info != gop->Mode->Info) {
+            gBS->FreePool(mode_info);
         }
 
         if (preset_modes[i] == -1) {
@@ -293,8 +344,8 @@ fallback:
                          edid_width += ((uint64_t)fb->edid->det_timing_desc1[4] & 0xf0) << 4;
                 uint64_t edid_height = (uint64_t)fb->edid->det_timing_desc1[5];
                          edid_height += ((uint64_t)fb->edid->det_timing_desc1[7] & 0xf0) << 4;
-                if (edid_width >= mode_info->HorizontalResolution
-                 && edid_height >= mode_info->VerticalResolution) {
+                if (edid_width >= mode_width
+                 && edid_height >= mode_height) {
                     _target_width = edid_width;
                     _target_height = edid_height;
                     _target_bpp = 32;
@@ -312,12 +363,17 @@ fallback:
         }
 
         if (current_fallback < SIZEOF_ARRAY(fallback_resolutions)) {
-            current_fallback++;
-
             _target_width = fallback_resolutions[current_fallback].width;
             _target_height = fallback_resolutions[current_fallback].height;
             _target_bpp = fallback_resolutions[current_fallback].bpp;
+
+            current_fallback++;
             goto retry;
+        }
+
+        if (fb->edid != NULL) {
+            pmm_free(fb->edid, sizeof(struct edid_info_struct));
+            fb->edid = NULL;
         }
 
         continue;
@@ -330,7 +386,7 @@ success:;
         fbs_count++;
     }
 
-    pmm_free(handles, handles_size);
+    pmm_free(handles, handles_alloc);
 
     gop_force_16 = false;
 

@@ -41,10 +41,12 @@ static bool stage3_init(struct volume *part) {
 
     bool old_cif = case_insensitive_fopen;
     case_insensitive_fopen = true;
-    if ((stage3 = fopen(part, "/limine-bios.sys")) == NULL
-     && (stage3 = fopen(part, "/limine/limine-bios.sys")) == NULL
+    if (true
+     && (stage3 = fopen(part, "/boot/limine/limine-bios.sys")) == NULL
      && (stage3 = fopen(part, "/boot/limine-bios.sys")) == NULL
-     && (stage3 = fopen(part, "/boot/limine/limine-bios.sys")) == NULL) {
+     && (stage3 = fopen(part, "/limine/limine-bios.sys")) == NULL
+     && (stage3 = fopen(part, "/limine-bios.sys")) == NULL
+    ) {
         case_insensitive_fopen = old_cif;
         return false;
     }
@@ -54,6 +56,7 @@ static bool stage3_init(struct volume *part) {
 
     if (stage3->size != (size_t)limine_bios_sys_size) {
         print("limine-bios.sys size incorrect.\n");
+        fclose(stage3);
         return false;
     }
 
@@ -85,12 +88,17 @@ noreturn void entry(uint8_t boot_drive, int boot_from) {
         panic(false, "Could not enable A20 line");
     }
 
+    reseed_stack_guard();
+
+    calibrate_tsc();
+    uint64_t usec_at_entry = rdtsc_usec();
+
     init_e820();
     init_memmap();
 
     init_idt();
 
-    disk_create_index();
+    disk_create_index(boot_from == BOOTED_FROM_PXE ? 0 : boot_drive);
 
     if (boot_from == BOOTED_FROM_HDD || boot_from == BOOTED_FROM_CD) {
         boot_volume = volume_get_by_bios_drive(boot_drive);
@@ -122,6 +130,7 @@ noreturn void entry(uint8_t boot_drive, int boot_from) {
 
     term_fallback();
 
+    usec_at_bootloader_entry = usec_at_entry;
     stage3_common();
 }
 

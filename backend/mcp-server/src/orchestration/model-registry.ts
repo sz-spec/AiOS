@@ -9,7 +9,7 @@
 
 export interface ModelConfig {
   id: string;
-  provider: "openai" | "anthropic" | "google" | "local";
+  provider: "openai" | "anthropic" | "google" | "local" | "mistral";
   thinking: boolean;
   maxTokens?: number;
   temperature?: number;

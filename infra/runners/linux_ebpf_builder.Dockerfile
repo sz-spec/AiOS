@@ -11,29 +11,25 @@
 # *runtime* half (load + attach + race-under-load) still needs a live Linux
 # >= 5.17 BPF-LSM runner (see docs/design/vOS_B31_eBPF_Race_Closure_Spec.md §7).
 #
-# Kernel-version target: Ubuntu 24.04 ships kernel/libc headers for 6.8, which
+# Kernel-version target: Ubuntu 26.04 supplies current Linux UAPI headers, which
 # satisfies the >= 5.17 floor that the bpf_loop() helper (per-byte mode) needs.
 #
 # HONEST BUILD NOTES (read before assuming a clean compile):
-#   * LSM BPF programs reference kernel context types (struct file/socket/
-#     msghdr). Where those fields are READ, a BTF-generated `vmlinux.h` is
-#     required; this skeleton only takes their ADDRESSES (never dereferences
-#     fields), so it compiles against opaque forward declarations — no BTF /
-#     bpftool / vmlinux.h dependency. That keeps the build-gate runnable on any
-#     Docker host (incl. Docker Desktop on macOS) without host kernel BTF. A
-#     CO-RE build that reads kernel fields would add vmlinux.h here.
+#   * The current wrapper performs CO-RE field reads and therefore requires
+#     bpftool plus the running Linux kernel's /sys/kernel/btf/vmlinux at run
+#     time. Image construction alone does not compile or attach the program.
 #   * bpf_loop() requires libbpf >= 0.7 (bpf_helper_defs.h) + kernel >= 5.17 at
-#     LOAD time; 24.04's libbpf-dev declares it. The compile asserts
+#     LOAD time; 26.04's libbpf-dev declares it. The compile asserts
 #     -Wall -Wextra -Werror so any drift fails the gate.
 #
 # Multi-stage:
-#   Stage `toolchain` — the pinned clang/llvm/libbpf/header stack (cacheable).
+#   Stage `toolchain` — the distro-managed clang/llvm/libbpf/header stack (cacheable).
 #   Stage `build`     — compiles taint_gate.o at container run time.
 
 # ---------------------------------------------------------------------------
 # Stage 1 — toolchain base
 # ---------------------------------------------------------------------------
-FROM ubuntu:24.04 AS toolchain
+FROM ubuntu:26.04 AS toolchain
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -49,8 +45,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libbpf-dev \
         linux-libc-dev \
         linux-tools-generic \
+        bpftool \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+# Existing run wrappers locate the executable below /usr/lib/linux-tools.
+RUN mkdir -p /usr/lib/linux-tools/vos && cp /usr/sbin/bpftool /usr/lib/linux-tools/vos/bpftool
 
 # Record the toolchain versions into the image for provenance.
 RUN clang --version > /opt/toolchain_versions.txt 2>&1 \

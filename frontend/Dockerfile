@@ -5,12 +5,12 @@
 # =============================================================================
 
 # Build stage
-FROM node:20-alpine AS builder
+FROM node:26.8.2-alpine AS builder
 
 WORKDIR /app
 
 # Copy dependency files
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm ci
@@ -25,7 +25,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # Production stage
-FROM node:20-alpine
+FROM node:26.8.2-alpine
 
 WORKDIR /app
 

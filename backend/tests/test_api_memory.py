@@ -45,7 +45,7 @@ def _make_entry(id="mem1", content="test memory", memory_type="conversation"):
 
 @pytest.fixture(autouse=True)
 def mock_memory(monkeypatch):
-    """Patch get_dev_memory at the module level so every route gets the mock."""
+    """Patch get_user_dev_memory at the module level so every route gets the mock."""
     mock_dm = MagicMock()
 
     # Default return values
@@ -86,7 +86,7 @@ def mock_memory(monkeypatch):
     mock_dm.import_memories.return_value = 3
     mock_dm.clear.return_value = True
 
-    monkeypatch.setattr("api.memory_routes.get_dev_memory", lambda: mock_dm)
+    monkeypatch.setattr("api.memory_routes.get_user_dev_memory", lambda user_id: mock_dm)
     return mock_dm
 
 

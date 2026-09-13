@@ -1,5 +1,6 @@
 """Generate the kernel's user-program table, publishing the result atomically."""
 import argparse
+import filecmp
 import os
 import re
 import tempfile
@@ -41,7 +42,8 @@ def generate(output: Path, bin_dir: Path, programs: list[str]) -> None:
             stream.write("    { (void*)0, (void*)0, 0 }\n};\n")
             stream.write("const size_t g_embedded_binaries_count = sizeof(g_embedded_binaries) / sizeof(g_embedded_binaries[0]) - 1;\n")
         temporary.chmod(0o644)
-        os.replace(temporary, output)
+        if not output.exists() or not filecmp.cmp(temporary, output, shallow=False):
+            os.replace(temporary, output)
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)

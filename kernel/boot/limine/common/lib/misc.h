@@ -21,14 +21,17 @@ extern EFI_BOOT_SERVICES *gBS;
 extern EFI_RUNTIME_SERVICES *gRT;
 extern EFI_HANDLE efi_image_handle;
 extern EFI_MEMORY_DESCRIPTOR *efi_mmap;
-extern UINTN efi_mmap_size, efi_desc_size;
+extern UINTN efi_mmap_size, efi_desc_size, efi_mmap_key;
 extern UINT32 efi_desc_ver;
 
 extern bool efi_boot_services_exited;
 bool efi_exit_boot_services(void);
 
-void *get_device_tree_blob(size_t extra_size);
+bool is_efi_serial_present(void);
 #endif
+
+void *get_device_tree_blob(const char *config, size_t extra_size, bool measure,
+                           bool required);
 
 extern struct volume *boot_volume;
 
@@ -36,14 +39,20 @@ extern struct volume *boot_volume;
 extern bool stage3_loaded;
 #endif
 
-extern bool quiet, serial, editor_enabled, help_hidden, hash_mismatch_panic;
+extern uintptr_t __stack_chk_guard;
+void reseed_stack_guard(void);
+
+extern bool quiet, terse, serial, editor_enabled, help_hidden, hash_mismatch_panic, secure_boot_active, measured_boot, firmware_logo;
+
+// What is drawn rather than where it goes: a COM_OUTPUT build sets this on
+// every port and transmits on BIOS alone.
+#define SERIAL_CONSOLE (serial || COM_OUTPUT)
+
+extern uint64_t usec_at_bootloader_entry;
 
 bool parse_resolution(size_t *width, size_t *height, size_t *bpp, const char *buf);
 
-void get_absolute_path(char *path_ptr, const char *path, const char *pwd);
-
-uint32_t oct2bin(uint8_t *str, uint32_t max);
-uint32_t hex2bin(uint8_t *str, uint32_t size);
+bool get_absolute_path(char *path_ptr, const char *path, const char *pwd, size_t size);
 
 uint64_t sqrt(uint64_t a_nInput);
 size_t get_trailing_zeros(uint64_t val);
@@ -55,19 +64,53 @@ uint8_t int_to_bcd(uint8_t val);
 noreturn void panic(bool allow_menu, const char *fmt, ...);
 
 int pit_sleep_and_quit_on_keypress(int seconds);
+int pit_sleep_ms_and_quit_on_keypress(uint64_t milliseconds);
+int pit_sleep_ms_and_quit_on_input(uint64_t milliseconds);
 
 uint64_t strtoui(const char *s, const char **end, int base);
 
-#define DIV_ROUNDUP(a, b) ({ \
-    __auto_type DIV_ROUNDUP_a = (a); \
-    __auto_type DIV_ROUNDUP_b = (b); \
-    (DIV_ROUNDUP_a + (DIV_ROUNDUP_b - 1)) / DIV_ROUNDUP_b; \
+#define MIN(a, b) ({ \
+    __auto_type MIN_a = (a); \
+    __auto_type MIN_b = (b); \
+    MIN_a > MIN_b ? MIN_b : MIN_a; \
 })
 
-#define ALIGN_UP(x, a) ({ \
+#define MAX(a, b) ({ \
+    __auto_type MAX_a = (a); \
+    __auto_type MAX_b = (b); \
+    MAX_a > MAX_b ? MAX_a : MAX_b; \
+})
+
+#define CHECKED_ADD(a, b, onerror) ({ \
+    __auto_type CHECKED_ADD_a = (a); \
+    __auto_type CHECKED_ADD_b = (b); \
+    typeof(CHECKED_ADD_a + CHECKED_ADD_b) CHECKED_ADD_res; \
+    if (__builtin_add_overflow(CHECKED_ADD_a, CHECKED_ADD_b, &CHECKED_ADD_res)) { \
+        onerror; \
+    } \
+    CHECKED_ADD_res; \
+})
+
+#define CHECKED_MUL(a, b, onerror) ({ \
+    __auto_type CHECKED_MUL_a = (a); \
+    __auto_type CHECKED_MUL_b = (b); \
+    typeof(CHECKED_MUL_a * CHECKED_MUL_b) CHECKED_MUL_res; \
+    if (__builtin_mul_overflow(CHECKED_MUL_a, CHECKED_MUL_b, &CHECKED_MUL_res)) { \
+        onerror; \
+    } \
+    CHECKED_MUL_res; \
+})
+
+#define DIV_ROUNDUP(a, b, onerror) ({ \
+    __auto_type DIV_ROUNDUP_a = (a); \
+    __auto_type DIV_ROUNDUP_b = (b); \
+    CHECKED_ADD(DIV_ROUNDUP_a, DIV_ROUNDUP_b - 1, onerror) / DIV_ROUNDUP_b; \
+})
+
+#define ALIGN_UP(x, a, onerror) ({ \
     __auto_type ALIGN_UP_value = (x); \
     __auto_type ALIGN_UP_align = (a); \
-    ALIGN_UP_value = DIV_ROUNDUP(ALIGN_UP_value, ALIGN_UP_align) * ALIGN_UP_align; \
+    ALIGN_UP_value = DIV_ROUNDUP(ALIGN_UP_value, ALIGN_UP_align, onerror) * ALIGN_UP_align; \
     ALIGN_UP_value; \
 })
 
@@ -90,6 +133,9 @@ noreturn void common_spinup(void *fnptr, int args, ...);
 noreturn void enter_in_el1(uint64_t entry, uint64_t sp, uint64_t sctlr,
                            uint64_t mair, uint64_t tcr, uint64_t ttbr0,
                            uint64_t ttbr1, uint64_t target_x0);
+noreturn void enter_in_el2(uint64_t entry, uint64_t sp, uint64_t sctlr,
+                           uint64_t mair, uint64_t tcr, uint64_t ttbr0,
+                           uint64_t ttbr1, uint64_t target_x0);
 #elif defined (__riscv)
 noreturn void riscv_spinup(uint64_t entry, uint64_t sp, uint64_t satp, uint64_t direct_map_offset);
 #if defined (UEFI)
@@ -102,6 +148,31 @@ noreturn void loongarch_spinup(uint64_t entry, uint64_t sp, uint64_t pgdl,
 #error Unknown architecture
 #endif
 
+#if defined (UEFI) && defined (__x86_64__)
+void prepare_spinup_tramp(void);
+void *spinup_tramp_low(void *hi);
+#endif
+
 #define no_unwind __attribute__((section(".no_unwind")))
+
+#define MEM_RANGE_X 1
+#define MEM_RANGE_W 2
+#define MEM_RANGE_R 4
+
+struct mem_range {
+    uint64_t base;
+    uint64_t length;
+    uint64_t permissions;
+};
+
+static inline const char *current_firmware(void) {
+#if defined (UEFI)
+    return "UEFI";
+#elif defined (BIOS)
+    return "BIOS";
+#else
+#error "Unspecified firmware type"
+#endif
+}
 
 #endif

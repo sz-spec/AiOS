@@ -1,0 +1,6 @@
+{
+  "iso_sha256": "94ccfc052dcae39c0531081f1a272f93518387fd52588591e509430baa8be8c0",
+  "scope": "Injected CPU 1 IST1 allocation failure, disposable BIOS VM with two requested CPUs",
+  "passed": true,
+  "expected_boot_gate_failure": "Full two-CPU smoke correctly fails; negative test expects only BSP online"
+}

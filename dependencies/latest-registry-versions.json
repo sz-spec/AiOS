@@ -1,0 +1,2038 @@
+{
+  "python": {
+    "aiofiles": {
+      "version": "25.1.0",
+      "requires_python": ">=3.9",
+      "requires_dist": null
+    },
+    "aiohttp": {
+      "version": "3.14.3",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "aiohappyeyeballs>=2.5.0",
+        "aiosignal>=1.4.0",
+        "async-timeout<6.0,>=4.0; python_version < \"3.11\"",
+        "attrs>=17.3.0",
+        "frozenlist>=1.1.1",
+        "multidict<7.0,>=4.5",
+        "propcache>=0.2.0",
+        "typing_extensions>=4.4; python_version < \"3.13\"",
+        "yarl<2.0,>=1.17.0",
+        "aiodns>=3.3.0; (sys_platform != \"android\" and sys_platform != \"ios\") and extra == \"speedups\"",
+        "Brotli>=1.2; (platform_python_implementation == \"CPython\" and sys_platform != \"android\" and sys_platform != \"ios\") and extra == \"speedups\"",
+        "brotlicffi>=1.2; platform_python_implementation != \"CPython\" and extra == \"speedups\"",
+        "backports.zstd; (platform_python_implementation == \"CPython\" and python_version < \"3.14\" and sys_platform != \"android\" and sys_platform != \"ios\") and extra == \"speedups\""
+      ]
+    },
+    "anthropic": {
+      "version": "1.5.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "anyio<5,>=3.5.0",
+        "docstring-parser<1,>=0.15",
+        "httpx2<3,>=2.0.0",
+        "jiter<1,>=0.4.0",
+        "pydantic<3,>=1.9.0",
+        "sniffio<2,>=1",
+        "typing-extensions<5,>=4.14",
+        "aiohttp<4,>=3.10.0; extra == \"aiohttp\"",
+        "boto3<2,>=1.28.57; extra == \"aws\"",
+        "botocore<2,>=1.31.57; extra == \"aws\"",
+        "boto3<2,>=1.28.57; extra == \"bedrock\"",
+        "botocore<2,>=1.31.57; extra == \"bedrock\"",
+        "google-auth[requests]<3,>=2; extra == \"google-cloud\"",
+        "mcp<3,>=1.0; python_version >= \"3.10\" and extra == \"mcp\"",
+        "google-auth[requests]<3,>=2; extra == \"vertex\"",
+        "standardwebhooks<2,>=1.0.1; extra == \"webhooks\""
+      ]
+    },
+    "authlib": {
+      "version": "1.8.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "cryptography>=45.0.1",
+        "joserfc>=1.6.1"
+      ]
+    },
+    "beautifulsoup4": {
+      "version": "4.15.0",
+      "requires_python": ">=3.7.0",
+      "requires_dist": [
+        "soupsieve>=1.6.1",
+        "typing-extensions>=4.0.0",
+        "cchardet; extra == \"cchardet\"",
+        "chardet; extra == \"chardet\"",
+        "charset-normalizer; extra == \"charset-normalizer\"",
+        "html5lib; extra == \"html5lib\"",
+        "lxml; extra == \"lxml\""
+      ]
+    },
+    "black": {
+      "version": "26.5.1",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "click>=8.0.0",
+        "mypy-extensions>=0.4.3",
+        "packaging>=22.0",
+        "pathspec>=1.0.0",
+        "platformdirs>=2",
+        "pytokens~=0.4.0",
+        "tomli>=1.1.0; python_version < \"3.11\"",
+        "typing-extensions>=4.0.1; python_version < \"3.11\"",
+        "colorama>=0.4.3; extra == \"colorama\"",
+        "aiohttp>=3.10; extra == \"d\"",
+        "ipython>=7.8.0; extra == \"jupyter\"",
+        "tokenize-rt>=3.2.0; extra == \"jupyter\"",
+        "uvloop>=0.15.2; sys_platform != \"win32\" and extra == \"uvloop\"",
+        "winloop>=0.5.0; sys_platform == \"win32\" and extra == \"uvloop\""
+      ]
+    },
+    "boto3": {
+      "version": "1.43.93",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "botocore<1.44.0,>=1.43.93",
+        "jmespath<2.0.0,>=0.7.1",
+        "s3transfer<0.20.0,>=0.19.0",
+        "botocore[crt]<2.0a0,>=1.21.0; extra == \"crt\""
+      ]
+    },
+    "chromadb": {
+      "version": "1.5.9",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "build>=1.0.3",
+        "pydantic>=2.0",
+        "pydantic-settings>=2.0",
+        "pybase64>=1.4.1",
+        "uvicorn[standard]>=0.18.3",
+        "numpy>=1.22.5",
+        "typing-extensions>=4.5.0",
+        "onnxruntime>=1.14.1",
+        "opentelemetry-api>=1.2.0",
+        "opentelemetry-exporter-otlp-proto-grpc>=1.2.0",
+        "opentelemetry-sdk>=1.2.0",
+        "tokenizers>=0.13.2",
+        "pypika>=0.48.9",
+        "tqdm>=4.65.0",
+        "overrides>=7.3.1",
+        "importlib-resources",
+        "graphlib-backport>=1.0.3; python_full_version < \"3.9\"",
+        "grpcio>=1.58.0",
+        "bcrypt>=4.0.1",
+        "typer>=0.9.0",
+        "kubernetes>=28.1.0",
+        "tenacity>=8.2.3",
+        "pyyaml>=6.0.0",
+        "mmh3>=4.0.1",
+        "orjson>=3.9.12",
+        "httpx>=0.27.0",
+        "rich>=10.11.0",
+        "jsonschema>=4.19.0",
+        "chroma-hnswlib==0.7.6; extra == \"dev\"",
+        "fastapi>=0.115.9; extra == \"dev\"",
+        "opentelemetry-instrumentation-fastapi>=0.41b0; extra == \"dev\""
+      ]
+    },
+    "crewai-tools": {
+      "version": "1.15.21",
+      "requires_python": "<3.14,>=3.10",
+      "requires_dist": [
+        "beautifulsoup4<5,>=4.13.4",
+        "crewai==1.15.21",
+        "pymupdf~=1.26.6",
+        "python-docx~=1.2.0",
+        "pytube~=15.0.0",
+        "requests<3,>=2.33.0",
+        "tiktoken<0.13,>=0.8.0",
+        "youtube-transcript-api~=1.2.2",
+        "langchain-apify<1.0.0,>=0.1.2; extra == \"apify\"",
+        "beautifulsoup4>=4.12.3; extra == \"beautifulsoup4\"",
+        "beautifulsoup4>=4.13.4; extra == \"bedrock\"",
+        "bedrock-agentcore<2.0.0,>=1.18.1; extra == \"bedrock\"",
+        "nest-asyncio>=1.6.0; extra == \"bedrock\"",
+        "playwright>=1.52.0; extra == \"bedrock\"",
+        "browserbase>=1.0.5; extra == \"browserbase\"",
+        "composio-core>=0.6.11.post1; extra == \"composio-core\"",
+        "contextual-client>=0.1.0; extra == \"contextual\"",
+        "nest-asyncio>=1.6.0; extra == \"contextual\"",
+        "couchbase>=4.6.0; extra == \"couchbase\"",
+        "databricks-sdk>=0.46.0; extra == \"databricks-sdk\"",
+        "daytona~=0.140.0; extra == \"daytona\"",
+        "e2b-code-interpreter~=2.6.0; extra == \"e2b\"",
+        "e2b~=2.20.0; extra == \"e2b\"",
+        "exa-py>=1.8.7; extra == \"exa-py\"",
+        "firecrawl-py>=1.8.0; extra == \"firecrawl-py\"",
+        "gitpython<4,>=3.1.59; extra == \"github\"",
+        "pygithub==1.59.1; extra == \"github\"",
+        "hyperbrowser>=0.18.0; extra == \"hyperbrowser\"",
+        "linkup-sdk>=0.2.2; extra == \"linkup-sdk\"",
+        "mcp<2,>=1.28.1; extra == \"mcp\"",
+        "mcpadapt>=0.1.9; extra == \"mcp\"",
+        "pymongo>=4.13; extra == \"mongodb\"",
+        "multion>=1.1.0; extra == \"multion\"",
+        "pymysql>=1.1.1; extra == \"mysql\"",
+        "oxylabs<4,>=2.0.0; extra == \"oxylabs\"",
+        "patronus>=0.0.16; extra == \"patronus\"",
+        "psycopg2-binary>=2.9.10; extra == \"postgresql\"",
+        "qdrant-client>=1.12.1; extra == \"qdrant-client\"",
+        "lxml<7,>=6.1.0; extra == \"rag\"",
+        "python-docx>=1.1.0; extra == \"rag\"",
+        "scrapegraph-py<2,>=1.9.0; extra == \"scrapegraph-py\"",
+        "scrapfly-sdk>=0.8.19; extra == \"scrapfly-sdk\"",
+        "selenium>=4.27.1; extra == \"selenium\"",
+        "serpapi>=0.1.5; extra == \"serpapi\"",
+        "singlestoredb>=1.12.4; extra == \"singlestore\"",
+        "sqlalchemy>=2.0.40; extra == \"singlestore\"",
+        "cryptography>=43.0.3; extra == \"snowflake\"",
+        "snowflake-connector-python>=3.12.4; extra == \"snowflake\"",
+        "snowflake-sqlalchemy>=1.11.0; extra == \"snowflake\"",
+        "spider-client>=0.1.25; extra == \"spider-client\"",
+        "sqlalchemy>=2.0.35; extra == \"sqlalchemy\"",
+        "stagehand>=0.4.1; extra == \"stagehand\"",
+        "tavily-python~=0.7.14; extra == \"tavily-python\"",
+        "weaviate-client>=4.10.2; extra == \"weaviate-client\"",
+        "nltk>=3.10.3; extra == \"xml\"",
+        "unstructured[all-docs,local-inference]>=0.17.2; python_version < \"3.11\" and extra == \"xml\"",
+        "unstructured[all-docs,local-inference]>=0.24.0; python_version >= \"3.11\" and extra == \"xml\""
+      ]
+    },
+    "cryptography": {
+      "version": "50.0.1",
+      "requires_python": "!=3.9.0,!=3.9.1,>=3.9",
+      "requires_dist": [
+        "cffi>=2.0.0; platform_python_implementation != \"PyPy\"",
+        "typing-extensions>=4.13.2; python_full_version < \"3.11\"",
+        "bcrypt>=3.1.5; extra == \"ssh\""
+      ]
+    },
+    "datasets": {
+      "version": "5.0.1",
+      "requires_python": ">=3.10.0",
+      "requires_dist": [
+        "filelock",
+        "numpy>=1.17",
+        "pyarrow>=21.0.0",
+        "dill<0.4.2,>=0.3.0",
+        "pandas",
+        "requests>=2.32.2",
+        "httpx<1.0.0",
+        "tqdm>=4.66.3",
+        "xxhash",
+        "multiprocess<0.70.20",
+        "fsspec[http]<=2026.6.0,>=2023.1.0",
+        "huggingface-hub<2.0,>=0.25.0",
+        "packaging",
+        "pyyaml>=5.1",
+        "torchcodec>=0.6.0; extra == \"audio\"",
+        "torch>=2.8.0; extra == \"audio\"",
+        "Pillow>=9.4.0; extra == \"vision\"",
+        "trimesh>=4.10.0; extra == \"mesh\"",
+        "tensorflow>=2.6.0; extra == \"tensorflow\"",
+        "tensorflow>=2.6.0; extra == \"tensorflow-gpu\"",
+        "torch; extra == \"torch\"",
+        "jax>=0.3.14; extra == \"jax\"",
+        "jaxlib>=0.3.14; extra == \"jax\"",
+        "numba>=0.56.4; python_version < \"3.14\" and extra == \"dev\"",
+        "absl-py; extra == \"dev\"",
+        "decorator; extra == \"dev\"",
+        "joblib<1.3.0; extra == \"dev\"",
+        "joblibspark; python_version < \"3.14\" and extra == \"dev\"",
+        "pytest; extra == \"dev\"",
+        "pytest-datadir; extra == \"dev\"",
+        "pytest-xdist; extra == \"dev\"",
+        "aiohttp; extra == \"dev\"",
+        "elasticsearch<8.0.0,>=7.17.12; extra == \"dev\"",
+        "faiss-cpu>=1.8.0.post1; extra == \"dev\"",
+        "h5py; extra == \"dev\"",
+        "pylance; extra == \"dev\"",
+        "pyiceberg[pyarrow,sql-sqlite]; extra == \"dev\"",
+        "jax>=0.3.14; sys_platform != \"win32\" and extra == \"dev\"",
+        "jaxlib>=0.3.14; sys_platform != \"win32\" and extra == \"dev\"",
+        "lz4; python_version < \"3.14\" and extra == \"dev\"",
+        "moto[server]; extra == \"dev\"",
+        "pyspark>=3.4; extra == \"dev\"",
+        "py7zr; extra == \"dev\"",
+        "rarfile>=4.0; extra == \"dev\"",
+        "sqlalchemy; extra == \"dev\"",
+        "protobuf<4.0.0; extra == \"dev\"",
+        "tensorflow>=2.6.0; (python_version < \"3.10\" and sys_platform != \"win32\") and extra == \"dev\"",
+        "tensorflow>=2.16.0; (python_version >= \"3.10\" and sys_platform != \"win32\" and python_version < \"3.14\") and extra == \"dev\"",
+        "tiktoken; extra == \"dev\"",
+        "torch>=2.8.0; extra == \"dev\"",
+        "torchdata; extra == \"dev\"",
+        "transformers>=4.42.0; extra == \"dev\"",
+        "zstandard; extra == \"dev\"",
+        "polars[timezone]>=0.20.0; extra == \"dev\"",
+        "Pillow>=9.4.0; extra == \"dev\"",
+        "torchcodec>=0.7.0; python_version < \"3.14\" and extra == \"dev\"",
+        "nibabel>=5.3.1; extra == \"dev\"",
+        "trimesh>=4.10.0; extra == \"dev\"",
+        "teich==0.1.5; extra == \"dev\"",
+        "ruff>=0.3.0; extra == \"dev\"",
+        "transformers; extra == \"dev\"",
+        "torch; extra == \"dev\"",
+        "tensorflow>=2.6.0; extra == \"dev\"",
+        "numba>=0.56.4; python_version < \"3.14\" and extra == \"tests\"",
+        "absl-py; extra == \"tests\"",
+        "decorator; extra == \"tests\"",
+        "joblib<1.3.0; extra == \"tests\"",
+        "joblibspark; python_version < \"3.14\" and extra == \"tests\"",
+        "pytest; extra == \"tests\"",
+        "pytest-datadir; extra == \"tests\"",
+        "pytest-xdist; extra == \"tests\"",
+        "aiohttp; extra == \"tests\"",
+        "elasticsearch<8.0.0,>=7.17.12; extra == \"tests\"",
+        "faiss-cpu>=1.8.0.post1; extra == \"tests\"",
+        "h5py; extra == \"tests\"",
+        "pylance; extra == \"tests\"",
+        "pyiceberg[pyarrow,sql-sqlite]; extra == \"tests\"",
+        "jax>=0.3.14; sys_platform != \"win32\" and extra == \"tests\"",
+        "jaxlib>=0.3.14; sys_platform != \"win32\" and extra == \"tests\"",
+        "lz4; python_version < \"3.14\" and extra == \"tests\"",
+        "moto[server]; extra == \"tests\"",
+        "pyspark>=3.4; extra == \"tests\"",
+        "py7zr; extra == \"tests\"",
+        "rarfile>=4.0; extra == \"tests\"",
+        "sqlalchemy; extra == \"tests\"",
+        "protobuf<4.0.0; extra == \"tests\"",
+        "tensorflow>=2.6.0; (python_version < \"3.10\" and sys_platform != \"win32\") and extra == \"tests\"",
+        "tensorflow>=2.16.0; (python_version >= \"3.10\" and sys_platform != \"win32\" and python_version < \"3.14\") and extra == \"tests\"",
+        "tiktoken; extra == \"tests\"",
+        "torch>=2.8.0; extra == \"tests\"",
+        "torchdata; extra == \"tests\"",
+        "transformers>=4.42.0; extra == \"tests\"",
+        "zstandard; extra == \"tests\"",
+        "polars[timezone]>=0.20.0; extra == \"tests\"",
+        "Pillow>=9.4.0; extra == \"tests\"",
+        "torchcodec>=0.7.0; python_version < \"3.14\" and extra == \"tests\"",
+        "nibabel>=5.3.1; extra == \"tests\"",
+        "trimesh>=4.10.0; extra == \"tests\"",
+        "teich==0.1.5; extra == \"tests\"",
+        "numba>=0.56.4; python_version < \"3.14\" and extra == \"tests-numpy2\"",
+        "absl-py; extra == \"tests-numpy2\"",
+        "decorator; extra == \"tests-numpy2\"",
+        "joblib<1.3.0; extra == \"tests-numpy2\"",
+        "joblibspark; python_version < \"3.14\" and extra == \"tests-numpy2\"",
+        "pytest; extra == \"tests-numpy2\"",
+        "pytest-datadir; extra == \"tests-numpy2\"",
+        "pytest-xdist; extra == \"tests-numpy2\"",
+        "aiohttp; extra == \"tests-numpy2\"",
+        "elasticsearch<8.0.0,>=7.17.12; extra == \"tests-numpy2\"",
+        "h5py; extra == \"tests-numpy2\"",
+        "pylance; extra == \"tests-numpy2\"",
+        "pyiceberg[pyarrow,sql-sqlite]; extra == \"tests-numpy2\"",
+        "jax>=0.3.14; sys_platform != \"win32\" and extra == \"tests-numpy2\"",
+        "jaxlib>=0.3.14; sys_platform != \"win32\" and extra == \"tests-numpy2\"",
+        "lz4; python_version < \"3.14\" and extra == \"tests-numpy2\"",
+        "moto[server]; extra == \"tests-numpy2\"",
+        "pyspark>=3.4; extra == \"tests-numpy2\"",
+        "py7zr; extra == \"tests-numpy2\"",
+        "rarfile>=4.0; extra == \"tests-numpy2\"",
+        "sqlalchemy; extra == \"tests-numpy2\"",
+        "protobuf<4.0.0; extra == \"tests-numpy2\"",
+        "tiktoken; extra == \"tests-numpy2\"",
+        "torch>=2.8.0; extra == \"tests-numpy2\"",
+        "torchdata; extra == \"tests-numpy2\"",
+        "transformers>=4.42.0; extra == \"tests-numpy2\"",
+        "zstandard; extra == \"tests-numpy2\"",
+        "polars[timezone]>=0.20.0; extra == \"tests-numpy2\"",
+        "Pillow>=9.4.0; extra == \"tests-numpy2\"",
+        "torchcodec>=0.7.0; python_version < \"3.14\" and extra == \"tests-numpy2\"",
+        "nibabel>=5.3.1; extra == \"tests-numpy2\"",
+        "trimesh>=4.10.0; extra == \"tests-numpy2\"",
+        "teich==0.1.5; extra == \"tests-numpy2\"",
+        "ruff>=0.3.0; extra == \"quality\"",
+        "tensorflow==2.12.0; extra == \"benchmarks\"",
+        "torch==2.0.1; extra == \"benchmarks\"",
+        "transformers==4.30.1; extra == \"benchmarks\"",
+        "transformers; extra == \"docs\"",
+        "torch; extra == \"docs\"",
+        "tensorflow>=2.6.0; extra == \"docs\"",
+        "pdfplumber>=0.11.4; extra == \"pdfs\"",
+        "nibabel>=5.3.2; extra == \"nibabel\"",
+        "ipyniivue==2.4.2; extra == \"nibabel\"",
+        "pyiceberg>=0.7.0; extra == \"iceberg\""
+      ]
+    },
+    "defusedxml": {
+      "version": "0.7.1",
+      "requires_python": ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
+      "requires_dist": null
+    },
+    "dilithium-py": {
+      "version": "1.4.0",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "ecdsa>=0.19.1; extra == \"pkcs\""
+      ]
+    },
+    "faiss-cpu": {
+      "version": "1.15.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "numpy>=1.25",
+        "packaging"
+      ]
+    },
+    "fastapi": {
+      "version": "0.141.1",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "starlette>=0.46.0",
+        "pydantic>=2.9.0",
+        "typing-extensions>=4.8.0",
+        "typing-inspection>=0.4.2",
+        "annotated-doc>=0.0.2",
+        "fastapi-cli[standard]>=0.0.32; extra == \"standard\"",
+        "fastar>=0.9.0; extra == \"standard\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"standard\"",
+        "jinja2>=3.1.5; extra == \"standard\"",
+        "python-multipart>=0.0.18; extra == \"standard\"",
+        "email-validator>=2.0.0; extra == \"standard\"",
+        "uvicorn[standard]>=0.12.0; extra == \"standard\"",
+        "pydantic-settings>=2.0.0; extra == \"standard\"",
+        "pydantic-extra-types>=2.0.0; extra == \"standard\"",
+        "fastapi-cli[standard-no-fastapi-cloud-cli]>=0.0.32; extra == \"standard-no-fastapi-cloud-cli\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "jinja2>=3.1.5; extra == \"standard-no-fastapi-cloud-cli\"",
+        "python-multipart>=0.0.18; extra == \"standard-no-fastapi-cloud-cli\"",
+        "email-validator>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "uvicorn[standard]>=0.12.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "pydantic-settings>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "pydantic-extra-types>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "fastapi-cli[standard]>=0.0.32; extra == \"all\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"all\"",
+        "jinja2>=3.1.5; extra == \"all\"",
+        "python-multipart>=0.0.18; extra == \"all\"",
+        "itsdangerous>=1.1.0; extra == \"all\"",
+        "pyyaml>=5.3.1; extra == \"all\"",
+        "email-validator>=2.0.0; extra == \"all\"",
+        "uvicorn[standard]>=0.12.0; extra == \"all\"",
+        "pydantic-settings>=2.0.0; extra == \"all\"",
+        "pydantic-extra-types>=2.0.0; extra == \"all\""
+      ]
+    },
+    "gunicorn": {
+      "version": "26.2.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "gevent>=24.10.1; extra == \"gevent\"",
+        "packaging; extra == \"gevent\"",
+        "tornado>=6.5.7; extra == \"tornado\"",
+        "setproctitle; extra == \"setproctitle\"",
+        "h2>=4.4.1; extra == \"http2\"",
+        "gunicorn_h1c>=0.6.9; extra == \"fast\"",
+        "gevent>=24.10.1; extra == \"testing\"",
+        "h2>=4.4.1; extra == \"testing\"",
+        "coverage; extra == \"testing\"",
+        "packaging; extra == \"testing\"",
+        "pytest>=9.0.3; extra == \"testing\"",
+        "pytest-cov; extra == \"testing\"",
+        "pytest-asyncio; extra == \"testing\"",
+        "uvloop>=0.19.0; extra == \"testing\"",
+        "httpx[http2]>=0.23.0; extra == \"testing\"",
+        "inotify>=0.2.10; sys_platform == \"linux\" and extra == \"testing\""
+      ]
+    },
+    "httptools": {
+      "version": "0.8.0",
+      "requires_python": ">=3.9",
+      "requires_dist": null
+    },
+    "httpx": {
+      "version": "0.28.1",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "anyio",
+        "certifi",
+        "httpcore==1.*",
+        "idna",
+        "brotli; platform_python_implementation == \"CPython\" and extra == \"brotli\"",
+        "brotlicffi; platform_python_implementation != \"CPython\" and extra == \"brotli\"",
+        "click==8.*; extra == \"cli\"",
+        "pygments==2.*; extra == \"cli\"",
+        "rich<14,>=10; extra == \"cli\"",
+        "h2<5,>=3; extra == \"http2\"",
+        "socksio==1.*; extra == \"socks\"",
+        "zstandard>=0.18.0; extra == \"zstd\""
+      ]
+    },
+    "httpx-sse": {
+      "version": "0.4.3",
+      "requires_python": ">=3.9",
+      "requires_dist": null
+    },
+    "jsonschema": {
+      "version": "4.26.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "attrs>=22.2.0",
+        "jsonschema-specifications>=2023.03.6",
+        "referencing>=0.28.4",
+        "rpds-py>=0.25.0",
+        "fqdn; extra == \"format\"",
+        "idna; extra == \"format\"",
+        "isoduration; extra == \"format\"",
+        "jsonpointer>1.13; extra == \"format\"",
+        "rfc3339-validator; extra == \"format\"",
+        "rfc3987; extra == \"format\"",
+        "uri-template; extra == \"format\"",
+        "webcolors>=1.11; extra == \"format\"",
+        "fqdn; extra == \"format-nongpl\"",
+        "idna; extra == \"format-nongpl\"",
+        "isoduration; extra == \"format-nongpl\"",
+        "jsonpointer>1.13; extra == \"format-nongpl\"",
+        "rfc3339-validator; extra == \"format-nongpl\"",
+        "rfc3986-validator>0.1.0; extra == \"format-nongpl\"",
+        "rfc3987-syntax>=1.1.0; extra == \"format-nongpl\"",
+        "uri-template; extra == \"format-nongpl\"",
+        "webcolors>=24.6.0; extra == \"format-nongpl\""
+      ]
+    },
+    "jsonschema-specifications": {
+      "version": "2025.9.1",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "referencing>=0.31.0"
+      ]
+    },
+    "langchain": {
+      "version": "1.4.0",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "langchain-core<2.0.0,>=1.6.0",
+        "langgraph<1.3.0,>=1.2.11",
+        "pydantic<3.0.0,>=2.7.4",
+        "langchain-anthropic; extra == \"anthropic\"",
+        "langchain-aws; extra == \"aws\"",
+        "langchain-azure-ai; extra == \"azure-ai\"",
+        "langchain-baseten>=0.2.0; extra == \"baseten\"",
+        "langchain-community; extra == \"community\"",
+        "langchain-deepseek; extra == \"deepseek\"",
+        "langchain-fireworks; extra == \"fireworks\"",
+        "langchain-google-genai; extra == \"google-genai\"",
+        "langchain-google-vertexai; extra == \"google-vertexai\"",
+        "langchain-groq; extra == \"groq\"",
+        "langchain-huggingface; extra == \"huggingface\"",
+        "fastmcp<5.0.0,>=4.0.1; extra == \"mcp\"",
+        "langchain-meta; extra == \"meta\"",
+        "langchain-mistralai; extra == \"mistralai\"",
+        "langchain-ollama; extra == \"ollama\"",
+        "langchain-openai; extra == \"openai\"",
+        "langchain-perplexity; extra == \"perplexity\"",
+        "langchain-together; extra == \"together\"",
+        "langchain-xai; extra == \"xai\""
+      ]
+    },
+    "langchain-anthropic": {
+      "version": "1.7.2",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "anthropic<2.0.0,>=0.120.0",
+        "langchain-core<2.0.0,>=1.6.2",
+        "pydantic<3.0.0,>=2.7.4"
+      ]
+    },
+    "langchain-community": {
+      "version": "0.4.2",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "aiohttp<4.0.0,>=3.8.3",
+        "httpx-sse<1.0.0,>=0.4.0",
+        "langchain-classic<2.0.0,>=1.0.7",
+        "langchain-core<2.0.0,>=1.4.0",
+        "langsmith<1.0.0,>=0.1.125",
+        "numpy>=1.26.2; python_version < \"3.13\"",
+        "numpy>=2.1.0; python_version >= \"3.13\"",
+        "pydantic-settings<3.0.0,>=2.10.1",
+        "pyyaml<7.0.0,>=5.3.0",
+        "requests<3.0.0,>=2.32.5",
+        "sqlalchemy<3.0.0,>=1.4.0",
+        "tenacity!=8.4.0,<10.0.0,>=8.1.0"
+      ]
+    },
+    "langchain-core": {
+      "version": "1.6.3",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "httpx<1.0.0,>=0.23.0",
+        "jsonpatch<2.0.0,>=1.33.0",
+        "langchain-protocol>=0.0.17",
+        "langsmith<1.0.0,>=0.3.45",
+        "packaging>=23.2.0",
+        "pydantic<3.0.0,>=2.7.4",
+        "pyyaml<7.0.0,>=5.3.0",
+        "tenacity!=8.4.0,<10.0.0,>=8.1.0",
+        "typing-extensions<5.0.0,>=4.7.0",
+        "uuid-utils<1.0,>=0.12.0"
+      ]
+    },
+    "langchain-google-genai": {
+      "version": "4.4.0",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "filetype<2.0.0,>=1.2.0",
+        "google-genai<3.0.0,>=2.20.0",
+        "langchain-core<2.0.0,>=1.6.1",
+        "pydantic<3.0.0,>=2.0.0"
+      ]
+    },
+    "langchain-ollama": {
+      "version": "1.1.0",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "langchain-core<2.0.0,>=1.2.21",
+        "ollama<1.0.0,>=0.6.1"
+      ]
+    },
+    "langchain-openai": {
+      "version": "1.6.2",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "certifi>=2024.6.2",
+        "langchain-core<2.0.0,>=1.6.2",
+        "openai<4.0.0,>=2.45.0",
+        "tiktoken<1.0.0,>=0.7.0"
+      ]
+    },
+    "langchain-tavily": {
+      "version": "0.2.18",
+      "requires_python": "<4.0,>=3.10",
+      "requires_dist": [
+        "langchain-core<2.0.0,>=1.2.11",
+        "langchain<2.0.0,>=1.0.0",
+        "aiohttp<4.0.0,>=3.11.14",
+        "requests<3.0.0,>=2.32.3"
+      ]
+    },
+    "langchain-text-splitters": {
+      "version": "1.1.2",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "langchain-core<2.0.0,>=1.2.31"
+      ]
+    },
+    "langchainhub": {
+      "version": "0.1.21",
+      "requires_python": "<4.0,>=3.8.1",
+      "requires_dist": [
+        "requests<3,>=2",
+        "types-requests<3.0.0.0,>=2.31.0.2",
+        "packaging<25,>=23.2"
+      ]
+    },
+    "langfuse": {
+      "version": "4.15.2",
+      "requires_python": "<4.0,>=3.10",
+      "requires_dist": [
+        "httpx<1.0,>=0.15.4",
+        "pydantic<3,>=2",
+        "backoff>=1.10.0",
+        "wrapt<3,>=1.14",
+        "packaging<27.0,>=23.2",
+        "opentelemetry-api<2,>=1.33.1",
+        "opentelemetry-sdk<2,>=1.33.1",
+        "opentelemetry-exporter-otlp-proto-http<2,>=1.33.1",
+        "typing-extensions<5,>=4.12.2"
+      ]
+    },
+    "langgraph": {
+      "version": "1.2.11",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "langchain-core<2,>=1.4.7",
+        "langgraph-checkpoint<5.0.0,>=4.1.0",
+        "langgraph-prebuilt<1.2.0,>=1.1.0",
+        "langgraph-sdk<0.5.0,>=0.4.2",
+        "pydantic>=2.7.4",
+        "xxhash>=3.5.0"
+      ]
+    },
+    "langgraph-checkpoint": {
+      "version": "4.2.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "langchain-core>=0.2.38",
+        "ormsgpack>=1.12.0"
+      ]
+    },
+    "langgraph-checkpoint-redis": {
+      "version": "0.5.2",
+      "requires_python": "<3.15,>=3.10",
+      "requires_dist": [
+        "langgraph-checkpoint<5.0.0,>=4.1.1",
+        "orjson<4.0.0,>=3.9.0",
+        "redis>=5.2.1",
+        "redisvl<1.0.0,>=0.15.0",
+        "tomli<3.0.0,>=2.0.1; python_version < \"3.11\""
+      ]
+    },
+    "langgraph-prebuilt": {
+      "version": "1.1.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "langchain-core>=1.3.1",
+        "langgraph-checkpoint<5.0.0,>=2.1.0"
+      ]
+    },
+    "langgraph-sdk": {
+      "version": "0.4.4",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "httpx>=0.25.2",
+        "langchain-core<2,>=1.4.0",
+        "langchain-protocol>=0.0.15",
+        "orjson>=3.11.5",
+        "websockets<17,>=14"
+      ]
+    },
+    "langsmith": {
+      "version": "0.12.4",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "anyio>=3.5.0",
+        "distro>=1.7.0",
+        "httpx2<3,>=2",
+        "orjson>=3.9.14; platform_python_implementation != \"PyPy\"",
+        "packaging>=23.2",
+        "pydantic<3,>=2",
+        "requests-toolbelt>=1.0.0",
+        "requests>=2.0.0",
+        "sniffio>=1.1",
+        "typing-extensions>=4.0.0",
+        "uuid-utils<1.0,>=0.12.0",
+        "websockets>=15.0",
+        "xxhash>=3.0.0",
+        "zstandard>=0.23.0",
+        "claude-agent-sdk>=0.1.0; python_version >= \"3.10\" and extra == \"claude-agent-sdk\"",
+        "google-genai>=1.75; extra == \"gemini-live\"",
+        "google-adk>=1.0.0; extra == \"google-adk\"",
+        "wrapt>=1.16.0; extra == \"google-adk\"",
+        "google-adk>=2.3.0; extra == \"google-adk-live\"",
+        "langsmith-pyo3>=0.1.0rc2; extra == \"langsmith-pyo3\"",
+        "cachetools>=5.0.0; extra == \"livekit\"",
+        "livekit-agents>=1.6; extra == \"livekit\"",
+        "opentelemetry-api>=1.30.0; extra == \"livekit\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.30.0; extra == \"livekit\"",
+        "opentelemetry-sdk>=1.30.0; extra == \"livekit\"",
+        "openai-agents>=0.0.3; extra == \"openai-agents\"",
+        "openai-agents>=0.0.3; extra == \"openai-realtime\"",
+        "openai>=1.50; extra == \"openai-realtime\"",
+        "opentelemetry-api>=1.30.0; extra == \"otel\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.30.0; extra == \"otel\"",
+        "opentelemetry-sdk>=1.30.0; extra == \"otel\"",
+        "cachetools>=5.0.0; extra == \"pipecat\"",
+        "opentelemetry-api>=1.30.0; extra == \"pipecat\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.30.0; extra == \"pipecat\"",
+        "opentelemetry-sdk>=1.30.0; extra == \"pipecat\"",
+        "pipecat-ai>=1.0; python_version >= \"3.11\" and extra == \"pipecat\"",
+        "pytest>=7.0.0; extra == \"pytest\"",
+        "rich>=13.9.4; extra == \"pytest\"",
+        "vcrpy>=7.0.0; extra == \"pytest\"",
+        "opentelemetry-api>=1.30.0; extra == \"strands-agents\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.30.0; extra == \"strands-agents\"",
+        "opentelemetry-sdk>=1.30.0; extra == \"strands-agents\"",
+        "strands-agents-tools>=0.2.0; extra == \"strands-agents\"",
+        "strands-agents>=0.1.0; extra == \"strands-agents\"",
+        "vcrpy>=7.0.0; extra == \"vcr\""
+      ]
+    },
+    "lxml": {
+      "version": "6.1.3",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "cssselect>=0.7; extra == \"cssselect\"",
+        "html5lib; extra == \"html5\"",
+        "BeautifulSoup4; extra == \"htmlsoup\"",
+        "lxml_html_clean; extra == \"html-clean\""
+      ]
+    },
+    "memory-profiler": {
+      "version": "0.61.0",
+      "requires_python": ">=3.5",
+      "requires_dist": [
+        "psutil"
+      ]
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "requires_python": "!=3.14.1,>=3.11",
+      "requires_dist": [
+        "asv; extra == \"benchmarking\"",
+        "virtualenv; extra == \"benchmarking\"",
+        "numpy>=1.25; extra == \"default\"",
+        "scipy>=1.11.2; extra == \"default\"",
+        "matplotlib>=3.8; extra == \"default\"",
+        "pandas>=2.0; extra == \"default\"",
+        "pre-commit>=4.1; extra == \"developer\"",
+        "mypy>=1.15; extra == \"developer\"",
+        "sphinx>=8.0; extra == \"doc\"",
+        "pydata-sphinx-theme>=0.16; extra == \"doc\"",
+        "sphinx-gallery>=0.18; extra == \"doc\"",
+        "numpydoc>=1.8.0; extra == \"doc\"",
+        "pillow>=10; extra == \"doc\"",
+        "texext>=0.6.7; extra == \"doc\"",
+        "myst-nb>=1.1; extra == \"doc\"",
+        "intersphinx-registry; extra == \"doc\"",
+        "osmnx>=2.0.0; extra == \"example\"",
+        "momepy>=0.7.2; extra == \"example\"",
+        "contextily>=1.6; extra == \"example\"",
+        "seaborn>=0.13; extra == \"example\"",
+        "cairocffi>=1.7; extra == \"example\"",
+        "igraph>=0.11; extra == \"example\"",
+        "scikit-learn>=1.5; extra == \"example\"",
+        "iplotx>=0.9.0; extra == \"example\"",
+        "lxml>=4.6; extra == \"extra\"",
+        "pygraphviz>=1.14; extra == \"extra\"",
+        "pydot>=3.0.1; extra == \"extra\"",
+        "sympy>=1.10; extra == \"extra\"",
+        "build>=0.10; extra == \"release\"",
+        "twine>=4.0; extra == \"release\"",
+        "wheel>=0.40; extra == \"release\"",
+        "changelist==0.5; extra == \"release\"",
+        "pytest>=7.2; extra == \"test\"",
+        "pytest-cov>=4.0; extra == \"test\"",
+        "pytest-xdist>=3.0; extra == \"test\"",
+        "pytest-mpl; extra == \"test-extras\"",
+        "pytest-randomly; extra == \"test-extras\""
+      ]
+    },
+    "numpy": {
+      "version": "2.5.3",
+      "requires_python": ">=3.12",
+      "requires_dist": null
+    },
+    "openai": {
+      "version": "3.13.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "anyio<5,>=4.10.0",
+        "httpx2<3,>=2.7.0",
+        "jiter<1,>=0.16.0",
+        "pydantic!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.*,<3,>=1.10.13",
+        "sniffio",
+        "typing-extensions<5,>=4.14",
+        "aiohttp>=3.14.3; extra == \"aiohttp\"",
+        "botocore<2,>=1.40.0; extra == \"bedrock\"",
+        "urllib3<3,>=2.7.0; extra == \"bedrock\"",
+        "numpy>=1; extra == \"datalib\"",
+        "pandas>=1.2.3; extra == \"datalib\"",
+        "websockets<16,>=13; extra == \"realtime\"",
+        "numpy>=2.0.2; extra == \"voice-helpers\"",
+        "sounddevice>=0.5.1; extra == \"voice-helpers\""
+      ]
+    },
+    "opentelemetry-api": {
+      "version": "1.44.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "typing-extensions>=4.5.0"
+      ]
+    },
+    "opentelemetry-sdk": {
+      "version": "1.44.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "opentelemetry-api==1.44.0",
+        "opentelemetry-semantic-conventions==0.65b0",
+        "typing-extensions>=4.5.0",
+        "opentelemetry-configuration==0.65b0; extra == \"file-configuration\""
+      ]
+    },
+    "orjson": {
+      "version": "3.12.0",
+      "requires_python": ">=3.10",
+      "requires_dist": null
+    },
+    "passlib": {
+      "version": "1.7.4",
+      "requires_python": "",
+      "requires_dist": [
+        "argon2-cffi (>=18.2.0) ; extra == 'argon2'",
+        "bcrypt (>=3.1.0) ; extra == 'bcrypt'",
+        "sphinx (>=1.6) ; extra == 'build_docs'",
+        "sphinxcontrib-fulltoc (>=1.2.0) ; extra == 'build_docs'",
+        "cloud-sptheme (>=1.10.1) ; extra == 'build_docs'",
+        "cryptography ; extra == 'totp'"
+      ]
+    },
+    "pgvector": {
+      "version": "0.5.0",
+      "requires_python": ">=3.10",
+      "requires_dist": null
+    },
+    "psutil": {
+      "version": "7.2.2",
+      "requires_python": ">=3.6",
+      "requires_dist": [
+        "psleak; extra == \"dev\"",
+        "pytest; extra == \"dev\"",
+        "pytest-instafail; extra == \"dev\"",
+        "pytest-xdist; extra == \"dev\"",
+        "setuptools; extra == \"dev\"",
+        "pywin32; (os_name == \"nt\" and implementation_name != \"pypy\") and extra == \"dev\"",
+        "wheel; (os_name == \"nt\" and implementation_name != \"pypy\") and extra == \"dev\"",
+        "wmi; (os_name == \"nt\" and implementation_name != \"pypy\") and extra == \"dev\"",
+        "abi3audit; extra == \"dev\"",
+        "black; extra == \"dev\"",
+        "check-manifest; extra == \"dev\"",
+        "coverage; extra == \"dev\"",
+        "packaging; extra == \"dev\"",
+        "pylint; extra == \"dev\"",
+        "pyperf; extra == \"dev\"",
+        "pypinfo; extra == \"dev\"",
+        "pytest-cov; extra == \"dev\"",
+        "requests; extra == \"dev\"",
+        "rstcheck; extra == \"dev\"",
+        "ruff; extra == \"dev\"",
+        "sphinx; extra == \"dev\"",
+        "sphinx_rtd_theme; extra == \"dev\"",
+        "toml-sort; extra == \"dev\"",
+        "twine; extra == \"dev\"",
+        "validate-pyproject[all]; extra == \"dev\"",
+        "virtualenv; extra == \"dev\"",
+        "vulture; extra == \"dev\"",
+        "wheel; extra == \"dev\"",
+        "colorama; os_name == \"nt\" and extra == \"dev\"",
+        "pyreadline3; os_name == \"nt\" and extra == \"dev\"",
+        "psleak; extra == \"test\"",
+        "pytest; extra == \"test\"",
+        "pytest-instafail; extra == \"test\"",
+        "pytest-xdist; extra == \"test\"",
+        "setuptools; extra == \"test\"",
+        "pywin32; (os_name == \"nt\" and implementation_name != \"pypy\") and extra == \"test\"",
+        "wheel; (os_name == \"nt\" and implementation_name != \"pypy\") and extra == \"test\"",
+        "wmi; (os_name == \"nt\" and implementation_name != \"pypy\") and extra == \"test\""
+      ]
+    },
+    "psycopg2-binary": {
+      "version": "2.9.13",
+      "requires_python": ">=3.10",
+      "requires_dist": null
+    },
+    "pydantic": {
+      "version": "2.13.5",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.46.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2",
+        "email-validator>=2.0.0; extra == \"email\"",
+        "tzdata; (python_version >= \"3.9\" and platform_system == \"Windows\") and extra == \"timezone\""
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.49.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "typing-extensions>=4.16.0"
+      ]
+    },
+    "pydantic-settings": {
+      "version": "2.15.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "pydantic>=2.7.0",
+        "python-dotenv>=0.21.0",
+        "typing-inspection>=0.4.0",
+        "boto3>=1.35.0; extra == \"aws-secrets-manager\"",
+        "azure-identity>=1.16.0; extra == \"azure-key-vault\"",
+        "azure-keyvault-secrets>=4.8.0; extra == \"azure-key-vault\"",
+        "google-cloud-secret-manager>=2.23.1; extra == \"gcp-secret-manager\"",
+        "tomli>=2.0.1; extra == \"toml\"",
+        "pyyaml>=6.0.1; extra == \"yaml\""
+      ]
+    },
+    "pyjwt": {
+      "version": "2.14.0",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "typing_extensions>=4.0; python_version < \"3.11\"",
+        "cryptography>=3.4.0; extra == \"crypto\""
+      ]
+    },
+    "pytest": {
+      "version": "9.1.1",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "colorama>=0.4; sys_platform == \"win32\"",
+        "exceptiongroup>=1; python_version < \"3.11\"",
+        "iniconfig>=1.0.1",
+        "packaging>=22",
+        "pluggy<2,>=1.5",
+        "pygments>=2.7.2",
+        "tomli>=1; python_version < \"3.11\"",
+        "argcomplete; extra == \"dev\"",
+        "attrs>=19.2; extra == \"dev\"",
+        "hypothesis>=3.56; extra == \"dev\"",
+        "mock; extra == \"dev\"",
+        "requests; extra == \"dev\"",
+        "setuptools; extra == \"dev\"",
+        "xmlschema; extra == \"dev\""
+      ]
+    },
+    "pytest-asyncio": {
+      "version": "1.4.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "backports-asyncio-runner<2,>=1.1; python_version < \"3.11\"",
+        "pytest<10,>=8.4",
+        "typing-extensions>=4.12; python_version < \"3.13\"",
+        "sphinx>=5.3; extra == \"docs\"",
+        "sphinx-rtd-theme>=1; extra == \"docs\"",
+        "sphinx-tabs>=3.5; extra == \"docs\"",
+        "coverage>=6.2; extra == \"testing\"",
+        "hypothesis>=5.7.1; extra == \"testing\""
+      ]
+    },
+    "pytest-benchmark": {
+      "version": "5.3.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "py-cpuinfo2>=10.1",
+        "pytest>=8.1",
+        "aspectlib; extra == \"aspect\"",
+        "elasticsearch; extra == \"elasticsearch\"",
+        "pygal; extra == \"histogram\"",
+        "pygaljs; extra == \"histogram\"",
+        "setuptools; extra == \"histogram\""
+      ]
+    },
+    "pytest-cov": {
+      "version": "7.1.0",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "coverage[toml]>=7.10.6",
+        "pluggy>=1.2",
+        "pytest>=7",
+        "process-tests; extra == \"testing\"",
+        "pytest-xdist; extra == \"testing\"",
+        "virtualenv; extra == \"testing\""
+      ]
+    },
+    "pytest-timeout": {
+      "version": "2.4.0",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "pytest>=7.0.0"
+      ]
+    },
+    "pytest-xdist": {
+      "version": "3.8.0",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "execnet>=2.1",
+        "pytest>=7.0.0",
+        "filelock; extra == \"testing\"",
+        "psutil>=3.0; extra == \"psutil\"",
+        "setproctitle; extra == \"setproctitle\""
+      ]
+    },
+    "python-dotenv": {
+      "version": "1.2.3",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "click>=5.0; extra == \"cli\""
+      ]
+    },
+    "python-multipart": {
+      "version": "0.0.32",
+      "requires_python": ">=3.10",
+      "requires_dist": null
+    },
+    "python-socketio": {
+      "version": "5.16.4",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "bidict>=0.21.0",
+        "python-engineio>=4.13.2",
+        "requests>=2.21.0; extra == \"client\"",
+        "websocket-client>=0.54.0; extra == \"client\"",
+        "aiohttp>=3.4; extra == \"asyncio-client\"",
+        "tox; extra == \"dev\"",
+        "sphinx; extra == \"docs\"",
+        "furo; extra == \"docs\""
+      ]
+    },
+    "ragas": {
+      "version": "0.4.3",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "numpy<3.0.0,>=1.21.0",
+        "datasets>=4.0.0",
+        "tiktoken",
+        "pydantic>=2.0.0",
+        "nest-asyncio",
+        "appdirs",
+        "diskcache>=5.6.3",
+        "typer",
+        "rich",
+        "openai>=1.0.0",
+        "tqdm",
+        "instructor",
+        "pillow>=10.4.0",
+        "networkx",
+        "scikit-network",
+        "langchain",
+        "langchain-core",
+        "langchain-community",
+        "langchain_openai",
+        "sentence-transformers; extra == \"all\"",
+        "transformers; extra == \"all\"",
+        "nltk; extra == \"all\"",
+        "rouge_score; extra == \"all\"",
+        "rapidfuzz; extra == \"all\"",
+        "pandas; extra == \"all\"",
+        "datacompy; extra == \"all\"",
+        "sacrebleu; extra == \"all\"",
+        "llama_index; extra == \"all\"",
+        "r2r; extra == \"all\"",
+        "GitPython; extra == \"all\"",
+        "GitPython; extra == \"git\"",
+        "langfuse>=3.2.4; extra == \"tracing\"",
+        "mlflow>=3.1.4; extra == \"tracing\"",
+        "google-api-python-client>=2.178.0; extra == \"gdrive\"",
+        "google-auth>=2.40.3; extra == \"gdrive\"",
+        "google-auth-oauthlib>=1.2.2; extra == \"gdrive\"",
+        "haystack-ai; extra == \"ai-frameworks\"",
+        "oci>=2.160.1; extra == \"oci\"",
+        "ag-ui-protocol>=0.1.9; extra == \"ag-ui\"",
+        "httpx>=0.27.0; extra == \"ag-ui\"",
+        "dspy-ai>=2.4.0; extra == \"dspy\"",
+        "ruff; extra == \"dev-minimal\"",
+        "pyright>=1.1.403; extra == \"dev-minimal\"",
+        "pre-commit>=4.3.0; extra == \"dev-minimal\"",
+        "pytest; extra == \"dev-minimal\"",
+        "pytest-xdist[psutil]; extra == \"dev-minimal\"",
+        "pytest-asyncio; extra == \"dev-minimal\"",
+        "nbmake; extra == \"dev-minimal\"",
+        "build>=1.3.0; extra == \"dev-minimal\"",
+        "scipy; extra == \"test\""
+      ]
+    },
+    "rank-bm25": {
+      "version": "0.2.2",
+      "requires_python": "",
+      "requires_dist": [
+        "numpy",
+        "pytest ; extra == 'dev'"
+      ]
+    },
+    "redis": {
+      "version": "8.1.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "async-timeout>=4.0.3; python_full_version < \"3.11.3\"",
+        "pybreaker>=1.4.0; extra == \"circuit-breaker\"",
+        "hiredis>=3.2.0; extra == \"hiredis\"",
+        "pyjwt>=2.13.0; extra == \"jwt\"",
+        "cryptography>=36.0.1; extra == \"ocsp\"",
+        "pyopenssl>=20.0.1; extra == \"ocsp\"",
+        "requests>=2.31.0; extra == \"ocsp\"",
+        "opentelemetry-api>=1.39.1; extra == \"otel\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.39.1; extra == \"otel\"",
+        "opentelemetry-sdk>=1.39.1; extra == \"otel\"",
+        "xxhash~=3.6.0; extra == \"xxhash\""
+      ]
+    },
+    "requests": {
+      "version": "2.34.2",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26",
+        "certifi>=2023.5.7",
+        "PySocks!=1.5.7,>=1.5.6; extra == \"socks\"",
+        "chardet<8,>=3.0.2; extra == \"use-chardet-on-py3\""
+      ]
+    },
+    "requests-oauthlib": {
+      "version": "2.0.0",
+      "requires_python": ">=3.4",
+      "requires_dist": [
+        "oauthlib>=3.0.0",
+        "requests>=2.0.0",
+        "oauthlib[signedtoken]>=3.0.0; extra == \"rsa\""
+      ]
+    },
+    "requests-toolbelt": {
+      "version": "1.0.0",
+      "requires_python": ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+      "requires_dist": [
+        "requests (<3.0.0,>=2.0.1)"
+      ]
+    },
+    "ruff": {
+      "version": "0.16.7",
+      "requires_python": ">=3.7",
+      "requires_dist": null
+    },
+    "sentence-transformers": {
+      "version": "6.0.1",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "transformers<6.0.0,>=5.0.0",
+        "tokenizers>=0.19",
+        "huggingface-hub<2.0.0,>=1.3.0",
+        "torch>=2.2",
+        "numpy>=1.24.0",
+        "scikit-learn>=1.1.0",
+        "scipy>=1.0.0",
+        "typing_extensions>=4.10.0",
+        "tqdm>=4.0.0",
+        "transformers[vision]; extra == \"image\"",
+        "transformers[audio]; extra == \"audio\"",
+        "transformers[video]; extra == \"video\"",
+        "datasets>=2.16.0; extra == \"train\"",
+        "accelerate>=1.3.0; extra == \"train\"",
+        "optimum-onnx[onnxruntime]; extra == \"onnx\"",
+        "optimum-onnx[onnxruntime-gpu]; extra == \"onnx-gpu\"",
+        "optimum-intel[openvino]>=2.0.0; extra == \"openvino\"",
+        "datasets>=2.16.0; extra == \"dev\"",
+        "accelerate>=1.3.0; extra == \"dev\"",
+        "pre-commit; extra == \"dev\"",
+        "pytest; extra == \"dev\"",
+        "pytest-cov; extra == \"dev\"",
+        "pytest-env; extra == \"dev\"",
+        "pytest-subtests; extra == \"dev\"",
+        "pytest-xdist; extra == \"dev\"",
+        "peft; extra == \"dev\"",
+        "transformers[audio,video,vision]; extra == \"dev\""
+      ]
+    },
+    "sentry-sdk": {
+      "version": "2.69.1",
+      "requires_python": ">=3.6",
+      "requires_dist": [
+        "urllib3>=1.26.11",
+        "certifi",
+        "aiohttp>=3.5; extra == \"aiohttp\"",
+        "anthropic>=0.16; extra == \"anthropic\"",
+        "arq>=0.23; extra == \"arq\"",
+        "asyncpg>=0.23; extra == \"asyncpg\"",
+        "apache-beam>=2.12; extra == \"beam\"",
+        "bottle>=0.12.13; extra == \"bottle\"",
+        "celery>=3; extra == \"celery\"",
+        "celery-redbeat>=2; extra == \"celery-redbeat\"",
+        "chalice>=1.16.0; extra == \"chalice\"",
+        "clickhouse-driver>=0.2.0; extra == \"clickhouse-driver\"",
+        "django>=1.8; extra == \"django\"",
+        "falcon>=1.4; extra == \"falcon\"",
+        "fastapi>=0.79.0; extra == \"fastapi\"",
+        "flask>=0.11; extra == \"flask\"",
+        "blinker>=1.1; extra == \"flask\"",
+        "markupsafe; extra == \"flask\"",
+        "grpcio>=1.21.1; extra == \"grpcio\"",
+        "protobuf>=3.8.0; extra == \"grpcio\"",
+        "httpcore[http2]==1.*; extra == \"http2\"",
+        "httpcore[asyncio]==1.*; extra == \"asyncio\"",
+        "httpx>=0.16.0; extra == \"httpx\"",
+        "huey>=2; extra == \"huey\"",
+        "huggingface_hub>=0.22; extra == \"huggingface-hub\"",
+        "langchain>=0.0.210; extra == \"langchain\"",
+        "langgraph>=0.6.6; extra == \"langgraph\"",
+        "launchdarkly-server-sdk>=9.8.0; extra == \"launchdarkly\"",
+        "litellm!=1.82.7,!=1.82.8,>=1.77.5; extra == \"litellm\"",
+        "litestar>=2.0.0; extra == \"litestar\"",
+        "loguru>=0.5; extra == \"loguru\"",
+        "mcp>=1.15.0; extra == \"mcp\"",
+        "openai>=1.0.0; extra == \"openai\"",
+        "tiktoken>=0.3.0; extra == \"openai\"",
+        "openfeature-sdk>=0.7.1; extra == \"openfeature\"",
+        "opentelemetry-distro>=0.35b0; extra == \"opentelemetry\"",
+        "opentelemetry-distro; extra == \"opentelemetry-experimental\"",
+        "opentelemetry-distro[otlp]>=0.35b0; extra == \"opentelemetry-otlp\"",
+        "pure_eval; extra == \"pure-eval\"",
+        "executing; extra == \"pure-eval\"",
+        "asttokens; extra == \"pure-eval\"",
+        "pydantic-ai>=1.0.0; extra == \"pydantic-ai\"",
+        "pymongo>=3.1; extra == \"pymongo\"",
+        "pyspark>=2.4.4; extra == \"pyspark\"",
+        "quart>=0.16.1; extra == \"quart\"",
+        "blinker>=1.1; extra == \"quart\"",
+        "rq>=0.6; extra == \"rq\"",
+        "sanic>=0.8; extra == \"sanic\"",
+        "sqlalchemy>=1.2; extra == \"sqlalchemy\"",
+        "starlette>=0.19.1; extra == \"starlette\"",
+        "starlite>=1.48; extra == \"starlite\"",
+        "statsig>=0.55.3; extra == \"statsig\"",
+        "tornado>=6; extra == \"tornado\"",
+        "UnleashClient>=6.0.1; extra == \"unleash\"",
+        "google-genai>=1.29.0; extra == \"google-genai\""
+      ]
+    },
+    "slowapi": {
+      "version": "0.1.10",
+      "requires_python": "<4.0,>=3.7",
+      "requires_dist": [
+        "limits>=2.3",
+        "redis<4.0.0,>=3.4.1; extra == \"redis\""
+      ]
+    },
+    "sqlalchemy": {
+      "version": "2.0.52",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "importlib-metadata; python_version < \"3.8\"",
+        "greenlet>=1; platform_machine == \"aarch64\" or (platform_machine == \"ppc64le\" or (platform_machine == \"x86_64\" or (platform_machine == \"amd64\" or (platform_machine == \"AMD64\" or (platform_machine == \"win32\" or platform_machine == \"WIN32\")))))",
+        "typing-extensions>=4.6.0",
+        "greenlet>=1; extra == \"asyncio\"",
+        "mypy>=0.910; extra == \"mypy\"",
+        "pyodbc; extra == \"mssql\"",
+        "pymssql; extra == \"mssql-pymssql\"",
+        "pyodbc; extra == \"mssql-pyodbc\"",
+        "mysqlclient>=1.4.0; extra == \"mysql\"",
+        "mysql-connector-python; extra == \"mysql-connector\"",
+        "mariadb!=1.1.10,!=1.1.2,!=1.1.5,>=1.0.1; extra == \"mariadb-connector\"",
+        "cx_oracle>=8; extra == \"oracle\"",
+        "oracledb>=1.0.1; extra == \"oracle-oracledb\"",
+        "psycopg2>=2.7; extra == \"postgresql\"",
+        "pg8000>=1.29.1; extra == \"postgresql-pg8000\"",
+        "greenlet>=1; extra == \"postgresql-asyncpg\"",
+        "asyncpg; extra == \"postgresql-asyncpg\"",
+        "psycopg2-binary; extra == \"postgresql-psycopg2binary\"",
+        "psycopg2cffi; extra == \"postgresql-psycopg2cffi\"",
+        "psycopg>=3.0.7; extra == \"postgresql-psycopg\"",
+        "psycopg[binary]>=3.0.7; extra == \"postgresql-psycopgbinary\"",
+        "pymysql; extra == \"pymysql\"",
+        "greenlet>=1; extra == \"aiomysql\"",
+        "aiomysql>=0.2.0; extra == \"aiomysql\"",
+        "greenlet>=1; extra == \"aioodbc\"",
+        "aioodbc; extra == \"aioodbc\"",
+        "greenlet>=1; extra == \"asyncmy\"",
+        "asyncmy>=0.2.12; extra == \"asyncmy\"",
+        "greenlet>=1; extra == \"aiosqlite\"",
+        "aiosqlite; extra == \"aiosqlite\"",
+        "typing_extensions!=3.10.0.1; extra == \"aiosqlite\"",
+        "sqlcipher3_binary; extra == \"sqlcipher\""
+      ]
+    },
+    "starlette": {
+      "version": "1.6.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "anyio<5,>=3.6.2",
+        "typing-extensions>=4.10.0; python_version < \"3.13\"",
+        "httpx2>=2.0.0; extra == \"full\"",
+        "httpx<0.29.0,>=0.27.0; extra == \"full\"",
+        "itsdangerous; extra == \"full\"",
+        "jinja2; extra == \"full\"",
+        "python-multipart>=0.0.18; extra == \"full\"",
+        "pyyaml; extra == \"full\""
+      ]
+    },
+    "strawberry-graphql": {
+      "version": "0.327.7",
+      "requires_python": "<4.0,>=3.10",
+      "requires_dist": [
+        "graphql-core<3.4.0,>=3.2.0",
+        "typing-extensions>=4.14.0",
+        "python-dateutil>=2.7",
+        "packaging>=23",
+        "cross-web>=0.6.0",
+        "aiohttp<4,>=3.7.4.post0; extra == \"aiohttp\"",
+        "protobuf>=3.20; extra == \"apollo-federation\"",
+        "starlette>=0.18.0; extra == \"asgi\"",
+        "python-multipart>=0.0.7; extra == \"asgi\"",
+        "chalice>=1.22; extra == \"chalice\"",
+        "channels>=4.0.0; extra == \"channels\"",
+        "django>=5.2; extra == \"channels\"",
+        "asgiref>=3.2; extra == \"channels\"",
+        "typer>=0.12.4; extra == \"cli\"",
+        "pygments>=2.3; extra == \"cli\"",
+        "rich>=12.0.0; extra == \"cli\"",
+        "libcst>=1.9.0; extra == \"cli\"",
+        "starlette>=0.18.0; extra == \"cli\"",
+        "uvicorn>=0.11.6; extra == \"cli\"",
+        "websockets<17,>=15.0.1; extra == \"cli\"",
+        "python-multipart>=0.0.7; extra == \"cli\"",
+        "rich>=12.0.0; extra == \"debug\"",
+        "libcst>=1.9.0; extra == \"debug\"",
+        "django>=5.2; extra == \"django\"",
+        "asgiref>=3.2; extra == \"django\"",
+        "fastapi>=0.65.2; extra == \"fastapi\"",
+        "python-multipart>=0.0.7; extra == \"fastapi\"",
+        "flask>=1.1; extra == \"flask\"",
+        "litestar>=2; python_full_version >= \"3.10\" and python_full_version < \"4\" and extra == \"litestar\"",
+        "opentelemetry-api<2; extra == \"opentelemetry\"",
+        "opentelemetry-sdk<2; extra == \"opentelemetry\"",
+        "pydantic>1.6.1; extra == \"pydantic\"",
+        "pyinstrument>=4.0.0; extra == \"pyinstrument\"",
+        "quart>=0.19.3; extra == \"quart\"",
+        "sanic>=20.12.2; extra == \"sanic\""
+      ]
+    },
+    "stripe": {
+      "version": "15.6.1",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "typing_extensions>=4.7.0",
+        "requests>=2.20",
+        "httpx; extra == \"async\""
+      ]
+    },
+    "tavily-python": {
+      "version": "0.8.2",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "requests",
+        "tiktoken>=0.5.1",
+        "httpx"
+      ]
+    },
+    "tenacity": {
+      "version": "9.1.4",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "reno; extra == \"doc\"",
+        "sphinx; extra == \"doc\"",
+        "pytest; extra == \"test\"",
+        "tornado>=4.5; extra == \"test\"",
+        "typeguard; extra == \"test\""
+      ]
+    },
+    "tiktoken": {
+      "version": "0.14.0",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "regex",
+        "requests",
+        "blobfile>=3; extra == \"blobfile\""
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "requires_python": ">=3.9",
+      "requires_dist": null
+    },
+    "uvicorn": {
+      "version": "0.52.4",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "click>=7.0",
+        "h11>=0.8",
+        "typing-extensions>=4.0; python_version < \"3.11\"",
+        "httptools>=0.8.0; extra == \"standard\"",
+        "python-dotenv>=0.13; extra == \"standard\"",
+        "pyyaml>=5.1; extra == \"standard\"",
+        "uvloop>=0.15.1; (sys_platform != \"win32\" and (sys_platform != \"cygwin\" and platform_python_implementation != \"PyPy\")) and extra == \"standard\"",
+        "watchfiles>=0.20; extra == \"standard\"",
+        "websockets>=13.0; extra == \"standard\""
+      ]
+    },
+    "uvloop": {
+      "version": "0.22.1",
+      "requires_python": ">=3.8.1",
+      "requires_dist": [
+        "aiohttp>=3.10.5; extra == \"test\"",
+        "flake8~=6.1; extra == \"test\"",
+        "psutil; extra == \"test\"",
+        "pycodestyle~=2.11.0; extra == \"test\"",
+        "pyOpenSSL~=25.3.0; extra == \"test\"",
+        "mypy>=0.800; extra == \"test\"",
+        "setuptools>=60; extra == \"dev\"",
+        "Cython~=3.0; extra == \"dev\"",
+        "Sphinx~=4.1.2; extra == \"docs\"",
+        "sphinxcontrib-asyncio~=0.3.0; extra == \"docs\"",
+        "sphinx_rtd_theme~=0.5.2; extra == \"docs\""
+      ]
+    },
+    "wasmtime": {
+      "version": "48.0.0",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "coverage; extra == \"testing\"",
+        "pycparser; extra == \"testing\"",
+        "pytest-mypy; extra == \"testing\"",
+        "pytest; extra == \"testing\""
+      ]
+    },
+    "websockets": {
+      "version": "17.1",
+      "requires_python": ">=3.11",
+      "requires_dist": null
+    },
+    "z3-solver": {
+      "version": "5.1.0.0",
+      "requires_python": null,
+      "requires_dist": [
+        "importlib-resources; python_version < \"3.9\""
+      ]
+    },
+    "bcrypt": {
+      "version": "5.0.0",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "pytest!=3.3.0,>=3.2.1; extra == \"tests\"",
+        "mypy; extra == \"typecheck\""
+      ]
+    },
+    "email-validator": {
+      "version": "2.3.0",
+      "requires_python": ">=3.8",
+      "requires_dist": [
+        "dnspython>=2.0.0",
+        "idna>=2.0.0"
+      ]
+    }
+  },
+  "npm": {
+    "@anthropic-ai/sdk": {
+      "version": "0.125.0",
+      "engines": null,
+      "peerDependencies": {
+        "zod": "^3.25.0 || ^4.0.0"
+      }
+    },
+    "@azure/openai": {
+      "version": "2.0.0",
+      "engines": {
+        "node": ">=18.0.0"
+      },
+      "peerDependencies": null
+    },
+    "@clerk/nextjs": {
+      "version": "7.9.2",
+      "engines": {
+        "node": ">=20.9.0"
+      },
+      "peerDependencies": {
+        "next": "^15.2.8 || ^15.3.8 || ^15.4.10 || ^15.5.9 || ^15.6.0-0 || ^16.0.10 || ^16.1.0-0",
+        "react": "^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0",
+        "react-dom": "^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0"
+      }
+    },
+    "@codesandbox/sandpack-react": {
+      "version": "2.20.0",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^16.8.0 || ^17 || ^18 || ^19",
+        "react-dom": "^16.8.0 || ^17 || ^18 || ^19"
+      }
+    },
+    "@codesandbox/sandpack-themes": {
+      "version": "2.0.21",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "@dagrejs/dagre": {
+      "version": "3.1.1",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "@eslint/eslintrc": {
+      "version": "3.3.7",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "peerDependencies": null
+    },
+    "@modelcontextprotocol/sdk": {
+      "version": "1.30.0",
+      "engines": {
+        "node": ">=18"
+      },
+      "peerDependencies": {
+        "zod": "^3.25 || ^4.0",
+        "@cfworker/json-schema": "^4.1.1"
+      }
+    },
+    "@octokit/rest": {
+      "version": "22.0.1",
+      "engines": {
+        "node": ">= 20"
+      },
+      "peerDependencies": null
+    },
+    "@opentelemetry/api": {
+      "version": "1.9.1",
+      "engines": {
+        "node": ">=8.0.0"
+      },
+      "peerDependencies": null
+    },
+    "@opentelemetry/auto-instrumentations-node": {
+      "version": "0.80.0",
+      "engines": {
+        "node": "^18.19.0 || >=20.6.0"
+      },
+      "peerDependencies": {
+        "@opentelemetry/api": "^1.4.1",
+        "@opentelemetry/core": "^2.0.0"
+      }
+    },
+    "@opentelemetry/exporter-trace-otlp-grpc": {
+      "version": "0.222.0",
+      "engines": {
+        "node": "^18.19.0 || >=20.6.0"
+      },
+      "peerDependencies": {
+        "@opentelemetry/api": "^1.3.0"
+      }
+    },
+    "@opentelemetry/sdk-node": {
+      "version": "0.222.0",
+      "engines": {
+        "node": "^18.19.0 || >=20.6.0"
+      },
+      "peerDependencies": {
+        "@opentelemetry/api": ">=1.3.0 <1.10.0"
+      }
+    },
+    "@playwright/test": {
+      "version": "1.63.0",
+      "engines": {
+        "node": ">=20"
+      },
+      "peerDependencies": null
+    },
+    "@radix-ui/react-context-menu": {
+      "version": "2.3.7",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
+        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
+        "@types/react": "*",
+        "@types/react-dom": "*"
+      }
+    },
+    "@radix-ui/react-dialog": {
+      "version": "1.1.23",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
+        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
+        "@types/react": "*",
+        "@types/react-dom": "*"
+      }
+    },
+    "@tailwindcss/postcss": {
+      "version": "4.3.3",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "@tauri-apps/api": {
+      "version": "2.11.1",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "@tauri-apps/cli": {
+      "version": "2.11.4",
+      "engines": {
+        "node": ">= 10"
+      },
+      "peerDependencies": null
+    },
+    "@testing-library/jest-dom": {
+      "version": "7.0.1",
+      "engines": {
+        "npm": ">=6",
+        "node": ">=22",
+        "yarn": ">=1"
+      },
+      "peerDependencies": {
+        "vitest": ">= 0.32",
+        "@testing-library/dom": ">=10 <11"
+      }
+    },
+    "@testing-library/react": {
+      "version": "16.3.3",
+      "engines": {
+        "node": ">=18"
+      },
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0",
+        "@types/react": "^18.0.0 || ^19.0.0",
+        "@types/react-dom": "^18.0.0 || ^19.0.0",
+        "@testing-library/dom": "^10.0.0"
+      }
+    },
+    "@types/bull": {
+      "version": "4.10.4",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "@types/express": {
+      "version": "5.0.6",
+      "engines": null,
+      "peerDependencies": {}
+    },
+    "@types/node": {
+      "version": "26.5.1",
+      "engines": null,
+      "peerDependencies": {}
+    },
+    "@types/react": {
+      "version": "19.3.0",
+      "engines": null,
+      "peerDependencies": {}
+    },
+    "@types/react-dom": {
+      "version": "19.3.0",
+      "engines": null,
+      "peerDependencies": {
+        "@types/react": "^19.3.0"
+      }
+    },
+    "@types/ws": {
+      "version": "8.18.1",
+      "engines": null,
+      "peerDependencies": {}
+    },
+    "@typescript-eslint/eslint-plugin": {
+      "version": "8.70.0",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "peerDependencies": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0",
+        "typescript": ">=4.8.4 <6.1.0",
+        "@typescript-eslint/parser": "^8.70.0"
+      }
+    },
+    "@typescript-eslint/parser": {
+      "version": "8.70.0",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "peerDependencies": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0",
+        "typescript": ">=4.8.4 <6.1.0"
+      }
+    },
+    "@vitest/coverage-v8": {
+      "version": "5.0.0",
+      "engines": null,
+      "peerDependencies": {
+        "vitest": "5.0.0",
+        "@vitest/browser": "5.0.0"
+      }
+    },
+    "@xyflow/react": {
+      "version": "12.11.6",
+      "engines": null,
+      "peerDependencies": {
+        "react": ">=17",
+        "react-dom": ">=17",
+        "@types/react": ">=17",
+        "@types/react-dom": ">=17"
+      }
+    },
+    "bull": {
+      "version": "4.16.5",
+      "engines": {
+        "node": ">=12"
+      },
+      "peerDependencies": null
+    },
+    "cmdk": {
+      "version": "1.1.1",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^18 || ^19 || ^19.0.0-rc",
+        "react-dom": "^18 || ^19 || ^19.0.0-rc"
+      }
+    },
+    "convex": {
+      "version": "1.45.0",
+      "engines": {
+        "npm": ">=7.0.0",
+        "node": ">=20.0.0"
+      },
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0-0 || ^19.0.0",
+        "@clerk/react": "^6.4.3",
+        "@auth0/auth0-react": "^2.0.1",
+        "@clerk/clerk-react": "^4.12.8 || ^5.0.0"
+      }
+    },
+    "convex-test": {
+      "version": "0.0.58",
+      "engines": null,
+      "peerDependencies": {
+        "convex": "^1.43.0"
+      }
+    },
+    "dotenv": {
+      "version": "17.4.2",
+      "engines": {
+        "node": ">=12"
+      },
+      "peerDependencies": null
+    },
+    "eslint": {
+      "version": "10.10.0",
+      "engines": {
+        "node": "^20.19.0 || ^22.13.0 || >=24"
+      },
+      "peerDependencies": {
+        "jiti": "*"
+      }
+    },
+    "eslint-config-next": {
+      "version": "16.3.5",
+      "engines": null,
+      "peerDependencies": {
+        "eslint": ">=9.0.0",
+        "typescript": ">=3.3.1"
+      }
+    },
+    "express": {
+      "version": "5.2.1",
+      "engines": {
+        "node": ">= 18"
+      },
+      "peerDependencies": null
+    },
+    "fastmcp": {
+      "version": "4.20.11",
+      "engines": null,
+      "peerDependencies": {
+        "ajv": "^8.0.0",
+        "jose": "^5.0.0 || ^6.0.0",
+        "ajv-formats": "^3.0.0"
+      }
+    },
+    "framer-motion": {
+      "version": "13.2.0",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0"
+      }
+    },
+    "immer": {
+      "version": "11.1.18",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "ioredis": {
+      "version": "6.0.0",
+      "engines": {
+        "node": ">=20.0.0"
+      },
+      "peerDependencies": null
+    },
+    "jest": {
+      "version": "30.5.1",
+      "engines": {
+        "node": "^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0"
+      },
+      "peerDependencies": {
+        "node-notifier": "^8.0.1 || ^9.0.0 || ^10.0.0"
+      }
+    },
+    "jsdom": {
+      "version": "30.0.1",
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "peerDependencies": {
+        "canvas": "^3.2.3"
+      }
+    },
+    "lucide-react": {
+      "version": "1.45.0",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+      }
+    },
+    "next": {
+      "version": "16.3.5",
+      "engines": {
+        "node": ">=20.9.0"
+      },
+      "peerDependencies": {
+        "sass": "^1.3.0",
+        "react": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0",
+        "react-dom": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0",
+        "@playwright/test": "^1.51.1",
+        "@opentelemetry/api": "^1.1.0",
+        "babel-plugin-react-compiler": "*"
+      }
+    },
+    "next-themes": {
+      "version": "0.4.6",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc",
+        "react-dom": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+      }
+    },
+    "openai": {
+      "version": "7.15.0",
+      "engines": {
+        "node": ">=22.0.0"
+      },
+      "peerDependencies": {
+        "ws": "^8.21.0",
+        "zod": "^3.25 || ^4.0",
+        "undici": ">=5 <9",
+        "@smithy/hash-node": ">=4.3.0 <5",
+        "@smithy/signature-v4": ">=5.4.0 <6",
+        "@aws-sdk/credential-provider-node": ">=3.972.0 <4"
+      }
+    },
+    "pino": {
+      "version": "10.3.1",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "pino-pretty": {
+      "version": "13.1.3",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "postcss": {
+      "version": "8.5.28",
+      "engines": {
+        "node": "^10 || ^12 || >=14"
+      },
+      "peerDependencies": null
+    },
+    "react": {
+      "version": "19.3.0",
+      "engines": {
+        "node": ">=0.10.0"
+      },
+      "peerDependencies": null
+    },
+    "react-dom": {
+      "version": "19.3.0",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^19.3.0"
+      }
+    },
+    "rimraf": {
+      "version": "6.1.3",
+      "engines": {
+        "node": "20 || >=22"
+      },
+      "peerDependencies": null
+    },
+    "sonner": {
+      "version": "2.0.8",
+      "engines": null,
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0 || ^19.0.0-rc",
+        "react-dom": "^18.0.0 || ^19.0.0 || ^19.0.0-rc",
+        "@types/react": "^18.0.0 || ^19.0.0"
+      }
+    },
+    "tailwindcss": {
+      "version": "4.3.3",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "tsx": {
+      "version": "4.23.13",
+      "engines": {
+        "node": ">=18.0.0"
+      },
+      "peerDependencies": null
+    },
+    "typescript": {
+      "version": "7.0.2",
+      "engines": {
+        "node": ">=16.20.0"
+      },
+      "peerDependencies": null
+    },
+    "vite": {
+      "version": "8.3.0",
+      "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "peerDependencies": {
+        "tsx": "^4.8.1",
+        "jiti": ">=1.21.0",
+        "less": "^4.0.0",
+        "sass": "^1.70.0",
+        "yaml": "^2.4.2",
+        "stylus": ">=0.54.8",
+        "terser": "^5.16.0",
+        "esbuild": "^0.27.0 || ^0.28.0",
+        "sugarss": "^5.0.0",
+        "@types/node": "^20.19.0 || >=22.12.0",
+        "sass-embedded": "^1.70.0",
+        "@vitejs/devtools": "^0.7.1"
+      }
+    },
+    "vitest": {
+      "version": "5.0.0",
+      "engines": {
+        "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+      },
+      "peerDependencies": {
+        "vite": "^6.4.0 || ^7.0.0 || ^8.0.0",
+        "jsdom": "*",
+        "happy-dom": "*",
+        "@vitest/ui": "5.0.0",
+        "@types/node": "^22.0.0 || >=24.0.0",
+        "@edge-runtime/vm": "*",
+        "@opentelemetry/api": "^1.9.0",
+        "@vitest/coverage-v8": "5.0.0",
+        "@vitest/browser-preview": "5.0.0",
+        "@vitest/coverage-istanbul": "5.0.0",
+        "@vitest/browser-playwright": "5.0.0",
+        "@vitest/browser-webdriverio": "^5.0.0-beta.5 || >=5.0.0"
+      }
+    },
+    "ws": {
+      "version": "8.21.3",
+      "engines": {
+        "node": ">=10.0.0"
+      },
+      "peerDependencies": {
+        "bufferutil": "^4.0.1",
+        "utf-8-validate": ">=5.0.2"
+      }
+    },
+    "yjs": {
+      "version": "13.6.32",
+      "engines": {
+        "npm": ">=8.0.0",
+        "node": ">=16.0.0"
+      },
+      "peerDependencies": null
+    },
+    "zod": {
+      "version": "4.6.4",
+      "engines": null,
+      "peerDependencies": null
+    },
+    "zustand": {
+      "version": "5.0.15",
+      "engines": {
+        "node": ">=12.20.0"
+      },
+      "peerDependencies": {
+        "immer": ">=9.0.6",
+        "react": ">=18.0.0",
+        "@types/react": ">=18.0.0",
+        "use-sync-external-store": ">=1.2.0"
+      }
+    }
+  },
+  "manifests": [
+    "frontend/package.json",
+    "desktop/package.json",
+    "backend/package.json",
+    "sdk/typescript/package.json",
+    "backend/mcp-server/package.json",
+    "backend/code_review/package.json",
+    "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "backend/projects/OmniStock_Enterprise/backend/package.json"
+  ],
+  "retrieved_on": "2026-09-13",
+  "sources": {
+    "python": "https://pypi.org/pypi/{package}/json",
+    "npm": "https://registry.npmjs.org/{package}/latest"
+  }
+}

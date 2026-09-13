@@ -11,9 +11,40 @@ from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 
-from memory.dev_memory import get_dev_memory, DevMemory
+from memory.dev_memory import get_user_dev_memory, DevMemory
 
-router = APIRouter()
+def _authenticated_memory_user(
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> AuthenticatedUser:
+    principal = getattr(user, "id", None)
+    if not isinstance(principal, str) or not principal.strip():
+        raise HTTPException(status_code=401, detail="Authenticated memory principal required")
+    return user
+
+
+router = APIRouter(dependencies=[Depends(_authenticated_memory_user)])
+
+
+def _principal_memory(user: AuthenticatedUser) -> DevMemory:
+    principal = getattr(user, "id", None)
+    if not isinstance(principal, str) or not principal.strip():
+        raise HTTPException(status_code=401, detail="Authenticated memory principal required")
+    return get_user_dev_memory(principal)
+
+
+def _http_memory_metadata(metadata: Optional[Dict[str, Any]], user: AuthenticatedUser) -> Dict[str, Any]:
+    """HTTP input is untrusted evidence, regardless of claimed provenance."""
+    if metadata is not None and not isinstance(metadata, dict):
+        raise HTTPException(status_code=422, detail="Memory metadata must be an object")
+    sanitized = dict(metadata or {})
+    sanitized.update({
+        "trust_level": "external",
+        "actor_id": user.id,
+        "source": "memory_api",
+        "model_origin": "unknown",
+    })
+    return sanitized
+
 
 # Auto-tagging keywords mapping
 AUTO_TAG_KEYWORDS = {
@@ -117,7 +148,7 @@ async def get_memory_stats(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Get memory statistics."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     return memory.get_stats()
 
 
@@ -130,9 +161,9 @@ async def store_memory(
     request: StoreMemoryRequest, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Store a new memory entry. Alias for /add with same behavior."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
-    metadata = request.metadata or {}
+    metadata = _http_memory_metadata(request.metadata, user)
     if request.auto_tag:
         auto_tags = auto_generate_tags(request.content)
         existing_tags = metadata.get("tags", [])
@@ -165,13 +196,13 @@ async def add_memory(
     request: AddMemoryRequest, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Add a new memory entry with auto-tagging."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
     # Check for similar existing memories
     similar = find_similar_memories(memory, request.content, threshold=0.85)
 
     # Auto-generate tags if enabled
-    metadata = request.metadata or {}
+    metadata = _http_memory_metadata(request.metadata, user)
     if request.auto_tag:
         auto_tags = auto_generate_tags(request.content)
         existing_tags = metadata.get("tags", [])
@@ -220,7 +251,7 @@ async def get_similar_memories(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Get memories similar to a specific memory."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     insight = memory.get_by_id(insight_id)
     if not insight:
         raise HTTPException(status_code=404, detail="Memory not found")
@@ -241,7 +272,7 @@ async def consolidate_similar_memories(
     threshold: float = 0.85, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Find and group similar memories for consolidation."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     all_memories = memory.get_recent(limit=100)
 
     # Group similar memories
@@ -285,7 +316,7 @@ async def query_memory(
     request: QueryMemoryRequest, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Query memories by semantic similarity."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
     results = memory.query(
         query=request.query,
@@ -308,7 +339,7 @@ async def get_recent_memories(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Get most recent memories."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
     results = memory.get_recent(limit=limit, memory_type=memory_type)
 
@@ -348,7 +379,7 @@ async def clear_memories(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Clear memories (optionally by type)."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
     success = memory.clear(memory_type)
 
@@ -378,9 +409,9 @@ async def quick_remember(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Quick endpoint to add a memory."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
-    metadata = {}
+    metadata = _http_memory_metadata(None, user)
     if tags:
         metadata["tags"] = [t.strip() for t in tags.split(",")]
     if files:
@@ -401,7 +432,7 @@ async def quick_recall(
     q: str, k: int = 5, user: AuthenticatedUser = Depends(get_current_user)
 ) -> List[Dict[str, Any]]:
     """Quick endpoint to query insights."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     return memory.query(q, top_k=k)
 
 
@@ -425,7 +456,7 @@ async def get_insight(
     insight_id: str, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Get a single insight by ID."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     result = memory.get_by_id(insight_id)
     if result:
         return result
@@ -443,10 +474,10 @@ async def update_insight(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Update an insight."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
 
     # Handle tags update - merge into metadata
-    metadata = request.metadata or {}
+    metadata = _http_memory_metadata(request.metadata, user)
     if request.tags is not None:
         metadata["tags"] = request.tags
 
@@ -466,7 +497,7 @@ async def delete_insight(
     insight_id: str, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Delete a single insight."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     success = memory.delete(insight_id)
     if success:
         return {"success": True, "message": "Insight deleted"}
@@ -482,7 +513,7 @@ async def bulk_delete_insights(
     request: BulkDeleteRequest, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Delete multiple insights."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     count = memory.delete_bulk(request.ids)
     return {"success": True, "deleted": count}
 
@@ -496,7 +527,7 @@ async def export_insights(
     user: AuthenticatedUser = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Export all insights."""
-    memory = get_dev_memory()
+    memory = _principal_memory(user)
     insights = memory.export_all()
     return {
         "insights": insights,
@@ -514,6 +545,10 @@ async def import_insights(
     request: ImportRequest, user: AuthenticatedUser = Depends(get_current_user)
 ) -> Dict[str, Any]:
     """Import insights."""
-    memory = get_dev_memory()
-    count = memory.import_memories(request.insights)
+    memory = _principal_memory(user)
+    sanitized = [
+        {**entry, "metadata": _http_memory_metadata(entry.get("metadata"), user)}
+        for entry in request.insights
+    ]
+    count = memory.import_memories(sanitized)
     return {"success": True, "imported": count}

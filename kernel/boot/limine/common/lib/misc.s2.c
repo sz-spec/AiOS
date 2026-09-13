@@ -2,11 +2,35 @@
 #include <stddef.h>
 #include <lib/misc.h>
 #include <lib/print.h>
+#include <lib/rand.h>
+
+// Reseeded at the entry point, before anything parses a disk.
+uintptr_t __stack_chk_guard = (uintptr_t)0x7a19f4c6e2b3d500ULL;
+
+void reseed_stack_guard(void) {
+    // A zero low byte stops string overflows from writing the canary intact.
+    __stack_chk_guard = safe_rand64() & ~(uintptr_t)0xff;
+}
+
+noreturn void __stack_chk_fail(void) {
+    panic(false, "Stack smashing detected");
+}
+
+#if defined (__i386__)
+// GCC routes the check in 32-bit PIC code through a hidden alias so the call
+// does not have to go through the PLT. Nothing provides it here.
+noreturn void __stack_chk_fail_local(void) {
+    __stack_chk_fail();
+}
+#endif
 
 bool verbose = false;
 bool quiet = false;
+bool terse = false;
 bool serial = false;
 bool hash_mismatch_panic = false;
+bool measured_boot = false;
+bool firmware_logo = false;
 
 uint8_t bcd_to_int(uint8_t val) {
     return (val & 0x0f) + ((val & 0xf0) >> 4) * 10;
@@ -33,27 +57,44 @@ uint64_t strtoui(const char *s, const char **end, int base) {
     uint64_t n = 0;
     for (size_t i = 0; ; i++) {
         int d = digit_to_int(s[i]);
-        if (d == -1) {
+        if (d == -1 || d >= base) {
             if (end != NULL)
                 *end = &s[i];
             break;
         }
-        n = n * base + d;
+        uint64_t mul_result = CHECKED_MUL(n, base, ({
+            if (end != NULL)
+                *end = &s[i];
+            return UINT64_MAX;
+        }));
+        n = CHECKED_ADD(mul_result, d, ({
+            if (end != NULL)
+                *end = &s[i];
+            return UINT64_MAX;
+        }));
     }
     return n;
 }
 
-void get_absolute_path(char *path_ptr, const char *path, const char *pwd) {
+bool get_absolute_path(char *path_ptr, const char *path, const char *pwd, size_t size) {
     char *orig_ptr = path_ptr;
 
+    if (size == 0) return false;
+
+    char *end_ptr = path_ptr + size - 1;
+
     if (!*path) {
-        strcpy(path_ptr, pwd);
-        return;
+        size_t pwd_len = strlen(pwd);
+        if (pwd_len >= size) return false;
+        memcpy(path_ptr, pwd, pwd_len + 1);
+        return true;
     }
 
     if (*path != '/') {
-        strcpy(path_ptr, pwd);
-        path_ptr += strlen(path_ptr);
+        size_t pwd_len = strlen(pwd);
+        if (pwd_len >= size) return false;
+        memcpy(path_ptr, pwd, pwd_len + 1);
+        path_ptr += pwd_len;
     } else {
         *path_ptr = '/';
         path_ptr++;
@@ -74,12 +115,12 @@ first_run:
                 }
                 if ((!strncmp(path, "..\0", 3))
                 ||  (!strncmp(path, "../\0", 4))) {
-                    while (*path_ptr != '/') path_ptr--;
+                    while (path_ptr > orig_ptr && *path_ptr != '/') path_ptr--;
                     if (path_ptr == orig_ptr) path_ptr++;
                     goto term;
                 }
                 if (!strncmp(path, "../", 3)) {
-                    while (*path_ptr != '/') path_ptr--;
+                    while (path_ptr > orig_ptr && *path_ptr != '/') path_ptr--;
                     if (path_ptr == orig_ptr) path_ptr++;
                     path += 2;
                     *path_ptr = 0;
@@ -89,18 +130,20 @@ first_run:
                     path += 1;
                     continue;
                 }
-                if (((path_ptr - 1) != orig_ptr) && (*(path_ptr - 1) != '/')) {
+                if (path_ptr > orig_ptr && ((path_ptr - 1) != orig_ptr) && (*(path_ptr - 1) != '/')) {
+                    if (path_ptr >= end_ptr) return false;
                     *path_ptr = '/';
                     path_ptr++;
                 }
                 continue;
             case '\0':
 term:
-                if ((*(path_ptr - 1) == '/') && ((path_ptr - 1) != orig_ptr))
+                if (path_ptr > orig_ptr && (*(path_ptr - 1) == '/') && ((path_ptr - 1) != orig_ptr))
                     path_ptr--;
                 *path_ptr = 0;
-                return;
+                return true;
             default:
+                if (path_ptr >= end_ptr) return false;
                 *path_ptr = *path;
                 path++;
                 path_ptr++;

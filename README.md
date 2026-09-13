@@ -20,6 +20,10 @@ requirements. Hardware coverage must be demonstrated with actual tests.
 
 ## Native build
 
+The unified native entry is `make native -j4`; see
+[native build dependencies](docs/design/NATIVE_BUILD.md) for configuration,
+isolated user/musl outputs and remaining packaging gates.
+
 From this directory, with `x86_64-elf-gcc`/binutils, Make, Python 3, NASM,
 mtools and xorriso installed:
 
@@ -53,7 +57,10 @@ template is copied before use. No physical disk is attached by the smoke test.
 `consolidation/baseline.json` records the initial 5,072-path import from
 `vos.v1`; additional manifests record reconciled agent boundaries and Limine
 build dependencies. Legacy repositories remain in the parent directory and
-are not runtime dependencies. Full capability reconciliation is still open.
+are not runtime dependencies. The [eleven-source comparison](consolidation/reconciliation/README.md)
+now records file coverage, local modifications and implementation choices for
+43 components. Unretained variants and missing capabilities remain explicit
+integration work; this comparison does not certify their implementation.
 
 `python3 consolidation/inventory.py` compares the eleven historical source
 trees by path and SHA-256. Its ignored JSON output is a comparison aid, not a
@@ -61,3 +68,12 @@ secret scan or proof of completed migration.
 
 See [native boot evidence](docs/design/NATIVE_BOOT_STATUS.md) for current
 results and remaining release gates. No remote repository is configured.
+
+### Unified build and dependency maintenance
+
+From this directory: `make native -j4` builds the BIOS/UEFI ISO;
+`make native-build-check` checks native dependency/packaging invariants;
+`make dependencies-check` checks generated Python profiles and Python/Node locks.
+See [dependency versions and compatibility exceptions](dependencies/README.md)
+and [native build evidence](docs/design/NATIVE_BUILD.md). Hosted components require
+their locked Python/Node environments; they are not dependencies of native boot.

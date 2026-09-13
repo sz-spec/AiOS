@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
 // Mock next/navigation
@@ -29,3 +29,10 @@ if (typeof crypto.randomUUID === 'undefined') {
     configurable: true,
   });
 }
+
+// Unit-only identity fixture. Convex authorization and Playwright use separate
+// configurations and never load this mock. Stable getToken avoids effect loops.
+vi.mock('@clerk/nextjs', () => {
+  const getToken = vi.fn(async () => 'unit-test-token');
+  return { useAuth: () => ({ getToken, isLoaded: true, isSignedIn: true, userId: 'unit-user' }) };
+});

@@ -4,11 +4,12 @@
 #include <lib/acpi.h>
 #include <lib/misc.h>
 #include <lib/print.h>
+#include <lib/config.h>
 #include <sys/cpu.h>
 #include <mm/pmm.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <libfdt/libfdt.h>
+#include <libfdt.h>
 
 // ACPI RISC-V Hart Capabilities Table
 struct rhct {
@@ -57,27 +58,59 @@ struct rhct_mmu {
     uint8_t mmu_type;
 } __attribute__((packed));
 
-size_t bsp_hartid;
-struct riscv_hart *hart_list;
-static struct riscv_hart *bsp_hart;
+// The block size fields hold the base-2 logarithm of the size in bytes, and
+// zero where the platform does not report one.
+struct rhct_cmo {
+    struct rhct_header header;
+    uint8_t reserved0;
+    uint8_t cbom_block_size;
+    uint8_t cbop_block_size;
+    uint8_t cboz_block_size;
+} __attribute__((packed));
 
-static struct riscv_hart *riscv_get_hart(size_t hartid) {
+#define RHCT_CMO_BLOCK_SIZE_MAX_LOG2 12
+
+void *riscv_fdt = NULL;
+
+size_t bsp_hartid;
+struct riscv_hart *hart_list = NULL;
+struct riscv_hart *bsp_hart;
+static const char *current_config = NULL;
+
+static uint64_t cached_time_base_freq = 0;
+
+uint64_t riscv_time_base_frequency(void) {
+    return cached_time_base_freq;
+}
+
+static struct riscv_hart *riscv_find_hart(size_t hartid) {
     for (struct riscv_hart *hart = hart_list; hart != NULL; hart = hart->next) {
         if (hart->hartid == hartid) {
             return hart;
         }
     }
-    panic(false, "no `struct riscv_hart` for hartid %u", hartid);
+    return NULL;
 }
 
 static inline struct rhct_hart_info *rhct_get_hart_info(struct rhct *rhct, uint32_t acpi_uid) {
     uint32_t offset = rhct->nodes_offset;
     for (uint32_t i = 0; i < rhct->nodes_len; i++) {
-        struct rhct_hart_info *node = (void *)((uintptr_t)rhct + offset);
-        if (node->header.type == RHCT_HART_INFO && node->acpi_processor_uid == acpi_uid) {
-            return node;
+        if (offset + sizeof(struct rhct_header) > rhct->header.length) {
+            return NULL;
         }
-        offset += node->header.size;
+        struct rhct_header *header = (void *)((uintptr_t)rhct + offset);
+        if (header->size < sizeof(struct rhct_header) ||
+            offset + header->size > rhct->header.length) {
+            return NULL;
+        }
+        if (header->type == RHCT_HART_INFO
+         && header->size >= sizeof(struct rhct_hart_info)) {
+            struct rhct_hart_info *node = (struct rhct_hart_info *)header;
+            if (node->acpi_processor_uid == acpi_uid) {
+                return node;
+            }
+        }
+        offset += header->size;
     }
     return NULL;
 }
@@ -89,16 +122,24 @@ static void init_riscv_acpi(void) {
         panic(false, "riscv: requires `APIC` and `RHCT` ACPI tables");
     }
 
+    cached_time_base_freq = rhct->time_base_frequency;
+
     for (uint8_t *madt_ptr = (uint8_t *)madt->madt_entries_begin;
-         (uintptr_t)madt_ptr < (uintptr_t)madt + madt->header.length; madt_ptr += *(madt_ptr + 1)) {
+         (uintptr_t)madt_ptr + 1 < (uintptr_t)madt + madt->header.length; madt_ptr += *(madt_ptr + 1)) {
+        if (*(madt_ptr + 1) == 0
+         || (uintptr_t)madt_ptr + *(madt_ptr + 1) > (uintptr_t)madt + madt->header.length) {
+            break;
+        }
         if (*madt_ptr != 0x18) {
+            continue;
+        }
+        if (*(madt_ptr + 1) < sizeof(struct madt_riscv_intc)) {
             continue;
         }
         struct madt_riscv_intc *intc = (struct madt_riscv_intc *)madt_ptr;
 
         // Ignore harts we can't do anything with.
-        if (!(intc->flags & MADT_RISCV_INTC_ENABLED ||
-                intc->flags & MADT_RISCV_INTC_ONLINE_CAPABLE)) {
+        if (!(intc->flags & MADT_RISCV_INTC_ENABLED)) {
             continue;
         }
 
@@ -107,20 +148,58 @@ static void init_riscv_acpi(void) {
 
         struct rhct_hart_info *hart_info = rhct_get_hart_info(rhct, acpi_uid);
         if (hart_info == NULL) {
-            panic(false, "riscv: missing rhct node for hartid %u", hartid);
+            panic(false, "riscv: missing rhct node for hartid %U", (uint64_t)hartid);
+        }
+
+        // Ensure the offsets[] array fits within the hart_info node as
+        // declared by the containing header.size.
+        uint64_t offsets_bytes = (uint64_t)hart_info->offsets_len * sizeof(uint32_t);
+        if (offsetof(struct rhct_hart_info, offsets) + offsets_bytes > hart_info->header.size) {
+            panic(false, "riscv: RHCT hart_info offsets_len exceeds node size");
         }
 
         const char *isa_string = NULL;
         uint8_t mmu_type = 0;
         uint8_t flags = 0;
+        uint32_t cbom_block_size = 0;
 
         for (uint32_t i = 0; i < hart_info->offsets_len; i++) {
-            const struct rhct_header *node = (void *)((uintptr_t)rhct + hart_info->offsets[i]);
+            uint32_t node_offset = hart_info->offsets[i];
+            if (node_offset + sizeof(struct rhct_header) > rhct->header.length) {
+                continue;
+            }
+            const struct rhct_header *node = (void *)((uintptr_t)rhct + node_offset);
+            if (node->size < sizeof(struct rhct_header) ||
+                node_offset + node->size > rhct->header.length) {
+                continue;
+            }
             switch (node->type) {
-                case RHCT_ISA_STRING:
-                    isa_string = ((struct rhct_isa_string *)node)->isa_string;
+                case RHCT_ISA_STRING: {
+                    if (node->size < sizeof(struct rhct_isa_string))
+                        break;
+                    struct rhct_isa_string *isa_node = (struct rhct_isa_string *)node;
+                    // Validate string is within node bounds and null-terminated
+                    uint16_t max_str_len = node->size - sizeof(struct rhct_isa_string);
+                    if (isa_node->isa_string_len > max_str_len)
+                        break;
+                    if (isa_node->isa_string_len == 0 ||
+                        isa_node->isa_string[isa_node->isa_string_len - 1] != '\0')
+                        break;
+                    isa_string = isa_node->isa_string;
                     break;
+                }
+                case RHCT_CMO: {
+                    if (node->size < sizeof(struct rhct_cmo))
+                        break;
+                    uint8_t log2_size = ((struct rhct_cmo *)node)->cbom_block_size;
+                    if (log2_size == 0 || log2_size > RHCT_CMO_BLOCK_SIZE_MAX_LOG2)
+                        break;
+                    cbom_block_size = (uint32_t)1 << log2_size;
+                    break;
+                }
                 case RHCT_MMU:
+                    if (node->size < sizeof(struct rhct_mmu))
+                        break;
                     mmu_type = ((struct rhct_mmu *)node)->mmu_type;
                     flags |= RISCV_HART_HAS_MMU;
                     break;
@@ -128,12 +207,13 @@ static void init_riscv_acpi(void) {
         }
 
         if (isa_string == NULL) {
-            print("riscv: missing isa string for hartid %u, skipping.\n", hartid);
+            print("riscv: missing isa string for hartid %U, skipping.\n", (uint64_t)hartid);
             continue;
         }
 
         if (strncmp("rv64", isa_string, 4) && strncmp("rv32", isa_string, 4)) {
-            print("riscv: skipping hartid %u with invalid isa string: %s", hartid, isa_string);
+            print("riscv: skipping hartid %U with invalid isa string: %s\n", (uint64_t)hartid, isa_string);
+            continue;
         }
 
         struct riscv_hart *hart = ext_mem_alloc(sizeof(struct riscv_hart));
@@ -144,6 +224,7 @@ static void init_riscv_acpi(void) {
         hart->hartid = hartid;
         hart->acpi_uid = acpi_uid;
         hart->isa_string = isa_string;
+        hart->cbom_block_size = cbom_block_size;
         hart->mmu_type = mmu_type;
         hart->flags = flags;
 
@@ -156,25 +237,38 @@ static void init_riscv_acpi(void) {
     }
 }
 
-static void init_riscv_fdt(const void *fdt) {
+static void init_riscv_fdt(const void *fdt, bool entry_dtb) {
     if (fdt_check_header(fdt)) {
         panic(false, "riscv: invalid device tree");
     }
 
     int cpus = fdt_path_offset(fdt, "/cpus");
     if (cpus < 0) {
-        panic(false, "riscv: missing `/cpus` node");
+        // Only an entry's own dtb_path is recoverable: _menu() re-runs this
+        // against global_dtb, so returning there would panic again.
+        panic(entry_dtb, "riscv: missing `/cpus` node");
+    }
+
+    int len;
+    const void *tbf = fdt_getprop(fdt, cpus, "timebase-frequency", &len);
+    if (tbf != NULL) {
+        if (len == 8) {
+            cached_time_base_freq = fdt64_ld(tbf);
+        } else if (len == 4) {
+            cached_time_base_freq = fdt32_ld(tbf);
+        }
     }
 
     int node;
     fdt_for_each_subnode(node, fdt, cpus) {
         const void *prop;
+        int prop_len;
 
         if (!(prop = fdt_getprop(fdt, node, "device_type", NULL)) || strcmp(prop, "cpu")) {
             continue;
         }
 
-        if (!(prop = fdt_getprop(fdt, node, "reg", NULL))) {
+        if (!(prop = fdt_getprop(fdt, node, "reg", &prop_len)) || prop_len < 4) {
             continue;
         }
         size_t hartid = fdt32_ld(prop);
@@ -194,14 +288,24 @@ static void init_riscv_fdt(const void *fdt) {
             }
         }
 
+        uint32_t cbom_block_size = 0;
+        if ((prop = fdt_getprop(fdt, node, "riscv,cbom-block-size", &prop_len))
+         && prop_len == 4) {
+            uint32_t size = fdt32_ld(prop);
+            if (size != 0 && size <= (uint32_t)1 << RHCT_CMO_BLOCK_SIZE_MAX_LOG2) {
+                cbom_block_size = size;
+            }
+        }
+
         const char *isa_string = fdt_getprop(fdt, node, "riscv,isa", NULL);
         if (isa_string == NULL) {
-            print("riscv: missing isa string for hartid %u, skipping.\n", hartid);
+            print("riscv: missing isa string for hartid %U, skipping.\n", (uint64_t)hartid);
             continue;
         }
 
         if (strncmp("rv64", isa_string, 4) && strncmp("rv32", isa_string, 4)) {
-            print("riscv: skipping hartid %u with invalid isa string: %s", hartid, isa_string);
+            print("riscv: skipping hartid %U with invalid isa string: %s\n", (uint64_t)hartid, isa_string);
+            continue;
         }
 
         struct riscv_hart *hart = ext_mem_alloc(sizeof(struct riscv_hart));
@@ -212,6 +316,7 @@ static void init_riscv_fdt(const void *fdt) {
         hart->hartid = hartid;
         hart->acpi_uid = 0;
         hart->isa_string = isa_string;
+        hart->cbom_block_size = cbom_block_size;
         hart->mmu_type = mmu_type;
         hart->flags = flags;
 
@@ -224,22 +329,56 @@ static void init_riscv_fdt(const void *fdt) {
     }
 }
 
-void init_riscv(void) {
-    void *fdt = get_device_tree_blob(0);
-    if (fdt != NULL) {
-        init_riscv_fdt(fdt);
-    } else if (acpi_get_rsdp()) {
+void init_riscv(const char *config) {
+    if (current_config == config && hart_list != NULL) {
+        return;
+    }
+
+    while (hart_list != NULL) {
+        void *cur_hart = hart_list;
+        hart_list = hart_list->next;
+        pmm_free(cur_hart, sizeof(struct riscv_hart));
+    }
+    bsp_hart = NULL;
+
+    if (riscv_fdt != NULL) {
+        pmm_free(riscv_fdt, fdt_totalsize(riscv_fdt));
+        riscv_fdt = NULL;
+    }
+
+    bool entry_dtb = false;
+    bool prioritise_dtb = false;
+    if (config != NULL) {
+        entry_dtb = config_get_value(config, 0, "dtb_path");
+        prioritise_dtb = entry_dtb;
+    }
+    if (!prioritise_dtb) {
+        prioritise_dtb = config_get_value(NULL, 0, "global_dtb");
+    }
+
+    if (!prioritise_dtb && acpi_get_rsdp()) {
         init_riscv_acpi();
     } else {
-        panic(false, "riscv: requires DTB or ACPI");
+        riscv_fdt = get_device_tree_blob(config, 0, false, true);
+        if (riscv_fdt != NULL) {
+            init_riscv_fdt(riscv_fdt, entry_dtb);
+        } else {
+            panic(false, "riscv: requires DTB or ACPI");
+        }
+    }
+
+    if (cached_time_base_freq != 0) {
+        tsc_freq = cached_time_base_freq;
     }
 
     if (bsp_hart == NULL) {
-        panic(false, "riscv: missing `struct riscv_hart` for BSP");
+        panic(entry_dtb, "riscv: missing `struct riscv_hart` for BSP");
     }
 
-    if (strncasecmp(bsp_hart->isa_string, "rv64i", 5)) {
-        panic(false, "unsupported cpu: %s", bsp_hart->isa_string);
+    // `g` is shorthand for `imafd`, so `rv64g` also implies the `i` base.
+    if (strncasecmp(bsp_hart->isa_string, "rv64i", 5)
+     && strncasecmp(bsp_hart->isa_string, "rv64g", 5)) {
+        panic(entry_dtb, "unsupported cpu: %s", bsp_hart->isa_string);
     }
 
     for (struct riscv_hart *hart = hart_list; hart != NULL; hart = hart->next) {
@@ -247,6 +386,8 @@ void init_riscv(void) {
             hart->flags |= RISCV_HART_COPROC;
         }
     }
+
+    current_config = config;
 }
 
 struct isa_extension {
@@ -317,9 +458,27 @@ static bool extension_matches(const struct isa_extension *ext, const char *name)
     return *name == '\0';
 }
 
+size_t riscv_cbom_block_size(void) {
+    // The device tree property is optional and Zicbom leaves the block size
+    // implementation defined; 64 is what every part documented so far uses.
+    // panic() flushes the framebuffer, so panicking here would recurse.
+    struct riscv_hart *hart = riscv_find_hart(bsp_hartid);
+    uint32_t size = hart == NULL ? 0 : hart->cbom_block_size;
+    if (size == 0 || (size & (size - 1)) != 0) {
+        return 64;
+    }
+    return size;
+}
+
 bool riscv_check_isa_extension_for(size_t hartid, const char *name, size_t *maj, size_t *min) {
+    // panic() flushes the framebuffer, and the flush comes back through here.
+    struct riscv_hart *hart = riscv_find_hart(hartid);
+    if (hart == NULL) {
+        return false;
+    }
+
     // Skip the `rv{32,64}` prefix so it's not parsed as extensions.
-    const char *isa_string = riscv_get_hart(hartid)->isa_string + 4;
+    const char *isa_string = hart->isa_string + 4;
 
     struct isa_extension ext;
     while (parse_extension(&isa_string, &ext)) {

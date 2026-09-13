@@ -1,0 +1,189 @@
+{
+  "date": "2026-09-14",
+  "scope": "Current nonignored source candidate snapshot; 24 findings all previously reviewed unchanged test/documentation/noncredential snippets. Not a complete security audit.",
+  "findings": [
+    {
+      "path": "backend/mcp-server/SECURITY.md",
+      "line": 88,
+      "rule": "generic-api-key",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/mcp-server/docs/INTEGRATION.md",
+      "line": 495,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/mcp-server/docs/INTEGRATION.md",
+      "line": 514,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/mcp-server/docs/INTEGRATION.md",
+      "line": 526,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/services/hybrid_kex.py",
+      "line": 80,
+      "rule": "generic-api-key",
+      "review": "Integer key-length expression; no key material",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/api/test_chat_routes.py",
+      "line": 39,
+      "rule": "jwt",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/governance/test_telemetry_genai.py",
+      "line": 38,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/governance/test_telemetry_genai.py",
+      "line": 228,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/security/test_ifc_engine.py",
+      "line": 313,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_code_review.py",
+      "line": 51,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_code_review.py",
+      "line": 72,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_api_clerk_webhook.py",
+      "line": 197,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 189,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 191,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 249,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 260,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 278,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 477,
+      "rule": "generic-api-key",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "backend/tests/test_output_sanitization.py",
+      "line": 195,
+      "rule": "github-pat",
+      "review": "Synthetic credential fixture exercising detection; not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "infra/verify/reports/GCP_EVIDENCE_AAA.summary.txt",
+      "line": 364,
+      "rule": "generic-api-key",
+      "review": "Public X.509 certificate fingerprint in historical boot log; not private key material",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "infra/verify/reports/GCP_EVIDENCE_AAA.summary.txt",
+      "line": 1176,
+      "rule": "generic-api-key",
+      "review": "Public X.509 certificate fingerprint in historical boot log; not private key material",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "sdk/docs/getting-started.md",
+      "line": 307,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "sdk/docs/getting-started.md",
+      "line": 336,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    },
+    {
+      "path": "sdk/docs/getting-started.md",
+      "line": 353,
+      "rule": "curl-auth-header",
+      "review": "Documentation placeholder, not a deployed credential",
+      "same_matching_text_as_published_HEAD": true
+    }
+  ],
+  "final_security_review_snapshot": {
+    "date": "2026-09-14",
+    "source_files": 5315,
+    "findings": 24,
+    "new_path_rule_pairs": 0,
+    "all_matched_source_spans_unchanged_since_HEAD": true,
+    "scope": "Nonignored source snapshot before final runtime evidence; source scan, not complete credential/security audit."
+  },
+  "staged_diff_scan": {
+    "date": "2026-09-14",
+    "command": "gitleaks git --pre-commit --staged --redact",
+    "findings": 0,
+    "bytes_scanned": 30809261,
+    "scope": "Staged source changes; later report-only updates contain no credentials."
+  }
+}

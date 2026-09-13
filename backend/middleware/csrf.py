@@ -64,8 +64,8 @@ def _resolve_handshake_secret() -> str:
       1. `VOS3_TAURI_IPC_SECRET` env var (canonical — set by Tauri Rust
          shell or the operator before starting the backend)
       2. A securely-generated dev fallback that is regenerated on every
-         backend start. In dev mode, the backend prints the fallback to
-         stdout so a local developer running `curl` can copy it.
+         backend start. Developers needing an explicit handshake value
+         should provide the environment variable; secrets are not logged.
 
     Production refusal: if `ENVIRONMENT=production` and no env var is set,
     we refuse to operate (don't silently fall back to a known value the
@@ -81,12 +81,11 @@ def _resolve_handshake_secret() -> str:
             "Generate one with: python -c 'import secrets; print(secrets.token_urlsafe(48))'"
         )
 
-    # Dev fallback — random per process so devs can grab it from the log.
+    # Dev fallback remains random per process and is never written to logs.
     fallback = secrets.token_urlsafe(32)
     logger.warning(
-        "VOS3_TAURI_IPC_SECRET not set; generated dev secret: %s "
-        "(persist via env var to avoid regeneration each restart)",
-        fallback,
+        "VOS3_TAURI_IPC_SECRET not set; generated an ephemeral development secret. "
+        "Set the environment variable for an explicit local handshake value."
     )
     return fallback
 

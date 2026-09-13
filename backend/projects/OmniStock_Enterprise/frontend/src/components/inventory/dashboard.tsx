@@ -4,7 +4,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatsCard } from './stats-card';
 import { ProductTable } from './product-table';
-import { StockStatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { mockProducts, mockStats, mockCategories, mockMovements } from '@/lib/mock-data';
 import { Product } from '@/types/inventory';

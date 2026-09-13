@@ -330,7 +330,7 @@ ASM_OBJECTS := $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(ASM_SOURCES))
 OBJECTS     := $(C_OBJECTS) $(ASM_OBJECTS)
 
 # Dependencies
-DEPS := $(C_OBJECTS:.o=.d)
+DEPS := $(OBJECTS:.o=.d)
 
 # ============================================================================
 # PRODUCTION BUILD
@@ -632,7 +632,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
 	@echo "  AS      $<"
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 # Create directories
 $(BUILD_DIR) $(OBJ_DIR):
@@ -651,14 +651,16 @@ clean:
 # ============================================================================
 
 # User binaries directory
-USER_BIN_DIR := ../user/build/bin
+USER_BUILD_DIR := $(BUILD_DIR)/user
+USER_BIN_DIR := $(USER_BUILD_DIR)/bin
 
 # User programs to embed
-USER_PROGRAMS := init sh cat grep wc head date uptime uname ai_test ai_diag ai_stat ai_top ai_stress ai_exploit business_sim setup_wizard ws_switch vos3_admin ai_audit udp_test tcp_test disk_test bench_csw bench_isolate bench_persist bench_overhead bench_sigpipe_test bench_bugfix_test bench_phase13_test bench_procfs_test bench_poll_test ps bench_fs_test bench_net_test bench_stress_test bench_fuzz_test bench_sched_test bench_app_isolation_test test_posix_fs test_epoll bench_thread_test stress_thread test_posix_core test_futex test_net_dispatch test_shm_dispatch diag_shm_stress fake_interp hello_dyn test_pt_interp auxv_interp hello_auxv ld-musl-x86_64.so.1 hello_musl test_dynlink test_signal_musl test_env_musl test_fileio_musl test_malloc_musl test_fork_musl test_pipe_musl test_stat_musl test_pthread_musl test_ai_guard test_net_e2e test_integration test_sustained test_stress_mt bench_ai_throughput bench_csw_1ms bench_soak_5min bench_hugepage_tlb bench_ai_scale test_npu_direct test_ai_latency bench_2026_frontier test_agent_chaos test_advanced_chaos test_model_load test_health_check test_agent_cluster test_torture test_ai_exploit_v2 test_max_saturation test_vmm_soak test_security_check
+include ../user/programs.mk
+USER_PROGRAMS := $(PROGRAMS)
 
 # Each build flavor owns its generated source. Never rewrite tracked source
 # files or share an append-in-place output between concurrent kernel builds.
-$(BUILD_DIR)/generated/embedded_bins.c: tools/embed_binaries.py $(addprefix $(USER_BIN_DIR)/,$(USER_PROGRAMS))
+$(BUILD_DIR)/generated/embedded_bins.c: tools/embed_binaries.py
 	@echo "  GEN     $@"
 	@python3 tools/embed_binaries.py --output "$@" --bin-dir "$(USER_BIN_DIR)" $(USER_PROGRAMS)
 
@@ -670,7 +672,7 @@ $(OBJ_DIR)/init/embedded_bins.o: $(BUILD_DIR)/generated/embedded_bins.c | $(OBJ_
 # Allow bench mode to be controlled from kernel build: make BENCH_MODE=1
 # This propagates BENCH_MODE to user/Makefile which sets -DHEADLESS_BENCH_SUITE=1
 # Also suppresses VOS3_DEBUG logging to avoid serial console bottleneck (Day 20 fix)
-ifdef BENCH_MODE
+ifeq ($(BENCH_MODE),1)
 _USER_BENCH := BENCH_MODE=$(BENCH_MODE)
 CFLAGS += -DVOS3_LOG_MIN_LEVEL=1
 CFLAGS += -DVOS3_SERIAL_MIN_LEVEL=1
@@ -683,12 +685,13 @@ endif
 
 # Ensure user binaries are built first — single stamp target prevents
 # parallel make from invoking sub-make 100+ times concurrently.
-$(USER_BIN_DIR)/.stamp: $(wildcard ../user/src/*.c ../user/Makefile)
-	@echo "Building user programs..."
-	@$(MAKE) -C ../user $(_USER_BENCH)
-	@touch $@
+.PHONY: FORCE_USER_BUILD
+FORCE_USER_BUILD:
+$(USER_BIN_DIR)/.stamp: FORCE_USER_BUILD
+	@$(MAKE) -C ../user BUILD_DIR="../kernel/$(USER_BUILD_DIR)" $(_USER_BENCH)
+	@python3 tools/build_config.py "$@" VOS_EMBED_ $(addprefix $(USER_BIN_DIR)/,$(USER_PROGRAMS))
 
-$(addprefix $(USER_BIN_DIR)/,$(USER_PROGRAMS)): $(USER_BIN_DIR)/.stamp
+$(BUILD_DIR)/generated/embedded_bins.c: $(USER_BIN_DIR)/.stamp ../user/programs.mk
 
 # ============================================================================
 # ISO IMAGE
@@ -713,11 +716,31 @@ $(addprefix $(USER_BIN_DIR)/,$(USER_PROGRAMS)): $(USER_BIN_DIR)/.stamp
 ISO           := $(BUILD_DIR)/vos3.iso
 INSTALLER_ISO ?= ../dist/vos5.iso
 
+# Packaging inputs are distinct from the kernel: bootloader/config changes must
+# refresh an existing image even when the kernel's bytes stay the same.
+LIMINE_BUILD_DIR ?= build/limine
+export LIMINE_BUILD_DIR
+ISO_BOOT_INPUTS := $(addprefix $(LIMINE_BUILD_DIR)/bin/,limine limine-bios.sys limine-bios-cd.bin limine-uefi-cd.bin BOOTX64.EFI BOOTIA32.EFI)
+export VOS_ISO_LIMINE_BUILD_DIR := $(LIMINE_BUILD_DIR)
+export VOS_ISO_XORRISO := $(shell xorriso -version 2>/dev/null | head -n 1)
+.PHONY: FORCE_ISO_CONFIG
+FORCE_ISO_CONFIG:
+$(BUILD_DIR)/iso-config.json: FORCE_ISO_CONFIG | $(BUILD_DIR)
+	@python3 tools/build_config.py "$@" VOS_ISO_ ../infra/build_iso.sh $(ISO_BOOT_INPUTS)
+
+
 # Primary `make iso` — produces the deployment installer ISO via the
 # infra/build_iso.sh wrapper. Output: dist/vos3_installer.iso.
 iso: $(INSTALLER_ISO)
 
-$(INSTALLER_ISO): $(BUILD_DIR)/$(KERNEL)
+# A shared installer path may previously contain another build flavor. Its
+# output-side stamp binds it to this invocation's exact kernel and boot inputs.
+.PHONY: FORCE_INSTALLER_CONFIG
+FORCE_INSTALLER_CONFIG:
+$(INSTALLER_ISO).build-config.json: $(BUILD_DIR)/$(KERNEL) $(BUILD_DIR)/iso-config.json FORCE_INSTALLER_CONFIG
+	@python3 tools/build_config.py "$@" VOS_ISO_ "$(BUILD_DIR)/$(KERNEL)" "$(BUILD_DIR)/iso-config.json"
+
+$(INSTALLER_ISO): $(INSTALLER_ISO).build-config.json
 	@echo "=== Building vOS installer ISO ==="
 	@KERNEL_ELF="$(CURDIR)/$(BUILD_DIR)/$(KERNEL)" \
 	 OUTPUT_ISO="$(INSTALLER_ISO)" \
@@ -727,7 +750,7 @@ $(INSTALLER_ISO): $(BUILD_DIR)/$(KERNEL)
 
 # In-tree ISO for qemu-iso target — same kernel, different output path,
 # uses the same wrapper script so the build logic stays single-sourced.
-$(ISO): $(BUILD_DIR)/$(KERNEL)
+$(ISO): $(BUILD_DIR)/$(KERNEL) $(BUILD_DIR)/iso-config.json
 	@echo "=== Building in-tree ISO for qemu-iso ==="
 	@KERNEL_ELF="$(CURDIR)/$(BUILD_DIR)/$(KERNEL)" \
 	 OUTPUT_ISO="$(CURDIR)/$(ISO)" \
@@ -1076,6 +1099,8 @@ release-bundle: $(INSTALLER_ISO)
 # compiler flags (which may contain quotes/spaces) inside shell command text.
 export VOS_CONFIG_CC := $(CC)
 export VOS_CONFIG_LD := $(LD)
+export VOS_CONFIG_CC_VERSION := $(shell $(CC) --version | head -n 1)
+export VOS_CONFIG_LD_VERSION := $(shell $(LD) --version | head -n 1)
 export VOS_CONFIG_CFLAGS := $(CFLAGS)
 export VOS_CONFIG_LDFLAGS := $(LDFLAGS)
 export VOS_CONFIG_EPOCH := $(SOURCE_DATE_EPOCH)

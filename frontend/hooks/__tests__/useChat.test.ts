@@ -30,7 +30,8 @@ describe('useChat', () => {
 
   it('sendMessage adds user message and assistant reply', async () => {
     vi.spyOn(global, 'fetch')
-      .mockRejectedValueOnce(new Error('models unavailable')) // loadModels
+      .mockRejectedValueOnce(new Error('models unavailable'))
+      .mockRejectedValueOnce(new Error('catalog unavailable')) // loadModels
       .mockRejectedValueOnce(new Error('VOS unavailable'))    // /api/vos/process
       .mockResolvedValueOnce({
         ok: true,
@@ -53,6 +54,7 @@ describe('useChat', () => {
   it('sendMessage sets error string on HTTP failure', async () => {
     vi.spyOn(global, 'fetch')
       .mockRejectedValueOnce(new Error('models unavailable'))
+      .mockRejectedValueOnce(new Error('catalog unavailable'))
       .mockRejectedValueOnce(new Error('VOS unavailable'))    // /api/vos/process
       .mockResolvedValueOnce({ ok: false, status: 500 } as Response);
 
@@ -71,6 +73,7 @@ describe('useChat', () => {
   it('sendMessage sets error on network failure', async () => {
     vi.spyOn(global, 'fetch')
       .mockRejectedValueOnce(new Error('models unavailable'))
+      .mockRejectedValueOnce(new Error('catalog unavailable'))
       .mockRejectedValueOnce(new Error('VOS unavailable'))    // /api/vos/process
       .mockRejectedValueOnce(new Error('Connection refused'));
 
@@ -86,6 +89,7 @@ describe('useChat', () => {
   it('clearHistory empties messages and clears error', async () => {
     vi.spyOn(global, 'fetch')
       .mockRejectedValueOnce(new Error('models unavailable'))
+      .mockRejectedValueOnce(new Error('catalog unavailable'))
       .mockRejectedValueOnce(new Error('VOS unavailable'))    // /api/vos/process
       .mockResolvedValueOnce({
         ok: true,
@@ -130,6 +134,7 @@ describe('useChat', () => {
   it('sendMessage messages have unique ids', async () => {
     vi.spyOn(global, 'fetch')
       .mockRejectedValueOnce(new Error('models unavailable'))
+      .mockRejectedValueOnce(new Error('catalog unavailable'))
       .mockRejectedValueOnce(new Error('VOS unavailable'))    // /api/vos/process
       .mockResolvedValueOnce({
         ok: true,

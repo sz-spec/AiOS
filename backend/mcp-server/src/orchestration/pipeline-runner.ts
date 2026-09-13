@@ -297,7 +297,7 @@ async function main() {
     console.log(`\n✅ Stream Complete: ${id} -> ${decision.modelId}`);
   });
 
-  runner.on('finalize', (result) => {
+  runner.on('finalize', (_result) => {
     console.log(`\n🎉 Project Finalized!`);
   });
 

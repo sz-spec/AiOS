@@ -1,4 +1,5 @@
 """Record effective build inputs without touching an unchanged stamp."""
+import hashlib
 import json
 import os
 import sys
@@ -7,7 +8,10 @@ from pathlib import Path
 
 path = Path(sys.argv[1])
 inputs = {key: value for key, value in os.environ.items()
-          if key.startswith('VOS_CONFIG_')}
+          if key.startswith(sys.argv[2] if len(sys.argv) > 2 else 'VOS_CONFIG_')}
+if len(sys.argv) > 3:
+    inputs['files'] = {name: hashlib.sha256(Path(name).read_bytes()).hexdigest()
+                       for name in sys.argv[3:]}
 content = json.dumps(inputs, sort_keys=True, indent=2) + '\n'
 if not path.exists() or path.read_text() != content:
     path.parent.mkdir(parents=True, exist_ok=True)

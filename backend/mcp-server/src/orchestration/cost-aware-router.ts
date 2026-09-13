@@ -9,7 +9,7 @@ import { z } from "zod";
 
 export interface ModelConfig {
   id: string;
-  provider: "openai" | "anthropic" | "google" | "local";
+  provider: "openai" | "anthropic" | "google" | "local" | "mistral";
   model: string;
   costPer1MInput: number;
   costPer1MOutput: number;
@@ -481,7 +481,7 @@ export const costAwareRouter = new CostAwareRouter();
 export const RoutingDecisionSchema = z.object({
   model: z.object({
     id: z.string(),
-    provider: z.enum(["openai", "anthropic", "google", "local"]),
+    provider: z.enum(["openai", "anthropic", "google", "local", "mistral"]),
     model: z.string(),
     costPer1MInput: z.number(),
     costPer1MOutput: z.number(),

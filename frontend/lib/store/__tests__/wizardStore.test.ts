@@ -28,10 +28,13 @@ describe('useWizardStore', () => {
     expect(useWizardStore.getState().currentStep).toBe(2);
   });
 
-  it('nextStep clamps at max step 4', () => {
-    useWizardStore.setState({ currentStep: 4 });
+  it('advances from Review to Deploy and clamps at final step 6', () => {
+    // app/create renders Review at 5 and Deploy at 6.
+    useWizardStore.setState({ currentStep: 5 });
     useWizardStore.getState().nextStep();
-    expect(useWizardStore.getState().currentStep).toBe(4);
+    expect(useWizardStore.getState().currentStep).toBe(6);
+    useWizardStore.getState().nextStep();
+    expect(useWizardStore.getState().currentStep).toBe(6);
   });
 
   it('prevStep decrements currentStep', () => {

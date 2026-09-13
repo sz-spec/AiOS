@@ -11,7 +11,7 @@
  */
 
 import express, { Request, Response, NextFunction } from 'express';
-import crypto from 'crypto';
+import { requireWebhookSecret, verifyGitHubSignature } from './webhook_auth';
 import { Octokit } from '@octokit/rest';
 import Anthropic from '@anthropic-ai/sdk';
 import Queue from 'bull';
@@ -26,7 +26,7 @@ interface Config {
   githubWebhookSecret: string;
   anthropicApiKey: string;
   ollamaUrl?: string;
-  redisUrl?: string;
+  redisUrl: string;
 }
 
 const config: Config = {
@@ -41,6 +41,8 @@ const config: Config = {
 // ============================================
 // Services
 // ============================================
+
+requireWebhookSecret(config.githubWebhookSecret);
 
 const octokit = new Octokit({ auth: config.githubToken });
 const anthropic = new Anthropic({ apiKey: config.anthropicApiKey });
@@ -84,24 +86,6 @@ interface ReviewFinding {
 // ============================================
 // GitHub Signature Verification
 // ============================================
-
-function verifyGitHubSignature(
-  payload: string,
-  signature: string | undefined,
-  secret: string
-): boolean {
-  if (!signature) return false;
-  
-  const expected = 'sha256=' + crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('hex');
-  
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expected)
-  );
-}
 
 // ============================================
 // AI Code Review
@@ -405,14 +389,14 @@ app.post('/webhooks/github', async (req: Request, res: Response) => {
   const deliveryId = req.headers['x-github-delivery'] as string;
 
   // Verify signature
-  if (config.githubWebhookSecret) {
-    const payload = req.body.toString();
-    if (!verifyGitHubSignature(payload, signature, config.githubWebhookSecret)) {
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
+  if (!Buffer.isBuffer(req.body) ||
+      !verifyGitHubSignature(req.body, signature, config.githubWebhookSecret)) {
+    return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const body = JSON.parse(req.body.toString());
+  let body;
+  try { body = JSON.parse(req.body.toString('utf8')); }
+  catch { return res.status(400).json({ error: 'Invalid JSON' }); }
 
   // Handle ping
   if (event === 'ping') {

@@ -1,0 +1,117 @@
+{
+  "reviewed": "2026-09-13",
+  "registry_snapshot": "latest-registry-versions.json",
+  "meaning": "latest_observed is the captured registry result, not an evergreen guarantee",
+  "version_exceptions": [
+    {
+      "ecosystem": "python",
+      "package": "aiofiles",
+      "latest_observed": "25.1.0",
+      "requested": "aiofiles>=24.1,<24.2",
+      "resolved": "24.1.0",
+      "reason": "crewai 1.15.21 requires aiofiles~=24.1.0",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "python",
+      "package": "chromadb",
+      "latest_observed": "1.5.9",
+      "requested": "chromadb>=1.1,<1.2.dev0",
+      "resolved": "1.1.1",
+      "reason": "crewai 1.15.21 requires chromadb~=1.1.0",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "python",
+      "package": "openai",
+      "latest_observed": "3.13.0",
+      "requested": "transitive dependency; no direct catalog declaration",
+      "resolved": "2.54.0",
+      "reason": "crewai 1.15.21 requires openai>=2.30.0,<3",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "python",
+      "package": "pydantic",
+      "latest_observed": "2.13.5",
+      "requested": "pydantic>=2.12,<2.13",
+      "resolved": "2.12.5",
+      "reason": "crewai 1.15.21 requires pydantic>=2.11.9,<2.13",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "python",
+      "package": "pydantic-core",
+      "latest_observed": "2.49.0",
+      "requested": "transitive dependency; no direct catalog declaration",
+      "resolved": "2.41.5",
+      "reason": "pydantic 2.12.5 requires pydantic-core==2.41.5",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "python",
+      "package": "tiktoken",
+      "latest_observed": "0.14.0",
+      "requested": "tiktoken>=0.12,<0.13",
+      "resolved": "0.12.0",
+      "reason": "crewai embeddings extra requires tiktoken>=0.8.0,<0.13",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "python",
+      "package": "websockets",
+      "latest_observed": "17.1",
+      "requested": "websockets>=16,<17",
+      "resolved": "16.1.1",
+      "reason": "google-genai 2.23.0 requires websockets>=13.0.0,<17.0",
+      "resolution": "latest compatible resolution; upstream requirement must change before lifting exception"
+    },
+    {
+      "ecosystem": "npm/frontend",
+      "package": "eslint",
+      "latest_observed": "10.10.0",
+      "requested": "9.39.5",
+      "resolved": "9.39.5",
+      "reason": "eslint-plugin-import 2.32.0 and eslint-plugin-jsx-a11y 6.10.2 allow ESLint through major 9; eslint-plugin-react 7.37.5 allows through ^9.7",
+      "resolution": "supported peer range retained; no legacy-peer-deps bypass"
+    },
+    {
+      "ecosystem": "npm/frontend",
+      "package": "typescript",
+      "latest_observed": "7.0.2",
+      "requested": "6.0.3",
+      "resolved": "6.0.3",
+      "reason": "typescript-eslint 8.70.0 requires TypeScript >=4.8.4 <6.1.0",
+      "resolution": "supported peer range retained; no legacy-peer-deps bypass"
+    }
+  ],
+  "platform_exceptions": [
+    {
+      "package": "z3-solver",
+      "resolved": "5.1.0.0",
+      "platform": "macOS ARM64",
+      "wheel_tag": "py3-none-macosx_13_3_arm64",
+      "reason": "uv 0.11.7 pip check and packaging 24.2 sys_tags reject this nonzero-minor macOS tag",
+      "runtime_evidence": "Import reports5.1.0; integration agent basic unsatisfiable solver query passed",
+      "boundary": "Successful runtime smoke does not prove wheel installation portability or real kernel safety; no retagging or checker bypass claimed"
+    }
+  ],
+  "lock_coherence": {
+    "scope": "shared package exact-version equality against full Linux lock",
+    "counts": {
+      "backend/requirements-full.lock": 278,
+      "requirements.lock": 273,
+      "backend/requirements.lock": 178,
+      "requirements_win.lock": 254,
+      "dependencies/requirements-macos-arm64.lock": 253
+    },
+    "mismatches": [],
+    "source_fingerprint_check": "passed",
+    "not_proven": [
+      "wheel compatibility on each target",
+      "absence of vulnerabilities",
+      "application behavioral compatibility"
+    ],
+    "reviewed": "2026-09-14"
+  }
+}

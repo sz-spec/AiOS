@@ -92,7 +92,7 @@ def main():
     text = log.read_text(errors='replace')
     fault = any(s in text for s in ('PANIC', 'SIGSEGV', 'uaccess address-space mismatch'))
     complete = 'VOS3 Setup Complete.' in text
-    online = re.findall(r'Initialization complete:\s*(\d+) CPUs online', text)
+    online = re.findall(r'(?:Initialization complete:|SMP:)\s*(\d+) CPUs online', text)
     online_cpus = int(online[-1]) if online else None
     cpu_coverage = args.smp == 1 or online_cpus == args.smp
     result = dict(scope='Ephemeral diskless VM setup; not persistent installation or physical hardware',

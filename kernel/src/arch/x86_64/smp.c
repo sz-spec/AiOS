@@ -48,6 +48,17 @@ static uint32_t g_smp_cpu_count = 0;
 /** @brief Number of online CPUs */
 static volatile uint32_t g_smp_online_count = 0;
 
+/* Per-CPU handshake remains valid after shared low boot parameters are reused. */
+enum { AP_STARTING, AP_PREPARED, AP_RELEASED, AP_FAILED, AP_CANCELED };
+static uint32_t g_ap_start_state[VOS3_SMP_MAX_CPUS];
+
+static __attribute__((noreturn)) void park_ap(void)
+{
+    __asm__ volatile ("cli" ::: "memory");
+    for (;;) __asm__ volatile ("hlt");
+}
+
+
 /** @brief BSP APIC ID */
 static uint32_t g_bsp_apic_id = 0;
 
@@ -377,6 +388,7 @@ static int wake_ap(uint32_t cpu_id)
     g_boot_params->cpu_id = cpu_id;
     g_boot_params->apic_id = cpu->apic_id;
     g_boot_params->ready = 0;
+    __atomic_store_n(&g_ap_start_state[cpu_id], AP_STARTING, __ATOMIC_RELEASE);
 
     /* Memory barrier to ensure parameters are visible */
     __asm__ volatile ("mfence" ::: "memory");
@@ -394,29 +406,33 @@ static int wake_ap(uint32_t cpu_id)
     delay_us(200);
 
     /* Check if AP started */
-    if (g_boot_params->ready == 0) {
+    if (__atomic_load_n(&g_ap_start_state[cpu_id], __ATOMIC_ACQUIRE) == AP_STARTING) {
         /* Send second SIPI */
         vos3_lapic_send_sipi(cpu->apic_id, 0x01);
 
         /* Wait for AP to start (up to 200ms) */
         for (uint32_t timeout = 0; timeout < VOS3_SMP_STARTUP_TIMEOUT_MS; timeout++) {
-            if (g_boot_params->ready != 0) {
+            if (__atomic_load_n(&g_ap_start_state[cpu_id], __ATOMIC_ACQUIRE) != AP_STARTING) {
                 break;
             }
             delay_ms(1);
         }
     }
 
-    if (g_boot_params->ready != 0) {
+    uint32_t state = __atomic_load_n(&g_ap_start_state[cpu_id], __ATOMIC_ACQUIRE);
+    if (state == AP_PREPARED) {
         cpu->flags |= VOS3_SMP_CPU_ONLINE;
         cpu->started = 1;
         g_smp_online_count++;
+        __atomic_store_n(&g_ap_start_state[cpu_id], AP_RELEASED, __ATOMIC_RELEASE);
         VOS3_INFO("[SMP] CPU %u Online (APIC ID: %u)", cpu_id, cpu->apic_id);
         return 0;
     } else {
         VOS3_WARN("[SMP] CPU %u did not respond (APIC ID: %u)", cpu_id, cpu->apic_id);
-        /* Remove from count - this CPU doesn't exist */
-        cpu->flags &= ~(VOS3_SMP_CPU_PRESENT | VOS3_SMP_CPU_ENABLED);
+        /* Firmware presence is independent of startup success. Cancel late
+         * completion so a timed-out AP cannot enter the scheduler uncounted. */
+        __atomic_exchange_n(&g_ap_start_state[cpu_id], AP_CANCELED, __ATOMIC_ACQ_REL);
+        cpu->flags &= ~VOS3_SMP_CPU_ONLINE;
         return -1;
     }
 }
@@ -456,12 +472,21 @@ void vos3_ap_entry(uint32_t cpu_id, uint32_t apic_id)
          * IST1=Double Fault, IST2=NMI, IST3=Machine Check, IST4=Debug
          * Each stack: 4 pages (16 KB) = VOS3_IST_STACK_SIZE */
         for (uint8_t ist = 1U; ist <= 4U; ist++) {
-            uint64_t ist_phys = vos3_pmm_alloc_pages(4, VOS3_PMM_FLAG_ZERO);
+            uint64_t ist_phys;
+#if defined(VOS3_TEST_AP_IST_FAILURE_CPU)
+            /* Explicit fault-injection build only; absent in normal kernels. */
+            if (cpu_id == VOS3_TEST_AP_IST_FAILURE_CPU && ist == 1U)
+                ist_phys = 0;
+            else
+#endif
+                ist_phys = vos3_pmm_alloc_pages(4, VOS3_PMM_FLAG_ZERO);
             if (ist_phys != 0) {
                 uint64_t ist_top = 0xFFFF800000000000ULL + ist_phys + VOS3_IST_STACK_SIZE;
                 vos3_tss_set_ist((uint16_t)cpu_id, ist, ist_top);
             } else {
-                VOS3_ERROR("[SMP] CPU %u: IST%u alloc failed!", cpu_id, ist);
+                VOS3_ERROR("[SMP] CPU %u: IST%u alloc failed; CPU parked", cpu_id, ist);
+                __atomic_store_n(&g_ap_start_state[cpu_id], AP_FAILED, __ATOMIC_RELEASE);
+                park_ap();
             }
         }
     }
@@ -476,12 +501,6 @@ void vos3_ap_entry(uint32_t cpu_id, uint32_t apic_id)
 
     /* 6. Initialize LAPIC for this AP */
     vos3_lapic_init();
-
-    /* 7. Mark as online in boot params (signals BSP) */
-    g_boot_params->ready = 1;
-
-    /* Memory barrier */
-    __asm__ volatile ("mfence" ::: "memory");
 
     /*
      * 8. VOS3_MODE Identity Inheritance
@@ -500,15 +519,22 @@ void vos3_ap_entry(uint32_t cpu_id, uint32_t apic_id)
     int result = vos3_sched_init_ap(cpu_id);
     if (result != 0) {
         VOS3_ERROR("[SMP] CPU %u scheduler init failed", cpu_id);
-        /* Fall back to simple halt loop */
-        vos3_int_enable();
-        for (;;) {
-            __asm__ volatile ("hlt");
-        }
+        __atomic_store_n(&g_ap_start_state[cpu_id], AP_FAILED, __ATOMIC_RELEASE);
+        park_ap();
     }
 
-    /* 10. Enter scheduler loop (runs tasks on this CPU) */
-    VOS3_INFO("[SMP] CPU %u entering scheduler — fully hardened", cpu_id);
+    /* Publish readiness only after every prerequisite succeeds. A timeout
+     * changes STARTING to CANCELED; never overwrite it with late readiness. */
+    uint32_t expected = AP_STARTING;
+    if (!__atomic_compare_exchange_n(&g_ap_start_state[cpu_id], &expected,
+                                    AP_PREPARED, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        park_ap();
+    while (__atomic_load_n(&g_ap_start_state[cpu_id], __ATOMIC_ACQUIRE) == AP_PREPARED)
+        __asm__ volatile ("pause");
+    if (__atomic_load_n(&g_ap_start_state[cpu_id], __ATOMIC_ACQUIRE) != AP_RELEASED)
+        park_ap();
+
+    VOS3_INFO("[SMP] CPU %u entering scheduler after BSP release", cpu_id);
     vos3_sched_loop_ap();
 
     /* Never reached */
@@ -573,14 +599,8 @@ int vos3_smp_init(void)
         }
     }
 
-    /* Update actual CPU count to only include present CPUs */
-    uint32_t present = 1;  /* BSP */
-    for (uint32_t i = 1; i < g_smp_cpu_count; i++) {
-        if ((g_smp_cpus[i].flags & VOS3_SMP_CPU_PRESENT) != 0) {
-            present++;
-        }
-    }
-    g_smp_cpu_count = present;
+    /* Preserve firmware topology indices. Online count tracks usable CPUs;
+     * compressing the table here aliases IDs after a failed startup. */
 
     g_smp_initialized = 1;
 

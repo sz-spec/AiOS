@@ -13,15 +13,14 @@ struct image {
     int pitch;
     size_t img_width; // x_size = scaled size, img_width = bitmap size
     size_t img_height;
-    size_t x_displacement;
-    size_t y_displacement;
+    int64_t x_displacement;
+    int64_t y_displacement;
     uint32_t back_colour;
+    char isQoi;
 };
 
 enum {
-    IMAGE_TILED,
-    IMAGE_CENTERED,
-    IMAGE_STRETCHED
+    IMAGE_TILED, IMAGE_CENTERED, IMAGE_STRETCHED
 };
 
 void image_make_centered(struct image *image, int frame_x_size, int frame_y_size, uint32_t back_colour);

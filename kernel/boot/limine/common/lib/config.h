@@ -9,7 +9,7 @@ extern bool config_ready;
 extern bool bad_config;
 
 struct menu_entry {
-    char name[64];
+    char *name;
     char *comment;
     struct menu_entry *parent;
     struct menu_entry *sub;
@@ -23,12 +23,15 @@ struct conf_tuple {
     char *value2;
 };
 
-extern bool config_format_old;
 extern struct menu_entry *menu_tree;
 
 int init_config_disk(struct volume *part);
 bool init_config_smbios(void);
 int init_config(size_t config_size);
+
+#if defined (UEFI)
+const char *config_get_raw(size_t *size_out);
+#endif
 
 char *config_get_value(const char *config, size_t index, const char *key);
 struct conf_tuple config_get_tuple(const char *config, size_t index,

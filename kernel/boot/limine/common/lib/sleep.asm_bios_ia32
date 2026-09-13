@@ -2,6 +2,8 @@ section .realmode
 
 int_08_ticks_counter: dd 0
 int_08_callback:      dd 0
+pit_ticks:            dd 0
+tsc_deadline:         dq 0
 
 int_08_isr:
     bits 16
@@ -20,8 +22,17 @@ _pit_sleep_and_quit_on_keypress:
     mov dword [int_08_callback], edx
     mov dword [0x08*4], int_08_isr
 
-    ; pit_ticks in edx
-    mov edx, dword [esp+4]
+    mov eax, dword [esp+4]
+    mov dword [pit_ticks], eax
+
+    mov eax, dword [esp+12]
+    mov dword [tsc_deadline], eax
+    mov eax, dword [esp+16]
+    mov dword [tsc_deadline+4], eax
+
+    ; whether to also break out on pending PS/2 aux (mouse) data
+    mov eax, dword [esp+8]
+    mov byte [.aux_poll], al
 
     mov dword [int_08_ticks_counter], 0
 
@@ -67,18 +78,39 @@ _pit_sleep_and_quit_on_keypress:
     mov byte [.mods], 0
     mov byte [.ascii], 0
     mov byte [.scan], 0
+    mov byte [.aux_hit], 0
 
   .loop:
-    cmp dword [int_08_ticks_counter], edx
-    je .done
+    mov eax, dword [int_08_ticks_counter]
+    cmp eax, dword [pit_ticks]
+    jae .done
 
-    push ecx
-    push edx
+    cmp dword [tsc_deadline+4], 0
+    jne .check_tsc
+    cmp dword [tsc_deadline], 0
+    je .check_aux
+  .check_tsc:
+    rdtsc
+    cmp edx, dword [tsc_deadline+4]
+    ja .done
+    jb .check_aux
+    cmp eax, dword [tsc_deadline]
+    jae .done
+
+  .check_aux:
+    cmp byte [.aux_poll], 0
+    je .no_aux
+    in al, 0x64
+    and al, 0x21
+    cmp al, 0x21
+    jne .no_aux
+    mov byte [.aux_hit], 1
+    jmp .done
+  .no_aux:
+
     mov ah, 0x01
     xor al, al
     int 0x16
-    pop edx
-    pop ecx
 
     jz .loop
 
@@ -101,10 +133,10 @@ _pit_sleep_and_quit_on_keypress:
     cli
 
     ; Restore GDT
-    o32 lgdt [ss:.gdt]
+    o32 lgdt [.gdt]
 
     ; Restore IDT
-    o32 lidt [ss:.idt]
+    o32 lidt [.idt]
 
     ; Jump back to pmode
     mov ebx, cr0
@@ -130,6 +162,9 @@ _pit_sleep_and_quit_on_keypress:
     mov edx, dword [int_08_callback]
     mov dword [0x08*4], edx
 
+    cmp byte [.aux_hit], 0
+    jne .aux_break
+
     cmp byte [.scan], 0
     je .fail
 
@@ -141,6 +176,11 @@ _pit_sleep_and_quit_on_keypress:
 
     ret
 
+  .aux_break:
+    ; XXX: keep in sync with lib/getchar.c
+    mov eax, -100
+    ret
+
   .fail:
     xor eax, eax
     ret
@@ -150,8 +190,8 @@ _pit_sleep_and_quit_on_keypress:
   .rm_idt:   dw 0x3ff
              dd 0
 
-  .mods:  dd 0
-  .ascii: dd 0
-  .scan:  dd 0
-
-section .note.GNU-stack noalloc noexec nowrite progbits
+  .mods:     dd 0
+  .ascii:    dd 0
+  .scan:     dd 0
+  .aux_poll: db 0
+  .aux_hit:  db 0

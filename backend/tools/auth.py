@@ -17,15 +17,18 @@ from typing import Optional, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
 
-from passlib.context import CryptContext
+import bcrypt
 import jwt
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 
 # =============================================================================
 # Configuration
 # =============================================================================
 
 JWT_SECRET = os.getenv("JWT_SECRET")
+if os.getenv("ENVIRONMENT", "development").strip().lower() in {"production", "prod"}:
+    if not JWT_SECRET or not JWT_SECRET.strip():
+        raise RuntimeError("JWT_SECRET is required in production; configure a shared signing key for all workers")
 if not JWT_SECRET:
     import secrets
 
@@ -40,17 +43,44 @@ REFRESH_TOKEN_EXPIRE_DAYS = 7
 # Password Hashing
 # =============================================================================
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+BCRYPT_MAX_PASSWORD_BYTES = 72
+
+
+def _password_bytes(password: str) -> bytes:
+    """Apply bcrypt's byte limit explicitly; never silently truncate input."""
+    if not isinstance(password, str):
+        raise ValueError("Password must be a string")
+    try:
+        encoded = password.encode("utf-8")
+    except UnicodeEncodeError:
+        raise ValueError("Password must be valid UTF-8") from None
+    if len(encoded) > BCRYPT_MAX_PASSWORD_BYTES:
+        raise ValueError("Password must be at most 72 UTF-8 bytes")
+    # Passlib rejected NUL; keep that input boundary during the migration.
+    if b"\x00" in encoded:
+        raise ValueError("Password must not contain NUL characters")
+    return encoded
 
 
 def hash_password(password: str) -> str:
-    """Hash a password."""
-    return pwd_context.hash(password)
+    """Hash valid UTF-8 input with bcrypt cost 12; reject more than 72 bytes."""
+    return bcrypt.hashpw(_password_bytes(password), bcrypt.gensalt(rounds=12)).decode("ascii")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Check legacy bcrypt hashes; invalid input/hash is an authentication failure."""
+    try:
+        encoded = _password_bytes(plain_password)
+        if not isinstance(hashed_password, str):
+            return False
+        return bcrypt.checkpw(encoded, hashed_password.encode("ascii"))
+    except (ValueError, TypeError):
+        return False
+
+
+def _validate_password_field(value: str) -> str:
+    _password_bytes(value)
+    return value
 
 
 # =============================================================================
@@ -71,12 +101,16 @@ class UserCreate(BaseModel):
     password: str
     name: Optional[str] = None
 
+    _validate_password = field_validator("password")(_validate_password_field)
+
 
 class UserLogin(BaseModel):
     """User login model."""
 
     email: EmailStr
     password: str
+
+    _validate_password = field_validator("password")(_validate_password_field)
 
 
 class TokenData(BaseModel):
@@ -343,7 +377,11 @@ class UserStore:
         if not user:
             return False
 
-        user.hashed_password = hash_password(new_password)
+        try:
+            replacement = hash_password(new_password)
+        except ValueError:
+            return False
+        user.hashed_password = replacement
         return True
 
 

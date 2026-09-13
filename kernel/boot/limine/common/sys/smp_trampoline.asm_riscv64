@@ -16,6 +16,10 @@ smp_trampoline_start:
 #define smp_tpl_info_struct     16
 #define smp_tpl_hhdm_offset     24
 
+        // The code this hart is about to fetch was written by another one, and
+        // `fence.i` orders only the fetches of the hart that executes it.
+        fence.i
+
         ld      a0, smp_tpl_info_struct(a1)
         ld      t1, smp_tpl_hhdm_offset(a1)
 
@@ -24,10 +28,15 @@ smp_trampoline_start:
         add     t0, t1, t0
         csrw    stvec, t0
         ld      t0, smp_tpl_satp(a1)
-        csrw    satp, t0
+        // Hence before the switch: a fence after it would never execute.
         sfence.vma
+        csrw    satp, t0
         unimp
+.align 4
 0:
+        // The manual asks for one after every `satp` write too.
+        sfence.vma
+
         // Relocate the smp_info and passed_info pointers to the higher half.
         add     a0, t1, a0
         add     a1, t1, a1
@@ -65,8 +74,11 @@ smp_trampoline_start:
         mv      t5, zero
         mv      t6, zero
         mv      tp, zero
+        mv      gp, zero
         mv      ra, zero
 
+        li      t0, (2 << 32)
+        csrw    sstatus, t0
         csrw    sie, zero
         csrw    stvec, zero
 
@@ -79,6 +91,7 @@ smp_trampoline_start:
         // Load sp from reserved field of info struct
         ld      sp, 16(a0)
 
-        jr      t0
+        // The entry point may have been written after the fence above.
+        fence.i
 
-.section .note.GNU-stack,"",%progbits
+        jr      t0

@@ -6,9 +6,18 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Tests placeholder\" && exit 0"
+    "test": "npm run build && node --test tests/client.test.cjs"
   },
-  "files": ["dist"],
-  "keywords": ["vos3", "sdk", "app-platform"],
-  "license": "MIT"
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "vos3",
+    "sdk",
+    "app-platform"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
 }

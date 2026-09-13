@@ -12,12 +12,15 @@
 #include <lib/config.h>
 #include <lib/print.h>
 #include <lib/uri.h>
+#include <lib/tpm.h>
 #include <lib/fb.h>
 #include <lib/term.h>
 #include <lib/elsewhere.h>
 #include <sys/pic.h>
 #include <sys/cpu.h>
 #include <sys/idt.h>
+#include <sys/iommu.h>
+#include <sys/lapic.h>
 #include <fs/file.h>
 #include <mm/vmm.h>
 #include <mm/pmm.h>
@@ -33,23 +36,32 @@ static size_t get_multiboot1_info_size(
     size_t modules_count, size_t modules_cmdlines_size,
     uint32_t section_entry_size, uint32_t section_num
 ) {
-    return ALIGN_UP(sizeof(struct multiboot1_info), 16) +                   // base structure
-           ALIGN_UP(strlen(cmdline) + 1, 16) +                              // cmdline
-           ALIGN_UP(sizeof(LIMINE_BRAND), 16) +                             // bootloader brand
-           ALIGN_UP(sizeof(section_entry_size * section_num), 16) +         // ELF info
-           ALIGN_UP(sizeof(struct multiboot1_module) * modules_count, 16) + // modules count
-           ALIGN_UP(modules_cmdlines_size, 16) +                            // modules command lines
-           ALIGN_UP(sizeof(struct multiboot1_mmap_entry) * MEMMAP_MAX, 16);        // memory map
+#define OVERFLOW panic(true, "multiboot1: info size overflow")
+    return ALIGN_UP(sizeof(struct multiboot1_info), 16, OVERFLOW) +
+           ALIGN_UP(strlen(cmdline) + 1, 16, OVERFLOW) +
+           ALIGN_UP(sizeof(LIMINE_BRAND), 16, OVERFLOW) +
+           ALIGN_UP(CHECKED_MUL(section_entry_size, section_num, OVERFLOW), 16, OVERFLOW) +
+           ALIGN_UP(CHECKED_MUL(sizeof(struct multiboot1_module), modules_count, OVERFLOW), 16, OVERFLOW) +
+           ALIGN_UP(modules_cmdlines_size, 16, OVERFLOW) +
+           ALIGN_UP(sizeof(struct multiboot1_mmap_entry) * MEMMAP_MAX, 16, OVERFLOW);
+#undef OVERFLOW
 }
 
 static void *mb1_info_alloc(void **mb1_info_raw, size_t size) {
     void *ret = *mb1_info_raw;
-    *mb1_info_raw += ALIGN_UP(size, 16);
+    *mb1_info_raw += ALIGN_UP(size, 16, panic(true, "multiboot: info alloc overflow"));
     return ret;
 }
 
 noreturn void multiboot1_load(char *config, char *cmdline) {
     struct file_handle *kernel_file;
+
+#if defined (UEFI)
+    if (cmdline != NULL) {
+        tpm_measure(TPM_PCR_BOOT_AUTH, TPM_EV_IPL,
+                    cmdline, strlen(cmdline), "cmdline: ", cmdline);
+    }
+#endif
 
     char *kernel_path = config_get_value(config, 0, "PATH");
     if (kernel_path == NULL) {
@@ -59,22 +71,44 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
         panic(true, "multiboot1: Executable path not specified");
     }
 
-    print("multiboot1: Loading executable `%#`...\n", kernel_path);
+    if (!terse) {
+        print("multiboot1: Loading executable `%#`...\n", kernel_path);
+    }
 
-    if ((kernel_file = uri_open(kernel_path)) == NULL)
+    if ((kernel_file = uri_open(kernel_path, MEMMAP_KERNEL_AND_MODULES, false
+#if defined (__i386__)
+        , NULL, NULL
+#endif
+    )) == NULL)
         panic(true, "multiboot1: Failed to open executable with path `%#`. Is the path correct?", kernel_path);
 
-    uint8_t *kernel = freadall(kernel_file, MEMMAP_KERNEL_AND_MODULES);
+    uint8_t *kernel = kernel_file->fd;
 
     size_t kernel_file_size = kernel_file->size;
+
+#if defined (UEFI)
+    tpm_measure_path(TPM_PCR_BOOT_AUTH, TPM_EV_IPL, "path: ", kernel_path);
+    tpm_measure(TPM_PCR_LOADED_IMAGES, TPM_EV_IPL,
+                kernel, kernel_file_size, "path: ", kernel_path);
+#endif
 
     fclose(kernel_file);
 
     struct multiboot1_header header = {0};
     size_t header_offset = 0;
 
-    for (header_offset = 0; header_offset < 8192; header_offset += 4) {
-        uint32_t v = *(uint32_t *)(kernel+header_offset);
+    // Per Multiboot spec, header must be within first 8192 bytes and 4-byte aligned.
+    // Ensure we don't read past end of file when checking magic or copying header.
+    size_t search_limit = 8192;
+    if (kernel_file_size < sizeof(struct multiboot1_header)) {
+        panic(true, "multiboot1: Kernel file too small to contain header");
+    }
+    if (search_limit > kernel_file_size - sizeof(struct multiboot1_header)) {
+        search_limit = kernel_file_size - sizeof(struct multiboot1_header);
+    }
+
+    for (header_offset = 0; header_offset <= search_limit; header_offset += 4) {
+        uint32_t v = *(uint32_t *)(kernel + header_offset);
 
         if (v == MULTIBOOT1_HEADER_MAGIC) {
             memcpy(&header, kernel + header_offset, sizeof(header));
@@ -89,6 +123,11 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
     if (header.magic + header.flags + header.checksum)
         panic(true, "multiboot1: Header checksum is invalid");
 
+    // Bits 0-2 are the defined requirements; the rest of 0-15 must be refused.
+    if (header.flags & 0xfff8) {
+        panic(true, "multiboot1: Header requires unsupported features");
+    }
+
     bool section_hdr_info_valid = false;
     struct elf_section_hdr_info section_hdr_info = {0};
 
@@ -100,27 +139,43 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
         if (header.load_addr > header.header_addr)
             panic(true, "multiboot1: Illegal load address");
 
+        size_t addr_diff = header.header_addr - header.load_addr;
+        if (addr_diff > header_offset)
+            panic(true, "multiboot1: Address tag offset underflow");
+
+        size_t load_src = header_offset - addr_diff;
+
         size_t load_size;
-        if (header.load_end_addr)
+        if (header.load_end_addr) {
+            if (header.load_end_addr < header.load_addr)
+                panic(true, "multiboot1: Load end address less than load address");
             load_size = header.load_end_addr - header.load_addr;
-        else
-            load_size = kernel_file_size;
+        } else {
+            if (load_src > kernel_file_size)
+                panic(true, "multiboot1: Load source exceeds kernel file size");
+            load_size = kernel_file_size - load_src;
+        }
 
         uint32_t bss_size = 0;
         if (header.bss_end_addr) {
-            uintptr_t bss_addr = header.load_addr + load_size;
+            uintptr_t bss_addr = CHECKED_ADD((uintptr_t)header.load_addr, load_size,
+                panic(true, "multiboot1: load_addr + load_size overflow"));
             if (header.bss_end_addr < bss_addr)
                 panic(true, "multiboot1: Illegal bss end address");
 
             bss_size = header.bss_end_addr - bss_addr;
         }
 
-        size_t full_size = load_size + bss_size;
+        if (load_src > kernel_file_size || load_size > kernel_file_size - load_src) {
+            panic(true, "multiboot1: load_src + load_size exceeds kernel file size");
+        }
+
+        size_t full_size = CHECKED_ADD(load_size, bss_size,
+            panic(true, "multiboot1: load_size + bss_size overflow"));
 
         void *elsewhere = ext_mem_alloc(full_size);
 
-        memcpy(elsewhere, kernel + (header_offset
-                - (header.header_addr - header.load_addr)), load_size);
+        memcpy(elsewhere, kernel + load_src, load_size);
 
         entry_point = header.entry_addr;
 
@@ -130,27 +185,46 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
         ranges->target = header.load_addr;
         ranges->length = full_size;
     } else {
-        int bits = elf_bits(kernel);
+        int bits = elf_bits(kernel, kernel_file_size);
 
         switch (bits) {
             case 32:
-                if (!elf32_load_elsewhere(kernel, &entry_point, &ranges))
+                if (!elf32_load_elsewhere(kernel, kernel_file_size, 0xffffffff,
+                                          &entry_point, &ranges))
                     panic(true, "multiboot1: ELF32 load failure");
 
-                section_hdr_info = elf32_section_hdr_info(kernel);
+                section_hdr_info = elf32_section_hdr_info(kernel, kernel_file_size);
                 section_hdr_info_valid = true;
                 break;
             case 64: {
-                if (!elf64_load_elsewhere(kernel, &entry_point, &ranges))
+                if (!elf64_load_elsewhere(kernel, kernel_file_size, 0xffffffff,
+                                          &entry_point, &ranges))
                     panic(true, "multiboot1: ELF64 load failure");
 
-                section_hdr_info = elf64_section_hdr_info(kernel);
+                section_hdr_info = elf64_section_hdr_info(kernel, kernel_file_size);
                 section_hdr_info_valid = true;
                 break;
             }
             default:
                 panic(true, "multiboot1: Invalid ELF file bitness");
         }
+    }
+
+    // multiboot_reloc_stub reads the range fields with 32-bit loads, so a
+    // target or length it cannot hold is truncated rather than refused.
+    if (ranges->target > 0x100000000
+     || ranges->length > 0xffffffff
+     || ranges->length > 0x100000000 - ranges->target) {
+        panic(true, "multiboot1: Executable does not fit under 4GiB");
+    }
+
+    if (!check_usable_memory(ranges->target, ranges->target + ranges->length)) {
+        panic(true, "multiboot1: Executable load address is not usable memory");
+    }
+
+    if (entry_point < ranges->target
+     || entry_point >= ranges->target + ranges->length) {
+        panic(true, "multiboot1: Entry point is outside the executable");
     }
 
     size_t n_modules;
@@ -162,7 +236,7 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
 
         char *module_cmdline = conf_tuple.value2;
         if (!module_cmdline) module_cmdline = "";
-        modules_cmdlines_size += ALIGN_UP(strlen(module_cmdline) + 1, 16);
+        modules_cmdlines_size += ALIGN_UP(strlen(module_cmdline) + 1, 16, panic(true, "multiboot: info size overflow"));
     }
 
     size_t mb1_info_size = get_multiboot1_info_size(
@@ -174,15 +248,19 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
     );
 
     // Realloc elsewhere ranges to include mb1 info, modules, and elf sections
-    struct elsewhere_range *new_ranges = ext_mem_alloc(sizeof(struct elsewhere_range) *
-        (ranges_count
+    uint64_t ranges_max = ranges_count
        + 1 /* mb1 info range */
        + n_modules
-       + (section_hdr_info_valid ? section_hdr_info.num : 0)));
+       + (section_hdr_info_valid ? section_hdr_info.num : 0);
+    struct elsewhere_range *new_ranges = ext_mem_alloc_counted(ranges_max, sizeof(struct elsewhere_range));
 
     memcpy(new_ranges, ranges, sizeof(struct elsewhere_range) * ranges_count);
     pmm_free(ranges, sizeof(struct elsewhere_range) * ranges_count);
     ranges = new_ranges;
+
+    // Reserve the kernel's target so later module/info sources can't be
+    // allocated on top of it.
+    elsewhere_reserve_target(ranges->target, ranges->length);
 
     // GRUB allocates boot info at 0x10000, *except* if the kernel happens
     // to overlap this region, then it gets moved to right after the
@@ -194,8 +272,8 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
     void *mb1_info_raw = ext_mem_alloc(mb1_info_size);
     uint64_t mb1_info_final_loc = 0x10000;
 
-    if (!elsewhere_append(true /* flexible target */,
-            ranges, &ranges_count,
+    if (!elsewhere_append(false,
+            ranges, &ranges_count, ranges_max,
             mb1_info_raw, &mb1_info_final_loc, mb1_info_size)) {
         panic(true, "multiboot1: Cannot allocate mb1 info");
     }
@@ -206,18 +284,31 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
         mb1_info_alloc(&mb1_info_raw, sizeof(struct multiboot1_info));
 
     if (section_hdr_info_valid == true) {
+        size_t section_table_size = CHECKED_MUL(section_hdr_info.section_entry_size, section_hdr_info.num,
+            panic(true, "multiboot1: ELF section table size overflow"));
+        if (section_hdr_info.section_offset > kernel_file_size ||
+            section_table_size > kernel_file_size - section_hdr_info.section_offset) {
+            panic(true, "multiboot1: ELF section headers out of bounds");
+        }
+
         multiboot1_info->elf_sect.num = section_hdr_info.num;
         multiboot1_info->elf_sect.size = section_hdr_info.section_entry_size;
         multiboot1_info->elf_sect.shndx = section_hdr_info.str_section_idx;
 
-        void *sections = mb1_info_alloc(&mb1_info_raw,
-            section_hdr_info.section_entry_size * section_hdr_info.num);
+        void *sections = mb1_info_alloc(&mb1_info_raw, section_table_size);
 
         multiboot1_info->elf_sect.addr = (uintptr_t)sections - mb1_info_slide;
 
-        memcpy(sections, kernel + section_hdr_info.section_offset, section_hdr_info.section_entry_size * section_hdr_info.num);
+        memcpy(sections, kernel + section_hdr_info.section_offset, section_table_size);
 
-        int bits = elf_bits(kernel);
+        int bits = elf_bits(kernel, kernel_file_size);
+
+        // No sections means no stride to check; the walk below cannot run.
+        if (section_hdr_info.num != 0
+         && ((bits == 64 && section_hdr_info.section_entry_size < sizeof(struct elf64_shdr))
+          || (bits == 32 && section_hdr_info.section_entry_size < sizeof(struct elf32_shdr)))) {
+            panic(true, "multiboot1: ELF section entry size too small");
+        }
 
         for (size_t i = 0; i < section_hdr_info.num; i++) {
             if (bits == 64) {
@@ -227,10 +318,15 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
                     continue;
                 }
 
+                if (shdr->sh_offset > kernel_file_size ||
+                    shdr->sh_size > kernel_file_size - shdr->sh_offset) {
+                    continue;
+                }
+
                 uint64_t section = (uint64_t)-1; /* no target preference, use top */
 
-                if (!elsewhere_append(true /* flexible target */,
-                        ranges, &ranges_count,
+                if (!elsewhere_append(false,
+                        ranges, &ranges_count, ranges_max,
                         kernel + shdr->sh_offset, &section, shdr->sh_size)) {
                     panic(true, "multiboot1: Cannot allocate elf sections");
                 }
@@ -243,14 +339,19 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
                     continue;
                 }
 
+                if (shdr->sh_offset > kernel_file_size ||
+                    shdr->sh_size > kernel_file_size - shdr->sh_offset) {
+                    continue;
+                }
+
                 uint64_t section = (uint64_t)-1; /* no target preference, use top */
 
-                if (!elsewhere_append(true /* flexible target */,
-                        ranges, &ranges_count,
+                if (!elsewhere_append(false,
+                        ranges, &ranges_count, ranges_max,
                         kernel + shdr->sh_offset, &section, shdr->sh_size)) {
                     panic(true, "multiboot1: Cannot allocate elf sections");
                 }
-                        
+
                 shdr->sh_addr = section;
             }
         }
@@ -273,10 +374,16 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
             if (module_path == NULL)
                 panic(true, "multiboot1: Module disappeared unexpectedly");
 
-            print("multiboot1: Loading module `%#`...\n", module_path);
+            if (!terse) {
+                print("multiboot1: Loading module `%#`...\n", module_path);
+            }
 
             struct file_handle *f;
-            if ((f = uri_open(module_path)) == NULL)
+            if ((f = uri_open(module_path, MEMMAP_BOOTLOADER_RECLAIMABLE, false
+#if defined (__i386__)
+                , NULL, NULL
+#endif
+            )) == NULL)
                 panic(true, "multiboot1: Failed to open module with path `%#`. Is the path correct?", module_path);
 
             char *module_cmdline = conf_tuple.value2;
@@ -286,11 +393,17 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
             char *lowmem_modstr = mb1_info_alloc(&mb1_info_raw, strlen(module_cmdline) + 1);
             strcpy(lowmem_modstr, module_cmdline);
 
-            void *module_addr = freadall(f, MEMMAP_BOOTLOADER_RECLAIMABLE);
+            void *module_addr = f->fd;
             uint64_t module_target = (uint64_t)-1; /* no target preference, use top */
 
-            if (!elsewhere_append(true /* flexible target */,
-                    ranges, &ranges_count,
+#if defined (UEFI)
+            tpm_measure_path(TPM_PCR_BOOT_AUTH, TPM_EV_IPL, "module_path: ", module_path);
+            tpm_measure(TPM_PCR_LOADED_IMAGES, TPM_EV_IPL,
+                        module_addr, f->size, "module_path: ", module_path);
+#endif
+
+            if (!elsewhere_append(false,
+                    ranges, &ranges_count, ranges_max,
                     module_addr, &module_target, f->size)) {
                 panic(true, "multiboot1: Cannot allocate module");
             }
@@ -303,7 +416,7 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
             fclose(f);
 
             if (verbose) {
-                print("multiboot1: Requested module %u:\n", i);
+                print("multiboot1: Requested module %u:\n", (uint32_t)i);
                 print("            Path:   %s\n", module_path);
                 print("            String: \"%s\"\n", module_cmdline ?: "");
                 print("            Begin:  %x\n", m->begin);
@@ -317,8 +430,7 @@ noreturn void multiboot1_load(char *config, char *cmdline) {
     char *lowmem_cmdline = mb1_info_alloc(&mb1_info_raw, strlen(cmdline) + 1);
     strcpy(lowmem_cmdline, cmdline);
     multiboot1_info->cmdline = (uint32_t)(size_t)lowmem_cmdline - mb1_info_slide;
-    if (cmdline)
-        multiboot1_info->flags |= (1 << 2);
+    multiboot1_info->flags |= (1 << 2);
 
     char *bootload_name = LIMINE_BRAND;
     char *lowmem_bootname = mb1_info_alloc(&mb1_info_raw, strlen(bootload_name) + 1);
@@ -358,9 +470,11 @@ modeset:;
 
             struct fb_info *fbs;
             size_t fbs_count;
-            fb_init(&fbs, &fbs_count, req_width, req_height, req_bpp);
+            fb_init(&fbs, &fbs_count, req_width, req_height, req_bpp, false, false);
             if (fbs_count == 0) {
 #if defined (UEFI)
+                // GRUB warns and boots rather than refusing, and that is what
+                // Multiboot 1 images are written and tested against.
                 goto skip_modeset;
 #elif defined (BIOS)
 textmode:
@@ -402,9 +516,7 @@ textmode:
 skip_modeset:;
 #endif
     } else {
-#if defined (UEFI)
-        panic(true, "multiboot1: Cannot use text mode with UEFI.");
-#elif defined (BIOS)
+#if defined (BIOS)
         vga_textmode_init(false);
 #endif
     }
@@ -447,9 +559,25 @@ skip_modeset:;
     multiboot1_info->mmap_addr = (uint32_t)(size_t)mmap - mb1_info_slide;
     multiboot1_info->flags |= (1 << 0) | (1 << 6);
 
+    if (rdmsr(0x1b) & (1 << 10)) {
+        if (x2apic_disable()) {
+            printv("multiboot1: Firmware had x2APIC enabled, reverted to xAPIC mode\n");
+        } else {
+            printv("multiboot1: Firmware has x2APIC enabled and it could not be disabled\n");
+        }
+    }
+
+    iommu_disable_all();
+
     irq_flush_type = IRQ_PIC_ONLY_FLUSH;
 
-    common_spinup(multiboot_spinup_32, 6,
+#if defined (UEFI) && defined (__x86_64__)
+    void *spinup_fn = spinup_tramp_low(multiboot_spinup_32);
+#else
+    void *spinup_fn = multiboot_spinup_32;
+#endif
+
+    common_spinup(spinup_fn, 6,
                   (uint32_t)(uintptr_t)reloc_stub, (uint32_t)0x2badb002,
                   (uint32_t)mb1_info_final_loc, (uint32_t)entry_point,
                   (uint32_t)(uintptr_t)ranges, (uint32_t)ranges_count);

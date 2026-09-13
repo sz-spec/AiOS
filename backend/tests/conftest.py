@@ -163,7 +163,7 @@ def _isolate_dev_memory(tmp_path_factory):
         _orig_init = _dm.DevMemory.__init__
 
         def _patched_init(self, persist_dir=None, **kw):
-            _orig_init(self, persist_dir=worker_dir, **kw)
+            _orig_init(self, persist_dir=persist_dir if persist_dir is not None else worker_dir, **kw)
 
         _dm.DevMemory.__init__ = _patched_init
         yield

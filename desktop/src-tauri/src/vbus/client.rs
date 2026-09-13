@@ -12,7 +12,7 @@
 
 use std::path::Path;
 
-use rand::RngCore;
+use rand::Rng;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::UnixStream;
 use tokio::time::{timeout, Duration};
@@ -229,7 +229,7 @@ impl VBusClient {
 
         // Build handshake payload: "VBUS3" + 32 random bytes.
         let mut session_key = [0u8; 32];
-        rand::thread_rng().fill_bytes(&mut session_key);
+        rand::rng().fill_bytes(&mut session_key);
 
         let mut payload = Vec::with_capacity(HANDSHAKE_MAGIC.len() + 32);
         payload.extend_from_slice(HANDSHAKE_MAGIC);

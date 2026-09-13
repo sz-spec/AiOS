@@ -16,7 +16,7 @@ import {
   prepareBackendContext,
   isPathAllowed,
   ALLOWED_WRITE_PATHS,
-} from "../smart-router-bridge";
+} from "../smart-router-bridge.js";
 
 // ============================================================================
 // TEST UTILITIES

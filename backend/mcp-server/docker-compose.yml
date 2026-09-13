@@ -1,8 +1,6 @@
 # docker-compose.yml
 # V OS MCP Agent Server - Development & Testing Stack
 
-version: '3.9'
-
 services:
   # ==========================================================================
   # Main MCP Server
@@ -17,6 +15,9 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
+      - MCP_AUTH_TOKENS=${MCP_AUTH_TOKENS:?Configure MCP_AUTH_TOKENS}
+      - MCP_CACHE_DIR=/tmp/vos-mcp-cache
+      - MCP_HOST=0.0.0.0
       - CACHE_ENABLED=true
       # Security
       - ALLOWED_HOSTS=127.0.0.1,localhost,mcp-server
@@ -61,7 +62,7 @@ services:
   # Redis for Distributed Caching (L3 Cache)
   # ==========================================================================
   redis:
-    image: redis:7-alpine
+    image: redis:8.10.1-alpine
     container_name: vos-redis
     command: >
       redis-server
@@ -85,10 +86,8 @@ services:
   # Jaeger for Distributed Tracing
   # ==========================================================================
   jaeger:
-    image: jaegertracing/all-in-one:1.53
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.20.0
     container_name: vos-jaeger
-    environment:
-      - COLLECTOR_OTLP_ENABLED=true
     ports:
       - "127.0.0.1:16686:16686"  # UI
       - "127.0.0.1:4317:4317"    # OTLP gRPC
@@ -101,7 +100,7 @@ services:
   # Prometheus for Metrics
   # ==========================================================================
   prometheus:
-    image: prom/prometheus:v2.48.0
+    image: prom/prometheus:v3.14.0
     container_name: vos-prometheus
     ports:
       - "127.0.0.1:9090:9090"
@@ -120,12 +119,12 @@ services:
   # Grafana for Dashboards
   # ==========================================================================
   grafana:
-    image: grafana/grafana:10.2.2
+    image: grafana/grafana:13.2.1
     container_name: vos-grafana
     ports:
       - "127.0.0.1:3001:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro

@@ -1,0 +1,3261 @@
+{
+  "from_commit": "7cddb61183685d9bddd2eb13d42223d929c2abe6",
+  "from_version": "8.6.0",
+  "version": "12.9.0",
+  "source": "https://github.com/Limine-Bootloader/Limine/releases/download/v12.9.0/limine-12.9.0.tar.gz",
+  "archive_sha256": "adea922af3b9c8179a4676bcecc8e4df2f3ef72ad36b3f4afab44cbf5f265e36",
+  "signature": "Valid signature against upstream-published fingerprint 05D29860D0A0668AAEFB9D691F3C021BECA23821; no web-of-trust identity claim",
+  "local_modifications": [],
+  "changes": [
+    {
+      "path": "bochsrc",
+      "action": "removed-upstream",
+      "old_sha256": "89f9c7ca8a536b32d2608582c7502b52d99a924229f60b2d25faa61e0299b0b1"
+    },
+    {
+      "path": "screenshot.png",
+      "action": "removed-upstream",
+      "old_sha256": "89c0a547d6042a208a2f82b91c605ddc2fd4dbc07e7d9215be62c32ca7118437"
+    },
+    {
+      "path": "README.md",
+      "action": "removed-upstream",
+      "old_sha256": "8681301a638058e4d51417bdeb0489071d7a405c1937eb1c96ea6ad3e2a61763"
+    },
+    {
+      "path": ".gitignore",
+      "action": "removed-upstream",
+      "old_sha256": "7c0e0168c57bfb1d109405b4572222a557a67b143e2c4800387045afa0db854d"
+    },
+    {
+      "path": "logo.png",
+      "action": "removed-upstream",
+      "old_sha256": "5ac860fe96c1fb7da14bdd2d204bf65fd9f447b8d11a2be054ef21d4a880a604"
+    },
+    {
+      "path": "test.mk",
+      "action": "removed-upstream",
+      "old_sha256": "9c185d33a8366fa7ee176f593f7510475d09c1cc01f3be38dbb6f61ca8cffd34"
+    },
+    {
+      "path": ".typos.toml",
+      "action": "removed-upstream",
+      "old_sha256": "769aebcf81700c6e76c4a9309cc173665d71529af995c6fb034335f1cfb09e7b"
+    },
+    {
+      "path": "PHILOSOPHY.md",
+      "action": "removed-upstream",
+      "old_sha256": "99602d827153fcc39fc931541e98d118fc8dfee4f9b89ffb3f57b2659b150dd6"
+    },
+    {
+      "path": "limine.h",
+      "action": "removed-upstream",
+      "old_sha256": "c00e7d4cd6e2674eca481f978b64a7fb8c8479cc32c466ec35aad2207761bf01"
+    },
+    {
+      "path": "PROTOCOL.md",
+      "action": "removed-upstream",
+      "old_sha256": "849a9bdd844d97b7e28c187ab06383eeb7fc5d001da5f62b23764fb131457a1f"
+    },
+    {
+      "path": "tinf/LICENSE",
+      "action": "removed-upstream",
+      "old_sha256": "f39b507b81b9ba1edce7fe742bbd68fda4b852063ce7299274ae97991d48814b"
+    },
+    {
+      "path": "build-aux/freestanding-toolchain",
+      "action": "removed-upstream",
+      "old_sha256": "620f782587bef7435db7a95b10104011d2ffb94c313b1c873d9bb0bdcaef5bd8"
+    },
+    {
+      "path": "host/.gitignore",
+      "action": "removed-upstream",
+      "old_sha256": "a891495c24fd5f06556b56ab0152633bd34a09721e21c109f5b74752f3e6af5e"
+    },
+    {
+      "path": "test/e9print.h",
+      "action": "removed-upstream",
+      "old_sha256": "ad1418e2e7915c2ef37282e0892e4f14cc3ef00ac11cbc990b7a0a39be10f189"
+    },
+    {
+      "path": "test/multiboot2.c",
+      "action": "removed-upstream",
+      "old_sha256": "a91e21860d4a0f7d43bddfe3a0b20489db50eedc64aa3356afffedd013d810db"
+    },
+    {
+      "path": "test/memory.c",
+      "action": "removed-upstream",
+      "old_sha256": "6c910af3fb85925ec5f6855e3253417ffc111396ddb5f705cc5d90b35f920e8b"
+    },
+    {
+      "path": "test/limine.c",
+      "action": "removed-upstream",
+      "old_sha256": "c3a24b3354e404763068352cc08f8695a2f4b6f2782752ee044a30f3684d80e7"
+    },
+    {
+      "path": "test/multiboot2_trampoline.asm",
+      "action": "removed-upstream",
+      "old_sha256": "a34b4fb807b47823937021771e3de916b14a18b5e4ba0ea236247f12ba74eed0"
+    },
+    {
+      "path": "test/multiboot2.ld",
+      "action": "removed-upstream",
+      "old_sha256": "a1a0d4cf5cce48dd4dbc32e2d1bca19bfa6db7d3c9b0046655ecf29f05fb41c9"
+    },
+    {
+      "path": "test/device_tree.dts",
+      "action": "removed-upstream",
+      "old_sha256": "252c75822efa9ad993fe98addeecf3a7a14dc396d84d372ae40b43aaade81b76"
+    },
+    {
+      "path": "test/limine.conf",
+      "action": "removed-upstream",
+      "old_sha256": "d6247d16bf10551f2f716f61d720543c0b2f13d9103fc77e45b04bfad2624390"
+    },
+    {
+      "path": "test/e9print.c",
+      "action": "removed-upstream",
+      "old_sha256": "911c59fbfa61ca17500db8ff549db8b8e23a6d4054b8f233d69a8e0bbb3e16ed"
+    },
+    {
+      "path": "test/.gitignore",
+      "action": "removed-upstream",
+      "old_sha256": "dcaec71828cc9cd8b8da4a080625f6fd9c96335670e804b56b3cd95b6cd8a198"
+    },
+    {
+      "path": "test/test.mk",
+      "action": "removed-upstream",
+      "old_sha256": "41ea26495cc5c9f6a71c3dcd38c962585402ddd86e8dd7720b287d2b2ee64690"
+    },
+    {
+      "path": "test/multiboot.ld",
+      "action": "removed-upstream",
+      "old_sha256": "a1a0d4cf5cce48dd4dbc32e2d1bca19bfa6db7d3c9b0046655ecf29f05fb41c9"
+    },
+    {
+      "path": "test/multiboot_trampoline.asm",
+      "action": "removed-upstream",
+      "old_sha256": "29790785b44a5d080b4460bdfb96d85a735a392de934f7ed74c0889368907c54"
+    },
+    {
+      "path": "test/multiboot.c",
+      "action": "removed-upstream",
+      "old_sha256": "24a5d06601cad6e5000f6387a9793d413a821398d17da409c56f3bedde05511e"
+    },
+    {
+      "path": "test/linker.ld",
+      "action": "removed-upstream",
+      "old_sha256": "7a5cca19ba4a25141cb7e73908c81a581b7623c2da7d2bdb5e65193fd0706de4"
+    },
+    {
+      "path": "test/bg.jpg",
+      "action": "removed-upstream",
+      "old_sha256": "75daf8c673c067acfa3e2af5518005a02224951c5da236c5d000a70f881f5cbc"
+    },
+    {
+      "path": "decompressor/mem.asm",
+      "action": "removed-upstream",
+      "old_sha256": "9dd693bfeb1e5909a8f5aa9d41a2c6a73eb60b1e85980c23b3ab804a850afbee"
+    },
+    {
+      "path": "decompressor/tinf.patch",
+      "action": "removed-upstream",
+      "old_sha256": "065147299ff890d6c65c16d41d7a32227403cd8f4f0150d1474476219861b9ad"
+    },
+    {
+      "path": "decompressor/main.c",
+      "action": "removed-upstream",
+      "old_sha256": "12295fe7ee20a0eed17c55a18cbf6209ed1c0a3fce41b8033f3b7ffb67ef0891"
+    },
+    {
+      "path": "decompressor/decompressor.mk",
+      "action": "removed-upstream",
+      "old_sha256": "7bf60450c077d9ce1a5e711dff1074255099671e208483803aaddf370e752167"
+    },
+    {
+      "path": "decompressor/entry.asm",
+      "action": "removed-upstream",
+      "old_sha256": "e05f9dd311b682523a0ff89be006426ba744c4f5eaf0bdb1fd18072c18b5da1b"
+    },
+    {
+      "path": "decompressor/linker.ld",
+      "action": "removed-upstream",
+      "old_sha256": "c4afdf6ade9fc2ff5821f5eaab210c7b9b43f05062d2eed86cc8be36f154cc9a"
+    },
+    {
+      "path": "nyu-efi/README.efilib",
+      "action": "removed-upstream",
+      "old_sha256": "05ac08e3c5cc83f2bc60606114471aeb5b3c76989c933c6766e2b5dd112ba0ec"
+    },
+    {
+      "path": "nyu-efi/README",
+      "action": "removed-upstream",
+      "old_sha256": "76d7c7889294c8142c0b3bd0391577510e01029e1acba8fdc4b3b48af44c8e0d"
+    },
+    {
+      "path": "nyu-efi/COPYING",
+      "action": "removed-upstream",
+      "old_sha256": "aa67461d5ed9c456e0482afad3f224dc2c20b57e0bf50bf84746f1c06b7f72b7"
+    },
+    {
+      "path": "nyu-efi/.gitignore",
+      "action": "removed-upstream",
+      "old_sha256": "8f2ed58c9717460348817440944c752eb61b274e81746e8e02ae80fddfa770fa"
+    },
+    {
+      "path": "cc-runtime/extendsftf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "fb80b41322099273a81ebe8334588041e81a25043fc4d99959a613676cfeab87"
+    },
+    {
+      "path": "cc-runtime/fixdfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "93eaf8c2c35528535f1963a0812f6e3d69bd0d2b4671ffc7632277593449838c"
+    },
+    {
+      "path": "cc-runtime/extendhftf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "074e8e885050f62e347e4376a91dfc163b2a105e2bae26cf89d90afa176808a1"
+    },
+    {
+      "path": "cc-runtime/lshrdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "b8c43f0df0c6136f017ffc18123e74677a52c893dbb166e216804756578a1eab"
+    },
+    {
+      "path": "cc-runtime/divmoddi4.c",
+      "action": "removed-upstream",
+      "old_sha256": "f85b721b92892ba571c85b15ad4ed4f59ac51d5a52d551a5a28e7f09a5ba3bfc"
+    },
+    {
+      "path": "cc-runtime/clzti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "70c9c2896ae9282850e9b6425dab8bc53c3ef68bef5f0ff2f8fd7bef4434fd79"
+    },
+    {
+      "path": "cc-runtime/divmodsi4.c",
+      "action": "removed-upstream",
+      "old_sha256": "600350324bb5f69053dfa93550ecb54c0110ec95a394cc307d5da0405a8860fa"
+    },
+    {
+      "path": "cc-runtime/adddf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "4d3d934be9ffdb77d94ebe2dcbc2d18a0effb9aa81a3a0276ce5c89945982b37"
+    },
+    {
+      "path": "cc-runtime/addsf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "58bcef2f633319d64d21e20b0f9552809238458409add439cc24513aa07cf160"
+    },
+    {
+      "path": "cc-runtime/floatunditf.c",
+      "action": "removed-upstream",
+      "old_sha256": "486fbf1fd3579847a1922a7ddbc59f7a8bbca76f878ca907d0b68e396dee6b7e"
+    },
+    {
+      "path": "cc-runtime/udivmodsi4.c",
+      "action": "removed-upstream",
+      "old_sha256": "7076fde23185eb4f60a7ff19402d6864bc3e5d105a56bab8bd1af27feb40f36f"
+    },
+    {
+      "path": "cc-runtime/udivmoddi4.c",
+      "action": "removed-upstream",
+      "old_sha256": "e963fd1418909bb0f43603a7846edf568d4c8bae0670bd3b13a3e754a104e2fe"
+    },
+    {
+      "path": "cc-runtime/fixunsxfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "6fcc4e6fbe66b37d73f33c2385b234b05fec66f86436e7f1d2d0805c4a712ced"
+    },
+    {
+      "path": "cc-runtime/powitf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "c40e11dccbeb1a21796528f88dae5f7944a248bcd0104dc65bc860e3284d5647"
+    },
+    {
+      "path": "cc-runtime/multi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "b2e133764668e78119f7c76facbb11f0b4b7c0c6b279fb0b97a589da11d1d060"
+    },
+    {
+      "path": "cc-runtime/cmpti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "b6950bc60c69bd1b3839754e6661afaff86b60870e56ad03c3778b104b484948"
+    },
+    {
+      "path": "cc-runtime/divsc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "c76d6bc4456d40051bbd35bdd277bee439147ac3f12a4c8ed71707b6cccdc1a5"
+    },
+    {
+      "path": "cc-runtime/divdc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "5fb170dad36baf671198eea6d6eb907897731e1f99024c180f2322def081ecd4"
+    },
+    {
+      "path": "cc-runtime/floatsitf.c",
+      "action": "removed-upstream",
+      "old_sha256": "1eaba998a718d4ff67f1ebe6ba93b614b1f9437b57f13923dd0043d55c9f3378"
+    },
+    {
+      "path": "cc-runtime/umodti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "3d88088419d87b486858a4bf54ff08209944ae526c77b8dc5e0c0b6b8001c1e9"
+    },
+    {
+      "path": "cc-runtime/divtf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "513aa4d30a49cf40b76cb37044d3d763c6d5e78630bd4050b1b954563fd7bdaa"
+    },
+    {
+      "path": "cc-runtime/fixunssfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "bc6a5e545513cbfc8e912b737566a20233a70f80631d8c0ce9b02e5617cf26c5"
+    },
+    {
+      "path": "cc-runtime/int_lib.h",
+      "action": "removed-upstream",
+      "old_sha256": "5f91500b16aa8fa609aedb3b2c69d2be968ba35aa79b493a66c1b961f47c67ef"
+    },
+    {
+      "path": "cc-runtime/fp_mode.h",
+      "action": "removed-upstream",
+      "old_sha256": "874aa9eee8990ae2a6f48127ddb48c3198a8fa741f634f93053ebac3f89e1e83"
+    },
+    {
+      "path": "cc-runtime/addvsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "36ad0fa5e9a6c26ea0e5fd9cfece1699bc8904cc7af8e6034138f2193cd88ae0"
+    },
+    {
+      "path": "cc-runtime/addvdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "60c8121c6ca71ff698704b9ee1e5124a86197de4480674d781edd2e4a076d262"
+    },
+    {
+      "path": "cc-runtime/fixunstfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "db9e239602d480ab86ac8b89659cb0791d897c08670fb6abd3b892fa8b518bae"
+    },
+    {
+      "path": "cc-runtime/udivmodti4.c",
+      "action": "removed-upstream",
+      "old_sha256": "2cfaca7399d1392c92ec4dd6458da22933b4ad2e0cd58769f22b52be98116760"
+    },
+    {
+      "path": "cc-runtime/int_mulo_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "59f40cf894c0bc39915698f449322343a22f752ced0f72f5900664b89a2e745c"
+    },
+    {
+      "path": "cc-runtime/floatuntixf.c",
+      "action": "removed-upstream",
+      "old_sha256": "f5a5409c23f94b972e510db4ca386c0a119cb3dd0beaa15528a13189515eea92"
+    },
+    {
+      "path": "cc-runtime/floatdisf.c",
+      "action": "removed-upstream",
+      "old_sha256": "017fda31d8ca271af73597e00fdb4b31c20e2b8e2120e3358e9d72f4cdcce3b9"
+    },
+    {
+      "path": "cc-runtime/fixxfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "6b8e7eb0d5e1f8b84f74d17b3c8a14219300fc923ac4d791c147a8be57556739"
+    },
+    {
+      "path": "cc-runtime/addtf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "c3d975bccdea516b390d87c0ee4e256dcfaf8d67c1b9a9f5f0521a028f54a883"
+    },
+    {
+      "path": "cc-runtime/clzdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "6171e0da0532e5f53860a83dc616466c174751f3e104996443d1398ecb8bf85f"
+    },
+    {
+      "path": "cc-runtime/clzsi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "3524233af4d8de1efe7e486ee84d24924f3f6154157b544791b1a8b927b8846f"
+    },
+    {
+      "path": "cc-runtime/divmodti4.c",
+      "action": "removed-upstream",
+      "old_sha256": "bcf5210b5534ab118d836fc8dd015519f5622c3238e0d526706a7848c5a4a144"
+    },
+    {
+      "path": "cc-runtime/lshrti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "89da91e31e33c3c62128c32ed1c740856a413c17ac1e7cd75702da37d1cf9fa4"
+    },
+    {
+      "path": "cc-runtime/fixunsdfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "be79b5143784f487020a835e5fb9550ba72048bdb3e27337d448fb5cfcd27974"
+    },
+    {
+      "path": "cc-runtime/extendhfsf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "68fe478029188effbd95399bee3a4d3669b3b32072701383480c94f1513e6f7f"
+    },
+    {
+      "path": "cc-runtime/assembly.h",
+      "action": "removed-upstream",
+      "old_sha256": "04d5a4dc04dcf6a6f17a0f8d83750813fe761b05d39f7628e5900156fced7e58"
+    },
+    {
+      "path": "cc-runtime/extendsfdf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "e7600ad700bd55bf8a3b41d84b13659e23b5f1fde9d07709f12d4d69ee4c470c"
+    },
+    {
+      "path": "cc-runtime/addvti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "8bb4138eaa9a5580fc27e7f9e8512f08091be3ba469e64382b853e2a7ce01c3c"
+    },
+    {
+      "path": "cc-runtime/fixsfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "f4e2612859118a85f585a35995cd4d24c6369f71ba4cd4934403807250664cf8"
+    },
+    {
+      "path": "cc-runtime/fixtfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "5d76fe584c58e6d3892c5fd245671c4f969353f74b4d1cc544b462a9dc78f9bd"
+    },
+    {
+      "path": "cc-runtime/umodsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "1404beb2eb5904b8b68cf46de4f08d232d4813dad319c167b4a3a8ed5afdb7bb"
+    },
+    {
+      "path": "cc-runtime/divdf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "076f2ad1a5911bedc81dbc76d750d44eaf0b6db9487aeb1446ce72a05bbd3b79"
+    },
+    {
+      "path": "cc-runtime/umoddi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "d812aa1e62d6179f9013e38bc040ba69d905be128fa25e104645a9da0841d209"
+    },
+    {
+      "path": "cc-runtime/divsf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "8afa8fea3b01c5de5f5100b84d990675abde87a9419e52351017148e761012d4"
+    },
+    {
+      "path": "cc-runtime/trunctfsf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "190d97ce7b807804cfe27259b0979fa1b30ec8997bfdbc4fddaf9d1d87c26ba8"
+    },
+    {
+      "path": "cc-runtime/trunctfdf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "dcd400910047c82e292cd4e1070d2e5e3ff7e28f74af615da0c3f73631a8a18c"
+    },
+    {
+      "path": "cc-runtime/floatunsisf.c",
+      "action": "removed-upstream",
+      "old_sha256": "ecc35d150e2198805ba07c0c4bd802fc158c313909f421d787e79ad0f3745782"
+    },
+    {
+      "path": "cc-runtime/divtc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "a631c78b898cc71a53ca08eb6f1d642d3c3e00e443e3dbdeffe671afd8706912"
+    },
+    {
+      "path": "cc-runtime/cmpdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "18cb3b389cd9735b62db41476334e9a8f4cc84960e46c828a30c2e0a3dd7240c"
+    },
+    {
+      "path": "cc-runtime/floatuntidf.c",
+      "action": "removed-upstream",
+      "old_sha256": "6c3d7479504ea5bd9dd711544247f1fdef86c1999a39af1ce748b95f5cfaa0c8"
+    },
+    {
+      "path": "cc-runtime/muldi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "76a80699855619040b053078ab246adacb060fcc15b4e3431b76ee053032a8b9"
+    },
+    {
+      "path": "cc-runtime/powisf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "ee202e15683cfc711d064ffe424ebe5de27f338edaccd5be3b81880cce9458d2"
+    },
+    {
+      "path": "cc-runtime/powidf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "5956c5f7ab607e598238f912e89e6c2ccdafc84578d4d1a167ada4346225d78d"
+    },
+    {
+      "path": "cc-runtime/truncdfhf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "be01ef3c8328ea72db82716573f2f4a4815e71f1f02bdcb8eb41e4e50e6c62fd"
+    },
+    {
+      "path": "cc-runtime/ctzti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "967dde517d93a8ff50384b8f938bb480121b0bc188f2aad25241282fd052e5aa"
+    },
+    {
+      "path": "cc-runtime/floatdidf.c",
+      "action": "removed-upstream",
+      "old_sha256": "aaa37268bb035f8f87c20bc64bf2def386edbde873209fa3569a5075d3209c1e"
+    },
+    {
+      "path": "cc-runtime/divsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "d6fc80648fefadc1997eda1e7570587e9f5287ccf7e57a8b75797a21938b123e"
+    },
+    {
+      "path": "cc-runtime/floatdixf.c",
+      "action": "removed-upstream",
+      "old_sha256": "c12b32e7fb341e656172de44fca9b4617d8d94931a0e4216d1eee3141e40afcc"
+    },
+    {
+      "path": "cc-runtime/divdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "668b6a3f19fd40fbdb079d0e88073364f88ec1b5e4b1cb38a2c721051c66efbd"
+    },
+    {
+      "path": "cc-runtime/floatunsidf.c",
+      "action": "removed-upstream",
+      "old_sha256": "e92eb37ac69b9ad229e91ccbf8405f3eebc35156470689f6eec8a4892befca95"
+    },
+    {
+      "path": "cc-runtime/int_util.h",
+      "action": "removed-upstream",
+      "old_sha256": "63d06198ab720a75c20bfd84be895c2746581b129168bae6201e7384bbb0473b"
+    },
+    {
+      "path": "cc-runtime/absvti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "d7b75e01b9450ddb6cfeb2fa0aa85ca32ffc1018ea2e7edfbac6ac7e265aa776"
+    },
+    {
+      "path": "cc-runtime/multc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "3bf10f0af1e50e6e9a2672ea0105cb6e2417a5feef5c477d65c83501c48b91a1"
+    },
+    {
+      "path": "cc-runtime/floatuntisf.c",
+      "action": "removed-upstream",
+      "old_sha256": "81f3bc7a7c652c9158f0215b3868223bc4ac5d128bbf04553a3c530f727089c8"
+    },
+    {
+      "path": "cc-runtime/mulsf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "df3f688adfbf94f170f4d0a434359396a9e2ac4dfd20eb1b1c44b26606b2b4f3"
+    },
+    {
+      "path": "cc-runtime/muldf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "acad67357304f8679ef99ea3f64a56db47ae17538bc38f29bcb616b8c049ecbc"
+    },
+    {
+      "path": "cc-runtime/paritysi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "a41f4394c711c949d64c408de6b9e8d34836faf9f1fc624a861df3194e256be5"
+    },
+    {
+      "path": "cc-runtime/paritydi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "7dac1a60368bbf47abf5247cb558d1545098434b17026fadf486d0c74e91acbe"
+    },
+    {
+      "path": "cc-runtime/fixsfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "dac7d991aff87e9813011bb7ad361c1c061eb90671daa56dca8b316633764384"
+    },
+    {
+      "path": "cc-runtime/subvdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "87c709b9eae4cfa4c81ffad2967964ee55452d6bac32ea074e4706b839f2e863"
+    },
+    {
+      "path": "cc-runtime/int_math.h",
+      "action": "removed-upstream",
+      "old_sha256": "42d83ee41543909de016379a8251e211a6890cbc7945c433bb30f4ba29d7b10c"
+    },
+    {
+      "path": "cc-runtime/subvsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "c40d701faa479e0b947abb669fcb87625d98f9e4fbe54474e4c08b4e048ef56b"
+    },
+    {
+      "path": "cc-runtime/fixtfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "b1ee73031edec94a6abc641bc4d87879555722a0118d1b3f28a725b6a86dbba0"
+    },
+    {
+      "path": "cc-runtime/fp_extend.h",
+      "action": "removed-upstream",
+      "old_sha256": "b3da60a65ab5aca4b93ddd36df8af90051912d1c455c4cea2de0e50ce37c526d"
+    },
+    {
+      "path": "cc-runtime/ctzdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "945cd8765de0c267f5ff93d53817687d53365edbfea21529f390318e46597d69"
+    },
+    {
+      "path": "cc-runtime/ctzsi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "f1f912dc5f9f40e4cefadc0aefc7fea5f6848657c7cf970e64d9a0220b2952c5"
+    },
+    {
+      "path": "cc-runtime/fp_fixuint_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "fc0d0b1b6fd1b3ec61ed3cd96e634de9f380eb76b7161fea91ddbddece71ac09"
+    },
+    {
+      "path": "cc-runtime/fixunsxfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "a52cd1933b31b100789243fa88d7e56884158a23d62e111083e421e7029197f3"
+    },
+    {
+      "path": "cc-runtime/truncsfbf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "7a235af08704648139015149b68844c7412ccabcfab319288bf41468d4c4e7aa"
+    },
+    {
+      "path": "cc-runtime/fp_mul_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "5fd5ec9eaf57c983ed521f3501346660221d6f2d49d48d186b2046702b54d8c3"
+    },
+    {
+      "path": "cc-runtime/fixunssfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "48425610973daf461e8063941cc5b1d5b82b468cd48d74f2a09222a7ad2a703d"
+    },
+    {
+      "path": "cc-runtime/int_endianness.h",
+      "action": "removed-upstream",
+      "old_sha256": "ad9b712afd909d29de28a48314547e9b3b4af598cf524cdf4eac4829085220f2"
+    },
+    {
+      "path": "cc-runtime/subvti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "781bce9495ca7f1d2bc703a76b15700809ebac7b5ad1ae7adb86cfba9d1aece2"
+    },
+    {
+      "path": "cc-runtime/fixunstfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "562f9eae54f065a8b687d13c3d9b7967bcc2e40cbaf87dee3cc3f107acb6cefc"
+    },
+    {
+      "path": "cc-runtime/parityti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "19127d1c904bfa9f1752bf02b003deb4935c279839fd04464aac4d00a04f1105"
+    },
+    {
+      "path": "cc-runtime/multf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "fd62536f2aed860e4362651c0c5481b5929cef5e4c603fbf875d776d4a60a3c1"
+    },
+    {
+      "path": "cc-runtime/int_mulv_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "32ea5403907d722e371e3255efc230a6cc8df7a9cd5522af0c1354959c1f89b2"
+    },
+    {
+      "path": "cc-runtime/muldc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "bc5c64f1eea021edc8b168dd4d0d97454a851a7908a5af3dc2d43681a23c43b3"
+    },
+    {
+      "path": "cc-runtime/mulsc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "f6895cb86aa9a79b8171e79500e55135e08abd0526246c13f8f45ea33951be0e"
+    },
+    {
+      "path": "cc-runtime/cc-runtime.mk",
+      "action": "removed-upstream",
+      "old_sha256": "9d1e15b83f79be522becf0977f34a9831a1de21dabcf68ae272644ed76b8b93d"
+    },
+    {
+      "path": "cc-runtime/int_types.h",
+      "action": "removed-upstream",
+      "old_sha256": "97f26e313b3d6a69b26f3174dc97f336eddfe1b0cba1d2d9358b2768305ce4e6"
+    },
+    {
+      "path": "cc-runtime/floattitf.c",
+      "action": "removed-upstream",
+      "old_sha256": "f25230e4e618a7429a83c7b5703c4ef8e55a9b3802c14aba98aa6b6278a39fa8"
+    },
+    {
+      "path": "cc-runtime/absvdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "92d89adc501e3f8aba30f49f68e99df1ecfb5941569d7f213331700836f5b467"
+    },
+    {
+      "path": "cc-runtime/fp_fixint_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "9f783582b31c028721a14561f2c5741b5bb19befa557a4575e1436381f966f4e"
+    },
+    {
+      "path": "cc-runtime/absvsi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "d84648b8427d3dd5d56c29b722af46e7ffa80e59ac1bc040633d29214e317d89"
+    },
+    {
+      "path": "cc-runtime/README",
+      "action": "removed-upstream",
+      "old_sha256": "cfcd7ca8fe1953fdec93fe4f67b05e84f4588aad85baa3bbc782414a2bb7e395"
+    },
+    {
+      "path": "cc-runtime/divti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "b8392be2b070cda2a01bc33c7912e06ab83ce9a1ec7995fe0acbe44540cf92ae"
+    },
+    {
+      "path": "cc-runtime/mulodi4.c",
+      "action": "removed-upstream",
+      "old_sha256": "55b3b4195f026a96f809823f3b5de6a66e0a0a9469e69f6e5494b987cf8dd579"
+    },
+    {
+      "path": "cc-runtime/mulosi4.c",
+      "action": "removed-upstream",
+      "old_sha256": "770bf722616411be0aea4b72f9d49fc7e4a6bb383fcc1007bf2df84f48315abf"
+    },
+    {
+      "path": "cc-runtime/int_to_fp_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "5bb2fa67db4fc0c35038240189c23ef94f005d14676f2a5e4deab4085ad05a55"
+    },
+    {
+      "path": "cc-runtime/CREDITS.TXT",
+      "action": "removed-upstream",
+      "old_sha256": "a9901f47a089da41e4690682d00ce4cedaa2baf41fedbe79beee366d43ac2461"
+    },
+    {
+      "path": "cc-runtime/udivdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "e250263dcb27261e969db4228a479b2f3bde2b06e59baa2f2c595ac752b17643"
+    },
+    {
+      "path": "cc-runtime/udivsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "c41c76d2e44362a662f26411b0f1b5bfdabe40d1d624fe335b601663a7a313ef"
+    },
+    {
+      "path": "cc-runtime/ashlti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "39afba4710d9b24c9c27cccdc8e18a18db10ce3616dc60cdcfa494f0a49a3a60"
+    },
+    {
+      "path": "cc-runtime/fp_trunc.h",
+      "action": "removed-upstream",
+      "old_sha256": "90626a0811dcf96be507daa5d7fe872d1efae2c388af4c48eaba45101856be23"
+    },
+    {
+      "path": "cc-runtime/fp_extend_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "63f9cd801c0c2a04e8becbd22f189eaaa47b5466bc098acc214fe69fd525f92a"
+    },
+    {
+      "path": "cc-runtime/fixunstfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "459ecff68eca03e17bf63b62e769dfae6f56337c49e12963a9a9629d84301c61"
+    },
+    {
+      "path": "cc-runtime/fp_mode.c",
+      "action": "removed-upstream",
+      "old_sha256": "32d294b7b4fa174e8a78d32c7e5e3bcebd6267c46a12fd4858b24ae5a2da4475"
+    },
+    {
+      "path": "cc-runtime/fp_lib.h",
+      "action": "removed-upstream",
+      "old_sha256": "8edc3d7debe27cb64355bbcd1d3d18390da20f7bf1358586ece770714bcfdc5e"
+    },
+    {
+      "path": "cc-runtime/floattisf.c",
+      "action": "removed-upstream",
+      "old_sha256": "85ae4d8277d49921da8e330a09031b601ccdf04b333116ce39cde9d9ea1d8dac"
+    },
+    {
+      "path": "cc-runtime/negti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "5ed863c89848453e48be85ca4c91be7a1fbbe1b80f12a6fdf17402c010b1cc3f"
+    },
+    {
+      "path": "cc-runtime/bswapdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "a330569afdc24b4b03983ea196e99f22b1e9e25a58149e1a969b9757eb18b71a"
+    },
+    {
+      "path": "cc-runtime/extendxftf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "d0e5c4855fd1ad7725b8a769b1be97217c930bd09fe7df2e178ebdeea9915f26"
+    },
+    {
+      "path": "cc-runtime/floatsidf.c",
+      "action": "removed-upstream",
+      "old_sha256": "3508353ff13dcaf10691013e209605f3ec104ee4a3bcd2c0d8ffe86ef72392b1"
+    },
+    {
+      "path": "cc-runtime/bswapsi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "f921d32911960a0700e22191fef4756b672653a7a0ab351d77f2fb4dc1d891f1"
+    },
+    {
+      "path": "cc-runtime/comparesf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "b2c9fb43110020c57ecad29f04fac8b407518642e3d666271b4ed11b26c1e00b"
+    },
+    {
+      "path": "cc-runtime/comparedf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "ae388d4c277ccfaceba1342da9b2c84d40a37ae811dd24ca44762ac1428b1d32"
+    },
+    {
+      "path": "cc-runtime/floatundixf.c",
+      "action": "removed-upstream",
+      "old_sha256": "f42f7d7ae56474f3cc5dd8d80a641f556b27a97921a61afd3bf55fa2de569e46"
+    },
+    {
+      "path": "cc-runtime/int_to_fp.h",
+      "action": "removed-upstream",
+      "old_sha256": "9ac8fd0650f1560e6c910979e0004c5956ae7da6e3bded7eab0b0270c51bf400"
+    },
+    {
+      "path": "cc-runtime/floatundidf.c",
+      "action": "removed-upstream",
+      "old_sha256": "b073584bd00935518f769f55722a0b055de2c23ba535fb5686e1990d0c88bfb7"
+    },
+    {
+      "path": "cc-runtime/fixunsxfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "7d250dba039ec168fca57e48bc33a8e0ce71978137503d46562f247f4e4a636d"
+    },
+    {
+      "path": "cc-runtime/ffsti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "80e3b51c072773cf848559eb66b15b74424dad26bcd077d43987766eb992ebe5"
+    },
+    {
+      "path": "cc-runtime/truncdfbf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "332a982dab89a07be499fd090957fb595583e2723b6f0ba531a5064c6b14248b"
+    },
+    {
+      "path": "cc-runtime/fixdfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "7040aff2a5b14406177c11f2b19d0a6cbeb91e8186b0c5c2f407a015544bfe3e"
+    },
+    {
+      "path": "cc-runtime/.gitignore",
+      "action": "removed-upstream",
+      "old_sha256": "81c6da8b6089a30896168e4f16ff9f85edf99ee861835fa5a129e335c0d18b13"
+    },
+    {
+      "path": "cc-runtime/negvti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "fa30f03177dfd64510531742c17bb9d5bbc1c23ca2d264a2c2a104bb143e2227"
+    },
+    {
+      "path": "cc-runtime/comparetf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "172d5aad16e7d978bcfb90f33db61d1017f41c12f223259a364448f90b4ce060"
+    },
+    {
+      "path": "cc-runtime/negdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "6f163c11ac47518ee82f136e2664c6e11a76e40da21eb511ddf09ab099d84efa"
+    },
+    {
+      "path": "cc-runtime/floatuntitf.c",
+      "action": "removed-upstream",
+      "old_sha256": "f26477259994ee5bd346e5afdebd6810c49bf6c57e53d9d456ee865382c8ffb1"
+    },
+    {
+      "path": "cc-runtime/mulxc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "c0d39899315fec0fa202d0aed221cf6de26726e3d5cbcfe4befad75658d3c596"
+    },
+    {
+      "path": "cc-runtime/ashldi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "7982c05b8a139ab662ac1a88be061669d7ee838d2153b42e4b0f4ec410bdf5a5"
+    },
+    {
+      "path": "cc-runtime/udivti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "c0b20f06f6e0e8a6b5423ca6674cf0c57219d07554f6f35c9ecc36bf28915355"
+    },
+    {
+      "path": "cc-runtime/fixtfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "f68619f14e2cb5dee4d0be5975c951dcf2471079d5da8f85c5c79958aa827368"
+    },
+    {
+      "path": "cc-runtime/muloti4.c",
+      "action": "removed-upstream",
+      "old_sha256": "a116475e0f4e98e16054e3e0492d55cc911691a0fac6dfedbe024eae9b0e02bc"
+    },
+    {
+      "path": "cc-runtime/negvdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "cef1901164610459f0d22bd10717412bf492b758652466ca2479bec40f5f6b32"
+    },
+    {
+      "path": "cc-runtime/fixunsdfdi.c",
+      "action": "removed-upstream",
+      "old_sha256": "7b87212f8896434b1d45ebed9d205ced7e9d41369648b7298074e6d8b1db0e8b"
+    },
+    {
+      "path": "cc-runtime/negvsi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "89cb0f85dc13ea577aaa0a9d7124ae22350cd3eda51e7b61eb26d33481444b2d"
+    },
+    {
+      "path": "cc-runtime/truncsfhf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "2b9506cccc6a87d92bbf7612dd09d525eb8ecb78fdf58555aa49014e0dbc3653"
+    },
+    {
+      "path": "cc-runtime/ffssi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "b1328621e08cad6486189652073f94589759e738c00cbfe3a922d4f3ede792f2"
+    },
+    {
+      "path": "cc-runtime/ffsdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "c4c554b314a20641164d4bb084d9f7bb99513fce93ff310742bce02ab11e2b9d"
+    },
+    {
+      "path": "cc-runtime/int_div_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "833906405d418f0f421d6155acc5abf79d9902ed37a44903d01c95ff55d3a010"
+    },
+    {
+      "path": "cc-runtime/truncdfsf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "fd9660965daabe47b6243fcee6b6f7f14c49c81153728902f4615e43eaf3b75a"
+    },
+    {
+      "path": "cc-runtime/fixxfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "02c4d2e7a6261b20bf43ecc094bfe5c775b365f98c713958a182a8c3a966280b"
+    },
+    {
+      "path": "cc-runtime/fp_div_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "3f11a70cfba89f7f444da2b615bf9d507ab9db05ccd93a304843f2bb5b450d7e"
+    },
+    {
+      "path": "cc-runtime/ucmpti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "c74d7be5038666f1e845e9c3e327295065de5779b8619b0c754e97a161d62618"
+    },
+    {
+      "path": "cc-runtime/fixsfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "24d026566e84b6291e68d8a5eef535abb5722cb645ddb6ded3c32e93429740a1"
+    },
+    {
+      "path": "cc-runtime/negsf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "73c3edef010c52baa399fa4d904bb2f1c66257096940f1a887f92671ff347538"
+    },
+    {
+      "path": "cc-runtime/negdf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "fdbb86d750d2f9ed40e3793a43938a8da584ab60ca361e6ebba6ad765aa09e62"
+    },
+    {
+      "path": "cc-runtime/popcountti2.c",
+      "action": "removed-upstream",
+      "old_sha256": "1cfc511d395a8af1ca45bace24f8fe1e40324bd6b23a58bc16539e8472de2d1c"
+    },
+    {
+      "path": "cc-runtime/trunctfhf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "04c941dc97745d3532f09eb4d98a11fd85416e7ae86e480c110422343d2cd26e"
+    },
+    {
+      "path": "cc-runtime/int_util.c",
+      "action": "removed-upstream",
+      "old_sha256": "8c60546463090745a66770b89cb04f607d4e29872e6d39f2a39c91013155ff75"
+    },
+    {
+      "path": "cc-runtime/mulvdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "f9200755b7c4b1c396a91bc473f641ee985a8651e55009108be2d624fd744402"
+    },
+    {
+      "path": "cc-runtime/mulvsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "8dd946a05cbd7b1fc0cbd009cc1e2988339eefd7303e302f12dcdd8e1408b5c9"
+    },
+    {
+      "path": "cc-runtime/floatunsitf.c",
+      "action": "removed-upstream",
+      "old_sha256": "00cd74e9fd10baa1348770c968aa82c7d61fecb7daa65aca49de178a7f8bb2c7"
+    },
+    {
+      "path": "cc-runtime/divxc3.c",
+      "action": "removed-upstream",
+      "old_sha256": "1c4e94a641f7b27eb2002e12e68633c98d55cb32390e6aca8325d8be66e172c3"
+    },
+    {
+      "path": "cc-runtime/modti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "23b5f5af57a8a3ccdab785eec6e486bffef932cee87ff1152b3beedaa6296414"
+    },
+    {
+      "path": "cc-runtime/subdf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "8c06ec6159102dffe2fe98c07047c1d0c78d4c56eb905513297282bb5763753a"
+    },
+    {
+      "path": "cc-runtime/subsf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "ff070ad16bb3a8be3c347a0200953ddda22377f509f8543b7aaf1b3e34293e4d"
+    },
+    {
+      "path": "cc-runtime/fp_add_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "327276adbb45d7e2cb2da1cf98b508da00b43b0cb84d4883d07878a0a9a1cd07"
+    },
+    {
+      "path": "cc-runtime/LICENSE.TXT",
+      "action": "removed-upstream",
+      "old_sha256": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d"
+    },
+    {
+      "path": "cc-runtime/floatditf.c",
+      "action": "removed-upstream",
+      "old_sha256": "46e78b24a6971095eb811012894dc8a9748fd8ac7fef1c870679a2c2ee42263c"
+    },
+    {
+      "path": "cc-runtime/fixunsdfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "f93cb176086d0fd5e312bb8c6f89c1ab76da68f7c61dc68fc3b856d781778dbf"
+    },
+    {
+      "path": "cc-runtime/fp_trunc_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "17098ba776ada9f2cc568a02cf34317bb0b59b8a603ff8a92ea909b7bc8c214b"
+    },
+    {
+      "path": "cc-runtime/ashrdi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "7aea539b6160c9439733fafc631d553ba2969aa15ebeba9fac12cd7027eedb4a"
+    },
+    {
+      "path": "cc-runtime/powixf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "d101a1b910c419f4ce44d2b8aec53d99183d3fe7241c070b3210d56d5d567cbb"
+    },
+    {
+      "path": "cc-runtime/floattidf.c",
+      "action": "removed-upstream",
+      "old_sha256": "d54eddafeb7f7f45ebf402dd9913356b353c269e5f5d044a58fcf6edc65ff759"
+    },
+    {
+      "path": "cc-runtime/moddi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "ec2261d7e4bf7b04583c17933a7fd370be4de10418c1d75929e0dc382694f820"
+    },
+    {
+      "path": "cc-runtime/modsi3.c",
+      "action": "removed-upstream",
+      "old_sha256": "120fb67478b98cd78ac8c5f3e8aa6e760d184ece60fa96e9f0672379e3c57aa5"
+    },
+    {
+      "path": "cc-runtime/mulvti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "3372782348a85ae38441419f5a570c45cc26ea79c32d807fb7c76d4f60cd3b1b"
+    },
+    {
+      "path": "cc-runtime/floatsisf.c",
+      "action": "removed-upstream",
+      "old_sha256": "c8b4fb692071ac6462fc99492a38243fa17bb50fa27281df73e8b69cde1c46bb"
+    },
+    {
+      "path": "cc-runtime/trunctfxf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "b99b6abb02f9c048272701018654ceefc1d8c372d6f941acfaa8fa0d95cbc8b0"
+    },
+    {
+      "path": "cc-runtime/fixunssfti.c",
+      "action": "removed-upstream",
+      "old_sha256": "f050658d0b1d182a5ef02300e8027bf0b4e0f65393b7e169a74fc02e8c4f8b78"
+    },
+    {
+      "path": "cc-runtime/truncxfbf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "1e8c5884086400a071e0b87ef0ca07984cc2fd433c9ef232e4cc4a01300c2179"
+    },
+    {
+      "path": "cc-runtime/popcountdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "9c4e3828d94046d00aa66835dca4158ae097abfca27515de07b732b8fc1c887c"
+    },
+    {
+      "path": "cc-runtime/popcountsi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "5ad8cb98cfb67fa4ffb25dc0592962fac006781dcf72039fed5174a0cb51a1cd"
+    },
+    {
+      "path": "cc-runtime/fp_compare_impl.inc",
+      "action": "removed-upstream",
+      "old_sha256": "b3a602d7e840571537aef20a2ad57ad124f2efc7f0a456a37bece30e9dde6394"
+    },
+    {
+      "path": "cc-runtime/ucmpdi2.c",
+      "action": "removed-upstream",
+      "old_sha256": "7ff381dcbdb4d10a93093e39a915c50206c73583d37b9cd2906f58f33982a856"
+    },
+    {
+      "path": "cc-runtime/fixdfsi.c",
+      "action": "removed-upstream",
+      "old_sha256": "1f6da8e8b66df21c4884561dd5ec7997e5771a6263d61f015c01635343b32890"
+    },
+    {
+      "path": "cc-runtime/ashrti3.c",
+      "action": "removed-upstream",
+      "old_sha256": "a6da2dc32167fbf369bbb0d185daeaf1b23aa13fda72f832e2097926c9fb2d74"
+    },
+    {
+      "path": "cc-runtime/extendbfsf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "68f98e6d0b044e22c2d06d7873b34df444eb82eb9235e381fe00583720f73a3b"
+    },
+    {
+      "path": "cc-runtime/floatundisf.c",
+      "action": "removed-upstream",
+      "old_sha256": "76b78e5b7b62e457ae6167324bedf23326751dbbe03166775bf9f16bb95b4d80"
+    },
+    {
+      "path": "cc-runtime/floattixf.c",
+      "action": "removed-upstream",
+      "old_sha256": "c229c6f5a7952aea78d94201bc57aaa8e4a717d2bbbf69491c794b5fbe37453b"
+    },
+    {
+      "path": "cc-runtime/extenddftf2.c",
+      "action": "removed-upstream",
+      "old_sha256": "c2842acc80e86b8da7e8b7c29f8771102b7cac52313a9d26c3f6e1580e7e962b"
+    },
+    {
+      "path": "cc-runtime/subtf3.c",
+      "action": "removed-upstream",
+      "old_sha256": "cbcce7e7aac50ef3f703b3c0a43c30dcd532be097472848cb337020ed48ae1e1"
+    },
+    {
+      "path": "dtc/BSD-2-Clause",
+      "action": "removed-upstream",
+      "old_sha256": "6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd"
+    },
+    {
+      "path": "dtc/GPL",
+      "action": "removed-upstream",
+      "old_sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/stdalign.h",
+      "action": "removed-upstream",
+      "old_sha256": "5f3fcc4613651958b2062f557a8b174040b69e015e38115b071cc4a9410c16bb"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/stdnoreturn.h",
+      "action": "removed-upstream",
+      "old_sha256": "d3f93616775d1aaedeeeea3a4664a4347e26d03182edbe1085798a2440057d10"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/float.h",
+      "action": "removed-upstream",
+      "old_sha256": "b8c48dfaf02a1236e76da83dac0365be69e2d4a85a789b1c60fdb3394ba133b9"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/LICENSE",
+      "action": "removed-upstream",
+      "old_sha256": "63c571bce52c75959b83112b017ed721b564df47a079b10549a3456e70776751"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/limits.h",
+      "action": "removed-upstream",
+      "old_sha256": "08bb0b62e68e44b5445d9925bb94b4a15ea3c3ab8ece9f4dc2f951402f6f7ef7"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/stddef.h",
+      "action": "removed-upstream",
+      "old_sha256": "bc0c6efd61dcd5d8cae353013aeac61b7759d1e6265fa0658313638d09a6a518"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/README",
+      "action": "removed-upstream",
+      "old_sha256": "26a5ad293414b060cbc9dfcff2a9bd2f46a7676cfe358ffdc9d20ee52ed438ed"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/stdbool.h",
+      "action": "removed-upstream",
+      "old_sha256": "723d669fbf68ec1dbcc3a4cbe5deac19b5034fa87c4ae860261fb5c4e031eb3a"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/iso646.h",
+      "action": "removed-upstream",
+      "old_sha256": "ac53cc4e50f3d416e8d17e2aa4b11790889116240d5cd1ec55f399cf2c15a14e"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/stdarg.h",
+      "action": "removed-upstream",
+      "old_sha256": "db64a56129ba1ff854f5be18222bf3a7832688e583eaddb0b300c98d15bdd999"
+    },
+    {
+      "path": "freestnd-c-hdrs-0bsd/stdint.h",
+      "action": "removed-upstream",
+      "old_sha256": "9009b67381d715bddb5b7d82da0c19b1e0e220f86ace00fa33d8a6f7c9c49697"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "action": "removed-upstream",
+      "old_sha256": "1279073aa67a1de8f46718a2302a5b95a2900c48d55aa823af8d783f955b61f5"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "action": "removed-upstream",
+      "old_sha256": "3e2b745d18466d4ea4bb6d7b6d23702f22d829f12d164125f3f2f6e0ea92e1af"
+    },
+    {
+      "path": ".github/workflows/qa.yml",
+      "action": "removed-upstream",
+      "old_sha256": "3630f809010c8703e5994b2d94502ca4b6ef15f6272d10f2b1e5916dd187f102"
+    },
+    {
+      "path": ".github/workflows/check.yml",
+      "action": "removed-upstream",
+      "old_sha256": "950f394ca390e4f7047e455d6765eb7657a0ddbc61ff8b27cbfd54ee626c8316"
+    },
+    {
+      "path": "common/libfdt/fdt_empty_tree.c",
+      "action": "removed-upstream",
+      "old_sha256": "f3cdbfa1bcc86cc841544fee5a16c2f66a4da86b1065eaadab9700addb858369"
+    },
+    {
+      "path": "common/libfdt/fdt_overlay.c",
+      "action": "removed-upstream",
+      "old_sha256": "7090d1ecd02dcb31c34e300ee2c7ca5d6bdd031cd913d8275670c6d817c14a0e"
+    },
+    {
+      "path": "common/libfdt/libfdt_env.h",
+      "action": "removed-upstream",
+      "old_sha256": "273bb264cacd60bb005cfa558bee084558469b9107eaf40d7e1362571ed1bc94"
+    },
+    {
+      "path": "common/libfdt/fdt.c",
+      "action": "removed-upstream",
+      "old_sha256": "3cbcd38b08f16025a81086dbf24fb920fb752435dcb9d852595d407b1d09dd9e"
+    },
+    {
+      "path": "common/libfdt/fdt_strerror.c",
+      "action": "removed-upstream",
+      "old_sha256": "4a1de9eb7eadefe07cfe53c238785aa9bdd54e5387903c2faa7e42006027c137"
+    },
+    {
+      "path": "common/libfdt/fdt_wip.c",
+      "action": "removed-upstream",
+      "old_sha256": "a26966b2d991b432473f5c7f6740a3db97ae51313da0ad9eba56048d56c06c73"
+    },
+    {
+      "path": "common/libfdt/fdt_rw.c",
+      "action": "removed-upstream",
+      "old_sha256": "dd7c00cd8c23638a934b20f902ac94dbd75c752455549f55b6a7baf30d51daea"
+    },
+    {
+      "path": "common/libfdt/libfdt_internal.h",
+      "action": "removed-upstream",
+      "old_sha256": "7c29a6e30115cdd0a30fb4014c7674ead0d4bd39b9989bed46acb4f838bbd4e8"
+    },
+    {
+      "path": "common/libfdt/fdt_addresses.c",
+      "action": "removed-upstream",
+      "old_sha256": "11ac9fb9f20f798483bc1e9e2835b79ef110e55ed7114e20337e59a1b6f4125f"
+    },
+    {
+      "path": "common/libfdt/fdt.h",
+      "action": "removed-upstream",
+      "old_sha256": "60269146c0f49a3da5e260763f4c59ff3257bc1ca01d0b11784ded6d2cb07492"
+    },
+    {
+      "path": "common/libfdt/fdt_ro.c",
+      "action": "removed-upstream",
+      "old_sha256": "69e99486680db4aa7abc9e8a4bc64025084e84f1fb565f6efe8a9246f61fd936"
+    },
+    {
+      "path": "common/libfdt/fdt_sw.c",
+      "action": "removed-upstream",
+      "old_sha256": "e9d193f023880f4359c3ed9954d678b51a87b1d66b783318a9d69a8122378122"
+    },
+    {
+      "path": "common/libfdt/libfdt.h",
+      "action": "removed-upstream",
+      "old_sha256": "80896cd91605fc60703328b2422f6bd29b1e2cba13a72d5953c934c0b28108a8"
+    },
+    {
+      "path": "common/libfdt/fdt_check.c",
+      "action": "removed-upstream",
+      "old_sha256": "17475451c6fece9b27097b3a3709540299e2316ca33a1c37605b97230ff31c7e"
+    },
+    {
+      "path": "common/protos/chainload_next.h",
+      "action": "removed-upstream",
+      "old_sha256": "9a341f9253909039a0ff617369051ca2eca8596c3b2fff164f479c9de714d911"
+    },
+    {
+      "path": "common/protos/chainload_next.c",
+      "action": "removed-upstream",
+      "old_sha256": "70dc9740ca81ce3397016b3b6e3413d46686cf845f7ef21f0b552f1d8ff67fe7"
+    },
+    {
+      "path": "common/lib/rand.c",
+      "action": "removed-upstream",
+      "old_sha256": "5c50c068a0cb03363570053410ba3544f1193dd658f7a39956c8103a0a495924"
+    },
+    {
+      "path": "common/lib/mem.asm_x86_64",
+      "action": "removed-upstream",
+      "old_sha256": "f3a489bf2dcd6d43ca802e5b9152b06bb56f49510614fa8b14b9efb45d009494"
+    },
+    {
+      "path": "common/lib/mem.s2.asm_ia32",
+      "action": "removed-upstream",
+      "old_sha256": "9dd693bfeb1e5909a8f5aa9d41a2c6a73eb60b1e85980c23b3ab804a850afbee"
+    },
+    {
+      "path": "common/flanterm/flanterm.c",
+      "action": "removed-upstream",
+      "old_sha256": "efcacd21c56277d314ad40545e3375863050ef349770de2c59245876a67f8eab"
+    },
+    {
+      "path": "common/flanterm/LICENSE",
+      "action": "removed-upstream",
+      "old_sha256": "201cea7095834beb9eed543928cd74ee90d456489a42aa05d6201fac0c5e36c6"
+    },
+    {
+      "path": "common/flanterm/README.md",
+      "action": "removed-upstream",
+      "old_sha256": "4eb0ef2cf916b01d701cf6ed1d6ec6906647716b2b9062baac2853e99698310b"
+    },
+    {
+      "path": "common/flanterm/flanterm.h",
+      "action": "removed-upstream",
+      "old_sha256": "43e010138e809ed0b6b0dd11d9c48d3a098249815b19b9590aa0c2f8f893f083"
+    },
+    {
+      "path": "common/flanterm/.gitignore",
+      "action": "removed-upstream",
+      "old_sha256": "563ced079ec0a6beb9c19fe4188aa3df5041d6ab8408d56cf1876669f7bedd01"
+    },
+    {
+      "path": "common/fs/ext2.s2.c",
+      "action": "removed-upstream",
+      "old_sha256": "248f1da82384a1cbaa70615d186827be10524132985d78149c40504dcd5b89ea"
+    },
+    {
+      "path": "common/fs/ext2.h",
+      "action": "removed-upstream",
+      "old_sha256": "de9cdbf9847077f2040eb601225b2ff9c3fd624f7db938403af513492924c5fb"
+    },
+    {
+      "path": "common/flanterm/backends/fb.c",
+      "action": "removed-upstream",
+      "old_sha256": "afa66d37240a395bd08a9c4e3158d9a68f085d88631978bfbe1f899f6146d6b8"
+    },
+    {
+      "path": "common/flanterm/backends/fb.h",
+      "action": "removed-upstream",
+      "old_sha256": "97ea4958dac2dba571bead0d9f4b5b12395bb0f8673be45ebd7c7a93260f4348"
+    },
+    {
+      "path": "nyu-efi/inc/efi.h",
+      "action": "removed-upstream",
+      "old_sha256": "71fb41de7780582698f4262b1a80bf238e868c863c50813deb879150bd3f8272"
+    },
+    {
+      "path": "nyu-efi/src/crt0-efi-loongarch64.S",
+      "action": "removed-upstream",
+      "old_sha256": "e3e7b10356d11c4bcb45155d0a61af89cceb0c63a2abb9498c9ebb99b5b547cb"
+    },
+    {
+      "path": "nyu-efi/src/elf_x86_64_efi.lds",
+      "action": "removed-upstream",
+      "old_sha256": "354b8bb082f60eac50ca3e286730667f2a6b9d707e3be099dbf1c38fdc228d02"
+    },
+    {
+      "path": "nyu-efi/src/reloc_loongarch64.c",
+      "action": "removed-upstream",
+      "old_sha256": "02f1c5472ea1ebe2975d010b3d4b5bc2621c0095039e7eddfe218f101f75ac81"
+    },
+    {
+      "path": "nyu-efi/src/crt0-efi-riscv64.S",
+      "action": "removed-upstream",
+      "old_sha256": "e2d83b1259a7adaa921b6aec58d4a16d6cf3437bc7bf6b13673ba53197c5d674"
+    },
+    {
+      "path": "nyu-efi/src/reloc_x86_64.c",
+      "action": "removed-upstream",
+      "old_sha256": "b0e3fe53d18da7361c3a0729439af51dbff48762cb94a292f7e17a0291b976c3"
+    },
+    {
+      "path": "nyu-efi/src/reloc_aarch64.c",
+      "action": "removed-upstream",
+      "old_sha256": "045d1b16ac48c1e005399d98cbfe943e908dcdb45b14875b29ea691459dedd01"
+    },
+    {
+      "path": "nyu-efi/src/elf_aarch64_efi.lds",
+      "action": "removed-upstream",
+      "old_sha256": "e250484e144d34831bbd5f21d1a33e12a09ea850508243639eca30996bcc556b"
+    },
+    {
+      "path": "nyu-efi/src/crt0-efi-x86_64.S",
+      "action": "removed-upstream",
+      "old_sha256": "f2279708b11d76bd7679f3a3ebb2b8d8a32a6f79a1acc2d39bdb527a298c405e"
+    },
+    {
+      "path": "nyu-efi/src/crt0-efi-aarch64.S",
+      "action": "removed-upstream",
+      "old_sha256": "a342a8e9f190dcb32a87a8ad62ddfe828a0042804a0f024f3df95a02655eb25e"
+    },
+    {
+      "path": "nyu-efi/src/nyu-efi.mk",
+      "action": "removed-upstream",
+      "old_sha256": "6f2adde982bc2d6df8495fda0f7f239f8e38ff51505f2be3f38bf50f678528b4"
+    },
+    {
+      "path": "nyu-efi/src/crt0-efi-ia32.S",
+      "action": "removed-upstream",
+      "old_sha256": "cd78e01880e03311d6d42c084e7ebed2c9dae82facbcc492a1c9e31da66396e0"
+    },
+    {
+      "path": "nyu-efi/src/reloc_riscv64.c",
+      "action": "removed-upstream",
+      "old_sha256": "64c5394340633035ecb89bd7db25c7c98e4708da4fcb515d4f12d15fda061a42"
+    },
+    {
+      "path": "nyu-efi/src/elf_ia32_efi.lds",
+      "action": "removed-upstream",
+      "old_sha256": "7ff110ffe8ddb52939e203e2bd55ef4993d25a599aaa1690663e660dffc49de9"
+    },
+    {
+      "path": "nyu-efi/src/reloc_ia32.c",
+      "action": "removed-upstream",
+      "old_sha256": "5d9063cb256ce256b922697287e0f1b588159e7fc21f7b695092e0fdd0ec4378"
+    },
+    {
+      "path": "nyu-efi/src/elf_loongarch64_efi.lds",
+      "action": "removed-upstream",
+      "old_sha256": "5ccb11b07b30df6e267892411d421739ba93288da462f2f046dbb5788ba76016"
+    },
+    {
+      "path": "nyu-efi/src/elf_riscv64_efi.lds",
+      "action": "removed-upstream",
+      "old_sha256": "46cef459c6b552dec2a582f225d0fd24a6d676414b28c2a94e2482464fb8b901"
+    },
+    {
+      "path": "nyu-efi/inc/efi/elf_common.h",
+      "action": "removed-upstream",
+      "old_sha256": "bfa4f72f5f238ebf8e0563ccead2b014a58905345ba4b9d7978fa78b5e0386c5"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efierr.h",
+      "action": "removed-upstream",
+      "old_sha256": "db030af0b5302c9dd38cd87f7dbe15299e323f70f5bda47efc2dec400dd3cddf"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efitcp.h",
+      "action": "removed-upstream",
+      "old_sha256": "9c93062114c662b5671e2736f47d209cd92bb01524af368d47d838310f55b9b9"
+    },
+    {
+      "path": "nyu-efi/inc/efi/eficon.h",
+      "action": "removed-upstream",
+      "old_sha256": "be27628d6c744533199e56be2d8de4d7ef5e7c2fed07d3d71e04b8a4e42651d8"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efinet.h",
+      "action": "removed-upstream",
+      "old_sha256": "85ca6473b5708d38289e192d027c651335a402812f0276f260495e277f428a3f"
+    },
+    {
+      "path": "nyu-efi/inc/efi/elf64.h",
+      "action": "removed-upstream",
+      "old_sha256": "f0366f31b6c2be4327fc2aa90ef7f3ad3ee0fdef2f25b8772178740e2f946772"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efipciio.h",
+      "action": "removed-upstream",
+      "old_sha256": "1cc83fa135df08e11a9d239bdf0f5918031fe9de2970c54e9f008c65abf01ccb"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efigpt.h",
+      "action": "removed-upstream",
+      "old_sha256": "b597e0bbdfa885c7e49de2f7c2ece721f8febbb891f3c14f8e96d8ec4b1ca727"
+    },
+    {
+      "path": "nyu-efi/inc/efi/pci22.h",
+      "action": "removed-upstream",
+      "old_sha256": "58a6134cef56bd1da3dd0c5c866ac908948dd8abd3c187303a463e72ab106dcf"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efi_nii.h",
+      "action": "removed-upstream",
+      "old_sha256": "7866c20a4c71f9b544cc31de5df7bde88979ff357bf90fcede3f3e9e569b970c"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efiser.h",
+      "action": "removed-upstream",
+      "old_sha256": "cd340eee6bd0cbab0a87a3b490aab543b844b22baf15a7384587a383475b7b2d"
+    },
+    {
+      "path": "nyu-efi/inc/efi/elf.h",
+      "action": "removed-upstream",
+      "old_sha256": "1627ad0b6f5c2f93605fff7d64a2fe37f946d65265f54c8899721e0225a3e8f7"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efiui.h",
+      "action": "removed-upstream",
+      "old_sha256": "24159efe913e20fba7a1e0c160ca0063827b837054d009709b39da3f2605b337"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efilink.h",
+      "action": "removed-upstream",
+      "old_sha256": "45a75ab6aaa19685f4cc0c85a658d3837494844ac6016e21d6cdda4d37f9c64d"
+    },
+    {
+      "path": "nyu-efi/inc/efi/elf32.h",
+      "action": "removed-upstream",
+      "old_sha256": "269e2433eb64f4659f72af3fff401fda2a3eecda3d3e025bc20c167ac07e5e36"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efiprot.h",
+      "action": "removed-upstream",
+      "old_sha256": "104f00eeb44ddb9e19219fb0f058e8773a80924805a3ed465ce73c6466bbe67e"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efiip.h",
+      "action": "removed-upstream",
+      "old_sha256": "f1210733219ea1892e4d110ccc6f3ce5e29403b87de9a9b72e1d34887896cfac"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efidevp.h",
+      "action": "removed-upstream",
+      "old_sha256": "c5ff1f97cb25ae68c2e61b0c422a7b075e97acfc0edbf0e42230f686885aba52"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efipart.h",
+      "action": "removed-upstream",
+      "old_sha256": "f07dfa8796bd87faaca38f5e64959014fbed232c6af8e5c89ff78e4174ceb47d"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efiapi.h",
+      "action": "removed-upstream",
+      "old_sha256": "e4f9eb5027d64d4d9e9106d53c094364c9e022bea9441e7438877a75751fcb5b"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efidebug.h",
+      "action": "removed-upstream",
+      "old_sha256": "0e265df3cb8357f9606c10b90f0f6354a9e2b21675ecbc1c044174257c0c7db8"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efishell.h",
+      "action": "removed-upstream",
+      "old_sha256": "913606e768d612b520aada45c188045cf439287b22ba8d849ec6f0b6d684b512"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efimp.h",
+      "action": "removed-upstream",
+      "old_sha256": "ad7aee189d85c919ef40424a963d5145c9b7ee91cc1e6613e65be1b318ce5e7f"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efi_pxe.h",
+      "action": "removed-upstream",
+      "old_sha256": "5ef4e0d99d56561417a37427279f00b8cf8e267654bbfda1ff0e2b1d141b799a"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efifs.h",
+      "action": "removed-upstream",
+      "old_sha256": "6542126a07cdd70d1954230b11e4ed9ecbe18c2e0eb6ce7d4af81ea2a14143c7"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efipoint.h",
+      "action": "removed-upstream",
+      "old_sha256": "b68186c7b6b407097589c39f1d28790f84a0128a870160bdb3bbd5d9253a53a6"
+    },
+    {
+      "path": "nyu-efi/inc/efi/libsmbios.h",
+      "action": "removed-upstream",
+      "old_sha256": "02b162f8a851f85ac57880723e39f2305799d0efa345cc3cc4a61558c37f01d8"
+    },
+    {
+      "path": "nyu-efi/inc/efi/romload.h",
+      "action": "removed-upstream",
+      "old_sha256": "5e87e6afab9a355fdd614be9e4e448967dc73a135068bc1a62485ba03fa87d34"
+    },
+    {
+      "path": "nyu-efi/inc/efi/eficonex.h",
+      "action": "removed-upstream",
+      "old_sha256": "1cb2108efe07e8d57e0f7ecb8f5b06060dc3b63919013a9d6c81b587d2d997c1"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efidef.h",
+      "action": "removed-upstream",
+      "old_sha256": "35d3dd768d2d20e7e323b272e926f0197db9eacc26a241478a98ce15d4021069"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efishellintf.h",
+      "action": "removed-upstream",
+      "old_sha256": "ecde3702c1c1bf895d7791e865c5ff3ce8112f8afa3b586807a2107086241bc0"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efiudp.h",
+      "action": "removed-upstream",
+      "old_sha256": "9086354958e3dc4002e072dd26e3df314352f07fa5eb08b1cce53e78dc203f62"
+    },
+    {
+      "path": "nyu-efi/inc/efi/efipxebc.h",
+      "action": "removed-upstream",
+      "old_sha256": "951468bf70864073c6daa03dea1bd4003614561d32577101338fa97f68c307e2"
+    },
+    {
+      "path": "nyu-efi/inc/efi/eficompiler.h",
+      "action": "removed-upstream",
+      "old_sha256": "6552a58e95f022c525f091e0ee30e8bd231bed247e776205d38aa26ccc4f2c2c"
+    },
+    {
+      "path": "nyu-efi/inc/efi/riscv64/efibind.h",
+      "action": "removed-upstream",
+      "old_sha256": "85fc9316320b00170ae8907db250273b9413dd2f532cb6763149ca337b9f9795"
+    },
+    {
+      "path": "nyu-efi/inc/efi/loongarch64/efibind.h",
+      "action": "removed-upstream",
+      "old_sha256": "caa202b077372fcb6d059104daf288c610ae3496764d78f3457eee275716c8b7"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/eficonsplit.h",
+      "action": "removed-upstream",
+      "old_sha256": "54dfea87161432f61248639d9e2b10a6c03c207e125a81bc57156520d4b44020"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/vgaclass.h",
+      "action": "removed-upstream",
+      "old_sha256": "a2b586e115af7673d39749078d39d2edf24b9b5aaab64a2c6f05dd286e24cfbe"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/adapterdebug.h",
+      "action": "removed-upstream",
+      "old_sha256": "66eae30aeb780f193f7c75db6272a7b4e1464f5f6f067681b8136fc84e06f1e7"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/legacyboot.h",
+      "action": "removed-upstream",
+      "old_sha256": "c33156b3dd9ec7c3d0fccc07f6888e250e8af4d167a986323395ce8efe12d653"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/efivar.h",
+      "action": "removed-upstream",
+      "old_sha256": "27737da72ed706758c17be64b927d438be0f0fa5337a3fcb994ad48a79c3d8b8"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/intload.h",
+      "action": "removed-upstream",
+      "old_sha256": "b1e0cd8d4b62e8d7c3a53b5a9b14e43659908852a6d7cedd34ce7e58e08e4047"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/readme.txt",
+      "action": "removed-upstream",
+      "old_sha256": "1b4c732ced4fe37239b32a75e2846a4d0c32df9a199ae530e0c8d30ec3a914a3"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/piflash64.h",
+      "action": "removed-upstream",
+      "old_sha256": "bd13d24390c18b65e3467192a343b40fb78a19e9e5e062217a920a50400ca8e4"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/efidbg.h",
+      "action": "removed-upstream",
+      "old_sha256": "76c3f769cfbcf4aa0ff058e085a2128c263d442bd359d5e9409463b828fb95d1"
+    },
+    {
+      "path": "nyu-efi/inc/efi/ia32/efibind.h",
+      "action": "removed-upstream",
+      "old_sha256": "8354acc37fb0a6616d96275635bbede1b472c4eb729e5613b202ac141bae8642"
+    },
+    {
+      "path": "nyu-efi/inc/efi/ia32/pe.h",
+      "action": "removed-upstream",
+      "old_sha256": "e5e17eef2e82dd3c13ce2d28434b7499cdab4d7a611d63dea09623bc61cef35e"
+    },
+    {
+      "path": "nyu-efi/inc/efi/aarch64/efibind.h",
+      "action": "removed-upstream",
+      "old_sha256": "9c0dec4347b719562a2bbfc1e9b415fbdfbb5177eb4567d8d91721bf47ea4070"
+    },
+    {
+      "path": "nyu-efi/inc/efi/x86_64/efibind.h",
+      "action": "removed-upstream",
+      "old_sha256": "1e3a6fd7e65e4240f663d11ac825af51332085fac5f28d312e82f95c42352504"
+    },
+    {
+      "path": "nyu-efi/inc/efi/x86_64/pe.h",
+      "action": "removed-upstream",
+      "old_sha256": "a8126999ee62c0c46e37b383d30063cdc3a4e40289d108d4b2999c5b738cb8f7"
+    },
+    {
+      "path": "nyu-efi/inc/efi/protocol/riscv/efiboot.h",
+      "action": "removed-upstream",
+      "old_sha256": "6b2b471c406fde86c70c54545a413dd6ea574fb37ec8d9ced15d334c190684a2"
+    },
+    {
+      "path": "decompressor/tinf/tinfgzip.c",
+      "action": "removed-upstream",
+      "old_sha256": "2bc4d96e6b74dbb6d04e5bee8ed24e5094f83b41b9e4fc08bbcb292f7e3a5bab"
+    },
+    {
+      "path": "decompressor/tinf/tinflate.c",
+      "action": "removed-upstream",
+      "old_sha256": "0762452ff6f5e7382780344d03035bf2ff75fb4cfda4d9b356c09e4683566569"
+    },
+    {
+      "path": "decompressor/tinf/tinf.h",
+      "action": "removed-upstream",
+      "old_sha256": "842419f5718223128f59a666e4dedf4e0049a8a70295bdf93434cd41b700d6e3"
+    },
+    {
+      "path": "AUTHORS.md",
+      "action": "added",
+      "sha256": "f50231c60fe882ec7e70e42abf2215a69720e124af1570bba68ffc61a8877938"
+    },
+    {
+      "path": "configure.ac",
+      "action": "updated",
+      "sha256": "e1a4cc515a17de048993e4e62e7865c12fd67cd3752ae34367286cd50624de79"
+    },
+    {
+      "path": "GNUmakefile.in",
+      "action": "updated",
+      "sha256": "682cc4ae5fcbd9ee26defb8714f05b0430e5d2dcfb7d3aa0b0fcf73d6b81f172"
+    },
+    {
+      "path": "bootstrap",
+      "action": "updated",
+      "sha256": "ea900f5615ee1f5b9c012491f93e51a881bee7c379ae6e802ba180e774f086c8"
+    },
+    {
+      "path": "timestamps",
+      "action": "updated",
+      "sha256": "1b917d812b29b537b818ac0fb4d17f4957ba6a5e195bd1b5d1967c4973db7960"
+    },
+    {
+      "path": "configure",
+      "action": "updated",
+      "sha256": "2a47e1e2c1938ec2e982d35e056bdf6c473bb592e1d7cd147ed812af8ac4a247"
+    },
+    {
+      "path": "ChangeLog",
+      "action": "updated",
+      "sha256": "56243d726aea7d4ae8863d026afee1619d9b62816e3a9a8d2a9ffff4fc9ad75d"
+    },
+    {
+      "path": "BUGS.md",
+      "action": "added",
+      "sha256": "404251d587181903026bbe82358096b8ccba007f66a20bed5ffc8bbe344de389"
+    },
+    {
+      "path": "USAGE.md",
+      "action": "updated",
+      "sha256": "138e0843e0bdd8c2e62e6cfcc82f45caca68bf6e374bb3ffcc3dba18df7ab5f5"
+    },
+    {
+      "path": "FAQ.md",
+      "action": "added",
+      "sha256": "8b56ef660815abc21840b5489de113eae2d39a2658b9b48baead26c93a2165a2"
+    },
+    {
+      "path": "INSTALL.md",
+      "action": "added",
+      "sha256": "972320a4197173b2d584a5e5dd203ee73c892755fac55561dc660a15cdabf4b5"
+    },
+    {
+      "path": ".editorconfig",
+      "action": "updated",
+      "sha256": "6ef50f42e5eb8d4e2c735de420a5a19a1b8ec19fcfc9a10324d64dcc61b48834"
+    },
+    {
+      "path": "CONFIG.md",
+      "action": "updated",
+      "sha256": "dab6c4a98df42eb9e9c63cf5774c20864af53aa93eb6b84a7c2d85ebade7542d"
+    },
+    {
+      "path": "COPYING",
+      "action": "updated",
+      "sha256": "f174b8ff78f6f8982a1fc992668f8486eb8cf598f6938923c22e9bb50f8338a8"
+    },
+    {
+      "path": "version",
+      "action": "added",
+      "sha256": "049dbe8280f045f28ff6b218b0cea40cc449d0f73b21cfc107f3fad3494ce296"
+    },
+    {
+      "path": "3RDPARTY.md",
+      "action": "added",
+      "sha256": "5b3e22d41644edb4775ce5a0f338ec043b0944578eb7ae1ccb3f4095a370df24"
+    },
+    {
+      "path": "aclocal.m4",
+      "action": "added",
+      "sha256": "11080b4ccbafd7937a418b308bd815ac664ea1e3e4c22d39be52a3b4d9b72b4f"
+    },
+    {
+      "path": "libfdt/BSD-2-Clause",
+      "action": "added",
+      "sha256": "6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd"
+    },
+    {
+      "path": "libfdt/GPL",
+      "action": "added",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    },
+    {
+      "path": "build-aux/install-sh",
+      "action": "updated",
+      "sha256": "776876b3909b096439109a4c7642eb0f9100f6ba3fb42fa93d05351e50a0a7ef"
+    },
+    {
+      "path": "build-aux/config.guess",
+      "action": "updated",
+      "sha256": "50205cf3ec5c7615b17f937a0a57babf4ec5cd0aade3d7b3cccbe5f1bf91a7ef"
+    },
+    {
+      "path": "build-aux/config.sub",
+      "action": "updated",
+      "sha256": "26b852f75a637448360a956931439f7e818bf63150eaadb9b85484347628d1fd"
+    },
+    {
+      "path": "picoefi/README",
+      "action": "added",
+      "sha256": "a9df064c88388a935be241f3eb50fa71776cf93dbbb1b67633924efbd15a8fe0"
+    },
+    {
+      "path": "picoefi/COPYING",
+      "action": "added",
+      "sha256": "cb04faf9e77880504160aae38d8a7cee59c038c5f1c1de95d0c133c85ecb25ef"
+    },
+    {
+      "path": "tools/limlzpack.c",
+      "action": "added",
+      "sha256": "bc01a41fb9403869f8874eb2d7da5642e2dc5623d338e94e5b87f3d5ab735204"
+    },
+    {
+      "path": "freestanding-c-hdrs/LICENSE",
+      "action": "added",
+      "sha256": "ff7ea00a764e90de714436e89585fe4cc6fc5235241f2b1b44d0939771db3129"
+    },
+    {
+      "path": "freestanding-c-hdrs/README",
+      "action": "added",
+      "sha256": "26a5ad293414b060cbc9dfcff2a9bd2f46a7676cfe358ffdc9d20ee52ed438ed"
+    },
+    {
+      "path": "host/limine.c",
+      "action": "updated",
+      "sha256": "89e6b382b0093525efc8c7a9d85ee192ad3862b8e857696a48f08c4e9f545521"
+    },
+    {
+      "path": "host/host.mk",
+      "action": "updated",
+      "sha256": "bf65c6e9e26c9ec7a0e07054ad3cf7206e394cc12871f438c8b8b0e088a57ae2"
+    },
+    {
+      "path": "LICENSES/LicenseRef-scancode-bsd-no-disclaimer-unmodified.txt",
+      "action": "added",
+      "sha256": "6c9f956b69757821cbc3dfe33d84707dcc00c405c7da921b0e6ad268f1f6672a"
+    },
+    {
+      "path": "stage1/decompressor.asm",
+      "action": "added",
+      "sha256": "9e1526e1920119f424a8230eb71f66c8fc75fabad82ca62b1a161291d1d64672"
+    },
+    {
+      "path": "common/linker_uefi_ia32.ld.in",
+      "action": "updated",
+      "sha256": "97c7cad608fadad7d44dde7f0efb43ec854c023b67239d2b39b6d6e4b9f18f3e"
+    },
+    {
+      "path": "common/menu_thunk.asm_ia32",
+      "action": "updated",
+      "sha256": "3f8d19477745af831efbc6fb8c44945670f04ff7e00b1ac0f2b2b26fe322e33e"
+    },
+    {
+      "path": "common/entry.s2.c",
+      "action": "updated",
+      "sha256": "f7a349aa7fc0f4dfde645d025573a3bf09bbf8392c61aff4d7bd5b9aaef005f9"
+    },
+    {
+      "path": "common/linker_uefi_aarch64.ld.in",
+      "action": "updated",
+      "sha256": "faa124d5db23f3100908b64b9ef92ded628663e88e0b80e8fbf3d2222512ee2b"
+    },
+    {
+      "path": "common/linker_uefi_riscv64.ld.in",
+      "action": "updated",
+      "sha256": "9d4c90a41c6dd17e883fc7386437736aa75c8dbef66ec0cb04459f7942bfd3f1"
+    },
+    {
+      "path": "common/common.mk",
+      "action": "updated",
+      "sha256": "44c979245fcfd189a1d5f5374d16160807b0bf953b89e294995a72e9c8a245e8"
+    },
+    {
+      "path": "common/menu_thunk.asm_loongarch64",
+      "action": "updated",
+      "sha256": "c09512de720b1872b44c9287ca4ead95681838be5a58cc55e197501535eb62c3"
+    },
+    {
+      "path": "common/menu.c",
+      "action": "updated",
+      "sha256": "865eb38d633c142f0181e1ef8f4a2c996a5d11167ec062fa94193092b7153f41"
+    },
+    {
+      "path": "common/cc-runtime.s2.c",
+      "action": "added",
+      "sha256": "60bb1af4f6541077b736f19bf0f5a22b5dd8a2f3bed0d9d9d89846a33ef24b74"
+    },
+    {
+      "path": "common/efi_thunk.asm_uefi_x86_64",
+      "action": "updated",
+      "sha256": "28337671c4e58c875e54c2c2ce02bfad719890fad4b03ee67010c904d046e244"
+    },
+    {
+      "path": "common/efi_thunk.asm_uefi_riscv64",
+      "action": "updated",
+      "sha256": "138a3f26392f75786e637dff3045e455dd1dc25b15c2b1401e627e1315059545"
+    },
+    {
+      "path": "common/linker_uefi_loongarch64.ld.in",
+      "action": "updated",
+      "sha256": "69d42a5bc08d5ce132c75087402d8e174f0f5cb2d373a78e305d3bddad1fce2e"
+    },
+    {
+      "path": "common/menu_thunk.asm_aarch64",
+      "action": "updated",
+      "sha256": "74331bc52b5435528f2c6102a620ac17a8f7863e75e5599b9e6ecb53f219e519"
+    },
+    {
+      "path": "common/menu_thunk.asm_riscv64",
+      "action": "updated",
+      "sha256": "3a9c82f4f32b8777a68bc13dc1c811e0adfba47de48dcec2dfde0204020f47dd"
+    },
+    {
+      "path": "common/stb_image.patch",
+      "action": "updated",
+      "sha256": "b29de00db38078fcfded4a63bb17faa34976f5a8f4225b49f70dabb944557cd0"
+    },
+    {
+      "path": "common/efi_thunk.asm_uefi_ia32",
+      "action": "updated",
+      "sha256": "3b4bc1825bc15fd7db8d3ba85391f1f32d273d615c7c84fb069470459630aa13"
+    },
+    {
+      "path": "common/efi_thunk.asm_uefi_aarch64",
+      "action": "updated",
+      "sha256": "79c5a18243995c16ddc8f408c9092136ac55a278a07ce1a6598021c1cf44c8a1"
+    },
+    {
+      "path": "common/menu.h",
+      "action": "updated",
+      "sha256": "525e7c32d9fa3670a4e3d363e71ee05605a97ab8e18203f6c77ea3916fba662b"
+    },
+    {
+      "path": "common/entry_asm.s2.asm_bios_ia32",
+      "action": "updated",
+      "sha256": "e6b9271ab18cbb3b4f13492d8691e0b040c1c897c6cfa9c1b1dcc8d2002b29dc"
+    },
+    {
+      "path": "common/menu_thunk.asm_x86_64",
+      "action": "updated",
+      "sha256": "9d32e84042e780c31be5255be0256a363c95060eb81a65d7ff3d030d01a250c7"
+    },
+    {
+      "path": "common/gensyms.sh",
+      "action": "updated",
+      "sha256": "07d92e4d5b55497113900f2fc2e487342b44e675a0eab0170fb25326ddcad37a"
+    },
+    {
+      "path": "common/linker_bios.ld.in",
+      "action": "updated",
+      "sha256": "08a5b5b8355e9f2ec0e5548476a8b608e408662c97bf984271e8dbbf850e5313"
+    },
+    {
+      "path": "common/linker_uefi_x86_64.ld.in",
+      "action": "updated",
+      "sha256": "9aa10f2b38120c405a29a08dccfa2171727d648fed9a996de621b513e9cc9352"
+    },
+    {
+      "path": "common/efi_thunk.asm_uefi_loongarch64",
+      "action": "updated",
+      "sha256": "01e30109dacd1f48b51830f305cc0040bfae32de927a05c0adc6fe16a382a128"
+    },
+    {
+      "path": "common/entry.s3.c",
+      "action": "updated",
+      "sha256": "8d11b43596b883d1bd1ee8a18bb77a470710d92af8aa049f3952940ca7e60c72"
+    },
+    {
+      "path": "m4/ax_prog_cc_for_build.m4",
+      "action": "added",
+      "sha256": "368eb217a49d95cee67e2632d7d682cac38737f6cba0f4bb32576a118bea827d"
+    },
+    {
+      "path": "flanterm/LICENSE",
+      "action": "added",
+      "sha256": "4d1e2a6be17497c194c916c9c53b9a4371868b9861367099fecc319ee32da0d5"
+    },
+    {
+      "path": "flanterm/README.md",
+      "action": "added",
+      "sha256": "903cdd66530b05544067673e80a13993a2240333937708291496487624852168"
+    },
+    {
+      "path": "flanterm/FRONTEND.md",
+      "action": "added",
+      "sha256": "a214dcf9b8c911df2ca9d66f009cc15ee8a093349e3a625379bd3a86de6b9c69"
+    },
+    {
+      "path": "flanterm/BACKEND_FB.md",
+      "action": "added",
+      "sha256": "d8d5e944c785756dd37c5a9ffab8c64a8fe78e1e37dfd88773fb8fdafbe235d6"
+    },
+    {
+      "path": "limine-protocol/LICENSE",
+      "action": "added",
+      "sha256": "e2b1c35814afb22acbddf7ff567d2b05a467e503628ffea62752bc1f3fa2595c"
+    },
+    {
+      "path": "limine-protocol/README.md",
+      "action": "added",
+      "sha256": "398a402f3eb40a05661386ba70fe2162a6632b797eca21ebcc01a934f137a5c1"
+    },
+    {
+      "path": "limine-protocol/PROTOCOL.md",
+      "action": "added",
+      "sha256": "83920cc9a58fbc0eba058064663868c84c6df510ad28d9f7a2ecc35949056818"
+    },
+    {
+      "path": "limine-protocol/include/limine.h",
+      "action": "added",
+      "sha256": "0aadf2633c85d8cb145344c968add158aeb1deb68af567d55ba8431c492b6d4c"
+    },
+    {
+      "path": "flanterm/src/flanterm.c",
+      "action": "added",
+      "sha256": "83abc24b9f625c4693ea0f3b867b9a8ecf34854e4ccd5549b1129f7d857c1640"
+    },
+    {
+      "path": "flanterm/src/flanterm_private.h",
+      "action": "added",
+      "sha256": "b59b4299956235a26413cb7f3a1d5e82c0ee2337981fea085001630321583baa"
+    },
+    {
+      "path": "flanterm/src/flanterm.h",
+      "action": "added",
+      "sha256": "c79bc6bed1842bef177f3b00ced69897cbd5a19f806623ab2d40491425c4221a"
+    },
+    {
+      "path": "flanterm/src/flanterm_backends/fb.c",
+      "action": "added",
+      "sha256": "1110272325cca6d608d3c9b9b30bf1eee23ad77723e6eff45b1c7966e4249d5b"
+    },
+    {
+      "path": "flanterm/src/flanterm_backends/fb.h",
+      "action": "added",
+      "sha256": "360712e32c347946929462c47511b5d5aea8d10a8432a2755f5b69b70eafda0a"
+    },
+    {
+      "path": "flanterm/src/flanterm_backends/fb_private.h",
+      "action": "added",
+      "sha256": "cccf33af7b790b915b62e1e61ff3c530fbafdef933b4db64f18a6c04d6d72ef8"
+    },
+    {
+      "path": "common/compress/gzip.h",
+      "action": "added",
+      "sha256": "3bc9fc6edb45ab313d669a497d130f30b7928a92302a1477e17a122f6d404720"
+    },
+    {
+      "path": "common/compress/pdgzip.c",
+      "action": "added",
+      "sha256": "1a0c455849631e7e17981f8f1c132270e43092251817ce42175acf54c2777816"
+    },
+    {
+      "path": "common/compress/gzip.c",
+      "action": "added",
+      "sha256": "3c5258c6011615b39544b5cb2157a93089e7828a4a247ebd5adf2a14f77be2ce"
+    },
+    {
+      "path": "common/compress/pdgzip.h",
+      "action": "added",
+      "sha256": "5cd2d8ede6ed0a97cdab0d3a371f0e8e99b755a7658494cc8955e80fc6316146"
+    },
+    {
+      "path": "common/protos/multiboot2.c",
+      "action": "updated",
+      "sha256": "a492f135f8b50337d14715a9f457f194f2770e80ed0a31ba4b54f1d606b7c9ec"
+    },
+    {
+      "path": "common/protos/limine_asm.asm_ia32",
+      "action": "updated",
+      "sha256": "538060155d80d1737fde6e2662c3e08216748812dccf0559d0babaf414a7b543"
+    },
+    {
+      "path": "common/protos/linux.h",
+      "action": "updated",
+      "sha256": "945a63eeb80303bb3098be03be601993be03705560e1824875fd80cae0d5db85"
+    },
+    {
+      "path": "common/protos/spinup_freebsd.asm_bios_ia32",
+      "action": "added",
+      "sha256": "ed36df15eb7945b00a83d0ab26d26abb06c5dc0ed75dbc638a25c0425e2671e9"
+    },
+    {
+      "path": "common/protos/limine.c",
+      "action": "updated",
+      "sha256": "59456be4cce5b6739231242bdebdf0a4afb3620aff86542d77403df2c7919209"
+    },
+    {
+      "path": "common/protos/efi_boot_entry.c",
+      "action": "added",
+      "sha256": "ab2c09b7cb8684cdad6694eef4fc644f7c4b276048a5b786cf445400b4c22206"
+    },
+    {
+      "path": "common/protos/chainload.h",
+      "action": "updated",
+      "sha256": "6e1c89734a96572f08a362f984a024f1b4fb8d2ab4e525b21327d8902101406a"
+    },
+    {
+      "path": "common/protos/multiboot1.c",
+      "action": "updated",
+      "sha256": "69a270141ed59a398d43da1f767482181bebded9b2cbedb6b228918e8e55adb8"
+    },
+    {
+      "path": "common/protos/linux_32.asm_x86",
+      "action": "updated",
+      "sha256": "3e68d055422fc3914a22e6019e4bfc08c3636cfd8efa7c2be0b10e750bab6c66"
+    },
+    {
+      "path": "common/protos/multiboot_reloc.asm_x86",
+      "action": "updated",
+      "sha256": "235486e88b7bc1eb84298a860403f69ddf13026ab10edd60eea456e835e206c6"
+    },
+    {
+      "path": "common/protos/linux_x86.c",
+      "action": "added",
+      "sha256": "5c9b35116208d835243dc167f86833f5d449e700b312ce3828b5780ed51cdbe4"
+    },
+    {
+      "path": "common/protos/linux_64.asm_uefi_x86_64",
+      "action": "added",
+      "sha256": "90f73d54f8e8560322fd33b75bfe77f70681ff55dbfb546840fbaf8bedef2ac1"
+    },
+    {
+      "path": "common/protos/limine_32.asm_x86",
+      "action": "updated",
+      "sha256": "397315b8e05d7297680ba5dcde5608519650f339502f58dcdd5a671263c5b667"
+    },
+    {
+      "path": "common/protos/efi_boot_entry.h",
+      "action": "added",
+      "sha256": "4ab147c1c0cb63a4c24236e639277fc414f8f7a1a6fcbad91ae5ef213c2a5ee5"
+    },
+    {
+      "path": "common/protos/multiboot1.h",
+      "action": "updated",
+      "sha256": "0ad0417934ef4ad5d66c98292ade63bf88d309b24498c2b586c09bda5f9e937d"
+    },
+    {
+      "path": "common/protos/chainload.c",
+      "action": "updated",
+      "sha256": "afdc4c1e797c53ff5a349d332daf23e97927a5a1bc0534b162bdc366ec667151"
+    },
+    {
+      "path": "common/protos/multiboot_32.asm_x86",
+      "action": "updated",
+      "sha256": "562def264a0b15c0fc5039e622b6f6b0c671c840825135a1823c97280460db3f"
+    },
+    {
+      "path": "common/protos/linux.c",
+      "action": "updated",
+      "sha256": "7b07863a307f379e2bf629bd2038a2df2bbbe2f05350a750bccface0a0847712"
+    },
+    {
+      "path": "common/protos/linux_risc.c",
+      "action": "updated",
+      "sha256": "e5efac361ac4687b610d96a71ebdf4164d1a16b923eff5249a08a9506f3abf57"
+    },
+    {
+      "path": "common/drivers/vga_textmode.h",
+      "action": "updated",
+      "sha256": "b861c4dfdbee7acbaca3d03ad50c8bffda52f1738246a4c61a39f3130474497b"
+    },
+    {
+      "path": "common/drivers/serial.c",
+      "action": "updated",
+      "sha256": "ad9658076100fd11e4c554aec568819d6efedd6ba012023399e3dca5c5b1be91"
+    },
+    {
+      "path": "common/drivers/mouse.c",
+      "action": "added",
+      "sha256": "931b78eb8f3fa6a400be53e176017658cebfee142a7f8944c6b8d0c329fef89c"
+    },
+    {
+      "path": "common/drivers/edid.c",
+      "action": "updated",
+      "sha256": "ca9a8df69d607773e23ec3a1fce430282e7a3310229fad0fff85e91523cd79b3"
+    },
+    {
+      "path": "common/drivers/gop.c",
+      "action": "updated",
+      "sha256": "5c2400fcfd2d458ae019f95945b1e5f96f874d477170be242b120bd3251cb626"
+    },
+    {
+      "path": "common/drivers/disk.h",
+      "action": "updated",
+      "sha256": "8732f6c6f0e6ce0c9084987357ee33eb69047eb47c14f504356b30e0b54a98bc"
+    },
+    {
+      "path": "common/drivers/mouse.h",
+      "action": "added",
+      "sha256": "86abf5ed08d53585662a743a7757c33149beaa1aa964a920db5a1e0a8618870f"
+    },
+    {
+      "path": "common/drivers/serial.h",
+      "action": "updated",
+      "sha256": "3e08c9d4efcc2b4adbccf15f8ca878c123e7f230e32606a976077e0b84385b6b"
+    },
+    {
+      "path": "common/drivers/vga_textmode.c",
+      "action": "updated",
+      "sha256": "18c8b2df0b565fdb99d67a450739b0c86a9bab4fb3588f6929a65c57922271da"
+    },
+    {
+      "path": "common/drivers/edid.h",
+      "action": "updated",
+      "sha256": "642a050d1498c0954b4e1218b1274683f78b2fb26761660f11fb17bedf82f0b5"
+    },
+    {
+      "path": "common/drivers/vbe.c",
+      "action": "updated",
+      "sha256": "84a055f939a911a72fab87bb95a87d946bb83bdc115bb0759a70323b82571cb3"
+    },
+    {
+      "path": "common/drivers/disk.s2.c",
+      "action": "updated",
+      "sha256": "e7532a0332d93f7d775733a1afb6280bfd864b487e9f4f30f92af711b21c8c14"
+    },
+    {
+      "path": "common/crypt/blake2b.h",
+      "action": "updated",
+      "sha256": "aaf3a644b4e2c0e111f04aad3c9d9ecd8caeba2fefd627cbc093f5cd040fa7ce"
+    },
+    {
+      "path": "common/crypt/blake2b.c",
+      "action": "updated",
+      "sha256": "0975c995f87814e8e12d2a368e47304e81ece377d45db7cf7478044b4be2e370"
+    },
+    {
+      "path": "common/sys/int_thunks.s2.asm_bios_ia32",
+      "action": "updated",
+      "sha256": "186da45ac752c3f8a8406b715815ce272be8eeb089266430ad1ec2a8ba249279"
+    },
+    {
+      "path": "common/sys/cpu_riscv.c",
+      "action": "updated",
+      "sha256": "ea5384902c0cf00c545956d1f6779e240cf9485f4ffb27de2153b57ad7a95e2f"
+    },
+    {
+      "path": "common/sys/e820.s2.c",
+      "action": "updated",
+      "sha256": "73d41bfae13e1eaf3c377a97a6741c518ec329a746c100a1366f552eb8852422"
+    },
+    {
+      "path": "common/sys/iommu.h",
+      "action": "added",
+      "sha256": "8b60e35607fe822075dd037069b08751c2d30851107ec0db0a41e08e494aced2"
+    },
+    {
+      "path": "common/sys/gdt.s2.c",
+      "action": "updated",
+      "sha256": "e667aebb1d9093447d16329a6b4586f2678b8e6ab0df9727fa33df4261b24ca3"
+    },
+    {
+      "path": "common/sys/exceptions.s2.c",
+      "action": "updated",
+      "sha256": "b3e4cd6a3be628a6974b5fc7da64c6456d2f9801a5c9eed57e149e4e8568edc6"
+    },
+    {
+      "path": "common/sys/sbi.asm_riscv64",
+      "action": "updated",
+      "sha256": "ad19267118a610dfa6bedddc69a857c298c9f6cc3f96e6a56d20cbe5b4666c37"
+    },
+    {
+      "path": "common/sys/smp.h",
+      "action": "updated",
+      "sha256": "0ea6c85e8d0e9a9da7c25f4967e3f6b0e212a2ab8e5916bc444e61f9a3dc867b"
+    },
+    {
+      "path": "common/sys/dummy_isr.asm_x86_64",
+      "action": "updated",
+      "sha256": "fc8c6b671b044c3fdeeacdd563b5455523b0ad404740892c25febdb577120414"
+    },
+    {
+      "path": "common/sys/lapic.h",
+      "action": "updated",
+      "sha256": "f7b1f86ddbdc146ba0d6ccf986be60af494d8717f5a26a77536255dc7ccae2b1"
+    },
+    {
+      "path": "common/sys/smp_trampoline.asm_aarch64",
+      "action": "updated",
+      "sha256": "a4515550fd8deea6da32e76bf6467b56e2671f489a1569fb5eaf2e415a9b0032"
+    },
+    {
+      "path": "common/sys/smp_trampoline.asm_x86",
+      "action": "updated",
+      "sha256": "b5eb6ba0a896ecb8ac4dccb038ea1281f8fcbee8d14a05eb55e51240b4077f38"
+    },
+    {
+      "path": "common/sys/smp_trampoline.asm_riscv64",
+      "action": "updated",
+      "sha256": "5a267f36cce3a427057b8286ac39e968cc4268e0f50567606abafc012efacd1c"
+    },
+    {
+      "path": "common/sys/smp_trampoline.asm_loongarch64",
+      "action": "added",
+      "sha256": "5b8f440aa72146af87aa53845cd9eef8301a5558d843da15c2b0c5e344372e3c"
+    },
+    {
+      "path": "common/sys/iommu.c",
+      "action": "added",
+      "sha256": "778fe78c8fcaf8fc2b157e33327b4357910620d2548a5b7ee9aca8384f39a1c0"
+    },
+    {
+      "path": "common/sys/cpu.h",
+      "action": "updated",
+      "sha256": "e9a6791e9590ebac08815a10dc73ef097002d5b818a08a8b4f718074bfed5f83"
+    },
+    {
+      "path": "common/sys/idt.c",
+      "action": "updated",
+      "sha256": "4de359cf06cf4c393278cf828f0bb934daf2362da81af1f843be65e272f7d793"
+    },
+    {
+      "path": "common/sys/cpu.s2.c",
+      "action": "added",
+      "sha256": "1b3202f8bfc051088ff75d833e4a670960179d56865c8b24150525aa6a649b7b"
+    },
+    {
+      "path": "common/sys/e820.h",
+      "action": "updated",
+      "sha256": "5b72ed2f0011c473a127cfeb266adab6ae43e23156cb5e164eaea130e1e265e6"
+    },
+    {
+      "path": "common/sys/dummy_isr.asm_ia32",
+      "action": "updated",
+      "sha256": "33c52f27b3c2041a3908b901be493f8ad3a68f4b4de7cb10dfe0edac01086b18"
+    },
+    {
+      "path": "common/sys/a20.s2.c",
+      "action": "updated",
+      "sha256": "889970c67607a4fc417c87df2f50319287101383e5d97d97d80d9aaaf0781b32"
+    },
+    {
+      "path": "common/sys/smp.c",
+      "action": "updated",
+      "sha256": "fedf26f09e562dbfb64305e0ac3229febc7cbb239fbba3929848911ba882b0a9"
+    },
+    {
+      "path": "common/sys/lapic.c",
+      "action": "updated",
+      "sha256": "c2615463f96c03c7500494b10428751cb4afc45ecd7703c5cecce015766d0a52"
+    },
+    {
+      "path": "common/pxe/pxe.s2.c",
+      "action": "updated",
+      "sha256": "68620b1c6505a31b3226c3f1011b082d038433cbe78234564b993e2c393dea3d"
+    },
+    {
+      "path": "common/pxe/tftp.s2.c",
+      "action": "updated",
+      "sha256": "059af009024920c4f70923c90fb467fcc76049c188e2f69b51351fae6ba8eb8a"
+    },
+    {
+      "path": "common/pxe/pxe_asm.s2.asm_bios_ia32",
+      "action": "updated",
+      "sha256": "90bf14e3b80f1d2d9fe0a4b81ebe1a8d15c9ed780e1d564534d6a993db8374ec"
+    },
+    {
+      "path": "common/lib/pe.c",
+      "action": "added",
+      "sha256": "73ae60bb1d64ebda835055f6bd51c0c911c5c7fdce732f5803820ca12823026d"
+    },
+    {
+      "path": "common/lib/getchar.h",
+      "action": "updated",
+      "sha256": "4c2ee5b06bf8edbb9814b394f0cb526259724e96908d84ebb99190a66c39c1f4"
+    },
+    {
+      "path": "common/lib/rng_seed.h",
+      "action": "added",
+      "sha256": "24357bbe9304428da7e86685910b42f593453b563c3f0074ab379096575538d9"
+    },
+    {
+      "path": "common/lib/trace.s2.c",
+      "action": "updated",
+      "sha256": "a80674025367a2fe1489c9a624457c6196cb87b785c1275e3a412b829c21c7fc"
+    },
+    {
+      "path": "common/lib/fb.c",
+      "action": "updated",
+      "sha256": "d95580e86c28b3ebace0b6daf41fa5ecf81db9f258f21a84fb3bc73ce7c66fce"
+    },
+    {
+      "path": "common/lib/bli.c",
+      "action": "added",
+      "sha256": "4f0f88f48379570bfa6d010018c43827c73a9b164a86e54fc1221013ec99de32"
+    },
+    {
+      "path": "common/lib/spinup.asm_aarch64",
+      "action": "updated",
+      "sha256": "46db294ba8af99ebaf75d6d57b2bf32ccccfb2ae20c295a80247aedfc55bd593"
+    },
+    {
+      "path": "common/lib/bgrt.c",
+      "action": "added",
+      "sha256": "016d289e93b5b28499a15c5328ca44352cb11414be0bc29d25a3d039c4d8c8e3"
+    },
+    {
+      "path": "common/lib/gterm.h",
+      "action": "updated",
+      "sha256": "0808294c11b1862df226ee0cf57ab3f1fd25106e908432c2e6b02a24a835d30e"
+    },
+    {
+      "path": "common/lib/tpm.c",
+      "action": "added",
+      "sha256": "0b950b7f3a6cb6ac58a573d439054e1b3181a62867d297ddbee635313463b247"
+    },
+    {
+      "path": "common/lib/term.c",
+      "action": "updated",
+      "sha256": "89fc8df443394b51dd71954fe043ad9df9bda39cca1c93b06d12d3ab0c1653fd"
+    },
+    {
+      "path": "common/lib/config.h",
+      "action": "updated",
+      "sha256": "e853ef7cf65d536e329b5b41ea6ca3301a54020f90babff34791ee75fa6273cc"
+    },
+    {
+      "path": "common/lib/rand.s2.c",
+      "action": "added",
+      "sha256": "93dfb44f07d115a289ecaaced016dc369c1c3c692712763d962141e307c23dd7"
+    },
+    {
+      "path": "common/lib/misc.h",
+      "action": "updated",
+      "sha256": "a5f4c58fab83c6270bca770bf57e2a8950f33266ef6463eef635e67fa8606108"
+    },
+    {
+      "path": "common/lib/uri.h",
+      "action": "updated",
+      "sha256": "5ff6bd51b1f790e89ea8efc588af286085fc8b8ed1ffaf468d0eedce33e82451"
+    },
+    {
+      "path": "common/lib/elsewhere.c",
+      "action": "updated",
+      "sha256": "a4b9337008b429c48805eb1d383311d944ea61c88b64b1391c57da8a03a8add4"
+    },
+    {
+      "path": "common/lib/libc.c",
+      "action": "updated",
+      "sha256": "81e9cb2d2bbac379e12b387c3105f7554c6633eb419aa5773de2dc4ea3da64fb"
+    },
+    {
+      "path": "common/lib/fdt.c",
+      "action": "updated",
+      "sha256": "5423d87d73bd97edd39ef32377e302bff6ad833eb22622385b82db3c1918a189"
+    },
+    {
+      "path": "common/lib/memory.s2.c",
+      "action": "updated",
+      "sha256": "aafddd7f744a225ea8e2c95b3f926752764d03f328671da4c1218a041d25d7f7"
+    },
+    {
+      "path": "common/lib/qoi.h",
+      "action": "added",
+      "sha256": "158f692214755643a8b0616ad0400d72dbbe310817c618edbf1473998a64b037"
+    },
+    {
+      "path": "common/lib/panic.s2.c",
+      "action": "updated",
+      "sha256": "0233d557db8fdf96918350a305cde91a8a4aca33216d2ac8c712cf47c79a3ff1"
+    },
+    {
+      "path": "common/lib/guid.h",
+      "action": "updated",
+      "sha256": "d2bbd8fe12daf2741d565e05a5cb2bf5abd54d303e7bde02ea3e15a7530315be"
+    },
+    {
+      "path": "common/lib/misc.s2.c",
+      "action": "updated",
+      "sha256": "9710915dfa431ce5430a48ee7d9c4736922326d404755e9dd8b780cb51e5663a"
+    },
+    {
+      "path": "common/lib/acpi.h",
+      "action": "updated",
+      "sha256": "5ac705d642a833930bca11ff1622adf41ada023de4af48018e9997da87850eea"
+    },
+    {
+      "path": "common/lib/real.h",
+      "action": "updated",
+      "sha256": "29c568d6f786811a22e4695fa0f9be672a7c3c179b210d75a53d2344e49a7582"
+    },
+    {
+      "path": "common/lib/image.c",
+      "action": "updated",
+      "sha256": "8d0333acacee902acbba02ffffaca69d004de520f0ac906a618b1bfcf35f183f"
+    },
+    {
+      "path": "common/lib/elf.h",
+      "action": "updated",
+      "sha256": "346db635bf99eba197fa6b1d6693f768a70e69b1df9f2a1ba77aedd4edb2de6a"
+    },
+    {
+      "path": "common/lib/stb_image.h",
+      "action": "updated",
+      "sha256": "c1b4edb10b1767f298fac39035de584be1f3c8abcb407b41f2eba199729d13b5"
+    },
+    {
+      "path": "common/lib/term.h",
+      "action": "updated",
+      "sha256": "6ff02058c4016cfbe88724df8b46d87bd67e8733f9f384feb83963f74c37aa2b"
+    },
+    {
+      "path": "common/lib/part.s2.c",
+      "action": "updated",
+      "sha256": "a9d12d1cd326814364e3e678c83bb92f154d509f931ece499d5d10ec15e9ff4a"
+    },
+    {
+      "path": "common/lib/tpm.h",
+      "action": "added",
+      "sha256": "17f51a1c438be5b04fc5417ca0fcee236ea686165b9cdb1df79e3ef99c7cc91a"
+    },
+    {
+      "path": "common/lib/gterm.c",
+      "action": "updated",
+      "sha256": "a1147ccab05b918ba0a517f02838be4a9da838a8dd0a42845303c332e1f349a5"
+    },
+    {
+      "path": "common/lib/bli.h",
+      "action": "added",
+      "sha256": "a42a0851c584b4f2177d86e4fa1607924e7b23fba50f3a04b32c8f0aec2ca33d"
+    },
+    {
+      "path": "common/lib/bgrt.h",
+      "action": "added",
+      "sha256": "54054011a9b0e8b170eabb7c540c538da2b7ce7a5c02f9693bf0aa062fdb68b5"
+    },
+    {
+      "path": "common/lib/print.s2.c",
+      "action": "updated",
+      "sha256": "d2f3a4fe354314ff3b3d536138157089412ebd447bf3b241f8e99733cd25f6a4"
+    },
+    {
+      "path": "common/lib/fb.h",
+      "action": "updated",
+      "sha256": "de6171c3df5fb154ea31e25e1e04c94dc78cd870699506d4db37cd7dc5b4d35b"
+    },
+    {
+      "path": "common/lib/rng_seed.c",
+      "action": "added",
+      "sha256": "5566f3ea91081ec18b49e05ad8290672eed9cfd0fde4bbd186a71f48b88f2e30"
+    },
+    {
+      "path": "common/lib/getchar.c",
+      "action": "updated",
+      "sha256": "7b0266eb975acc4cd632d1749dece19e5a01debf81d80a88a02ceb9101bc0f7e"
+    },
+    {
+      "path": "common/lib/time.c",
+      "action": "updated",
+      "sha256": "3ae5f55f548101f9dc3f3d06da6434b9d6bb76554c80b0536a8dfdd886ace932"
+    },
+    {
+      "path": "common/lib/pe.h",
+      "action": "added",
+      "sha256": "1e53f8b1d5dbb01f6cd5b91e7493bc32bdee32388c0e62474e210cb89125dad9"
+    },
+    {
+      "path": "common/lib/config.c",
+      "action": "updated",
+      "sha256": "d0611ffbcc055b58ac41a7038b2b46a90270dc873ceaaed9685336aabb649e6d"
+    },
+    {
+      "path": "common/lib/libc.s2.c",
+      "action": "updated",
+      "sha256": "5dcfacc5d94a763b55edb5fb133c2061dce59082d8d5dd114a700534be301255"
+    },
+    {
+      "path": "common/lib/rand.h",
+      "action": "updated",
+      "sha256": "96419b0c7ca1f57148857f4f52ba61fc8bde2ba29c4c19c24ea3caa12c8ff579"
+    },
+    {
+      "path": "common/lib/spinup.asm_uefi_x86_64",
+      "action": "updated",
+      "sha256": "114035edd7e2a9e55482d0b57f35f354d8e298c4b8c67b45cebadb6642eb3db6"
+    },
+    {
+      "path": "common/lib/real.s2.asm_bios_ia32",
+      "action": "updated",
+      "sha256": "054f86cc750c73c570c7a9757e488ca085e63ce86856e152eb616c02ae5e3a21"
+    },
+    {
+      "path": "common/lib/spinup.asm_bios_ia32",
+      "action": "updated",
+      "sha256": "0bc89f040d70d734844ec4caf7640cf10a1ed31845ec3c408af7b001bf4dbe03"
+    },
+    {
+      "path": "common/lib/guid.c",
+      "action": "updated",
+      "sha256": "ae18e6789d2eeec2d573417ca613c33f3c7164ecdfd7454a9b76f047dee0ea6c"
+    },
+    {
+      "path": "common/lib/part.h",
+      "action": "updated",
+      "sha256": "fc2f41236136bc6b1008070b26742f1ab5dda7f2aeb469c1b4c2aaa930f2e3cc"
+    },
+    {
+      "path": "common/lib/qoi.c",
+      "action": "added",
+      "sha256": "2e4459ddd9498545108d499782d52fe962bc0b3c42352963e185d466b05be458"
+    },
+    {
+      "path": "common/lib/spinup.asm_loongarch64",
+      "action": "updated",
+      "sha256": "c457957fdb24e8fe7fce093e3386559b3e9e40fdd8b843d998955304f272fab8"
+    },
+    {
+      "path": "common/lib/libc.h",
+      "action": "updated",
+      "sha256": "095a1b7169e3753fdef891e26e270c3ac049ef7d71d50ebf2bb9b399f93f5526"
+    },
+    {
+      "path": "common/lib/sleep.asm_bios_ia32",
+      "action": "updated",
+      "sha256": "99f5bf78083cb5bb4b492c38767259c6e7ffa68cf4188a902899558e1994fa0b"
+    },
+    {
+      "path": "common/lib/spinup.asm_uefi_ia32",
+      "action": "updated",
+      "sha256": "f3cb6615603e45275012a1769a67d41687138adab60e1485524aff286580ab84"
+    },
+    {
+      "path": "common/lib/misc.c",
+      "action": "updated",
+      "sha256": "4710c098ff1d5e338aaeb43611f420d0ef4fb5b571b859f39a76354fd32a8e6a"
+    },
+    {
+      "path": "common/lib/elsewhere.h",
+      "action": "updated",
+      "sha256": "bf10c13c901ca5727ade2a9b2fa7d11274c6f4a8b7778d7fff5be958cea0d13e"
+    },
+    {
+      "path": "common/lib/uri.c",
+      "action": "updated",
+      "sha256": "265a5d6253476852b3eef4b3e148b005c4906937fb2a7d914ab912b9d013abe1"
+    },
+    {
+      "path": "common/lib/elf.c",
+      "action": "updated",
+      "sha256": "0dbd3966eab89d2fc61dd4a724a8587e12ca07e4408c83618c8bf8b785ebc84e"
+    },
+    {
+      "path": "common/lib/acpi.s2.c",
+      "action": "added",
+      "sha256": "b1f1a434ee7e0f0db3f7e69696e4cfc61c6a7a7bd6ef7320d2a7ab80b515e75b"
+    },
+    {
+      "path": "common/lib/spinup.asm_riscv64",
+      "action": "updated",
+      "sha256": "ea616f0a7ff34ef0655ee2e4662e85433816c556b9db37d7a2facf04c736453b"
+    },
+    {
+      "path": "common/lib/image.h",
+      "action": "updated",
+      "sha256": "70edaaf31d9a8ed74710de84f9bbb0f87c346db5a0971f4be4cb63855244a24e"
+    },
+    {
+      "path": "common/lib/macros.aarch64_asm.h",
+      "action": "updated",
+      "sha256": "9b27713d5c8be7067e634e08cf06c7db0792a10f2a5be2a47b67763fba08c84f"
+    },
+    {
+      "path": "common/lib/acpi.c",
+      "action": "updated",
+      "sha256": "e78299385a2ac2529627040623692399d83abfee680e6418e57e92cfb503ab7d"
+    },
+    {
+      "path": "common/mm/pmm.c",
+      "action": "updated",
+      "sha256": "c409cbd0dbb14f8b6273b19b597034f8b16e8fb3ecdc6ebf2f875becf6e0524d"
+    },
+    {
+      "path": "common/mm/vmm.c",
+      "action": "updated",
+      "sha256": "6763e2ade8df45c17048df03cdc948b65e0058dc9df8b742d9e8c2e12727a998"
+    },
+    {
+      "path": "common/mm/mtrr.c",
+      "action": "updated",
+      "sha256": "90521dba38f542139ba7c67ce3787174063f1e92cda8c010ee2c75f6eeb9ec94"
+    },
+    {
+      "path": "common/mm/efi_pt.c",
+      "action": "added",
+      "sha256": "6f8e33249b91c525ad876ecbddaef720b14890028f95990ed144fb07bb305c59"
+    },
+    {
+      "path": "common/mm/pmm.s2.c",
+      "action": "updated",
+      "sha256": "628e87d2779a36421cb3be2af0441e94aeb511301df7a397aab40e12ab5aa882"
+    },
+    {
+      "path": "common/mm/pmm.h",
+      "action": "updated",
+      "sha256": "1baef13370dd1fc8ee77da78e593f8fcd37d5df41de6b5f444788ffcd3ac8d65"
+    },
+    {
+      "path": "common/mm/vmm.h",
+      "action": "updated",
+      "sha256": "a207b7f19392320a7dd8e383d479857d33897b5d5515bc630ca0668684193200"
+    },
+    {
+      "path": "common/mm/mtrr.h",
+      "action": "updated",
+      "sha256": "178364e6c1c77de4309d267b52b7fdf21819ef8b9de49eaa4a7baad78d5719ae"
+    },
+    {
+      "path": "common/mm/efi_pt.h",
+      "action": "added",
+      "sha256": "1a1e341c8412267d05594a957e3a64914f626e900b48593a19d578f69d664549"
+    },
+    {
+      "path": "common/fs/file.s2.c",
+      "action": "updated",
+      "sha256": "8792c3a92960f7e2b6d28fe062565fed4e7d3d7385af0123447c8b626c50691d"
+    },
+    {
+      "path": "common/fs/iso9660.h",
+      "action": "updated",
+      "sha256": "c0949e534b5b77f0cb0a2767f3a8462ae28432bfce0ddaa81af2d9c2c540d2db"
+    },
+    {
+      "path": "common/fs/file.h",
+      "action": "updated",
+      "sha256": "33629a4bd8eeb142603fc7ba0ff66470cbac1e094742872dc0de3b57dc1b897e"
+    },
+    {
+      "path": "common/fs/iso9660.s2.c",
+      "action": "updated",
+      "sha256": "1160b6edb349fb725372a65ac0af165501f2bfdb1f8e89e56f9cd0c774936ed7"
+    },
+    {
+      "path": "common/fs/fat32.s2.c",
+      "action": "updated",
+      "sha256": "4c18e29724fad05cc809cd1cd30f894b94be47551594977423336608e4164525"
+    },
+    {
+      "path": "common/libc-compat/string.h",
+      "action": "updated",
+      "sha256": "a16be2ccafe2096c5c3d74ad4f463fbc56fc1d8cd69a8fa05711bce2828c20bc"
+    },
+    {
+      "path": "stage1/pxe/bootsect.asm",
+      "action": "updated",
+      "sha256": "a8ca7df0e915d72ab58b67214bc71e8bf5d671bbdb4cd04cbe5bcf817e486c39"
+    },
+    {
+      "path": "stage1/cd/bootsect.asm",
+      "action": "updated",
+      "sha256": "342e0524081ef3ee2fbcfdece1a260d13d984e4905541e33e2b25624d332418c"
+    },
+    {
+      "path": "stage1/hdd/disk.asm",
+      "action": "updated",
+      "sha256": "8ff62dc2583c3579d61fd71e788302f7b8e13247b0d88b154729605c64ea8e16"
+    },
+    {
+      "path": "stage1/hdd/bootsect.asm",
+      "action": "updated",
+      "sha256": "0b0c82e9a263b235e7f596fd4fc3cc9310ee6798ea383ec7a49073acbdedd439"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/stdalign.h",
+      "action": "added",
+      "sha256": "3da6a83f8462b367dbcf0166bd270b64aa22b54019536c1ec27b91f4c4c7dd5f"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/stdnoreturn.h",
+      "action": "added",
+      "sha256": "f0dac70724e85257184bcbe5bdbb3ca5dacfd9eae236d432b4314923749a8169"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/float.h",
+      "action": "added",
+      "sha256": "4c4f06e9571d6fe6b4636292bb727a61e1c835ec85e10b7175695b70955ae8aa"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/limits.h",
+      "action": "added",
+      "sha256": "da17cf650d0668a0912319904bfbe7212f871810d440ab948d2fe38e7834d8fd"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/stddef.h",
+      "action": "added",
+      "sha256": "ffff8914a65f55b3af15177cd848ee5a6e46b653d982c9fd5b9de996b37bc06b"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/stdbool.h",
+      "action": "added",
+      "sha256": "b9748fa718330cea66e00e66d4fbb3c6d4a23710f06d04a0d850ec649678f8d6"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/iso646.h",
+      "action": "added",
+      "sha256": "16fe32277d934ba8093471342fdc9ab57277e75e02996809e135ba73ebd3ca2c"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/stdarg.h",
+      "action": "added",
+      "sha256": "e1baa8a82e427b0050cc2514ca3f9abf817850183d66e79164725bf015c9b879"
+    },
+    {
+      "path": "freestanding-c-hdrs/include/stdint.h",
+      "action": "added",
+      "sha256": "2387c936ea77aba9b8cbd84366fdf229031dbf7975f328c161d617217450ffca"
+    },
+    {
+      "path": "picoefi/riscv64/reloc.c",
+      "action": "added",
+      "sha256": "d1a57a4b38a02b5ec367af8d08192345f3850ba7d96307c1eb2725b496cd4cab"
+    },
+    {
+      "path": "picoefi/riscv64/entry.S",
+      "action": "added",
+      "sha256": "6fe0ec30ab2e9c8def5590bafb0e2a2072d0ce59796fdbfddc2975d26ac8fd1c"
+    },
+    {
+      "path": "picoefi/riscv64/link_script.lds",
+      "action": "added",
+      "sha256": "91137ec16ba1d34fd144fd8e948ad194b4bc78f4569d06161b84fb6b9635f916"
+    },
+    {
+      "path": "picoefi/inc/efi.h",
+      "action": "added",
+      "sha256": "71fb41de7780582698f4262b1a80bf238e868c863c50813deb879150bd3f8272"
+    },
+    {
+      "path": "picoefi/LICENSES/LicenseRef-scancode-bsd-no-disclaimer-unmodified.txt",
+      "action": "added",
+      "sha256": "6c9f956b69757821cbc3dfe33d84707dcc00c405c7da921b0e6ad268f1f6672a"
+    },
+    {
+      "path": "picoefi/loongarch64/reloc.c",
+      "action": "added",
+      "sha256": "daa528929f5230088d918e9286d97343d3f810601969b54f517348f91a76e147"
+    },
+    {
+      "path": "picoefi/loongarch64/entry.S",
+      "action": "added",
+      "sha256": "8a731a545231f1a4fb1d5170b690e8e76112e917d90cc55a980a5f8f8ec78c72"
+    },
+    {
+      "path": "picoefi/loongarch64/link_script.lds",
+      "action": "added",
+      "sha256": "f71bc8e49e82219038b93f086b3c9f7c87592ba13f18349d9389fa071c73a54a"
+    },
+    {
+      "path": "picoefi/ia32/reloc.c",
+      "action": "added",
+      "sha256": "2cc1e7f1e2c53bd7fdea1f3c069967004a3c003119f657d89a34a045149590ca"
+    },
+    {
+      "path": "picoefi/ia32/entry.S",
+      "action": "added",
+      "sha256": "990591949dec4501fe0ae3eb038edf83f90f683a46b69d90f6028548162b792b"
+    },
+    {
+      "path": "picoefi/ia32/link_script.lds",
+      "action": "added",
+      "sha256": "b40a49f7f7c4c733d9cb5ce330e35583466751e719b4d69d376e9e02801bc2ee"
+    },
+    {
+      "path": "picoefi/aarch64/reloc.c",
+      "action": "added",
+      "sha256": "fbab1a1301f024948846d3a87ae43344e3fa74c3f05b74e60363cc0a9d218450"
+    },
+    {
+      "path": "picoefi/aarch64/entry.S",
+      "action": "added",
+      "sha256": "b633e41cba5298f94305be0c5c88b8ada7028360e94124466a1e2a78e8a36d09"
+    },
+    {
+      "path": "picoefi/aarch64/link_script.lds",
+      "action": "added",
+      "sha256": "e57cf973c0b3dcab1a6094dafcb652e23f5f682ebbd05b7606c1763a347aa94e"
+    },
+    {
+      "path": "picoefi/x86_64/reloc.c",
+      "action": "added",
+      "sha256": "ee482b96456c166c71dc9aef56d12dd476676c59ce3bea6d5b33fb275604daa8"
+    },
+    {
+      "path": "picoefi/x86_64/entry.S",
+      "action": "added",
+      "sha256": "5a4fd240e8316776af0ae5564b15543d4774069b5b503e81a37076e6ccf50723"
+    },
+    {
+      "path": "picoefi/x86_64/link_script.lds",
+      "action": "added",
+      "sha256": "65f4aef40f7322111e48ff9f3991b98f4c218396b3a893c4e5cf8fe8874a7a14"
+    },
+    {
+      "path": "picoefi/inc/efi/elf_common.h",
+      "action": "added",
+      "sha256": "bfa4f72f5f238ebf8e0563ccead2b014a58905345ba4b9d7978fa78b5e0386c5"
+    },
+    {
+      "path": "picoefi/inc/efi/efierr.h",
+      "action": "added",
+      "sha256": "db030af0b5302c9dd38cd87f7dbe15299e323f70f5bda47efc2dec400dd3cddf"
+    },
+    {
+      "path": "picoefi/inc/efi/efitcp.h",
+      "action": "added",
+      "sha256": "9c93062114c662b5671e2736f47d209cd92bb01524af368d47d838310f55b9b9"
+    },
+    {
+      "path": "picoefi/inc/efi/eficon.h",
+      "action": "added",
+      "sha256": "be27628d6c744533199e56be2d8de4d7ef5e7c2fed07d3d71e04b8a4e42651d8"
+    },
+    {
+      "path": "picoefi/inc/efi/efinet.h",
+      "action": "added",
+      "sha256": "85ca6473b5708d38289e192d027c651335a402812f0276f260495e277f428a3f"
+    },
+    {
+      "path": "picoefi/inc/efi/elf64.h",
+      "action": "added",
+      "sha256": "f0366f31b6c2be4327fc2aa90ef7f3ad3ee0fdef2f25b8772178740e2f946772"
+    },
+    {
+      "path": "picoefi/inc/efi/efipciio.h",
+      "action": "added",
+      "sha256": "1cc83fa135df08e11a9d239bdf0f5918031fe9de2970c54e9f008c65abf01ccb"
+    },
+    {
+      "path": "picoefi/inc/efi/efigpt.h",
+      "action": "added",
+      "sha256": "b597e0bbdfa885c7e49de2f7c2ece721f8febbb891f3c14f8e96d8ec4b1ca727"
+    },
+    {
+      "path": "picoefi/inc/efi/pci22.h",
+      "action": "added",
+      "sha256": "58a6134cef56bd1da3dd0c5c866ac908948dd8abd3c187303a463e72ab106dcf"
+    },
+    {
+      "path": "picoefi/inc/efi/efi_nii.h",
+      "action": "added",
+      "sha256": "7866c20a4c71f9b544cc31de5df7bde88979ff357bf90fcede3f3e9e569b970c"
+    },
+    {
+      "path": "picoefi/inc/efi/efiser.h",
+      "action": "added",
+      "sha256": "cd340eee6bd0cbab0a87a3b490aab543b844b22baf15a7384587a383475b7b2d"
+    },
+    {
+      "path": "picoefi/inc/efi/elf.h",
+      "action": "added",
+      "sha256": "0d965e7ed1d46c56aefb1a420c2767b4c0dc00a262ca201402e0bb3180fae40d"
+    },
+    {
+      "path": "picoefi/inc/efi/efiui.h",
+      "action": "added",
+      "sha256": "24159efe913e20fba7a1e0c160ca0063827b837054d009709b39da3f2605b337"
+    },
+    {
+      "path": "picoefi/inc/efi/efilink.h",
+      "action": "added",
+      "sha256": "45a75ab6aaa19685f4cc0c85a658d3837494844ac6016e21d6cdda4d37f9c64d"
+    },
+    {
+      "path": "picoefi/inc/efi/elf32.h",
+      "action": "added",
+      "sha256": "269e2433eb64f4659f72af3fff401fda2a3eecda3d3e025bc20c167ac07e5e36"
+    },
+    {
+      "path": "picoefi/inc/efi/efiprot.h",
+      "action": "added",
+      "sha256": "6cd1ab9bd606177bc0505b885c3f8e22bba56daf8c286b466969bf2fac1f1cd3"
+    },
+    {
+      "path": "picoefi/inc/efi/efiip.h",
+      "action": "added",
+      "sha256": "f1210733219ea1892e4d110ccc6f3ce5e29403b87de9a9b72e1d34887896cfac"
+    },
+    {
+      "path": "picoefi/inc/efi/efidevp.h",
+      "action": "added",
+      "sha256": "c5ff1f97cb25ae68c2e61b0c422a7b075e97acfc0edbf0e42230f686885aba52"
+    },
+    {
+      "path": "picoefi/inc/efi/efipart.h",
+      "action": "added",
+      "sha256": "f07dfa8796bd87faaca38f5e64959014fbed232c6af8e5c89ff78e4174ceb47d"
+    },
+    {
+      "path": "picoefi/inc/efi/efiapi.h",
+      "action": "added",
+      "sha256": "ed0767173bfd2d48fd97dfe1834b883ea2216dfe00a52715a4277a04a8c064cb"
+    },
+    {
+      "path": "picoefi/inc/efi/efidebug.h",
+      "action": "added",
+      "sha256": "0e265df3cb8357f9606c10b90f0f6354a9e2b21675ecbc1c044174257c0c7db8"
+    },
+    {
+      "path": "picoefi/inc/efi/efishell.h",
+      "action": "added",
+      "sha256": "913606e768d612b520aada45c188045cf439287b22ba8d849ec6f0b6d684b512"
+    },
+    {
+      "path": "picoefi/inc/efi/efimp.h",
+      "action": "added",
+      "sha256": "ad7aee189d85c919ef40424a963d5145c9b7ee91cc1e6613e65be1b318ce5e7f"
+    },
+    {
+      "path": "picoefi/inc/efi/efi_pxe.h",
+      "action": "added",
+      "sha256": "5ef4e0d99d56561417a37427279f00b8cf8e267654bbfda1ff0e2b1d141b799a"
+    },
+    {
+      "path": "picoefi/inc/efi/efifs.h",
+      "action": "added",
+      "sha256": "6542126a07cdd70d1954230b11e4ed9ecbe18c2e0eb6ce7d4af81ea2a14143c7"
+    },
+    {
+      "path": "picoefi/inc/efi/efipoint.h",
+      "action": "added",
+      "sha256": "b68186c7b6b407097589c39f1d28790f84a0128a870160bdb3bbd5d9253a53a6"
+    },
+    {
+      "path": "picoefi/inc/efi/libsmbios.h",
+      "action": "added",
+      "sha256": "02b162f8a851f85ac57880723e39f2305799d0efa345cc3cc4a61558c37f01d8"
+    },
+    {
+      "path": "picoefi/inc/efi/romload.h",
+      "action": "added",
+      "sha256": "5e87e6afab9a355fdd614be9e4e448967dc73a135068bc1a62485ba03fa87d34"
+    },
+    {
+      "path": "picoefi/inc/efi/eficonex.h",
+      "action": "added",
+      "sha256": "1cb2108efe07e8d57e0f7ecb8f5b06060dc3b63919013a9d6c81b587d2d997c1"
+    },
+    {
+      "path": "picoefi/inc/efi/efidef.h",
+      "action": "added",
+      "sha256": "afc9186a7c2bec0b6c10b8c07ee0de609d123d7327e8ef157669ff3717c33610"
+    },
+    {
+      "path": "picoefi/inc/efi/efishellintf.h",
+      "action": "added",
+      "sha256": "ecde3702c1c1bf895d7791e865c5ff3ce8112f8afa3b586807a2107086241bc0"
+    },
+    {
+      "path": "picoefi/inc/efi/efiudp.h",
+      "action": "added",
+      "sha256": "9086354958e3dc4002e072dd26e3df314352f07fa5eb08b1cce53e78dc203f62"
+    },
+    {
+      "path": "picoefi/inc/efi/efipxebc.h",
+      "action": "added",
+      "sha256": "951468bf70864073c6daa03dea1bd4003614561d32577101338fa97f68c307e2"
+    },
+    {
+      "path": "picoefi/inc/efi/eficompiler.h",
+      "action": "added",
+      "sha256": "6552a58e95f022c525f091e0ee30e8bd231bed247e776205d38aa26ccc4f2c2c"
+    },
+    {
+      "path": "picoefi/inc/efi/riscv64/efibind.h",
+      "action": "added",
+      "sha256": "8126f83fbc0bde0d49e027a601b55c7103c02d3fd2e320272025ea451204cdbb"
+    },
+    {
+      "path": "picoefi/inc/efi/loongarch64/efibind.h",
+      "action": "added",
+      "sha256": "bfd3aac009e6e6b814e7e0db8d5a38d7855bb4f1780ad2615a63c5516c12ad0b"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/eficonsplit.h",
+      "action": "added",
+      "sha256": "54dfea87161432f61248639d9e2b10a6c03c207e125a81bc57156520d4b44020"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/eficc.h",
+      "action": "added",
+      "sha256": "c92faef5b85a8f0c7b2e4f49b39388bf71b6a185dbff589c149ef3eee6774654"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/vgaclass.h",
+      "action": "added",
+      "sha256": "a2b586e115af7673d39749078d39d2edf24b9b5aaab64a2c6f05dd286e24cfbe"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/adapterdebug.h",
+      "action": "added",
+      "sha256": "66eae30aeb780f193f7c75db6272a7b4e1464f5f6f067681b8136fc84e06f1e7"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/legacyboot.h",
+      "action": "added",
+      "sha256": "c33156b3dd9ec7c3d0fccc07f6888e250e8af4d167a986323395ce8efe12d653"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/efivar.h",
+      "action": "added",
+      "sha256": "27737da72ed706758c17be64b927d438be0f0fa5337a3fcb994ad48a79c3d8b8"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/efitcg2.h",
+      "action": "added",
+      "sha256": "194f8df29af8c0cfe83262729a884c5f14bfa8e7174894ddabd80e6adceecdc3"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/intload.h",
+      "action": "added",
+      "sha256": "b1e0cd8d4b62e8d7c3a53b5a9b14e43659908852a6d7cedd34ce7e58e08e4047"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/readme.txt",
+      "action": "added",
+      "sha256": "1b4c732ced4fe37239b32a75e2846a4d0c32df9a199ae530e0c8d30ec3a914a3"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/piflash64.h",
+      "action": "added",
+      "sha256": "bd13d24390c18b65e3467192a343b40fb78a19e9e5e062217a920a50400ca8e4"
+    },
+    {
+      "path": "picoefi/inc/efi/ia32/efibind.h",
+      "action": "added",
+      "sha256": "8354acc37fb0a6616d96275635bbede1b472c4eb729e5613b202ac141bae8642"
+    },
+    {
+      "path": "picoefi/inc/efi/ia32/pe.h",
+      "action": "added",
+      "sha256": "e5e17eef2e82dd3c13ce2d28434b7499cdab4d7a611d63dea09623bc61cef35e"
+    },
+    {
+      "path": "picoefi/inc/efi/aarch64/efibind.h",
+      "action": "added",
+      "sha256": "9c0dec4347b719562a2bbfc1e9b415fbdfbb5177eb4567d8d91721bf47ea4070"
+    },
+    {
+      "path": "picoefi/inc/efi/x86_64/efibind.h",
+      "action": "added",
+      "sha256": "1e3a6fd7e65e4240f663d11ac825af51332085fac5f28d312e82f95c42352504"
+    },
+    {
+      "path": "picoefi/inc/efi/x86_64/pe.h",
+      "action": "added",
+      "sha256": "a8126999ee62c0c46e37b383d30063cdc3a4e40289d108d4b2999c5b738cb8f7"
+    },
+    {
+      "path": "picoefi/inc/efi/protocol/riscv/efiboot.h",
+      "action": "added",
+      "sha256": "6b2b471c406fde86c70c54545a413dd6ea574fb37ec8d9ced15d334c190684a2"
+    },
+    {
+      "path": "libfdt/src/fdt_empty_tree.c",
+      "action": "added",
+      "sha256": "f3cdbfa1bcc86cc841544fee5a16c2f66a4da86b1065eaadab9700addb858369"
+    },
+    {
+      "path": "libfdt/src/fdt_overlay.c",
+      "action": "added",
+      "sha256": "7090d1ecd02dcb31c34e300ee2c7ca5d6bdd031cd913d8275670c6d817c14a0e"
+    },
+    {
+      "path": "libfdt/src/libfdt_env.h",
+      "action": "added",
+      "sha256": "273bb264cacd60bb005cfa558bee084558469b9107eaf40d7e1362571ed1bc94"
+    },
+    {
+      "path": "libfdt/src/fdt.c",
+      "action": "added",
+      "sha256": "3cbcd38b08f16025a81086dbf24fb920fb752435dcb9d852595d407b1d09dd9e"
+    },
+    {
+      "path": "libfdt/src/fdt_strerror.c",
+      "action": "added",
+      "sha256": "4a1de9eb7eadefe07cfe53c238785aa9bdd54e5387903c2faa7e42006027c137"
+    },
+    {
+      "path": "libfdt/src/fdt_wip.c",
+      "action": "added",
+      "sha256": "a26966b2d991b432473f5c7f6740a3db97ae51313da0ad9eba56048d56c06c73"
+    },
+    {
+      "path": "libfdt/src/fdt_rw.c",
+      "action": "added",
+      "sha256": "dd7c00cd8c23638a934b20f902ac94dbd75c752455549f55b6a7baf30d51daea"
+    },
+    {
+      "path": "libfdt/src/libfdt_internal.h",
+      "action": "added",
+      "sha256": "7c29a6e30115cdd0a30fb4014c7674ead0d4bd39b9989bed46acb4f838bbd4e8"
+    },
+    {
+      "path": "libfdt/src/fdt_addresses.c",
+      "action": "added",
+      "sha256": "11ac9fb9f20f798483bc1e9e2835b79ef110e55ed7114e20337e59a1b6f4125f"
+    },
+    {
+      "path": "libfdt/src/fdt.h",
+      "action": "added",
+      "sha256": "60269146c0f49a3da5e260763f4c59ff3257bc1ca01d0b11784ded6d2cb07492"
+    },
+    {
+      "path": "libfdt/src/fdt_ro.c",
+      "action": "added",
+      "sha256": "69e99486680db4aa7abc9e8a4bc64025084e84f1fb565f6efe8a9246f61fd936"
+    },
+    {
+      "path": "libfdt/src/fdt_sw.c",
+      "action": "added",
+      "sha256": "e9d193f023880f4359c3ed9954d678b51a87b1d66b783318a9d69a8122378122"
+    },
+    {
+      "path": "libfdt/src/libfdt.h",
+      "action": "added",
+      "sha256": "86426da9fde87efb0ee21d026eab526f93ca567bb18dbf7ab6f2a600d519a232"
+    },
+    {
+      "path": "libfdt/src/fdt_check.c",
+      "action": "added",
+      "sha256": "17475451c6fece9b27097b3a3709540299e2316ca33a1c37605b97230ff31c7e"
+    }
+  ]
+}

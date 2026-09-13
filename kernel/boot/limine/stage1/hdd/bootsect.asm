@@ -1,4 +1,13 @@
 org 0x7c00
+
+; How much of the disk the boot sector reads in past itself.
+STAGE2_LOAD_MAX equ 32768 - 512
+
+; The installer refuses any disk whose first partition starts before LBA 63 and
+; places stage 2 at byte 4096, so that is all it can ever count on having. That
+; is tighter than STAGE2_LOAD_MAX, so it is what the payload actually has to fit
+; in.
+STAGE2_FIT_MAX equ 63 * 512 - 4096
 bits 16
 
 start:
@@ -43,7 +52,7 @@ start:
     mov ds, si
     mov es, si
     mov ss, si
-    mov sp, 0x7c00
+    mov esp, 0x7c00
     sti
 
     ; Limine isn't made for floppy disks, these are dead anyways.
@@ -67,41 +76,28 @@ start:
 
     push 0x7000
     pop es
-    mov di, stage2_locs
+    mov di, stage2_loc
     mov eax, dword [di]
     mov ebp, dword [di+4]
     xor bx, bx
-    xor ecx, ecx
-    mov cx, word [di-4]
+    mov ecx, STAGE2_LOAD_MAX
     call read_sectors
     jc err.4
-    mov eax, dword [di+8]
-    mov ebp, dword [di+12]
-    add bx, cx
-    mov cx, word [di-2]
-    call read_sectors
-    jc err.5
 
     lgdt [gdt]
 
     cli
+
+    push dword 0
+    mov ebp, 0x10
+
     mov eax, cr0
     bts ax, 0
     mov cr0, eax
 
     jmp 0x08:vector
 
-times 0xda-($-$$) db 0
-times 6 db 0
-
-; Includes
-
-%include 'disk.asm'
-%include '../gdt.asm'
-
 err:
-  .5:
-    inc si
   .4:
     inc si
   .3:
@@ -121,18 +117,23 @@ err:
     .h: hlt
     jmp .h
 
+times 0xda-($-$$) db 0
+times 6 db 0
+
+; Includes
+
+%include 'disk.asm'
+%include '../gdt.asm'
+
 bits 32
 vector:
-    mov eax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
+    mov ds, ebp
+    mov es, ebp
+    mov fs, ebp
+    mov gs, ebp
+    mov ss, ebp
 
     and edx, 0xff
-
-    push 0
 
     push edx
 
@@ -142,11 +143,7 @@ vector:
     call 0x70000
 
 times 0x1a4-($-$$) db 0
-stage2_size_a: dw 0
-stage2_size_b: dw 0
-stage2_locs:
-stage2_loc_a:  dq 0
-stage2_loc_b:  dq 0
+stage2_loc: dq 0
 
 times 0x1b8-($-$$) db 0
 times 510-($-$$) db 0
@@ -160,6 +157,9 @@ incbin DECOMPRESSOR_PATH
 
 align 16
 stage2:
-%strcat STAGE2_PATH BUILDDIR, '/common-bios/stage2.bin.gz'
+%strcat STAGE2_PATH BUILDDIR, '/common-bios/stage2.bin.limlz'
 incbin STAGE2_PATH
 .size: equ $ - stage2
+.fullsize: equ $ - decompressor
+
+times -(stage2.fullsize > STAGE2_FIT_MAX) db 0

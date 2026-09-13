@@ -8,6 +8,8 @@
 #include <lib/part.h>
 #include <lib/config.h>
 #include <lib/trace.h>
+#include <lib/bli.h>
+#include <lib/tpm.h>
 #include <sys/e820.h>
 #include <sys/a20.h>
 #include <sys/idt.h>
@@ -27,44 +29,18 @@
 void stage3_common(void);
 
 #if defined (UEFI)
-extern symbol __slide, __image_base, __image_end;
-extern symbol _start;
-
 noreturn void uefi_entry(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     gST = SystemTable;
     gBS = SystemTable->BootServices;
     gRT = SystemTable->RuntimeServices;
     efi_image_handle = ImageHandle;
 
+    reseed_stack_guard();
+
+    calibrate_tsc();
+    usec_at_bootloader_entry = rdtsc_usec();
+
     EFI_STATUS status;
-
-    const char *deferred_error = NULL;
-
-#if defined (__x86_64__)
-    if ((uintptr_t)__slide >= 0x100000000) {
-        size_t image_size = ALIGN_UP((uintptr_t)__image_end - (uintptr_t)__image_base, 4096);
-        size_t image_size_pages = ALIGN_UP((size_t)image_size, 4096) / 4096;
-        size_t new_base;
-        for (new_base = 0x1000; new_base + (size_t)image_size < 0x100000000; new_base += 0x1000) {
-            EFI_PHYSICAL_ADDRESS _new_base = (EFI_PHYSICAL_ADDRESS)new_base;
-            status = gBS->AllocatePages(AllocateAddress, EfiLoaderCode, image_size_pages, &_new_base);
-            if (status == 0) {
-                goto new_base_gotten;
-            }
-        }
-        deferred_error = "Limine does not support being loaded above 4GiB and no alternative loading spot found";
-        goto defer_error;
-new_base_gotten:
-        memcpy((void *)new_base, __slide, (size_t)image_size);
-        __attribute__((ms_abi))
-        void (*new_entry_point)(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable);
-        new_entry_point = (void *)(new_base + ((uintptr_t)_start - (uintptr_t)__slide));
-        new_entry_point(ImageHandle, SystemTable);
-        __builtin_unreachable();
-    }
-
-defer_error:
-#endif
 
     gST->ConOut->EnableCursor(gST->ConOut, false);
 
@@ -77,15 +53,33 @@ defer_error:
         print("WARNING: Failed to disable watchdog timer!\n");
     }
 
-    if (deferred_error != NULL) {
-        panic(false, "%s", deferred_error);
-    }
-
 #if defined (__x86_64__) || defined (__i386__)
     init_gdt();
 #endif
+#if defined (__x86_64__)
+    // Stage the below-4GiB handoff stub while allocations are still permitted.
+    prepare_spinup_tramp();
+#endif
 
     disk_create_index();
+
+    // Detect UEFI Secure Boot
+    {
+        EFI_GUID global_variable = EFI_GLOBAL_VARIABLE;
+        UINT8 secure_boot = 0;
+        UINTN sb_size = sizeof(secure_boot);
+        EFI_STATUS sb_status = gRT->GetVariable(L"SecureBoot", &global_variable, NULL, &sb_size, &secure_boot);
+        if (sb_status == EFI_SUCCESS && secure_boot == 1) {
+            UINT8 setup_mode = 0;
+            UINTN sm_size = sizeof(setup_mode);
+            EFI_STATUS sm_status = gRT->GetVariable(L"SetupMode", &global_variable, NULL, &sm_size, &setup_mode);
+            if (sm_status != EFI_SUCCESS || setup_mode == 0) {
+                secure_boot_active = true;
+            }
+        }
+    }
+
+    tpm_init();
 
     boot_volume = NULL;
 
@@ -95,28 +89,37 @@ defer_error:
 could_not_match:
             print("WARNING: Could not meaningfully match the boot device handle with a volume.\n");
             print("         Using the first volume containing a Limine configuration!\n");
+            print("\n");
+            print("THIS IS A BUG! Please report this issue upstream.\n");
+            print("Press any key to continue...\n");
+            for (;;) {
+                int ret = pit_sleep_and_quit_on_keypress(65535);
+                if (ret != 0) {
+                    break;
+                }
+            }
 
             for (size_t i = 0; i < volume_index_i; i++) {
                 struct file_handle *f;
 
                 bool old_cif = case_insensitive_fopen;
                 case_insensitive_fopen = true;
-                if ((f = fopen(volume_index[i], "/limine.conf")) != NULL
-                 || (f = fopen(volume_index[i], "/limine/limine.conf")) != NULL
-                 || (f = fopen(volume_index[i], "/boot/limine.conf")) != NULL
+                if (
+                 false
+#if defined (UEFI)
+                 || (f = fopen(volume_index[i], "/EFI/limine/limine.conf")) != NULL
+                 || (f = fopen(volume_index[i], "/EFI/BOOT/limine.conf")) != NULL
+#endif
                  || (f = fopen(volume_index[i], "/boot/limine/limine.conf")) != NULL
-                 || (f = fopen(volume_index[i], "/EFI/BOOT/limine.conf")) != NULL) {
+                 || (f = fopen(volume_index[i], "/boot/limine.conf")) != NULL
+                 || (f = fopen(volume_index[i], "/limine/limine.conf")) != NULL
+                 || (f = fopen(volume_index[i], "/limine.conf")) != NULL
+                ) {
                     goto opened;
                 }
 
-                if ((f = fopen(volume_index[i], "/limine.cfg")) == NULL
-                 && (f = fopen(volume_index[i], "/limine/limine.cfg")) == NULL
-                 && (f = fopen(volume_index[i], "/boot/limine.cfg")) == NULL
-                 && (f = fopen(volume_index[i], "/boot/limine/limine.cfg")) == NULL
-                 && (f = fopen(volume_index[i], "/EFI/BOOT/limine.cfg")) == NULL) {
-                    case_insensitive_fopen = old_cif;
-                    continue;
-                }
+                case_insensitive_fopen = old_cif;
+                continue;
 
 opened:
                 case_insensitive_fopen = old_cif;
@@ -177,10 +180,13 @@ noreturn void stage3_common(void) {
 #else
 #error riscv: only UEFI is supported
 #endif
-    init_riscv();
 #endif
 
     term_notready();
+
+#if defined (UEFI)
+    init_bli();
+#endif
 
     menu(true);
 }

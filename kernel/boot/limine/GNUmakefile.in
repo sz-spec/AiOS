@@ -1,5 +1,5 @@
-MAKEFLAGS += -rR
 .SUFFIXES:
+.DELETE_ON_ERROR:
 
 override SOURCE_DATE_EPOCH := @SOURCE_DATE_EPOCH@
 export SOURCE_DATE_EPOCH
@@ -7,18 +7,16 @@ export SOURCE_DATE_EPOCH
 override SOURCE_DATE_EPOCH_TOUCH := @SOURCE_DATE_EPOCH_TOUCH@
 
 override PACKAGE_TARNAME := @PACKAGE_TARNAME@
+override PACKAGE_VERSION := @PACKAGE_VERSION@
+override DIST_OUTPUT := $(PACKAGE_TARNAME)-$(PACKAGE_VERSION)
 
-prefix := @prefix@
-exec_prefix := @exec_prefix@
+override prefix := @prefix@
+override exec_prefix := @exec_prefix@
 
-bindir := @bindir@
-datarootdir := @datarootdir@
-includedir := @includedir@
-datarootdir := @datarootdir@
-mandir := @mandir@
-docdir := @docdir@
-
-STRIP := @STRIP@
+override bindir := @bindir@
+override datarootdir := @datarootdir@
+override mandir := @mandir@
+override docdir := @docdir@
 
 override BUILDDIR := @BUILDDIR@
 override BINDIR := $(BUILDDIR)/bin
@@ -26,9 +24,10 @@ override BINDIR := $(BUILDDIR)/bin
 override SRCDIR := @SRCDIR@
 
 override SPACE := $(subst ,, )
+override TAB := $(subst ,,	)
 override COMMA := ,
 
-override MKESCAPE = $(subst $(SPACE),\ ,$(1))
+override MKESCAPE = $(subst $(TAB),\$(TAB),$(subst $(SPACE),\ ,$(1)))
 override SHESCAPE = $(subst ','\'',$(1))
 override NASMESCAPE = $(subst ','"'$(COMMA) \"'\"$(COMMA) '"',$(1))
 
@@ -42,38 +41,39 @@ override BUILD_UEFI_CD := @BUILD_UEFI_CD@
 override BUILD_BIOS_PXE := @BUILD_BIOS_PXE@
 override BUILD_BIOS_CD := @BUILD_BIOS_CD@
 
-CC := @CC@
-export CC
+INSTALL := @INSTALL@
+INSTALL_PROGRAM := @INSTALL_PROGRAM@
+INSTALL_DATA := @INSTALL_DATA@
+STRIP := @STRIP@
 
 MKDIR_P := @MKDIR_P@
 export MKDIR_P
-
-INSTALL := @INSTALL@
-export INSTALL
-
-INSTALL_PROGRAM := @INSTALL_PROGRAM@
-export INSTALL_PROGRAM
-
-INSTALL_DATA := @INSTALL_DATA@
-export INSTALL_DATA
-
 GREP := @GREP@
 export GREP
-
 SED := @SED@
 export SED
-
 AWK := @AWK@
 export AWK
 
+CC := @CC@
+CC_FOR_BUILD := @CC_FOR_BUILD@
+CFLAGS_FOR_BUILD := @CFLAGS_FOR_BUILD@
+
 CPPFLAGS := @CPPFLAGS@
-export CPPFLAGS
 CFLAGS := @CFLAGS@
-export CFLAGS
 LDFLAGS := @LDFLAGS@
-export LDFLAGS
 LIBS := @LIBS@
-export LIBS
+
+CC_FOR_TARGET := @CC_FOR_TARGET@
+export CC_FOR_TARGET
+LD_FOR_TARGET := @LD_FOR_TARGET@
+export LD_FOR_TARGET
+OBJCOPY_FOR_TARGET := @OBJCOPY_FOR_TARGET@
+export OBJCOPY_FOR_TARGET
+OBJDUMP_FOR_TARGET := @OBJDUMP_FOR_TARGET@
+export OBJDUMP_FOR_TARGET
+READELF_FOR_TARGET := @READELF_FOR_TARGET@
+export READELF_FOR_TARGET
 
 override WERROR_FLAG := @WERROR_FLAG@
 export WERROR_FLAG
@@ -87,9 +87,7 @@ export LDFLAGS_FOR_TARGET
 NASMFLAGS_FOR_TARGET := @NASMFLAGS_FOR_TARGET@
 export NASMFLAGS_FOR_TARGET
 
-override LIMINE_VERSION := @PACKAGE_VERSION@
-
-override STAGE1_FILES := $(shell find '$(call SHESCAPE,$(SRCDIR))/stage1' -type f -name '*.asm' | LC_ALL=C sort)
+override STAGE1_FILES := $(shell find '$(call SHESCAPE,$(SRCDIR))/stage1' -type f -name '*.asm' | LC_ALL=C sort | sed 's/[[:blank:]]/\\&/g')
 
 .PHONY: all
 all: $(call MKESCAPE,$(BINDIR))/Makefile
@@ -100,7 +98,7 @@ all1: $(BUILD_UEFI_X86_64) $(BUILD_UEFI_IA32) $(BUILD_UEFI_AARCH64) $(BUILD_UEFI
 	$(MAKE) '$(call SHESCAPE,$(BINDIR))/limine'
 	$(MAKE) '$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin'
 
-$(call MKESCAPE,$(BINDIR))/limine-bios-hdd.h: $(call MKESCAPE,$(BINDIR))/limine-bios-hdd.bin
+$(call MKESCAPE,$(BINDIR))/limine-bios-hdd.h: $(call MKESCAPE,$(BINDIR))/limine-bios-hdd.bin $(call MKESCAPE,$(SRCDIR))/host/hgen.sh
 	$(MKDIR_P) '$(call SHESCAPE,$(BINDIR))'
 	cd '$(call SHESCAPE,$(BINDIR))' && '$(call SHESCAPE,$(SRCDIR))/host/hgen.sh' >limine-bios-hdd.h
 
@@ -109,36 +107,36 @@ ifneq ($(BUILD_BIOS),limine-bios)
 override LIMINE_NO_BIOS := -DLIMINE_NO_BIOS
 endif
 
-$(call MKESCAPE,$(BINDIR))/limine: $(call MKESCAPE,$(BINDIR))/Makefile $(call MKESCAPE,$(SRCDIR))/host/limine.c $(if $(filter $(BUILD_BIOS),limine-bios),$(call MKESCAPE,$(BINDIR))/limine-bios-hdd.h)
+$(call MKESCAPE,$(BINDIR))/limine: $(call MKESCAPE,$(BUILDDIR))/GNUmakefile $(call MKESCAPE,$(BINDIR))/Makefile $(call MKESCAPE,$(SRCDIR))/host/limine.c $(if $(filter $(BUILD_BIOS),limine-bios),$(call MKESCAPE,$(BINDIR))/limine-bios-hdd.h)
 	$(SED) 's/%VERSION%/@PACKAGE_VERSION@/g;s/%COPYRIGHT%/@LIMINE_COPYRIGHT@/g' <'$(call SHESCAPE,$(SRCDIR))/host/limine.c' >'$(call SHESCAPE,$(BINDIR))/limine.c'
 	$(MAKE) -C '$(call SHESCAPE,$(BINDIR))' limine \
 		CC="$(CC)" \
-		CFLAGS="$(CFLAGS)" \
+		CFLAGS="$(CFLAGS) -Wall -Wextra $(WERROR_FLAG)" \
 		CPPFLAGS='$(CPPFLAGS) $(LIMINE_NO_BIOS) -DLIMINE_DATADIR=\"$(call SHESCAPE,$(datarootdir))/limine\"' \
 		LDFLAGS="$(LDFLAGS)" \
-		LIBS="$(LIBS)" \
-		WERROR_FLAG="$(WERROR_FLAG)"
+		LIBS="$(LIBS)"
 
-$(call MKESCAPE,$(BINDIR))/Makefile: $(call MKESCAPE,$(SRCDIR))/host/host.mk $(call MKESCAPE,$(SRCDIR))/host/.gitignore
+$(call MKESCAPE,$(BINDIR))/Makefile: $(call MKESCAPE,$(SRCDIR))/host/host.mk
 	mkdir -p '$(call SHESCAPE,$(BINDIR))'
 	cp '$(call SHESCAPE,$(SRCDIR))/host/host.mk' '$(call SHESCAPE,$(BINDIR))/Makefile'
-	cp '$(call SHESCAPE,$(SRCDIR))/host/.gitignore' '$(call SHESCAPE,$(BINDIR))/'
 
 .PHONY: limine
 limine:
 	$(MAKE) '$(call SHESCAPE,$(BINDIR))/limine'
 
 .PHONY: clean
-clean: limine-bios-clean limine-uefi-ia32-clean limine-uefi-x86-64-clean limine-uefi-aarch64-clean limine-uefi-riscv64-clean limine-uefi-loongarch64-clean
+clean: tools-clean limine-bios-clean limine-uefi-ia32-clean limine-uefi-x86-64-clean limine-uefi-aarch64-clean limine-uefi-riscv64-clean limine-uefi-loongarch64-clean
 	rm -rf '$(call SHESCAPE,$(BINDIR))' '$(call SHESCAPE,$(BUILDDIR))/stage1.stamp'
 
 .PHONY: install
 install: all
 	$(INSTALL) -d '$(call SHESCAPE,$(DESTDIR)$(docdir))'
 	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/COPYING' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
+	$(INSTALL) -d '$(call SHESCAPE,$(DESTDIR)$(docdir))/LICENSES'
+	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/LICENSES/LicenseRef-scancode-bsd-no-disclaimer-unmodified.txt' '$(call SHESCAPE,$(DESTDIR)$(docdir))/LICENSES/'
+	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/3RDPARTY.md' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
 	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/CONFIG.md' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
-	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/PROTOCOL.md' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
-	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/PHILOSOPHY.md' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
+	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/FAQ.md' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
 	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/USAGE.md' '$(call SHESCAPE,$(DESTDIR)$(docdir))/'
 	$(INSTALL) -d '$(call SHESCAPE,$(DESTDIR)$(mandir))/man1'
 	$(INSTALL_DATA) '$(call SHESCAPE,$(BUILDDIR))/man/man1/limine.1' '$(call SHESCAPE,$(DESTDIR)$(mandir))/man1/'
@@ -171,8 +169,6 @@ endif
 ifeq ($(BUILD_UEFI_IA32),limine-uefi-ia32)
 	$(INSTALL_DATA) '$(call SHESCAPE,$(BINDIR))/BOOTIA32.EFI' '$(call SHESCAPE,$(DESTDIR)$(datarootdir))/limine/'
 endif
-	$(INSTALL) -d '$(call SHESCAPE,$(DESTDIR)$(includedir))'
-	$(INSTALL_DATA) '$(call SHESCAPE,$(SRCDIR))/limine.h' '$(call SHESCAPE,$(DESTDIR)$(includedir))/'
 	$(INSTALL) -d '$(call SHESCAPE,$(DESTDIR)$(bindir))'
 	$(INSTALL_PROGRAM) '$(call SHESCAPE,$(BINDIR))/limine' '$(call SHESCAPE,$(DESTDIR)$(bindir))/'
 
@@ -183,16 +179,18 @@ install-strip: install
 .PHONY: uninstall
 uninstall:
 	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/COPYING'
+	rm -rf '$(call SHESCAPE,$(DESTDIR)$(docdir))/LICENSES'
+	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/3RDPARTY.md'
 	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/CONFIG.md'
-	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/PROTOCOL.md'
-	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/PHILOSOPHY.md'
+	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/FAQ.md'
 	rm -f '$(call SHESCAPE,$(DESTDIR)$(docdir))/USAGE.md'
 	rm -f '$(call SHESCAPE,$(DESTDIR)$(mandir))/man1/limine.1'
 	rm -f '$(call SHESCAPE,$(DESTDIR)$(bindir))/limine'
 	rm -rf '$(call SHESCAPE,$(DESTDIR)$(datarootdir))/limine'
-	rm -f '$(call SHESCAPE,$(DESTDIR)$(includedir))/limine.h'
 
-$(call MKESCAPE,$(BUILDDIR))/stage1.stamp: $(STAGE1_FILES) $(call MKESCAPE,$(BUILDDIR))/decompressor-build/decompressor.bin $(call MKESCAPE,$(BUILDDIR))/common-bios/stage2.bin.gz
+$(call MKESCAPE,$(BUILDDIR))/stage1.stamp: $(STAGE1_FILES) $(call MKESCAPE,$(BUILDDIR))/common-bios/stage2.bin.limlz
+	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))/decompressor-build'
+	cd '$(call SHESCAPE,$(SRCDIR))/stage1' && nasm decompressor.asm -Wall -w-unknown-warning -w-reloc $(WERROR_FLAG) -fbin -o '$(call SHESCAPE,$(BUILDDIR))/decompressor-build/decompressor.bin'
 	$(MKDIR_P) '$(call SHESCAPE,$(BINDIR))'
 	cd '$(call SHESCAPE,$(SRCDIR))/stage1/hdd' && nasm bootsect.asm -Wall -w-unknown-warning -w-reloc $(WERROR_FLAG) -fbin -DBUILDDIR="'"'$(call NASMESCAPE,$(BUILDDIR))'"'" -o '$(call SHESCAPE,$(BINDIR))/limine-bios-hdd.bin'
 ifneq ($(BUILD_BIOS_CD),no)
@@ -205,15 +203,14 @@ endif
 	touch '$(call SHESCAPE,$(BUILDDIR))/stage1.stamp'
 
 .PHONY: limine-bios
-limine-bios: common-bios decompressor
+limine-bios: common-bios
 	$(MAKE) '$(call SHESCAPE,$(BUILDDIR))/stage1.stamp'
 
 $(call MKESCAPE,$(BINDIR))/limine-uefi-cd.bin: $(if $(BUILD_UEFI_IA32),$(call MKESCAPE,$(BUILDDIR))/common-uefi-ia32/BOOTIA32.EFI) $(if $(BUILD_UEFI_X86_64),$(call MKESCAPE,$(BUILDDIR))/common-uefi-x86-64/BOOTX64.EFI) $(if $(BUILD_UEFI_AARCH64),$(call MKESCAPE,$(BUILDDIR))/common-uefi-aarch64/BOOTAA64.EFI) $(if $(BUILD_UEFI_RISCV64),$(call MKESCAPE,$(BUILDDIR))/common-uefi-riscv64/BOOTRISCV64.EFI) $(if $(BUILD_UEFI_LOONGARCH64),$(call MKESCAPE,$(BUILDDIR))/common-uefi-loongarch64/BOOTLOONGARCH64.EFI)
 ifneq ($(BUILD_UEFI_CD),no)
 	$(MKDIR_P) '$(call SHESCAPE,$(BINDIR))'
 	rm -f '$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin'
-	dd if=/dev/zero of='$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin' bs=512 count=5760 2>/dev/null
-	mformat -i '$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin' -f 2880 -N 12345678 ::
+	TZ=UTC0; export TZ; \
 	LIMINE_UEFI_CD_TMP="$$(mktemp -d)"; \
 		mkdir -p "$$LIMINE_UEFI_CD_TMP"/EFI/BOOT; \
 		cp '$(call SHESCAPE,$(BUILDDIR))/common-uefi-aarch64/BOOTAA64.EFI' "$$LIMINE_UEFI_CD_TMP"/EFI/BOOT/ 2>/dev/null; \
@@ -222,6 +219,10 @@ ifneq ($(BUILD_UEFI_CD),no)
 		cp '$(call SHESCAPE,$(BUILDDIR))/common-uefi-x86-64/BOOTX64.EFI' "$$LIMINE_UEFI_CD_TMP"/EFI/BOOT/ 2>/dev/null; \
 		cp '$(call SHESCAPE,$(BUILDDIR))/common-uefi-ia32/BOOTIA32.EFI' "$$LIMINE_UEFI_CD_TMP"/EFI/BOOT/ 2>/dev/null; \
 		find "$$LIMINE_UEFI_CD_TMP" -exec touch -t $(SOURCE_DATE_EPOCH_TOUCH) '{}' + && \
+		LIMINE_UEFI_CD_SIZE="$$(find "$$LIMINE_UEFI_CD_TMP" -type f -exec cat '{}' + | wc -c)" && \
+		LIMINE_UEFI_CD_SECTORS="$$(( (($$LIMINE_UEFI_CD_SIZE + 1048575) / 1048576 + 1) * 2048 ))" && \
+		dd if=/dev/zero of='$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin' bs=512 count="$$LIMINE_UEFI_CD_SECTORS" 2>/dev/null && \
+		mformat -i '$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin' -T "$$LIMINE_UEFI_CD_SECTORS" -N 12345678 :: && \
 		mcopy -D o -s -m -i '$(call SHESCAPE,$(BINDIR))/limine-uefi-cd.bin' "$$LIMINE_UEFI_CD_TMP"/EFI :: && \
 		rm -rf "$$LIMINE_UEFI_CD_TMP"
 endif
@@ -295,55 +296,61 @@ limine-uefi-loongarch64-clean: common-uefi-loongarch64-clean
 
 .PHONY: dist
 dist:
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)"
-	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)"
-	cp -r '$(call SHESCAPE,$(SRCDIR))'/.git '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)"/
-	cd '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)" && git checkout .
-	cd '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)" && ./bootstrap
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/common/flanterm/.git"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/common/flanterm/.gitignore"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/freestnd-c-hdrs-0bsd/.git"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/nyu-efi/.git"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/nyu-efi/.gitignore"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/cc-runtime/.git"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/cc-runtime/.gitignore"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/dtc"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/tinf"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/common/lib/stb_image.h.nopatch"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/.git"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/.gitignore"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/.github"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/README.md"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/autom4te.cache"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/test"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/test.mk"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/logo.png"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/screenshot.png"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/bochsrc"
-	echo "$(LIMINE_VERSION)" > '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)/version"
-	cd '$(call SHESCAPE,$(BUILDDIR))' && tar -cf "limine-$(LIMINE_VERSION).tar" "limine-$(LIMINE_VERSION)"
-	cd '$(call SHESCAPE,$(BUILDDIR))' && gzip < "limine-$(LIMINE_VERSION).tar" > "limine-$(LIMINE_VERSION).tar.gz"
-	cd '$(call SHESCAPE,$(BUILDDIR))' && ( lzip < "limine-$(LIMINE_VERSION).tar" > "limine-$(LIMINE_VERSION).tar.lz" || rm -f "limine-$(LIMINE_VERSION).tar.lz" )
-	cd '$(call SHESCAPE,$(BUILDDIR))' && ( bzip2 < "limine-$(LIMINE_VERSION).tar" > "limine-$(LIMINE_VERSION).tar.bz2" || rm -f "limine-$(LIMINE_VERSION).tar.bz2" )
-	cd '$(call SHESCAPE,$(BUILDDIR))' && ( xz < "limine-$(LIMINE_VERSION).tar" > "limine-$(LIMINE_VERSION).tar.xz" || rm -f "limine-$(LIMINE_VERSION).tar.xz" )
-	cd '$(call SHESCAPE,$(BUILDDIR))' && ( zstd < "limine-$(LIMINE_VERSION).tar" > "limine-$(LIMINE_VERSION).tar.zst" || rm -f "limine-$(LIMINE_VERSION).tar.zst" )
-	cd '$(call SHESCAPE,$(BUILDDIR))' && rm "limine-$(LIMINE_VERSION).tar"
-	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"limine-$(LIMINE_VERSION)"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)"
+	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)"
+	cp -r '$(call SHESCAPE,$(SRCDIR))'/.git '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)"/
+	cd '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)" && git checkout .
+	cd '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)" && ./bootstrap
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/contrib"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/flanterm/.git"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/flanterm/.gitignore"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/flanterm/.github"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/freestanding-c-hdrs/.git"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/limine-protocol/.git"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/picoefi/.git"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/picoefi/.gitignore"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/cc-runtime"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/libfdt/.git"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/stbi-hardened"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/pdgzip"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/.git"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/.gitignore"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/.github"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/README.md"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/DCO"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/CONTRIBUTING.md"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/AGENTS.md"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/CLAUDE.md"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/autom4te.cache"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/test"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/test.mk"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/logo.png"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/screenshot.png"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/bochsrc"
+	echo "$(PACKAGE_VERSION)" > '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)/version"
+	cd '$(call SHESCAPE,$(BUILDDIR))' && find "$(DIST_OUTPUT)" ! -type d -perm -100 -exec chmod 755 '{}' +
+	cd '$(call SHESCAPE,$(BUILDDIR))' && find "$(DIST_OUTPUT)" ! -type d ! -perm -100 -exec chmod 644 '{}' +
+	cd '$(call SHESCAPE,$(BUILDDIR))' && TZ=UTC0 find "$(DIST_OUTPUT)" -exec touch -t $(SOURCE_DATE_EPOCH_TOUCH) '{}' +
+	cd '$(call SHESCAPE,$(BUILDDIR))' && tar -cf "$(DIST_OUTPUT).tar" $$(find "$(DIST_OUTPUT)" ! -type d | LC_ALL=C sort)
+	cd '$(call SHESCAPE,$(BUILDDIR))' && gzip -n < "$(DIST_OUTPUT).tar" > "$(DIST_OUTPUT).tar.gz"
+	cd '$(call SHESCAPE,$(BUILDDIR))' && ( bzip2 < "$(DIST_OUTPUT).tar" > "$(DIST_OUTPUT).tar.bz2" || rm -f "$(DIST_OUTPUT).tar.bz2" )
+	cd '$(call SHESCAPE,$(BUILDDIR))' && ( xz < "$(DIST_OUTPUT).tar" > "$(DIST_OUTPUT).tar.xz" || rm -f "$(DIST_OUTPUT).tar.xz" )
+	cd '$(call SHESCAPE,$(BUILDDIR))' && rm "$(DIST_OUTPUT).tar"
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))'/"$(DIST_OUTPUT)"
 
 .PHONY: distclean
 distclean: clean
-	rm -rf ovmf* config.log config.status GNUmakefile config.h toolchain-files man/man1/limine.1
+	rm -rf .cache compile_commands.json edk2-ovmf config.log config.status GNUmakefile config.h man/man1/limine.1
 
 .PHONY: maintainer-clean
 maintainer-clean: distclean
-	cd '$(call SHESCAPE,$(SRCDIR))' && rm -rf common/flanterm common/libfdt common/lib/stb_image.h.nopatch common/lib/stb_image.h decompressor/tinf tinf dtc freestnd-c-hdrs-0bsd cc-runtime nyu-efi configure timestamps build-aux *'~' autom4te.cache aclocal.m4 *.tar*
+	cd '$(call SHESCAPE,$(SRCDIR))' && rm -rf flanterm stbi-hardened common/lib/stb_image.h pdgzip common/compress/pdgzip.c common/compress/pdgzip.h libfdt freestanding-c-hdrs cc-runtime common/cc-runtime.s2.c limine-protocol picoefi configure timestamps build-aux *'~' autom4te.cache aclocal.m4 *.tar*
 
 .PHONY: common-uefi-x86-64
 common-uefi-x86-64:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/uefi-x86_64-toolchain.mk' \
-	TARGET=uefi-x86-64 \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-x86-64' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk
+	$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk \
+		TARGET=uefi-x86-64 \
+		BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-x86-64'
 
 .PHONY: common-uefi-x86-64-clean
 common-uefi-x86-64-clean:
@@ -351,10 +358,9 @@ common-uefi-x86-64-clean:
 
 .PHONY: common-uefi-aarch64
 common-uefi-aarch64:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/uefi-aarch64-toolchain.mk' \
-	TARGET=uefi-aarch64 \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-aarch64' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk
+	$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk \
+		TARGET=uefi-aarch64 \
+		BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-aarch64'
 
 .PHONY: common-uefi-aarch64-clean
 common-uefi-aarch64-clean:
@@ -362,10 +368,9 @@ common-uefi-aarch64-clean:
 
 .PHONY: common-uefi-riscv64
 common-uefi-riscv64:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/uefi-riscv64-toolchain.mk' \
-	TARGET=uefi-riscv64 \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-riscv64' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk
+	$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk \
+		TARGET=uefi-riscv64 \
+		BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-riscv64'
 
 .PHONY: common-uefi-riscv64-clean
 common-uefi-riscv64-clean:
@@ -373,10 +378,9 @@ common-uefi-riscv64-clean:
 
 .PHONY: common-uefi-loongarch64
 common-uefi-loongarch64:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/uefi-loongarch64-toolchain.mk' \
-	TARGET=uefi-loongarch64 \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-loongarch64' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk
+	$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk \
+		TARGET=uefi-loongarch64 \
+		BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-loongarch64'
 
 .PHONY: common-uefi-loongarch64-clean
 common-uefi-loongarch64-clean:
@@ -384,34 +388,35 @@ common-uefi-loongarch64-clean:
 
 .PHONY: common-uefi-ia32
 common-uefi-ia32:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/uefi-i686-toolchain.mk' \
-	TARGET=uefi-ia32 \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-ia32' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk
+	$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk \
+		TARGET=uefi-ia32 \
+		BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-uefi-ia32'
 
 .PHONY: common-uefi-ia32-clean
 common-uefi-ia32-clean:
 	rm -rf '$(call SHESCAPE,$(BUILDDIR))/common-uefi-ia32'
 
 .PHONY: common-bios
-common-bios:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/bios-i686-toolchain.mk' \
-	TARGET=bios \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-bios' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk
+common-bios: $(call MKESCAPE,$(BUILDDIR))/tools-build/limlzpack
+	$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/common' -f common.mk \
+		TARGET=bios \
+		BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/common-bios' \
+		LIMLZPACK='$(call SHESCAPE,$(BUILDDIR))/tools-build/limlzpack'
 
 .PHONY: common-bios-clean
 common-bios-clean:
 	rm -rf '$(call SHESCAPE,$(BUILDDIR))/common-bios'
 
-.PHONY: decompressor
-decompressor:
-	TOOLCHAIN_FILE='$(call SHESCAPE,$(BUILDDIR))/toolchain-files/bios-i686-toolchain.mk' \
-	BUILDDIR='$(call SHESCAPE,$(BUILDDIR))/decompressor-build' \
-		$(MAKE) -C '$(call SHESCAPE,$(SRCDIR))/decompressor' -f decompressor.mk
+$(call MKESCAPE,$(BUILDDIR))/tools-build/limlzpack: $(call MKESCAPE,$(SRCDIR))/tools/limlzpack.c
+	$(MKDIR_P) '$(call SHESCAPE,$(BUILDDIR))/tools-build'
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -std=c99 -Wall -Wextra $(WERROR_FLAG) '$(call SHESCAPE,$<)' -o '$(call SHESCAPE,$@)'
 
 .PHONY: decompressor-clean
 decompressor-clean:
 	rm -rf '$(call SHESCAPE,$(BUILDDIR))/decompressor-build'
 
--include test.mk
+.PHONY: tools-clean
+tools-clean:
+	rm -rf '$(call SHESCAPE,$(BUILDDIR))/tools-build'
+
+-include $(call MKESCAPE,$(SRCDIR))/test.mk

@@ -13,13 +13,33 @@
 #include <lib/term.h>
 #include <mm/pmm.h>
 #include <menu.h>
+#include <drivers/mouse.h>
 
 noreturn void panic(bool allow_menu, const char *fmt, ...) {
     va_list args;
 
     va_start(args, fmt);
 
+#if defined (UEFI)
+    // Don't return to the menu under measured boot: a partial boot may
+    // have already dirtied the TPM PCRs.
+    if (measured_boot) {
+        allow_menu = false;
+    }
+#endif
+
     quiet = false;
+
+    // Lift the pointer sprite off the screen before printing over it.
+    if (
+#if defined (BIOS)
+      stage3_loaded == true
+#else
+      true
+#endif
+      ) {
+        mouse_erase_pointer();
+    }
 
     if (
 #if defined (BIOS)
@@ -28,6 +48,9 @@ noreturn void panic(bool allow_menu, const char *fmt, ...) {
       term_backend == _NOT_READY) {
         term_fallback();
     }
+
+    // Set on what term_fallback() installed, not on what it replaced.
+    FOR_TERM(TERM->autoflush = true);
 
     if (
 #if defined (BIOS)

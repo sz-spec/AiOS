@@ -39,6 +39,8 @@ interface KernelState {
 
   // ---- data ----
   sysinfo: SysInfo;
+  statusPing: boolean;
+  statusData: string;
   slots: string | null;
   loading: boolean;
   error: string | null;
@@ -150,6 +152,8 @@ export const useKernelStore = create<KernelState>()(
       vbusHmac: false,
       warpOpen: false,
       sysinfo: {},
+      statusPing: false,
+      statusData: '',
       slots: null,
       loading: false,
       error: null,
@@ -181,6 +185,8 @@ export const useKernelStore = create<KernelState>()(
               s.vbusHmac = status.vbus_hmac;
               s.warpOpen = status.warp_open;
               s.connected = status.vbus_connected;
+              s.statusPing = status.vbus_connected;
+              s.statusData = '';
             });
           } else {
             // Browser mode: HTTP API
@@ -193,6 +199,8 @@ export const useKernelStore = create<KernelState>()(
             set((s) => {
               s.connected = data.connected ?? false;
               s.sysinfo = data.sysinfo ?? {};
+              s.statusPing = data.ping === true;
+              s.statusData = typeof data.data === 'string' ? data.data : '';
               if (data.qemu_alive !== undefined) s.qemuAlive = data.qemu_alive;
               if (data.vbus_connected !== undefined) s.vbusConnected = data.vbus_connected;
               if (data.vbus_hmac !== undefined) s.vbusHmac = data.vbus_hmac;
@@ -204,6 +212,8 @@ export const useKernelStore = create<KernelState>()(
           set((s) => {
             s.error = msg;
             s.connected = false;
+            s.statusPing = false;
+            s.statusData = '';
           });
         } finally {
           set((s) => {
@@ -249,6 +259,8 @@ export const useKernelStore = create<KernelState>()(
             s.vbusHmac = false;
             s.warpOpen = false;
             s.connected = false;
+            s.statusPing = false;
+            s.statusData = '';
           });
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);

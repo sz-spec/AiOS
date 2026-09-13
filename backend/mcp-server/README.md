@@ -6,11 +6,11 @@
 
 **Production-grade Multi-Agent MCP Server with Streaming, Caching & Observability**
 
-[![SDK Version](https://img.shields.io/badge/MCP%20SDK-1.25.2-green)](https://github.com/modelcontextprotocol/typescript-sdk)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.26.8-blue)](https://github.com/punkpeye/fastmcp)
+[![SDK Version](https://img.shields.io/badge/MCP%20SDK-1.30.0-green)](https://github.com/modelcontextprotocol/typescript-sdk)
+[![FastMCP](https://img.shields.io/badge/FastMCP-4.20.11-blue)](https://github.com/punkpeye/fastmcp)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Security](https://img.shields.io/badge/CVE--2025--66414-Patched-success)](SECURITY.md)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue)](https://www.typescriptlang.org/)
 
 [Features](#-features) •
 [Quick Start](#-quick-start) •
@@ -29,7 +29,7 @@ V OS MCP Agent Server הוא שרת [Model Context Protocol](https://modelcontex
 - 🤖 **Multi-Agent Orchestration** - ניתוב חכם בין agents מרובים
 - ⚡ **Real-time Streaming** - תשובות streaming עם progress reporting
 - 💾 **3-Layer Caching** - ביצועים משופרים עם cache hit rate של 40-60%
-- 🔒 **Enterprise Security** - DNS rebinding protection, OAuth, rate limiting
+- 🔒 **Access controls** - bearer authentication, scoped tool authorization, loopback HTTP binding
 - 📊 **Full Observability** - OpenTelemetry tracing, Prometheus metrics
 - 🔌 **Multi-Provider** - OpenAI, Anthropic, Azure, Local models
 
@@ -92,61 +92,40 @@ V OS MCP Agent Server הוא שרת [Model Context Protocol](https://modelcontex
 
 ### Prerequisites
 
-- Node.js 22+
+- Node.js satisfying `^22.12.0 || ^24.0.0 || >=26.0.0` (validation used Node 26)
 - npm or pnpm
 - (Optional) Docker & Docker Compose
 - (Optional) Redis for distributed caching
 
-### Installation
+### Installation and authenticated HTTP
 
-```bash
-# Clone the repository
-git clone https://github.com/v-os/mcp-agent-server.git
-cd mcp-agent-server
+From this directory:
 
-# Install dependencies
-npm install
-
-# Copy environment template
-cp .env.example .env
-
-# Edit .env with your API keys
-nano .env
-
-# Start development server
-npm run dev
+```sh
+npm ci
+npm run build
 ```
 
-### Docker Quick Start
+Generate one independent random token per principal with `node -e 'console.log(require("node:crypto").randomBytes(32).toString("hex"))'`. Keep it in your secret store. Configure `MCP_AUTH_TOKENS` as a JSON array containing objects with `token`, `userId`, and `role` (`user` or `admin`), then run `npm start`. For example, the structure is:
 
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
-
-# View logs
-docker-compose logs -f mcp-server
-
-# Check health
-curl http://localhost:8080/health
+```json
+[{ "token": "<replace-with-generated-secret>", "userId": "alice", "role": "user" }]
 ```
 
-### Verify Installation
+The placeholder is not a usable credential. Missing configuration fails startup. The server defaults to **127.0.0.1:8080**; `MCP_HOST` accepts an explicit literal IPv4/IPv6 bind address, and clients send `Authorization: Bearer <their-token>` on every MCP request to `/mcp`. HTTP requests are stateless. For remote clients, provide a TLS reverse proxy. Restart after changing credentials to revoke old tokens. Provider keys are optional for quota/status tests, and required only for the selected hosted provider. Environment variables must be supplied by the process launcher; the server does not automatically load a `.env` file.
 
-```bash
-# Health check
-curl http://localhost:8080/health
+Ordinary users can chat and inspect their own quota. Only explicitly configured admins can change quotas or read global cost, cache, and health metrics. The `v_health` MCP tool is admin-only; an HTTP `/health` response is not an authorization check.
 
-# Expected response:
-{
-  "status": "healthy",
-  "version": "1.0.1",
-  "security": {
-    "dnsRebindingProtection": true,
-    "cveFixed": ["CVE-2025-66414"]
-  },
-  "agents": 4
-}
+### Local stdio
+
+```sh
+MCP_STDIO_USER_ID=local-owner npm run start:stdio
 ```
+
+Stdio is a trusted local process channel, requires an explicit identity, and defaults to the `user` role. Set `MCP_STDIO_ROLE=admin` only for a process owner who should administer quotas. Logs go to stderr; stdout is reserved for MCP. Global semantic caching is disabled on HTTP until tenant isolation is implemented; exact cache entries are separated by user/model/agent.
+
+These controls do not provide atomic distributed quota reservations, OAuth token issuance, or a complete security certification. See [the authentication review](../../docs/design/evidence/security-mcp.md).
+
 
 ---
 
@@ -172,9 +151,11 @@ curl http://localhost:8080/health
 {
   "mcpServers": {
     "v-os": {
-      "command": "npx",
-      "args": ["-y", "v-os-mcp-agent-server"],
+      "command": "node",
+      "args": ["/absolute/path/to/backend/mcp-server/dist/server.js"],
       "env": {
+        "TRANSPORT": "stdio",
+        "MCP_STDIO_USER_ID": "local-owner",
         "OPENAI_API_KEY": "sk-...",
         "ANTHROPIC_API_KEY": "sk-ant-..."
       }
@@ -192,7 +173,7 @@ curl http://localhost:8080/health
     "v-os": {
       "url": "http://localhost:8080/mcp",
       "headers": {
-        "x-api-key": "your-api-key"
+        "Authorization": "Bearer <your-generated-token>"
       }
     }
   }
@@ -209,7 +190,7 @@ curl http://localhost:8080/health
       "type": "http",
       "url": "http://localhost:8080/mcp",
       "headers": {
-        "x-api-key": "your-api-key"
+        "Authorization": "Bearer <your-generated-token>"
       }
     }
   }
@@ -228,7 +209,7 @@ const transport = new StreamableHTTPClientTransport(
   new URL("http://localhost:8080/mcp"),
   {
     requestInit: {
-      headers: { "x-api-key": "your-api-key" }
+      headers: { "Authorization": "Bearer <your-generated-token>" }
     }
   }
 );
@@ -325,29 +306,15 @@ REDIS_URL=redis://localhost:6379
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 ```
 
-📖 **Full configuration:** [.env.example](.env.example)
+Authentication variables are documented in [Quick Start](#-quick-start); supply them through the process launcher.
 
 ---
 
 ## 🔒 Security
 
-### CVE Status
+The current server enforces bearer authentication, per-principal quota reads, administrator permissions for global operations, Zod input validation, and loopback-only HTTP. Tokens are static deployment secrets; OAuth issuance and rate limiting are not implemented by this entrypoint. Container filesystem policy depends on deployment configuration.
 
-| CVE | Status | Description |
-|-----|--------|-------------|
-| CVE-2025-66414 | ✅ Patched | DNS Rebinding Protection |
-
-### Security Features
-
-- ✅ DNS Rebinding Protection (enabled by default)
-- ✅ API Key Authentication
-- ✅ Per-tool Authorization
-- ✅ Rate Limiting
-- ✅ Input Validation (Zod v4)
-- ✅ Non-root Docker container
-- ✅ Read-only filesystem
-
-📖 **Security policy:** [SECURITY.md](SECURITY.md)
+The latest dependency audit reported zero known npm advisories at validation time; that is not proof that the service is vulnerability-free. See [dependency validation and lint backlog](docs/DEPENDENCY_VALIDATION.md) and [the scoped security review](../../docs/design/evidence/security-mcp.md).
 
 ---
 
@@ -537,3 +504,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 [Twitter](https://twitter.com/v_os_ai)
 
 </div>
+
+### Container deployment
+
+The Docker image uses Node 26.8.2, runs as UID 1001, explicitly binds `MCP_HOST=0.0.0.0` for container port publishing, and still requires `MCP_AUTH_TOKENS` at startup. Restrict published ports to loopback behind a TLS proxy as appropriate. The image sets `MCP_CACHE_DIR=/tmp/vos-mcp-cache` so a `/tmp` tmpfs supports a read-only root filesystem. The `/health` endpoint returns only `ok`; it is a liveness check, not an authenticated tool or provider check. Lockfile installation and high-severity dependency audit failures fail the image build.

@@ -1,11 +1,12 @@
-// This blake2b implementation comes from the GNU coreutils project.
-// https://github.com/coreutils/coreutils/blob/master/src/blake2/blake2b-ref.c
+// Based on https://github.com/BLAKE2/BLAKE2/blob/master/ref/blake2b-ref.c
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <crypt/blake2b.h>
 #include <lib/libc.h>
+#include <lib/misc.h>
+#include <mm/pmm.h>
 
 #define BLAKE2B_BLOCK_BYTES 128
 #define BLAKE2B_KEY_BYTES 64
@@ -62,6 +63,17 @@ struct blake2b_param {
     uint8_t personal[BLAKE2B_PERSONAL_BYTES];
 } __attribute__((packed));
 
+// Safe unaligned load/store helpers for architectures with strict alignment (ARM64, RISC-V)
+static inline uint64_t load64_le(const void *src) {
+    uint64_t val;
+    memcpy(&val, src, sizeof(val));
+    return val;
+}
+
+static inline void store64_le(void *dst, uint64_t val) {
+    memcpy(dst, &val, sizeof(val));
+}
+
 static void blake2b_increment_counter(struct blake2b_state *state, uint64_t inc) {
     state->t[0] += inc;
     state->t[1] += state->t[0] < inc;
@@ -98,7 +110,7 @@ static void blake2b_compress(struct blake2b_state *state, const uint8_t block[st
     uint64_t v[16];
 
     for (int i = 0; i < 16; i++) {
-        m[i] = *(uint64_t *)(block + i * sizeof(m[i]));
+        m[i] = load64_le(block + i * sizeof(m[i]));
     }
 
     for (int i = 0; i < 8; i++) {
@@ -149,7 +161,7 @@ static void blake2b_init(struct blake2b_state *state) {
     }
 
     for (int i = 0; i < 8; i++) {
-        state->h[i] ^= *(uint64_t *)((void *)&param + sizeof(state->h[i]) * i);
+        state->h[i] ^= load64_le((uint8_t *)&param + sizeof(state->h[i]) * i);
     }
 }
 
@@ -175,8 +187,8 @@ static void blake2b_update(struct blake2b_state *state, const void *in, size_t i
             blake2b_increment_counter(state, BLAKE2B_BLOCK_BYTES);
             blake2b_compress(state, in);
 
-            in += fill;
-            in_len -= fill;
+            in += BLAKE2B_BLOCK_BYTES;
+            in_len -= BLAKE2B_BLOCK_BYTES;
         }
     }
 
@@ -193,7 +205,7 @@ static void blake2b_final(struct blake2b_state *state, void *out) {
     blake2b_compress(state, state->buf);
 
     for (int i = 0; i < 8; i++) {
-        *(uint64_t *)(buffer + sizeof(state->h[i]) * i) = state->h[i];
+        store64_le(buffer + sizeof(state->h[i]) * i, state->h[i]);
     }
 
     memcpy(out, buffer, BLAKE2B_OUT_BYTES);
@@ -206,4 +218,73 @@ void blake2b(void *out, const void *in, size_t in_len) {
     blake2b_init(&state);
     blake2b_update(&state, in, in_len);
     blake2b_final(&state, out);
+}
+
+/*  Streaming filter: wraps a source file_handle and hashes bytes as
+    they are read sequentially. The hash is finalized and compared via
+    blake2b_check_hash(). Non-sequential reads panic -- the filter is
+    meant to sit underneath uri_open, which reads it monotonically.  */
+struct blake2b_handle {
+    struct file_handle  *source;
+    struct blake2b_state state;
+    uint64_t             pos;
+    bool                 finalized;
+    uint8_t              digest[BLAKE2B_OUT_BYTES];
+};
+
+static uint64_t blake2b_read(struct file_handle *fh, void *buf, uint64_t loc, uint64_t count) {
+    struct blake2b_handle *h = fh->fd;
+    if (loc != h->pos) {
+        panic(false, "blake2b filter: non-sequential read (pos=%x, loc=%x)",
+              (uint64_t)h->pos, loc);
+    }
+    uint64_t got = fread(h->source, buf, loc, count);
+    blake2b_update(&h->state, buf, got);
+    h->pos += got;
+    return got;
+}
+
+static void blake2b_close(struct file_handle *fh) {
+    struct blake2b_handle *h = fh->fd;
+    fclose(h->source);
+    pmm_free(h, sizeof(struct blake2b_handle));
+}
+
+struct file_handle *blake2b_open(struct file_handle *source) {
+    struct blake2b_handle *h = ext_mem_alloc(sizeof(struct blake2b_handle));
+    blake2b_init(&h->state);
+    h->source = source;
+    h->pos = 0;
+    h->finalized = false;
+
+    struct file_handle *ret = ext_mem_alloc(sizeof(struct file_handle));
+    ret->fd = h;
+    ret->read = (void *)blake2b_read;
+    ret->close = (void *)blake2b_close;
+    ret->size = source->size;
+    ret->vol = source->vol;
+    if (source->path != NULL && source->path_len > 0) {
+        ret->path = ext_mem_alloc(source->path_len);
+        memcpy(ret->path, source->path, source->path_len);
+        ret->path_len = source->path_len;
+    }
+#if defined (UEFI)
+    ret->efi_part_handle = source->efi_part_handle;
+#endif
+    ret->pxe = source->pxe;
+    memcpy(ret->pxe_ip, source->pxe_ip, 4);
+    ret->pxe_port = source->pxe_port;
+    return ret;
+}
+
+bool blake2b_check_hash(struct file_handle *fh, void *reference_hash) {
+    if (fh->read != (void *)blake2b_read) {
+        panic(false, "blake2b_check_hash: not a blake2b filter handle");
+    }
+    struct blake2b_handle *h = fh->fd;
+    if (!h->finalized) {
+        blake2b_final(&h->state, h->digest);
+        h->finalized = true;
+    }
+    return memcmp(h->digest, reference_hash, BLAKE2B_OUT_BYTES) == 0;
 }

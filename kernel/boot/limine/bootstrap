@@ -16,54 +16,20 @@ clone_repo_commit() {
     if test -d "$2/.git"; then
         git -C "$2" reset --hard
         git -C "$2" clean -fd
-        if ! git -C "$2" checkout $3; then
+        if ! git -C "$2" -c advice.detachedHead=false checkout $3; then
             rm -rf "$2"
         fi
     else
         if test -d "$2"; then
             set +x
-            echo "error: '$2' is not a Git repository"
+            echo "error: '$2' is not a Git repository" 1>&2
             exit 1
         fi
     fi
     if ! test -d "$2"; then
         git clone $1 "$2"
-        if ! git -C "$2" checkout $3; then
+        if ! git -C "$2" -c advice.detachedHead=false checkout $3; then
             rm -rf "$2"
-            exit 1
-        fi
-    fi
-}
-
-download_by_hash() {
-    DOWNLOAD_COMMAND="curl -Lo"
-    if ! command -v $DOWNLOAD_COMMAND >/dev/null 2>&1; then
-        DOWNLOAD_COMMAND="wget -O"
-        if ! command -v $DOWNLOAD_COMMAND >/dev/null 2>&1; then
-            set +x
-            echo "error: Neither curl nor wget found"
-            exit 1
-        fi
-    fi
-    SHA256_COMMAND="sha256sum"
-    if ! command -v $SHA256_COMMAND >/dev/null 2>&1; then
-        SHA256_COMMAND="sha256"
-        if ! command -v $SHA256_COMMAND >/dev/null 2>&1; then
-            set +x
-            echo "error: Cannot find sha256(sum) command"
-            exit 1
-        fi
-    fi
-    if ! test -f "$2" || ! $SHA256_COMMAND "$2" | grep $3 >/dev/null 2>&1; then
-        rm -f "$2"
-        mkdir -p "$2" && rm -rf "$2"
-        $DOWNLOAD_COMMAND "$2" $1
-        if ! $SHA256_COMMAND "$2" | grep $3 >/dev/null 2>&1; then
-            set +x
-            echo "error: Cannot download file '$2' by hash"
-            echo "incorrect hash:"
-            $SHA256_COMMAND "$2"
-            rm -f "$2"
             exit 1
         fi
     fi
@@ -71,69 +37,64 @@ download_by_hash() {
 
 if ! test -f version; then
     clone_repo_commit \
-        https://github.com/osdev0/freestnd-c-hdrs-0bsd.git \
-        freestnd-c-hdrs-0bsd \
-        0353851fdebe0eb6a4d2c608c5393040d310bf35
+        https://github.com/osdev0/freestanding-c-hdrs.git \
+        freestanding-c-hdrs \
+        38fed4e1e3365733ddbfa03b0a28936243ad31e9
 
     clone_repo_commit \
         https://github.com/osdev0/cc-runtime.git \
         cc-runtime \
-        9c281448fe40498a6341d74f55c9af4f642c0b1d
-
-    download_by_hash \
-        https://github.com/osdev0/freestanding-toolchain/raw/944d9bed2a4687a7138ab6231312a43c18743a1c/freestanding-toolchain \
-        build-aux/freestanding-toolchain \
-        620f782587bef7435db7a95b10104011d2ffb94c313b1c873d9bb0bdcaef5bd8
-    chmod +x build-aux/freestanding-toolchain
+        dae79833b57a01b9fd3e359ee31def69f5ae899b
+    cp cc-runtime/src/cc-runtime.c common/cc-runtime.s2.c
 
     clone_repo_commit \
-        https://github.com/osdev0/nyu-efi.git \
-        nyu-efi \
-        2dbb386e24cee72505a31ebdbb76cda792375eef
+        https://github.com/iczelia/pdgzip.git \
+        pdgzip \
+        010197664688f071b923615ea235ecb24963b61a
+    cp pdgzip/pdgzip.c common/compress/pdgzip.c
+    cp pdgzip/pdgzip.h common/compress/pdgzip.h
 
     clone_repo_commit \
-        https://github.com/jibsen/tinf.git \
-        tinf \
-        57ffa1f1d5e3dde19011b2127bd26d01689b694b
-    mkdir -p decompressor/tinf
-    cp tinf/src/tinf.h tinf/src/tinflate.c tinf/src/tinfgzip.c decompressor/tinf/
-    patch -p0 < decompressor/tinf.patch
-    rm -f decompressor/tinf/*.orig
+        https://github.com/Limine-Bootloader/limine-protocol.git \
+        limine-protocol \
+        da65184e91f80fcb397270121b1e2515a11e01ee
 
     clone_repo_commit \
-        https://github.com/mintsuki/flanterm.git \
-        common/flanterm \
-        a6f6edd6631c01caab932a59dce97bbd5f0c72c8
+        https://github.com/PicoEFI/PicoEFI.git \
+        picoefi \
+        ca03047ab1edf9772842d1d71950ec442f5b2309
 
-    download_by_hash \
-        https://github.com/nothings/stb/raw/f7f20f39fe4f206c6f19e26ebfef7b261ee59ee4/stb_image.h \
-        common/lib/stb_image.h.nopatch \
-        594c2fe35d49488b4382dbfaec8f98366defca819d916ac95becf3e75f4200b3
-    cp common/lib/stb_image.h.nopatch common/lib/stb_image.h
+    clone_repo_commit \
+        https://github.com/Mintsuki/Flanterm.git \
+        flanterm \
+        3e311fe2ce4f663273c22d1a229745bc53afa930
+
+    clone_repo_commit \
+        https://github.com/Mintsuki/stbi-hardened.git \
+        stbi-hardened \
+        b85b7e87f6f87300f32f7de3d94e1ed083a71263
+    cp stbi-hardened/include/stb_image.h common/lib/stb_image.h
     patch -p0 < common/stb_image.patch
     rm -f common/lib/stb_image.h.orig
 
     clone_repo_commit \
-        https://git.kernel.org/pub/scm/utils/dtc/dtc.git \
-        dtc \
-        99031e3a4a6e479466ae795790b44727434ca27d
-    rm -rf common/libfdt
-    cp -rp dtc/libfdt common/
-    find common/libfdt/ -type f -not -name '*.c' -not -name '*.h' -delete
+        https://github.com/osdev0/libfdt.git \
+        libfdt \
+        7bf94e6347129d17eca263112296ad170dec28a9
 fi
 
 # Create timestamps file
 if test -d .git && git log -1 >/dev/null 2>&1; then
     cat >timestamps <<EOF
-REGEN_DATE="$(git log -1 --pretty=%cd --date='format:%B %Y')"
+REGEN_DATE="$(LC_ALL=C git log -1 --pretty=%cd --date='format:%B %Y')"
 SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
-SOURCE_DATE_EPOCH_TOUCH="$(git log -1 --pretty=%cI | head -c 16 | sed 's/-//g;s/T//g;s/://g')"
+SOURCE_DATE_EPOCH_TOUCH="$(TZ=UTC0 git log -1 --pretty=%cd --date='format-local:%Y%m%d%H%M')"
 EOF
 else
     if ! test -f timestamps; then
         cat >timestamps <<EOF
 REGEN_DATE="UNVERSIONED"
-SOURCE_DATE_EPOCH="1546297200"
+SOURCE_DATE_EPOCH="1546300800"
 SOURCE_DATE_EPOCH_TOUCH="201901010000"
 EOF
     fi
@@ -152,8 +113,8 @@ for auxfile in $AUXFILES; do
     if ! test -f build-aux/$auxfile; then
         if ! $AUTOMAKE --print-libdir >/dev/null 2>&1; then
             set +x
-            echo "error: Broken autoreconf detected, but missing or broken automake."
-            echo "       Please make sure automake is installed and working."
+            echo "error: Broken autoreconf detected, but missing or broken automake." 1>&2
+            echo "       Please make sure automake is installed and working." 1>&2
             exit 1
         fi
         AUTOMAKE_LIBDIR="$($AUTOMAKE --print-libdir)"
@@ -166,3 +127,7 @@ for auxfile in $AUXFILES; do
         chmod +x build-aux/$auxfile
     fi
 done
+
+set +x
+
+printf "\nSource tree bootstrapped successfully!\n"

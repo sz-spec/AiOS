@@ -3,6 +3,14 @@
 set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 output_dir="${LIMINE_BUILD_DIR:-$repo_root/kernel/build/limine}/bin"
+mkdir -p "$output_dir"
+output_dir="$(cd "$output_dir" && pwd)"
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"
+if [[ "${LIMINE_FORCE_REBUILD:-0}" != 1 ]] && \
+   python3 "$repo_root/scripts/limine_build_state.py" "$output_dir"; then
+    echo "Limine source, tools and artifacts unchanged."
+    exit 0
+fi
 # Upstream's nested makefiles do not support spaces in their source paths.
 # Build a private source copy, then export only the finished boot artifacts.
 scratch="$(mktemp -d /tmp/vos5-limine.XXXXXX)"
@@ -13,9 +21,10 @@ cd "$scratch/build"
 "$scratch/source/configure" \
     --enable-bios --enable-bios-cd --enable-uefi-x86-64 \
     --enable-uefi-ia32 --enable-uefi-cd \
-    "TOOLCHAIN_FOR_TARGET=${TOOLCHAIN_FOR_TARGET:-x86_64-elf}"
+    "TOOLCHAIN_FOR_TARGET=${TOOLCHAIN_FOR_TARGET:-x86_64-elf}-"
 make -j "${BUILD_JOBS:-4}"
 mkdir -p "$output_dir"
 for artifact in limine limine-bios.sys limine-bios-cd.bin limine-uefi-cd.bin BOOTX64.EFI BOOTIA32.EFI; do
     cp "bin/$artifact" "$output_dir/$artifact"
 done
+python3 "$repo_root/scripts/limine_build_state.py" "$output_dir" --record

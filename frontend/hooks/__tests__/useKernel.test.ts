@@ -1,9 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useKernel } from '../useKernel';
+import { useKernelStore } from '@/lib/stores/kernel-store';
 
 describe('useKernel', () => {
   beforeEach(() => {
+    useKernelStore.setState(useKernelStore.getInitialState(), true);
     vi.spyOn(global, 'fetch').mockRejectedValue(new Error('Network unavailable'));
   });
 
@@ -48,8 +50,15 @@ describe('useKernel', () => {
     });
 
     expect(result.current.status).toEqual(mockStatus);
+    // A successful HTTP ping must not manufacture desktop vbus state.
+    expect(useKernelStore.getState().vbusConnected).toBe(false);
     expect(result.current.error).toBeNull();
     expect(result.current.loading).toBe(false);
+    useKernelStore.setState({ qemuAlive: true });
+    vi.mocked(fetch).mockRejectedValueOnce(new Error('refresh failed'));
+    await act(async () => { await result.current.fetchStatus(); });
+    expect(result.current.status?.ping).toBe(false);
+    expect(result.current.status?.data).toBe('');
   });
 
   it('fetchStatus sets error and clears status on HTTP failure', async () => {
@@ -116,6 +125,10 @@ describe('useKernel', () => {
     });
 
     expect(result.current.error).toBe('Status 500');
+    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => ({ processes: [] }) } as Response);
+    await act(async () => { await result.current.fetchProcesses(); });
+    expect(result.current.error).toBeNull();
+    expect(result.current.processes).toEqual([]);
   });
 
   // ---- fetchFilesystem ----

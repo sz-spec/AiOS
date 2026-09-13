@@ -1,11 +1,9 @@
-#if !defined (__x86_64__) && !defined (__i386__)
-
 #include <stdint.h>
 #include <stddef.h>
 
-void *memcpy(void *dest, const void *src, size_t n) {
-    uint8_t *pdest = (uint8_t *)dest;
-    const uint8_t *psrc = (const uint8_t *)src;
+void *memcpy(void *restrict dest, const void *restrict src, size_t n) {
+    uint8_t *restrict pdest = (uint8_t *restrict)dest;
+    const uint8_t *restrict psrc = (const uint8_t *restrict)src;
 
     for (size_t i = 0; i < n; i++) {
         pdest[i] = psrc[i];
@@ -28,11 +26,11 @@ void *memmove(void *dest, const void *src, size_t n) {
     uint8_t *pdest = (uint8_t *)dest;
     const uint8_t *psrc = (const uint8_t *)src;
 
-    if (src > dest) {
+    if ((uintptr_t)src > (uintptr_t)dest) {
         for (size_t i = 0; i < n; i++) {
             pdest[i] = psrc[i];
         }
-    } else if (src < dest) {
+    } else if ((uintptr_t)src < (uintptr_t)dest) {
         for (size_t i = n; i > 0; i--) {
             pdest[i-1] = psrc[i-1];
         }
@@ -53,5 +51,3 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 
     return 0;
 }
-
-#endif
