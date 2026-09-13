@@ -55,6 +55,13 @@ fix adds Socket.IO/Strawberry and required transitives without changing any
 previously resolved version. Actual final backend runtime qualification is
 tracked in the [container review](security-backend-container-final.md).
 
+The rebuilt backend image includes the corrected minimal profile and completed
+successfully with manifest-list digest
+`0bab617c63145ed5eedf11368f250f055d25dee63f446ef2aeae86cde1e3dd50`.
+The previous image's missing-Socket.IO failure is retained as discovery
+evidence. A successful strict startup of this replacement image has not yet
+been established; image construction alone does not close that gate.
+
 ## Remaining gates
 
 - Six unique Python advisories remain open; compatible pins do not resolve
