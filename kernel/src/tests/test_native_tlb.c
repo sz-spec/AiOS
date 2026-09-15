@@ -32,11 +32,17 @@ void vos3_native_tlb_observe(void)
 }
 
 #ifdef NATIVE_TLB_SKIP_FLUSH
-int vos3_native_tlb_skip_flush(void) { return phase == 2; }
+int vos3_native_tlb_skip_flush(void)
+{
+    /* On SMP corrupt exactly one remote response, leaving the BSP and other
+     * APs as controls. The one-CPU image uses CPU0 as its negative control. */
+    return phase == 2 && get_cpu_id() == (vos3_smp_online_count() > 1 ? 1U : 0U);
+}
 #endif
 
 static void verify(unsigned round)
 {
+    int failed_cpu = -1;
     for (unsigned cpu = 0; cpu < vos3_smp_cpu_count(); cpu++) {
         const vos3_smp_cpu_info_t *info = vos3_smp_get_cpu_info(cpu);
         if (info == NULL || !info->started) continue;
@@ -50,8 +56,11 @@ static void verify(unsigned round)
             observations[cpu].before0 != 17 || observations[cpu].before1 != 34 ||
             observations[cpu].after0 != 17 ||
             observations[cpu].after1 != (round == 1 ? 34U : 51U))
-            vos3_panic("NATIVE_TLB FAIL translation cpu=%u round=%u", cpu, round);
+            failed_cpu = (int)cpu;
     }
+    /* Preserve every CPU's observation before stopping a negative image. */
+    if (failed_cpu >= 0)
+        vos3_panic("NATIVE_TLB FAIL translation cpu=%u round=%u", (unsigned)failed_cpu, round);
 }
 
 void vos3_native_tlb_test(void)
