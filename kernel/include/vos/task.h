@@ -347,6 +347,9 @@ typedef struct vos3_task {
 #ifdef NATIVE_SMP_WORKLOAD
     uint32_t native_smp_reported;
 #endif
+    /* Immutable per-registration security principal; never a PID/TID alias.
+     * Assigned before publication; fork/clone registration replaces copied value. */
+    uint64_t identity_cookie;
 } __attribute__((aligned(VOS3_CACHE_LINE_SIZE))) vos3_task_t;
 
 /* ============================================================================

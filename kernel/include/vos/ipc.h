@@ -215,7 +215,8 @@ typedef struct vos3_shm_region {
     uint32_t flags;             /**< Region flags */
 
     vos3_mutex_t lock;          /**< Region lock */
-    vos3_tid_t owner;           /**< Owner task */
+    vos3_tid_t owner;           /**< Diagnostic TID; not authorization */
+    uint64_t owner_identity;    /**< Immutable creator principal; zero is kernel-only */
 } vos3_shm_region_t;
 
 /** @brief Shared memory flags */
@@ -252,7 +253,7 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
                                        size_t size, uint32_t flags);
 
 /**
- * @brief Destroy a shared memory region
+ * @brief Release creator ownership; only the creating task principal may close
  * @param[in] id Region ID
  * @return 0 on success, negative error on failure
  */
@@ -561,6 +562,7 @@ int vos3_ipc_init(void);
 #define VOS3_IPC_ERR_WOULDBLOCK (-11)
 #define VOS3_IPC_ERR_INTR       (-12)
 #define VOS3_IPC_ERR_PIPE       (-13)
+#define VOS3_IPC_ERR_ACCESS     (-13) /* EACCES for SHM authorization */
 
 /** @brief Error return for signal handler */
 #define VOS3_SIG_ERR    ((vos3_sighandler_t)-1)

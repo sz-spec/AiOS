@@ -48,6 +48,13 @@ static vos3_spinlock_t g_task_lock = VOS3_SPINLOCK_INIT;
 
 /** @brief Next task ID */
 static vos3_atomic32_t g_next_tid = { 0 };
+/* Protected by g_task_lock. Never reset or wrapped: exhaustion fails closed. */
+static uint64_t g_last_identity_cookie;
+static uint64_t alloc_identity_cookie(void)
+{
+    if (g_last_identity_cookie == UINT64_MAX) return 0;
+    return ++g_last_identity_cookie;
+}
 
 /** @brief Task subsystem initialized flag */
 static int g_task_initialized = 0;
@@ -456,8 +463,12 @@ vos3_task_t* vos3_task_create(const char* name,
     vos3_spinlock_lock(&g_task_lock);
 
     int slot = find_free_slot(task->tid);
-    if (slot < 0) {
+    task->identity_cookie = slot < 0 ? 0 : alloc_identity_cookie();
+    if (slot < 0 || task->identity_cookie == 0) {
         vos3_spinlock_unlock(&g_task_lock);
+        /* Newly created table is empty; no file references were published. */
+        vos3_kfree(task->fd_table);
+        vos3_kfree(task->xsave_area_raw);
         vos3_vmap_stack_free(task->kernel_stack, task->kernel_stack_guard);
         vos3_kfree(task);
         return NULL;
@@ -737,7 +748,8 @@ int vos3_task_register(vos3_task_t* task)
     vos3_spinlock_lock(&g_task_lock);
 
     int slot = find_free_slot(task->tid);
-    if (slot < 0) {
+    task->identity_cookie = slot < 0 ? 0 : alloc_identity_cookie();
+    if (slot < 0 || task->identity_cookie == 0) {
         vos3_spinlock_unlock(&g_task_lock);
         VOS3_ERROR("task_register: task table full (tid=%u)", task->tid);
         return -1;

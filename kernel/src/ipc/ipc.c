@@ -204,8 +204,16 @@ static int64_t sys_shm_create(vos3_syscall_frame_t* frame)
  */
 static int64_t sys_shm_destroy(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi > UINT32_MAX) return -EINVAL;
     vos3_ipc_id_t id = (vos3_ipc_id_t)frame->rdi;
     return (int64_t)vos3_shm_destroy(id);
+}
+
+/* Only IPC_RMID is supported. Other Linux commands must not close a region. */
+static int64_t sys_shmctl(vos3_syscall_frame_t* frame)
+{
+    if (frame->rsi != 0) return -EINVAL;
+    return sys_shm_destroy(frame);
 }
 
 /**
@@ -213,6 +221,7 @@ static int64_t sys_shm_destroy(vos3_syscall_frame_t* frame)
  */
 static int64_t sys_shm_map(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi > UINT32_MAX) return -EINVAL;
     vos3_ipc_id_t id = (vos3_ipc_id_t)frame->rdi;
     uint32_t flags = (uint32_t)frame->rsi;
 
@@ -225,6 +234,7 @@ static int64_t sys_shm_map(vos3_syscall_frame_t* frame)
  */
 static int64_t sys_shm_unmap(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi > UINT32_MAX) return -EINVAL;
     vos3_ipc_id_t id = (vos3_ipc_id_t)frame->rdi;
     void* addr = (void*)frame->rsi;
     return (int64_t)vos3_shm_unmap(id, addr);
@@ -235,6 +245,7 @@ static int64_t sys_shm_unmap(vos3_syscall_frame_t* frame)
  */
 static int64_t sys_shm_size(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi > UINT32_MAX) return -EINVAL;
     vos3_ipc_id_t id = (vos3_ipc_id_t)frame->rdi;
     return (int64_t)vos3_shm_size(id);
 }
@@ -555,7 +566,7 @@ int vos3_ipc_init(void)
     /* Shared memory — Linux x86-64 ABI aliases */
     vos3_syscall_register(LINUX_SYS_SHMGET, sys_shm_create);   /* shmget(29) → create */
     vos3_syscall_register(LINUX_SYS_SHMAT,  sys_shm_map);      /* shmat(30)  → map */
-    vos3_syscall_register(LINUX_SYS_SHMCTL, sys_shm_destroy);   /* shmctl(31) → destroy */
+    vos3_syscall_register(LINUX_SYS_SHMCTL, sys_shmctl);   /* shmctl(31) → destroy */
     vos3_syscall_register(LINUX_SYS_SHMDT,  sys_shm_unmap);    /* shmdt(67)  → unmap */
 
     /* Pipes */

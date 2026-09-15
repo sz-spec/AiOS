@@ -20,6 +20,7 @@ def classify_serial(raw, exit_status, requested_cpus=1):
     try:
         require(exit_status=='observation_timeout','unexpected VM exit')
         for marker in (
+            '[SHM-IDENTITY] PASS: zero-cookie denied, same-TID different-cookie denied, owner restored, backing intact, final release',
             '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close','PMM Statistics:','VMM: Initialization complete','Starting scheduler'):
             require(clean.count(marker)==1,'missing/repeated boot stage')
         require(not any(x in clean for x in ('PANIC','General Protection Fault','Double Fault','uaccess address-space mismatch','NATIVE_MEMORY FAIL','NATIVE_ISOLATION FAIL')),'unexpected failure')
@@ -84,10 +85,22 @@ def classify_serial(raw, exit_status, requested_cpus=1):
         require(survivor_wait[0]<loaded[0]<exec_owner[0]<detached[0]<detached_wait[0],'exec lifecycle ordering')
         backing=one(backing='owned',pid=pid,closed_fd=1,reused_fd=1,split=1,clone=1,contents=1)
         require(detached_wait[0]<backing[0],'backing test order')
-        previous=backing[0]
+        auth_private=one(shm_auth='private',parent_pid=pid,cpl=3,destroy_denied=1,alias_denied=1,map_denied=1,clone_denied=1,wait_status=0)
+        auth_public=one(shm_auth='public',parent_pid=pid,cpl=3,destroy_denied=1,alias_denied=1,owner_closed=1,survivor=1,wait_status=0)
+        auth_pids={int(auth_private[1]['pid']),int(auth_public[1]['pid'])}
+        require(len(auth_pids)==2 and all(x>0 for x in auth_pids) and not auth_pids&(pids|{owner_pid,survivor_pid,exec_pid,exec_survivor}),'SHM authorization child identities')
+        require(set(auth_private[1])=={'shm_auth','pid','parent_pid','cpl','destroy_denied','alias_denied','map_denied','clone_denied','wait_status'},'unexpected private authorization fields')
+        require(set(auth_public[1])=={'shm_auth','pid','parent_pid','cpl','destroy_denied','alias_denied','owner_closed','survivor','wait_status'},'unexpected public authorization fields')
+        stale=one(shm_auth='stale',pid=pid,cpl=3,canonical=1,alias=1,unsupported=1,wide=1,canary=1)
+        require(set(stale[1])=={'shm_auth','pid','cpl','old','new','slot','canonical','alias','unsupported','wide','canary'},'unexpected stale authorization fields')
+        old_handle,new_handle,slot=(int(stale[1][key]) for key in ('old','new','slot'))
+        require(0<old_handle<=0x7fffffff and 0<new_handle<=0x7fffffff and 1<=slot<64,'SHM handle bounds')
+        require(old_handle&63==new_handle&63==slot and old_handle>>6<new_handle>>6,'SHM generation/slot identity')
+        require(backing[0]<auth_private[0]<auth_public[0]<stale[0],'SHM authorization ordering')
+        previous=stale[0]
         complete=one(complete=1,cases=12,parent_pid=pid);progress=one(progress=1,parent_pid=pid,canary=1)
         require(previous<complete[0]<progress[0],'completion/progress ordering')
-        require(len(records)==43,'unexpected marker count')
+        require(len(records)==46,'unexpected marker count')
         result.update(passed=True,online_cpus=requested_cpus,scope='12 observed sequential memory transition cases; no remote TLB/concurrent COW proof')
     except (ValueError,KeyError,TypeError) as error:
         result['failures'].append(str(error))

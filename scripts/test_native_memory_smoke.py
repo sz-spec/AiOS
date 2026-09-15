@@ -4,6 +4,7 @@ from native_memory_smoke import CASES, ERRORS, BASE, classify_serial, bind_artif
 
 def trace(cpus=1):
     lines=['PMM Statistics:','VMM: Initialization complete','Starting scheduler',
+             '[SHM-IDENTITY] PASS: zero-cookie denied, same-TID different-cookie denied, owner restored, backing intact, final release',
              '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close',
              '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
              '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close',
@@ -24,7 +25,10 @@ def trace(cpus=1):
               'NATIVE_MEMORY lifetime=exec_owner_waited pid=203 survivor_pid=204 parent_pid=1 wait_status=0',
               'NATIVE_MEMORY lifetime=exec_detach pid=204 cpl=3 canary=1 survivor=1',
               'NATIVE_MEMORY lifetime=exec_detach pid=204 parent_pid=1 wait_status=0 verified=1',
-              'NATIVE_MEMORY backing=owned pid=1 closed_fd=1 reused_fd=1 split=1 clone=1 contents=1']
+              'NATIVE_MEMORY backing=owned pid=1 closed_fd=1 reused_fd=1 split=1 clone=1 contents=1',
+              'NATIVE_MEMORY shm_auth=private pid=205 parent_pid=1 cpl=3 destroy_denied=1 alias_denied=1 map_denied=1 clone_denied=1 wait_status=0',
+              'NATIVE_MEMORY shm_auth=public pid=206 parent_pid=1 cpl=3 destroy_denied=1 alias_denied=1 owner_closed=1 survivor=1 wait_status=0',
+              'NATIVE_MEMORY shm_auth=stale pid=1 cpl=3 old=65 new=129 slot=1 canonical=1 alias=1 unsupported=1 wide=1 canary=1']
     return '\n'.join(lines+['NATIVE_MEMORY complete=1 cases=12 parent_pid=1','NATIVE_MEMORY progress=1 parent_pid=1 canary=1'])
 
 class OracleTests(unittest.TestCase):
@@ -47,6 +51,9 @@ class OracleTests(unittest.TestCase):
         r=self.check(trace());bind_artifact_identity(r,'a','b');self.assertFalse(r['passed'])
     def test_old_backing_marker_is_insufficient(self):
         self.assertFalse(self.check(trace().replace(', creator-first explicit/reap, duplicate creator close',''))['passed'])
+    def test_shm_authorization_mutations(self):
+        for old,new in [('destroy_denied=1','destroy_denied=0'),('alias_denied=1','alias_denied=0'),('map_denied=1','map_denied=0'),('clone_denied=1','clone_denied=0'),('owner_closed=1','owner_closed=0'),('new=129','new=65'),('new=129','new=130'),('new=129','new=2147483649'),('slot=1','slot=0'),('pid=205','pid=1'),('pid=206','pid=205'),('wide=1','wide=0')]:
+            with self.subTest(old=old,new=new):self.assertFalse(self.check(trace().replace(old,new,1))['passed'])
     def test_order(self):
         l=trace().splitlines();a=next(i for i,x in enumerate(l) if 'case=cow_private' in x and 'attempt=1' in x);l[a],l[a+1]=l[a+1],l[a];self.assertFalse(self.check('\n'.join(l))['passed'])
 if __name__=='__main__':unittest.main()

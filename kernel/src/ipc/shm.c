@@ -241,6 +241,14 @@ void shm_va_free(uint64_t addr, size_t size)
 static vos3_shm_region_t* g_shm_table[VOS3_SHM_MAX_REGIONS];
 /* Creator close is distinct from mapping/temporary reference release. */
 static uint8_t g_shm_creator_released[VOS3_SHM_MAX_REGIONS];
+/* Positive signed-32-bit handles: 6 slot bits, 25 generation bits.
+ * A saturated slot is permanently retired, never wrapped/reissued. */
+#define SHM_SLOT_BITS 6U
+#define SHM_SLOT_MASK ((1U << SHM_SLOT_BITS) - 1U)
+#define SHM_GENERATION_MAX (INT32_MAX >> SHM_SLOT_BITS)
+_Static_assert(VOS3_SHM_MAX_REGIONS == (1U << SHM_SLOT_BITS), "SHM handle layout");
+static uint32_t g_shm_generation[VOS3_SHM_MAX_REGIONS];
+static uint32_t shm_slot(vos3_ipc_id_t id) { return id & SHM_SLOT_MASK; }
 
 /** @brief Shared memory table lock */
 static vos3_spinlock_t g_shm_lock = VOS3_SPINLOCK_INIT;
@@ -254,12 +262,12 @@ static vos3_spinlock_t g_shm_lock = VOS3_SPINLOCK_INIT;
  */
 static vos3_shm_region_t* shm_get(vos3_ipc_id_t id)
 {
-    if (id == VOS3_IPC_INVALID || id >= VOS3_SHM_MAX_REGIONS) {
+    if (id > INT32_MAX || shm_slot(id) == 0U) {
         return NULL;
     }
 
-    vos3_shm_region_t* shm = g_shm_table[id];
-    if (shm == NULL || shm->magic != VOS3_SHM_MAGIC) {
+    vos3_shm_region_t* shm = g_shm_table[shm_slot(id)];
+    if (shm == NULL || shm->magic != VOS3_SHM_MAGIC || shm->id != id) {
         return NULL;
     }
 
@@ -272,8 +280,9 @@ static vos3_shm_region_t* shm_get(vos3_ipc_id_t id)
 static vos3_ipc_id_t shm_alloc_id(void)
 {
     for (vos3_ipc_id_t i = 1U; i < VOS3_SHM_MAX_REGIONS; i++) {
-        if (g_shm_table[i] == NULL) {
-            return i;
+        if (g_shm_table[i] == NULL && g_shm_generation[i] < SHM_GENERATION_MAX) {
+            uint32_t generation = ++g_shm_generation[i];
+            return (generation << SHM_SLOT_BITS) | i;
         }
     }
     return VOS3_IPC_INVALID;
@@ -285,7 +294,8 @@ static vos3_ipc_id_t shm_alloc_id(void)
 
 vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
 {
-    if (size == 0U) {
+    if (size == 0U || size > SIZE_MAX - (VOS3_LARGE_PAGE_SIZE - 1U) ||
+        (flags & VOS3_SHM_FLAG_DEVICE)) {
         return VOS3_IPC_INVALID;
     }
 
@@ -437,8 +447,9 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
 
     vos3_task_t* current = vos3_sched_current();
     shm->owner = current ? current->tid : 0U;
+    shm->owner_identity = current ? current->identity_cookie : 0U;
 
-    g_shm_table[id] = shm;
+    g_shm_table[shm_slot(id)] = shm;
 
     vos3_spinlock_unlock(&g_shm_lock);
 
@@ -538,8 +549,9 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
 
     vos3_task_t* current = vos3_sched_current();
     shm->owner = current ? current->tid : 0U;
+    shm->owner_identity = current ? current->identity_cookie : 0U;
 
-    g_shm_table[id] = shm;
+    g_shm_table[shm_slot(id)] = shm;
 
     vos3_spinlock_unlock(&g_shm_lock);
 
@@ -561,7 +573,15 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
         return VOS3_IPC_ERR_NOTFOUND;
     }
 
-    if (creator && g_shm_creator_released[id]) {
+    if (creator) {
+        vos3_task_t* caller = vos3_sched_current();
+        if (caller == NULL || caller->identity_cookie == 0 ||
+            caller->identity_cookie != shm->owner_identity) {
+            vos3_spinlock_unlock(&g_shm_lock);
+            return VOS3_IPC_ERR_ACCESS;
+        }
+    }
+    if (creator && g_shm_creator_released[shm_slot(id)]) {
         vos3_spinlock_unlock(&g_shm_lock);
         return VOS3_IPC_ERR_INVALID;
     }
@@ -572,7 +592,7 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
         vos3_spinlock_unlock(&g_shm_lock);
         return VOS3_IPC_ERR_INVALID;
     }
-    if (creator) g_shm_creator_released[id] = 1;
+    if (creator) g_shm_creator_released[shm_slot(id)] = 1;
     uint32_t new_rc = __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
 
     if (new_rc > 0U) {
@@ -581,7 +601,7 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
     }
 
     /* Phase 1 (under lock): Invalidate the region so it cannot be found
-     * by shm_get() or duplicate-name checks, but keep g_shm_table[id]
+     * by shm_get() or duplicate-name checks, but keep g_shm_table[shm_slot(id)]
      * non-NULL so the slot is NOT recycled until physical cleanup is done. */
     shm->magic = 0U;
     shm->name[0] = '\0';
@@ -609,8 +629,8 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
     /* Phase 3 (under lock): Return slot to the pool now that all
      * virtual/physical resources have been fully released. */
     vos3_spinlock_lock(&g_shm_lock);
-    g_shm_table[id] = NULL;
-    g_shm_creator_released[id] = 0;
+    g_shm_table[shm_slot(id)] = NULL;
+    g_shm_creator_released[shm_slot(id)] = 0;
     vos3_spinlock_unlock(&g_shm_lock);
 
     vos3_kfree(shm);
@@ -652,9 +672,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
         vos3_task_t* caller = vos3_sched_current();
         if (caller != NULL && caller->address_space != NULL &&
             caller->address_space != vos3_vmm_get_kernel_space() &&
-            shm->owner != 0U &&
             !(shm->flags & VOS3_SHM_FLAG_PUBLIC) &&
-            caller->tid != shm->owner) {
+            (caller->identity_cookie == 0 || caller->identity_cookie != shm->owner_identity)) {
             /* Undo the pin — safe because ref_count > 0 prevents destroy */
             shm_release_owned(id, 0);
             return NULL;
@@ -838,8 +857,9 @@ vos3_ipc_id_t vos3_shm_find(const char* name)
         vos3_shm_region_t* shm = g_shm_table[i];
         if (shm != NULL && shm->magic == VOS3_SHM_MAGIC) {
             if (strcmp(shm->name, name) == 0) {
+                vos3_ipc_id_t id = shm->id;
                 vos3_spinlock_unlock(&g_shm_lock);
-                return i;
+                return id;
             }
         }
     }
@@ -850,10 +870,9 @@ vos3_ipc_id_t vos3_shm_find(const char* name)
 
 size_t vos3_shm_size(vos3_ipc_id_t id)
 {
+    vos3_spinlock_lock(&g_shm_lock);
     vos3_shm_region_t* shm = shm_get(id);
-    if (shm == NULL) {
-        return 0U;
-    }
-
-    return shm->size;
+    size_t size = shm ? shm->size : 0U;
+    vos3_spinlock_unlock(&g_shm_lock);
+    return size;
 }

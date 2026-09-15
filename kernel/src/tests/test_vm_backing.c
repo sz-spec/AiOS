@@ -14,6 +14,44 @@ static void require(int ok, const char* reason)
     if (!ok) VOS3_PANIC("VM-BACKING: %s", reason);
 }
 
+/* Test-only principal substitution, never a task pointer replacement. Local
+ * IRQ exclusion prevents this task being scheduled with a temporary cookie. */
+static void test_shm_identity(void)
+{
+    vos3_task_t* task = vos3_sched_current();
+    require(task != NULL && task->identity_cookie != 0, "identity test needs principal");
+    uint64_t saved = task->identity_cookie;
+    uint32_t tid = task->tid;
+    vos3_ipc_id_t id = vos3_shm_create("native-shm-identity", VOS3_PAGE_SIZE, 0);
+    require(id != VOS3_IPC_INVALID, "identity SHM create");
+    void* mapped = vos3_shm_map(id, 0);
+    require(mapped != NULL, "identity SHM map");
+    uintptr_t phys = 0;
+    require(vos3_vmm_virt_to_phys((uintptr_t)mapped, &phys) == 0, "identity translation");
+    uint32_t refs = vos3_pmm_ref_get(phys);
+    volatile uint64_t* data = (volatile uint64_t*)vos3_phys_to_virt(phys);
+    data[0] = 0xAABBCCDD11223344ULL;
+    uint64_t other = saved == UINT64_MAX ? 1 : saved + 1;
+    vos3_irqflags_t irq = vos3_irq_save();
+    task->identity_cookie = 0;
+    int zero_result = vos3_shm_destroy(id);
+    task->identity_cookie = other;
+    int recycled_tid_result = vos3_shm_destroy(id);
+    task->identity_cookie = saved;
+    vos3_irq_restore(irq);
+    /* Restore identity and IRQ state before any assertion/panic. */
+    require(task->tid == tid && task->identity_cookie == saved, "identity restoration");
+    require(zero_result == VOS3_IPC_ERR_ACCESS && recycled_tid_result == VOS3_IPC_ERR_ACCESS,
+            "zero or different principal accepted numeric TID authority");
+    require(vos3_shm_size(id) == VOS3_PAGE_SIZE && refs > 0 &&
+            vos3_pmm_ref_get(phys) == refs && data[0] == 0xAABBCCDD11223344ULL,
+            "denied principal changed live backing");
+    require(vos3_shm_destroy(id) == VOS3_IPC_OK, "restored owner rejected");
+    require(vos3_shm_unmap(id, mapped) == VOS3_IPC_OK && vos3_shm_size(id) == 0,
+            "identity test final mapping release");
+    VOS3_INFO("[SHM-IDENTITY] PASS: zero-cookie denied, same-TID different-cookie denied, owner restored, backing intact, final release");
+}
+
 /* Only filesystem close is synthetic; retain, clone, CPU pins and deferred
  * reclamation execute the production implementation with real page tables. */
 static unsigned backing_close_count;
@@ -268,4 +306,5 @@ void vos3_test_vm_backing(void)
     VOS3_INFO("[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close");
     test_metadata_cow();
     test_file_reference_ownership();
+    test_shm_identity();
 }
