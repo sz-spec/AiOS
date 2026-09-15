@@ -4,3 +4,6 @@ PROGRAMS := init sh cat grep wc head date uptime uname ai_test ai_diag ai_stat a
 ifeq ($(NATIVE_ISOLATION_TEST),1)
 PROGRAMS += test_native_isolation
 endif
+ifeq ($(MEMORY_TRANSITIONS_TEST),1)
+PROGRAMS += test_native_memory
+endif

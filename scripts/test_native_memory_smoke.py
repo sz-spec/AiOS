@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+import unittest
+from native_memory_smoke import CASES, ERRORS, BASE, classify_serial, bind_artifact_identity
+
+def trace(cpus=1):
+    lines=['PMM Statistics:','VMM: Initialization complete','Starting scheduler',f'SMP: {cpus} CPUs online','NATIVE_MEMORY role=parent pid=1 cpl=3','NATIVE_MEMORY guard=kernel_mprotect rejected=1','NATIVE_MEMORY api_guards=1','NATIVE_MEMORY restoration=1 canary=1','NATIVE_MEMORY rx_control=1 result=42']
+    for i,case in enumerate(CASES):
+        pid=100+i;addr=BASE+(16+i*8)*4096+(4096 if i in (3,10) else 8192 if i==11 else 0)
+        op='read' if i in (5,6,9,10,11) else 'execute' if i==7 else 'write'
+        lines.append(f'NATIVE_MEMORY case={case} pid={pid} address={hex(addr)} operation={op} cpl=3 attempt=1')
+        lines.append(f'NATIVE_MEMORY case={case} pid={pid} private=1' if i<2 else f"SIGSEGV: task 'memory' (pid={pid}) addr={hex(addr)} RIP=0x400000 err={hex(ERRORS[i])}")
+        lines.append(f'NATIVE_MEMORY case={case} pid={pid} wait_status={0 if i<2 else 35584} parent_pid=1 canary=1 ack={i+1}')
+    return '\n'.join(lines+['NATIVE_MEMORY complete=1 cases=12 parent_pid=1','NATIVE_MEMORY progress=1 parent_pid=1 canary=1'])
+
+class OracleTests(unittest.TestCase):
+    def check(self,s):return classify_serial(s,'observation_timeout')
+    def test_valid(self):
+        for cpus in (1,4):self.assertTrue(classify_serial('\x1b[32m'+trace(cpus)+'\x1b[0m','observation_timeout',cpus)['passed'])
+    def test_every_line_required(self):
+        lines=trace().splitlines()
+        for i in range(len(lines)):
+            with self.subTest(line=lines[i]):self.assertFalse(self.check('\n'.join(lines[:i]+lines[i+1:]))['passed'])
+    def test_corruptions(self):
+        for a,b in [('cpl=3','cpl=0'),('err=0x15','err=0x5'),('err=0x6','err=0x7'),('canary=1','canary=0'),('wait_status=35584','wait_status=139'),('ack=5','ack=4'),('(pid=102)','(pid=103)'),('private=1','private=0'),('result=42','result=0')]:
+            with self.subTest(a=a):self.assertFalse(self.check(trace().replace(a,b,1))['passed'])
+    def test_extra_failure_and_reboot(self):
+        for s in ['NATIVE_MEMORY FAIL reason=late','SIGSEGV invalid','PANIC','Starting scheduler','NATIVE_MEMORY progress=1 parent_pid=1 canary=1']:
+            self.assertFalse(self.check(trace()+'\n'+s)['passed'])
+    def test_status_cpu_and_artifact(self):
+        self.assertFalse(classify_serial(trace(),0)['passed'])
+        self.assertFalse(classify_serial(trace(),'observation_timeout',4)['passed'])
+        r=self.check(trace());bind_artifact_identity(r,'a','b');self.assertFalse(r['passed'])
+    def test_order(self):
+        l=trace().splitlines();l[7],l[8]=l[8],l[7];self.assertFalse(self.check('\n'.join(l))['passed'])
+if __name__=='__main__':unittest.main()

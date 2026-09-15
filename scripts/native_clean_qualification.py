@@ -23,10 +23,13 @@ def main():
     parser.add_argument('--builder', default='vos5-builder:dependency-upgrade')
     parser.add_argument('--revision', default='HEAD')
     parser.add_argument('--isolation', action='store_true', help='build and run the gated native process-isolation image')
+    parser.add_argument('--memory', action='store_true', help='run the gated COW/protection/unmap transition suite')
     parser.add_argument('--seconds', type=int, default=35)
     parser.add_argument('--firmware-code', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-x86_64-code.fd'))
     parser.add_argument('--firmware-vars', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-i386-vars.fd'))
     args = parser.parse_args()
+    if args.memory:
+        args.isolation = True
     if args.seconds <= 0:
         parser.error('seconds must be positive')
     repo = Path(__file__).resolve().parents[1]
@@ -43,6 +46,9 @@ def main():
         result['build_command'] += ['HEADLESS_AUDIT=1', 'NATIVE_ISOLATION_TEST=1',
                                     'BUILD_DIR=build/native-isolation', 'INSTALLER_ISO=../dist/vos5-isolation.iso']
         result['scope'] = 'fresh-source diagnostic image; four direct CPU isolation attempts in each emulator configuration'
+        if args.memory:
+            result['build_command'] += ['MEMORY_TRANSITIONS_TEST=1']
+            result['scope'] = 'fresh-source diagnostic image; COW and page-permission transitions in each emulator configuration'
     result['harness_sha256'] = digest(Path(__file__))
 
     def call(cmd, timeout=30):
@@ -96,8 +102,10 @@ def main():
         build_dir = 'kernel/build/native-isolation' if args.isolation else 'kernel/build/native-unified'
         result['kernel_sha256'] = digest(work / build_dir / 'vos3.elf')
         if args.isolation:
-            result['user_test_sha256'] = digest(work / build_dir / 'user/bin/test_native_isolation')
+            result['user_test_sha256'] = digest(work / build_dir / ('user/bin/test_native_memory' if args.memory else 'user/bin/test_native_isolation'))
         classifier = repo / ('scripts/native_isolation_smoke.py' if args.isolation else 'scripts/native_boot_smoke.py')
+        if args.memory:
+            classifier = repo / 'scripts/native_memory_smoke.py'
         result['classifier_sha256'] = digest(classifier)
         result['qemu_version'] = call(['qemu-system-x86_64', '--version']).splitlines()[0]
         result['firmware_sha256'] = {'code': digest(args.firmware_code), 'vars_template': digest(args.firmware_vars)}

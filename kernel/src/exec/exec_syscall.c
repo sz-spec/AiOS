@@ -701,12 +701,25 @@ static int64_t sys_set_robust_list(uint64_t head, size_t len)
 /**
  * @brief sys_mprotect - Change memory protection on a page range
  */
+/* Validate before rounding or touching any page table. End is exclusive. */
+static int user_mapping_range(uint64_t addr, uint64_t length, uint64_t* rounded)
+{
+    if (!length || (addr & (VOS3_PAGE_SIZE - 1)) ||
+        length > UINT64_MAX - (VOS3_PAGE_SIZE - 1)) return 0;
+    uint64_t size = (length + VOS3_PAGE_SIZE - 1) & ~((uint64_t)VOS3_PAGE_SIZE - 1);
+    if (addr >= VOS3_USER_END || size > VOS3_USER_END - addr) return 0;
+    *rounded = size;
+    return 1;
+}
+
 static int64_t sys_mprotect(uint64_t addr, uint64_t len, int prot)
 {
-    if (addr == 0 || len == 0) {
-        return 0;
-    }
-    return (int64_t)vos3_vmm_mprotect_range((uintptr_t)addr, (size_t)len, prot);
+    uint64_t rounded;
+    if ((prot & ~7) || (prot & 6) == 6 ||
+        (addr & (VOS3_PAGE_SIZE - 1)) || addr >= VOS3_USER_END) return -22;
+    if (len == 0) return 0; /* Preserve the existing empty-range no-op. */
+    if (!user_mapping_range(addr, len, &rounded)) return -22;
+    return (int64_t)vos3_vmm_mprotect_range((uintptr_t)addr, (size_t)rounded, prot);
 }
 
 /**
@@ -1053,9 +1066,11 @@ static int64_t sys_nanosleep(const void* user_req, void* user_rem)
 static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
                          int flags, int fd, uint64_t offset)
 {
-    (void)offset;
-
-    if (length == 0) {
+    /* Only private mappings have implemented fork/backing semantics. */
+    if ((flags & (MAP_SHARED | MAP_PRIVATE)) != MAP_PRIVATE ||
+        (flags & ~(MAP_PRIVATE | MAP_FIXED | MAP_ANONYMOUS))) return -22;
+    if ((prot & ~7) || (offset & (VOS3_PAGE_SIZE - 1)) ||
+        length == 0 || length > UINT64_MAX - (VOS3_PAGE_SIZE - 1)) {
         return -22;  /* EINVAL */
     }
 
@@ -1073,6 +1088,8 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
 
     /* Page-align length */
     length = (length + VOS3_PAGE_SIZE - 1) & ~((uint64_t)VOS3_PAGE_SIZE - 1);
+    if (!(flags & MAP_ANONYMOUS) &&
+        (offset > INT64_MAX || length > (uint64_t)INT64_MAX - offset)) return -22;
 
     vos3_task_t* task = vos3_sched_current();
     if (task == NULL || task->address_space == NULL) {
@@ -1094,22 +1111,21 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
         return -12;  /* ENOMEM */
     }
 
-    /* Determine base address */
-    uint64_t base;
-    if ((flags & MAP_FIXED) && addr != 0 && (addr & (VOS3_PAGE_SIZE - 1)) == 0) {
-        /* MAP_FIXED: use the exact requested address */
-        base = addr;
-    } else {
-        /* Phase v17 (K-C5): Per-process mmap bump allocator.
-         * Falls back to global for init task (before task struct is set up). */
-        if (task != NULL && task->mmap_next >= VOS3_MMAP_BASE) {
-            base = task->mmap_next;
-            task->mmap_next += length;
-        } else {
-            base = g_mmap_next;
-            g_mmap_next += length;
-        }
+    /* Fixed overlap replacement is deliberately unsupported until transactional. */
+    uint64_t base = (flags & MAP_FIXED) ? addr :
+        (task->mmap_next >= VOS3_MMAP_BASE ? task->mmap_next : g_mmap_next);
+    uint64_t rounded;
+    if (!user_mapping_range(base, length, &rounded)) return -22;
+    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+        vos3_vma_t* existing = &as->vmas[i];
+        if (existing->valid && base < existing->vm_end && base + length > existing->vm_start)
+            return -17; /* EEXIST: never overwrite another mapping. */
     }
+    if ((as->brk_start && base < as->brk && base + length > as->brk_start) ||
+        (task->user_stack && base < (uintptr_t)task->user_stack + task->user_stack_size &&
+         base + length > (uintptr_t)task->user_stack)) return -17;
+    for (uint64_t va = base; va < base + length; va += VOS3_PAGE_SIZE)
+        if (vos3_vmm_is_mapped((uintptr_t)va)) return -17;
 
     /* Record VMA — NO physical memory allocated yet (demand paging) */
     vma->vm_start = base;
@@ -1119,7 +1135,7 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
     if (flags & MAP_ANONYMOUS) {
         vma->vm_fd = -1;
     } else {
-        int dup_fd = vos3_dup(task->fd_table, fd);
+        int dup_fd = task->fd_table ? vos3_dup(task->fd_table, fd) : -1;
         if (dup_fd < 0) {
             vma->valid = 0;
             return -9;  /* EBADF */
@@ -1129,6 +1145,7 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
     vma->vm_offset = offset;
     vma->valid = 1;
     as->num_vmas++;
+    if (!(flags & MAP_FIXED)) task->mmap_next = base + length;
 
     VOS3_DEBUG("[MMAP] Mapped anonymous region 0x%llx-0x%llx (size=%llu)",
                (unsigned long long)base, (unsigned long long)(base + length),
@@ -1142,98 +1159,63 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
  */
 static int64_t sys_munmap(uint64_t addr, uint64_t length)
 {
-    if (length == 0 || (addr & (VOS3_PAGE_SIZE - 1)) != 0) {
-        return -22;  /* EINVAL */
-    }
-
-    length = (length + VOS3_PAGE_SIZE - 1) & ~((uint64_t)VOS3_PAGE_SIZE - 1);
-
+    uint64_t size;
+    if (!user_mapping_range(addr, length, &size)) return -22;
     vos3_task_t* task = vos3_sched_current();
-    if (task == NULL || task->address_space == NULL) {
-        return -22;  /* EINVAL */
-    }
-
+    if (!task || !task->address_space) return -22;
     vos3_address_space_t* as = task->address_space;
-    uint64_t unmap_end = addr + length;
-
-    /* Find VMA containing the start address */
-    for (uint32_t i = 0; i < VOS3_MAX_VMAS; i++) {
-        if (!as->vmas[i].valid) continue;
-        if (addr < as->vmas[i].vm_start || addr >= as->vmas[i].vm_end) continue;
-
-        vos3_vma_t* vma = &as->vmas[i];
-        uint64_t vma_start = vma->vm_start;
-        uint64_t vma_end   = vma->vm_end;
-
-        /* Clamp unmap range to VMA bounds */
-        if (unmap_end > vma_end) unmap_end = vma_end;
-
-        /* Unmap physical pages in the requested range */
-        vos3_vmm_unmap_range((uintptr_t)addr, (size_t)(unmap_end - addr));
-
-        if (addr == vma_start && unmap_end == vma_end) {
-            /* Case 1: Full match — remove entire VMA */
-            int old_fd = vma->vm_fd;
-            vma->valid = 0;
-            vma->vm_fd = -1;
-            if (as->num_vmas > 0) as->num_vmas--;
-            if (old_fd >= 0) {
-                vos3_close(old_fd);
-            }
-
-        } else if (addr == vma_start) {
-            /* Case 2: Front trim — shrink from front */
-            uint64_t trimmed = unmap_end - vma_start;
-            vma->vm_start = unmap_end;
-            vma->vm_offset += trimmed;
-
-        } else if (unmap_end >= vma_end) {
-            /* Case 3: Back trim — shrink from end */
-            vma->vm_end = addr;
-
-        } else {
-            /* Case 4: Middle split — split into two VMAs */
-            vos3_vma_t* new_vma = NULL;
-            for (uint32_t j = 0; j < VOS3_MAX_VMAS; j++) {
-                if (!as->vmas[j].valid) {
-                    new_vma = &as->vmas[j];
-                    break;
-                }
-            }
-            if (new_vma == NULL) {
-                /* No free slot — truncate to [vma_start, addr) as best effort */
-                vma->vm_end = addr;
-                return -12;  /* ENOMEM */
-            }
-
-            /* Create remainder [unmap_end, vma_end) */
-            new_vma->vm_start = unmap_end;
-            new_vma->vm_end   = vma_end;
-            new_vma->vm_prot  = vma->vm_prot;
-            new_vma->vm_flags = vma->vm_flags;
-            new_vma->vm_offset = vma->vm_offset + (unmap_end - vma_start);
-            new_vma->valid    = 1;
-
-            /* Dup fd for the new VMA if file-backed */
-            if (vma->vm_fd >= 0 && task->fd_table != NULL) {
-                int dup_fd = vos3_dup(task->fd_table, vma->vm_fd);
-                new_vma->vm_fd = (dup_fd >= 0) ? dup_fd : -1;
-            } else {
-                new_vma->vm_fd = -1;
-            }
-
-            as->num_vmas++;
-
-            /* Shrink original to [vma_start, addr) */
-            vma->vm_end = addr;
+    uint64_t end = addr + size;
+    int split_slot = -1, split_fd = -1, split_index = -1;
+    int page_check = vos3_vmm_validate_user_unmap((uintptr_t)addr, (size_t)size);
+    if (page_check != 0) return page_check;
+    /* A contiguous removal can split at most one nonoverlapping VMA. Reserve
+       its metadata/backing reference before changing any mapping. */
+    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+        vos3_vma_t* v = &as->vmas[i];
+        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
+        if (addr > v->vm_start && end < v->vm_end) {
+            if (split_index >= 0) return -22; /* Reject corrupt overlapping VMAs. */
+            split_index = (int)i;
         }
-
-        VOS3_DEBUG("[MUNMAP] Unmapped region 0x%llx-0x%llx",
-                   (unsigned long long)addr, (unsigned long long)unmap_end);
-        return 0;
     }
-
-    return -22;  /* EINVAL: no VMA found */
+    if (split_index >= 0) {
+        for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i)
+            if (!as->vmas[i].valid) { split_slot = (int)i; break; }
+        if (split_slot < 0) return -12;
+        vos3_vma_t* v = &as->vmas[split_index];
+        if (v->vm_fd >= 0) {
+            if (!task->fd_table) return -9;
+            split_fd = vos3_dup(task->fd_table, v->vm_fd);
+            if (split_fd < 0) return split_fd;
+        }
+    }
+    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+        if ((int)i == split_slot) continue;
+        vos3_vma_t* v = &as->vmas[i];
+        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
+        uint64_t lo = addr > v->vm_start ? addr : v->vm_start;
+        uint64_t hi = end < v->vm_end ? end : v->vm_end;
+        vos3_vmm_unmap_range((uintptr_t)lo, (size_t)(hi - lo));
+        if (lo == v->vm_start && hi == v->vm_end) {
+            int fd = v->vm_fd;
+            v->valid = 0; v->vm_fd = -1;
+            if (as->num_vmas) --as->num_vmas;
+            if (fd >= 0) vos3_close(fd);
+        } else if (lo == v->vm_start) {
+            v->vm_offset += hi - v->vm_start; v->vm_start = hi;
+        } else if (hi == v->vm_end) {
+            v->vm_end = lo;
+        } else {
+            vos3_vma_t* tail = &as->vmas[split_slot];
+            *tail = *v;
+            tail->vm_start = hi;
+            tail->vm_offset += hi - v->vm_start;
+            tail->vm_fd = split_fd;
+            v->vm_end = lo;
+            ++as->num_vmas;
+        }
+    }
+    return 0; /* Unmapped holes are already absent. */
 }
 
 /* ============================================================================

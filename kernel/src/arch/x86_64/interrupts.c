@@ -384,7 +384,12 @@ static void handle_page_fault(vos3_int_frame_t* frame)
     /* ===== Demand Paging: Lazy Allocation ===== */
     {
         int present = (frame->error_code & 0x01);
-        if (!present && is_user) {
+        vos3_vma_t* demand_vma = current ? vos3_vmm_find_vma(current->address_space, (uintptr_t)cr2) : NULL;
+        int fetch = (frame->error_code & 0x10) != 0;
+        int allowed = demand_vma == NULL ? !fetch :
+            (fetch ? !!(demand_vma->vm_prot & 4) :
+             is_write ? !!(demand_vma->vm_prot & 2) : !!(demand_vma->vm_prot & 3));
+        if (!present && is_user && allowed) {
             /* Page not present in user space — check if address is valid */
             if (vos3_vmm_is_valid_user_addr((uintptr_t)cr2)) {
                 /* Allocate zero-filled page on demand */
@@ -419,7 +424,9 @@ static void handle_page_fault(vos3_int_frame_t* frame)
                             ptr[i] = 0ULL;
                         }
                     }
-                    uint64_t flags = VOS3_PTE_PRESENT | VOS3_PTE_WRITABLE | VOS3_PTE_USER | VOS3_PTE_NO_EXECUTE;
+                    uint64_t flags = VOS3_PTE_PRESENT | VOS3_PTE_USER;
+                    if (demand_vma == NULL || (demand_vma->vm_prot & 2)) flags |= VOS3_PTE_WRITABLE;
+                    if (demand_vma == NULL || !(demand_vma->vm_prot & 4)) flags |= VOS3_PTE_NO_EXECUTE;
                     if (vos3_vmm_map_user(aligned, page, flags) == 0) {
 #ifdef NATIVE_ISOLATION_TEST
                         vos3_native_isolation_mapping(current, aligned, page);

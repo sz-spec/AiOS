@@ -22,6 +22,7 @@
 #include "../../include/vos/scheduler.h"
 #include "../../include/vos/percpu.h"
 #include "../../include/vos/entry_state.h"
+#include "../../include/vos/vfs.h"
 /* Note: AI PTE bit constants (VOS3_PTE_AI_MASK etc.) are now defined
  * directly in vmm.h, eliminating the vmm -> ai_guard layering violation.
  * ai_guard.h includes vmm.h and re-exports them. */
@@ -690,6 +691,29 @@ size_t vos3_vmm_unmap_range(uintptr_t virt_start, size_t size)
     return unmapped;
 }
 
+int vos3_vmm_validate_user_unmap(uintptr_t start, size_t size)
+{
+    if ((start & 4095U) || !size || (size & 4095U) ||
+        start > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - start + 1U) return -22;
+    vos3_task_t* task = vos3_sched_current();
+    if (!task || !task->address_space) return -22;
+    vos3_address_space_t* as = task->address_space;
+    vos3_irqflags_t irq = vos3_irq_save();
+    vos3_spinlock_acquire(&as->lock);
+    int result = 0;
+    for (uintptr_t va = start; va < start + size;) {
+        int level = 4;
+        vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+        if (pte && vos3_pte_is_present(*pte) && level != 4) { result = -95; break; }
+        /* Skip an absent subtree rather than scanning every page in a hole. */
+        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
+        va = (va | (span - 1)) + 1;
+    }
+    vos3_spinlock_release(&as->lock);
+    vos3_irq_restore(irq);
+    return result;
+}
+
 int vos3_vmm_virt_to_phys(uintptr_t virt, uintptr_t* phys)
 {
     if (g_vmm_initialized == 0U) {
@@ -872,6 +896,9 @@ int vos3_vmm_update_flags(uintptr_t virt, vos3_vmm_flags_t flags)
      * 11=GUARD). The old code replaced the entire PTE, destroying these
      * custom bits on any flag update (e.g., mprotect, reprotect tick). */
     uint64_t ai_bits = (*pte) & VOS3_PTE_AI_MASK;
+    if (*pte & VOS3_PTE_COW) {
+        pte_flags = (pte_flags & ~VOS3_PTE_WRITABLE) | VOS3_PTE_COW;
+    }
     *pte = vos3_pte_create(addr, pte_flags) | ai_bits;
 
     vos3_vmm_invlpg(virt);
@@ -881,51 +908,82 @@ int vos3_vmm_update_flags(uintptr_t virt, vos3_vmm_flags_t flags)
     return VOS3_VMM_OK;
 }
 
-/**
- * @brief Convert PROT_* flags to VMM flags
- */
-static vos3_vmm_flags_t prot_to_vmm_flags(int prot)
-{
-    vos3_vmm_flags_t flags = VOS3_VMM_FLAG_USER;
-    if (prot & 0x2) { /* PROT_WRITE */
-        flags |= VOS3_VMM_FLAG_WRITE;
-    }
-    if (prot & 0x4) { /* PROT_EXEC */
-        flags |= VOS3_VMM_FLAG_EXEC;
-    }
-    return flags;
-}
-
-/**
- * @brief Change memory protection on a page range
- *
- * @param addr  Page-aligned start address
- * @param len   Length in bytes (will be rounded up to pages)
- * @param prot  PROT_READ/PROT_WRITE/PROT_EXEC bitmask
- * @return 0 on success, -EINVAL on bad alignment
- */
+/* mprotect preflights every page and VMA split before changing permissions.
+ * PROT_NONE retains the physical frame with USER cleared, preserving data on
+ * restoration. Shared writable frames remain read-only until a COW fault. */
 int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
 {
-    if (addr & 0xFFF) {
-        return -22;  /* EINVAL: must be page-aligned */
+    if ((addr & 4095U) || (prot & ~7) || (prot & 6) == 6 ||
+        addr > VOS3_USER_SPACE_END || len > SIZE_MAX - 4095U) return -22;
+    if (len == 0) return 0;
+    size_t rounded = (len + 4095U) & ~(size_t)4095U;
+    if (rounded > VOS3_USER_SPACE_END - addr + 1U) return -22;
+    uintptr_t end = addr + rounded;
+    vos3_task_t* task = vos3_sched_current();
+    if (!task || !task->address_space) return -22;
+    vos3_address_space_t* as = task->address_space;
+    vos3_vma_t planned[VOS3_MAX_VMAS] = {0};
+    int extra_fds[VOS3_MAX_VMAS];
+    unsigned count = 0, fd_count = 0;
+    int error = -12;
+    vos3_irqflags_t irq = vos3_irq_save();
+    vos3_spinlock_acquire(&as->lock);
+
+    for (uintptr_t va = addr; va < end; va += VOS3_PAGE_SIZE) {
+        int level;
+        vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+        int resident = pte && vos3_pte_is_present(*pte);
+        if (!resident && !vos3_vmm_find_vma(as, va)) goto abort;
+        /* Partial huge-page permission splitting is not implemented. */
+        if (resident && level != 4) { error = -95; goto abort; }
     }
-
-    /* W^X enforcement: reject simultaneous WRITE+EXEC */
-    if ((prot & 0x2) && (prot & 0x4)) {
-        return -22;  /* EINVAL: W^X violation */
-    }
-
-    vos3_vmm_flags_t flags = prot_to_vmm_flags(prot);
-    size_t pages = (len + 0xFFF) >> 12;
-
-    for (size_t i = 0; i < pages; i++) {
-        uintptr_t va = addr + (i << 12);
-        if (vos3_vmm_is_mapped(va)) {
-            vos3_vmm_update_flags(va, flags);
+    for (unsigned i = 0; i < VOS3_MAX_VMAS; ++i) {
+        vos3_vma_t old = as->vmas[i];
+        if (!old.valid) continue;
+        uintptr_t cuts[4]; unsigned n = 0;
+        cuts[n++] = old.vm_start;
+        if (addr > old.vm_start && addr < old.vm_end) cuts[n++] = addr;
+        if (end > old.vm_start && end < old.vm_end) cuts[n++] = end;
+        cuts[n++] = old.vm_end;
+        for (unsigned j = 0; j + 1 < n; ++j) {
+            if (count == VOS3_MAX_VMAS) goto abort;
+            vos3_vma_t part = old;
+            part.vm_start = cuts[j]; part.vm_end = cuts[j + 1];
+            part.vm_offset += cuts[j] - old.vm_start;
+            if (cuts[j] >= addr && cuts[j] < end) part.vm_prot = prot;
+            if (j && old.vm_fd >= 0) {
+                part.vm_fd = vos3_dup(task->fd_table, old.vm_fd);
+                if (part.vm_fd < 0) goto abort;
+                extra_fds[fd_count++] = part.vm_fd;
+            }
+            planned[count++] = part;
         }
-        /* Unmapped pages: silently skip (Linux behavior) */
     }
+    for (unsigned i = 0; i < VOS3_MAX_VMAS; ++i) as->vmas[i] = planned[i];
+    as->num_vmas = count;
+    for (uintptr_t va = addr; va < end; va += VOS3_PAGE_SIZE) {
+        int level;
+        vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+        if (!pte || !vos3_pte_is_present(*pte)) continue;
+        uint64_t value = *pte & ~(VOS3_PTE_USER | VOS3_PTE_WRITABLE |
+                                  VOS3_PTE_NO_EXECUTE | VOS3_PTE_COW);
+        if (prot) value |= VOS3_PTE_USER;
+        if (!(prot & 4)) value |= VOS3_PTE_NO_EXECUTE;
+        if (prot & 2) {
+            if (vos3_pmm_ref_get(vos3_pte_get_addr(value)) > 1U) value |= VOS3_PTE_COW;
+            else value |= VOS3_PTE_WRITABLE;
+        }
+        *pte = value;
+        vos3_vmm_invlpg(va);
+    }
+    vos3_spinlock_release(&as->lock);
+    vos3_irq_restore(irq);
     return 0;
+abort:
+    vos3_spinlock_release(&as->lock);
+    vos3_irq_restore(irq);
+    for (unsigned i = 0; i < fd_count; ++i) vos3_close(extra_fds[i]);
+    return error;
 }
 
 void vos3_vmm_invlpg(uintptr_t virt)
@@ -1590,7 +1648,9 @@ static vos3_pte_t* clone_pt_level_cow(vos3_pte_t* src, int level, int clone_kern
             uintptr_t phys = vos3_pte_get_addr(entry);
 
             /* Mark both parent and child as read-only with COW flag */
-            uint64_t cow_flags = (entry & ~VOS3_PTE_WRITABLE) | VOS3_PTE_COW;
+            uint64_t cow_flags = entry;
+            if (entry & (VOS3_PTE_WRITABLE | VOS3_PTE_COW))
+                cow_flags = (entry & ~VOS3_PTE_WRITABLE) | VOS3_PTE_COW;
 
             /* Update source entry (parent) to be read-only COW */
             src[i] = cow_flags;
@@ -1605,7 +1665,9 @@ static vos3_pte_t* clone_pt_level_cow(vos3_pte_t* src, int level, int clone_kern
             uintptr_t phys = vos3_pte_get_addr(entry);
 
             /* Mark both parent and child as read-only with COW flag */
-            uint64_t cow_flags = (entry & ~VOS3_PTE_WRITABLE) | VOS3_PTE_COW;
+            uint64_t cow_flags = entry;
+            if (entry & (VOS3_PTE_WRITABLE | VOS3_PTE_COW))
+                cow_flags = (entry & ~VOS3_PTE_WRITABLE) | VOS3_PTE_COW;
             src[i] = cow_flags;
             dst[i] = cow_flags;
 
@@ -1740,6 +1802,8 @@ int vos3_vmm_handle_cow_fault(uintptr_t fault_addr, uint64_t error_code)
     }
 
     /* Get the PTE */
+    vos3_vma_t* fault_vma = vos3_vmm_find_vma(as, fault_addr);
+    if (fault_vma != NULL && !(fault_vma->vm_prot & 2)) return -1;
     int level;
     vos3_pte_t* pte = walk_page_tables(as->pml4, fault_addr, 0, is_user, &level);
 

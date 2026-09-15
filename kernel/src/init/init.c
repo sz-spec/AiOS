@@ -37,7 +37,9 @@
 
 /** @brief Fallback init paths */
 static const char* init_paths[] = {
-#ifdef NATIVE_ISOLATION_TEST
+#ifdef MEMORY_TRANSITIONS_TEST
+    "/bin/test_native_memory",
+#elif defined(NATIVE_ISOLATION_TEST)
     "/bin/test_native_isolation",
 #else
     "/bin/init",

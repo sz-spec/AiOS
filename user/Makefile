@@ -765,6 +765,11 @@ $(BIN_DIR)/test_native_isolation: $(SRC_DIR)/test_native_isolation.c $(BUILD_DIR
 	@$(CC) $(CFLAGS) -MMD -MP -MT "$@" -c $< -o $(BUILD_DIR)/test_native_isolation.o
 	@$(LD) $(LDFLAGS) -Ttext=$(USER_BASE) -o $@ $(BUILD_DIR)/lib/crt0.o $(BUILD_DIR)/test_native_isolation.o $(BUILD_DIR)/libc.a
 
+$(BIN_DIR)/test_native_memory: $(SRC_DIR)/test_native_memory.c $(BUILD_DIR)/libc.a | $(BIN_DIR)
+	@echo "  CC+LD   $@"
+	@$(CC) $(CFLAGS) -MMD -MP -MT "$@" -c $< -o $(BUILD_DIR)/test_native_memory.o
+	@$(LD) $(LDFLAGS) -Ttext=$(USER_BASE) -o $@ $(BUILD_DIR)/lib/crt0.o $(BUILD_DIR)/test_native_memory.o $(BUILD_DIR)/libc.a
+
 # Build program: bench_app_isolation_test (Phase N - App Isolation Tests)
 $(BIN_DIR)/bench_app_isolation_test: $(SRC_DIR)/bench_app_isolation_test.c $(BUILD_DIR)/libc.a | $(BIN_DIR)
 	@echo "  CC+LD   $@"

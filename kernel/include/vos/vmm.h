@@ -137,7 +137,9 @@ int vos3_vmm_is_tombstoned(uintptr_t vaddr);
 #define VOS3_PTE_OS_AVAIL3      ((uint64_t)(1ULL << 11))
 
 /** @brief Copy-on-Write flag (software, uses OS_AVAIL1) */
-#define VOS3_PTE_COW            VOS3_PTE_OS_AVAIL1
+/* Software-only leaf bit; do not alias AI_MONITORED (bit 9).
+ * IA-32e leaf entries ignore bits 58:52 (Intel SDM vol. 3A paging tables). */
+#define VOS3_PTE_COW            ((uint64_t)(1ULL << 52))
 
 /* ============================================================================
  * AI GUARD PTE BITS (Using OS-available bits 9-11)
@@ -394,6 +396,8 @@ int vos3_vmm_is_mapped(uintptr_t virt);
  * @return 0 on success, negative error code on failure
  */
 int vos3_vmm_get_pte(uintptr_t virt, vos3_pte_t* pte);
+/* Reject unsupported huge user leaves before destructive VMA edits. */
+int vos3_vmm_validate_user_unmap(uintptr_t start, size_t size);
 
 /**
  * @brief Write a PTE value directly (read-modify-write pattern)
