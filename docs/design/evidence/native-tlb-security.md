@@ -45,3 +45,33 @@ Independent host runs passed: the actual-C protocol harness (one Python test exe
 Independently reviewed checked LAPIC delivery: destination/vector/nonzero budget are validated, both pre-send and post-send ICR-pending waits are bounded, status propagates through the architecture adapter, and any delivery failure permanently poisons the protocol before releasing requester ownership. The actual-C host harness passes again. This closes the unbounded ICR-wait finding for this primitive; budgets count iterations per target rather than providing a hard wall-clock deadline. NMI interaction with ICR programming remains outside the ordinary interrupt-exclusion assumption.
 
 Confirmed an adjacent existing PTE-bit collision: `VMM_PTE_COGNITIVE_BIT` in vmm.c and `VOS3_PTE_COW` in vmm.h both use bit 52. Setting a cognitive marker therefore also sets the COW marker; querying cognitive state can classify ordinary COW pages as cognitive, and COW/mprotect clearing can erase cognitive metadata. This requires a separate bit-allocation/policy correction and regression. The isolated kernel-alias TLB probe does not exercise that combination, so its result cannot qualify general COW/cognitive compatibility. No adjacent production changes were made by this reviewer.
+
+## Initial native evidence and controlled remote failure
+
+Independently reviewed the first native clean matrix at `/private/tmp/vos5-tlb-native-20260915` and recomputed ISO `b9990739837b4cc374691ec80e19d948b3d839d70db8fdbd4e02ca251a4ac977`. All four BIOS/UEFI × 1/4 CPU cases pass under explicit TLB/SMP diagnostic flags. Actual four-CPU observations show 17/34 before invalidation and 17/51 afterward on every CPU, with the adjacent first page unchanged.
+
+The refined negative control omits the phase-two flush only on remote CPU1 in SMP. Independently read its BIOS/4 raw trace: CPU1 retains 34 afterward while CPU0, CPU2 and CPU3 observe 51; the kernel then reports the expected translation failure. This is direct evidence that the observer detects a stale remote translation, not merely a missing acknowledgement. The one-CPU negative selects CPU0. Negative injection remains behind the dedicated diagnostic flag.
+
+Final same-core matrix and normal/memory/original-isolation regressions remain pending at this writing. The initial pass and controlled negative do not close shared-address-space lifetime, mutation synchronization, the bit-52 collision, or general physical-hardware qualification.
+
+## Final same-source native verdict
+
+Independently reclassified all four raw final BIOS/UEFI × 1/4 CPU traces from commit `8c20f26e442a3525ffbc83a6d4e3ede68040c04f`; all pass. Recomputed ISO `df4ee8536d477063f9096750ec45ed05c75cf220f56a29d70e3468b24e39ed6b` and kernel `24784224d262870f8b29ddf62116479dc93fb1cc778e750d3077a2b1ea49d8c7` against the actual final artifacts. Every observation retains its ISO hash, and the 106.30-second clean run confirms container cleanup. The supplied two-commit source secret scan has zero findings.
+
+The bounded native contract is accepted: participating processors replace the deliberately stale second-page translation after acknowledged full invalidation, while preserving the adjacent first-page value. This is actual shared **kernel mapping** translation evidence, not proof of shared user-address-space permission revocation, lifetime, synchronization or safe arbitrary frame reuse. Failure/poison behavior is additionally covered by the actual-C host harness, not injected native delivery-timeout evidence.
+
+Normal/memory/original-isolation regression matrices and completion of the full negative-control matrix remain separately pending; their results must not be inferred from this native pass. The COW/cognitive bit collision and shared-VM lifetime concerns remain unresolved.
+
+## Positive regression/default-build audit
+
+Independently reclassified the portable normal, memory and original-isolation raw traces from source `8c20f26e442a3525ffbc83a6d4e3ede68040c04f`: four normal boots pass, four memory runs verify 48 cases, and four original-isolation runs verify 16 cases. Reviewed `default-build-check.json` and checked the actual normal kernel build-config file: AP scheduler/workload, TLB test/skip-flush and headless diagnostic defines are absent. The normal kernel **does retain the new TLB primitive**; only diagnostic activation/fault injection are off. The two-commit source scan has zero findings.
+
+This closes the positive regression checks, not shared-VM lifetime or mutation integration. Final formal negative-matrix completion remains separately tracked until its last persisted observation is reviewed.
+
+## Final negative-control and publication verdict
+
+Reviewed the completed four-case negative-control assessment. Independently checked the separately completed UEFI/4 raw trace against its recorded SHA-256: CPU1 alone retains the stale second-page value 34, while CPU0/2/3 observe 51; all retain first-page value 17 and pre-flush 17/34. The expected CPU1 translation failure occurs with no success-completion marker. This completes the previously pending negative matrix using the same negative ISO. The original aggregate remains failed, correctly distinguished from the successful review of expected failures.
+
+Independently parsed all 135 `generic-api-key` findings in the persisted redacted evidence scan and recomputed each flagged manifest value against its corresponding isolated final-source file. Every value is an exact SHA-256 digest, so these findings are hash false positives. No potential secret values were printed and no suppressions were added.
+
+Final bounded verdict: the checked shootdown protocol, observed native kernel-alias invalidation, controlled stale-remote detection and positive regression package are accepted within the stated assumptions. Shared-VM lifetime/concurrency integration and the COW/cognitive bit collision remain separate unresolved risks; no broader user-memory revocation or universal SMP security approval is implied.

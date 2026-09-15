@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "failures": [
+    "unexpected failure PANIC"
+  ],
+  "iso_sha256": "7cce491f6344609e8e22a1b76dceb5ed03da451b2799dff1c88f61491eb177cc",
+  "iso_sha256_after": "7cce491f6344609e8e22a1b76dceb5ed03da451b2799dff1c88f61491eb177cc",
+  "artifact_unchanged": true,
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 1,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}

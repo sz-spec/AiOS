@@ -50,3 +50,27 @@ This reviewer authored the host tests but not the production protocol. Architect
 Added `scripts/native_tlb_smoke.py`, composing the existing strict SMP observer with exact native TLB probe checks. For every requested CPU it requires one warm and one remap record, hardware APIC matching kernel topology, before values 17/34, warm after values 17/34 and remap after values 17/51. All topology records precede all warm records, which precede all remap records, completion and the user SMP parent. Unchanged first-page values are mandatory; the second page must exhibit stale-before and updated-after behavior.
 
 Six observer test methods pass, covering every missing probe record, skipped-flush stale results, corrupted values/APICs, phase reordering, duplicate/truncated/failure records and preservation of underlying SMP failure. The reviewer authored this observer; independent review and actual positive/skip-flush VM evidence remain separate. The proposed native gate concerns two observed kernel mappings on each CPU and does not establish general shared-address-space or memory-lifetime correctness.
+
+## Final positive native matrix verified
+
+Independently reclassified all four raw logs at `/private/tmp/vos5-tlb-final-20260915/`: BIOS/UEFI with one and four CPUs pass. Across ten CPU instances, exactly twenty warm/remap records establish unchanged first-page data and stale second-page value 34 becoming 51 after flushing. All sixty-four user computation checkpoints validate. Both four-CPU runs additionally observe workers on APICs 0 and 2; one-CPU controls observe APIC 0.
+
+The final run archives commit `8c20f26e442a3525ffbc83a6d4e3ede68040c04f`, the same source as the targeted skip-flush negative. Independently recomputed and matched actual ISO/kernel/user/classifier/harness hashes:
+
+- ISO: `df4ee8536d477063f9096750ec45ed05c75cf220f56a29d70e3468b24e39ed6b`.
+- Kernel: `24784224d262870f8b29ddf62116479dc93fb1cc778e750d3077a2b1ea49d8c7`.
+- User workload: `cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b`.
+- Classifier: `c56a1535d637fe752e95f64d50be563d87e20d3fd3e162e492435578c8e172d7`.
+- Harness: `15da3ec37b391c0c08c0941073239cfb10aaaf3defaf946455c67a9eaf7b876f`.
+
+Elapsed time: 106.3 seconds. Accept the positive two-page kernel-translation observation gate within these configurations. The host protocol now also passes immediate/partial send-failure poison tests, totaling fourteen fresh-process scenarios; the complete observer suite has thirty-five passing tests.
+
+The negative review currently verifies BIOS/1, BIOS/4 and UEFI/1 with exactly the selected CPU retaining stale data, expected panic and no completion/user workload. UEFI/4 negative evidence remains pending; the formal negative-review JSON correctly remains `passed: false` with that case missing. This positive verdict does not complete the negative matrix or pending regression matrices, and makes no general shared-user-address-space, concurrent revocation or lifetime proof.
+
+## Negative controls and regressions complete
+
+Independently verified the separately completed UEFI/4-CPU negative log: all four CPUs have complete warm/remap records, CPU 1 alone retains second-page value 34, the other CPUs read 51, and the expected CPU-1 round-2 translation panic occurs. No TLB completion or user workload follows. Its before/after ISO matches the other negative cases. The formal review at `/private/tmp/vos5-tlb-negative-review-20260915.json` now verifies all four expected failures and binds their serial/artifact hashes.
+
+The original qualification aggregate remains failed (`AssertionError: bios1`); UEFI/4 was completed separately using the same ISO after queued work was cancelled. A passing negative-review verdict means the intended failures are evidenced, not that the negative ISO passes qualification. Original results were not rewritten.
+
+Also independently checked the final regression results under `/private/tmp/vos5-tlb-{normal,memory,isolation}-20260915`: four normal boots, forty-eight memory cases and sixteen isolation cases pass. All share the final positive run's source commit, tree, archive hash and source-manifest hash; source inputs remain unchanged and each matrix uses a stable ISO. These are separate flavored artifacts, not one identical kernel/ISO. Together the positive matrix, targeted negative controls and bounded regressions complete this TLB observation gate without expanding it to general concurrent shared-user-memory isolation.

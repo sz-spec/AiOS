@@ -1,0 +1,18 @@
+[
+  {
+    "flags": [
+      "NATIVE_TLB_TEST=1"
+    ],
+    "exit": 2,
+    "expected_error": "requires NATIVE_SMP_TEST=1",
+    "passed": true
+  },
+  {
+    "flags": [
+      "NATIVE_TLB_SKIP_FLUSH=1"
+    ],
+    "exit": 2,
+    "expected_error": "requires NATIVE_TLB_TEST=1",
+    "passed": true
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "reason": "Original aggregate stopped on expected BIOS1 failure; UEFI4 was completed separately without changing the original aggregate.",
+  "command": [
+    "python3",
+    "scripts/native_tlb_smoke.py",
+    "--iso",
+    "/private/tmp/vos5-tlb-negative-20260915/source/dist/vos5-smp.iso",
+    "--output",
+    "/private/tmp/vos5-tlb-negative-20260915/uefi4",
+    "--smp",
+    "4",
+    "--seconds",
+    "35",
+    "--firmware-code",
+    "/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+    "--firmware-vars",
+    "/opt/homebrew/share/qemu/edk2-i386-vars.fd"
+  ],
+  "exit_code": 1,
+  "result": "negative/uefi4/result.json",
+  "expected_failure_review": "negative-review.json"
+}

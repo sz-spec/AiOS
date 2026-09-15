@@ -62,6 +62,17 @@ the same observer and workload with the old scheduler; its multi-CPU cases are
 expected to fail until AP scheduling is enabled. SMP and isolation/memory flavors
 are deliberately separate. See [qualification and claim limits](evidence/native-smp-qualification.md).
 
+The kernel TLB warm/remap probe adds a separate opt-in to that SMP diagnostic:
+
+```sh
+python3 scripts/native_clean_qualification.py --tlb --output /private/tmp/vos5-tlb-new
+```
+
+`--tlb-skip-flush` instead builds the intentional failure control. It must fail:
+one CPU acknowledges without invalidating its remapped translation. The normal
+build contains the corrected TLB protocol but neither this probe nor the AP
+scheduler. See [TLB evidence and boundaries](evidence/native-tlb-qualification.md).
+
 `BUILD_DIR` is relative to `kernel/`, defaults to `build/native-unified`, and
 should be a relative path without whitespace. The repository itself may have
 spaces in its absolute path. Use distinct build directories for concurrent

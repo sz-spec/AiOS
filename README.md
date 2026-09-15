@@ -27,6 +27,13 @@ diagnostic image, with BIOS/UEFI and single-CPU controls. The normal scheduler
 remains unchanged; simultaneous execution and cross-CPU memory revocation are
 separate, unqualified gates.
 
+[Native TLB qualification](docs/design/evidence/native-tlb-qualification.md)
+now observes stale kernel translations replaced on every tested CPU, with a
+negative control that deliberately omits one CPU's invalidation. The normal
+kernel uses per-CPU generation acknowledgements and fails closed on incomplete
+shootdowns. Shared-user-VM lifetime, concurrent permission revocation and the
+existing COW/cognitive PTE-bit collision remain unresolved.
+
 The governing architecture is recorded in
 [core requirements](docs/design/CORE_REQUIREMENTS.md), alongside the supplied
 [historical technical brief](docs/design/vOS_Technical_Brief.pdf).

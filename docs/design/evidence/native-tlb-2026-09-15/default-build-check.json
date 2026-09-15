@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "diagnostic_defines_absent": true,
+  "scope": "normal kernel retains new TLB primitive; AP scheduler and fault injection disabled"
+}

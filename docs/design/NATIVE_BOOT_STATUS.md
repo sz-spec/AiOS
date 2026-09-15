@@ -1,5 +1,10 @@
 # Native boot qualification — updated 2026-09-15
 
+The [native TLB probe](evidence/native-tlb-qualification.md) now observes old
+kernel translations before invalidation and replacements afterward on every
+tested CPU, in BIOS/UEFI ×1/4 configurations. This qualifies the bounded kernel
+remap primitive; shared-user-VM protection and lifetime are still separate gates.
+
 The [gated AP user-execution test](evidence/native-smp-qualification.md) passes
 BIOS/UEFI ×1/4 CPUs, including actual CPL3 CPUID observations on non-BSP CPUs.
 The same workload with AP scheduling disabled fails the multi-CPU criterion while

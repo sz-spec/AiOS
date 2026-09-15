@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "failures": [],
+  "worker_apic_ids": [
+    1,
+    2
+  ],
+  "online_cpus": 4,
+  "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+  "tlb_cpus_verified": 4,
+  "tlb_rounds": 2,
+  "iso_sha256": "b9990739837b4cc374691ec80e19d948b3d839d70db8fdbd4e02ca251a4ac977",
+  "iso_sha256_after": "b9990739837b4cc374691ec80e19d948b3d839d70db8fdbd4e02ca251a4ac977",
+  "artifact_unchanged": true,
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 4,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}

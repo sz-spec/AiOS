@@ -1,0 +1,58 @@
+{
+  "review_kind": "expected negative control, not positive qualification",
+  "passed": true,
+  "commit": "8c20f26e442a3525ffbc83a6d4e3ede68040c04f",
+  "cases": [
+    {
+      "name": "bios1",
+      "cpus": 1,
+      "expected_bad_cpu": 0,
+      "complete_warm_remap_records": true,
+      "only_selected_cpu_stale": true,
+      "expected_panic": true,
+      "no_completion_or_user_workload": true,
+      "serial_sha256": "81263d0a94dfcce698148a2f186e511389824440f2bffa446911792e0325ee69"
+    },
+    {
+      "name": "bios4",
+      "cpus": 4,
+      "expected_bad_cpu": 1,
+      "complete_warm_remap_records": true,
+      "only_selected_cpu_stale": true,
+      "expected_panic": true,
+      "no_completion_or_user_workload": true,
+      "serial_sha256": "652aba4fbb977e750b32a160c1c9a36032f60942e39a696da36d42438605b5c6"
+    },
+    {
+      "name": "uefi1",
+      "cpus": 1,
+      "expected_bad_cpu": 0,
+      "complete_warm_remap_records": true,
+      "only_selected_cpu_stale": true,
+      "expected_panic": true,
+      "no_completion_or_user_workload": true,
+      "serial_sha256": "57226b3b317b6c710c539e738a798c9f2750b8b99169c359c7946e1690aff20d"
+    },
+    {
+      "name": "uefi4",
+      "cpus": 4,
+      "expected_bad_cpu": 1,
+      "complete_warm_remap_records": true,
+      "only_selected_cpu_stale": true,
+      "expected_panic": true,
+      "no_completion_or_user_workload": true,
+      "serial_sha256": "27178e8ae25f40290dfcad853ab3ace828221602dc0c5ff6bec139eb0198b88e",
+      "execution": "separate completion after original aggregate stopped"
+    }
+  ],
+  "missing": [],
+  "artifact_hashes": {
+    "iso_sha256": "7cce491f6344609e8e22a1b76dceb5ed03da451b2799dff1c88f61491eb177cc",
+    "kernel_sha256": "dcd1fc3f617415f228abfc9f47e93eb49d353283f0b05fdc5aa5055829f4e48e",
+    "user_test_sha256": "cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b",
+    "classifier_sha256": "c56a1535d637fe752e95f64d50be563d87e20d3fd3e162e492435578c8e172d7"
+  },
+  "original_harness_passed": false,
+  "original_harness_error": "AssertionError: bios1",
+  "verdict": "All four expected negative controls verified; original aggregate failure preserved. UEFI4 completed separately using same ISO."
+}
