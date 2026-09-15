@@ -24,6 +24,21 @@ class SMPTests(unittest.TestCase):
  def test_corruptions(self):
   for old,new in [('cpl=3','cpl=0'),('checkpoint=2','checkpoint=1'),('steps=200000','steps=1'),('wait_status=0','wait_status=35584'),('cpu=1 apic=1','cpu=1 apic=9'),('value='+str(expected_values(0)[0]),'value=0')]:
    with self.subTest(old=old):self.assertFalse(classify_serial(trace().replace(old,new,1),'observation_timeout',4)['passed'])
+ def test_observed_mid_record_interleaving_rejected(self):
+  original=trace()
+  line=next(x for x in original.splitlines() if 'worker=0' in x and 'checkpoint=1 ' in x)
+  # Actual observed failure: kernel schedule output interrupts the APIC token.
+  broken=line.replace('apic=0','api[INFO]  NATIVE_SMP schedule pid=101 cpu=0 apic=0\nc=0')
+  result=classify_serial(original.replace(line,broken),'observation_timeout',4)
+  self.assertFalse(result['passed'])
+  self.assertIn('malformed marker',result['failures'])
+ def test_truncated_schedule_rejected(self):
+  original=trace()
+  for fragment in ('NATIVE_SMP schedule pid=100 cpu=0 api',
+                   'NATIVE_SMP schedule pid=100 cpu=0 apic=',
+                   'NATIVE_SMP schedule pid=100'):
+   with self.subTest(fragment=fragment):
+    self.assertFalse(classify_serial(original+'\n'+fragment,'observation_timeout',4)['passed'])
  def test_failures(self):
   for extra in ('PANIC','SIGSEGV','NATIVE_SMP FAIL reason=late','NATIVE_SMP progress=1 parent_pid=1 cpl=3 apic=0'):
    self.assertFalse(classify_serial(trace()+'\n'+extra,'observation_timeout',4)['passed'])

@@ -16,6 +16,21 @@
 
 #include "../../include/vos/console.h"
 #include "../../include/arch/x86_64/memory_map.h"
+#ifdef NATIVE_SMP_WORKLOAD
+#include "../../include/vos/atomic.h"
+static vos3_spinlock_t g_record_lock = VOS3_SPINLOCK_INIT;
+uint64_t vos3_console_record_begin(void)
+{
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_record_lock);
+    return flags;
+}
+void vos3_console_record_end(uint64_t flags)
+{
+    vos3_spinlock_unlock(&g_record_lock);
+    vos3_irq_restore(flags);
+}
+#endif
 
 /* ============================================================================
  * PORT I/O HELPERS (x86_64)
@@ -748,6 +763,9 @@ static void klog_store(vos3_log_level_t level, const char* fmt, va_list args)
 
 void vos3_log(vos3_log_level_t level, const char* fmt, ...)
 {
+#ifdef NATIVE_SMP_WORKLOAD
+    uint64_t record_flags = vos3_console_record_begin();
+#endif
     if (level > VOS3_LOG_PANIC) {
         level = VOS3_LOG_PANIC;
     }
@@ -762,6 +780,9 @@ void vos3_log(vos3_log_level_t level, const char* fmt, ...)
 
     /* Only output to serial/VGA if level meets the serial threshold */
     if ((unsigned int)level < (unsigned int)VOS3_SERIAL_MIN_LEVEL) {
+#ifdef NATIVE_SMP_WORKLOAD
+        vos3_console_record_end(record_flags);
+#endif
         return;  /* Silenced — stored in ring buffer only */
     }
 
@@ -785,6 +806,9 @@ void vos3_log(vos3_log_level_t level, const char* fmt, ...)
 
     /* Restore color */
     g_console.vga_attr = saved_attr;
+#ifdef NATIVE_SMP_WORKLOAD
+    vos3_console_record_end(record_flags);
+#endif
 }
 
 /* ============================================================================

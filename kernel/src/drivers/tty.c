@@ -224,10 +224,17 @@ static int64_t console_write(vos3_device_t* dev, vos3_file_t* file,
         return VOS3_DEV_ERR_INVAL;
     }
 
+#ifdef NATIVE_SMP_WORKLOAD
+    /* sys_write has already copied this bounded record into kernel memory. */
+    uint64_t record_flags = vos3_console_record_begin();
+#endif
     const char* p = (const char*)buf;
     for (size_t i = 0U; i < count; i++) {
         vos3_console_putc(p[i]);
     }
+#ifdef NATIVE_SMP_WORKLOAD
+    vos3_console_record_end(record_flags);
+#endif
 
     return (int64_t)count;
 }

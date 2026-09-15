@@ -147,6 +147,12 @@ void vos3_console_puts(const char* str);
  * @param[in] len String length
  */
 void vos3_console_write(const char* str, size_t len);
+#ifdef NATIVE_SMP_WORKLOAD
+/* Diagnostic record serialization. Only kernel-resident buffers may be used
+ * while held; callers must not fault, allocate or invoke the logger. */
+uint64_t vos3_console_record_begin(void);
+void vos3_console_record_end(uint64_t flags);
+#endif
 
 /**
  * @brief Formatted console output (printf-like)
