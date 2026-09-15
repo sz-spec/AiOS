@@ -25,7 +25,7 @@ def classify_serial(raw, exit_status, requested_cpus=1):
         require(not any(x in clean for x in ('PANIC','General Protection Fault','Double Fault','uaccess address-space mismatch','NATIVE_MEMORY FAIL','NATIVE_ISOLATION FAIL')),'unexpected failure')
         for marker in (
             '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
-            '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup',
+            '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close',
             '[VM-METADATA] PASS: distinct tags, real COW copy, parent integrity, mprotect, flag updates, final accounting',
         ):
             require(clean.count(marker)==1,'missing/duplicate native lifecycle marker: '+marker)

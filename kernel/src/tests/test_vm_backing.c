@@ -80,6 +80,62 @@ static void test_file_reference_ownership(void)
     VOS3_INFO("[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close");
 }
 
+static void test_creator_first_shm(void)
+{
+    vos3_task_t* task = vos3_sched_current();
+    vos3_address_space_t* saved_task = task->address_space;
+    vos3_address_space_t* saved_cpu = vos3_vmm_get_current_space();
+    for (unsigned reap = 0; reap < 2; ++reap) {
+        vos3_address_space_t* as = vos3_vmm_create_address_space();
+        require(as != NULL, "creator-first AS allocation");
+        vos3_ipc_id_t id = vos3_shm_create("native-creator-first", VOS3_PAGE_SIZE, 0);
+        require(id != VOS3_IPC_INVALID, "creator-first SHM allocation");
+        task->address_space = as;
+        vos3_vmm_switch_address_space(as);
+        void* addr = vos3_shm_map(id, 0);
+        require(addr != NULL, "creator-first map");
+        uintptr_t phys = 0;
+        require(vos3_vmm_virt_to_phys((uintptr_t)addr, &phys) == 0, "creator-first translation");
+        require(vos3_shm_destroy(id) == VOS3_IPC_OK, "creator-first close");
+        require(vos3_shm_destroy(id) == VOS3_IPC_ERR_INVALID, "duplicate creator close stole mapping");
+        require(vos3_shm_size(id) == VOS3_PAGE_SIZE && vos3_pmm_ref_get(phys) > 0,
+                "creator close freed live mapping");
+        ((volatile uint64_t*)vos3_phys_to_virt(phys))[0] = 0x1234ABCD;
+        size_t before = vos3_pmm_free_pages_count();
+        vos3_vmm_stats_t old_stats, new_stats;
+        vos3_vmm_get_stats(&old_stats);
+        if (!reap) {
+            require(vos3_shm_unmap(id, addr) == VOS3_IPC_OK, "last explicit mapping close");
+        } else {
+            vos3_vmm_destroy_address_space(as);
+            task->address_space = saved_task;
+            vos3_vmm_switch_address_space(saved_cpu);
+            vos3_vmm_reap_address_spaces();
+        }
+        /* Only query registry/PMM after final put; never dereference freed backing. */
+        require(vos3_shm_size(id) == 0 && vos3_shm_find("native-creator-first") == VOS3_IPC_INVALID,
+                "last mapping release leaked region");
+        require(vos3_pmm_ref_get(phys) == 0, "last mapping release leaked backing");
+        vos3_vmm_get_stats(&new_stats);
+        require(new_stats.page_tables <= old_stats.page_tables,
+                "final release increased page-table count");
+        size_t released_tables = old_stats.page_tables - new_stats.page_tables;
+        /* Reaping also releases the AS metadata allocation; explicit detach
+         * leaves page-table allocation intact. Require at least backing+tables. */
+        size_t free_after = vos3_pmm_free_pages_count();
+        require(released_tables < SIZE_MAX && free_after >= before &&
+                free_after - before >= 1 + released_tables,
+                "last mapping release missing PMM backing/table reclamation");
+        require(vos3_shm_destroy(id) == VOS3_IPC_ERR_NOTFOUND, "destroy resurrected finalized slot");
+        if (!reap) {
+            task->address_space = saved_task;
+            vos3_vmm_switch_address_space(saved_cpu);
+            vos3_vmm_destroy_address_space(as);
+            vos3_vmm_reap_address_spaces();
+        }
+    }
+}
+
 static void test_metadata_cow(void)
 {
     const uintptr_t va = 0x7200000000ULL;
@@ -208,7 +264,8 @@ void vos3_test_vm_backing(void)
         require(bytes[i] == 0xC0FFEE0000000000ULL + i, "final release corrupted backing");
     require(vos3_shm_destroy(id) == VOS3_IPC_OK, "creator release failed");
     require(vos3_shm_size(id) == 0, "mapping reference leaked after final release");
-    VOS3_INFO("[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup");
+    test_creator_first_shm();
+    VOS3_INFO("[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close");
     test_metadata_cow();
     test_file_reference_ownership();
 }

@@ -239,6 +239,8 @@ void shm_va_free(uint64_t addr, size_t size)
 
 /** @brief Shared memory table */
 static vos3_shm_region_t* g_shm_table[VOS3_SHM_MAX_REGIONS];
+/* Creator close is distinct from mapping/temporary reference release. */
+static uint8_t g_shm_creator_released[VOS3_SHM_MAX_REGIONS];
 
 /** @brief Shared memory table lock */
 static vos3_spinlock_t g_shm_lock = VOS3_SPINLOCK_INIT;
@@ -547,7 +549,9 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
     return id;
 }
 
-int vos3_shm_destroy(vos3_ipc_id_t id)
+/* Drop one owned creator/mapping/temporary pin. Every last put follows the
+ * same finalization path. Callers must release shm->lock before calling. */
+static int shm_release_owned(vos3_ipc_id_t id, int creator)
 {
     vos3_spinlock_lock(&g_shm_lock);
 
@@ -557,7 +561,18 @@ int vos3_shm_destroy(vos3_ipc_id_t id)
         return VOS3_IPC_ERR_NOTFOUND;
     }
 
-    /* Decrement reference count */
+    if (creator && g_shm_creator_released[id]) {
+        vos3_spinlock_unlock(&g_shm_lock);
+        return VOS3_IPC_ERR_INVALID;
+    }
+
+    /* Serialize the final transition with lookup/map pinning; never revive
+     * or wrap a zero count. The table slot remains reserved until cleanup. */
+    if (__atomic_load_n(&shm->ref_count, __ATOMIC_ACQUIRE) == 0U) {
+        vos3_spinlock_unlock(&g_shm_lock);
+        return VOS3_IPC_ERR_INVALID;
+    }
+    if (creator) g_shm_creator_released[id] = 1;
     uint32_t new_rc = __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
 
     if (new_rc > 0U) {
@@ -595,6 +610,7 @@ int vos3_shm_destroy(vos3_ipc_id_t id)
      * virtual/physical resources have been fully released. */
     vos3_spinlock_lock(&g_shm_lock);
     g_shm_table[id] = NULL;
+    g_shm_creator_released[id] = 0;
     vos3_spinlock_unlock(&g_shm_lock);
 
     vos3_kfree(shm);
@@ -602,6 +618,11 @@ int vos3_shm_destroy(vos3_ipc_id_t id)
     VOS3_DEBUG("Destroyed shared memory (id=%u)", id);
 
     return VOS3_IPC_OK;
+}
+
+int vos3_shm_destroy(vos3_ipc_id_t id)
+{
+    return shm_release_owned(id, 1);
 }
 
 void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
@@ -614,6 +635,11 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
     vos3_spinlock_lock(&g_shm_lock);
     vos3_shm_region_t* shm = shm_get(id);
     if (shm == NULL) {
+        vos3_spinlock_unlock(&g_shm_lock);
+        return NULL;
+    }
+    uint32_t refs = __atomic_load_n(&shm->ref_count, __ATOMIC_ACQUIRE);
+    if (refs == 0U || refs == UINT32_MAX) {
         vos3_spinlock_unlock(&g_shm_lock);
         return NULL;
     }
@@ -630,7 +656,7 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
             !(shm->flags & VOS3_SHM_FLAG_PUBLIC) &&
             caller->tid != shm->owner) {
             /* Undo the pin — safe because ref_count > 0 prevents destroy */
-            __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
+            shm_release_owned(id, 0);
             return NULL;
         }
     }
@@ -646,8 +672,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
         /* No untracked mapping may be installed. Concurrent AS map/unmap
          * remains unqualified; the region mutex alone does not serialize it. */
         if (current->address_space->shm_count >= VOS3_AS_MAX_SHM) {
-            __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
             vos3_mutex_unlock(&shm->lock);
+            shm_release_owned(id, 0);
             return NULL;
         }
         /* Allocate user virtual address range (free-list + bump fallback) */
@@ -655,8 +681,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                             ? VOS3_LARGE_PAGE_SIZE : VOS3_PAGE_SIZE;
         uint64_t user_vaddr = shm_va_alloc(shm->size, va_align);
         if (user_vaddr == 0) {
-            __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
             vos3_mutex_unlock(&shm->lock);
+            shm_release_owned(id, 0);
             return NULL;
         }
 
@@ -673,8 +699,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                             vos3_vmm_unmap((uintptr_t)user_vaddr + prev);
                     }
                     shm_va_free(user_vaddr, shm->size);
-                    __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
                     vos3_mutex_unlock(&shm->lock);
+                    shm_release_owned(id, 0);
                     return NULL;
                 }
             }
@@ -689,8 +715,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                         vos3_vmm_unmap(user_vaddr + prev);
                     }
                     shm_va_free(user_vaddr, shm->size);
-                    __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
                     vos3_mutex_unlock(&shm->lock);
+                    shm_release_owned(id, 0);
                     return NULL;
                 }
             }
@@ -707,8 +733,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                             vos3_vmm_unmap((uintptr_t)user_vaddr + prev);
                     }
                     shm_va_free(user_vaddr, shm->size);
-                    __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
                     vos3_mutex_unlock(&shm->lock);
+                    shm_release_owned(id, 0);
                     return NULL;
                 }
             }
@@ -790,38 +816,14 @@ int vos3_shm_unmap(vos3_ipc_id_t id, void* addr)
         }
     }
 
-    {
-        uint32_t old_rc = __atomic_load_n(&shm->ref_count, __ATOMIC_ACQUIRE);
-        if (old_rc > 0U) {
-            __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
-        }
-    }
-
     vos3_mutex_unlock(&shm->lock);
-
-    return VOS3_IPC_OK;
+    return shm_release_owned(id, 0);
 }
 
-/**
- * @brief Atomically decrement SHM ref_count during final address-space cleanup.
- *
- * Called after the final owning address space has removed its page tables.
- * Uses atomic operations instead of mutex to avoid deadlock — the
- * reaper can run in any task context, including one that holds shm->lock.
- */
+/* Final AS reclamation runs after borrowed leaves are unreachable. */
 void vos3_shm_dec_refcount(vos3_ipc_id_t id)
 {
-    vos3_shm_region_t* shm = shm_get(id);
-    if (shm == NULL) {
-        return;
-    }
-    /* CAS loop: eliminates TOCTOU between load and sub */
-    uint32_t old;
-    do {
-        old = __atomic_load_n(&shm->ref_count, __ATOMIC_ACQUIRE);
-        if (old == 0U) return;
-    } while (!__atomic_compare_exchange_n(&shm->ref_count, &old, old - 1U,
-             0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE));
+    (void)shm_release_owned(id, 0);
 }
 
 vos3_ipc_id_t vos3_shm_find(const char* name)

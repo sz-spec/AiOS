@@ -6,7 +6,7 @@ def trace(cpus=1):
     lines=['PMM Statistics:','VMM: Initialization complete','Starting scheduler',
              '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close',
              '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
-             '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup',
+             '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close',
              '[VM-METADATA] PASS: distinct tags, real COW copy, parent integrity, mprotect, flag updates, final accounting',
              f'SMP: {cpus} CPUs online','NATIVE_MEMORY role=parent pid=1 cpl=3','NATIVE_MEMORY guard=kernel_mprotect rejected=1','NATIVE_MEMORY api_guards=1','NATIVE_MEMORY restoration=1 canary=1','NATIVE_MEMORY rx_control=1 result=42']
     for i,case in enumerate(CASES):
@@ -45,6 +45,8 @@ class OracleTests(unittest.TestCase):
         self.assertFalse(classify_serial(trace(),0)['passed'])
         self.assertFalse(classify_serial(trace(),'observation_timeout',4)['passed'])
         r=self.check(trace());bind_artifact_identity(r,'a','b');self.assertFalse(r['passed'])
+    def test_old_backing_marker_is_insufficient(self):
+        self.assertFalse(self.check(trace().replace(', creator-first explicit/reap, duplicate creator close',''))['passed'])
     def test_order(self):
         l=trace().splitlines();a=next(i for i,x in enumerate(l) if 'case=cow_private' in x and 'attempt=1' in x);l[a],l[a+1]=l[a+1],l[a];self.assertFalse(self.check('\n'.join(l))['passed'])
 if __name__=='__main__':unittest.main()
