@@ -405,22 +405,33 @@ static void handle_page_fault(vos3_int_frame_t* frame)
                     /* Check if this is a file-backed VMA */
                     vos3_vma_t* vma = vos3_vmm_find_vma(
                         current ? current->address_space : NULL, (uintptr_t)cr2);
-                    if (vma != NULL && vma->vm_fd >= 0) {
-                        /* Read page from file */
-                        uint64_t file_off = vma->vm_offset + (aligned - vma->vm_start);
-                        int64_t saved_pos = vos3_lseek(vma->vm_fd, 0, 1 /*SEEK_CUR*/);
-                        vos3_lseek(vma->vm_fd, (int64_t)file_off, 0 /*SEEK_SET*/);
-                        int64_t nread = vos3_read(vma->vm_fd, kvirt, VOS3_PAGE_SIZE);
-                        vos3_lseek(vma->vm_fd, saved_pos, 0 /*SEEK_SET*/);
-                        /* Zero-fill remainder if short read */
-                        if (nread < (int64_t)VOS3_PAGE_SIZE) {
-                            size_t valid = (nread > 0) ? (size_t)nread : 0;
-                            memset((uint8_t*)kvirt + valid, 0,
-                                   VOS3_PAGE_SIZE - valid);
+                    int backing_ok = 1;
+                    if (vma != NULL && vma->vm_file != NULL) {
+                        vos3_file_t* file = vma->vm_file;
+                        uint64_t delta = aligned - vma->vm_start;
+                        int64_t nread = -1;
+                        /* The backing reference belongs to the VMA, never to
+                         * the faulting task's descriptor table. Positional I/O
+                         * concurrency remains outside this serialized path. */
+                        if (vma->vm_offset <= INT64_MAX &&
+                            delta <= (uint64_t)INT64_MAX - vma->vm_offset &&
+                            file->ops && file->ops->read && file->ops->lseek) {
+                            uint64_t off = vma->vm_offset + delta;
+                            if (off <= (uint64_t)INT64_MAX - VOS3_PAGE_SIZE) {
+                                int64_t saved = file->ops->lseek(file, 0, 1);
+                                if (saved >= 0) {
+                                    if (file->ops->lseek(file, (int64_t)off, 0) == (int64_t)off)
+                                        nread = file->ops->read(file, kvirt, VOS3_PAGE_SIZE);
+                                    if (file->ops->lseek(file, saved, 0) != saved) nread = -1;
+                                }
+                            }
                         }
-                        VOS3_DEBUG("[DEMAND] File-backed page: addr=0x%llx fd=%d off=0x%llx nread=%lld",
-                                   (unsigned long long)cr2, vma->vm_fd,
-                                   (unsigned long long)file_off, (long long)nread);
+                        if (nread < 0 || nread > (int64_t)VOS3_PAGE_SIZE) {
+                            backing_ok = 0;
+                        } else {
+                            memset((uint8_t*)kvirt + (size_t)nread, 0,
+                                   VOS3_PAGE_SIZE - (size_t)nread);
+                        }
                     } else {
                         /* Zero-fill for anonymous pages */
                         uint64_t* ptr = (uint64_t*)kvirt;
@@ -431,7 +442,7 @@ static void handle_page_fault(vos3_int_frame_t* frame)
                     uint64_t flags = VOS3_PTE_PRESENT | VOS3_PTE_USER;
                     if (demand_vma == NULL || (demand_vma->vm_prot & 2)) flags |= VOS3_PTE_WRITABLE;
                     if (demand_vma == NULL || !(demand_vma->vm_prot & 4)) flags |= VOS3_PTE_NO_EXECUTE;
-                    if (vos3_vmm_map_user(aligned, page, flags) == 0) {
+                    if (backing_ok && vos3_vmm_map_user(aligned, page, flags) == 0) {
 #ifdef NATIVE_ISOLATION_TEST
                         vos3_native_isolation_mapping(current, aligned, page);
 #endif

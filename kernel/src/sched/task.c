@@ -581,12 +581,9 @@ void vos3_task_destroy(vos3_task_t* task)
         task->xsave_area_size = 0u;
     }
 
-    /* Threads share address_space with their process — don't free it */
-    if (task->address_space != NULL &&
-        task->address_space != vos3_vmm_get_kernel_space() &&
-        !task->is_thread) {
-        vos3_vmm_destroy_address_space(task->address_space);
-    }
+    /* Every task owns one reference, including CLONE_VM children. */
+    vos3_vmm_destroy_address_space(task->address_space);
+    task->address_space = NULL;
 
     VOS3_DEBUG("Destroyed task '%s' (tid=%u)", task->name, task->tid);
 
@@ -704,31 +701,9 @@ void vos3_task_reap(void)
         if (task->fpu_state_raw != NULL) {
             vos3_kfree(task->fpu_state_raw);
         }
-        /* Cleanup leaked SHM mappings — recycle VA slots to free-list.
-         * Must run BEFORE vos3_vmm_destroy_address_space().
-         * Forked children have shm_count=0 (cleared in fork), so this
-         * only runs for tasks that called shm_map() themselves.
-         * Uses atomic refcount ops — safe in any task context. */
-        if (task->shm_count > 0 && !task->is_thread) {
-            extern void shm_va_free(uint64_t addr, size_t size);
-            extern void vos3_shm_dec_refcount(uint32_t id);
-            for (uint32_t si = 0; si < task->shm_count; si++) {
-                VOS3_DEBUG("Reap: cleaning SHM id=%u addr=0x%llx",
-                           task->shm_mappings[si].id,
-                           (unsigned long long)task->shm_mappings[si].user_addr);
-                shm_va_free(task->shm_mappings[si].user_addr,
-                            task->shm_mappings[si].size);
-                vos3_shm_dec_refcount(task->shm_mappings[si].id);
-            }
-            task->shm_count = 0;
-        }
-
-        /* Threads share address_space with their process — don't free it */
-        if (task->address_space != NULL &&
-            task->address_space != vos3_vmm_get_kernel_space() &&
-            !task->is_thread) {
-            vos3_vmm_destroy_address_space(task->address_space);
-        }
+        /* Final address-space release owns SHM mapping cleanup. */
+        vos3_vmm_destroy_address_space(task->address_space);
+        task->address_space = NULL;
 
         vos3_kfree(task);
     }

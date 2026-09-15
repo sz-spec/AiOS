@@ -591,6 +591,7 @@ int vos3_fd_table_init(vos3_fd_table_t* table);
  * @param[in] table FD table
  */
 void vos3_fd_table_destroy(vos3_fd_table_t* table);
+vos3_fd_table_t* vos3_fd_table_clone(vos3_fd_table_t* table);
 
 /**
  * @brief Allocate file descriptor
@@ -619,6 +620,7 @@ vos3_file_t* vos3_fd_get(vos3_fd_table_t* table, int fd);
  * @param[in] file File pointer previously returned by vos3_fd_get()
  */
 void vos3_fd_put(vos3_file_t* file);
+int vos3_file_retain(vos3_file_t* file);
 
 /**
  * @brief Free file descriptor

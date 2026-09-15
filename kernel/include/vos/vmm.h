@@ -136,10 +136,13 @@ int vos3_vmm_is_tombstoned(uintptr_t vaddr);
 #define VOS3_PTE_OS_AVAIL2      ((uint64_t)(1ULL << 10))
 #define VOS3_PTE_OS_AVAIL3      ((uint64_t)(1ULL << 11))
 
-/** @brief Copy-on-Write flag (software, uses OS_AVAIL1) */
+/** @brief Copy-on-Write flag (software-only leaf metadata). */
 /* Software-only leaf bit; do not alias AI_MONITORED (bit 9).
  * IA-32e leaf entries ignore bits 58:52 (Intel SDM vol. 3A paging tables). */
-#define VOS3_PTE_COW            ((uint64_t)(1ULL << 52))
+#define VOS3_PTE_COW            ((uint64_t)(1ULL << 53))
+
+/** @brief Cognitive Priority marker; retain the existing AI Guard bit ABI. */
+#define VOS3_PTE_COGNITIVE        ((uint64_t)(1ULL << 52))
 
 /* ============================================================================
  * AI GUARD PTE BITS (Using OS-available bits 9-11)
@@ -162,6 +165,20 @@ int vos3_vmm_is_tombstoned(uintptr_t vaddr);
 #define VOS3_PTE_AI_MASK            (VOS3_PTE_AI_MONITORED | \
                                      VOS3_PTE_AI_PROTECTED | \
                                      VOS3_PTE_AI_GUARD_PAGE)
+
+/* IA-32e leaf software bits must never alias physical addresses, NX or
+ * protection keys (62:59). Keep the 52/53 allocation separate from AI 9:11. */
+#ifdef __cplusplus
+#define VOS3_PTE_ASSERT static_assert
+#else
+#define VOS3_PTE_ASSERT _Static_assert
+#endif
+VOS3_PTE_ASSERT((VOS3_PTE_COW & VOS3_PTE_COGNITIVE) == 0,
+                "COW and cognitive priority must be independent");
+VOS3_PTE_ASSERT(((VOS3_PTE_COW | VOS3_PTE_COGNITIVE) &
+                 (VOS3_PTE_AI_MASK | VOS3_PTE_ADDR_MASK | 0xF800000000000000ULL)) == 0,
+                "Software leaf tags overlap hardware or AI Guard fields");
+#undef VOS3_PTE_ASSERT
 
 /** @brief Maximum number of VBus/AI application contexts.
  *  Duplicated from ai_guard.h so vmm.c can validate app_id bounds
@@ -288,7 +305,7 @@ typedef struct vos3_vma {
     uint64_t    vm_end;         /**< End virtual address (page-aligned) */
     int         vm_prot;        /**< Protection: PROT_READ | PROT_WRITE | PROT_EXEC */
     int         vm_flags;       /**< Flags: MAP_SHARED | MAP_PRIVATE | MAP_ANONYMOUS */
-    int         vm_fd;          /**< File descriptor (-1 for anonymous) */
+    struct vos3_file* vm_file;  /**< Owned backing reference; NULL for anonymous */
     uint64_t    vm_offset;      /**< File offset */
     uint8_t     valid;          /**< Entry in use */
 } vos3_vma_t;
@@ -296,18 +313,29 @@ typedef struct vos3_vma {
 /**
  * @brief Address space structure
  */
+#define VOS3_AS_MAX_SHM 16U
+
 typedef struct vos3_address_space {
     vos3_pte_t* pml4;           /**< PML4 virtual address */
     uintptr_t   pml4_phys;      /**< PML4 physical address */
     vos3_pte_t* user_pml4;      /**< Owned restricted root; populated by KPTI */
     uintptr_t   user_pml4_phys; /**< Restricted root physical address */
     uint64_t    lock;           /**< Spinlock for modifications */
-    uint32_t    ref_count;      /**< Reference count */
+    uint32_t    ref_count;      /**< Creator/task references plus active CPU pins */
+    struct vos3_address_space* retired_next; /**< Zero-reference reaper queue */
     uint32_t    flags;          /**< Address space flags */
     uint64_t    brk;            /**< Program break (heap end) */
     uint64_t    brk_start;      /**< Initial program break */
     vos3_vma_t  vmas[VOS3_MAX_VMAS]; /**< mmap VMA descriptors */
     uint32_t    num_vmas;       /**< Number of valid VMAs */
+
+    /* Mapping lifetime follows the shared address space, including threads. */
+    struct {
+        uint32_t id;
+        uint64_t user_addr;
+        size_t size;
+    } shm_mappings[VOS3_AS_MAX_SHM];
+    uint32_t shm_count;
 } vos3_address_space_t;
 
 /**
@@ -467,7 +495,12 @@ vos3_address_space_t* vos3_vmm_create_address_space(void);
  * @brief Destroy address space
  * @param[in] as Address space to destroy
  */
+/* Release one owned reference; final release queues reclamation. */
 void vos3_vmm_destroy_address_space(vos3_address_space_t* as);
+/* Caller must already own a reference or otherwise serialize pointer lifetime. */
+int vos3_vmm_retain_address_space(vos3_address_space_t* as);
+/* Process-context drain; also safe during early boot for empty test spaces. */
+void vos3_vmm_reap_address_spaces(void);
 
 /**
  * @brief Switch to address space

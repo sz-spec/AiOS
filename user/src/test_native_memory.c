@@ -5,6 +5,7 @@
 #include "stdint.h"
 #include "syscall.h"
 #include "string.h"
+#include "poll.h"
 #define PAGE 4096UL
 #define BASE 0x7100000000ULL
 static volatile unsigned char *witness;
@@ -21,9 +22,78 @@ static void unmap(volatile unsigned char *p,unsigned pages) { if(syscall2(11,(lo
 static int collect(pid_t child) {
  for(unsigned i=0;i<5000;i++) { int s=-1; pid_t r=waitpid(child,&s,1); if(r==child)return s; if(r!=0)fail("wait"); if(usleep(1000))fail("sleep"); } fail("timeout");return -1;
 }
+
+#include "test_native_backing.inc"
+
+/* Separate assembly return path: never resume a C frame on the new stack. */
+extern long native_share_clone(void *top, void (*entry)(void *), void *argument);
+__asm__(".text\n.type native_share_clone,@function\nnative_share_clone:\n"
+        "and $-16,%rdi\nsub $16,%rdi\nmov %rsi,0(%rdi)\nmov %rdx,8(%rdi)\n"
+        "mov %rdi,%rsi\nmov $273,%edi\nxor %edx,%edx\nxor %r10d,%r10d\nxor %r8d,%r8d\n"
+        "mov $56,%eax\nsyscall\ntest %rax,%rax\njnz 1f\n"
+        "pop %rax\npop %rdi\ncall *%rax\nmov $90,%edi\nmov $60,%eax\nsyscall\nud2\n1: ret\n");
+static void transfer(int fd,void *data,unsigned size,int sending){
+ if(!sending){struct pollfd p={fd,POLLIN,0};if(syscall3(SYS_POLL,(long)&p,1,5000)!=1||!(p.revents&POLLIN))fail("lifetime_pipe_timeout");}
+ if((sending?write(fd,data,size):read(fd,data,size))!=(int)size)fail("lifetime_pipe");
+}
+struct lifetime_args {volatile unsigned char *page;int command,reply,detach;};
+static void failed_exec_child(void *argument){
+ volatile unsigned char *page=argument;if(cpl()!=3)fail("shared_cpl");
+ char *args[]={"missing",NULL};char *env[]={NULL};
+ if(execve("/tmp/vos-invalid-lifetime.elf",args,env)>=0)fail("failed_exec_return");
+ check(page);page[0]^=0xff;
+ printf("NATIVE_MEMORY lifetime=failed_exec pid=%d cpl=3 shared=1 rollback=1\n",getpid());_exit(0);
+}
+static void survivor_child(void *argument){
+ struct lifetime_args *a=argument;pid_t self=getpid();if(cpl()!=3)fail("survivor_cpl");
+ transfer(a->reply,&self,sizeof(self),1);unsigned char challenge;
+ transfer(a->command,&challenge,1,0);if(challenge!=0x71)fail("survivor_challenge");
+ check(a->page);for(unsigned i=0;i<PAGE;i++)a->page[i]^=0xff;
+ for(unsigned i=0;i<PAGE;i++)if(a->page[i]!=(unsigned char)(pattern(i)^0xff))fail("survivor_write");
+ printf("NATIVE_MEMORY lifetime=%s pid=%d cpl=3 canary=1 survivor=1\n",a->detach?"exec_detach":"parent_exit",self);
+ challenge=0x72;transfer(a->reply,&challenge,1,1);_exit(0);
+}
+static void lifetime_tests(pid_t parent){
+ int bad=open("/tmp/vos-invalid-lifetime.elf",O_CREAT|O_TRUNC|O_WRONLY,0600);
+ if(bad<0)fail("invalid_elf_create");
+ static const char malformed[64]="not-an-ELF-lifetime-control";
+ if(write(bad,malformed,sizeof(malformed))!=(int)sizeof(malformed)||close(bad))fail("invalid_elf_write");
+ volatile unsigned char *page=map(BASE+0x200000,1,3);fill(page);
+ volatile unsigned char *stack=map(BASE+0x210000,4,3);
+ pid_t child=native_share_clone((void*)(stack+4*PAGE-16),failed_exec_child,(void*)page);
+ if(child<=0)fail("shared_clone");if(collect(child)!=0)fail("shared_wait");
+ if(page[0]!=(unsigned char)(pattern(0)^0xff))fail("shared_visibility");page[0]=pattern(0);check(page);
+ printf("NATIVE_MEMORY lifetime=failed_exec pid=%d parent_pid=%d wait_status=0 verified=1\n",child,parent);
+ unmap(stack,4);unmap(page,1);
+ for(int detach=0;detach<2;detach++){
+ int command[2],reply[2];if(pipe(command)||pipe(reply))fail("lifetime_pipes");
+ pid_t owner=fork();if(owner<0)fail("owner_fork");
+ if(owner==0){
+  struct lifetime_args a={map(BASE+0x220000,1,3),command[0],reply[1],detach};fill(a.page);
+  volatile unsigned char *survivor_stack=map(BASE+0x230000,4,3);
+  /* Arguments must survive owner-stack reclamation. Store in shared VMA. */
+  struct lifetime_args *stable=(struct lifetime_args*)map(BASE+0x240000,1,3);*stable=a;
+  pid_t survivor=native_share_clone((void*)(survivor_stack+4*PAGE-16),survivor_child,stable);
+  if(survivor<=0)fail("survivor_clone");
+  if(detach){char *args[]={"test_native_memory","--lifetime-detached",NULL};char *env[]={NULL};execve("/bin/test_native_memory",args,env);fail("self_exec_returned");}
+  _exit(0);
+ }
+ pid_t survivor;transfer(reply[0],&survivor,sizeof(survivor),0);
+ if(survivor<=0||survivor==owner||collect(owner)!=0)fail("owner_wait");
+ printf("NATIVE_MEMORY lifetime=%s pid=%d survivor_pid=%d parent_pid=%d wait_status=0\n",detach?"exec_owner_waited":"owner_waited",owner,survivor,parent);
+ unsigned char challenge=0x71;transfer(command[1],&challenge,1,1);transfer(reply[0],&challenge,1,0);
+ if(challenge!=0x72||collect(survivor)!=0)fail("survivor_wait");
+ printf("NATIVE_MEMORY lifetime=%s pid=%d parent_pid=%d wait_status=0 verified=1\n",detach?"exec_detach":"parent_exit",survivor,parent);
+ close(command[0]);close(command[1]);close(reply[0]);close(reply[1]);
+ }
+}
 static const char *names[]={"cow_private","cow_mprotect_rw","ro_before_fork","ro_after_fork","lazy_ro_write","none_lazy_read","none_populated_read","nx_execute","lazy_mprotect_ro","unmap_single","unmap_middle","unmap_multiple"};
 int main(int argc,char **argv,char **envp) {
- (void)argc;(void)argv; if(cpl()!=3)fail("cpl"); pid_t parent=getpid();
+ if(argc==2&&!strcmp(argv[1],"--lifetime-detached")){
+  if(cpl()!=3)fail("exec_detached_cpl");
+  printf("NATIVE_MEMORY lifetime=exec_loaded pid=%d cpl=3 loaded=1\n",getpid());_exit(0);
+ }
+ if(cpl()!=3)fail("cpl"); pid_t parent=getpid();
  printf("NATIVE_MEMORY role=parent pid=%d cpl=3\n",parent);
  const char *target=NULL; const char *prefix="VOS_NATIVE_KERNEL_TARGET=";
  for(unsigned i=0;envp&&i<64&&envp[i];i++)if(!strncmp(envp[i],prefix,strlen(prefix)))target=envp[i]+strlen(prefix);
@@ -87,6 +157,8 @@ int main(int argc,char **argv,char **envp) {
   printf("NATIVE_MEMORY case=%s pid=%d wait_status=%d parent_pid=%d canary=1 ack=%u\n",names[i],child,status,parent,i+1);
   unmap(p,(i==3||i>=10)?3:1);
  }
+ lifetime_tests(parent);
+ native_backing_tests(parent);
  printf("NATIVE_MEMORY complete=1 cases=12 parent_pid=%d\n",parent);
  if(usleep(10000)||cpl()!=3||getpid()!=parent)fail("progress");check(witness);
  printf("NATIVE_MEMORY progress=1 parent_pid=%d canary=1\n",parent);

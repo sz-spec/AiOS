@@ -316,6 +316,10 @@ C_SOURCES += $(SRC_DIR)/tests/test_process_roots.c
 CFLAGS += -DVOS3_PROCESS_ROOTS_TEST
 endif
 
+ifeq ($(MEMORY_TRANSITIONS_TEST),1)
+C_SOURCES += $(SRC_DIR)/tests/test_vm_backing.c
+endif
+
 # Assembly sources
 ifeq ($(NATIVE_ISOLATION_TEST),1)
 C_SOURCES += $(SRC_DIR)/tests/test_native_isolation.c

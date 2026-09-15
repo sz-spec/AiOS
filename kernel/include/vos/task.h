@@ -290,15 +290,6 @@ typedef struct vos3_task {
     /* ===== Per-process mmap bump allocator (Phase v17 K-C5) ===== */
     uint64_t            mmap_next;      /**< Next virtual address for mmap (per-process) */
 
-    /* ===== SHM Resource Tracking (Task 6: Exit Cleanup) ===== */
-#define VOS3_TASK_MAX_SHM   16  /**< Max concurrent SHM mappings per task */
-    struct {
-        uint32_t    id;         /**< SHM region IPC ID (0 = unused slot) */
-        uint64_t    user_addr;  /**< User VA returned by shm_map */
-        uint64_t    size;       /**< Mapped size (for shm_va_free) */
-    } shm_mappings[VOS3_TASK_MAX_SHM];
-    uint32_t            shm_count;      /**< Number of active SHM mappings */
-
     /* ===== Wait Queue Entry (embedded to avoid stack-allocated dangling pointers) ===== */
     vos3_wait_entry_t   wq_entry;       /**< Embedded wait queue entry for blocking */
 

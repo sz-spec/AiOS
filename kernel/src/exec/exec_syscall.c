@@ -279,6 +279,9 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         return -1;
     }
 
+    /* Guard contexts own policy/resources and have no safe clone API yet. */
+    if (parent->ai_guard_ctx != NULL) return -95;
+
     VOS3_DEBUG("sys_clone: creating thread, parent='%s' pid=%u stack=0x%llx tls=0x%llx",
                parent->name, parent->pid,
                (unsigned long long)child_stack,
@@ -321,6 +324,15 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     child->fpu_state_raw  = NULL;
     child->fpu_state      = NULL;
     child->fpu_initialized = 0;
+    child->xsave_area_raw = NULL;
+    child->xsave_area = NULL;
+    child->xsave_area_size = 0;
+    child->ai_guard_ctx = NULL;
+    /* CLONE_VM inherits the parent's fixed CPU owner in diagnostic SMP.
+     * Cross-CPU shared VMA mutation has not yet been qualified. */
+#ifdef NATIVE_SMP_WORKLOAD
+    child->native_smp_reported = 0;
+#endif
 
     /* Allocate kernel stack via vmap (guard page + mapped pages) */
     uintptr_t clone_guard_va = 0;
@@ -333,17 +345,42 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     child->kernel_stack_size = VOS3_VMAP_STACK_PAGES * VOS3_PAGE_SIZE;
     child->kernel_stack_guard = clone_guard_va;
 
-    /* CLONE_VM: share address space (no COW clone) */
-    /* child->address_space already copied from parent via memcpy */
-
-    /* CLONE_FILES: share fd_table — bump table ref_count (not per-file) */
-    if ((flags & CLONE_FILES) && parent->fd_table != NULL) {
-        __atomic_add_fetch(&parent->fd_table->ref_count, 1U, __ATOMIC_ACQ_REL);
+    /* Acquire all ownership before publishing the child. */
+    if (vos3_vmm_retain_address_space(parent->address_space) != 0) {
+        vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
+        vos3_kfree(child);
+        return -12;
+    }
+    child->fd_table = NULL;
+    if (parent->fd_table != NULL) {
+        if (flags & CLONE_FILES) {
+            child->fd_table = parent->fd_table;
+            uint32_t refs = __atomic_load_n(&child->fd_table->ref_count, __ATOMIC_ACQUIRE);
+            for (;;) {
+                if (refs == 0 || refs == UINT32_MAX) {
+                    vos3_vmm_destroy_address_space(child->address_space);
+                    vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
+                    vos3_kfree(child);
+                    return -75;
+                }
+                if (__atomic_compare_exchange_n(&child->fd_table->ref_count, &refs,
+                        refs + 1U, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) break;
+            }
+        } else {
+            child->fd_table = vos3_fd_table_clone(parent->fd_table);
+            if (child->fd_table == NULL) {
+                vos3_vmm_destroy_address_space(child->address_space);
+                vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
+                vos3_kfree(child);
+                return -12;
+            }
+        }
     }
 
     /* Mark as thread */
-    child->is_thread = 1;
-    child->flags |= VOS3_TASK_FLAG_THREAD;
+    child->is_thread = (flags & CLONE_THREAD) != 0;
+    child->flags &= ~VOS3_TASK_FLAG_THREAD;
+    if (child->is_thread) child->flags |= VOS3_TASK_FLAG_THREAD;
     child->flags |= VOS3_TASK_FLAG_USER;
 
     /* Thread group: tgid = process leader's pid */
@@ -355,9 +392,11 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         child->thread_group_leader = parent;
     }
 
-    /* Link into thread group list */
-    child->thread_next = parent->thread_next;
-    parent->thread_next = child;
+    if (!child->is_thread) {
+        child->tgid = child->pid;
+        child->thread_group_leader = child;
+    }
+    child->thread_next = NULL;
 
     /* TLS: set %fs base if requested */
     child->tls_base = (flags & CLONE_SETTLS) ? tls : parent->tls_base;
@@ -407,8 +446,7 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     /* Thread has no parent (detached) */
     child->parent   = parent;
     child->children = NULL;
-    child->sibling  = parent->children;
-    parent->children = child;
+    child->sibling = NULL;
 
     child->state = VOS3_TASK_READY;
     child->next  = NULL;
@@ -417,13 +455,26 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     /* Register and schedule */
     if (vos3_task_register(child) != 0) {
         VOS3_ERROR("sys_clone: failed to register thread in task table");
-        vos3_kfree(child->kernel_stack);
+        if (child->fd_table != NULL &&
+            __atomic_sub_fetch(&child->fd_table->ref_count, 1U, __ATOMIC_ACQ_REL) == 0) {
+            vos3_fd_table_destroy(child->fd_table);
+            vos3_kfree(child->fd_table);
+        }
+        vos3_vmm_destroy_address_space(child->address_space);
+        vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
         vos3_kfree(child);
         return -12;  /* ENOMEM */
     }
 
-    vos3_sched_add_task(child);
-
+    child->sibling = parent->children;
+    parent->children = child;
+    if (child->is_thread) {
+        child->thread_next = parent->thread_next;
+        parent->thread_next = child;
+    }
+    /* Set all child-visible state before the scheduler can run it. */
+    child->clear_child_tid = (flags & CLONE_CHILD_CLEARTID)
+        ? (volatile uint32_t*)frame->r10 : NULL;
     /* CLONE_PARENT_SETTID: write child TID to parent's *ptid (rdx) */
     if (flags & CLONE_PARENT_SETTID) {
         uint32_t* ptid = (uint32_t*)frame->rdx;
@@ -433,15 +484,12 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         }
     }
 
-    /* CLONE_CHILD_CLEARTID: save ctid pointer (r10) for futex_wake on exit */
-    if (flags & CLONE_CHILD_CLEARTID) {
-        child->clear_child_tid = (volatile uint32_t*)frame->r10;
-    }
-
-    VOS3_INFO("sys_clone: created thread '%s' tid=%u from parent '%s' pid=%u",
-              child->name, child->tid, parent->name, parent->pid);
-
-    return (int64_t)child->tid;
+    uint32_t tid = child->tid;
+    VOS3_INFO("sys_clone: created task '%s' tid=%u from parent '%s' pid=%u",
+              child->name, tid, parent->name, parent->pid);
+    vos3_sched_add_task(child);
+    /* A detached child may finish immediately after publication. */
+    return (int64_t)tid;
 }
 
 /**
@@ -1133,14 +1181,19 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
     vma->vm_prot = prot;
     vma->vm_flags = flags;
     if (flags & MAP_ANONYMOUS) {
-        vma->vm_fd = -1;
+        vma->vm_file = NULL;
     } else {
-        int dup_fd = task->fd_table ? vos3_dup(task->fd_table, fd) : -1;
-        if (dup_fd < 0) {
+        vos3_file_t* backing = task->fd_table ? vos3_fd_get(task->fd_table, fd) : NULL;
+        if (backing == NULL) {
             vma->valid = 0;
             return -9;  /* EBADF */
         }
-        vma->vm_fd = dup_fd;
+        if ((backing->flags & VOS3_O_ACCMODE) == VOS3_O_WRONLY ||
+            !backing->ops || !backing->ops->read || !backing->ops->lseek) {
+            vos3_fd_put(backing);
+            return -13;
+        }
+        vma->vm_file = backing;
     }
     vma->vm_offset = offset;
     vma->valid = 1;
@@ -1165,7 +1218,8 @@ static int64_t sys_munmap(uint64_t addr, uint64_t length)
     if (!task || !task->address_space) return -22;
     vos3_address_space_t* as = task->address_space;
     uint64_t end = addr + size;
-    int split_slot = -1, split_fd = -1, split_index = -1;
+    int split_slot = -1, split_index = -1;
+    vos3_file_t* split_file = NULL;
     int page_check = vos3_vmm_validate_user_unmap((uintptr_t)addr, (size_t)size);
     if (page_check != 0) return page_check;
     /* A contiguous removal can split at most one nonoverlapping VMA. Reserve
@@ -1183,10 +1237,10 @@ static int64_t sys_munmap(uint64_t addr, uint64_t length)
             if (!as->vmas[i].valid) { split_slot = (int)i; break; }
         if (split_slot < 0) return -12;
         vos3_vma_t* v = &as->vmas[split_index];
-        if (v->vm_fd >= 0) {
-            if (!task->fd_table) return -9;
-            split_fd = vos3_dup(task->fd_table, v->vm_fd);
-            if (split_fd < 0) return split_fd;
+        if (v->vm_file) {
+            split_file = v->vm_file;
+            int retained = vos3_file_retain(split_file);
+            if (retained != 0) return retained;
         }
     }
     for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
@@ -1197,10 +1251,10 @@ static int64_t sys_munmap(uint64_t addr, uint64_t length)
         uint64_t hi = end < v->vm_end ? end : v->vm_end;
         vos3_vmm_unmap_range((uintptr_t)lo, (size_t)(hi - lo));
         if (lo == v->vm_start && hi == v->vm_end) {
-            int fd = v->vm_fd;
-            v->valid = 0; v->vm_fd = -1;
+            vos3_file_t* backing = v->vm_file;
+            v->valid = 0; v->vm_file = NULL;
             if (as->num_vmas) --as->num_vmas;
-            if (fd >= 0) vos3_close(fd);
+            if (backing) vos3_fd_put(backing);
         } else if (lo == v->vm_start) {
             v->vm_offset += hi - v->vm_start; v->vm_start = hi;
         } else if (hi == v->vm_end) {
@@ -1210,7 +1264,7 @@ static int64_t sys_munmap(uint64_t addr, uint64_t length)
             *tail = *v;
             tail->vm_start = hi;
             tail->vm_offset += hi - v->vm_start;
-            tail->vm_fd = split_fd;
+            tail->vm_file = split_file;
             v->vm_end = lo;
             ++as->num_vmas;
         }

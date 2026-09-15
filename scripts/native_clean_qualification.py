@@ -59,7 +59,7 @@ def main():
                                     'BUILD_DIR=build/native-isolation', 'INSTALLER_ISO=../dist/vos5-isolation.iso']
         result['scope'] = 'fresh-source diagnostic image; four direct CPU isolation attempts in each emulator configuration'
         if args.memory:
-            result['build_command'] += ['MEMORY_TRANSITIONS_TEST=1']
+            result['build_command'] += ['MEMORY_TRANSITIONS_TEST=1', 'PROCESS_ROOTS_TEST=1']
             result['scope'] = 'fresh-source diagnostic image; COW and page-permission transitions in each emulator configuration'
     result['harness_sha256'] = digest(Path(__file__))
     if args.smp_workload:

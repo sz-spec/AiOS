@@ -275,6 +275,7 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
 
     /* Save old address space for cleanup/restore */
     vos3_address_space_t* old_as = current->address_space;
+    uint64_t old_mmap_next = current->mmap_next;
     vos3_address_space_t* kernel_space = vos3_vmm_get_kernel_space();
 
     /* Create new address space for the user process
@@ -319,6 +320,7 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
 
         /* Destroy the failed new address space */
         vos3_vmm_destroy_address_space(new_as);
+        current->mmap_next = old_mmap_next;
         return result;
     }
 
@@ -344,6 +346,7 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
                 vos3_vmm_switch_address_space(kernel_space);
             }
             vos3_vmm_destroy_address_space(new_as);
+            current->mmap_next = old_mmap_next;
             return result;
         }
 
@@ -358,6 +361,7 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
                 vos3_vmm_switch_address_space(kernel_space);
             }
             vos3_vmm_destroy_address_space(new_as);
+            current->mmap_next = old_mmap_next;
             return VOS3_ELF_ERR_INVALID;
         }
 
@@ -521,6 +525,10 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
         return -1;
     }
 
+    /* Independent SHM fork needs a separate shared-mapping retain protocol. */
+    if (parent->address_space && parent->address_space->shm_count) return -95;
+    if (parent->ai_guard_ctx != NULL) return -95; /* No policy-preserving clone API. */
+
     /* Extract user state from syscall frame */
     uint64_t user_rip = frame->rcx;      /* SYSCALL saves RIP to RCX */
     uint64_t user_rflags = frame->r11;   /* SYSCALL saves RFLAGS to R11 */
@@ -551,12 +559,10 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
     child->fpu_state_raw  = NULL;
     child->fpu_state      = NULL;
     child->fpu_initialized = 0;
-
-    /* SHM: forked children do NOT own parent's SHM mappings.
-     * The child gets COW copies of mapped pages but the SHM VA pool
-     * and refcount belong to the parent.  Zero out so the reaper
-     * skips SHM cleanup for children. */
-    child->shm_count = 0;
+    child->xsave_area_raw = NULL;
+    child->xsave_area = NULL;
+    child->xsave_area_size = 0;
+    child->ai_guard_ctx = NULL;
 
     /* Allocate new TID/PID */
     static uint32_t next_pid = 100U;
@@ -655,31 +661,21 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
                (unsigned long long)(uintptr_t)child->context,
                (unsigned long long)child->context->rip);
 
-    /* Copy file descriptor table */
-    if (parent->fd_table != NULL) {
-        child->fd_table = (vos3_fd_table_t*)vos3_kzalloc(sizeof(vos3_fd_table_t));
-        if (child->fd_table != NULL) {
-            memcpy(child->fd_table, parent->fd_table, sizeof(vos3_fd_table_t));
-            vos3_spinlock_init(&child->fd_table->spinlock);
-            __atomic_store_n(&child->fd_table->ref_count, 1U, __ATOMIC_RELEASE);
-
-            /* Increment ref_count on every inherited file object.
-             * Without this, the first close() in either process drops
-             * ref_count to 0 and frees the file — leaving the other
-             * process with a dangling pointer. */
-            for (int fdi = 0; fdi < (int)VOS3_MAX_FD; fdi++) {
-                if (child->fd_table->entries[fdi].file != NULL) {
-                    __atomic_add_fetch(&child->fd_table->entries[fdi].file->ref_count, 1U, __ATOMIC_ACQ_REL);
-                }
-            }
-        }
+    child->fd_table = parent->fd_table ? vos3_fd_table_clone(parent->fd_table) : NULL;
+    if (parent->fd_table && !child->fd_table) {
+        vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
+        vos3_kfree(child);
+        return VOS3_ELF_ERR_NOMEM;
     }
-
-    /* Set up parent-child relationship */
     child->parent = parent;
     child->children = NULL;
-    child->sibling = parent->children;
-    parent->children = child;
+    child->sibling = NULL;
+    child->is_thread = 0;
+    child->flags &= ~VOS3_TASK_FLAG_THREAD;
+    child->thread_group_leader = child;
+    child->tgid = child->pid;
+    child->thread_next = NULL;
+    child->clear_child_tid = NULL;
 
     /* Initialize child state */
     child->state = VOS3_TASK_READY;
@@ -696,6 +692,10 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
     child->address_space = vos3_vmm_clone_cow(parent->address_space);
     if (child->address_space == NULL) {
         VOS3_ERROR("fork: failed to clone address space with COW");
+        if (child->fd_table) {
+            vos3_fd_table_destroy(child->fd_table);
+            vos3_kfree(child->fd_table);
+        }
         vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
         vos3_kfree(child);
         return VOS3_ELF_ERR_NOMEM;
@@ -709,10 +709,18 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
     /* Register in task table (needed for signal delivery, task lookup) */
     if (vos3_task_register(child) != 0) {
         VOS3_ERROR("fork: failed to register child in task table");
+        vos3_vmm_destroy_address_space(child->address_space);
+        if (child->fd_table) {
+            vos3_fd_table_destroy(child->fd_table);
+            vos3_kfree(child->fd_table);
+        }
         vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
         vos3_kfree(child);
         return VOS3_ELF_ERR_NOMEM;
     }
+
+    child->sibling = parent->children;
+    parent->children = child;
 
     /* Fork-safety: reseed entropy pool so child gets unique CSPRNG state */
     vos3_entropy_reseed();

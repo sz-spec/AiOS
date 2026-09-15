@@ -49,6 +49,8 @@ static vos3_address_space_t g_kernel_space;
 
 /** @brief Software address-space binding belongs to the executing CPU. */
 static vos3_address_space_t* g_current_spaces[VOS3_MAX_CPUS];
+static vos3_address_space_t* g_retired_spaces;
+static vos3_spinlock_t g_retired_lock = VOS3_SPINLOCK_INIT;
 
 /* create/clone allocate this descriptor from one physical page. */
 _Static_assert(sizeof(vos3_address_space_t) <= VOS3_PAGE_SIZE,
@@ -93,16 +95,15 @@ void vos3_vmm_set_maxphyaddr(uint8_t phys_addr_bits)
  * preserved by cold scrub (Identity Buffer) and prioritised by the L3 Color Guard.
  * Originally named "tombstone" — renamed to reflect its broader role in the
  * Cognitive Pager subsystem. */
-#define VMM_PTE_COGNITIVE_BIT  ((uint64_t)(1ULL << 52))
 
 int vos3_vmm_set_cognitive_priority(uintptr_t vaddr)
 {
     vos3_pte_t pte;
     if (vos3_vmm_get_pte(vaddr, &pte) != 0) return -1;
     /* K-C5: Atomic CAS */
-    vos3_pte_t desired = pte | VMM_PTE_COGNITIVE_BIT;
+    vos3_pte_t desired = pte | VOS3_PTE_COGNITIVE;
     while (vos3_vmm_cas_pte(vaddr, &pte, desired) != 0) {
-        desired = pte | VMM_PTE_COGNITIVE_BIT;
+        desired = pte | VOS3_PTE_COGNITIVE;
     }
     return 0;
 }
@@ -111,7 +112,7 @@ int vos3_vmm_is_cognitive_priority(uintptr_t vaddr)
 {
     vos3_pte_t pte;
     if (vos3_vmm_get_pte(vaddr, &pte) != 0) return 0;
-    return (pte & VMM_PTE_COGNITIVE_BIT) ? 1 : 0;
+    return (pte & VOS3_PTE_COGNITIVE) ? 1 : 0;
 }
 
 /* Backward-compat aliases for cold scrub / recovery subsystem */
@@ -566,6 +567,8 @@ int vos3_vmm_map_range(uintptr_t virt_start, uintptr_t phys_start,
  *                   the physical page for a subsequent user-space mapping, so
  *                   they must pass free_phys=0.  sys_munmap / sys_brk pass 1.
  */
+static int address_in_shm(vos3_address_space_t* as, uintptr_t va);
+
 static int vmm_unmap_internal(uintptr_t virt, int free_phys)
 {
     if (g_vmm_initialized == 0U) {
@@ -623,7 +626,7 @@ static int vmm_unmap_internal(uintptr_t virt, int free_phys)
     vos3_irq_restore(irqflags);
 
     /* Free the physical page if requested (COW-safe: pmm_free checks refcount) */
-    if (free_phys && page_phys != 0) {
+    if (free_phys && page_phys != 0 && !address_in_shm(as, virt)) {
         vos3_pmm_free(page_phys);
     }
 
@@ -896,7 +899,7 @@ int vos3_vmm_update_flags(uintptr_t virt, vos3_vmm_flags_t flags)
     /* AG-A1 fix: Preserve AI Guard PTE bits (9=MONITORED, 10=PROTECTED,
      * 11=GUARD). The old code replaced the entire PTE, destroying these
      * custom bits on any flag update (e.g., mprotect, reprotect tick). */
-    uint64_t ai_bits = (*pte) & VOS3_PTE_AI_MASK;
+    uint64_t ai_bits = (*pte) & (VOS3_PTE_AI_MASK | VOS3_PTE_COGNITIVE);
     if (*pte & VOS3_PTE_COW) {
         pte_flags = (pte_flags & ~VOS3_PTE_WRITABLE) | VOS3_PTE_COW;
     }
@@ -924,7 +927,7 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
     if (!task || !task->address_space) return -22;
     vos3_address_space_t* as = task->address_space;
     vos3_vma_t planned[VOS3_MAX_VMAS] = {0};
-    int extra_fds[VOS3_MAX_VMAS];
+    vos3_file_t* extra_files[VOS3_MAX_VMAS];
     unsigned count = 0, fd_count = 0;
     int error = -12;
     vos3_irqflags_t irq = vos3_irq_save();
@@ -952,10 +955,10 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
             part.vm_start = cuts[j]; part.vm_end = cuts[j + 1];
             part.vm_offset += cuts[j] - old.vm_start;
             if (cuts[j] >= addr && cuts[j] < end) part.vm_prot = prot;
-            if (j && old.vm_fd >= 0) {
-                part.vm_fd = vos3_dup(task->fd_table, old.vm_fd);
-                if (part.vm_fd < 0) goto abort;
-                extra_fds[fd_count++] = part.vm_fd;
+            if (j && old.vm_file) {
+                int retained = vos3_file_retain(old.vm_file);
+                if (retained != 0) { error = retained; goto abort; }
+                extra_files[fd_count++] = old.vm_file;
             }
             planned[count++] = part;
         }
@@ -983,7 +986,7 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
 abort:
     vos3_spinlock_release(&as->lock);
     vos3_irq_restore(irq);
-    for (unsigned i = 0; i < fd_count; ++i) vos3_close(extra_fds[i]);
+    for (unsigned i = 0; i < fd_count; ++i) vos3_fd_put(extra_files[i]);
     return error;
 }
 
@@ -1100,8 +1103,18 @@ vos3_address_space_t* vos3_vmm_create_address_space(void)
  * Kernel-space entries (256-511) are shared and must NOT be freed.
  * Leaf data pages are freed, then the page table structure itself.
  */
-static void free_user_page_tables(vos3_pte_t *pml4)
+static int address_in_shm(vos3_address_space_t* as, uintptr_t va)
 {
+    for (unsigned i = 0; i < as->shm_count; ++i)
+        if (va >= as->shm_mappings[i].user_addr &&
+            va - as->shm_mappings[i].user_addr < as->shm_mappings[i].size)
+            return 1;
+    return 0;
+}
+
+static void free_user_page_tables(vos3_address_space_t* as)
+{
+    vos3_pte_t* pml4 = as->pml4;
     /* Only walk user-space half (entries 0-255) */
     for (int i = 0; i < 256; i++) {
         if (!vos3_pte_is_present(pml4[i])) continue;
@@ -1137,7 +1150,11 @@ static void free_user_page_tables(vos3_pte_t *pml4)
                 for (int l = 0; l < 512; l++) {
                     if (vos3_pte_is_present(pt[l])) {
                         /* 4 KiB leaf page — free user data page */
-                        vos3_pmm_free(vos3_pte_get_addr(pt[l]));
+                        uintptr_t va = ((uintptr_t)i << 39) | ((uintptr_t)j << 30) |
+                                       ((uintptr_t)k << 21) | ((uintptr_t)l << 12);
+                        /* SHM owns its backing; these leaves only borrow it. */
+                        if (!address_in_shm(as, va))
+                            vos3_pmm_free(vos3_pte_get_addr(pt[l]));
                     }
                 }
                 free_page_table(pt);  /* Free PT */
@@ -1148,25 +1165,32 @@ static void free_user_page_tables(vos3_pte_t *pml4)
     }
 }
 
-void vos3_vmm_destroy_address_space(vos3_address_space_t* as)
+static void reclaim_address_space(vos3_address_space_t* as)
 {
     if (as == NULL || as == &g_kernel_space) {
         return;
     }
 
-    /* Close any dup'd file descriptors in VMA entries */
+    /* Release VMA-owned backing files independently of the reaper's fd table. */
     {
-        extern int vos3_close(int fd);
         for (uint32_t i = 0; i < VOS3_MAX_VMAS; i++) {
-            if (as->vmas[i].valid && as->vmas[i].vm_fd >= 0) {
-                vos3_close(as->vmas[i].vm_fd);
-                as->vmas[i].vm_fd = -1;
+            if (as->vmas[i].valid && as->vmas[i].vm_file) {
+                vos3_fd_put(as->vmas[i].vm_file);
+                as->vmas[i].vm_file = NULL;
             }
         }
     }
 
     /* Free all user-space page tables and data pages */
-    free_user_page_tables(as->pml4);
+    free_user_page_tables(as);
+    /* No task or CPU can now reach these mappings. Release each SHM owner once. */
+    for (unsigned i = 0; i < as->shm_count; ++i) {
+        extern void shm_va_free(uint64_t addr, size_t size);
+        extern void vos3_shm_dec_refcount(uint32_t id);
+        shm_va_free(as->shm_mappings[i].user_addr, as->shm_mappings[i].size);
+        vos3_shm_dec_refcount(as->shm_mappings[i].id);
+    }
+    as->shm_count = 0;
 
     /* Free PML4 itself */
     free_page_table(as->pml4);
@@ -1182,6 +1206,52 @@ void vos3_vmm_destroy_address_space(vos3_address_space_t* as)
     vos3_pmm_free(phys);
 }
 
+int vos3_vmm_retain_address_space(vos3_address_space_t* as)
+{
+    if (as == NULL) return -22;
+    if (as == &g_kernel_space) return 0;
+    uint32_t refs = __atomic_load_n(&as->ref_count, __ATOMIC_ACQUIRE);
+    for (;;) {
+        if (refs == 0U) return -5; /* Never resurrect a retired descriptor. */
+        if (refs == UINT32_MAX) return -75;
+        if (__atomic_compare_exchange_n(&as->ref_count, &refs, refs + 1U,
+                0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return 0;
+    }
+}
+
+void vos3_vmm_destroy_address_space(vos3_address_space_t* as)
+{
+    if (as == NULL || as == &g_kernel_space) return;
+    uint32_t refs = __atomic_load_n(&as->ref_count, __ATOMIC_ACQUIRE);
+    for (;;) {
+        if (refs == 0U) VOS3_PANIC("VMM: address-space reference underflow");
+        if (__atomic_compare_exchange_n(&as->ref_count, &refs, refs - 1U,
+                0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) break;
+    }
+    if (refs != 1U) return;
+    vos3_irqflags_t irq = vos3_irq_save();
+    vos3_spinlock_acquire(&g_retired_lock);
+    as->retired_next = g_retired_spaces;
+    g_retired_spaces = as;
+    vos3_spinlock_release(&g_retired_lock);
+    vos3_irq_restore(irq);
+}
+
+void vos3_vmm_reap_address_spaces(void)
+{
+    vos3_irqflags_t irq = vos3_irq_save();
+    vos3_spinlock_acquire(&g_retired_lock);
+    vos3_address_space_t* list = g_retired_spaces;
+    g_retired_spaces = NULL;
+    vos3_spinlock_release(&g_retired_lock);
+    vos3_irq_restore(irq);
+    while (list != NULL) {
+        vos3_address_space_t* next = list->retired_next;
+        reclaim_address_space(list);
+        list = next;
+    }
+}
+
 void vos3_vmm_switch_address_space(vos3_address_space_t* as)
 {
     if (as == NULL) {
@@ -1191,9 +1261,15 @@ void vos3_vmm_switch_address_space(vos3_address_space_t* as)
     /* Keep the software binding and CR3 update indivisible with respect to
      * local scheduling; another CPU has its own independent slot. */
     vos3_irqflags_t irqflags = vos3_irq_save();
-    g_current_spaces[get_cpu_id()] = as;
+    unsigned cpu = get_cpu_id();
+    vos3_address_space_t* old = g_current_spaces[cpu];
+    if (old != as && vos3_vmm_retain_address_space(as) != 0)
+        VOS3_PANIC("VMM: cannot pin incoming address space");
     vos3_entry_bind_roots(as->pml4_phys, as->user_pml4_phys);
     vos3_write_cr3(as->pml4_phys);
+    g_current_spaces[cpu] = as;
+    /* CR3 and both entry roots no longer reference old before its CPU unpin. */
+    if (old != as) vos3_vmm_destroy_address_space(old);
     vos3_irq_restore(irqflags);
 }
 
@@ -1609,6 +1685,11 @@ vos3_address_space_t* vos3_vmm_clone_cow(vos3_address_space_t* src)
         return NULL;
     }
 
+    /* SHM physical ownership cannot be converted into anonymous COW ownership.
+     * CLONE_VM shares this descriptor safely; independent SHM fork needs its
+     * own mapping/VA retain protocol and is explicitly unsupported for now. */
+    if (src->shm_count != 0) return NULL;
+
     VOS3_DEBUG("VMM: clone_cow - cloning address space 0x%llx",
                (unsigned long long)(uintptr_t)src);
 
@@ -1655,7 +1736,15 @@ vos3_address_space_t* vos3_vmm_clone_cow(vos3_address_space_t* src)
 
     /* Copy VMA descriptors (mmap regions) */
     for (uint32_t i = 0; i < VOS3_MAX_VMAS; i++) {
-        dst->vmas[i] = src->vmas[i];
+        vos3_vma_t part = src->vmas[i];
+        if (part.valid && part.vm_file && vos3_file_retain(part.vm_file) != 0) {
+            /* Only earlier entries have acquired backing ownership. The
+             * zeroed remaining entries must not release borrowed references. */
+            vos3_vmm_destroy_address_space(dst);
+            vos3_vmm_flush_tlb();
+            return NULL;
+        }
+        dst->vmas[i] = part;
     }
     dst->num_vmas = src->num_vmas;
 

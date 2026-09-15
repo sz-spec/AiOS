@@ -3,13 +3,28 @@ import unittest
 from native_memory_smoke import CASES, ERRORS, BASE, classify_serial, bind_artifact_identity
 
 def trace(cpus=1):
-    lines=['PMM Statistics:','VMM: Initialization complete','Starting scheduler',f'SMP: {cpus} CPUs online','NATIVE_MEMORY role=parent pid=1 cpl=3','NATIVE_MEMORY guard=kernel_mprotect rejected=1','NATIVE_MEMORY api_guards=1','NATIVE_MEMORY restoration=1 canary=1','NATIVE_MEMORY rx_control=1 result=42']
+    lines=['PMM Statistics:','VMM: Initialization complete','Starting scheduler',
+             '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close',
+             '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
+             '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup',
+             '[VM-METADATA] PASS: distinct tags, real COW copy, parent integrity, mprotect, flag updates, final accounting',
+             f'SMP: {cpus} CPUs online','NATIVE_MEMORY role=parent pid=1 cpl=3','NATIVE_MEMORY guard=kernel_mprotect rejected=1','NATIVE_MEMORY api_guards=1','NATIVE_MEMORY restoration=1 canary=1','NATIVE_MEMORY rx_control=1 result=42']
     for i,case in enumerate(CASES):
         pid=100+i;addr=BASE+(16+i*8)*4096+(4096 if i in (3,10) else 8192 if i==11 else 0)
         op='read' if i in (5,6,9,10,11) else 'execute' if i==7 else 'write'
         lines.append(f'NATIVE_MEMORY case={case} pid={pid} address={hex(addr)} operation={op} cpl=3 attempt=1')
         lines.append(f'NATIVE_MEMORY case={case} pid={pid} private=1' if i<2 else f"SIGSEGV: task 'memory' (pid={pid}) addr={hex(addr)} RIP=0x400000 err={hex(ERRORS[i])}")
         lines.append(f'NATIVE_MEMORY case={case} pid={pid} wait_status={0 if i<2 else 35584} parent_pid=1 canary=1 ack={i+1}')
+    lines += ['NATIVE_MEMORY lifetime=failed_exec pid=200 cpl=3 shared=1 rollback=1',
+              'NATIVE_MEMORY lifetime=failed_exec pid=200 parent_pid=1 wait_status=0 verified=1',
+              'NATIVE_MEMORY lifetime=owner_waited pid=201 survivor_pid=202 parent_pid=1 wait_status=0',
+              'NATIVE_MEMORY lifetime=parent_exit pid=202 cpl=3 canary=1 survivor=1',
+              'NATIVE_MEMORY lifetime=parent_exit pid=202 parent_pid=1 wait_status=0 verified=1',
+              'NATIVE_MEMORY lifetime=exec_loaded pid=203 cpl=3 loaded=1',
+              'NATIVE_MEMORY lifetime=exec_owner_waited pid=203 survivor_pid=204 parent_pid=1 wait_status=0',
+              'NATIVE_MEMORY lifetime=exec_detach pid=204 cpl=3 canary=1 survivor=1',
+              'NATIVE_MEMORY lifetime=exec_detach pid=204 parent_pid=1 wait_status=0 verified=1',
+              'NATIVE_MEMORY backing=owned pid=1 closed_fd=1 reused_fd=1 split=1 clone=1 contents=1']
     return '\n'.join(lines+['NATIVE_MEMORY complete=1 cases=12 parent_pid=1','NATIVE_MEMORY progress=1 parent_pid=1 canary=1'])
 
 class OracleTests(unittest.TestCase):
@@ -31,5 +46,5 @@ class OracleTests(unittest.TestCase):
         self.assertFalse(classify_serial(trace(),'observation_timeout',4)['passed'])
         r=self.check(trace());bind_artifact_identity(r,'a','b');self.assertFalse(r['passed'])
     def test_order(self):
-        l=trace().splitlines();l[7],l[8]=l[8],l[7];self.assertFalse(self.check('\n'.join(l))['passed'])
+        l=trace().splitlines();a=next(i for i,x in enumerate(l) if 'case=cow_private' in x and 'attempt=1' in x);l[a],l[a+1]=l[a+1],l[a];self.assertFalse(self.check('\n'.join(l))['passed'])
 if __name__=='__main__':unittest.main()

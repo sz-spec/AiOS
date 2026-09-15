@@ -95,6 +95,10 @@ static void init_task_entry(void* arg)
     extern void vos3_native_tlb_test(void);
     vos3_native_tlb_test();
 #endif
+#ifdef MEMORY_TRANSITIONS_TEST
+    extern void vos3_test_vm_backing(void);
+    vos3_test_vm_backing();
+#endif
     int fd0 = vos3_open("/dev/console", VOS3_O_RDWR, 0U);
     if (fd0 < 0) {
         VOS3_ERROR("Init: Failed to open /dev/console for stdin (error %d)", fd0);

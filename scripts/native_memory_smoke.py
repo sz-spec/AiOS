@@ -19,9 +19,16 @@ def classify_serial(raw, exit_status, requested_cpus=1):
     result={'passed':False,'failures':[],'cases_verified':0}
     try:
         require(exit_status=='observation_timeout','unexpected VM exit')
-        for marker in ('PMM Statistics:','VMM: Initialization complete','Starting scheduler'):
+        for marker in (
+            '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close','PMM Statistics:','VMM: Initialization complete','Starting scheduler'):
             require(clean.count(marker)==1,'missing/repeated boot stage')
         require(not any(x in clean for x in ('PANIC','General Protection Fault','Double Fault','uaccess address-space mismatch','NATIVE_MEMORY FAIL','NATIVE_ISOLATION FAIL')),'unexpected failure')
+        for marker in (
+            '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
+            '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup',
+            '[VM-METADATA] PASS: distinct tags, real COW copy, parent integrity, mprotect, flag updates, final accounting',
+        ):
+            require(clean.count(marker)==1,'missing/duplicate native lifecycle marker: '+marker)
         counts=re.findall(r'(?:Initialization complete:|SMP:)\s*(\d+) CPUs online',clean)
         require(bool(counts) and int(counts[-1])==requested_cpus,'CPU count mismatch')
         records=[]; faults=[]
@@ -58,9 +65,29 @@ def classify_serial(raw, exit_status, requested_cpus=1):
                 found=[f for f in faults if f[1]==child];require(len(found)==1,'missing/duplicate child fault')
                 observed,_,actual,error=found[0];require(actual==addr and error==ERRORS[i],'fault address/error mismatch')
             require(previous<attempt[0]<observed<ack[0],'case ordering');previous=ack[0];result['cases_verified']+=1
+        shared=one(lifetime='failed_exec',shared=1,rollback=1,cpl=3)
+        shared_pid=int(shared[1]['pid']);require(shared_pid>0 and shared_pid not in pids,'shared child identity');pids.add(shared_pid)
+        shared_wait=one(lifetime='failed_exec',pid=shared_pid,parent_pid=pid,wait_status=0,verified=1)
+        owner=one(lifetime='owner_waited',parent_pid=pid,wait_status=0)
+        owner_pid=int(owner[1]['pid']);survivor_pid=int(owner[1]['survivor_pid'])
+        require(owner_pid>0 and survivor_pid>0 and owner_pid!=survivor_pid and owner_pid not in pids and survivor_pid not in pids,'survivor identities')
+        survivor=one(lifetime='parent_exit',pid=survivor_pid,cpl=3,canary=1,survivor=1)
+        survivor_wait=one(lifetime='parent_exit',pid=survivor_pid,parent_pid=pid,wait_status=0,verified=1)
+        require(previous<shared[0]<shared_wait[0]<owner[0]<survivor[0]<survivor_wait[0],'lifetime ordering')
+        loaded=one(lifetime='exec_loaded',cpl=3,loaded=1)
+        exec_owner=one(lifetime='exec_owner_waited',parent_pid=pid,wait_status=0)
+        exec_pid=int(exec_owner[1]['pid']);exec_survivor=int(exec_owner[1]['survivor_pid'])
+        require(exec_pid>0 and exec_survivor>0 and exec_pid!=exec_survivor and not {exec_pid,exec_survivor}&(pids|{owner_pid,survivor_pid}),'exec lifecycle identities')
+        require(int(loaded[1]['pid'])==exec_pid,'exec-loaded identity mismatch')
+        detached=one(lifetime='exec_detach',pid=exec_survivor,cpl=3,canary=1,survivor=1)
+        detached_wait=one(lifetime='exec_detach',pid=exec_survivor,parent_pid=pid,wait_status=0,verified=1)
+        require(survivor_wait[0]<loaded[0]<exec_owner[0]<detached[0]<detached_wait[0],'exec lifecycle ordering')
+        backing=one(backing='owned',pid=pid,closed_fd=1,reused_fd=1,split=1,clone=1,contents=1)
+        require(detached_wait[0]<backing[0],'backing test order')
+        previous=backing[0]
         complete=one(complete=1,cases=12,parent_pid=pid);progress=one(progress=1,parent_pid=pid,canary=1)
         require(previous<complete[0]<progress[0],'completion/progress ordering')
-        require(len(records)==33,'unexpected marker count')
+        require(len(records)==43,'unexpected marker count')
         result.update(passed=True,online_cpus=requested_cpus,scope='12 observed sequential memory transition cases; no remote TLB/concurrent COW proof')
     except (ValueError,KeyError,TypeError) as error:
         result['failures'].append(str(error))

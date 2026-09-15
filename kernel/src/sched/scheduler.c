@@ -850,13 +850,14 @@ void vos3_sched_tick(void)
  */
 static void sched_process_deferred(void)
 {
-#ifdef NATIVE_SMP_TEST
-    /* Every owner must revisit its dead tasks; the BSP flag cannot provide
-     * per-CPU reclamation. Shared periodic services remain on the BSP. */
+    /* No resource reclamation from an interrupt/IRQ-disabled continuation. */
     uint64_t rflags;
     __asm__ volatile ("pushfq; popq %0" : "=r"(rflags));
     if (!(rflags & (1ULL << 9)))
         return; /* Interrupt/IRQ-disabled context is not a reclamation point. */
+    vos3_vmm_reap_address_spaces();
+#ifdef NATIVE_SMP_TEST
+    /* Every owner must revisit its dead tasks. */
     vos3_task_reap();
     if (get_cpu_id() != 0)
         return;

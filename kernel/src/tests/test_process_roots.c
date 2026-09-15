@@ -14,6 +14,17 @@ static void require(int condition, const char* message)
 
 void vos3_test_process_roots(void)
 {
+    /* Rejection controls use local metadata only, never a freed pointer. */
+    vos3_address_space_t invalid = {0};
+    require(vos3_vmm_retain_address_space(NULL) == -22, "retain null accepted");
+    require(vos3_vmm_retain_address_space(&invalid) == -5,
+            "zero-reference address space resurrected");
+    invalid.ref_count = UINT32_MAX;
+    require(vos3_vmm_retain_address_space(&invalid) == -75,
+            "reference overflow accepted");
+    require(invalid.ref_count == UINT32_MAX, "overflow changed reference count");
+    vos3_address_space_t* original = vos3_vmm_get_current_space();
+    require(original != NULL, "missing original CPU binding");
     size_t free_before = vos3_pmm_free_pages_count();
     vos3_vmm_stats_t before, after;
     vos3_vmm_get_stats(&before);
@@ -59,13 +70,35 @@ void vos3_test_process_roots(void)
             child->user_pml4_phys != child->pml4_phys,
             "child restricted root alias");
     require(child->user_pml4[0] == 0, "clone copied unpublished restricted mappings");
+    /* Independent creator and retained task-style ownership. */
+    require(child->ref_count == 1, "new clone ownership count");
+    require(vos3_vmm_retain_address_space(child) == 0 && child->ref_count == 2,
+            "extra ownership retain failed");
+    vos3_vmm_destroy_address_space(child);
+    require(child->ref_count == 1, "nonfinal owner release freed clone");
+    vos3_vmm_reap_address_spaces();
+    require(child->ref_count == 1 && child->pml4_phys != 0,
+            "reaper reclaimed owned clone");
     vos3_vmm_destroy_address_space(child);
     vos3_vmm_destroy_address_space(second);
-    /* Destroy must release only the restricted root page, not follow the
-     * sentinel as a second ownership path into page-table subtrees. */
+    /* Never load the sentinel into hardware, even as an entry-root binding. */
+    first->user_pml4[0] = 0;
+    require(first->ref_count == 1, "creator ownership count");
+    vos3_vmm_switch_address_space(first);
+    require(vos3_vmm_get_current_space() == first && first->ref_count == 2,
+            "CPU binding did not pin incoming roots");
+    vos3_vmm_switch_address_space(first);
+    require(first->ref_count == 2, "same-space switch leaked CPU pin");
     vos3_vmm_destroy_address_space(first);
+    require(first->ref_count == 1, "creator release lost active CPU pin");
+    vos3_vmm_reap_address_spaces();
+    require(vos3_vmm_get_current_space() == first && first->ref_count == 1,
+            "reaper freed active CPU roots");
+    vos3_vmm_switch_address_space(original);
+    /* first has reached zero; never dereference it after the final unpin. */
+    vos3_vmm_reap_address_spaces();
     vos3_vmm_get_stats(&after);
     require(vos3_pmm_free_pages_count() == free_before, "physical page leak");
     require(after.page_tables == before.page_tables, "page-table accounting leak");
-    VOS3_INFO("[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, release, accounting");
+    VOS3_INFO("[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting");
 }

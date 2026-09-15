@@ -87,6 +87,49 @@ void vos3_fd_table_destroy(vos3_fd_table_t* table)
     }
 }
 
+/* Requires an already owned reference or a locked descriptor-table entry. */
+int vos3_file_retain(vos3_file_t* file)
+{
+    if (file == NULL) return -22;
+    uint32_t refs = __atomic_load_n(&file->ref_count, __ATOMIC_ACQUIRE);
+    for (;;) {
+        if (refs == 0) return -5;
+        if (refs == UINT32_MAX) return -75;
+        if (__atomic_compare_exchange_n(&file->ref_count, &refs, refs + 1U,
+                0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return 0;
+    }
+}
+
+/* Independent descriptor ownership snapshot for fork/clone without CLONE_FILES. */
+vos3_fd_table_t* vos3_fd_table_clone(vos3_fd_table_t* table)
+{
+    extern void* vos3_kzalloc(size_t size);
+    extern void vos3_kfree(void* ptr);
+    if (table == NULL) return NULL;
+    vos3_fd_table_t* copy = vos3_kzalloc(sizeof(*copy));
+    if (copy == NULL) return NULL;
+    vos3_fd_table_init(copy);
+    uint64_t irq;
+    __asm__ volatile("pushfq; pop %0; cli" : "=r"(irq) :: "memory");
+    vos3_spinlock_acquire(&table->spinlock);
+    for (unsigned i = 0; i < VOS3_MAX_FD; ++i) {
+        vos3_file_t* file = table->entries[i].file;
+        if (file != NULL) {
+            if (vos3_file_retain(file) != 0) goto fail;
+        }
+        copy->entries[i] = table->entries[i];
+    }
+    vos3_spinlock_release(&table->spinlock);
+    __asm__ volatile("push %0; popfq" :: "r"(irq) : "memory", "cc");
+    return copy;
+fail:
+    vos3_spinlock_release(&table->spinlock);
+    __asm__ volatile("push %0; popfq" :: "r"(irq) : "memory", "cc");
+    vos3_fd_table_destroy(copy);
+    vos3_kfree(copy);
+    return NULL;
+}
+
 int vos3_fd_alloc(vos3_fd_table_t* table, vos3_file_t* file)
 {
     if (table == NULL || file == NULL) {
@@ -161,7 +204,7 @@ vos3_file_t* vos3_fd_get(vos3_fd_table_t* table, int fd)
         /* Atomic ref_count bump UNDER the lock — prevents concurrent
          * close() from freeing the file between our read and return.
          * This is the "Reference Sealing" protocol. */
-        __atomic_add_fetch(&file->ref_count, 1U, __ATOMIC_ACQ_REL);
+        if (vos3_file_retain(file) != 0) file = NULL;
     }
 
     vos3_spinlock_release(&table->spinlock);

@@ -359,7 +359,7 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
 
     /* Map into kernel virtual address space */
     void* kernel_addr = vos3_vmm_map_pages(phys_addr, size,
-                                            VOS3_PTE_PRESENT | VOS3_PTE_WRITABLE);
+                                            VOS3_PTE_PRESENT | VOS3_PTE_WRITABLE | VOS3_PTE_NO_EXECUTE);
     if (kernel_addr == NULL) {
         if (flags & VOS3_SHM_FLAG_HUGETLB) {
             size_t huge_count = size / VOS3_LARGE_PAGE_SIZE;
@@ -643,6 +643,13 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
     vos3_task_t* current = vos3_sched_current();
     if (current != NULL && current->address_space != NULL &&
         current->address_space != vos3_vmm_get_kernel_space()) {
+        /* No untracked mapping may be installed. Concurrent AS map/unmap
+         * remains unqualified; the region mutex alone does not serialize it. */
+        if (current->address_space->shm_count >= VOS3_AS_MAX_SHM) {
+            __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
+            vos3_mutex_unlock(&shm->lock);
+            return NULL;
+        }
         /* Allocate user virtual address range (free-list + bump fallback) */
         uint64_t va_align = (shm->flags & VOS3_SHM_FLAG_HUGETLB)
                             ? VOS3_LARGE_PAGE_SIZE : VOS3_PAGE_SIZE;
@@ -662,7 +669,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                                        VOS3_VMM_FLAG_WRITE_COMBINE);
                 if (ret != VOS3_VMM_OK) {
                     if (off > 0) {
-                        vos3_vmm_unmap_range((uintptr_t)user_vaddr, off);
+                        for (size_t prev = 0; prev < off; prev += VOS3_PAGE_SIZE)
+                            vos3_vmm_unmap((uintptr_t)user_vaddr + prev);
                     }
                     shm_va_free(user_vaddr, shm->size);
                     __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
@@ -678,7 +686,7 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                 if (ret != VOS3_VMM_OK) {
                     /* Unmap any pages we already mapped */
                     for (size_t prev = 0; prev < off; prev += VOS3_LARGE_PAGE_SIZE) {
-                        vos3_vmm_unmap_large(user_vaddr + prev);
+                        vos3_vmm_unmap(user_vaddr + prev);
                     }
                     shm_va_free(user_vaddr, shm->size);
                     __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
@@ -695,7 +703,8 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
                 if (ret != 0) {
                     /* Unmap any pages we already mapped */
                     if (off > 0) {
-                        vos3_vmm_unmap_range((uintptr_t)user_vaddr, off);
+                        for (size_t prev = 0; prev < off; prev += VOS3_PAGE_SIZE)
+                            vos3_vmm_unmap((uintptr_t)user_vaddr + prev);
                     }
                     shm_va_free(user_vaddr, shm->size);
                     __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
@@ -705,15 +714,12 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
             }
         }
 
+        /* Mapping references belong to the address space, not one thread. */
+        uint32_t idx = current->address_space->shm_count++;
+        current->address_space->shm_mappings[idx].id = id;
+        current->address_space->shm_mappings[idx].user_addr = user_vaddr;
+        current->address_space->shm_mappings[idx].size = shm->size;
         vos3_mutex_unlock(&shm->lock);
-
-        /* Register in task's SHM tracking table for exit cleanup */
-        if (current->shm_count < VOS3_TASK_MAX_SHM) {
-            uint32_t idx = current->shm_count++;
-            current->shm_mappings[idx].id = id;
-            current->shm_mappings[idx].user_addr = user_vaddr;
-            current->shm_mappings[idx].size = shm->size;
-        }
 
         VOS3_DEBUG("SHM mapped id=%u to user addr 0x%llx (size=%zu)",
                    id, (unsigned long long)user_vaddr, shm->size);
@@ -738,27 +744,46 @@ int vos3_shm_unmap(vos3_ipc_id_t id, void* addr)
 
     /* If a user-space address was provided, unmap those pages and recycle VA */
     vos3_task_t* current = vos3_sched_current();
-    if (addr != NULL && current != NULL && current->address_space != NULL &&
+    if (current != NULL && current->address_space != NULL &&
         current->address_space != vos3_vmm_get_kernel_space()) {
-        if (shm->flags & VOS3_SHM_FLAG_HUGETLB) {
-            /* HugePage SHM: unmap each 2MB page individually */
-            for (size_t off = 0; off < shm->size; off += VOS3_LARGE_PAGE_SIZE) {
-                vos3_vmm_unmap_large((uintptr_t)addr + off);
+        /* Check exact ownership before PTE, VA-pool or refcount mutation. */
+        uint32_t owned = current->address_space->shm_count;
+        for (uint32_t si = 0; si < current->address_space->shm_count; ++si) {
+            if (current->address_space->shm_mappings[si].id == id &&
+                current->address_space->shm_mappings[si].user_addr == (uint64_t)(uintptr_t)addr &&
+                current->address_space->shm_mappings[si].size == shm->size) {
+                owned = si;
+                break;
             }
-        } else {
-            vos3_vmm_unmap_range((uintptr_t)addr, shm->size);
+        }
+        if (addr == NULL || owned == current->address_space->shm_count) {
+            vos3_mutex_unlock(&shm->lock);
+            return VOS3_IPC_ERR_INVALID;
+        }
+        /* Detach borrowed leaves only: the region owns RAM/device backing.
+         * Generic unmap selects the task AS for both 4K and 2M leaves.
+         * munmap may have removed leaves already; that is safe to finish. */
+        size_t step = (shm->flags & VOS3_SHM_FLAG_HUGETLB)
+                        ? VOS3_LARGE_PAGE_SIZE : VOS3_PAGE_SIZE;
+        for (size_t off = 0; off < shm->size; off += step) {
+            int rc = vos3_vmm_unmap((uintptr_t)addr + off);
+            if (rc != VOS3_VMM_OK && rc != VOS3_VMM_ERR_NOTMAPPED) {
+                /* Keep the lifetime record and ref for retry/final cleanup. */
+                vos3_mutex_unlock(&shm->lock);
+                return VOS3_IPC_ERR_INVALID;
+            }
         }
         /* Recycle the user VA range for future SHM mappings */
         shm_va_free((uint64_t)(uintptr_t)addr, shm->size);
 
-        /* Remove from task's SHM tracking table */
-        for (uint32_t si = 0; si < current->shm_count; si++) {
-            if (current->shm_mappings[si].id == id &&
-                current->shm_mappings[si].user_addr == (uint64_t)(uintptr_t)addr) {
+        /* Remove from the address space's tracking table */
+        for (uint32_t si = 0; si < current->address_space->shm_count; si++) {
+            if (current->address_space->shm_mappings[si].id == id &&
+                current->address_space->shm_mappings[si].user_addr == (uint64_t)(uintptr_t)addr) {
                 /* Swap with last entry */
-                current->shm_count--;
-                if (si < current->shm_count) {
-                    current->shm_mappings[si] = current->shm_mappings[current->shm_count];
+                current->address_space->shm_count--;
+                if (si < current->address_space->shm_count) {
+                    current->address_space->shm_mappings[si] = current->address_space->shm_mappings[current->address_space->shm_count];
                 }
                 break;
             }
@@ -778,9 +803,9 @@ int vos3_shm_unmap(vos3_ipc_id_t id, void* addr)
 }
 
 /**
- * @brief Atomically decrement SHM ref_count during task exit cleanup.
+ * @brief Atomically decrement SHM ref_count during final address-space cleanup.
  *
- * Called from vos3_task_reap() when a dying task has SHM mappings.
+ * Called after the final owning address space has removed its page tables.
  * Uses atomic operations instead of mutex to avoid deadlock — the
  * reaper can run in any task context, including one that holds shm->lock.
  */
