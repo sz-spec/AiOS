@@ -1,0 +1,11 @@
+# Scheduler and lifecycle liveness
+
+Reviewer: `/root/math_build_review`. Source reviewed: `32187957757ab57d7820d0a63fa62c409003b126`. This is one specialized review task performed by an existing agent, not an additional independent agent or comprehensive audit.
+
+- **P1 — current blocker is observable.** `/private/tmp/vos5-lifetime-memory-20260915/bios4/serial.log` reaches the shared survivor’s canary acknowledgement and exit, but never records coordinator completion of its wait. The aggregate fails. This is stronger evidence than an assumed successful lifetime transition and requires diagnosis before final approval.
+- **P2 — immutable ownership is a bounded scheduling design.** The gated picker scans interactive and priority queues for own/unbound tasks; first selection assigns ownership under the scheduler lock. Reclamation is owner-local for tasks, while CPU-pinned address spaces retire through a separate queue. This avoids a specific cross-CPU stack handoff hazard but limits migration.
+- **P2 — opportunities are not fairness.** Periodic scheduling IPIs and bounded user polling provide observable progress opportunities. They do not establish a maximum scheduling delay or guarantee reclamation latency under contention.
+
+Validation reviewed: previous controlled AP-execution matrices demonstrate actual user CPUID identities beyond the BSP. They do not prove simultaneous execution. This task reviewed current source and the new failed BIOS4 evidence without launching replacement VMs. Full wait/reparent concurrency and scheduler fairness remain unreviewed.
+
+**Disposition, 2026-09-15:** The historical BIOS4 failure above was reproduced and traced to reparenting a survivor to an AP idle task sharing PID 1. Commit `3ce56da73271db2e30ac4b226db88bb72a979d50` restricts selection to live user init. Independently reclassified the corrected four-run memory matrix: each now contains all 43 user records, four kernel checks and successful final survivor waits. Actual ISO/kernel/user/observer hashes match its result. The specific blocker is resolved within this tested sequential lifecycle; fairness and concurrent scheduler correctness remain outside the verdict. Original failed evidence is preserved.

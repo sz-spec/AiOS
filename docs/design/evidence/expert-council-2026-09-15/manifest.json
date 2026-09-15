@@ -1,0 +1,31 @@
+{
+  "algorithm": "SHA-256",
+  "excluded": [
+    "manifest.json"
+  ],
+  "files": {
+    "01-bios-boot.md": "938609f6e669b1f89d2cf7aa8fb34919c2e403583a2469f372e283c01261c946",
+    "02-uefi-kpti.md": "1d5f057b8195c4b617f3d3e422ca13af224d1115800a68a025dc197ba14c79f9",
+    "03-scheduler-smp.md": "8171e6a78a2910caef2b069c20d6538cf8d8812b4cdf7c88248ba2e94a2d786c",
+    "04-drivers-hardware.md": "0983b022f777060146d82b17021192d50bd91505f7e810434d355743938b2233",
+    "05-build-reproducibility.md": "7d6b2f3f98e3e11fe46cc51599b515dd065a3318903b9873b4be92789ccd5b2a",
+    "06-consolidation-coverage.md": "0285cbc010382962eb5f32782c8eaaeba26bbb7a7c1cafe841575836dfd8ff41",
+    "07-install-windows-coexistence.md": "1ac1cc8b7a82af0fa39eeef13c42184be08a79bb4b9fe8ab9e29abcadec3cf08",
+    "08-kernel-isolation-security.md": "c1224f612df6f10fc3809cec22d8924ed1612dc7a0dad9e15f987096dbbcc392",
+    "09-ai-policy-capabilities.md": "07d6c67902c674513d9ea125e9abee31ab69f516269ef32a5191bf65db78bc16",
+    "10-vfs-ipc-security.md": "3aa9d0321a3a26eb9645ee08db11bc409ddc05d51d0c3382acb954672e240d77",
+    "11-network-hosted-boundaries.md": "6e02a3a2a0b4d8e5790ac19aac82e5bebc22f34d76a2facfc12bf864face617d",
+    "12-supply-chain-updates.md": "ac946e1dbaf0a7500b3408ac03aed0f2770dbaf6d7b15489a1a555bc35b82db0",
+    "13-threat-model-release.md": "54dc966aa7dde9b3e602b6599a98ac0b1394fe6d6434c86e96c59c42d307b0ed",
+    "14-refcount-invariants.md": "ba9e05f945908a5fe4f77fe58d0482fdbe10d8b813104f75c1fdee0fffca06bf",
+    "15-memory-model-concurrency.md": "39da6247ea5aad7e74d568c4c0278786e878cd55279808b6c5a8a41f7a3ff918",
+    "16-address-arithmetic.md": "71493f05879904ce957d9446a1ec337204b45cf10657034400620df0c7de5a64",
+    "17-scheduler-liveness.md": "79df404fd9723b95fe0f4b9b0c39bf2cf4e88cc33941f3e7297bbbbdc6676cba",
+    "18-test-oracles-evidence.md": "3b4105d377554861bb2cdf6a8fb68187f00b6bb79084135e1a8b190a9b2f61bd",
+    "19-performance-efficiency.md": "5c06a931a9dda6504fa6a17cf414769c4f8a5c5072ca7c12c105b170be2c1ebf",
+    "20-core-principles-release-plan.md": "4e9efae7bcf9deb363ad116363cbbb2b9e35ac2706dd43a08667c3ce2e3dbcf7",
+    "ACTIONS.md": "51a1f4ed926be2472b66707b9b9acfd2d7cf7b0c875b45b87bc9cc10c1ae1f2e",
+    "README.md": "e683591ce1d27dc156ec0b34fc9dc9d3cc3a20291127b09d75b97e4409eb057c",
+    "gitleaks.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  }
+}

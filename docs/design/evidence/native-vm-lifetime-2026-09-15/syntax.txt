@@ -1,0 +1,20 @@
+In file included from kernel/src/exec/exec.c:24:
+kernel/src/exec/../../include/vos/string.h:100:32: warning: unknown warning group '-Wstringop-overflow', ignored [-Wunknown-warning-option]
+  100 | #pragma GCC diagnostic ignored "-Wstringop-overflow"
+      |                                ^
+1 warning generated.
+In file included from kernel/src/exec/exec_syscall.c:22:
+kernel/src/exec/../../include/vos/string.h:100:32: warning: unknown warning group '-Wstringop-overflow', ignored [-Wunknown-warning-option]
+  100 | #pragma GCC diagnostic ignored "-Wstringop-overflow"
+      |                                ^
+1 warning generated.
+In file included from kernel/src/ipc/shm.c:23:
+kernel/src/ipc/../../include/vos/string.h:100:32: warning: unknown warning group '-Wstringop-overflow', ignored [-Wunknown-warning-option]
+  100 | #pragma GCC diagnostic ignored "-Wstringop-overflow"
+      |                                ^
+1 warning generated.
+In file included from kernel/src/fs/fd.c:25:
+kernel/src/fs/../../include/vos/string.h:100:32: warning: unknown warning group '-Wstringop-overflow', ignored [-Wunknown-warning-option]
+  100 | #pragma GCC diagnostic ignored "-Wstringop-overflow"
+      |                                ^
+1 warning generated.

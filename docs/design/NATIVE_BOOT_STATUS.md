@@ -1,5 +1,11 @@
 # Native boot qualification — updated 2026-09-15
 
+The [shared-VM lifetime report](evidence/native-vm-lifetime-qualification.md)
+records COW metadata separation, explicit task/CPU references, owned file/SHM
+backings and the observed AP-idle/init reparenting failure and correction.
+The [review council](evidence/expert-council-2026-09-15/README.md) tracks the
+remaining native, hardware, hosted and release requirements.
+
 The [native TLB probe](evidence/native-tlb-qualification.md) now observes old
 kernel translations before invalidation and replacements afterward on every
 tested CPU, in BIOS/UEFI ×1/4 configurations. This qualifies the bounded kernel

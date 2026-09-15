@@ -150,3 +150,10 @@ ABI qualification, production desktop assets and physical hardware qualification
 remain open. Root build commands do not certify every hosted feature or every OS
 release requirement. Current dependency compatibility exceptions are explicit in
 `dependencies/upgrade-exceptions.json`.
+
+
+The `--memory` qualification now also enables `PROCESS_ROOTS_TEST=1` and requires
+shared-VM lifecycle, SHM, PTE metadata and backing-reference evidence. See the
+[lifetime report](evidence/native-vm-lifetime-qualification.md) for source identity,
+compatibility restrictions and the distinction between sequential lifecycle tests
+and concurrent shared-VM protection.

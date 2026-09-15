@@ -1,0 +1,11 @@
+# Threat model and release conditions
+
+Reviewer: `/root/mcp_upgrade`. Source: `32187957757ab57d7820d0a63fa62c409003b126`. Date: 2026-09-15. Bounded source and evidence review; no production edits.
+
+1. **P0 — define the deployment claim.** Existing qualification covers specific QEMU BIOS/UEFI configurations and bounded kernel/user workloads, as recorded in `native-clean-build-security.md`, `native-isolation-security.md` and `native-tlb-security.md`. It does not establish operation on every PC, resistance to malicious firmware, physical tampering or arbitrary peripheral DMA. Publish a supported hardware and adversary matrix before a general-purpose secure-OS release.
+2. **P1 — concurrency is a separate gate.** `native-vm-lifetime-security.md` distinguishes reference safety from shared-VMA mutations, remote revocation and file-position races. Require actual remote-CPU adversarial observations and allocation/failure controls before extending the qualified scheduling model.
+3. **P1 — release acceptance must bind evidence to artifacts.** Require the committed source, builder identity, classifier hashes, raw serial logs, positive/negative results and cleanup records for each claimed gate. Keep failed aggregates visible. Signed install/update artifacts and rollback recovery must be qualified separately from bootability.
+
+Reviewed scope: the limited native, AI-policy, VFS/IPC, hosted and supply-chain documents in this council package. No exhaustive audit or independent twenty-person review is claimed: these six role reviews are one agent's bounded contribution, with prior authorship disclosed. Unreviewed scope includes comprehensive syscall fuzzing, all device drivers, network protocol adversaries, cloud tenancy penetration tests, measured boot and physical hardware failure injection. A release decision should close the relevant boundary findings rather than extrapolate from passing examples.
+
+2026-09-15 follow-up: source `3ce56da` fixes idle-task orphan adoption. All four corrected memory/lifetime logs and 5,594 source hashes independently verify; original failure remains preserved. This bounded sequential gate passes, while general PID ambiguity, concurrency and release findings remain open. Original review scope above is unchanged.

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "source_commit": "3ce56da73271db2e30ac4b226db88bb72a979d50",
+  "diagnostic_defines_absent": [
+    "-DNATIVE_ISOLATION_TEST",
+    "-DMEMORY_TRANSITIONS_TEST",
+    "-DNATIVE_SMP_TEST",
+    "-DNATIVE_SMP_WORKLOAD",
+    "-DNATIVE_TLB_TEST",
+    "-DNATIVE_TLB_SKIP_FLUSH",
+    "-DVOS3_PROCESS_ROOTS_TEST"
+  ],
+  "config_sha256": "0454e679f38c9395887ddbb73f655b295e39429ab62c5354586f1cf4433e9ca7",
+  "scope": "normal build retains ownership and TLB fixes; diagnostic workloads/AP scheduler disabled"
+}

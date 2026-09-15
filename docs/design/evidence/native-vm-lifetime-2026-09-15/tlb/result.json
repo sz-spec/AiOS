@@ -1,0 +1,120 @@
+{
+  "passed": true,
+  "build_container_name": "vos5-native-clean-bd21e6133698",
+  "build_command": [
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_SMP_WORKLOAD=1",
+    "BUILD_DIR=build/native-smp",
+    "INSTALLER_ISO=../dist/vos5-smp.iso",
+    "NATIVE_SMP_TEST=1",
+    "NATIVE_TLB_TEST=1"
+  ],
+  "scope": "kernel translation replacement and actual AP user execution; no shared-user-VM isolation proof",
+  "network": "none",
+  "source_date_epoch": 1700000000,
+  "harness_sha256": "7d7672a5dbd457c6e58a65ac42d59ee6bd6e6a362ed4a736cf08b43c272687f7",
+  "commit": "3daf340141b90690a47bad84c51523c44c243e20",
+  "git_tree": "95db2afaf893a1ee873e1020b561cce7bf59b0d5",
+  "archive_sha256": "dc11058b0d2cddb41d954baead34f1deb072f4fdc55084a8931f34d706a6528f",
+  "initial_generated_outputs_absent": true,
+  "source_files": 5594,
+  "source_manifest_sha256": "23d0f5a7175dd621441651114025a9a1676bbd421b6b3b93cb264f2a2fdcdd86",
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "build_exit": 0,
+  "source_inputs_unchanged": true,
+  "iso_sha256": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+  "iso_bytes": 12836864,
+  "kernel_sha256": "ee33abe014e1459b1be141ba23fb2cc2ea90d1c7c7c0b80a12923b906aff9e89",
+  "user_test_sha256": "cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b",
+  "classifier_sha256": "c56a1535d637fe752e95f64d50be563d87e20d3fd3e162e492435578c8e172d7",
+  "qemu_version": "QEMU emulator version 10.2.2",
+  "firmware_sha256": {
+    "code": "33090cc07675baa5190d9f1e84bf5176b33bcbfa9bacac522961150cdb6dbb2a",
+    "vars_template": "5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e"
+  },
+  "boots": [
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0
+      ],
+      "online_cpus": 1,
+      "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+      "tlb_cpus_verified": 1,
+      "tlb_rounds": 2,
+      "iso_sha256": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "iso_sha256_after": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "artifact_unchanged": true,
+      "firmware": "bios",
+      "cpu": "qemu64",
+      "smp": 1,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0,
+        1
+      ],
+      "online_cpus": 4,
+      "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+      "tlb_cpus_verified": 4,
+      "tlb_rounds": 2,
+      "iso_sha256": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "iso_sha256_after": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "artifact_unchanged": true,
+      "firmware": "bios",
+      "cpu": "qemu64",
+      "smp": 4,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0
+      ],
+      "online_cpus": 1,
+      "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+      "tlb_cpus_verified": 1,
+      "tlb_rounds": 2,
+      "iso_sha256": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "iso_sha256_after": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "artifact_unchanged": true,
+      "firmware": "uefi",
+      "cpu": "qemu64",
+      "smp": 1,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0,
+        1
+      ],
+      "online_cpus": 4,
+      "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+      "tlb_cpus_verified": 4,
+      "tlb_rounds": 2,
+      "iso_sha256": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "iso_sha256_after": "a5970c99628e0f7cc8187799bf21018d2d1fe0b6a8a098511c4b5e5883531f88",
+      "artifact_unchanged": true,
+      "firmware": "uefi",
+      "cpu": "qemu64",
+      "smp": 4,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    }
+  ],
+  "build_container_removed": true,
+  "elapsed_seconds": 106.32
+}

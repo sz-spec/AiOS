@@ -1,0 +1,26 @@
+[
+  {
+    "name": "memory",
+    "exit": 0,
+    "passed": true,
+    "result": "/private/tmp/vos5-lifetime-memory-final-20260915/result.json"
+  },
+  {
+    "name": "normal",
+    "exit": 0,
+    "passed": true,
+    "result": "/private/tmp/vos5-lifetime-normal-final-20260915/result.json"
+  },
+  {
+    "name": "tlb",
+    "exit": 0,
+    "passed": true,
+    "result": "/private/tmp/vos5-lifetime-tlb-final-20260915/result.json"
+  },
+  {
+    "name": "isolation",
+    "exit": 0,
+    "passed": true,
+    "result": "/private/tmp/vos5-lifetime-isolation-final-20260915/result.json"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "failures": [],
+  "cases_verified": 12,
+  "online_cpus": 1,
+  "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof",
+  "iso_sha256": "a16eb11213fb26f01c65edd47c38b9bd1565981e6d9164d55ce3533b3848a41f",
+  "iso_sha256_after": "a16eb11213fb26f01c65edd47c38b9bd1565981e6d9164d55ce3533b3848a41f",
+  "artifact_unchanged": true,
+  "firmware": "bios",
+  "cpu": "qemu64",
+  "smp": 1,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}

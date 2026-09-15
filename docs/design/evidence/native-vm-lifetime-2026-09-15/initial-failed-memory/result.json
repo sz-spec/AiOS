@@ -1,0 +1,41 @@
+{
+  "passed": false,
+  "build_container_name": "vos5-native-clean-b7ca89f12116",
+  "build_command": [
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_ISOLATION_TEST=1",
+    "BUILD_DIR=build/native-isolation",
+    "INSTALLER_ISO=../dist/vos5-isolation.iso",
+    "MEMORY_TRANSITIONS_TEST=1",
+    "PROCESS_ROOTS_TEST=1"
+  ],
+  "scope": "fresh-source diagnostic image; COW and page-permission transitions in each emulator configuration",
+  "network": "none",
+  "source_date_epoch": 1700000000,
+  "harness_sha256": "7d7672a5dbd457c6e58a65ac42d59ee6bd6e6a362ed4a736cf08b43c272687f7",
+  "commit": "32187957757ab57d7820d0a63fa62c409003b126",
+  "git_tree": "1c8f3d75c2c9f7e5bba05042906097ce6f288546",
+  "archive_sha256": "26170e79c2b4be049b3242d5465f710774fe9baf52654f93d2a86387cfb8b811",
+  "initial_generated_outputs_absent": true,
+  "source_files": 5594,
+  "source_manifest_sha256": "ae696956e54468caa477e23514a5530bbe30631906f1ded12a68065f7960cc8c",
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "build_exit": 0,
+  "source_inputs_unchanged": true,
+  "iso_sha256": "8731a8fc6d092e39f78e167b7e9a6917a6e9302446d05a436af06e52a7746a11",
+  "iso_bytes": 12980224,
+  "kernel_sha256": "0bdeea6130040301062ad2c6f7f39e44f62cfa04d346e5087d90424d6c17c599",
+  "user_test_sha256": "dbc15c1d4b6c49165d34187d2871fa47e444ef76397346a11c90a5a1be82b337",
+  "classifier_sha256": "a91aecafe18dc930f70944c3eaceecb6fcebdd75be1d4574b462aea692eaf944",
+  "qemu_version": "QEMU emulator version 10.2.2",
+  "firmware_sha256": {
+    "code": "33090cc07675baa5190d9f1e84bf5176b33bcbfa9bacac522961150cdb6dbb2a",
+    "vars_template": "5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e"
+  },
+  "error": "AssertionError: bios4",
+  "build_container_removed": true,
+  "elapsed_seconds": 95.44
+}

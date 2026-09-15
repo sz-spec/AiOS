@@ -1,0 +1,9 @@
+# Drivers and hardware coverage
+
+Reviewer: `/root/rust_upgrade` (one actual agent, architecture/build/hardware council track). Source baseline: `32187957757ab57d7820d0a63fa62c409003b126`. These are seven specialized reviews by one reviewer, not seven independent agents.
+
+**P1 — Universal PC support has no corresponding hardware matrix.** [docs/design/CORE_REQUIREMENTS.md](../../../../docs/design/CORE_REQUIREMENTS.md) CORE-03 explicitly requires architecture/CPU/RAM/firmware/storage/network evidence. Reviewed native matrices use q35/TCG, qemu64 and small CPU counts. That is useful emulator coverage, not proof for physical NVMe, USB controllers, graphics, Wi-Fi, enterprise firmware or older CPU variants. Publish supported/tested/unsupported combinations and add physical boot plus storage/network workloads incrementally.
+
+**P1 — Driver initialization is not functional qualification.** [kernel/src/boot/boot_drivers.c](../../../../kernel/src/boot/boot_drivers.c) invokes storage HAL, PCI/ACPI, HDA, DMA and auto-probe facilities. The existence of those calls and sources such as [kernel/src/drivers/nvme.c](../../../../kernel/src/drivers/nvme.c) cannot establish error recovery, DMA containment or durable I/O. Require device-specific detection, transfer-integrity, timeout/reset and power-cycle tests; separately establish IOMMU isolation where claimed. No specific uninspected driver is declared broken by this review.
+
+**P2 — Hardware-independent behavior requires explicit fallbacks.** CORE-06 requires feature detection and honest reporting when optional protections are absent. Add negative configurations for unsupported instructions/security facilities and verify denial still works without silently bypassing authorization. Reviewed initialization architecture and claim/evidence alignment; no exhaustive driver source audit, firmware inventory or physical-device execution was performed.

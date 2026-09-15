@@ -1,0 +1,9 @@
+# Build graph and reproducibility
+
+Reviewer: `/root/rust_upgrade` (one actual agent, architecture/build/hardware council track). Source baseline: `32187957757ab57d7820d0a63fa62c409003b126`. These are seven specialized reviews by one reviewer, not seven independent agents.
+
+**P1 — Fresh builds and bit-identical rebuilds are different gates.** The earlier direct comparison of clean ISOs found equal size but 2,458 differing bytes across 25 sectors. Directory/Rock Ridge timestamps differed despite fixed primary-volume timestamps; `limine-bios.sys` differed in three GNU build-ID payloads, and BIOS CD differences were not completely attributed. [infra/build_iso.sh](../../../../infra/build_iso.sh) copies files into a fresh staging tree without normalizing their timestamps. Do not claim complete binary reproducibility from a no-op build retaining an existing ISO.
+
+**P2 — Keep the existing provenance controls.** [infra/build_limine.sh](../../../../infra/build_limine.sh) uses a private source copy and fixed SOURCE_DATE_EPOCH; [kernel/Makefile](../../../../kernel/Makefile) records tool/configuration inputs and distinct packaging inputs. `security-native-vendors-independent.md` records verified archive hashes and preserved port evidence. Retain exact builder identity and source manifests for each gate, then normalize remaining metadata and identify bootloader build-ID causes in a dedicated reproducibility task.
+
+**P2 — Scope dependency claims to compatible resolved versions.** `dependencies/upgrade-exceptions.json` and `unification-build-dependency-status.md` record compatibility limits and remaining advisories; latest compatible is not latest everything. Reviewed native packaging and recorded dependency policy, not every package or fresh registry state. No new build was performed for this council review.

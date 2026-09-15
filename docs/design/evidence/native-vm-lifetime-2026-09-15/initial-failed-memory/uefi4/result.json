@@ -1,0 +1,15 @@
+{
+  "passed": false,
+  "failures": [
+    "missing/duplicate {'lifetime': 'parent_exit', 'pid': 301, 'parent_pid': 1, 'wait_status': 0, 'verified': 1}"
+  ],
+  "cases_verified": 12,
+  "iso_sha256": "8731a8fc6d092e39f78e167b7e9a6917a6e9302446d05a436af06e52a7746a11",
+  "iso_sha256_after": "8731a8fc6d092e39f78e167b7e9a6917a6e9302446d05a436af06e52a7746a11",
+  "artifact_unchanged": true,
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 4,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}

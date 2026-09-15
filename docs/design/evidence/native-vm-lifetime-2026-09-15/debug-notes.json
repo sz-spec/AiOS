@@ -1,0 +1,7 @@
+{
+  "source": "32187957757ab57d7820d0a63fa62c409003b126",
+  "initial_debug_cpu_selection": "Separate HMP cpu calls do not persist selection; captures array repeats BSP and is not evidence for four independent CPUs.",
+  "authoritative_all_cpu_registers": "debug-r2/capture-40.json all_registers field",
+  "r3_interpretation": "User init sleeps one tick ahead and retries wait; ticks advance; init children list empty while survivor remains in task table.",
+  "correction": "3ce56da restricts adoption to live non-idle user init; PID namespace ambiguity outside this selection remains open."
+}

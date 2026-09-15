@@ -11,6 +11,12 @@ the keyboard-driven wizard. Full kernel isolation, concurrent user workloads
 on secondary CPUs, persistent installation, hosted workflows
 and remaining legacy capabilities still require work and validation.
 
+The [shared-VM lifetime stage](docs/design/evidence/native-vm-lifetime-qualification.md)
+separates COW/cognitive metadata and adds task/CPU ownership across clone and exec.
+The [review council](docs/design/evidence/expert-council-2026-09-15/README.md)
+records twenty specialized reviews by three reviewing agents and one coordinator.
+Its findings and the lifetime qualification limits remain explicit.
+
 The [native isolation gate](docs/design/evidence/native-isolation-qualification.md)
 tests four direct user-mode read/write attempts against another process and a
 supervisor kernel page, with correlated faults and continued victim progress.

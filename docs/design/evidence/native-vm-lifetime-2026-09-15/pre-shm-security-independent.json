@@ -1,0 +1,43 @@
+{
+  "source_files_checked": 5594,
+  "checks": {
+    "manifest_canonical_json": true,
+    "archive": true,
+    "classifier": true,
+    "source_files": true,
+    "iso_sha256": true,
+    "kernel_sha256": true,
+    "user_test_sha256": true
+  },
+  "reclassified": [
+    {
+      "case": "bios1",
+      "passed": true,
+      "cases": 12,
+      "serial_sha256": "647288ce67f738e96020a8336faba36dd6617f6e247660ffbbfa73f26a5622c2",
+      "file_refs": 1
+    },
+    {
+      "case": "bios4",
+      "passed": true,
+      "cases": 12,
+      "serial_sha256": "6c2178a4cac6060b3cd4e99ae38b5a39ac91943c60a4f235e4d83bfa28cb497e",
+      "file_refs": 1
+    },
+    {
+      "case": "uefi1",
+      "passed": true,
+      "cases": 12,
+      "serial_sha256": "f0635597427d99f7a7593dc1834ecb2ef2a921214f0c243b66c812c0c804a33c",
+      "file_refs": 1
+    },
+    {
+      "case": "uefi4",
+      "passed": true,
+      "cases": 12,
+      "serial_sha256": "46dec27a6d2ad325852525e750023e060b2d68526953ef717700949dfa73f5aa",
+      "file_refs": 1
+    }
+  ],
+  "scope": "independent retained-byte hash and raw-log reclassification; VM executed by coordinator"
+}

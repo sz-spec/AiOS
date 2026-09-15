@@ -1,0 +1,9 @@
+# Network and hosted integration boundaries
+
+Reviewer: `/root/mcp_upgrade`. Source: `32187957757ab57d7820d0a63fa62c409003b126`. Date: 2026-09-15. Bounded source and evidence review; no production edits.
+
+1. **P1 — native network policy is incomplete.** `kernel/src/net/socket.c:task_has_cap` uses PID-based bootstrap permission rather than a task capability set. Treat this as a limited bootstrap mechanism. Native hostile-packet processing, socket ownership and privilege delegation need separate runtime gates before exposing the kernel directly to untrusted networks.
+2. **P1 — hosted authentication is a different trust boundary.** [docs/design/evidence/backend-runtime-security-review.md](../../../../docs/design/evidence/backend-runtime-security-review.md) records offline container tests with generated credentials, strict router discovery, authentication negatives and namespace persistence. They do not validate live Clerk/Convex identity issuance, cloud ACLs or tenant administration. Require provider-backed end-to-end identity and revocation tests before production deployment.
+3. **P2 — health is not full readiness.** The same source review records that backend `/health` reports an HTTP success with separate initialization booleans. Release monitoring must inspect required service state; a responsive process alone cannot establish availability of external dependencies.
+
+Validation reviewed: native capability branch and previously retained backend runtime evidence. This council task did not rerun Docker, contact providers, deploy public ports or send messages externally. Not reviewed: TLS termination configuration in a live environment, credentials in operator files, egress policies, web application penetration tests, malicious device traffic or cloud billing permissions. Keep hosted success separate from bare-metal OS qualification.

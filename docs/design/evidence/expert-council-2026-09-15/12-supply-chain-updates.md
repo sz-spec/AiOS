@@ -1,0 +1,9 @@
+# Supply chain and updates
+
+Reviewer: `/root/mcp_upgrade`. Source: `32187957757ab57d7820d0a63fa62c409003b126`. Date: 2026-09-15. Bounded source and evidence review; no production edits.
+
+1. **P1 — update authenticity is not a release chain.** `update.sh` fetches and fast-forwards a remote branch, then rebuilds through Compose with `--pull`. The inspected flow does not enforce a signed release manifest, immutable deployment digest or anti-rollback counter. Repository transport trust and branch permissions are not equivalent to an authenticated OS update policy. Require signed artifact selection and recoverable rollback tests before unattended enterprise updates.
+2. **P1 — provenance has explicit limits.** [docs/design/evidence/security-native-vendors-independent.md](../../../../docs/design/evidence/security-native-vendors-independent.md) records independently checked retained hashes and the reported Limine signature, while noting GNU/musl signature gaps. Hash equality establishes content integrity against the recorded pin, not independent publisher identity. Close or explicitly accept these trust-anchor gaps.
+3. **P2 — unsigned installers can be built locally.** [scripts/build_installers.sh](../../../../scripts/build_installers.sh) labels unsigned artifacts and directs distribution to CI signing. Preserve that distinction; review the actual release workflow and signature verification on the consumer before calling an artifact distributable.
+
+Validation: bounded inspection of updater and installer scripts and retained vendor review. No update was executed and no signing credentials were inspected. Not reviewed: Secure Boot key enrollment, firmware revocation databases, compromised build hosts, complete SBOM-to-binary correspondence or reproducible ISO bytes. The clean pinned-builder tests support build provenance within their recorded input boundary, not all these release assurances.

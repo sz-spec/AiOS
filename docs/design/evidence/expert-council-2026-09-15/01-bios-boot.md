@@ -1,0 +1,9 @@
+# BIOS boot and native execution
+
+Reviewer: `/root/rust_upgrade` (one actual agent, architecture/build/hardware council track). Source baseline: `32187957757ab57d7820d0a63fa62c409003b126`. These are seven specialized reviews by one reviewer, not seven independent agents.
+
+**P1 — Keep boot evidence separate from an installable release.** [infra/build_iso.sh](../../../../infra/build_iso.sh) stages the native ELF and Limine BIOS/UEFI artifacts and selects `protocol: multiboot2`. [README.md](../../../../README.md) identifies the fixed-physical-address loading path. This establishes a concrete native loading route; the QEMU matrices in `native-memory-transitions-qualification.md` demonstrate subsequent ring-3 execution. It does not establish persistence after installation, all firmware implementations or workload stability. Require cold boot, reboot and workload evidence on each supported machine class before advertising support.
+
+**P1 — Preserve normal-image regression controls.** Diagnostic images directly launch test programs and change boot configuration. The memory qualification report separately records normal boot and isolation regressions, and distinguishes reused development workspaces from clean builds. Continue normal-image exclusion checks, exact source/ELF/ISO identities and finite serial oracles after the ongoing lifetime changes; do not substitute a passing diagnostic boot for a clean normal boot.
+
+**P2 — Correct obsolete deployment instructions before release.** [docs/DEPLOYMENT.md](../../../../docs/DEPLOYMENT.md) still describes `grub-mkrescue`, generated `grub.cfg` and `vos3_installer.iso`; the current script invokes Limine/xorriso and publishes `vos5.iso`. Validate the documented operator procedure against an actual clean checkout. Reviewed packaging and recorded native gates, not a full boot assembly audit or physical-machine test.
