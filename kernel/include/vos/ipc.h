@@ -258,6 +258,9 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
  * @return 0 on success, negative error on failure
  */
 int vos3_shm_destroy(vos3_ipc_id_t id);
+/* Kernel lifecycle APIs: notification is IRQ-safe; drain needs safe process context. */
+void vos3_shm_owner_exit(uint64_t identity);
+void vos3_shm_reap_creators(void);
 
 /**
  * @brief Map shared memory into current address space

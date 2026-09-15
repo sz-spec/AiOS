@@ -13,6 +13,7 @@
  * @note MISRA C:2024 Compliant
  */
 
+#include "../../include/vos/ipc.h"
 #include "../../include/vos/task.h"
 #include "../../include/vos/scheduler.h"
 #include "../../include/vos/heap.h"
@@ -546,6 +547,9 @@ void vos3_task_destroy(vos3_task_t* task)
 
     vos3_spinlock_unlock(&g_task_lock);
 
+    __atomic_store_n(&task->state, VOS3_TASK_DEAD, __ATOMIC_RELEASE);
+    vos3_shm_owner_exit(task->identity_cookie);
+
     /* Free resources */
     if (task->kernel_stack != NULL) {
         vos3_vmap_stack_free(task->kernel_stack, task->kernel_stack_guard);
@@ -625,7 +629,8 @@ void vos3_task_defer_destroy(vos3_task_t* task)
     vos3_spinlock_unlock(&g_task_lock);
 
     /* Mark as dead — distinct from ZOMBIE */
-    task->state = VOS3_TASK_DEAD;
+    __atomic_store_n(&task->state, VOS3_TASK_DEAD, __ATOMIC_RELEASE);
+    vos3_shm_owner_exit(task->identity_cookie);
     task->reap_after_tick = vos3_sched_get_ticks() + 2;  /* Wait 2 ticks minimum */
 
     /* Enqueue for deferred cleanup */
@@ -680,6 +685,7 @@ void vos3_task_reap(void)
         }
 
         task->next = NULL;
+        vos3_shm_owner_exit(task->identity_cookie);
 
         VOS3_DEBUG("Reaping task '%s' (tid=%u)", task->name, task->tid);
 
@@ -908,7 +914,8 @@ void vos3_task_exit(int exit_code)
                   current->name, current->pid, exit_code);
 
         current->exit_code = exit_code;
-        current->state = VOS3_TASK_ZOMBIE;
+        __atomic_store_n(&current->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
+        vos3_shm_owner_exit(current->identity_cookie);
 
         /* Remove from scheduler run queue */
         vos3_sched_remove_task(current);
@@ -1083,7 +1090,8 @@ void vos3_task_kill(vos3_task_t* task, int signal)
 
     /* Set exit code and transition to zombie */
     task->exit_code = -signal;
-    task->state = VOS3_TASK_ZOMBIE;
+    __atomic_store_n(&task->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
+    vos3_shm_owner_exit(task->identity_cookie);
 
     /* Remove from scheduler run queue */
     vos3_sched_remove_task(task);
@@ -1179,7 +1187,8 @@ void vos3_task_check_cpu_quota(void)
 
         /* Force task exit */
         current->exit_code = -9;  /* SIGKILL equivalent */
-        current->state = VOS3_TASK_ZOMBIE;
+        __atomic_store_n(&current->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
+        vos3_shm_owner_exit(current->identity_cookie);
         vos3_sched_remove_task(current);
 
         /* Wake parent so waitpid() doesn't block forever on this zombie */

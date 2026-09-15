@@ -7,6 +7,7 @@
  * READC, APPEND, LSM, RMDIR, EXEC, HTTPGET.
  */
 
+#include "../../include/vos/ipc.h"
 #include "vbus_bridge_internal.h"
 
 /* ============================================================================
@@ -438,7 +439,8 @@ void cmd_exec(const char* path, const char* args)
         VOS3_WARN("[BRIDGE] EXEC: child pid=%u timed out after %u polls, killing",
                    child->pid, polls);
         child->exit_code = -9;
-        child->state = VOS3_TASK_ZOMBIE;
+        __atomic_store_n(&child->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
+        vos3_shm_owner_exit(child->identity_cookie);
         exit_code = -9;
     } else if (req.done) {
         exit_code = req.exit_code;

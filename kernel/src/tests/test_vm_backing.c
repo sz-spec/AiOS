@@ -14,6 +14,60 @@ static void require(int ok, const char* reason)
     if (!ok) VOS3_PANIC("VM-BACKING: %s", reason);
 }
 
+static void test_shm_exit_cleanup(void)
+{
+    vos3_task_t* task = vos3_sched_current();
+    uint64_t identity = task->identity_cookie;
+    vos3_irqflags_t original_irq = vos3_irq_save();
+    vos3_irq_restore(original_irq);
+    require((original_irq & (1ULL << 9)) != 0, "SHM exit test needs IRQ-enabled context");
+    /* Two creator-only regions: use a temporary real mapping to identify
+     * backing, then detach so only creator ownership remains. */
+    vos3_ipc_id_t ids[2]; uintptr_t physical[2];
+    for (unsigned i = 0; i < 2; ++i) {
+        ids[i] = vos3_shm_create(i ? "exit-unmapped-b" : "exit-unmapped-a", VOS3_PAGE_SIZE, 0);
+        require(ids[i] != VOS3_IPC_INVALID, "exit test create");
+        void* addr = vos3_shm_map(ids[i], 0);
+        require(addr && vos3_vmm_virt_to_phys((uintptr_t)addr, &physical[i]) == 0,
+                "exit test backing");
+        require(vos3_shm_unmap(ids[i], addr) == 0, "exit test temporary detach");
+    }
+    vos3_shm_owner_exit(identity == UINT64_MAX ? 1 : identity + 1);
+    vos3_shm_reap_creators();
+    require(vos3_shm_size(ids[0]) == VOS3_PAGE_SIZE && vos3_shm_size(ids[1]) == VOS3_PAGE_SIZE,
+            "unrelated identity selected creators");
+    vos3_irqflags_t irq = vos3_irq_save();
+    vos3_shm_owner_exit(identity); vos3_shm_owner_exit(identity);
+    vos3_shm_reap_creators();
+    int preserved = vos3_shm_size(ids[0]) == VOS3_PAGE_SIZE && vos3_shm_size(ids[1]) == VOS3_PAGE_SIZE &&
+                    vos3_pmm_ref_get(physical[0]) > 0 && vos3_pmm_ref_get(physical[1]) > 0;
+    size_t before = vos3_pmm_free_pages_count();
+    vos3_irq_restore(irq);
+    require(preserved, "IRQ-off exit mark/drain freed backing");
+    vos3_shm_reap_creators(); vos3_shm_reap_creators();
+    require(vos3_shm_size(ids[0]) == 0 && vos3_shm_size(ids[1]) == 0 &&
+            vos3_pmm_ref_get(physical[0]) == 0 && vos3_pmm_ref_get(physical[1]) == 0,
+            "exit creator-only reclamation");
+    size_t after = vos3_pmm_free_pages_count();
+    require(after >= before && after - before >= 2, "exit backing PMM recovery");
+    for (unsigned explicit_close = 0; explicit_close < 2; ++explicit_close) {
+        vos3_ipc_id_t id = vos3_shm_create("exit-mapped", VOS3_PAGE_SIZE, 0);
+        require(id != VOS3_IPC_INVALID, "exit mapped create");
+        void* addr = vos3_shm_map(id, 0); uintptr_t phys = 0;
+        require(addr && vos3_vmm_virt_to_phys((uintptr_t)addr, &phys) == 0, "exit mapped backing");
+        volatile uint64_t* data = (volatile uint64_t*)vos3_phys_to_virt(phys);
+        data[0] = 0x1122EEFF;
+        if (explicit_close) require(vos3_shm_destroy(id) == 0, "exit explicit creator close");
+        vos3_shm_owner_exit(identity); vos3_shm_owner_exit(identity);
+        vos3_shm_reap_creators(); vos3_shm_reap_creators();
+        require(vos3_shm_size(id) == VOS3_PAGE_SIZE && vos3_pmm_ref_get(phys) > 0 && data[0] == 0x1122EEFF,
+                "exit or duplicate mark lost mapped owner");
+        require(vos3_shm_unmap(id, addr) == 0 && vos3_shm_size(id) == 0 && vos3_pmm_ref_get(phys) == 0,
+                "exit last mapping reclamation");
+    }
+    VOS3_INFO("[SHM-EXIT] PASS: unrelated identity retained, duplicate mark, IRQ-off drain deferred, two creator backings freed, mapped survivor, explicit-close no double release");
+}
+
 /* Test-only principal substitution, never a task pointer replacement. Local
  * IRQ exclusion prevents this task being scheduled with a temporary cookie. */
 static void test_shm_identity(void)
@@ -307,4 +361,5 @@ void vos3_test_vm_backing(void)
     test_metadata_cow();
     test_file_reference_ownership();
     test_shm_identity();
+    test_shm_exit_cleanup();
 }

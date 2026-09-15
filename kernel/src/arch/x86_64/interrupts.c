@@ -13,6 +13,7 @@
  * @note MISRA C:2024 Compliant
  */
 
+#include "../../../include/vos/ipc.h"
 #include "../../../include/arch/x86_64/idt.h"
 #include "../../../include/vos/console.h"
 #include "../../../include/vos/timer.h"
@@ -63,7 +64,8 @@ fault_kill_current(vos3_task_t* task, int exit_code)
     vos3_irqflags_t flags = vos3_irq_save();
 
     task->exit_code = exit_code;
-    task->state = VOS3_TASK_ZOMBIE;
+    __atomic_store_n(&task->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
+    vos3_shm_owner_exit(task->identity_cookie);
 
     /* Remove from scheduler run queue so we're never re-scheduled */
     vos3_sched_remove_task(task);

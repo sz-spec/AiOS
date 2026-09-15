@@ -855,6 +855,7 @@ static void sched_process_deferred(void)
     __asm__ volatile ("pushfq; popq %0" : "=r"(rflags));
     if (!(rflags & (1ULL << 9)))
         return; /* Interrupt/IRQ-disabled context is not a reclamation point. */
+    vos3_shm_reap_creators();
     vos3_vmm_reap_address_spaces();
 #ifdef NATIVE_SMP_TEST
     /* Every owner must revisit its dead tasks. */

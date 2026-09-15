@@ -89,6 +89,7 @@ static void lifetime_tests(pid_t parent){
 }
 static const char *names[]={"cow_private","cow_mprotect_rw","ro_before_fork","ro_after_fork","lazy_ro_write","none_lazy_read","none_populated_read","nx_execute","lazy_mprotect_ro","unmap_single","unmap_middle","unmap_multiple"};
 #include "test_native_shm_auth.inc"
+#include "test_native_shm_exit.inc"
 
 int main(int argc,char **argv,char **envp) {
  if(argc==2&&!strcmp(argv[1],"--lifetime-detached")){
@@ -162,6 +163,7 @@ int main(int argc,char **argv,char **envp) {
  lifetime_tests(parent);
  native_backing_tests(parent);
  native_shm_auth_tests(parent);
+ native_shm_exit_tests(parent);
  printf("NATIVE_MEMORY complete=1 cases=12 parent_pid=%d\n",parent);
  if(usleep(10000)||cpl()!=3||getpid()!=parent)fail("progress");check(witness);
  printf("NATIVE_MEMORY progress=1 parent_pid=%d canary=1\n",parent);

@@ -241,6 +241,8 @@ void shm_va_free(uint64_t addr, size_t size)
 static vos3_shm_region_t* g_shm_table[VOS3_SHM_MAX_REGIONS];
 /* Creator close is distinct from mapping/temporary reference release. */
 static uint8_t g_shm_creator_released[VOS3_SHM_MAX_REGIONS];
+/* Each pending full handle owns the former creator reference until drained. */
+static vos3_ipc_id_t g_shm_pending_creators[VOS3_SHM_MAX_REGIONS];
 /* Positive signed-32-bit handles: 6 slot bits, 25 generation bits.
  * A saturated slot is permanently retired, never wrapped/reissued. */
 #define SHM_SLOT_BITS 6U
@@ -252,6 +254,28 @@ static uint32_t shm_slot(vos3_ipc_id_t id) { return id & SHM_SLOT_MASK; }
 
 /** @brief Shared memory table lock */
 static vos3_spinlock_t g_shm_lock = VOS3_SPINLOCK_INIT;
+
+/* Exit notification can run in timer/fault context. Every registry holder
+ * excludes local IRQs, so an interrupt cannot wait on its interrupted holder. */
+static vos3_irqflags_t shm_registry_lock(void)
+{
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_shm_lock);
+    return flags;
+}
+static void shm_registry_unlock(vos3_irqflags_t flags)
+{
+    vos3_spinlock_unlock(&g_shm_lock);
+    vos3_irq_restore(flags);
+}
+static int shm_creator_is_dying(void)
+{
+    vos3_task_t* task = vos3_sched_current();
+    if (task == NULL) return 0;
+    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    return state == VOS3_TASK_ZOMBIE || state == VOS3_TASK_DEAD;
+}
+
 
 /* ============================================================================
  * INTERNAL HELPERS
@@ -387,14 +411,14 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
     /* Clear the memory */
     memset(kernel_addr, 0, size);
 
-    vos3_spinlock_lock(&g_shm_lock);
+    vos3_irqflags_t registry_flags = shm_registry_lock();
 
     /* Check for duplicate name */
     if (name != NULL) {
         for (uint32_t i = 0; i < VOS3_SHM_MAX_REGIONS; i++) {
             if (g_shm_table[i] != NULL &&
                 strcmp(g_shm_table[i]->name, name) == 0) {
-                vos3_spinlock_unlock(&g_shm_lock);
+                shm_registry_unlock(registry_flags);
                 vos3_vmm_unmap_pages(kernel_addr, size);
                 if (flags & VOS3_SHM_FLAG_HUGETLB) {
                     size_t hc = size / VOS3_LARGE_PAGE_SIZE;
@@ -409,9 +433,9 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
         }
     }
 
-    vos3_ipc_id_t id = shm_alloc_id();
+    vos3_ipc_id_t id = shm_creator_is_dying() ? VOS3_IPC_INVALID : shm_alloc_id();
     if (id == VOS3_IPC_INVALID) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         vos3_vmm_unmap_pages(kernel_addr, size);
         if (flags & VOS3_SHM_FLAG_HUGETLB) {
             size_t huge_count = size / VOS3_LARGE_PAGE_SIZE;
@@ -451,10 +475,10 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
 
     g_shm_table[shm_slot(id)] = shm;
 
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
 
-    VOS3_DEBUG("Created shared memory '%s' (id=%u, size=%zu, phys=0x%llx)",
-               shm->name, id, size, (unsigned long long)phys_addr);
+    VOS3_DEBUG("Created shared memory (id=%u, size=%zu, phys=0x%llx)",
+               id, size, (unsigned long long)phys_addr);
 
     return id;
 }
@@ -517,11 +541,11 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
 
     /* Do NOT zero device memory — it's MMIO, not RAM */
 
-    vos3_spinlock_lock(&g_shm_lock);
+    vos3_irqflags_t registry_flags = shm_registry_lock();
 
-    vos3_ipc_id_t id = shm_alloc_id();
+    vos3_ipc_id_t id = shm_creator_is_dying() ? VOS3_IPC_INVALID : shm_alloc_id();
     if (id == VOS3_IPC_INVALID) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         vos3_vmm_unmap_pages(kernel_addr, size);
         vos3_kfree(shm);
         return VOS3_IPC_INVALID;
@@ -553,10 +577,10 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
 
     g_shm_table[shm_slot(id)] = shm;
 
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
 
-    VOS3_DEBUG("Created device SHM '%s' (id=%u, size=%zu, phys=0x%llx)",
-               shm->name, id, size, (unsigned long long)phys_addr);
+    VOS3_DEBUG("Created device SHM (id=%u, size=%zu, phys=0x%llx)",
+               id, size, (unsigned long long)phys_addr);
 
     return id;
 }
@@ -565,11 +589,11 @@ vos3_ipc_id_t vos3_shm_create_device(const char* name, uint64_t phys_addr,
  * same finalization path. Callers must release shm->lock before calling. */
 static int shm_release_owned(vos3_ipc_id_t id, int creator)
 {
-    vos3_spinlock_lock(&g_shm_lock);
+    vos3_irqflags_t registry_flags = shm_registry_lock();
 
     vos3_shm_region_t* shm = shm_get(id);
     if (shm == NULL) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         return VOS3_IPC_ERR_NOTFOUND;
     }
 
@@ -577,26 +601,26 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
         vos3_task_t* caller = vos3_sched_current();
         if (caller == NULL || caller->identity_cookie == 0 ||
             caller->identity_cookie != shm->owner_identity) {
-            vos3_spinlock_unlock(&g_shm_lock);
+            shm_registry_unlock(registry_flags);
             return VOS3_IPC_ERR_ACCESS;
         }
     }
     if (creator && g_shm_creator_released[shm_slot(id)]) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         return VOS3_IPC_ERR_INVALID;
     }
 
     /* Serialize the final transition with lookup/map pinning; never revive
      * or wrap a zero count. The table slot remains reserved until cleanup. */
     if (__atomic_load_n(&shm->ref_count, __ATOMIC_ACQUIRE) == 0U) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         return VOS3_IPC_ERR_INVALID;
     }
     if (creator) g_shm_creator_released[shm_slot(id)] = 1;
     uint32_t new_rc = __atomic_sub_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);
 
     if (new_rc > 0U) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         return VOS3_IPC_OK;
     }
 
@@ -606,7 +630,7 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
     shm->magic = 0U;
     shm->name[0] = '\0';
 
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
 
     /* Phase 2 (outside lock): Free all virtual and physical mappings */
     vos3_vmm_unmap_pages(shm->kernel_addr, shm->size);
@@ -628,16 +652,55 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
 
     /* Phase 3 (under lock): Return slot to the pool now that all
      * virtual/physical resources have been fully released. */
-    vos3_spinlock_lock(&g_shm_lock);
+    registry_flags = shm_registry_lock();
     g_shm_table[shm_slot(id)] = NULL;
     g_shm_creator_released[shm_slot(id)] = 0;
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
 
     vos3_kfree(shm);
 
     VOS3_DEBUG("Destroyed shared memory (id=%u)", id);
 
     return VOS3_IPC_OK;
+}
+
+/* Kernel lifecycle notification only: no syscall accepts an owner cookie.
+ * Claim once, transferring (not decrementing) the creator ref to deferred work.
+ * No allocation, region mutex, VMM operation or physical release is allowed here. */
+void vos3_shm_owner_exit(uint64_t identity)
+{
+    if (identity == 0) return;
+    vos3_irqflags_t registry_flags = shm_registry_lock();
+    for (uint32_t slot = 1; slot < VOS3_SHM_MAX_REGIONS; ++slot) {
+        vos3_shm_region_t* shm = g_shm_table[slot];
+        if (shm && shm->magic == VOS3_SHM_MAGIC &&
+            shm->owner_identity == identity && !g_shm_creator_released[slot]) {
+            g_shm_creator_released[slot] = 1;
+            g_shm_pending_creators[slot] = shm->id;
+        }
+    }
+    shm_registry_unlock(registry_flags);
+}
+
+/* Safe process-context caller required, just like the address-space reaper.
+ * Detach bounded work while locked; each detached handle still owns its pin. */
+void vos3_shm_reap_creators(void)
+{
+    uint64_t rflags;
+    __asm__ volatile ("pushfq; popq %0" : "=r"(rflags));
+    if (!(rflags & (1ULL << 9))) return;
+    vos3_ipc_id_t pending[VOS3_SHM_MAX_REGIONS];
+    size_t count = 0;
+    vos3_irqflags_t registry_flags = shm_registry_lock();
+    for (uint32_t slot = 1; slot < VOS3_SHM_MAX_REGIONS; ++slot) {
+        if (g_shm_pending_creators[slot]) {
+            pending[count++] = g_shm_pending_creators[slot];
+            g_shm_pending_creators[slot] = 0;
+        }
+    }
+    shm_registry_unlock(registry_flags);
+    for (size_t i = 0; i < count; ++i)
+        (void)shm_release_owned(pending[i], 0);
 }
 
 int vos3_shm_destroy(vos3_ipc_id_t id)
@@ -652,19 +715,19 @@ void* vos3_shm_map(vos3_ipc_id_t id, uint32_t flags)
     /* Hold g_shm_lock across shm_get() + ref_count bump to prevent
      * use-after-free: another CPU could shm_destroy() and kfree(shm)
      * between shm_get() returning and mutex_lock(&shm->lock). */
-    vos3_spinlock_lock(&g_shm_lock);
+    vos3_irqflags_t registry_flags = shm_registry_lock();
     vos3_shm_region_t* shm = shm_get(id);
     if (shm == NULL) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         return NULL;
     }
     uint32_t refs = __atomic_load_n(&shm->ref_count, __ATOMIC_ACQUIRE);
     if (refs == 0U || refs == UINT32_MAX) {
-        vos3_spinlock_unlock(&g_shm_lock);
+        shm_registry_unlock(registry_flags);
         return NULL;
     }
     __atomic_add_fetch(&shm->ref_count, 1U, __ATOMIC_ACQ_REL);  /* Pin before releasing global lock */
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
 
     /* Ownership enforcement: user tasks can only map SHM they created,
      * unless the region was created with VOS3_SHM_FLAG_PUBLIC. */
@@ -851,28 +914,28 @@ vos3_ipc_id_t vos3_shm_find(const char* name)
         return VOS3_IPC_INVALID;
     }
 
-    vos3_spinlock_lock(&g_shm_lock);
+    vos3_irqflags_t registry_flags = shm_registry_lock();
 
     for (vos3_ipc_id_t i = 1U; i < VOS3_SHM_MAX_REGIONS; i++) {
         vos3_shm_region_t* shm = g_shm_table[i];
         if (shm != NULL && shm->magic == VOS3_SHM_MAGIC) {
             if (strcmp(shm->name, name) == 0) {
                 vos3_ipc_id_t id = shm->id;
-                vos3_spinlock_unlock(&g_shm_lock);
+                shm_registry_unlock(registry_flags);
                 return id;
             }
         }
     }
 
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
     return VOS3_IPC_INVALID;
 }
 
 size_t vos3_shm_size(vos3_ipc_id_t id)
 {
-    vos3_spinlock_lock(&g_shm_lock);
+    vos3_irqflags_t registry_flags = shm_registry_lock();
     vos3_shm_region_t* shm = shm_get(id);
     size_t size = shm ? shm->size : 0U;
-    vos3_spinlock_unlock(&g_shm_lock);
+    shm_registry_unlock(registry_flags);
     return size;
 }

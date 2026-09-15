@@ -20,6 +20,7 @@ def classify_serial(raw, exit_status, requested_cpus=1):
     try:
         require(exit_status=='observation_timeout','unexpected VM exit')
         for marker in (
+            '[SHM-EXIT] PASS: unrelated identity retained, duplicate mark, IRQ-off drain deferred, two creator backings freed, mapped survivor, explicit-close no double release',
             '[SHM-IDENTITY] PASS: zero-cookie denied, same-TID different-cookie denied, owner restored, backing intact, final release',
             '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close','PMM Statistics:','VMM: Initialization complete','Starting scheduler'):
             require(clean.count(marker)==1,'missing/repeated boot stage')
@@ -52,7 +53,7 @@ def classify_serial(raw, exit_status, requested_cpus=1):
         api=one(api_guards=1)
         rx=one(rx_control=1,result=42)
         require(parent[0]<guard[0]<api[0]<restore[0]<rx[0],'setup order');previous=rx[0];pids={pid}
-        require(len(faults)==10,'exactly ten faults required')
+        require(len(faults)==11,'exactly eleven faults required')
         for i,case in enumerate(CASES):
             attempt=one(case=case,attempt=1);ack=one(case=case,ack=i+1)
             child=int(attempt[1]['pid']);require(child>0 and child not in pids,'child identity');pids.add(child)
@@ -98,9 +99,25 @@ def classify_serial(raw, exit_status, requested_cpus=1):
         require(old_handle&63==new_handle&63==slot and old_handle>>6<new_handle>>6,'SHM generation/slot identity')
         require(backing[0]<auth_private[0]<auth_public[0]<stale[0],'SHM authorization ordering')
         previous=stale[0]
+        used=pids|{owner_pid,survivor_pid,exec_pid,exec_survivor}|auth_pids
+        for exit_case in ('unmapped','mapped','explicit'):
+            done=one(shm_exit=exit_case,parent_pid=pid,cpl=3,wait_status=0,retired=1)
+            child=int(done[1]['pid']);require(child>0 and child not in used,'SHM exit identity');used.add(child)
+            fields={'shm_exit','pid','parent_pid','cpl','wait_status','retired'}
+            if exit_case!='unmapped':
+                fields.add('survivor');require(done[1].get('survivor')=='1','SHM exit lost survivor')
+            require(set(done[1])==fields and previous<done[0],'SHM exit fields/order');previous=done[0]
+        attempted=one(shm_exit='fault',operation='read',cpl=3,attempt=1)
+        child=int(attempted[1]['pid']);require(child>0 and child not in used,'SHM fault identity')
+        address=int(attempted[1]['address'],16);require(address==0x7400000000,'SHM terminal fault address')
+        actual=[f for f in faults if f[1]==child];require(len(actual)==1,'SHM terminal fault correlation')
+        require(actual[0][2]==address and actual[0][3]==4,'SHM terminal fault error')
+        done=one(shm_exit='fault',pid=child,parent_pid=pid,cpl=3,wait_status=35584,retired=1)
+        require(set(attempted[1])=={'shm_exit','pid','address','operation','cpl','attempt'} and set(done[1])=={'shm_exit','pid','parent_pid','cpl','wait_status','retired'},'SHM fault fields')
+        require(previous<attempted[0]<actual[0][0]<done[0],'SHM fault ordering');previous=done[0]
         complete=one(complete=1,cases=12,parent_pid=pid);progress=one(progress=1,parent_pid=pid,canary=1)
         require(previous<complete[0]<progress[0],'completion/progress ordering')
-        require(len(records)==46,'unexpected marker count')
+        require(len(records)==51,'unexpected marker count')
         result.update(passed=True,online_cpus=requested_cpus,scope='12 observed sequential memory transition cases; no remote TLB/concurrent COW proof')
     except (ValueError,KeyError,TypeError) as error:
         result['failures'].append(str(error))
