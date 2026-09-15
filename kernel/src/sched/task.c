@@ -917,12 +917,18 @@ void vos3_task_exit(int exit_code)
         if (current->children != NULL) {
             vos3_spinlock_lock(&g_task_lock);
             /* Direct table scan — vos3_task_find_by_pid() would re-acquire
-             * g_task_lock and deadlock.  Skip TOMBSTONE entries. */
+             * g_task_lock and deadlock. AP idle tasks can also have numeric
+             * PID 1; only the live user init can adopt process children. */
             vos3_task_t* init = NULL;
             for (size_t ri = 0U; ri < VOS3_MAX_TASKS; ri++) {
                 if (g_task_table[ri] != NULL &&
                     g_task_table[ri] != VOS3_TASK_TOMBSTONE &&
-                    g_task_table[ri]->pid == 1) {
+                    g_task_table[ri] != current &&
+                    g_task_table[ri]->pid == 1 &&
+                    (g_task_table[ri]->flags & VOS3_TASK_FLAG_USER) &&
+                    !(g_task_table[ri]->flags & VOS3_TASK_FLAG_IDLE) &&
+                    g_task_table[ri]->state != VOS3_TASK_ZOMBIE &&
+                    g_task_table[ri]->state != VOS3_TASK_DEAD) {
                     init = g_task_table[ri];
                     break;
                 }
