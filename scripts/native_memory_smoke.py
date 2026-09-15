@@ -21,7 +21,7 @@ def classify_serial(raw, exit_status, requested_cpus=1):
         require(exit_status=='observation_timeout','unexpected VM exit')
         for marker in ('PMM Statistics:','VMM: Initialization complete','Starting scheduler'):
             require(clean.count(marker)==1,'missing/repeated boot stage')
-        require(not any(x in clean for x in ('PANIC','General Protection Fault','Double Fault','uaccess address-space mismatch','NATIVE_MEMORY FAIL')),'unexpected failure')
+        require(not any(x in clean for x in ('PANIC','General Protection Fault','Double Fault','uaccess address-space mismatch','NATIVE_MEMORY FAIL','NATIVE_ISOLATION FAIL')),'unexpected failure')
         counts=re.findall(r'(?:Initialization complete:|SMP:)\s*(\d+) CPUs online',clean)
         require(bool(counts) and int(counts[-1])==requested_cpus,'CPU count mismatch')
         records=[]; faults=[]

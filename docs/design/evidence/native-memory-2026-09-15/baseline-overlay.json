@@ -1,0 +1,4 @@
+{
+  "base_commit": "cc9dcecba3a79f2e310a0805226b7cc02a968972",
+  "description": "new diagnostic workload/init integration on prior unmodified memory implementation"
+}

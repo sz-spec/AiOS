@@ -38,6 +38,17 @@ progress. Normal builds exclude this ELF and the kernel diagnostic hooks.
 The flag combination `NATIVE_ISOLATION_TEST=1 HEADLESS_AUDIT=0` is rejected.
 See [isolation evidence and limits](evidence/native-isolation-qualification.md).
 
+The next suite adds COW, page-permission and unmap transition tests:
+
+```sh
+python3 scripts/native_clean_qualification.py --memory --output /tmp/vos5-memory-run --seconds 40
+```
+
+It adds `MEMORY_TRANSITIONS_TEST=1` to the diagnostic flavor and uses
+`test_native_memory`. See [the memory-transition report](evidence/native-memory-transitions-qualification.md)
+for corrected behavior, runtime results, explicit mmap compatibility limits and
+the remaining shared-VM/remote-TLB qualification gap.
+
 `BUILD_DIR` is relative to `kernel/`, defaults to `build/native-unified`, and
 should be a relative path without whitespace. The repository itself may have
 spaces in its absolute path. Use distinct build directories for concurrent

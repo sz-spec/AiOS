@@ -1,0 +1,7 @@
+{
+  "kernel/src/mm/vmm.c": "626b929245588ccb0b755d74a2389047ef1c6286d82a5db15abcacddfc5bd6bd",
+  "kernel/include/vos/vmm.h": "901a785eec302066515f106bec5e384b616dce03fce4ed0989eaff8fbf059c7b",
+  "kernel/src/exec/exec_syscall.c": "445e8430ad109814255b58779ef06f7719734477c4a46642b777d3827b021cc1",
+  "kernel/src/arch/x86_64/interrupts.c": "6c02989fbe6254303f13364ff6db9df33eabddfc16d8df5d60abf77b3286054c",
+  "user/src/test_native_memory.c": "15422edb64f891c1fce605278ac056be2fbbf55fe0e7fb98fd750aa4150dead2"
+}

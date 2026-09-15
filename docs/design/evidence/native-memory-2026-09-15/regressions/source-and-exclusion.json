@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "kernel_user_sources_compared": 3539,
+  "source_reference": "../source-manifest.json",
+  "diagnostic_symbols_and_target_env_absent": true,
+  "both_test_programs_absent": true,
+  "normal_kernel_sha256": "9d0bfc6065797c5c6f2a2d66155719f356ac653c285a9a806832a75ac7b8457f"
+}

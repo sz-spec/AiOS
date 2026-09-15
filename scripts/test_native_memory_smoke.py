@@ -24,7 +24,7 @@ class OracleTests(unittest.TestCase):
         for a,b in [('cpl=3','cpl=0'),('err=0x15','err=0x5'),('err=0x6','err=0x7'),('canary=1','canary=0'),('wait_status=35584','wait_status=139'),('ack=5','ack=4'),('(pid=102)','(pid=103)'),('private=1','private=0'),('result=42','result=0')]:
             with self.subTest(a=a):self.assertFalse(self.check(trace().replace(a,b,1))['passed'])
     def test_extra_failure_and_reboot(self):
-        for s in ['NATIVE_MEMORY FAIL reason=late','SIGSEGV invalid','PANIC','Starting scheduler','NATIVE_MEMORY progress=1 parent_pid=1 canary=1']:
+        for s in ['NATIVE_MEMORY FAIL reason=late','NATIVE_ISOLATION FAIL kernel_canary','SIGSEGV invalid','PANIC','Starting scheduler','NATIVE_MEMORY progress=1 parent_pid=1 canary=1']:
             self.assertFalse(self.check(trace()+'\n'+s)['passed'])
     def test_status_cpu_and_artifact(self):
         self.assertFalse(classify_serial(trace(),0)['passed'])

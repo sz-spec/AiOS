@@ -1,4 +1,9 @@
-# Native boot qualification — updated 2026-09-14
+# Native boot qualification — updated 2026-09-15
+
+The [memory-transition gate](evidence/native-memory-transitions-qualification.md)
+passes 48 sequential cases after VMA/COW/mapping-boundary fixes. Normal boot and
+the prior isolation suite also pass BIOS/UEFI ×1/4 CPUs on the changed kernel.
+Shared-VM concurrency and remote TLB revocation remain unqualified.
 
 The [fresh-source qualification](evidence/native-clean-build-qualification.md)
 now passes BIOS and UEFI with both one and four CPUs against one ISO, with

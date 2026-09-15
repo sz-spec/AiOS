@@ -16,6 +16,11 @@ tests four direct user-mode read/write attempts against another process and a
 supervisor kernel page, with correlated faults and continued victim progress.
 Its bounded evidence does not certify every memory-isolation mechanism.
 
+[Memory-transition qualification](docs/design/evidence/native-memory-transitions-qualification.md)
+now covers COW, read-only/PROT_NONE/NX permissions and unmap behavior on 4 KiB
+anonymous pages. Kernel-address mprotect and permission bypasses were corrected.
+Concurrent shared-address-space execution and remote TLB revocation remain open.
+
 The governing architecture is recorded in
 [core requirements](docs/design/CORE_REQUIREMENTS.md), alongside the supplied
 [historical technical brief](docs/design/vOS_Technical_Brief.pdf).

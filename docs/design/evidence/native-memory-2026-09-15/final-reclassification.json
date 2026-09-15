@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "scope": "reclassification of existing actual VM serial logs; no additional VM execution",
+  "change": "reject failures from the shared diagnostic kernel-canary hook",
+  "classifier_sha256": "e628652936e56675e78e8a8e517d84ec2ada15a42e233242707db63282a82807",
+  "results": [
+    {
+      "passed": true,
+      "failures": [],
+      "cases_verified": 12,
+      "online_cpus": 1,
+      "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof",
+      "case": "bios1",
+      "serial_sha256": "660f76fbe65e17cdd569df59ab11b1504d9532861c5dcb12ea6c71fbef43805e"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "cases_verified": 12,
+      "online_cpus": 4,
+      "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof",
+      "case": "bios4",
+      "serial_sha256": "d1de3b12b0cf171da9106baad0b8477f3cacad54fded2557bcb120be29307022"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "cases_verified": 12,
+      "online_cpus": 1,
+      "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof",
+      "case": "uefi1",
+      "serial_sha256": "7ed4defd7bbfafc0ef6a718d775e5ef6e16cad2040a2b9ddf983d9e2ee29111b"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "cases_verified": 12,
+      "online_cpus": 4,
+      "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof",
+      "case": "uefi4",
+      "serial_sha256": "7b72c034ac42b69d63863588d50e8ae9b36d2266a82342e7b060e2040c61ea37"
+    }
+  ]
+}

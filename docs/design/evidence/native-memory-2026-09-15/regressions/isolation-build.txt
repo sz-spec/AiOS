@@ -1,0 +1,1103 @@
+Limine source, tools and artifacts unchanged.
+make[1]: Entering directory '/vos3/kernel'
+make[1]: Warning: File 'build/memory-regression-isolation' has modification time 0.00024 s in the future
+make[2]: Entering directory '/vos3/user'
+  AS      src/boot/multiboot2_entry.S
+  AS      src/boot/entry.S
+  AS      src/arch/x86_64/isr_stubs.S
+  AS      src/arch/x86_64/syscall_entry.S
+  AS      src/arch/x86_64/user_entry.S
+  AS      src/arch/x86_64/trampoline.S
+  AS      src/sched/context.S
+  CC      src/boot/multiboot2_stub.c
+  CC      src/boot/multiboot2_parse.c
+  CC      src/boot/limine_stub.c
+  CC      src/boot/kmain.c
+  CC      src/boot/boot_mm.c
+  CC      src/boot/boot_drivers.c
+  CC      src/boot/boot_fs.c
+  CC      src/boot/boot_ai.c
+  CC      src/boot/boot_net.c
+  CC      src/boot/uefi_boot.c
+  CC      src/mm/pmm.c
+  CC      src/mm/vmm.c
+  CC      src/arch/x86_64/kpti_roots.c
+  CC      src/mm/heap.c
+  CC      src/mm/ai_guard.c
+  CC      src/mm/ai_pte.c
+  CC      src/mm/ai_slots.c
+src/mm/ai_slots.c: In function 'vos3_ai_lazy_thaw_enable':
+src/mm/ai_slots.c:2935:14: warning: variable 'unmapped' set but not used [-Wunused-but-set-variable=]
+ 2935 |     uint32_t unmapped = 0;
+      |              ^~~~~~~~
+  CC      src/mm/ai_sq.c
+  CC      src/mm/ai_isc.c
+  CC      src/mm/ai_monitor.c
+  CC      src/mm/ai_telemetry.c
+  CC      src/mm/user_copy.c
+  CC      src/mm/ai_kv_managed.c
+  CC      src/mm/ai_kv_compress.c
+  CC      src/mm/ai_kv_prefix.c
+  CC      src/mm/kv_compressor.c
+  CC      src/mm/intent_validator.c
+  CC      src/mm/tee.c
+  CC      src/mm/hcs.c
+  CC      src/mm/audit_ring.c
+  CC      src/arch/x86_64/numa.c
+  CC      src/arch/x86_64/percpu.c
+  CC      src/arch/x86_64/smp.c
+  CC      src/arch/x86_64/smp_telemetry.c
+src/arch/x86_64/smp.c: In function 'vos3_smp_init':
+src/arch/x86_64/smp.c:591:14: warning: variable 'woken' set but not used [-Wunused-but-set-variable=]
+  591 |     uint32_t woken = 0;
+      |              ^~~~~
+  CC      src/drivers/console.c
+  CC      src/drivers/timer.c
+  CC      src/drivers/device.c
+  CC      src/drivers/devfs.c
+  CC      src/drivers/mem.c
+  CC      src/drivers/tty.c
+  CC      src/drivers/keyboard.c
+  CC      src/drivers/dev_init.c
+  CC      src/arch/x86_64/gdt.c
+  CC      src/arch/x86_64/idt.c
+  CC      src/arch/x86_64/interrupts.c
+  CC      src/arch/x86_64/pic.c
+  CC      src/arch/x86_64/cpu.c
+  CC      lib/syscalls.c
+  CC      lib/string.c
+  CC      src/arch/x86_64/mitigation_factory.c
+  CC      src/arch/x86_64/microcode_check.c
+  CC      src/arch/x86_64/kpti.c
+  CC      src/arch/x86_64/pci_ecam.c
+  CC      src/arch/x86_64/apic.c
+  CC      src/arch/x86_64/ioapic.c
+  CC      lib/stdio.c
+  CC      src/arch/x86_64/xsave.c
+lib/stdio.c:496:9: warning: 'O_RDONLY' redefined
+  496 | #define O_RDONLY    0x0000
+      |         ^~~~~~~~
+In file included from lib/stdio.c:14:
+include/unistd.h:69:9: note: this is the location of the previous definition
+   69 | #define O_RDONLY    0
+      |         ^~~~~~~~
+lib/stdio.c:497:9: warning: 'O_WRONLY' redefined
+  497 | #define O_WRONLY    0x0001
+      |         ^~~~~~~~
+include/unistd.h:70:9: note: this is the location of the previous definition
+   70 | #define O_WRONLY    1
+      |         ^~~~~~~~
+lib/stdio.c:498:9: warning: 'O_RDWR' redefined
+  498 | #define O_RDWR      0x0002
+      |         ^~~~~~
+include/unistd.h:71:9: note: this is the location of the previous definition
+   71 | #define O_RDWR      2
+      |         ^~~~~~
+lib/stdio.c:499:9: warning: 'O_CREAT' redefined
+  499 | #define O_CREAT     0x0040
+      |         ^~~~~~~
+include/unistd.h:72:9: note: this is the location of the previous definition
+   72 | #define O_CREAT     0100
+      |         ^~~~~~~
+lib/stdio.c:500:9: warning: 'O_TRUNC' redefined
+  500 | #define O_TRUNC     0x0200
+      |         ^~~~~~~
+include/unistd.h:73:9: note: this is the location of the previous definition
+   73 | #define O_TRUNC     01000
+      |         ^~~~~~~
+lib/stdio.c:501:9: warning: 'O_APPEND' redefined
+  501 | #define O_APPEND    0x0400
+      |         ^~~~~~~~
+include/unistd.h:74:9: note: this is the location of the previous definition
+   74 | #define O_APPEND    02000
+      |         ^~~~~~~~
+  CC      src/diag/assert_cert.c
+  CC      src/arch/x86_64/syscall.c
+  CC      src/arch/x86_64/user.c
+src/arch/x86_64/syscall.c: In function 'vos3_sys_debug':
+src/arch/x86_64/syscall.c:238:14: warning: unused variable 'value' [-Wunused-variable]
+  238 |     uint64_t value = frame->rdi;
+      |              ^~~~~
+src/arch/x86_64/syscall.c: In function 'vos3_debug_iretq_frame':
+src/arch/x86_64/syscall.c:821:23: warning: unused variable 'val4' [-Wunused-variable]
+  821 |     volatile uint64_t val4 = rsp[4];
+      |                       ^~~~
+src/arch/x86_64/syscall.c:818:23: warning: unused variable 'val3' [-Wunused-variable]
+  818 |     volatile uint64_t val3 = rsp[3];
+      |                       ^~~~
+src/arch/x86_64/syscall.c:815:23: warning: unused variable 'val2' [-Wunused-variable]
+  815 |     volatile uint64_t val2 = rsp[2];
+      |                       ^~~~
+src/arch/x86_64/syscall.c:812:23: warning: unused variable 'val1' [-Wunused-variable]
+  812 |     volatile uint64_t val1 = rsp[1];
+      |                       ^~~~
+src/arch/x86_64/syscall.c:809:23: warning: unused variable 'val0' [-Wunused-variable]
+  809 |     volatile uint64_t val0 = rsp[0];
+      |                       ^~~~
+  CC      src/sched/task.c
+src/sched/task.c: In function 'vos3_task_set_state':
+src/sched/task.c:809:23: warning: unused variable 'old_state' [-Wunused-variable]
+  809 |     vos3_task_state_t old_state = task->state;
+      |                       ^~~~~~~~~
+  CC      src/sched/scheduler.c
+  CC      lib/stdlib.c
+  CC      src/sched/sync.c
+  CC      src/sched/dispatch_hint.c
+  CC      src/sched/xsave_ctx.c
+  CC      src/sched/core_cookie.c
+  CC      lib/signal.c
+  CC      lib/time.c
+  CC      src/pro/license_check.c
+  CC      src/ipc/ipc.c
+  CC      src/ipc/msgqueue.c
+  CC      lib/dns.c
+lib/dns.c:61:21: warning: 'ntohl' defined but not used [-Wunused-function]
+   61 | static unsigned int ntohl(unsigned int x)
+      |                     ^~~~~
+lib/dns.c:56:23: warning: 'ntohs' defined but not used [-Wunused-function]
+   56 | static unsigned short ntohs(unsigned short x)
+      |                       ^~~~~
+  CC      src/ipc/shm.c
+  CC      src/ipc/pipe.c
+  AS      lib/crt0.S
+  AS      lib/restore_rt.S
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/fake_interp (ET_DYN/shared)
+  CC      src/ipc/signal.c
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/fake_interp
+   text	   data	    bss	    dec	    hex	filename
+    412	    216	      0	    628	    274	../kernel/build/memory-regression-isolation/user/bin/fake_interp
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/auxv_interp (ET_DYN/shared)
+  CC      src/ipc/signal_syscall.c
+  CC      src/ipc/futex.c
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/auxv_interp
+   text	   data	    bss	    dec	    hex	filename
+   2769	    216	      0	   2985	    ba9	../kernel/build/memory-regression-isolation/user/bin/auxv_interp
+  AR      ../kernel/build/memory-regression-isolation/user/libc.a
+  CC      src/ipc/dispatcher.c
+  CC      src/fs/posix_syscall.c
+  CC      src/fs/vfs.c
+  CC      src/fs/fd.c
+  CC      src/fs/ramfs.c
+  CC      src/fs/file.c
+  CC      src/fs/dir.c
+  CC      src/fs/pipe.c
+  CC      src/fs/vos3fs.c
+  CC      src/fs/procfs.c
+  CC      src/fs/epoll.c
+  CC      src/fs/fs_syscall.c
+  CC      src/fs/vvfs.c
+  CC      src/fs/vvfs_codec.c
+  CC      src/fs/vvfs_transport.c
+  CC      src/fs/vvfs_model_verify.c
+  CC      src/fs/vbus_fs.c
+  CC      src/exec/elf.c
+  CC      src/exec/exec.c
+  CC      src/exec/exec_syscall.c
+  CC      src/time/time_syscall.c
+  CC      src/init/init.c
+  CC      src/init/init_binaries.c
+  CC      src/core/vos3_config.c
+  CC      src/core/memcpy.c
+  CC      src/core/kaslr.c
+  CC      src/core/stack_protector.c
+  CC      src/core/crc32c.c
+  CC      src/core/crc64.c
+  CC      src/core/cet.c
+  CC      src/mm/ai_prefetch.c
+  CC      src/drivers/virtio_net.c
+  CC      src/drivers/virtio_blk.c
+src/drivers/virtio_net.c: In function 'vos3_net_test_flood_attack':
+src/drivers/virtio_net.c:1331:16: warning: variable 'irq_packets' set but not used [-Wunused-but-set-variable=]
+ 1331 |         size_t irq_packets = 0;
+      |                ^~~~~~~~~~~
+  CC      src/drivers/virtio_core.c
+  CC      src/drivers/virtio_vbus.c
+  CC      src/drivers/virtio_bridge.c
+src/drivers/virtio_vbus.c: In function 'vos3_vbus_init':
+src/drivers/virtio_vbus.c:570:14: warning: unused variable 'host_features' [-Wunused-variable]
+  570 |     uint32_t host_features = virtio_inl(io_base + VIRTIO_PCI_HOST_FEATURES);
+      |              ^~~~~~~~~~~~~
+  CC      src/drivers/vbus_transport.c
+  CC      src/drivers/vbus_fs_cmds.c
+  CC      src/drivers/vbus_ai_cmds.c
+  CC      src/drivers/vbus_diag_cmds.c
+  CC      src/drivers/vbus_app_cmds.c
+  CC      src/drivers/pci.c
+  CC      src/drivers/acpi.c
+  CC      src/drivers/storage_hal.c
+  CC      src/drivers/nvme.c
+  CC      src/drivers/ivshmem.c
+  CC      src/drivers/virtio_gpu.c
+  CC      src/drivers/gpu_compute.c
+  CC      src/drivers/npu.c
+  CC      src/drivers/vbus_transport_avx.c
+  CC      src/drivers/hda_audio.c
+  CC      src/ai/driver_synth.c
+  CC      src/ai/npu_dispatch.c
+  CC      src/drivers/accel.c
+  CC      src/drivers/dma_warp.c
+  CC      src/drivers/net_stress.c
+  CC      src/net/ethernet.c
+  CC      src/net/arp.c
+  CC      src/net/ip.c
+  CC      src/net/icmp.c
+  CC      src/net/udp.c
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/init
+  CC      src/net/tcp.c
+  CC      src/net/socket.c
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/init
+   text	   data	    bss	    dec	    hex	filename
+  18547	    212	    904	  19663	   4ccf	../kernel/build/memory-regression-isolation/user/bin/init
+  CC      src/net/dns.c
+  CC      src/net/day4_security_test.c
+  CC      src/mm/gpu_mem.c
+  CC      src/mm/ai_kim.c
+  CC      src/sched/per_cpu.c
+  CC      src/crypto/entropy.c
+  CC      src/crypto/sha256.c
+  CC      src/crypto/sha384.c
+  CC      src/crypto/sha512.c
+  CC      src/crypto/ed25519_verify.c
+  CC      src/crypto/mlkem768.c
+src/crypto/mlkem768.c: In function 'vos3_mlkem768_encaps':
+src/crypto/mlkem768.c:249:68: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+  249 |         for (size_t i = 0u; i < VOS3_MLKEM768_SS_BYTES; i++) ss[i] = 0u;
+      |                                                              ~~~~~~^~~~
+src/crypto/mlkem768.c:241:41: note: at offset 32 into destination object 'ss' of size [0, 32]
+  241 |                          uint8_t        ss[VOS3_MLKEM768_SS_BYTES])
+      |                          ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+src/crypto/mlkem768.c: In function 'vos3_mlkem768_decaps':
+src/crypto/mlkem768.c:261:68: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+  261 |         for (size_t i = 0u; i < VOS3_MLKEM768_SS_BYTES; i++) ss[i] = 0u;
+      |                                                              ~~~~~~^~~~
+src/crypto/mlkem768.c:256:41: note: at offset 32 into destination object 'ss' of size [0, 32]
+  256 |                          uint8_t        ss[VOS3_MLKEM768_SS_BYTES])
+      |                          ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+  CC      src/crypto/crypto_helpers.c
+  CC      src/crypto/x25519.c
+  CC      src/crypto/aes_gcm.c
+  CC      src/crypto/tls13.c
+  CC      src/net/dns_tls.c
+  CC      src/net/http.c
+  CC      src/ai/model_download.c
+  CC      src/ai/ggml_core.c
+  CC      src/ai/gguf_loader.c
+  CC      src/bench/bench_hooks.c
+  CC      src/tests/bench_kim_neural.c
+  CC      src/tests/bench_kim_multi_core.c
+  CC      src/tests/vbus_replay_test.c
+  CC      src/tests/tls_integrity_test.c
+  CC      src/tests/test_phase21_audit.c
+  CC      src/tests/test_phase21_extreme.c
+  CC      src/tests/test_phase21_divine.c
+  CC      src/ai/spec_decoder.c
+  CC      src/mm/ai_context_manager.c
+  CC      src/tests/test_phase22_velocity.c
+  CC      src/tests/test_phase22_audit.c
+  CC      src/ai/hybrid_orch.c
+  CC      src/mm/npu_affinity.c
+  CC      src/tests/test_phase23_audit.c
+  CC      src/tests/test_phase23_vortex.c
+  CC      src/fs/vector_vfs.c
+  CC      src/ai/sni_orchestrator.c
+  CC      src/tests/test_phase31_audit.c
+  CC      src/ai/vscreen_parser.c
+  CC      src/ai/agent_mesh.c
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/sh
+src/sh.c:37:9: warning: 'O_RDONLY' redefined
+   37 | #define O_RDONLY    0x0000
+      |         ^~~~~~~~
+In file included from src/sh.c:19:
+include/unistd.h:69:9: note: this is the location of the previous definition
+   69 | #define O_RDONLY    0
+      |         ^~~~~~~~
+src/sh.c:38:9: warning: 'O_WRONLY' redefined
+   38 | #define O_WRONLY    0x0001
+      |         ^~~~~~~~
+include/unistd.h:70:9: note: this is the location of the previous definition
+   70 | #define O_WRONLY    1
+      |         ^~~~~~~~
+src/sh.c:39:9: warning: 'O_RDWR' redefined
+   39 | #define O_RDWR      0x0002
+      |         ^~~~~~
+include/unistd.h:71:9: note: this is the location of the previous definition
+   71 | #define O_RDWR      2
+      |         ^~~~~~
+src/sh.c:40:9: warning: 'O_CREAT' redefined
+   40 | #define O_CREAT     0x0040
+      |         ^~~~~~~
+include/unistd.h:72:9: note: this is the location of the previous definition
+   72 | #define O_CREAT     0100
+      |         ^~~~~~~
+src/sh.c:41:9: warning: 'O_TRUNC' redefined
+   41 | #define O_TRUNC     0x0200
+      |         ^~~~~~~
+include/unistd.h:73:9: note: this is the location of the previous definition
+   73 | #define O_TRUNC     01000
+      |         ^~~~~~~
+src/sh.c:42:9: warning: 'O_APPEND' redefined
+   42 | #define O_APPEND    0x0400
+      |         ^~~~~~~~
+include/unistd.h:74:9: note: this is the location of the previous definition
+   74 | #define O_APPEND    02000
+      |         ^~~~~~~~
+  CC      src/exec/action_bridge.c
+  CC      src/tests/test_phase41_audit.c
+  CC      src/tests/test_phase41_extreme.c
+  CC      src/tests/test_phase41_omega.c
+  CC      src/ui/vspace_shell.c
+  CC      src/sec/pud_sandbox.c
+  CC      src/ai/sovereign_clipboard.c
+  CC      src/tests/test_phase51_audit.c
+  CC      src/tests/test_phase51_infinity.c
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/sh
+   text	   data	    bss	    dec	    hex	filename
+  27436	    500	   5400	  33336	   8238	../kernel/build/memory-regression-isolation/user/bin/sh
+  CC      src/tests/test_phase51_singularity.c
+  CC      src/tests/test_phase51_event_horizon.c
+  CC      src/tests/test_phase51_quantum_void.c
+  CC      src/sec/immutable_lock.c
+  CC      src/sec/recovery_bridge.c
+  CC      src/sec/sovereign_watermark.c
+  CC      src/sec/mmr_audit.c
+  CC      src/sec/tpm2.c
+  CC      src/sec/hybrid_key.c
+  CC      src/sec/capability_table.c
+  CC      src/tests/test_phase61_audit.c
+  CC      src/tests/test_phase61_event_horizon.c
+  CC      src/tests/test_phase62_absolute_zero.c
+  CC      src/tests/test_phase70_genesis_gate.c
+  CC      src/tests/test_phase81_velocity.c
+  CC      src/tests/test_phase82_endurance.c
+  CC      src/tests/test_phase10_omega.c
+  CC      src/hyperv/hyperv_bridge.c
+  CC      src/hyperv/hyperv_init.c
+  CC      src/tests/test_native_isolation.c
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/cat
+src/cat.c:21:9: warning: 'O_RDONLY' redefined
+   21 | #define O_RDONLY    0x0000
+      |         ^~~~~~~~
+In file included from src/cat.c:18:
+include/unistd.h:69:9: note: this is the location of the previous definition
+   69 | #define O_RDONLY    0
+      |         ^~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/cat
+   text	   data	    bss	    dec	    hex	filename
+  17108	    212	    920	  18240	   4740	../kernel/build/memory-regression-isolation/user/bin/cat
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/grep
+src/grep.c:21:9: warning: 'O_RDONLY' redefined
+   21 | #define O_RDONLY    0x0000
+      |         ^~~~~~~~
+In file included from src/grep.c:18:
+include/unistd.h:69:9: note: this is the location of the previous definition
+   69 | #define O_RDONLY    0
+      |         ^~~~~~~~
+src/grep.c: In function 'match':
+src/grep.c:36:16: warning: unused variable 'plen' [-Wunused-variable]
+   36 |         size_t plen = strlen(pattern);
+      |                ^~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/grep
+   text	   data	    bss	    dec	    hex	filename
+  18708	    212	    920	  19840	   4d80	../kernel/build/memory-regression-isolation/user/bin/grep
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/wc
+src/wc.c:20:9: warning: 'O_RDONLY' redefined
+   20 | #define O_RDONLY    0x0000
+      |         ^~~~~~~~
+In file included from src/wc.c:17:
+include/unistd.h:69:9: note: this is the location of the previous definition
+   69 | #define O_RDONLY    0
+      |         ^~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/wc
+   text	   data	    bss	    dec	    hex	filename
+  18044	    212	    920	  19176	   4ae8	../kernel/build/memory-regression-isolation/user/bin/wc
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/head
+src/head.c:18:9: warning: 'O_RDONLY' redefined
+   18 | #define O_RDONLY    0x0000
+      |         ^~~~~~~~
+In file included from src/head.c:15:
+include/unistd.h:69:9: note: this is the location of the previous definition
+   69 | #define O_RDONLY    0
+      |         ^~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/head
+   text	   data	    bss	    dec	    hex	filename
+  17700	    212	    920	  18832	   4990	../kernel/build/memory-regression-isolation/user/bin/head
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/date
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/date
+   text	   data	    bss	    dec	    hex	filename
+  21165	    212	    968	  22345	   5749	../kernel/build/memory-regression-isolation/user/bin/date
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/uptime
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/uptime
+   text	   data	    bss	    dec	    hex	filename
+  21229	    212	    968	  22409	   5789	../kernel/build/memory-regression-isolation/user/bin/uptime
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/uname
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/uname
+   text	   data	    bss	    dec	    hex	filename
+  20877	    212	    968	  22057	   5629	../kernel/build/memory-regression-isolation/user/bin/uname
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_test
+   text	   data	    bss	    dec	    hex	filename
+  19788	    212	    920	  20920	   51b8	../kernel/build/memory-regression-isolation/user/bin/ai_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_diag
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_diag
+   text	   data	    bss	    dec	    hex	filename
+  19404	    212	    920	  20536	   5038	../kernel/build/memory-regression-isolation/user/bin/ai_diag
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_stat
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_stat
+   text	   data	    bss	    dec	    hex	filename
+  19540	    212	    920	  20672	   50c0	../kernel/build/memory-regression-isolation/user/bin/ai_stat
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_top
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_top
+   text	   data	    bss	    dec	    hex	filename
+  20708	    212	    920	  21840	   5550	../kernel/build/memory-regression-isolation/user/bin/ai_top
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_stress
+src/ai_stress.c: In function 'main':
+src/ai_stress.c:410:9: warning: variable 'quick_mode' set but not used [-Wunused-but-set-variable=]
+  410 |     int quick_mode = 0;
+      |         ^~~~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_stress
+   text	   data	    bss	    dec	    hex	filename
+  22812	    212	   1368	  24392	   5f48	../kernel/build/memory-regression-isolation/user/bin/ai_stress
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_exploit
+src/ai_exploit.c: In function 'attack_ro_segment':
+src/ai_exploit.c:119:21: warning: ISO C forbids conversion of function pointer to object pointer type [-Wpedantic]
+  119 |     void *ro_addr = (void *)_start;
+      |                     ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_exploit
+   text	   data	    bss	    dec	    hex	filename
+  21156	    244	    952	  22352	   5750	../kernel/build/memory-regression-isolation/user/bin/ai_exploit
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/business_sim
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/setup_wizard
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/business_sim
+   text	   data	    bss	    dec	    hex	filename
+  31780	    244	   1272	  33296	   8210	../kernel/build/memory-regression-isolation/user/bin/business_sim
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ws_switch
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/setup_wizard
+   text	   data	    bss	    dec	    hex	filename
+  29372	    212	   1976	  31560	   7b48	../kernel/build/memory-regression-isolation/user/bin/setup_wizard
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/vos3_admin
+src/vos3_admin.c:184:20: warning: 'get_permission_name' defined but not used [-Wunused-function]
+  184 | static const char* get_permission_name(uint32_t perm)
+      |                    ^~~~~~~~~~~~~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ws_switch
+   text	   data	    bss	    dec	    hex	filename
+  25772	    212	   2136	  28120	   6dd8	../kernel/build/memory-regression-isolation/user/bin/ws_switch
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ai_audit
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ai_audit
+   text	   data	    bss	    dec	    hex	filename
+  25324	    212	   1000	  26536	   67a8	../kernel/build/memory-regression-isolation/user/bin/ai_audit
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/udp_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/tcp_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/vos3_admin
+   text	   data	    bss	    dec	    hex	filename
+  24670	    212	    920	  25802	   64ca	../kernel/build/memory-regression-isolation/user/bin/vos3_admin
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/disk_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/udp_test
+   text	   data	    bss	    dec	    hex	filename
+  18123	    212	    904	  19239	   4b27	../kernel/build/memory-regression-isolation/user/bin/udp_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_csw
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/disk_test
+   text	   data	    bss	    dec	    hex	filename
+  18027	    212	    936	  19175	   4ae7	../kernel/build/memory-regression-isolation/user/bin/disk_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_isolate
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/tcp_test
+   text	   data	    bss	    dec	    hex	filename
+  19886	    212	    920	  21018	   521a	../kernel/build/memory-regression-isolation/user/bin/tcp_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_persist
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_csw
+   text	   data	    bss	    dec	    hex	filename
+  18251	    212	    904	  19367	   4ba7	../kernel/build/memory-regression-isolation/user/bin/bench_csw
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_overhead
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_isolate
+   text	   data	    bss	    dec	    hex	filename
+  18947	    212	    936	  20095	   4e7f	../kernel/build/memory-regression-isolation/user/bin/bench_isolate
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_sigpipe_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_persist
+   text	   data	    bss	    dec	    hex	filename
+  18659	    212	    904	  19775	   4d3f	../kernel/build/memory-regression-isolation/user/bin/bench_persist
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_bugfix_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_overhead
+   text	   data	    bss	    dec	    hex	filename
+  18491	    212	    904	  19607	   4c97	../kernel/build/memory-regression-isolation/user/bin/bench_overhead
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_phase13_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_sigpipe_test
+   text	   data	    bss	    dec	    hex	filename
+  19043	    212	    936	  20191	   4edf	../kernel/build/memory-regression-isolation/user/bin/bench_sigpipe_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_procfs_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_bugfix_test
+   text	   data	    bss	    dec	    hex	filename
+  20507	    212	    936	  21655	   5497	../kernel/build/memory-regression-isolation/user/bin/bench_bugfix_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_poll_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_procfs_test
+   text	   data	    bss	    dec	    hex	filename
+  19499	    212	    936	  20647	   50a7	../kernel/build/memory-regression-isolation/user/bin/bench_procfs_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/ps
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_phase13_test
+   text	   data	    bss	    dec	    hex	filename
+  22963	    212	    936	  24111	   5e2f	../kernel/build/memory-regression-isolation/user/bin/bench_phase13_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_fs_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_poll_test
+   text	   data	    bss	    dec	    hex	filename
+  18259	    212	    936	  19407	   4bcf	../kernel/build/memory-regression-isolation/user/bin/bench_poll_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_net_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/ps
+   text	   data	    bss	    dec	    hex	filename
+  17603	    212	    904	  18719	   491f	../kernel/build/memory-regression-isolation/user/bin/ps
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_stress_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_fs_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_net_test
+   text	   data	    bss	    dec	    hex	filename
+  24587	    212	    936	  25735	   6487	../kernel/build/memory-regression-isolation/user/bin/bench_fs_test
+   text	   data	    bss	    dec	    hex	filename
+  23075	    212	    936	  24223	   5e9f	../kernel/build/memory-regression-isolation/user/bin/bench_net_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_fuzz_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_stress_test
+   text	   data	    bss	    dec	    hex	filename
+  20059	    212	    936	  21207	   52d7	../kernel/build/memory-regression-isolation/user/bin/bench_stress_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_sched_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_fuzz_test
+   text	   data	    bss	    dec	    hex	filename
+  20659	    212	    936	  21807	   552f	../kernel/build/memory-regression-isolation/user/bin/bench_fuzz_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_app_isolation_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_sched_test
+   text	   data	    bss	    dec	    hex	filename
+  20115	    212	   1000	  21327	   534f	../kernel/build/memory-regression-isolation/user/bin/bench_sched_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_posix_fs
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_app_isolation_test
+   text	   data	    bss	    dec	    hex	filename
+  21075	    212	    936	  22223	   56cf	../kernel/build/memory-regression-isolation/user/bin/bench_app_isolation_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_epoll
+src/test_epoll.c: In function 'test_select_pipe':
+src/test_epoll.c:430:69: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  430 |         TEST_FAIL("select_pipe: pfd[0] not set in rfds after select");
+      |                                                                     ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_posix_fs
+   text	   data	    bss	    dec	    hex	filename
+  25772	    212	    952	  26936	   6938	../kernel/build/memory-regression-isolation/user/bin/test_posix_fs
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_thread_test
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_epoll
+   text	   data	    bss	    dec	    hex	filename
+  21563	    212	    936	  22711	   58b7	../kernel/build/memory-regression-isolation/user/bin/test_epoll
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/stress_thread
+src/bench_thread_test.c: In function 'test_basic_clone_thread':
+src/bench_thread_test.c:130:39: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  130 |         TEST_FAIL("basic_clone_thread");
+      |                                       ^
+src/bench_thread_test.c:143:43: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  143 |             TEST_FAIL("basic_clone_thread");
+      |                                           ^
+src/bench_thread_test.c:154:39: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  154 |         TEST_FAIL("basic_clone_thread");
+      |                                       ^
+src/bench_thread_test.c: In function 'test_arch_prctl_set_fs':
+src/bench_thread_test.c:176:38: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  176 |         TEST_FAIL("arch_prctl_set_fs");
+      |                                      ^
+src/bench_thread_test.c:185:38: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  185 |         TEST_FAIL("arch_prctl_set_fs");
+      |                                      ^
+src/bench_thread_test.c:194:38: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  194 |         TEST_FAIL("arch_prctl_set_fs");
+      |                                      ^
+src/bench_thread_test.c: In function 'test_set_tid_address':
+src/bench_thread_test.c:222:36: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  222 |         TEST_FAIL("set_tid_address");
+      |                                    ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_thread_test
+   text	   data	    bss	    dec	    hex	filename
+  17867	    244	  66472	  84583	  14a67	../kernel/build/memory-regression-isolation/user/bin/bench_thread_test
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_posix_core
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/stress_thread
+   text	   data	    bss	    dec	    hex	filename
+  20355	    212	 656584	 677151	  a551f	../kernel/build/memory-regression-isolation/user/bin/stress_thread
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_futex
+src/test_futex.c: In function 'test_futex_mutex':
+src/test_futex.c:282:46: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  282 |         TEST_FAIL("futex_mutex: clone failed");
+      |                                              ^
+src/test_futex.c:302:45: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  302 |             TEST_FAIL("futex_mutex: timeout");
+      |                                             ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_posix_core
+   text	   data	    bss	    dec	    hex	filename
+  19758	    212	    952	  20922	   51ba	../kernel/build/memory-regression-isolation/user/bin/test_posix_core
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_net_dispatch
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_futex
+   text	   data	    bss	    dec	    hex	filename
+  18371	    212	  66472	  85055	  14c3f	../kernel/build/memory-regression-isolation/user/bin/test_futex
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_shm_dispatch
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_net_dispatch
+   text	   data	    bss	    dec	    hex	filename
+  22771	    212	    936	  23919	   5d6f	../kernel/build/memory-regression-isolation/user/bin/test_net_dispatch
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/diag_shm_stress
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_shm_dispatch
+   text	   data	    bss	    dec	    hex	filename
+  20995	    212	    936	  22143	   567f	../kernel/build/memory-regression-isolation/user/bin/test_shm_dispatch
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/hello_dyn (with PT_INTERP)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/hello_dyn
+   text	   data	    bss	    dec	    hex	filename
+  12828	    212	    904	  13944	   3678	../kernel/build/memory-regression-isolation/user/bin/hello_dyn
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_pt_interp
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_pt_interp
+   text	   data	    bss	    dec	    hex	filename
+  16875	    212	    904	  17991	   4647	../kernel/build/memory-regression-isolation/user/bin/test_pt_interp
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/hello_auxv (with PT_INTERP)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/hello_auxv
+   text	   data	    bss	    dec	    hex	filename
+  12828	    212	    904	  13944	   3678	../kernel/build/memory-regression-isolation/user/bin/hello_auxv
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_dynlink
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/diag_shm_stress
+   text	   data	    bss	    dec	    hex	filename
+  22939	    212	    936	  24087	   5e17	../kernel/build/memory-regression-isolation/user/bin/diag_shm_stress
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_ai_guard
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_ai_guard
+   text	   data	    bss	    dec	    hex	filename
+  17091	    212	    936	  18239	   473f	../kernel/build/memory-regression-isolation/user/bin/test_ai_guard
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_net_e2e
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_dynlink
+   text	   data	    bss	    dec	    hex	filename
+  21844	    212	    952	  23008	   59e0	../kernel/build/memory-regression-isolation/user/bin/test_dynlink
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_integration
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_net_e2e
+   text	   data	    bss	    dec	    hex	filename
+  18806	    212	    952	  19970	   4e02	../kernel/build/memory-regression-isolation/user/bin/test_net_e2e
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_sustained
+src/test_sustained.c:37:9: warning: 'O_CREAT' redefined
+   37 | #define O_CREAT         0x40
+      |         ^~~~~~~
+In file included from src/test_sustained.c:15:
+include/unistd.h:72:9: note: this is the location of the previous definition
+   72 | #define O_CREAT     0100
+      |         ^~~~~~~
+src/test_sustained.c:38:9: warning: 'O_TRUNC' redefined
+   38 | #define O_TRUNC         0x200
+      |         ^~~~~~~
+include/unistd.h:73:9: note: this is the location of the previous definition
+   73 | #define O_TRUNC     01000
+      |         ^~~~~~~
+src/test_sustained.c: In function 'main':
+src/test_sustained.c:249:19: warning: unused variable 'total_pages' [-Wunused-variable]
+  249 |     unsigned long total_pages = info.total_pages;
+      |                   ^~~~~~~~~~~
+src/test_sustained.c: At top level:
+src/test_sustained.c:115:12: warning: 'g_errors' defined but not used [-Wunused-variable]
+  115 | static int g_errors = 0;
+      |            ^~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_sustained
+   text	   data	    bss	    dec	    hex	filename
+  19243	    212	    936	  20391	   4fa7	../kernel/build/memory-regression-isolation/user/bin/test_sustained
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_ai_throughput
+src/bench_ai_throughput.c: In function 'main':
+src/bench_ai_throughput.c:177:13: warning: variable 'fork_ok' set but not used [-Wunused-but-set-variable=]
+  177 |         int fork_ok = 1;
+      |             ^~~~~~~
+src/bench_ai_throughput.c:251:24: warning: unused variable 't_read_end' [-Wunused-variable]
+  251 |     unsigned long long t_read_end = rdtsc();
+      |                        ^~~~~~~~~~
+src/bench_ai_throughput.c:243:24: warning: unused variable 't_read_start' [-Wunused-variable]
+  243 |     unsigned long long t_read_start = rdtsc();
+      |                        ^~~~~~~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_integration
+   text	   data	    bss	    dec	    hex	filename
+  24716	    212	    952	  25880	   6518	../kernel/build/memory-regression-isolation/user/bin/test_integration
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_csw_1ms
+src/bench_csw_1ms.c: In function 'test_preemption_cost':
+src/bench_csw_1ms.c:236:41: warning: variable 'counter' set but not used [-Wunused-but-set-variable=]
+  236 |             volatile unsigned long long counter = 0;
+      |                                         ^~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_ai_throughput
+   text	   data	    bss	    dec	    hex	filename
+  19027	    212	    936	  20175	   4ecf	../kernel/build/memory-regression-isolation/user/bin/bench_ai_throughput
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_soak_5min
+src/bench_soak_5min.c:42:9: warning: 'O_CREAT' redefined
+   42 | #define O_CREAT         0x40
+      |         ^~~~~~~
+In file included from src/bench_soak_5min.c:17:
+include/unistd.h:72:9: note: this is the location of the previous definition
+   72 | #define O_CREAT     0100
+      |         ^~~~~~~
+src/bench_soak_5min.c:43:9: warning: 'O_TRUNC' redefined
+   43 | #define O_TRUNC         0x200
+      |         ^~~~~~~
+include/unistd.h:73:9: note: this is the location of the previous definition
+   73 | #define O_TRUNC     01000
+      |         ^~~~~~~
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_csw_1ms
+   text	   data	    bss	    dec	    hex	filename
+  20251	    212	    936	  21399	   5397	../kernel/build/memory-regression-isolation/user/bin/bench_csw_1ms
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_hugepage_tlb
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_hugepage_tlb
+   text	   data	    bss	    dec	    hex	filename
+  19699	    212	    936	  20847	   516f	../kernel/build/memory-regression-isolation/user/bin/bench_hugepage_tlb
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_ai_scale (SSE enabled)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_soak_5min
+   text	   data	    bss	    dec	    hex	filename
+  20147	    212	   1256	  21615	   546f	../kernel/build/memory-regression-isolation/user/bin/bench_soak_5min
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_npu_direct
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_npu_direct
+   text	   data	    bss	    dec	    hex	filename
+  18635	    244	    936	  19815	   4d67	../kernel/build/memory-regression-isolation/user/bin/test_npu_direct
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_ai_latency
+src/test_ai_latency.c: In function 'test_spsc_basic_correctness':
+src/test_ai_latency.c:86:56: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+   86 |         TEST_FAIL("spsc_basic_correctness: init failed");
+      |                                                        ^
+src/test_ai_latency.c: In function 'test_spsc_throughput':
+src/test_ai_latency.c:245:54: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  245 |         TEST_FAIL("spsc_throughput: ring init failed");
+      |                                                      ^
+src/test_ai_latency.c:270:50: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  270 |         TEST_FAIL("spsc_throughput: clone failed");
+      |                                                  ^
+src/test_ai_latency.c:316:58: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  316 |             TEST_FAIL("spsc_throughput: consumer timeout");
+      |                                                          ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_ai_scale
+   text	   data	    bss	    dec	    hex	filename
+  23155	    244	2233064	2256463	 226e4f	../kernel/build/memory-regression-isolation/user/bin/bench_ai_scale
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/bench_2026_frontier (SSE enabled)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_ai_latency
+   text	   data	    bss	    dec	    hex	filename
+  20054	    212	 330552	 350818	  55a62	../kernel/build/memory-regression-isolation/user/bin/test_ai_latency
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_agent_chaos
+src/bench_2026_frontier.c: In function 'test_massive_context':
+src/bench_2026_frontier.c:368:60: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  368 |         TEST_FAIL("massive_context: no HugePages allocated");
+      |                                                            ^
+src/test_agent_chaos.c: In function 'soak_5min_leak_check':
+src/test_agent_chaos.c:173:67: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  173 |         TEST_FAIL("soak_5min_leak_check: warm-up iteration failed");
+      |                                                                   ^
+src/test_agent_chaos.c: In function 'agent_chaos_crash_recovery':
+src/test_agent_chaos.c:270:65: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  270 |         TEST_FAIL("agent_chaos_crash_recovery: spsc_init failed");
+      |                                                                 ^
+src/test_agent_chaos.c:279:60: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  279 |         TEST_FAIL("agent_chaos_crash_recovery: fork failed");
+      |                                                            ^
+src/bench_2026_frontier.c: In function 'test_vision_latency':
+src/bench_2026_frontier.c:532:53: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  532 |         TEST_FAIL("vision_latency: ring init failed");
+      |                                                     ^
+src/bench_2026_frontier.c:612:57: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  612 |             TEST_FAIL("vision_latency: consumer timeout");
+      |                                                         ^
+src/test_agent_chaos.c: In function 'race_condition_stress':
+src/test_agent_chaos.c:734:73: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  734 |         TEST_FAIL("race_condition_stress: timeout waiting for consumers");
+      |                                                                         ^
+src/bench_2026_frontier.c: In function 'test_npu_direct_stress':
+src/bench_2026_frontier.c:1040:61: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+ 1040 |         TEST_FAIL("npu_direct_stress: MOVNTDQ verify failed");
+      |                                                             ^
+src/bench_2026_frontier.c:970:24: warning: variable 'frame_cycles' set but not used [-Wunused-but-set-variable=]
+  970 |     unsigned long long frame_cycles[T4_FRAME_COUNT];
+      |                        ^~~~~~~~~~~~
+src/bench_2026_frontier.c: In function 'test_ai_guard_sandbox':
+src/bench_2026_frontier.c:1061:50: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+ 1061 |         TEST_FAIL("ai_guard_sandbox: fork failed");
+      |                                                  ^
+src/bench_2026_frontier.c: At top level:
+src/bench_2026_frontier.c:116:12: warning: 'get_sysinfo' defined but not used [-Wunused-function]
+  116 | static int get_sysinfo(vos3_sysinfo_t* info)
+      |            ^~~~~~~~~~~
+src/bench_2026_frontier.c: In function 'test_agent_isolation':
+src/bench_2026_frontier.c:729:78: warning: iteration 8 invokes undefined behavior [-Waggressive-loop-optimizations]
+  729 |         g_t3_patterns[i].lo = 0xDEADBEEF00000000ULL | (unsigned long long)(i * 0x11111111);
+      |                                                                           ~~~^~~~~~~~~~~~~
+src/bench_2026_frontier.c:728:23: note: within this loop
+  728 |     for (int i = 0; i < T3_NUM_AGENTS; i++) {
+      |                       ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_agent_chaos
+   text	   data	    bss	    dec	    hex	filename
+  23140	    212	 789048	 812400	  c6570	../kernel/build/memory-regression-isolation/user/bin/test_agent_chaos
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_advanced_chaos
+src/test_advanced_chaos.c: In function 'spsc_signal_atomicity':
+src/test_advanced_chaos.c:132:60: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  132 |         TEST_FAIL("spsc_signal_atomicity: ring init failed");
+      |                                                            ^
+src/test_advanced_chaos.c:143:55: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  143 |         TEST_FAIL("spsc_signal_atomicity: fork failed");
+      |                                                       ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/bench_2026_frontier
+   text	   data	    bss	    dec	    hex	filename
+  27876	    212	2690008	2718096	 297990	../kernel/build/memory-regression-isolation/user/bin/bench_2026_frontier
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_model_load
+src/test_model_load.c: In function 'model_burst_shm':
+src/test_model_load.c:218:49: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  218 |         TEST_FAIL("model_burst_shm: fork failed");
+      |                                                 ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_advanced_chaos
+   text	   data	    bss	    dec	    hex	filename
+  20667	    212	  67624	  88503	  159b7	../kernel/build/memory-regression-isolation/user/bin/test_advanced_chaos
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_model_load
+   text	   data	    bss	    dec	    hex	filename
+  21299	    212	1049736	1071247	 10588f	../kernel/build/memory-regression-isolation/user/bin/test_model_load
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_health_check
+src/test_health_check.c: In function 'spsc_responsive':
+src/test_health_check.c:242:54: warning: ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]
+  242 |         TEST_FAIL("spsc_responsive: ring init failed");
+      |                                                      ^
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_health_check
+   text	   data	    bss	    dec	    hex	filename
+  19435	    212	 132520	 152167	  25267	../kernel/build/memory-regression-isolation/user/bin/test_health_check
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_agent_cluster
+src/test_agent_cluster.c:115:12: warning: 'get_sysinfo' defined but not used [-Wunused-function]
+  115 | static int get_sysinfo(vos3_sysinfo_t* info)
+      |            ^~~~~~~~~~~
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_torture
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_agent_cluster
+   text	   data	    bss	    dec	    hex	filename
+  22404	    212	    952	  23568	   5c10	../kernel/build/memory-regression-isolation/user/bin/test_agent_cluster
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_ai_exploit_v2
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_torture
+   text	   data	    bss	    dec	    hex	filename
+  21155	    212	    936	  22303	   571f	../kernel/build/memory-regression-isolation/user/bin/test_torture
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_max_saturation (SSE enabled)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_ai_exploit_v2
+   text	   data	    bss	    dec	    hex	filename
+  23004	    212	    952	  24168	   5e68	../kernel/build/memory-regression-isolation/user/bin/test_ai_exploit_v2
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_vmm_soak
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_max_saturation
+   text	   data	    bss	    dec	    hex	filename
+  21043	    212	   9640	  30895	   78af	../kernel/build/memory-regression-isolation/user/bin/test_max_saturation
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_security_check
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_security_check
+   text	   data	    bss	    dec	    hex	filename
+  17819	    212	    936	  18967	   4a17	../kernel/build/memory-regression-isolation/user/bin/test_security_check
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_native_isolation
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_vmm_soak
+   text	   data	    bss	    dec	    hex	filename
+  20715	    212	    936	  21863	   5567	../kernel/build/memory-regression-isolation/user/bin/test_vmm_soak
+src/unistd/getcwd.c: In function 'getcwd':
+src/unistd/getcwd.c:25:1: warning: function may return address of local variable [-Wreturn-local-addr]
+   25 | }
+      | ^
+src/unistd/getcwd.c:9:14: note: declared here
+    9 |         char tmp[buf ? 1 : PATH_MAX];
+      |              ^~~
+  CC    crt1.o
+  CC    Scrt1.o (PIC)
+  AS    crti.o
+  AS    crtn.o
+  LD    libc.so (1111 objects)
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: _mulxc3.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+   text	   data	    bss	    dec	    hex	filename
+ 649461	   2176	  10957	 662594	  a1c42	../../kernel/build/memory-regression-isolation/user/musl/lib/libc.so
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/hello_musl (dynamic, musl libc)
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_signal_musl (dynamic, musl libc)
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_env_musl (dynamic, musl libc)
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_fileio_musl (dynamic, musl libc)
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/hello_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_fileio_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/hello_musl
+   text	   data	    bss	    dec	    hex	filename
+    608	    392	      0	   1000	    3e8	../kernel/build/memory-regression-isolation/user/bin/hello_musl
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_malloc_musl (dynamic, musl libc)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_fileio_musl
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+   text	   data	    bss	    dec	    hex	filename
+   1829	    456	      0	   2285	    8ed	../kernel/build/memory-regression-isolation/user/bin/test_fileio_musl
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_env_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_fork_musl (dynamic, musl libc)
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_signal_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_env_musl
+   text	   data	    bss	    dec	    hex	filename
+   2066	    456	      0	   2522	    9da	../kernel/build/memory-regression-isolation/user/bin/test_env_musl
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_pipe_musl (dynamic, musl libc)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_signal_musl
+   text	   data	    bss	    dec	    hex	filename
+   1654	    424	      8	   2086	    826	../kernel/build/memory-regression-isolation/user/bin/test_signal_musl
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_stat_musl (dynamic, musl libc)
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_fork_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_malloc_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_fork_musl
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+   text	   data	    bss	    dec	    hex	filename
+   1418	    440	      0	   1858	    742	../kernel/build/memory-regression-isolation/user/bin/test_fork_musl
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_pthread_musl (dynamic, musl libc)
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_malloc_musl
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_pipe_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+   text	   data	    bss	    dec	    hex	filename
+   1759	    448	      0	   2207	    89f	../kernel/build/memory-regression-isolation/user/bin/test_malloc_musl
+  CC+LD   ../kernel/build/memory-regression-isolation/user/bin/test_stress_mt (dynamic, musl libc)
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_pipe_musl
+   text	   data	    bss	    dec	    hex	filename
+   2011	    480	      8	   2499	    9c3	../kernel/build/memory-regression-isolation/user/bin/test_pipe_musl
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_stat_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_stat_musl
+   text	   data	    bss	    dec	    hex	filename
+   2517	    472	      0	   2989	    bad	../kernel/build/memory-regression-isolation/user/bin/test_stat_musl
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_pthread_musl.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_pthread_musl
+   text	   data	    bss	    dec	    hex	filename
+   2654	    432	     72	   3158	    c56	../kernel/build/memory-regression-isolation/user/bin/test_pthread_musl
+/opt/cross/bin/x86_64-elf-ld: warning: -z pack-relative-relocs=none ignored
+/opt/cross/bin/x86_64-elf-ld: warning: ../kernel/build/memory-regression-isolation/user/test_stress_mt.o: missing .note.GNU-stack section implies executable stack
+/opt/cross/bin/x86_64-elf-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+  SIZE    ../kernel/build/memory-regression-isolation/user/bin/test_stress_mt
+   text	   data	    bss	    dec	    hex	filename
+   4476	    512	     24	   5012	   1394	../kernel/build/memory-regression-isolation/user/bin/test_stress_mt
+
+User-space build complete:
+total 8364
+drwxr-xr-x  90 root root   2880 Sep 15 09:54 .
+drwxr-xr-x 182 root root   5824 Sep 15 09:54 ..
+-rwxr-xr-x   1 root root 107744 Sep 15 09:54 ai_audit
+-rwxr-xr-x   1 root root  93608 Sep 15 09:54 ai_diag
+-rwxr-xr-x   1 root root  99136 Sep 15 09:54 ai_exploit
+-rwxr-xr-x   1 root root  94424 Sep 15 09:54 ai_stat
+-rwxr-xr-x   1 root root 102544 Sep 15 09:54 ai_stress
+-rwxr-xr-x   1 root root  95016 Sep 15 09:54 ai_test
+-rwxr-xr-x   1 root root  99768 Sep 15 09:54 ai_top
+-rwxr-xr-x   1 root root  16552 Sep 15 09:54 auxv_interp
+-rwxr-xr-x   1 root root 132944 Sep 15 09:54 bench_2026_frontier
+-rwxr-xr-x   1 root root 112840 Sep 15 09:54 bench_ai_scale
+-rwxr-xr-x   1 root root  99064 Sep 15 09:54 bench_ai_throughput
+-rwxr-xr-x   1 root root  98424 Sep 15 09:54 bench_app_isolation_test
+-rwxr-xr-x   1 root root 101272 Sep 15 09:54 bench_bugfix_test
+-rwxr-xr-x   1 root root  90848 Sep 15 09:54 bench_csw
+-rwxr-xr-x   1 root root 101240 Sep 15 09:54 bench_csw_1ms
+-rwxr-xr-x   1 root root 112528 Sep 15 09:54 bench_fs_test
+-rwxr-xr-x   1 root root  97536 Sep 15 09:54 bench_fuzz_test
+-rwxr-xr-x   1 root root 100608 Sep 15 09:54 bench_hugepage_tlb
+-rwxr-xr-x   1 root root  93360 Sep 15 09:54 bench_isolate
+-rwxr-xr-x   1 root root 112136 Sep 15 09:54 bench_net_test
+-rwxr-xr-x   1 root root  92376 Sep 15 09:54 bench_overhead
+-rwxr-xr-x   1 root root  92712 Sep 15 09:54 bench_persist
+-rwxr-xr-x   1 root root 112384 Sep 15 09:54 bench_phase13_test
+-rwxr-xr-x   1 root root  92664 Sep 15 09:54 bench_poll_test
+-rwxr-xr-x   1 root root  99056 Sep 15 09:54 bench_procfs_test
+-rwxr-xr-x   1 root root  97360 Sep 15 09:54 bench_sched_test
+-rwxr-xr-x   1 root root  95920 Sep 15 09:54 bench_sigpipe_test
+-rwxr-xr-x   1 root root 103040 Sep 15 09:54 bench_soak_5min
+-rwxr-xr-x   1 root root  96744 Sep 15 09:54 bench_stress_test
+-rwxr-xr-x   1 root root  90088 Sep 15 09:54 bench_thread_test
+-rwxr-xr-x   1 root root 121440 Sep 15 09:54 business_sim
+-rwxr-xr-x   1 root root  87312 Sep 15 09:54 cat
+-rwxr-xr-x   1 root root  99128 Sep 15 09:54 date
+-rwxr-xr-x   1 root root 111376 Sep 15 09:54 diag_shm_stress
+-rwxr-xr-x   1 root root  88712 Sep 15 09:54 disk_test
+-rwxr-xr-x   1 root root   4856 Sep 15 09:54 fake_interp
+-rwxr-xr-x   1 root root  92816 Sep 15 09:54 grep
+-rwxr-xr-x   1 root root  88632 Sep 15 09:54 head
+-rwxr-xr-x   1 root root  80256 Sep 15 09:54 hello_auxv
+-rwxr-xr-x   1 root root  80256 Sep 15 09:54 hello_dyn
+-rwxr-xr-x   1 root root   8944 Sep 15 09:54 hello_musl
+-rwxr-xr-x   1 root root  90208 Sep 15 09:54 init
+-rwxr-xr-x   1 root root 654440 Sep 15 09:54 ld-musl-x86_64.so.1
+-rwxr-xr-x   1 root root  90624 Sep 15 09:54 ps
+-rwxr-xr-x   1 root root 116432 Sep 15 09:54 setup_wizard
+-rwxr-xr-x   1 root root 130216 Sep 15 09:54 sh
+-rwxr-xr-x   1 root root  99544 Sep 15 09:54 stress_thread
+-rwxr-xr-x   1 root root  95480 Sep 15 09:54 tcp_test
+-rwxr-xr-x   1 root root 109224 Sep 15 09:54 test_advanced_chaos
+-rwxr-xr-x   1 root root 120280 Sep 15 09:54 test_agent_chaos
+-rwxr-xr-x   1 root root 116256 Sep 15 09:54 test_agent_cluster
+-rwxr-xr-x   1 root root 109688 Sep 15 09:54 test_ai_exploit_v2
+-rwxr-xr-x   1 root root  86744 Sep 15 09:54 test_ai_guard
+-rwxr-xr-x   1 root root 100608 Sep 15 09:54 test_ai_latency
+-rwxr-xr-x   1 root root 114136 Sep 15 09:54 test_dynlink
+-rwxr-xr-x   1 root root  10928 Sep 15 09:54 test_env_musl
+-rwxr-xr-x   1 root root 107376 Sep 15 09:54 test_epoll
+-rwxr-xr-x   1 root root  10688 Sep 15 09:54 test_fileio_musl
+-rwxr-xr-x   1 root root  10152 Sep 15 09:54 test_fork_musl
+-rwxr-xr-x   1 root root  94368 Sep 15 09:54 test_futex
+-rwxr-xr-x   1 root root  99160 Sep 15 09:54 test_health_check
+-rwxr-xr-x   1 root root 117536 Sep 15 09:54 test_integration
+-rwxr-xr-x   1 root root  10856 Sep 15 09:54 test_malloc_musl
+-rwxr-xr-x   1 root root 101600 Sep 15 09:54 test_max_saturation
+-rwxr-xr-x   1 root root 105696 Sep 15 09:54 test_model_load
+-rwxr-xr-x   1 root root  96080 Sep 15 09:54 test_native_isolation
+-rwxr-xr-x   1 root root 107736 Sep 15 09:54 test_net_dispatch
+-rwxr-xr-x   1 root root  97144 Sep 15 09:54 test_net_e2e
+-rwxr-xr-x   1 root root  92208 Sep 15 09:54 test_npu_direct
+-rwxr-xr-x   1 root root  11360 Sep 15 09:54 test_pipe_musl
+-rwxr-xr-x   1 root root  95816 Sep 15 09:54 test_posix_core
+-rwxr-xr-x   1 root root 116472 Sep 15 09:54 test_posix_fs
+-rwxr-xr-x   1 root root  86040 Sep 15 09:54 test_pt_interp
+-rwxr-xr-x   1 root root  14232 Sep 15 09:54 test_pthread_musl
+-rwxr-xr-x   1 root root  89464 Sep 15 09:54 test_security_check
+-rwxr-xr-x   1 root root 105752 Sep 15 09:54 test_shm_dispatch
+-rwxr-xr-x   1 root root  11936 Sep 15 09:54 test_signal_musl
+-rwxr-xr-x   1 root root  12376 Sep 15 09:54 test_stat_musl
+-rwxr-xr-x   1 root root  24816 Sep 15 09:54 test_stress_mt
+-rwxr-xr-x   1 root root  98160 Sep 15 09:54 test_sustained
+-rwxr-xr-x   1 root root 107744 Sep 15 09:54 test_torture
+-rwxr-xr-x   1 root root 104024 Sep 15 09:54 test_vmm_soak
+-rwxr-xr-x   1 root root  90336 Sep 15 09:54 udp_test
+-rwxr-xr-x   1 root root  98840 Sep 15 09:54 uname
+-rwxr-xr-x   1 root root 101488 Sep 15 09:54 uptime
+-rwxr-xr-x   1 root root 111312 Sep 15 09:54 vos3_admin
+-rwxr-xr-x   1 root root  90088 Sep 15 09:54 wc
+-rwxr-xr-x   1 root root 106944 Sep 15 09:54 ws_switch
+make[2]: Leaving directory '/vos3/user'
+  GEN     build/memory-regression-isolation/generated/embedded_bins.c
+  CC      build/memory-regression-isolation/generated/embedded_bins.c
+  LD      build/memory-regression-isolation/vos3.elf
+
+Kernel built: build/memory-regression-isolation/vos3.elf
+  0 .multiboot2   00000018  0000000002000000  0000000002000000  00001000  2**3
+  1 .note.Xen     00000014  0000000002000018  0000000002000018  00001018  2**2
+  2 .text.boot32  000001c5  0000000002000030  0000000002000030  00001030  2**0
+  3 .text.boot64  0000003a  0000000002000200  0000000002000200  00001200  2**0
+  4 .data.boot    00000026  0000000002000240  0000000002000240  00001240  2**4
+  5 .bss.boot     00005000  0000000002001000  0000000002001000  00001266  2**12
+  6 .text         0007d797  ffffffff82006000  0000000002006000  00002000  2**6
+  7 .rodata       00811d6e  ffffffff82084000  0000000002084000  00080000  2**6
+  8 .data         0000048c  ffffffff82896000  0000000002896000  00892000  2**5
+  9 .bss          035ad000  ffffffff82897000  0000000002897000  0089248c  2**12
+ 10 .stacks       00020000  ffffffff85e44000  0000000005e44000  0089248c  2**0
+
+   text	   data	    bss	    dec	    hex	filename
+ 514498	8462880	56434688	65412066	3e61be2	build/memory-regression-isolation/vos3.elf
+=== Building vOS installer ISO ===
+xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
+
+xorriso : NOTE : Environment variable SOURCE_DATE_EPOCH encountered with value 1700000000
+Drive current: -outdev 'stdio:/tmp/vos5-iso.90weLg/vos5.iso'
+Media current: stdio file, overwriteable
+Media status : is blank
+Media summary: 0 sessions, 0 data blocks, 0 data, 1627g free
+Added to ISO image: directory '/'='/tmp/vos5-iso.90weLg/root'
+xorriso : UPDATE :      11 files added in 1 seconds
+xorriso : UPDATE :      11 files added in 1 seconds
+ISO image produced: 6268 sectors
+Written to medium : 6268 sectors at LBA 0
+Writing to 'stdio:/tmp/vos5-iso.90weLg/vos5.iso' completed successfully.
+
+Physical block size of 512 bytes.
+Installing to GPT. Logical block size of 512 bytes.
+Detected ISOHYBRID with a GUID partition table (GPT).
+Converting to MBR for improved compatibility...
+Conversion successful.
+No active partition found, some systems may not boot.
+Setting partition 1 as active to work around the issue...
+Installing to MBR.
+Stage 2 to be located at byte offset 0x1000.
+Reminder: Remember to copy the limine-bios.sys file in either
+          the root, /boot, /limine, or /boot/limine directories of
+          one of the partitions on the device, or boot will fail!
+Limine BIOS stages installed successfully.
+Built BIOS + UEFI image: ../dist/memory-regression-isolation.iso
+43510046fa9b5865e05bc2cbd72a654d74868171660a75cf371150c1f19f5654  ../dist/memory-regression-isolation.iso
+=== Installer ISO complete: ../dist/memory-regression-isolation.iso ===
+make[1]: Leaving directory '/vos3/kernel'
+make[1]: warning:  Clock skew detected.  Your build may be incomplete.

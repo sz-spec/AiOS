@@ -1,0 +1,15 @@
+{
+  "passed": false,
+  "failures": [
+    "unexpected failure"
+  ],
+  "cases_verified": 0,
+  "iso_sha256": "a693fd22d1430caf80e4c225cfd75c03697d9aa528945eacda4f58cf92041362",
+  "iso_sha256_after": "a693fd22d1430caf80e4c225cfd75c03697d9aa528945eacda4f58cf92041362",
+  "artifact_unchanged": true,
+  "firmware": "bios",
+  "cpu": "qemu64",
+  "smp": 1,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}
