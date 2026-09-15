@@ -21,6 +21,9 @@
 #include "../../include/vos/console.h"
 #include "../../include/vos/string.h"
 #include "../../include/vos/user.h"
+#ifdef NATIVE_SMP_WORKLOAD
+#include "../../include/arch/x86_64/smp.h"
+#endif
 #ifdef NATIVE_ISOLATION_TEST
 #include "../../include/vos/native_isolation_test.h"
 #endif
@@ -37,7 +40,9 @@
 
 /** @brief Fallback init paths */
 static const char* init_paths[] = {
-#ifdef MEMORY_TRANSITIONS_TEST
+#ifdef NATIVE_SMP_WORKLOAD
+    "/bin/test_native_smp",
+#elif defined(MEMORY_TRANSITIONS_TEST)
     "/bin/test_native_memory",
 #elif defined(NATIVE_ISOLATION_TEST)
     "/bin/test_native_isolation",
@@ -73,6 +78,13 @@ static void init_task_entry(void* arg)
     (void)arg;
 
     VOS3_INFO("Init: Kernel init task starting");
+#ifdef NATIVE_SMP_WORKLOAD
+    for (uint32_t cpu = 0; cpu < vos3_smp_cpu_count(); cpu++) {
+        const vos3_smp_cpu_info_t *info = vos3_smp_get_cpu_info(cpu);
+        if (info != NULL && info->started)
+            VOS3_INFO("NATIVE_SMP topology cpu=%u apic=%u online=1", cpu, info->apic_id);
+    }
+#endif
 
     /*
      * Set up standard file descriptors (stdin/stdout/stderr).

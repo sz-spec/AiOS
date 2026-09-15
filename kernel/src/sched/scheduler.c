@@ -384,6 +384,11 @@ static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
     /* Update current task for this CPU */
     g_current_task[cpu_id] = next;
     next->cpu_id = cpu_id;
+#ifdef NATIVE_SMP_WORKLOAD
+    if (next->pid > 0 && !(next->flags & VOS3_TASK_FLAG_IDLE))
+        VOS3_INFO("NATIVE_SMP schedule pid=%u cpu=%u apic=%u", next->pid,
+                  cpu_id, vos3_lapic_id());
+#endif
 
     /* Also update per-CPU structure */
     percpu_set_current(next);

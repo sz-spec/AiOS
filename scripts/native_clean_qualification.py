@@ -24,12 +24,15 @@ def main():
     parser.add_argument('--revision', default='HEAD')
     parser.add_argument('--isolation', action='store_true', help='build and run the gated native process-isolation image')
     parser.add_argument('--memory', action='store_true', help='run the gated COW/protection/unmap transition suite')
+    parser.add_argument('--smp-workload', action='store_true', help='observe actual user CPU execution with the existing scheduler')
     parser.add_argument('--seconds', type=int, default=35)
     parser.add_argument('--firmware-code', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-x86_64-code.fd'))
     parser.add_argument('--firmware-vars', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-i386-vars.fd'))
     args = parser.parse_args()
     if args.memory:
         args.isolation = True
+    if args.smp_workload and args.isolation:
+        parser.error('SMP workload requires a separate diagnostic image')
     if args.seconds <= 0:
         parser.error('seconds must be positive')
     repo = Path(__file__).resolve().parents[1]
@@ -50,6 +53,10 @@ def main():
             result['build_command'] += ['MEMORY_TRANSITIONS_TEST=1']
             result['scope'] = 'fresh-source diagnostic image; COW and page-permission transitions in each emulator configuration'
     result['harness_sha256'] = digest(Path(__file__))
+    if args.smp_workload:
+        result['build_command'] += ['HEADLESS_AUDIT=1', 'NATIVE_SMP_WORKLOAD=1',
+                                    'BUILD_DIR=build/native-smp', 'INSTALLER_ISO=../dist/vos5-smp.iso']
+        result['scope'] = 'actual user CPU identities; no simultaneous execution or isolation proof'
 
     def call(cmd, timeout=30):
         return subprocess.check_output(cmd, cwd=repo, text=True, stderr=subprocess.STDOUT, timeout=timeout).strip()
@@ -95,17 +102,24 @@ def main():
         assert all(digest(work / name) == value for name, value in inputs.items()), 'build mutated source inputs'
         result['source_inputs_unchanged'] = True
         iso = work / ('dist/vos5-isolation.iso' if args.isolation else 'dist/vos5.iso')
+        if args.smp_workload:
+            iso = work / 'dist/vos5-smp.iso'
         assert iso.is_file()
         iso.chmod(0o444)
         result['iso_sha256'] = digest(iso)
         result['iso_bytes'] = iso.stat().st_size
         build_dir = 'kernel/build/native-isolation' if args.isolation else 'kernel/build/native-unified'
+        if args.smp_workload:
+            build_dir = 'kernel/build/native-smp'
         result['kernel_sha256'] = digest(work / build_dir / 'vos3.elf')
         if args.isolation:
             result['user_test_sha256'] = digest(work / build_dir / ('user/bin/test_native_memory' if args.memory else 'user/bin/test_native_isolation'))
         classifier = repo / ('scripts/native_isolation_smoke.py' if args.isolation else 'scripts/native_boot_smoke.py')
         if args.memory:
             classifier = repo / 'scripts/native_memory_smoke.py'
+        if args.smp_workload:
+            result['user_test_sha256'] = digest(work / build_dir / 'user/bin/test_native_smp')
+            classifier = repo / 'scripts/native_smp_smoke.py'
         result['classifier_sha256'] = digest(classifier)
         result['qemu_version'] = call(['qemu-system-x86_64', '--version']).splitlines()[0]
         result['firmware_sha256'] = {'code': digest(args.firmware_code), 'vars_template': digest(args.firmware_vars)}

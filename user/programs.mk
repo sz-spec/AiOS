@@ -7,3 +7,6 @@ endif
 ifeq ($(MEMORY_TRANSITIONS_TEST),1)
 PROGRAMS += test_native_memory
 endif
+ifeq ($(NATIVE_SMP_WORKLOAD),1)
+PROGRAMS += test_native_smp
+endif
