@@ -21,6 +21,12 @@ now covers COW, read-only/PROT_NONE/NX permissions and unmap behavior on 4 KiB
 anonymous pages. Kernel-address mprotect and permission bypasses were corrected.
 Concurrent shared-address-space execution and remote TLB revocation remain open.
 
+[AP user-execution qualification](docs/design/evidence/native-smp-qualification.md)
+now demonstrates actual CPL3 computation on secondary CPUs in a separately gated
+diagnostic image, with BIOS/UEFI and single-CPU controls. The normal scheduler
+remains unchanged; simultaneous execution and cross-CPU memory revocation are
+separate, unqualified gates.
+
 The governing architecture is recorded in
 [core requirements](docs/design/CORE_REQUIREMENTS.md), alongside the supplied
 [historical technical brief](docs/design/vOS_Technical_Brief.pdf).

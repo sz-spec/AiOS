@@ -1,0 +1,28 @@
+[
+  {
+    "flags": [
+      "NATIVE_SMP_TEST=1"
+    ],
+    "exit": 2,
+    "expected_error": "requires NATIVE_SMP_WORKLOAD=1",
+    "passed": true
+  },
+  {
+    "flags": [
+      "NATIVE_SMP_WORKLOAD=1"
+    ],
+    "exit": 2,
+    "expected_error": "requires HEADLESS_AUDIT=1",
+    "passed": true
+  },
+  {
+    "flags": [
+      "HEADLESS_AUDIT=1",
+      "NATIVE_SMP_WORKLOAD=1",
+      "NATIVE_ISOLATION_TEST=1"
+    ],
+    "exit": 2,
+    "expected_error": "requires a separate diagnostic image",
+    "passed": true
+  }
+]

@@ -49,6 +49,19 @@ It adds `MEMORY_TRANSITIONS_TEST=1` to the diagnostic flavor and uses
 for corrected behavior, runtime results, explicit mmap compatibility limits and
 the remaining shared-VM/remote-TLB qualification gap.
 
+To qualify actual user execution on secondary CPUs in a separate diagnostic image:
+
+```sh
+python3 scripts/native_clean_qualification.py --smp-test --output /private/tmp/vos5-smp-new
+```
+
+Use a new output directory for every run. This adds `HEADLESS_AUDIT=1`,
+`NATIVE_SMP_WORKLOAD=1` and `NATIVE_SMP_TEST=1`, builds `build/native-smp`, and
+boots `dist/vos5-smp.iso` in all four configurations. `--smp-workload` alone uses
+the same observer and workload with the old scheduler; its multi-CPU cases are
+expected to fail until AP scheduling is enabled. SMP and isolation/memory flavors
+are deliberately separate. See [qualification and claim limits](evidence/native-smp-qualification.md).
+
 `BUILD_DIR` is relative to `kernel/`, defaults to `build/native-unified`, and
 should be a relative path without whitespace. The repository itself may have
 spaces in its absolute path. Use distinct build directories for concurrent

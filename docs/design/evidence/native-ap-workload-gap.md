@@ -25,6 +25,12 @@ First determine whether the current production scheduler can pass this test unch
 
 ## Claim boundaries
 
+Update, 2026-09-15: the proposed actual-user-execution gate is now implemented and
+[qualified in an explicitly gated diagnostic image](native-smp-qualification.md).
+The unchanged scheduler fails its multi-CPU criterion. The analysis above remains
+the baseline diagnosis; the normal production build still does not enable the new
+AP scheduler. The stronger concurrency and memory-revocation claims below remain open.
+
 1. **Online CPU:** initialization and BSP release succeeded.
 2. **Actual user execution on multiple CPUs:** genuine ring-3 computation checkpoints were observed on distinct hardware CPUs.
 3. **Concurrent progress:** independent workloads made progress during a coordinated overlapping interval; migration of a single worker between CPUs is insufficient.

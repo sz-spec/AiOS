@@ -1,5 +1,11 @@
 # Native boot qualification — updated 2026-09-15
 
+The [gated AP user-execution test](evidence/native-smp-qualification.md) passes
+BIOS/UEFI ×1/4 CPUs, including actual CPL3 CPUID observations on non-BSP CPUs.
+The same workload with AP scheduling disabled fails the multi-CPU criterion while
+passing single-CPU controls. This diagnostic gate does not enable production SMP
+or establish simultaneous progress, shared-VM synchronization or TLB revocation.
+
 The [memory-transition gate](evidence/native-memory-transitions-qualification.md)
 passes 48 sequential cases after VMA/COW/mapping-boundary fixes. Normal boot and
 the prior isolation suite also pass BIOS/UEFI ×1/4 CPUs on the changed kernel.

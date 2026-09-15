@@ -49,3 +49,23 @@ These changes resolve the identified AP interrupt/reclamation blocker sufficient
 Reviewed root's gated `NATIVE_SMP_WORKLOAD` record lock shared by `vos3_log` and the TTY console write path. The syscall copies user data to stack/heap bounce storage before acquiring this lock. Within the reviewed locked paths, formatting/ring updates and serial/VGA output do not allocate or call the logger recursively; raw console helpers do not reacquire the record lock. Interrupt disable/restore protects against ordinary same-CPU interrupt reentry. This is acceptable for the next bounded diagnostic trial and prevents interleaved kernel/user checkpoint records without loosening the classifier.
 
 Limits remain: direct raw-console and panic output are outside this serialization; NMI or a fault while formatting invalid kernel data can still reenter logging. Large writes split into bounce chunks are not guaranteed atomic as a whole. The tested checkpoint records fit the small bounded-write path. This is not a general crash-safe console or arbitrary untrusted logging guarantee. The earlier interleaved multi-CPU trace remains a failed observation, not a retroactive pass.
+
+## Gated clean runtime evidence
+
+Independently reviewed the clean result for commit `c4df93d468585542147ca96f5aba04b6cd2e5843` at `/private/tmp/vos5-smp-records-20260915`, recomputed ISO/kernel/user-ELF hashes, and reclassified all four original serial logs. All pass: BIOS/UEFI single-CPU controls report worker APIC 0; four-CPU BIOS reports worker APIC IDs 1 and 2, and four-CPU UEFI IDs 0 and 1. These are actual CPL3 CPUID observations with matching kernel topology/schedule evidence and verified checkpoint arithmetic, child exits and parent progress.
+
+ISO `3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d`; kernel `f239f485af2ce7a4ca8e5764b72c26f714eb79fea28140b47ec6d726cee28af3`; user ELF `cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b`. Every boot retains the same ISO hash. The run took 106.61 seconds and recorded successful build-container cleanup.
+
+The recorded build explicitly enables `HEADLESS_AUDIT=1`, `NATIVE_SMP_WORKLOAD=1` and `NATIVE_SMP_TEST=1`. Source inspection confirms activation requires the workload flag and remains absent by default; the workload alone does not enable AP scheduling. The supplied four-commit source secret scan reports zero findings. This is a scoped scan result, not a repository-history guarantee.
+
+The gated result establishes user execution on non-BSP processors. The serialized old-scheduler baseline and normal-build regression remain pending at this writing, so comparative/default-build qualification is not yet closed. No remote TLB, shared-VM concurrency, FPU isolation, fairness, simultaneous execution or physical-hardware guarantee is inferred.
+
+## Final comparative/default-build review and verdict
+
+Independently reclassified the persisted serialized baseline: both single-CPU controls pass; BIOS/UEFI four-CPU cases fail specifically because workers did not demonstrate multiple hardware CPUs. This supplies the required controlled negative baseline without treating malformed/interleaved output as the evidence of absent AP execution.
+
+Independently reclassified all four normal-regression raw traces successfully. Its kernel hash `9d0bfc6065797c5c6f2a2d66155719f356ac653c285a9a806832a75ac7b8457f` matches the previously qualified normal kernel from the memory-transition regression. Together with the explicit build gates, this supports the default-off boundary: the AP scheduler remains diagnostic and is not activated in ordinary builds. Comparative baseline and normal-regression checks are now complete, superseding earlier pending statements.
+
+Reviewed the final qualification report's scope: it correctly excludes simultaneous execution, fairness, sustained stability, FPU isolation, shared-VM synchronization, remote TLB safety and physical hardware. The gated AP user-execution stage is accepted within those limits; production activation is not approved by this evidence.
+
+Independently recomputed all 134 source-manifest values identified by the publication secret-scan review against the isolated clean source files. Every value is its corresponding file's SHA-256 digest: all are hash false positives. No potential secret values were printed and no suppressions were added. This triage is limited to the reported findings.

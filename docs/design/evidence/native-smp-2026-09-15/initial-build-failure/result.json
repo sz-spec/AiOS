@@ -1,0 +1,28 @@
+{
+  "passed": false,
+  "build_container_name": "vos5-native-clean-24b5b532d16a",
+  "build_command": [
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_SMP_WORKLOAD=1",
+    "BUILD_DIR=build/native-smp",
+    "INSTALLER_ISO=../dist/vos5-smp.iso"
+  ],
+  "scope": "actual user CPU identities; no simultaneous execution or isolation proof",
+  "network": "none",
+  "source_date_epoch": 1700000000,
+  "harness_sha256": "2897cd1a50cc9907594c73694f54da5b699c08cc847505be9d9a7a0fb858b309",
+  "commit": "5795c9734ba297f6612cf20d70fe3588cc1d3532",
+  "git_tree": "f9d9520954422ca69f2c971ce434f29e92dd4403",
+  "archive_sha256": "7a3b5f9d1131f8ac9920b7df6a31a18297963cd82a4f9d8f072cf93272c5f0ff",
+  "initial_generated_outputs_absent": true,
+  "source_files": 5436,
+  "source_manifest_sha256": "69d8ed3a2a5e937b4176af4105bdcffb9744ae1af8ebfaef13fe32a1d0709c89",
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "build_exit": 2,
+  "error": "AssertionError: clean build failed; see build.log",
+  "build_container_removed": true,
+  "elapsed_seconds": 35.72
+}

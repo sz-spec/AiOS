@@ -1,0 +1,39 @@
+{
+  "passed": false,
+  "build_container_name": "vos5-native-clean-de694bf003c4",
+  "build_command": [
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_SMP_WORKLOAD=1",
+    "BUILD_DIR=build/native-smp",
+    "INSTALLER_ISO=../dist/vos5-smp.iso"
+  ],
+  "scope": "actual user CPU identities; no simultaneous execution or isolation proof",
+  "network": "none",
+  "source_date_epoch": 1700000000,
+  "harness_sha256": "902f72b8529d3c3223b1b52fcb31efbdd72fd75cc5ea395e645a01e00c685a60",
+  "commit": "912e08e18743f9f0cd5294026c40b9e02c7db4b5",
+  "git_tree": "a10c4fadd2ad0241f97b5c807d71cad8be4bfbe8",
+  "archive_sha256": "f6570c1890b77127d5a0b8418c14a8f515c789aec282d288f82636a47603b553",
+  "initial_generated_outputs_absent": true,
+  "source_files": 5436,
+  "source_manifest_sha256": "5b4c562cee0e064ef598b939e90da3a09bc4206376b0b23b43c17986399c9d9e",
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "build_exit": 0,
+  "source_inputs_unchanged": true,
+  "iso_sha256": "6048b16d6890b683625eda22f106de8849f97706c8c704768a3fc0df53adb2ef",
+  "iso_bytes": 12830720,
+  "kernel_sha256": "cafff3c46590a9c811e1975a60c0ad24422bad8983d2b5ec6dc57b99406f0574",
+  "user_test_sha256": "cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b",
+  "classifier_sha256": "207b34fe145214e4e0223256333db51dd717a55085e449864d233abc3d5cd1a2",
+  "qemu_version": "QEMU emulator version 10.2.2",
+  "firmware_sha256": {
+    "code": "33090cc07675baa5190d9f1e84bf5176b33bcbfa9bacac522961150cdb6dbb2a",
+    "vars_template": "5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e"
+  },
+  "error": "AssertionError: bios1",
+  "build_container_removed": true,
+  "elapsed_seconds": 106.8
+}

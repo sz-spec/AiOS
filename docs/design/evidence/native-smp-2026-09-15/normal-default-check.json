@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "diagnostic_defines_absent": true,
+  "kernel_sha256_matches_previous_qualified_normal": "9d0bfc6065797c5c6f2a2d66155719f356ac653c285a9a806832a75ac7b8457f",
+  "iso_matches_previous": false,
+  "scope": "normal kernel unchanged; no byte-identical ISO claim"
+}

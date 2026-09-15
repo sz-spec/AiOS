@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "failures": [],
+  "worker_apic_ids": [
+    0
+  ],
+  "online_cpus": 1,
+  "scope": "single-CPU deterministic workload control",
+  "iso_sha256": "c8a9e7b45693f94ba6c83a350d6865895428068f147763474d55271fe6d9230f",
+  "iso_sha256_after": "c8a9e7b45693f94ba6c83a350d6865895428068f147763474d55271fe6d9230f",
+  "artifact_unchanged": true,
+  "firmware": "bios",
+  "cpu": "qemu64",
+  "smp": 1,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}

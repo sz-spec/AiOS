@@ -1,0 +1,111 @@
+{
+  "passed": true,
+  "build_container_name": "vos5-native-clean-afd082f8561d",
+  "build_command": [
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_SMP_WORKLOAD=1",
+    "BUILD_DIR=build/native-smp",
+    "INSTALLER_ISO=../dist/vos5-smp.iso",
+    "NATIVE_SMP_TEST=1"
+  ],
+  "scope": "actual user CPU identities; no simultaneous execution or isolation proof",
+  "network": "none",
+  "source_date_epoch": 1700000000,
+  "harness_sha256": "902f72b8529d3c3223b1b52fcb31efbdd72fd75cc5ea395e645a01e00c685a60",
+  "commit": "c4df93d468585542147ca96f5aba04b6cd2e5843",
+  "git_tree": "75233300d0d0ebc93fd679c2e5653be30d03e4af",
+  "archive_sha256": "5f4887943a8c0c4752039896980607d6b2d05e50f23526a1d4b2284d64d178bb",
+  "initial_generated_outputs_absent": true,
+  "source_files": 5436,
+  "source_manifest_sha256": "aa8caba28c2977f4a9ecf10ee3e3b6dc63ffe03bdd6264a4e7bfd700cb3b0bac",
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "build_exit": 0,
+  "source_inputs_unchanged": true,
+  "iso_sha256": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+  "iso_bytes": 12832768,
+  "kernel_sha256": "f239f485af2ce7a4ca8e5764b72c26f714eb79fea28140b47ec6d726cee28af3",
+  "user_test_sha256": "cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b",
+  "classifier_sha256": "207b34fe145214e4e0223256333db51dd717a55085e449864d233abc3d5cd1a2",
+  "qemu_version": "QEMU emulator version 10.2.2",
+  "firmware_sha256": {
+    "code": "33090cc07675baa5190d9f1e84bf5176b33bcbfa9bacac522961150cdb6dbb2a",
+    "vars_template": "5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e"
+  },
+  "boots": [
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0
+      ],
+      "online_cpus": 1,
+      "scope": "single-CPU deterministic workload control",
+      "iso_sha256": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "iso_sha256_after": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "artifact_unchanged": true,
+      "firmware": "bios",
+      "cpu": "qemu64",
+      "smp": 1,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        1,
+        2
+      ],
+      "online_cpus": 4,
+      "scope": "actual user execution across CPU identities; no simultaneous execution/fairness proof",
+      "iso_sha256": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "iso_sha256_after": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "artifact_unchanged": true,
+      "firmware": "bios",
+      "cpu": "qemu64",
+      "smp": 4,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0
+      ],
+      "online_cpus": 1,
+      "scope": "single-CPU deterministic workload control",
+      "iso_sha256": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "iso_sha256_after": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "artifact_unchanged": true,
+      "firmware": "uefi",
+      "cpu": "qemu64",
+      "smp": 1,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    },
+    {
+      "passed": true,
+      "failures": [],
+      "worker_apic_ids": [
+        0,
+        1
+      ],
+      "online_cpus": 4,
+      "scope": "actual user execution across CPU identities; no simultaneous execution/fairness proof",
+      "iso_sha256": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "iso_sha256_after": "3bebb24ff547d9ea69b27f535e9cd8df89e27dbc49e84d0ba6b05a1c5fd8d75d",
+      "artifact_unchanged": true,
+      "firmware": "uefi",
+      "cpu": "qemu64",
+      "smp": 4,
+      "observation_seconds": 35,
+      "exit_status": "observation_timeout"
+    }
+  ],
+  "build_container_removed": true,
+  "elapsed_seconds": 106.61
+}

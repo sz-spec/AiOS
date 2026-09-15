@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "failures": [
+    "workers did not demonstrate multiple hardware CPUs"
+  ],
+  "iso_sha256": "c8a9e7b45693f94ba6c83a350d6865895428068f147763474d55271fe6d9230f",
+  "iso_sha256_after": "c8a9e7b45693f94ba6c83a350d6865895428068f147763474d55271fe6d9230f",
+  "artifact_unchanged": true,
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 4,
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout"
+}
