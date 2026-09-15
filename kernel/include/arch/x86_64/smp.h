@@ -233,6 +233,9 @@ void vos3_lapic_write(uint32_t reg, uint32_t value);
  * @param[in] vector Interrupt vector
  */
 void vos3_lapic_send_ipi(uint32_t apic_id, uint32_t vector);
+/* Caller excludes local interrupts. Zero on delivery completion; -1 on
+ * invalid xAPIC destination/vector or exhausted polling budget. */
+int vos3_lapic_send_ipi_checked(uint32_t apic_id, uint32_t vector, uint32_t budget);
 
 /**
  * @brief Send INIT IPI to specified AP

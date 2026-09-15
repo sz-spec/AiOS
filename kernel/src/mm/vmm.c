@@ -14,6 +14,7 @@
  */
 
 #include "../../include/vos/vmm.h"
+#include "../../include/vos/tlb_shootdown.h"
 #include "../../include/vos/pmm.h"
 #include "../../include/vos/atomic.h"
 #include "../../include/vos/console.h"
@@ -1004,133 +1005,27 @@ void vos3_vmm_flush_tlb(void)
  * Phase 4.2: IPI-Optimized SMP TLB Flush Range
  * ============================================================================ */
 
-/** @brief Shared state for IPI TLB shootdown handler */
-static volatile uintptr_t g_flush_base = 0;
-static volatile size_t    g_flush_size = 0;
-static volatile uint32_t  g_flush_ack_count = 0;
-
-/** @brief Spinlock protecting flush_range publish-wait sequence */
-static vos3_spinlock_t g_flush_lock = VOS3_SPINLOCK_INIT;
-
-/**
- * @brief IPI handler for remote TLB flush (registered on vector 0xFB)
- */
+/* Protocol state and acknowledgement handling live in tlb_shootdown.c. */
 static void vos3_vmm_tlb_flush_ipi_handler(vos3_int_frame_t* frame)
 {
     (void)frame;
-
-    uintptr_t base = g_flush_base;
-    size_t    size = g_flush_size;
-
-    for (uintptr_t a = base; a < base + size; a += VOS3_PAGE_SIZE_2M) {
-        vos3_vmm_invlpg(a);
-    }
-
-    /* Acknowledge: caller spins on this counter */
-    __atomic_fetch_add(&g_flush_ack_count, 1, __ATOMIC_RELEASE);
-
-    /* Send EOI to LAPIC */
+    vos3_tlb_shootdown_handle();
     vos3_lapic_eoi();
-}
-
-void vos3_vmm_flush_range(uintptr_t base, size_t size)
-{
-    uint32_t ncpus = vos3_smp_cpu_count();
-
-    /* Flush local TLB first */
-    for (uintptr_t a = base; a < base + size; a += VOS3_PAGE_SIZE_2M) {
-        vos3_vmm_invlpg(a);
-    }
-
-    /* If single-CPU, no IPI needed */
-    if (ncpus <= 1U) {
-        vos3_atomic_fetch_add64(&g_vmm_stats.tlb_flushes, 1ULL);
-        return;
-    }
-
-    uint32_t expected_acks = ncpus - 1U;
-
-    /* Serialize concurrent flush_range callers — prevents globals corruption */
-    vos3_spinlock_lock(&g_flush_lock);
-
-    /* Set shared state for IPI handler */
-    g_flush_base = base;
-    g_flush_size = size;
-
-    /* Reset acknowledge counter */
-    __atomic_store_n(&g_flush_ack_count, 0, __ATOMIC_SEQ_CST);
-    __asm__ volatile("mfence" ::: "memory");
-
-    /* Short-Hand IPI Broadcast: "All Excluding Self" — single LAPIC write */
-    vos3_lapic_send_ipi_shorthand(VOS3_IPI_TLB_FLUSH,
-                                  VOS3_ICR_ALL_EXCL_SELF);
-
-    /* IPI Acknowledge Barrier: spin with deterministic timeout.
-     * __builtin_ia32_pause mitigates speculative side-channels during TLB shootdown.
-     * Timeout after ~100K iterations (~5ms at 2GHz with ~100-cycle pause). */
-    {
-        uint32_t timeout = 100000U;
-        while (__atomic_load_n(&g_flush_ack_count, __ATOMIC_ACQUIRE) < expected_acks) {
-            __asm__ volatile("pause" ::: "memory");
-            if (--timeout == 0) {
-                VOS3_WARN("VMM: TLB flush IPI timeout (got %u/%u acks)",
-                          __atomic_load_n(&g_flush_ack_count, __ATOMIC_RELAXED),
-                          expected_acks);
-                break;
-            }
-        }
-    }
-
-    vos3_spinlock_unlock(&g_flush_lock);
-
-    vos3_atomic_fetch_add64(&g_vmm_stats.tlb_flushes, 1ULL);
 }
 
 int vos3_vmm_flush_range_checked(uintptr_t base, size_t size)
 {
-    uint32_t ncpus = vos3_smp_cpu_count();
-
-    /* Flush local TLB first */
-    for (uintptr_t a = base; a < base + size; a += VOS3_PAGE_SIZE_2M) {
-        vos3_vmm_invlpg(a);
-    }
-
-    /* If single-CPU, no IPI needed — always succeeds */
-    if (ncpus <= 1U) {
+    int result = vos3_tlb_shootdown_checked(base, size);
+    if (result == 0 && size != 0)
         vos3_atomic_fetch_add64(&g_vmm_stats.tlb_flushes, 1ULL);
-        return 0;
-    }
+    return result;
+}
 
-    uint32_t expected_acks = ncpus - 1U;
-
-    vos3_spinlock_lock(&g_flush_lock);
-
-    g_flush_base = base;
-    g_flush_size = size;
-
-    __atomic_store_n(&g_flush_ack_count, 0, __ATOMIC_SEQ_CST);
-    __asm__ volatile("mfence" ::: "memory");
-
-    vos3_lapic_send_ipi_shorthand(VOS3_IPI_TLB_FLUSH,
-                                  VOS3_ICR_ALL_EXCL_SELF);
-
-    {
-        uint32_t timeout = 100000U;
-        while (__atomic_load_n(&g_flush_ack_count, __ATOMIC_ACQUIRE) < expected_acks) {
-            __asm__ volatile("pause" ::: "memory");
-            if (--timeout == 0) {
-                vos3_spinlock_unlock(&g_flush_lock);
-                VOS3_WARN("VMM: TLB flush IPI timeout (checked, got %u/%u acks)",
-                          __atomic_load_n(&g_flush_ack_count, __ATOMIC_RELAXED),
-                          expected_acks);
-                return -1;  /* Timeout — caller marks slot CORRUPT */
-            }
-        }
-    }
-
-    vos3_spinlock_unlock(&g_flush_lock);
-    vos3_atomic_fetch_add64(&g_vmm_stats.tlb_flushes, 1ULL);
-    return 0;
+void vos3_vmm_flush_range(uintptr_t base, size_t size)
+{
+    int result = vos3_vmm_flush_range_checked(base, size);
+    if (result != 0)
+        vos3_panic("TLB shootdown failed (%d); refusing unsafe continuation", result);
 }
 
 void vos3_vmm_get_stats(vos3_vmm_stats_t* stats)

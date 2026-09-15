@@ -736,10 +736,11 @@ static inline uint64_t vos3_vmm_flags_to_pte_ex(vos3_vmm_flags_t flags, int is_l
 /**
  * @brief Flush TLB range across all CPUs via IPI broadcast
  *
- * Flushes local TLB, then sends Short-Hand IPI "All Excluding Self"
- * with acknowledge barrier (spins until all APs confirm).
+ * Conservative full-context invalidation on every started CPU, with
+ * generation-bound per-CPU acknowledgements. Panics on failure: callers of
+ * this void API cannot safely continue after incomplete invalidation.
  *
- * @param[in] base  Virtual base address (2MB-aligned for HugePages)
+ * @param[in] base  Canonical virtual base address (alignment not required)
  * @param[in] size  Size in bytes to flush
  */
 void vos3_vmm_flush_range(uintptr_t base, size_t size);
@@ -748,7 +749,10 @@ void vos3_vmm_flush_range(uintptr_t base, size_t size);
  * @brief Flush TLB range with error return (Phase 4.2.5)
  * @param[in] base  Virtual base address
  * @param[in] size  Size in bytes
- * @return 0 on success, -1 on IPI timeout
+ * @return 0 on success, -22 invalid range/topology, -16 concurrent request,
+ *         -110 missing acknowledgement, -5 permanently failed protocol.
+ * Timeout poisons subsequent requests until reboot. Callers must retain old
+ * physical pages and serialize PTE changes until this operation succeeds.
  */
 int vos3_vmm_flush_range_checked(uintptr_t base, size_t size);
 

@@ -91,6 +91,10 @@ static void init_task_entry(void* arg)
      * These must be opened before exec so the user process has
      * working console I/O.
      */
+#ifdef NATIVE_TLB_TEST
+    extern void vos3_native_tlb_test(void);
+    vos3_native_tlb_test();
+#endif
     int fd0 = vos3_open("/dev/console", VOS3_O_RDWR, 0U);
     if (fd0 < 0) {
         VOS3_ERROR("Init: Failed to open /dev/console for stdin (error %d)", fd0);

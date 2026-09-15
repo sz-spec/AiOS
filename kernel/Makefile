@@ -117,6 +117,8 @@ C_SOURCES := \
     $(SRC_DIR)/boot/uefi_boot.c \
     $(SRC_DIR)/mm/pmm.c \
     $(SRC_DIR)/mm/vmm.c \
+    $(SRC_DIR)/mm/tlb_shootdown.c \
+    $(SRC_DIR)/arch/x86_64/tlb_shootdown.c \
     $(SRC_DIR)/arch/x86_64/kpti_roots.c \
     $(SRC_DIR)/mm/heap.c \
     $(SRC_DIR)/mm/ai_guard.c \
@@ -318,6 +320,9 @@ endif
 ifeq ($(NATIVE_ISOLATION_TEST),1)
 C_SOURCES += $(SRC_DIR)/tests/test_native_isolation.c
 endif
+ifeq ($(NATIVE_TLB_TEST),1)
+C_SOURCES += $(SRC_DIR)/tests/test_native_tlb.c
+endif
 
 # Assembly sources
 ASM_SOURCES := \
@@ -402,6 +407,18 @@ ifneq ($(NATIVE_SMP_WORKLOAD),1)
 $(error NATIVE_SMP_TEST=1 requires NATIVE_SMP_WORKLOAD=1)
 endif
 CFLAGS += -DNATIVE_SMP_TEST
+endif
+ifeq ($(NATIVE_TLB_TEST),1)
+ifneq ($(NATIVE_SMP_TEST),1)
+$(error NATIVE_TLB_TEST=1 requires NATIVE_SMP_TEST=1)
+endif
+CFLAGS += -DNATIVE_TLB_TEST
+endif
+ifeq ($(NATIVE_TLB_SKIP_FLUSH),1)
+ifneq ($(NATIVE_TLB_TEST),1)
+$(error NATIVE_TLB_SKIP_FLUSH=1 requires NATIVE_TLB_TEST=1)
+endif
+CFLAGS += -DNATIVE_TLB_SKIP_FLUSH
 endif
 
 ifdef PRODUCTION

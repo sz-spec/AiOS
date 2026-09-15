@@ -221,6 +221,26 @@ void vos3_lapic_send_ipi(uint32_t apic_id, uint32_t vector)
     lapic_wait_icr_idle();
 }
 
+int vos3_lapic_send_ipi_checked(uint32_t apic_id, uint32_t vector, uint32_t budget)
+{
+    if (apic_id > 255U || vector < 16U || vector > 255U || budget == 0)
+        return -1;
+    uint32_t remaining = budget;
+    while ((vos3_lapic_read(VOS3_LAPIC_ICR_LOW) & VOS3_ICR_PENDING) != 0) {
+        if (--remaining == 0) return -1;
+        __asm__ volatile("pause" ::: "memory");
+    }
+    vos3_lapic_write(VOS3_LAPIC_ICR_HIGH, apic_id << 24);
+    vos3_lapic_write(VOS3_LAPIC_ICR_LOW, vector | VOS3_ICR_FIXED | VOS3_ICR_PHYSICAL |
+                     VOS3_ICR_ASSERT | VOS3_ICR_EDGE);
+    remaining = budget;
+    while ((vos3_lapic_read(VOS3_LAPIC_ICR_LOW) & VOS3_ICR_PENDING) != 0) {
+        if (--remaining == 0) return -1;
+        __asm__ volatile("pause" ::: "memory");
+    }
+    return 0;
+}
+
 void vos3_lapic_send_init(uint32_t apic_id)
 {
     lapic_wait_icr_idle();

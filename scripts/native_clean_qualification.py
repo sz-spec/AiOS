@@ -26,10 +26,16 @@ def main():
     parser.add_argument('--memory', action='store_true', help='run the gated COW/protection/unmap transition suite')
     parser.add_argument('--smp-workload', action='store_true', help='observe actual user CPU execution with the existing scheduler')
     parser.add_argument('--smp-test', action='store_true', help='enable the gated AP scheduler with the SMP workload')
+    parser.add_argument('--tlb', action='store_true', help='warm and replace real kernel translations on each CPU')
+    parser.add_argument('--tlb-skip-flush', action='store_true', help='negative diagnostic: deliberately omit remap invalidation')
     parser.add_argument('--seconds', type=int, default=35)
     parser.add_argument('--firmware-code', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-x86_64-code.fd'))
     parser.add_argument('--firmware-vars', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-i386-vars.fd'))
     args = parser.parse_args()
+    if args.tlb_skip_flush:
+        args.tlb = True
+    if args.tlb:
+        args.smp_test = True
     if args.smp_test:
         args.smp_workload = True
     if args.memory:
@@ -62,6 +68,11 @@ def main():
         result['scope'] = 'actual user CPU identities; no simultaneous execution or isolation proof'
         if args.smp_test:
             result['build_command'] += ['NATIVE_SMP_TEST=1']
+        if args.tlb:
+            result['build_command'] += ['NATIVE_TLB_TEST=1']
+            result['scope'] = 'kernel translation replacement and actual AP user execution; no shared-user-VM isolation proof'
+        if args.tlb_skip_flush:
+            result['build_command'] += ['NATIVE_TLB_SKIP_FLUSH=1']
 
     def call(cmd, timeout=30):
         return subprocess.check_output(cmd, cwd=repo, text=True, stderr=subprocess.STDOUT, timeout=timeout).strip()
@@ -125,6 +136,8 @@ def main():
         if args.smp_workload:
             result['user_test_sha256'] = digest(work / build_dir / 'user/bin/test_native_smp')
             classifier = repo / 'scripts/native_smp_smoke.py'
+        if args.tlb:
+            classifier = repo / 'scripts/native_tlb_smoke.py'
         result['classifier_sha256'] = digest(classifier)
         result['qemu_version'] = call(['qemu-system-x86_64', '--version']).splitlines()[0]
         result['firmware_sha256'] = {'code': digest(args.firmware_code), 'vars_template': digest(args.firmware_vars)}
