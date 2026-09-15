@@ -11,6 +11,10 @@ the keyboard-driven wizard. Full kernel isolation, concurrent user workloads
 on secondary CPUs, persistent installation, hosted workflows
 and remaining legacy capabilities still require work and validation.
 
+The [SHM authorization stage](docs/design/evidence/native-shm-authorization.md)
+binds creator close to immutable task identities and rejects stale region handles.
+Its evidence distinguishes tested denials from remaining IPC/concurrency limits.
+
 The [shared-VM lifetime stage](docs/design/evidence/native-vm-lifetime-qualification.md)
 separates COW/cognitive metadata and adds task/CPU ownership across clone and exec.
 The [review council](docs/design/evidence/expert-council-2026-09-15/README.md)

@@ -11,3 +11,13 @@ Validation: reviewed the SHM detach correction and real-PMM test, plus authored 
 2026-09-15 follow-up: source `3ce56da` fixes idle-task orphan adoption. All four corrected memory/lifetime logs and 5,594 source hashes independently verify; original failure remains preserved. This bounded sequential gate passes, while general PID ambiguity, concurrency and release findings remain open. Original review scope above is unchanged.
 
 **P1 follow-up:** creator-first SHM finalization passes all four independently verified native configurations at `3daf340`. Separate authorization gap: `ipc.c:sys_shm_destroy` forwards caller-supplied IDs without checking creator ownership; the new creator-close flag does not authenticate callers. Full IPC security remains unqualified.
+
+## Subsequent SHM authorization disposition — 2026-09-15
+
+The prior direct foreign-destruction blocker is closed within the task-local
+contract by `9e58227056eeb0ec0f6a5b14330406488a26a542`; all four new memory
+configurations pass. This supersedes earlier statements that this specific
+check remained absent. See the [authorization qualification](../native-shm-authorization.md)
+for immutable identities, stale-handle protection and explicit remaining IPC,
+creator-orphan cleanup and concurrency limits. Historical review findings above
+remain the record of their original source baseline.

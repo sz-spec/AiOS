@@ -1,0 +1,22 @@
+Actual C PTE metadata
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.580s
+
+OK
+
+Actual C TLB protocol
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.467s
+
+OK
+
+Actual C SHM identity helpers
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.403s
+
+OK
+production-helper-sha256 f355f6d7b4622fe2a35550955fbdcd8519100de800c3af198da3e5947f9f768d
+

@@ -54,3 +54,13 @@ address-space reap and duplicate creator-close rejection. The full new marker
 is mandatory; historical shorter markers fail the observer. This closes the
 sequential ownership defect only. Unauthorized creator destruction by a foreign
 caller remains an explicit P1 release blocker in the action table.
+
+## Subsequent SHM authorization disposition — 2026-09-15
+
+The prior direct foreign-destruction blocker is closed within the task-local
+contract by `9e58227056eeb0ec0f6a5b14330406488a26a542`; all four new memory
+configurations pass. This supersedes earlier statements that this specific
+check remained absent. See the [authorization qualification](../native-shm-authorization.md)
+for immutable identities, stale-handle protection and explicit remaining IPC,
+creator-orphan cleanup and concurrency limits. Historical review findings above
+remain the record of their original source baseline.

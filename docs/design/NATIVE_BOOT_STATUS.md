@@ -1,5 +1,8 @@
 # Native boot qualification — updated 2026-09-15
 
+The [SHM authorization report](evidence/native-shm-authorization.md) records
+creator identity, stale-handle protection and native foreign-process controls.
+
 The [shared-VM lifetime report](evidence/native-vm-lifetime-qualification.md)
 records COW metadata separation, explicit task/CPU references, owned file/SHM
 backings and the observed AP-idle/init reparenting failure and correction.

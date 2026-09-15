@@ -1,0 +1,259 @@
+{
+  "reviewer": "/root/mcp_upgrade",
+  "source": "9e58227056eeb0ec0f6a5b14330406488a26a542",
+  "scope": "Independent retained source/artifact hashes and archived-classifier raw-log verification; coordinator ran VMs; authorship limits in native-shm-authorization-security.md",
+  "matrices": {
+    "memory": {
+      "source_files_rehashed": 5763,
+      "artifact_hashes_match": true,
+      "iso_sha256": "3bfbb2771ae8d605d70c273c8d67445c03cec9408c4a6622e11e4f95a3e12a94",
+      "kernel_sha256": "9c1381880962cbae7f3a91a756fb83ef72b50cb621dc4030f71ca6ded248953c",
+      "raw_logs": [
+        {
+          "case": "bios1",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 12,
+            "online_cpus": 1,
+            "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+          },
+          "serial_sha256": "c7d64a27ab70b56c04227e867121eafde545f93607413a91fa3d2028ef675267"
+        },
+        {
+          "case": "bios4",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 12,
+            "online_cpus": 4,
+            "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+          },
+          "serial_sha256": "c96bd69625a0a27135afdb4950cc0ebbfaefe3922b95e391b334ada8eb2bf7e2"
+        },
+        {
+          "case": "uefi1",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 12,
+            "online_cpus": 1,
+            "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+          },
+          "serial_sha256": "166a3470c6132d7609df9ea411e9509f2cb47c88bc14725b7173073025bc549e"
+        },
+        {
+          "case": "uefi4",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 12,
+            "online_cpus": 4,
+            "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+          },
+          "serial_sha256": "7bcefed3806466a050e546f4accee0d3e822c1a7ecfbe2288ddf61b24c8fa57f"
+        }
+      ],
+      "build_container_removed": true,
+      "elapsed_seconds": 107.35
+    },
+    "normal": {
+      "source_files_rehashed": 5763,
+      "artifact_hashes_match": true,
+      "iso_sha256": "1dd93751f4c7ba96317dbfcb61ce4e5cb7f7cbf1960b593c57f8e2a188d314b1",
+      "kernel_sha256": "0c7bae821600c75d0e9436338360e4cc429ba650aba2cf375e7ea2b6bcc3431e",
+      "raw_logs": [
+        {
+          "case": "bios1",
+          "classification": {
+            "pmm": true,
+            "vmm": true,
+            "scheduler": true,
+            "wizard_output": true,
+            "online_cpus": 1,
+            "failures": [],
+            "passed": true
+          },
+          "serial_sha256": "a0b3088c485723fc09a525458998a5f689a95543ca438d2ab16139ea98611826"
+        },
+        {
+          "case": "bios4",
+          "classification": {
+            "pmm": true,
+            "vmm": true,
+            "scheduler": true,
+            "wizard_output": true,
+            "online_cpus": 4,
+            "failures": [],
+            "passed": true
+          },
+          "serial_sha256": "055c059546a9a31e2244b73abe1466b89b7243aee92448db3b7ed101fd49672d"
+        },
+        {
+          "case": "uefi1",
+          "classification": {
+            "pmm": true,
+            "vmm": true,
+            "scheduler": true,
+            "wizard_output": true,
+            "online_cpus": 1,
+            "failures": [],
+            "passed": true
+          },
+          "serial_sha256": "55143a36afa89d8e48dac16c7fd49ee793990b242e7e868d169642e40918d068"
+        },
+        {
+          "case": "uefi4",
+          "classification": {
+            "pmm": true,
+            "vmm": true,
+            "scheduler": true,
+            "wizard_output": true,
+            "online_cpus": 4,
+            "failures": [],
+            "passed": true
+          },
+          "serial_sha256": "658328cb5143fb710669e514cfacbe8620d67f17213252a615a2262d1b830a82"
+        }
+      ],
+      "build_container_removed": true,
+      "elapsed_seconds": 106.67,
+      "normal_diagnostic_defines_absent": true
+    },
+    "tlb": {
+      "source_files_rehashed": 5763,
+      "artifact_hashes_match": true,
+      "iso_sha256": "559433d883ced60ad1f145f983ff27ea120ec8d221e405fd9474f3686df1b405",
+      "kernel_sha256": "b6517176ab6e2a171a5dbf190e1e647df5d7faabcfc5fdf16fc43afc0a6036bc",
+      "raw_logs": [
+        {
+          "case": "bios1",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "worker_apic_ids": [
+              0
+            ],
+            "online_cpus": 1,
+            "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+            "tlb_cpus_verified": 1,
+            "tlb_rounds": 2
+          },
+          "serial_sha256": "371fed29e523f6b8cbb063b5c5b41c0d79279332eefc1452352cf61d824af263"
+        },
+        {
+          "case": "bios4",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "worker_apic_ids": [
+              0,
+              3
+            ],
+            "online_cpus": 4,
+            "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+            "tlb_cpus_verified": 4,
+            "tlb_rounds": 2
+          },
+          "serial_sha256": "aa4938edd40da3a0f9f97b43b3ef43d8c02a3b5fb857f76b512e736fe50cb798"
+        },
+        {
+          "case": "uefi1",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "worker_apic_ids": [
+              0
+            ],
+            "online_cpus": 1,
+            "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+            "tlb_cpus_verified": 1,
+            "tlb_rounds": 2
+          },
+          "serial_sha256": "3d62396839df4e16b6614bfe91c5a1f5b85abd9d432c0d4aa75365420ea1754a"
+        },
+        {
+          "case": "uefi4",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "worker_apic_ids": [
+              0,
+              3
+            ],
+            "online_cpus": 4,
+            "scope": "observed two-page kernel TLB remap on each CPU plus SMP workload; no general shared-address-space proof",
+            "tlb_cpus_verified": 4,
+            "tlb_rounds": 2
+          },
+          "serial_sha256": "c997e5fbd92a9ca8ee61a3de68e95f6ff19f3caa27308ceaa1982c1aa997d8a0"
+        }
+      ],
+      "build_container_removed": true,
+      "elapsed_seconds": 106.78
+    },
+    "isolation": {
+      "source_files_rehashed": 5763,
+      "artifact_hashes_match": true,
+      "iso_sha256": "865a12d6a916aedfff4e65023afeea3d0765458d4dd75cdd4c2fe6a8913f837a",
+      "kernel_sha256": "cb028c8b9daa69b8234257e286ed1d4d4b52b629643d9afe9bf60f4c9a35a3e5",
+      "raw_logs": [
+        {
+          "case": "bios1",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 4,
+            "online_cpus": 1,
+            "parent_pid": 1,
+            "victim_pid": 100,
+            "scope": "four observed ring3 fault-containment cases; not universal process isolation"
+          },
+          "serial_sha256": "c620797cb04e23216212c2e2e82b3df99e4b24d38dadce99a57f1d84c6ed5554"
+        },
+        {
+          "case": "bios4",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 4,
+            "online_cpus": 4,
+            "parent_pid": 1,
+            "victim_pid": 100,
+            "scope": "four observed ring3 fault-containment cases; not universal process isolation"
+          },
+          "serial_sha256": "1fab27787b1d94edc654da6404e0db7a06fc5e16cb77414c31a435a101b966e4"
+        },
+        {
+          "case": "uefi1",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 4,
+            "online_cpus": 1,
+            "parent_pid": 1,
+            "victim_pid": 100,
+            "scope": "four observed ring3 fault-containment cases; not universal process isolation"
+          },
+          "serial_sha256": "9fc3fcc850986740da6f1d6ea753e1dbaf63f6ca8fe0c350b32f5ff83b00d49d"
+        },
+        {
+          "case": "uefi4",
+          "classification": {
+            "passed": true,
+            "failures": [],
+            "cases_verified": 4,
+            "online_cpus": 4,
+            "parent_pid": 1,
+            "victim_pid": 100,
+            "scope": "four observed ring3 fault-containment cases; not universal process isolation"
+          },
+          "serial_sha256": "cd0f39d8037a42dae28f061f840964107f60b7a3070af16819ca27dbc69c56ce"
+        }
+      ],
+      "build_container_removed": true,
+      "elapsed_seconds": 106.67
+    }
+  },
+  "complete": true
+}
