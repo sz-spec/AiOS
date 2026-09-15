@@ -25,10 +25,13 @@ def main():
     parser.add_argument('--isolation', action='store_true', help='build and run the gated native process-isolation image')
     parser.add_argument('--memory', action='store_true', help='run the gated COW/protection/unmap transition suite')
     parser.add_argument('--smp-workload', action='store_true', help='observe actual user CPU execution with the existing scheduler')
+    parser.add_argument('--smp-test', action='store_true', help='enable the gated AP scheduler with the SMP workload')
     parser.add_argument('--seconds', type=int, default=35)
     parser.add_argument('--firmware-code', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-x86_64-code.fd'))
     parser.add_argument('--firmware-vars', type=Path, default=Path('/opt/homebrew/share/qemu/edk2-i386-vars.fd'))
     args = parser.parse_args()
+    if args.smp_test:
+        args.smp_workload = True
     if args.memory:
         args.isolation = True
     if args.smp_workload and args.isolation:
@@ -57,6 +60,8 @@ def main():
         result['build_command'] += ['HEADLESS_AUDIT=1', 'NATIVE_SMP_WORKLOAD=1',
                                     'BUILD_DIR=build/native-smp', 'INSTALLER_ISO=../dist/vos5-smp.iso']
         result['scope'] = 'actual user CPU identities; no simultaneous execution or isolation proof'
+        if args.smp_test:
+            result['build_command'] += ['NATIVE_SMP_TEST=1']
 
     def call(cmd, timeout=30):
         return subprocess.check_output(cmd, cwd=repo, text=True, stderr=subprocess.STDOUT, timeout=timeout).strip()

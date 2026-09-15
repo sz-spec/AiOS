@@ -539,6 +539,12 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
 
     /* Copy parent task */
     memcpy(child, parent, sizeof(vos3_task_t));
+#ifdef NATIVE_SMP_WORKLOAD
+    child->native_smp_reported = 0;
+#endif
+#ifdef NATIVE_SMP_TEST
+    child->sched_owner_plus_one = 0;
+#endif
 
     /* FPU: each child must have its own state buffer.
      * Clear copied pointers so #NM handler allocates fresh on first use. */

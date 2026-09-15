@@ -25,6 +25,9 @@
 #include "../../include/vos/uaccess.h"
 #include "../../include/vos/tee.h"     /* Cyber overlay (Stage 3): vos3_intent_validate self-test at boot */
 #include "../../include/vos/sha384.h"  /* Cyber overlay (Stage 6): incremental SHA-384 self-test */
+#ifdef NATIVE_SMP_TEST
+#include "../../include/vos/percpu.h"
+#endif
 
 /* ============================================================================
  * TASK TABLE — Open-addressing hash map (linear probing)
@@ -487,6 +490,9 @@ vos3_task_t* vos3_task_create_idle(uint32_t cpu_id)
     /* Mark as idle task */
     task->flags |= VOS3_TASK_FLAG_IDLE;
     task->cpu_id = cpu_id;
+#ifdef NATIVE_SMP_TEST
+    task->sched_owner_plus_one = cpu_id + 1;
+#endif
 
     VOS3_DEBUG("Created idle task for CPU %u", cpu_id);
 
@@ -500,6 +506,13 @@ void vos3_task_destroy(vos3_task_t* task)
     }
 
     /* Cannot destroy current task */
+#ifdef NATIVE_SMP_TEST
+    if (task->sched_owner_plus_one != 0 &&
+        task->sched_owner_plus_one != get_cpu_id() + 1) {
+        VOS3_ERROR("Cannot directly destroy a remote-owned task");
+        return;
+    }
+#endif
     if (task == vos3_sched_current()) {
         VOS3_ERROR("Cannot destroy current task");
         return;
@@ -647,7 +660,12 @@ void vos3_task_reap(void)
         list = list->next;
 
         /* Not ready yet or still current — re-defer */
-        if (now < task->reap_after_tick || task == current) {
+        if (now < task->reap_after_tick || task == current
+#ifdef NATIVE_SMP_TEST
+            || (task->sched_owner_plus_one != 0 &&
+                task->sched_owner_plus_one != get_cpu_id() + 1)
+#endif
+        ) {
             task->next = deferred;
             deferred = task;
             continue;

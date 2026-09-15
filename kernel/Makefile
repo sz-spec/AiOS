@@ -397,6 +397,12 @@ $(error NATIVE_SMP_WORKLOAD requires a separate diagnostic image)
 endif
 CFLAGS += -DNATIVE_SMP_WORKLOAD
 endif
+ifeq ($(NATIVE_SMP_TEST),1)
+ifneq ($(NATIVE_SMP_WORKLOAD),1)
+$(error NATIVE_SMP_TEST=1 requires NATIVE_SMP_WORKLOAD=1)
+endif
+CFLAGS += -DNATIVE_SMP_TEST
+endif
 
 ifdef PRODUCTION
 CFLAGS += -DVOS3_PRODUCTION_BUILD

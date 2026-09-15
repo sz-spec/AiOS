@@ -307,6 +307,24 @@ static int rq_empty(const vos3_run_queue_t* rq)
 static vos3_task_t* pick_next_task(void)
 {
     uint32_t cpu_id = get_cpu_id();
+#ifdef NATIVE_SMP_TEST
+    /* A queued previous task may still be saving its stack. Only its owner
+     * may select it; local IRQ exclusion closes the same-CPU handoff gap.
+     * There is deliberately no migration until handoff/FPU migration is qualified. */
+    for (int prio = (int)VOS3_PRIORITY_COUNT; prio >= 0; prio--) {
+        vos3_run_queue_t *rq = prio == (int)VOS3_PRIORITY_COUNT ?
+                              &g_interactive_rq : &g_run_queues[prio];
+        for (vos3_task_t *task = rq->head; task != NULL; task = task->next) {
+            if (task->sched_owner_plus_one != 0 &&
+                task->sched_owner_plus_one != cpu_id + 1)
+                continue;
+            task->sched_owner_plus_one = cpu_id + 1;
+            rq_remove(rq, task);
+            return task;
+        }
+    }
+    return g_idle_task[cpu_id];
+#else
 
     /* [QUANTUM-LEAP v21.0.1] Two-Plane fast path: any LC_INTERACTIVE
      * task wins over every priority queue. This implements the
@@ -334,6 +352,7 @@ static vos3_task_t* pick_next_task(void)
 
     /* No runnable tasks - return idle task for this CPU */
     return g_idle_task[cpu_id];
+#endif
 }
 
 /**
@@ -385,9 +404,12 @@ static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
     g_current_task[cpu_id] = next;
     next->cpu_id = cpu_id;
 #ifdef NATIVE_SMP_WORKLOAD
-    if (next->pid > 0 && !(next->flags & VOS3_TASK_FLAG_IDLE))
+    if (next->pid > 0 && !(next->flags & VOS3_TASK_FLAG_IDLE) &&
+        !next->native_smp_reported) {
         VOS3_INFO("NATIVE_SMP schedule pid=%u cpu=%u apic=%u", next->pid,
                   cpu_id, vos3_lapic_id());
+        next->native_smp_reported = 1;
+    }
 #endif
 
     /* Also update per-CPU structure */
@@ -583,6 +605,11 @@ void vos3_sched_start(void)
 
     VOS3_INFO("Starting scheduler (SMP-aware)");
 
+#ifdef NATIVE_SMP_TEST
+    /* First context takes over interrupt state; no IRQ may interrupt the
+     * initial locked selection while there is no valid current task. */
+    (void)vos3_irq_save();
+#endif
     g_sched_running = 1;
 
     /* Initialize BSP scheduler state */
@@ -590,7 +617,13 @@ void vos3_sched_start(void)
     g_cpu_sched_state[0].task_count = 0;
 
     /* Pick first task */
+#ifdef NATIVE_SMP_TEST
+    vos3_spinlock_lock(&g_sched_lock);
+#endif
     vos3_task_t* first = pick_next_task();
+#ifdef NATIVE_SMP_TEST
+    vos3_spinlock_unlock(&g_sched_lock);
+#endif
 
     g_current_task[0] = first;
     first->state = VOS3_TASK_RUNNING;
@@ -664,6 +697,10 @@ void vos3_sched_add_task(vos3_task_t* task)
 
     /* Load balancing: assign to least loaded CPU */
     uint32_t target_cpu = find_least_loaded_cpu();
+#ifdef NATIVE_SMP_TEST
+    if (task->sched_owner_plus_one != 0)
+        target_cpu = task->sched_owner_plus_one - 1;
+#endif
     task->cpu_id = target_cpu;
     g_cpu_sched_state[target_cpu].task_count++;
 
@@ -813,6 +850,17 @@ void vos3_sched_tick(void)
  */
 static void sched_process_deferred(void)
 {
+#ifdef NATIVE_SMP_TEST
+    /* Every owner must revisit its dead tasks; the BSP flag cannot provide
+     * per-CPU reclamation. Shared periodic services remain on the BSP. */
+    uint64_t rflags;
+    __asm__ volatile ("pushfq; popq %0" : "=r"(rflags));
+    if (!(rflags & (1ULL << 9)))
+        return; /* Interrupt/IRQ-disabled context is not a reclamation point. */
+    vos3_task_reap();
+    if (get_cpu_id() != 0)
+        return;
+#endif
     if (g_reap_pending != 0) {
         g_reap_pending = 0;
         vos3_task_reap();
@@ -1128,9 +1176,21 @@ void vos3_sched_loop_ap(void)
 
     /* Main scheduler loop */
     for (;;) {
+#ifdef NATIVE_SMP_TEST
+        __asm__ volatile ("sti" ::: "memory");
+#endif
         /* K-R2/K-R3: Process deferred ISR work (reap + AI Guard reprotect)
          * while idle — safe process context. */
         sched_process_deferred();
+
+#ifdef NATIVE_SMP_TEST
+        /* Disable IRQs before the pending check; STI;HLT closes lost wakeups. */
+        __asm__ volatile ("cli" ::: "memory");
+        if (g_cpu_sched_state[cpu_id].need_reschedule != 0) {
+            vos3_sched_reschedule();
+            continue;
+        }
+#endif
 
         /* Enable interrupts and halt until next interrupt */
         __asm__ volatile (
@@ -1156,6 +1216,12 @@ int vos3_sched_need_reschedule(void)
     uint32_t cpu_id = get_cpu_id();
     return g_cpu_sched_state[cpu_id].need_reschedule;
 }
+#ifdef NATIVE_SMP_TEST
+void vos3_sched_request_reschedule(void)
+{
+    g_cpu_sched_state[get_cpu_id()].need_reschedule = 1;
+}
+#endif
 
 /**
  * @brief Get task count for a specific CPU

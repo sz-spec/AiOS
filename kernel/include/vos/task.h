@@ -348,6 +348,14 @@ typedef struct vos3_task {
      */
     uint64_t            core_cookie;        /**< SMT-isolation cookie (0 = any) */
 
+#ifdef NATIVE_SMP_TEST
+    /* Immutable after first dispatch, under g_sched_lock. Zero means unbound.
+     * Appended so assembly offsets of existing members do not change. */
+    uint32_t sched_owner_plus_one;
+#endif
+#ifdef NATIVE_SMP_WORKLOAD
+    uint32_t native_smp_reported;
+#endif
 } __attribute__((aligned(VOS3_CACHE_LINE_SIZE))) vos3_task_t;
 
 /* ============================================================================

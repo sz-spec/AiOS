@@ -219,6 +219,9 @@ void vos3_sched_loop_ap(void);
  * @return 1 if reschedule needed, 0 otherwise
  */
 int vos3_sched_need_reschedule(void);
+#ifdef NATIVE_SMP_TEST
+void vos3_sched_request_reschedule(void);
+#endif
 
 /**
  * @brief Get task count assigned to a specific CPU

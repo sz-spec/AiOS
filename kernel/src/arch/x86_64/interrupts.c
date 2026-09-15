@@ -27,6 +27,10 @@
 #include "../../../include/vos/heap.h"
 #include "../../../include/arch/x86_64/cpu.h"
 #include "../../../include/vos/percpu.h"
+#ifdef NATIVE_SMP_TEST
+#include "../../../include/arch/x86_64/smp.h"
+#include "../../../include/vos/atomic.h"
+#endif
 #ifdef NATIVE_ISOLATION_TEST
 #include "../../../include/vos/native_isolation_test.h"
 #endif
@@ -745,11 +749,20 @@ void vos3_fpu_init(void)
  */
 void vos3_fpu_release_owner(vos3_task_t* task)
 {
+#ifdef NATIVE_SMP_TEST
+    /* Fixed scheduler ownership permits only local reclamation. */
+    vos3_irqflags_t flags = vos3_irq_save();
+    uint32_t cpu = get_cpu_id();
+    if (g_fpu_owner[cpu] == task)
+        g_fpu_owner[cpu] = NULL;
+    vos3_irq_restore(flags);
+#else
     for (uint32_t i = 0; i < VOS3_MAX_CPUS; i++) {
         if (g_fpu_owner[i] == task) {
             g_fpu_owner[i] = NULL;
         }
     }
+#endif
 }
 
 /**
@@ -781,6 +794,26 @@ static void handle_machine_check(vos3_int_frame_t* frame)
 /* Forward declaration for PIC EOI */
 extern void vos3_pic_eoi(uint8_t irq);
 
+#ifdef NATIVE_SMP_TEST
+static void handle_schedule_ipi(vos3_int_frame_t* frame)
+{
+    (void)frame;
+    /* Retire this interrupt before switching away from its stack. */
+    vos3_lapic_eoi();
+    if (vos3_sched_is_running()) {
+        vos3_sched_request_reschedule();
+        /* Kernel code may hold locks even while the current task is idle.
+         * Its idle loop consumes the request only after deferred work ends.
+         * Arbitrary kernel preemption requires a separate qualification. */
+        if ((frame->cs & 3U) == 3U) {
+            vos3_sched_tick();
+            if (vos3_sched_need_reschedule())
+                vos3_sched_reschedule();
+        }
+    }
+}
+#endif
+
 /**
  * @brief Timer IRQ Handler (IRQ0)
  */
@@ -792,6 +825,15 @@ static void handle_timer_irq(vos3_int_frame_t* frame)
     vos3_timer_irq_handler();
 
     vos3_pic_eoi(0U);
+#ifdef NATIVE_SMP_TEST
+    if (vos3_sched_is_running()) {
+        for (uint32_t cpu = 1; cpu < vos3_smp_cpu_count(); cpu++) {
+            const vos3_smp_cpu_info_t *info = vos3_smp_get_cpu_info(cpu);
+            if (info != NULL && info->started)
+                vos3_lapic_send_ipi(info->apic_id, VOS3_INT_IPI_SCHEDULE);
+        }
+    }
+#endif
 
     /* Reschedule if needed — this is critical for waking sleeping tasks.
      * vos3_sched_tick() processes the sleep queue and sets g_need_reschedule,
@@ -896,6 +938,10 @@ static void handle_control_protection(vos3_int_frame_t* frame)
 void vos3_interrupts_init(void)
 {
     VOS3_INFO("INT: Registering default interrupt handlers");
+#ifdef NATIVE_SMP_TEST
+    if (vos3_int_register(VOS3_INT_IPI_SCHEDULE, handle_schedule_ipi) != 0)
+        vos3_panic("Cannot register scheduler IPI");
+#endif
 
     /* CPU Exceptions */
     vos3_int_register(VOS3_INT_DIVIDE_ERROR, handle_divide_error);
