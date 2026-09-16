@@ -11,6 +11,9 @@ the keyboard-driven wizard. Full kernel isolation, concurrent user workloads
 on secondary CPUs, persistent installation, hosted workflows
 and remaining legacy capabilities still require work and validation.
 
+The [SHM creator-exit stage](docs/design/evidence/native-shm-exit.md) releases
+creator references through safe deferred work while surviving mappings retain backing.
+
 The [SHM authorization stage](docs/design/evidence/native-shm-authorization.md)
 binds creator close to immutable task identities and rejects stale region handles.
 Its evidence distinguishes tested denials from remaining IPC/concurrency limits.

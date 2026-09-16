@@ -1,4 +1,7 @@
-# Native boot qualification — updated 2026-09-15
+# Native boot qualification — updated 2026-09-17
+
+The [SHM creator-exit report](evidence/native-shm-exit.md) records normal and
+fault termination, deferred release and surviving-mapping controls.
 
 The [SHM authorization report](evidence/native-shm-authorization.md) records
 creator identity, stale-handle protection and native foreign-process controls.

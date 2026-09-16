@@ -21,3 +21,12 @@ check remained absent. See the [authorization qualification](../native-shm-autho
 for immutable identities, stale-handle protection and explicit remaining IPC,
 creator-orphan cleanup and concurrency limits. Historical review findings above
 remain the record of their original source baseline.
+
+## Creator-exit disposition — 2026-09-17
+
+`8c23007eed4acd731b98bdd2998c9634f2ba3f75` adds deferred creator-reference
+cleanup across task death paths. The four memory configurations pass normal/fault
+retirement before parent collection, mapped-survivor and no-double-release tests.
+See the [creator-exit qualification](../native-shm-exit.md) for physical-page
+controls and the limits on zombie address spaces, concurrency and remote stopping.
+This supersedes the earlier absence of automatic creator-reference release.

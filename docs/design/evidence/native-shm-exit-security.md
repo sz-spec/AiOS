@@ -1,0 +1,41 @@
+# Independent security review: SHM creator-exit cleanup
+
+Reviewer `/root/mcp_upgrade`; 2026-09-15. Initial source `3cccbc9`, followed by the coordinator's working implementation. Production source is read-only for this reviewer. The earlier design recommendations are retained in [initial design review](native-shm-owner-exit-security.md).
+
+## Source assessment before runtime
+
+The owner-exit marker scans the bounded region table under an IRQ-safe registry lock, matches immutable creator identity, atomically claims the creator-released flag and records the full generation-tagged handle. It transfers the creator reference without decrementing it. No memory allocation, region mutex acquisition, page-table mutation or backing release occurs in the marker. The retained reference prevents finalization and slot reuse while pending.
+
+The deferred drain refuses to act with interrupts disabled, detaches pending handles under the lock and consumes each owned reference after releasing the lock and restoring IRQ state. A repeated mark cannot consume a mapping reference because the creator-released flag remains set. Concurrent drain invocations detach disjoint pending entries; each detached entry still owns its pin. Explicit creator close before exit makes later marking a no-op; a close after marking is refused as already released. Public authorization is unchanged and no syscall accepts a creator cookie.
+
+All actual acquisitions of `g_shm_lock` now use the IRQ-save/restore wrappers. This prevents a local quota or fault interrupt from waiting on a registry lock held by its interrupted continuation. Source inspection found owner-exit marking at normal exit, user-fault death, kill, quota termination and bridge child timeout, with direct-destroy/deferred-destroy/reaper fallbacks. New creator publication checks ZOMBIE/DEAD state inside the registry critical section: either publication precedes the death scan and is included, or the later creation is rejected. This does not independently prove remote task-stop or all scheduler-state concurrency semantics.
+
+No blocker was found in the bounded sequential ownership protocol. Independently compiled the five changed C files with freestanding x86-64 Clang syntax checking; checks passed with existing GCC-specific warning-pragma warnings. Native results are pending.
+
+## Required observer and threat boundaries
+
+Unmapped creator cleanup must be observed before waitpid, otherwise a reaper-only implementation could falsely satisfy the test. A mapped public survivor must verify contents and writes after creator death, then show final registry retirement after detaching. Preserve explicit-close-then-exit, duplicate marks, stale full-handle isolation, IRQ-disabled no-drain and exact deferred cleanup controls. Fault coverage requires the actual user fault address/error evidence, not merely a wait status. Registry disappearance alone does not prove PMM reclamation; use separate native accounting where claimed.
+
+Unqualified boundaries remain concurrent shared-VMA mutation, remote kill of a running kernel continuation, creator mappings surviving as an uncollected zombie, bootstrap zero-identity resources, and full IPC/Linux compatibility. The selected contract releases creator ownership at death; it does not promise immediate removal of independently retained mappings. Final approval requires artifact-bound clean runtime and preservation of prior authorization, lifetime, TLB and isolation controls.
+
+## Final test/source review before commit
+
+Reviewed the settled kernel test and user workload. The kernel control records physical backing through real mappings, removes those mappings to leave creator-only references, and checks that unrelated identity notification does not select the regions. Repeated owner marking and a drain call while interrupts are disabled must leave both regions and PMM references intact. After restoring interrupts, repeated drains must remove the regions and release at least two backing pages. Separate retained-mapping and explicit-close-before-mark cases assert live contents/refcounts until the final unmap. This is a boot-context control of the real API, not actual remote process death or arbitrary concurrent ownership proof.
+
+The user workload now checks retirement before waitpid for both unmapped normal exit and a deliberately faulting creator, rejecting a reaper-only implementation. The fault is an actual CPL3 read at `0x7400000000`; the observer requires its precise PID/address/error-code evidence, the eleventh expected SIGSEGV and final retirement/wait verification. Public mapped survivors check every byte and then write/verify data after creator exit before detaching. Registry retirement remains distinct from the kernel PMM accounting assertion.
+
+Creation logging now uses local scalar values after publication rather than dereferencing a region that another context could retire. Independently reran nine observer host tests and freestanding kernel/user syntax checks; all passed. No scoped blocker was found for the native trial. The production dying-publication guard and all hook paths are source-reviewed; only paths executed by subsequent native evidence may be described as runtime-qualified. Final artifact-bound matrix evidence is still pending.
+
+## Clean memory gate verified — 2026-09-17
+
+Independently verified source `8c23007eed4acd731b98bdd2998c9634f2ba3f75` using the clean memory matrix in the legacy-named `/private/tmp/vos5-shm-exit-memory-release-20260915` directory. All four BIOS/UEFI one/four-CPU logs pass their archived observer. Each raw log contains exactly 51 user records, six required kernel PASS records and eleven actual SIGSEGV records. Recomputed all recorded source hashes, canonical manifest, archive, classifier and actual kernel/ISO/user artifacts; all match. This establishes the bounded normal/fault creator-exit and deferred cleanup controls, including retirement before wait and preservation of foreign mapped survivors.
+
+Portable evidence is recorded under the actual review date in `native-shm-exit-2026-09-17/security-independent.json`. Normal, TLB and previous-isolation regressions for the same source are still pending; `complete` remains false until those independently verify. Legacy temporary directory dates are not treated as new execution dates.
+
+## Final bounded approval — 2026-09-17
+
+All four matrices for source `8c23007eed4acd731b98bdd2998c9634f2ba3f75` independently verify: creator-exit/memory, normal boot, TLB and prior isolation, each under BIOS/UEFI with one/four CPUs. All sixteen raw logs pass their archived classifiers. Each matrix's 5,823 source-file hashes, canonical manifest, archive, classifier, actual kernel/ISO and applicable user workload match the recorded identities; every case preserves before/after ISO identity. Normal build configuration excludes diagnostic and experimental activation defines. All aggregates report builder cleanup. Portable `native-shm-exit-2026-09-17/security-independent.json` records `complete: true` and retains exact artifact/raw-log identities plus the per-memory-log 51 user/6 kernel/11 fault counts.
+
+Approve the bounded creator-reference cleanup behavior for normal exit and the observed terminal user fault, including retirement before wait, IRQ-disabled mark/drain deferral, repeated notification safety, actual two-page backing recovery and preserved mapped survivors. The four-matrix regression suite also preserves prior creator authorization, generation-handle, lifetime, memory-protection, normal-boot, TLB and isolation controls. Kill/quota/bridge-timeout hooks and dying-publication guards were inspected in source but are not individually claimed to have been exercised by the native user workload.
+
+This closes the qualified creator-exit resource leak, not all task-death or concurrent IPC behavior. Remote running-task kill, concurrent shared mappings, bootstrap identity-zero resources, immediate reclamation of independently retained mappings, and full Linux IPC compatibility remain outside the approval. No universal hardware or general release certification follows from these emulator results. Source and runtime work were authored/executed by other agents/coordinator; this review independently inspected their implementation and retained evidence without running another VM.
