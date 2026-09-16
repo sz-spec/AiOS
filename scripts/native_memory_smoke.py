@@ -26,6 +26,7 @@ def classify_serial(raw, exit_status, requested_cpus=1):
             require(clean.count(marker)==1,'missing/repeated boot stage')
         require(not any(x in clean for x in ('PANIC','General Protection Fault','Double Fault','uaccess address-space mismatch','NATIVE_MEMORY FAIL','NATIVE_ISOLATION FAIL')),'unexpected failure')
         for marker in (
+            '[PMM-CONTIGUOUS] PASS: pages=64 initial_refs=1 final_refs=0 exact_free_accounting=1',
             '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
             '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close',
             '[VM-METADATA] PASS: distinct tags, real COW copy, parent integrity, mprotect, flag updates, final accounting',

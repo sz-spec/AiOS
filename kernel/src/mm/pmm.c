@@ -745,6 +745,16 @@ uintptr_t vos3_pmm_alloc_pages(size_t count, vos3_pmm_flags_t flags)
                     continue;
                 }
 
+                /* Publish the initial ownership reference for every page only
+                 * after the whole run is claimed. Failed claims never touch
+                 * a competing allocator's reference count. */
+                for (size_t j = 0U; j < count; j++) {
+                    size_t page = start_page + j;
+                    if (page < g_pmm.refcount_size) {
+                        vos3_atomic_store32(&g_pmm.refcount[page], 1U);
+                    }
+                }
+
                 vos3_spinlock_release(&g_pmm.lock);
 
                 uintptr_t addr = vos3_pmm_page_to_addr(start_page);

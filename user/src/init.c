@@ -304,8 +304,12 @@ int main(int argc, char *argv[], char *envp[])
             exit(1); \
         } \
         if (_pid > 0) { \
-            int _status; \
-            waitpid(_pid, &_status, 0); \
+            int _status = 0; \
+            pid_t _waited = waitpid(_pid, &_status, 0); \
+            if (_waited != _pid) { \
+                printf("Init: ERROR - waitpid failed for %s\n", name); \
+                break; \
+            } \
             printf("=== %s: exit=%d ===\n\n", name, \
                    WIFEXITED(_status) ? WEXITSTATUS(_status) : -1); \
         } else { \

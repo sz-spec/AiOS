@@ -2,6 +2,7 @@
 #include "vos/vmm.h"
 #include "vos/pmm.h"
 #include "vos/console.h"
+#include "vos/atomic.h"
 
 extern void vos3_vmm_test_table_alloc_budget(int budget);
 
@@ -12,8 +13,39 @@ static void require(int condition, const char* message)
     }
 }
 
+static void test_contiguous_page_ownership(void)
+{
+    /* Boot-only qualification: kmain invokes this before SMP initialization
+     * and before scheduler start. Local IRQ exclusion prevents interrupt-side
+     * PMM activity during exact accounting. This is not concurrent allocator
+     * qualification; the host test separately injects a competing claim. */
+    vos3_irqflags_t irq = vos3_irq_save();
+    size_t before = vos3_pmm_free_pages_count();
+    require(before >= 64U, "insufficient free pages for contiguous control");
+    uintptr_t base = vos3_pmm_alloc_pages(64U, VOS3_PMM_FLAG_NONE);
+    require(base != 0U && (base & (VOS3_PAGE_SIZE - 1U)) == 0U,
+            "contiguous allocation failed or unaligned");
+    require(vos3_pmm_free_pages_count() == before - 64U,
+            "contiguous allocation statistics mismatch");
+    for (size_t i = 0U; i < 64U; ++i) {
+        require(vos3_pmm_ref_get(base + i * VOS3_PAGE_SIZE) == 1U,
+                "contiguous page missing initial ownership reference");
+    }
+    vos3_pmm_free_pages(base, 64U);
+    for (size_t i = 0U; i < 64U; ++i) {
+        /* Read allocator metadata only; never dereference released memory. */
+        require(vos3_pmm_ref_get(base + i * VOS3_PAGE_SIZE) == 0U,
+                "contiguous page retained reference after free");
+    }
+    require(vos3_pmm_free_pages_count() == before,
+            "contiguous free leaked physical pages");
+    vos3_irq_restore(irq);
+    VOS3_INFO("[PMM-CONTIGUOUS] PASS: pages=64 initial_refs=1 final_refs=0 exact_free_accounting=1");
+}
+
 void vos3_test_process_roots(void)
 {
+    test_contiguous_page_ownership();
     /* Rejection controls use local metadata only, never a freed pointer. */
     vos3_address_space_t invalid = {0};
     require(vos3_vmm_retain_address_space(NULL) == -22, "retain null accepted");

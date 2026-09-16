@@ -726,8 +726,9 @@ static void test_agent_isolation(void)
 
     /* Initialize unique patterns per agent */
     for (int i = 0; i < T3_NUM_AGENTS; i++) {
-        g_t3_patterns[i].lo = 0xDEADBEEF00000000ULL | (unsigned long long)(i * 0x11111111);
-        g_t3_patterns[i].hi = 0xCAFEBABE00000000ULL | (unsigned long long)(i * 0x22222222);
+        /* Defined modulo-2^32 payloads preserve the fixed upper tags. */
+        g_t3_patterns[i].lo = 0xDEADBEEF00000000ULL | (uint64_t)((uint32_t)i * UINT32_C(0x11111111));
+        g_t3_patterns[i].hi = 0xCAFEBABE00000000ULL | (uint64_t)((uint32_t)i * UINT32_C(0x22222222));
         g_t3_results[i]  = 0;
         g_t3_coldboot[i] = 0;
     }

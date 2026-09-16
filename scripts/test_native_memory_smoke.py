@@ -7,7 +7,8 @@ def trace(cpus=1):
              '[SHM-EXIT] PASS: unrelated identity retained, duplicate mark, IRQ-off drain deferred, two creator backings freed, mapped survivor, explicit-close no double release',
              '[SHM-IDENTITY] PASS: zero-cookie denied, same-TID different-cookie denied, owner restored, backing intact, final release',
              '[VM-FILE-REFS] PASS: checked retain, clone rollback, partial release, CPU pin, exactly-once close',
-             '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
+             '[PMM-CONTIGUOUS] PASS: pages=64 initial_refs=1 final_refs=0 exact_free_accounting=1',
+            '[PROCESS-ROOTS] PASS: create, clone, independent roots, allocation failures, owner refs, CPU pins, release, accounting',
              '[VM-BACKING] PASS: tracking cap, foreign unmap, unsupported SHM fork, surviving owner, final mapping cleanup, creator-first explicit/reap, duplicate creator close',
              '[VM-METADATA] PASS: distinct tags, real COW copy, parent integrity, mprotect, flag updates, final accounting',
              f'SMP: {cpus} CPUs online','NATIVE_MEMORY role=parent pid=1 cpl=3','NATIVE_MEMORY guard=kernel_mprotect rejected=1','NATIVE_MEMORY api_guards=1','NATIVE_MEMORY restoration=1 canary=1','NATIVE_MEMORY rx_control=1 result=42']
@@ -56,6 +57,15 @@ class OracleTests(unittest.TestCase):
         self.assertFalse(classify_serial(trace(),0)['passed'])
         self.assertFalse(classify_serial(trace(),'observation_timeout',4)['passed'])
         r=self.check(trace());bind_artifact_identity(r,'a','b');self.assertFalse(r['passed'])
+    def test_contiguous_marker_exact_and_unique(self):
+        marker = "[PMM-CONTIGUOUS] PASS: pages=64 initial_refs=1 final_refs=0 exact_free_accounting=1"
+        for bad in (trace().replace('pages=64', 'pages=63'),
+                    trace().replace('initial_refs=1', 'initial_refs=0'),
+                    trace().replace('final_refs=0', 'final_refs=1'),
+                    trace().replace('exact_free_accounting=1', 'exact_free_accounting=0'),
+                    trace() + '\n' + marker):
+            self.assertFalse(self.check(bad)['passed'])
+
     def test_old_backing_marker_is_insufficient(self):
         self.assertFalse(self.check(trace().replace(', creator-first explicit/reap, duplicate creator close',''))['passed'])
     def test_shm_authorization_mutations(self):
