@@ -101,6 +101,25 @@ export function useMarketplace() {
     }
   }, [getToken]);
 
+  const getInstalled = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await apiFetch(getToken, `${API_URL}/api/apps/installed`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setInstalledApps(data.apps ?? []);
+      return data.apps as InstalledApp[];
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to load installed apps';
+      setError(msg);
+      console.error('Marketplace getInstalled error:', err);
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getToken]);
+
   const install = useCallback(async (slug: string) => {
     setIsLoading(true);
     setError(null);
@@ -122,7 +141,7 @@ export function useMarketplace() {
     } finally {
       setIsLoading(false);
     }
-  }, [getToken]);
+  }, [getToken, getInstalled]);
 
   const uninstall = useCallback(async (slug: string) => {
     setIsLoading(true);
@@ -140,25 +159,6 @@ export function useMarketplace() {
       setError(msg);
       console.error('Marketplace uninstall error:', err);
       return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getToken]);
-
-  const getInstalled = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await apiFetch(getToken, `${API_URL}/api/apps/installed`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setInstalledApps(data.apps ?? []);
-      return data.apps as InstalledApp[];
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Failed to load installed apps';
-      setError(msg);
-      console.error('Marketplace getInstalled error:', err);
-      return [];
     } finally {
       setIsLoading(false);
     }
