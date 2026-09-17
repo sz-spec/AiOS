@@ -212,6 +212,12 @@ int vos3_delegation_is_awaiting(void);
  */
 int access_ok(const void* addr, size_t size);
 
+/* Exact kernel usercopy instruction fault matcher. Returns its static recovery
+ * address, or zero for every fault outside the dedicated copy instructions. */
+uintptr_t vos3_usercopy_fault_fixup(uintptr_t rip, uint64_t cs, uint64_t error,
+                                   uintptr_t addr, uintptr_t rsi,
+                                   uintptr_t rdi, uint64_t remaining);
+
 /**
  * @brief Identity-aware access check (Privacy Shield)
  *

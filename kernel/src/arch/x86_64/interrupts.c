@@ -14,6 +14,7 @@
  */
 
 #include "../../../include/vos/ipc.h"
+#include "../../../include/vos/uaccess.h"
 #include "../../../include/arch/x86_64/idt.h"
 #include "../../../include/vos/console.h"
 #include "../../../include/vos/timer.h"
@@ -283,6 +284,13 @@ static void handle_page_fault(vos3_int_frame_t* frame)
     /* Decode error code */
     int is_write = (frame->error_code & 0x02) ? 1 : 0;
     int is_user = (frame->error_code & 0x04) ? 1 : 0;
+    uintptr_t copy_fixup = vos3_usercopy_fault_fixup(frame->rip, frame->cs,
+        frame->error_code, (uintptr_t)cr2, frame->rsi, frame->rdi, frame->rcx);
+    if (copy_fixup != 0 && (vos3_read_cr4() & VOS3_CR4_SMAP) != 0) {
+        /* Run fault handling with SMAP enabled. IRET restores saved AC only
+         * when retrying a successfully resolved copy instruction. */
+        __asm__ volatile(".byte 0x0f, 0x01, 0xca" ::: "memory", "cc");
+    }
 
     /* ===== AI Guard Integration ===== */
     vos3_task_t* current = vos3_sched_current();
@@ -395,7 +403,7 @@ static void handle_page_fault(vos3_int_frame_t* frame)
         int allowed = demand_vma == NULL ? !fetch :
             (fetch ? !!(demand_vma->vm_prot & 4) :
              is_write ? !!(demand_vma->vm_prot & 2) : !!(demand_vma->vm_prot & 3));
-        if (!present && is_user && allowed) {
+        if (!present && (is_user || copy_fixup != 0) && allowed) {
             /* Page not present in user space — check if address is valid */
             if (vos3_vmm_is_valid_user_addr((uintptr_t)cr2)) {
                 /* Allocate zero-filled page on demand */
@@ -471,6 +479,14 @@ static void handle_page_fault(vos3_int_frame_t* frame)
                       (unsigned long long)cr2);
             fault_kill_current(current, 128 + 11);
         }
+    }
+
+    /* A precise copy-site failure returns to its caller for normal cleanup.
+     * COW/demand paging above retain first chance to resolve and retry. */
+    if (copy_fixup != 0) {
+        frame->rip = copy_fixup;
+        frame->rflags &= ~(1ULL << 18); /* Never return to the caller with AC set. */
+        return;
     }
 
     /* ===== Unhandled Page Fault ===== */

@@ -347,6 +347,7 @@ int main(int argc, char *argv[], char *envp[])
     /* Re-enabled for debugging */
     RUN_BENCH("bench_stress_test", BENCH_STRESS_PATH);
     RUN_BENCH("bench_fuzz_test", BENCH_FUZZ_PATH);
+    RUN_BENCH("test_usercopy", "/bin/test_usercopy");
     RUN_BENCH("bench_sched_test", BENCH_SCHED_PATH);
     /* Re-enabled for debugging */
     RUN_BENCH("bench_app_isolation_test", BENCH_APP_ISOLATION_PATH);

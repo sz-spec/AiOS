@@ -112,6 +112,44 @@ static uint64_t g_last_violation_addr = 0U;
 #include "../../include/vos/task.h"
 #include "../../include/vos/scheduler.h"
 #include "../../include/vos/vmm.h"
+#include "../../include/arch/x86_64/memory_map.h"
+
+/* Exact instruction fixups: no global/per-CPU continuation or saved stack. */
+extern int vos3_usercopy_from_raw(void*, const void*, size_t);
+extern int vos3_usercopy_to_raw(void*, const void*, size_t);
+extern const char vos3_usercopy_from_fault[], vos3_usercopy_from_fixup[];
+extern const char vos3_usercopy_to_fault[], vos3_usercopy_to_fixup[];
+__asm__(
+    ".pushsection .text\n"
+    ".global vos3_usercopy_from_raw, vos3_usercopy_from_fault, vos3_usercopy_from_fixup\n"
+    ".type vos3_usercopy_from_raw,@function\n"
+    "vos3_usercopy_from_raw:\n cld\n mov %rdx,%rcx\n"
+    "vos3_usercopy_from_fault:\n rep movsb\n xor %eax,%eax\n ret\n"
+    "vos3_usercopy_from_fixup:\n mov $-14,%eax\n ret\n"
+    ".size vos3_usercopy_from_raw,.-vos3_usercopy_from_raw\n"
+    ".global vos3_usercopy_to_raw, vos3_usercopy_to_fault, vos3_usercopy_to_fixup\n"
+    ".type vos3_usercopy_to_raw,@function\n"
+    "vos3_usercopy_to_raw:\n cld\n mov %rdx,%rcx\n"
+    "vos3_usercopy_to_fault:\n rep movsb\n xor %eax,%eax\n ret\n"
+    "vos3_usercopy_to_fixup:\n mov $-14,%eax\n ret\n"
+    ".size vos3_usercopy_to_raw,.-vos3_usercopy_to_raw\n"
+    ".popsection\n");
+
+uintptr_t vos3_usercopy_fault_fixup(uintptr_t rip, uint64_t cs, uint64_t error,
+                                   uintptr_t addr, uintptr_t rsi,
+                                   uintptr_t rdi, uint64_t remaining)
+{
+    /* Only supervisor data accesses, never user/RSVD/fetch/PK/shadow-stack faults. */
+    if ((cs & 3U) != 0 || (error & ~3ULL) != 0 || remaining == 0)
+        return 0;
+    if (rip == (uintptr_t)vos3_usercopy_from_fault && (error & 2U) == 0 &&
+        addr == rsi && access_ok((const void*)rsi, remaining))
+        return (uintptr_t)vos3_usercopy_from_fixup;
+    if (rip == (uintptr_t)vos3_usercopy_to_fault && (error & 2U) != 0 &&
+        addr == rdi && access_ok((const void*)rdi, remaining))
+        return (uintptr_t)vos3_usercopy_to_fixup;
+    return 0;
+}
 
 /* ============================================================================
  * IDENTITY MODE FUNCTIONS
@@ -597,6 +635,8 @@ int access_ok(const void* addr, size_t size)
 /**
  * @brief Copy data from user space to kernel space
  */
+static int user_pages_accessible(const void* addr, size_t size, int write);
+
 int copy_from_user(void* dest, const void* src, size_t n)
 {
     /* Validate kernel destination */
@@ -610,7 +650,7 @@ int copy_from_user(void* dest, const void* src, size_t n)
     }
 
     /* Validate user source pointer */
-    if (!access_ok(src, n)) {
+    if (!access_ok(src, n) || !user_pages_accessible(src, n, 0)) {
         return -EFAULT;
     }
 
@@ -619,40 +659,46 @@ int copy_from_user(void* dest, const void* src, size_t n)
      * The helpers skip STAC/CLAC when this CPU has no active SMAP; the
      * instructions themselves would raise #UD on unsupported processors. */
     stac();
-    memcpy(dest, src, n);
+    int result = vos3_usercopy_from_raw(dest, src, n);
     clac();
 
-    return 0;
+    return result;
 }
 
 /**
- * @brief Check if all pages in a user range are writable
+ * @brief Reject populated mappings without effective user permissions
  *
- * Walks the page tables to verify write permission on every page
- * spanned by [addr, addr+size). Prevents kernel panics from writing
- * to read-only user pages (e.g. .text segment).
+ * Checks USER at every level, including huge-page leaves. Writes also need
+ * effective WRITE or a leaf COW marker. Absent mappings are left for the
+ * bounded fault path, which can demand-page valid VMAs or return EFAULT.
  *
  * @param[in] addr  Start address
  * @param[in] size  Size in bytes
  * @return 1 if all pages are writable, 0 otherwise
  */
-static int user_pages_writable(const void* addr, size_t size)
+static int user_pages_accessible(const void* addr, size_t size, int write)
 {
-    uint64_t start = (uint64_t)(uintptr_t)addr;
-    uint64_t end = start + size;
-    uint64_t page;
-    vos3_pte_t pte;
-
-    /* Check every page in the range */
-    for (page = start & ~0xFFFULL; page < end; page += 0x1000ULL) {
-        if (vos3_vmm_get_pte((uintptr_t)page, &pte) != 0) {
-            return 0;  /* Page not mapped */
-        }
-        if (!vos3_pte_is_writable(pte) && !vos3_pte_is_cow(pte)) {
-            return 0;  /* Page is truly read-only (not COW) */
+    uintptr_t start = (uintptr_t)addr;
+    uintptr_t end = start + size; /* caller already checked range/overflow */
+    vos3_address_space_t* as = vos3_vmm_get_current_space();
+    if (as == NULL || as->pml4 == NULL) return 0;
+    for (uintptr_t page = start & ~0xFFFULL; page < end; page += 0x1000ULL) {
+        vos3_pte_t* table = as->pml4;
+        for (unsigned level = 0; level < 4; level++) {
+            unsigned shift = 39U - 9U * level;
+            vos3_pte_t entry = __atomic_load_n(&table[(page >> shift) & 511U], __ATOMIC_ACQUIRE);
+            /* Absent mappings reach the exact fault/retry path. Only a valid
+             * permitted VMA/heap may be demand-paged by the page-fault handler. */
+            if ((entry & VOS3_PTE_PRESENT) == 0) break;
+            if ((entry & VOS3_PTE_USER) == 0) return 0;
+            int leaf = level == 3 || ((level == 1 || level == 2) &&
+                                         (entry & (1ULL << 7)) != 0);
+            if (write && (entry & VOS3_PTE_WRITABLE) == 0 &&
+                !(leaf && vos3_pte_is_cow(entry))) return 0;
+            if (leaf) break;
+            table = vos3_phys_to_virt(vos3_pte_get_addr(entry));
         }
     }
-
     return 1;
 }
 
@@ -677,16 +723,16 @@ int copy_to_user(void* dest, const void* src, size_t n)
     }
 
     /* Verify destination pages are writable (prevents kernel panic on RO pages) */
-    if (!user_pages_writable(dest, n)) {
+    if (!user_pages_accessible(dest, n, 1)) {
         return -EFAULT;
     }
 
     /* SMAP: Temporarily allow supervisor access to user pages. */
     stac();
-    memcpy(dest, src, n);
+    int result = vos3_usercopy_to_raw(dest, src, n);
     clac();
 
-    return 0;
+    return result;
 }
 
 /**
@@ -717,8 +763,6 @@ int64_t strncpy_from_user(char* dest, const char* src, size_t max)
         return -EFAULT;
     }
 
-    /* SMAP: Allow supervisor access to user pages during string copy */
-    stac();
 
     /* Copy character by character with bounds checking */
     for (i = 0U; i < max - 1U; i++) {
@@ -728,8 +772,10 @@ int64_t strncpy_from_user(char* dest, const char* src, size_t max)
             return -EFAULT;
         }
 
-        dest[i] = src[i];
-        if (src[i] == '\0') {
+        char value;
+        if (copy_from_user(&value, src + i, 1) != 0) return -EFAULT;
+        dest[i] = value;
+        if (value == '\0') {
             clac();
             return (int64_t)i;
         }
@@ -774,8 +820,6 @@ int64_t strnlen_user(const char* src, size_t max)
         return -EFAULT;
     }
 
-    /* SMAP: Allow supervisor access to user pages during string scan */
-    stac();
 
     /* Scan for NUL with bounds checking */
     for (i = 0U; i < max; i++) {
@@ -785,7 +829,9 @@ int64_t strnlen_user(const char* src, size_t max)
             return -EFAULT;
         }
 
-        if (src[i] == '\0') {
+        char value;
+        if (copy_from_user(&value, src + i, 1) != 0) return -EFAULT;
+        if (value == '\0') {
             clac();
             return (int64_t)(i + 1U);  /* Include NUL in count (POSIX style) */
         }

@@ -12,3 +12,5 @@ endif
 ifeq ($(NATIVE_SMP_WORKLOAD),1)
 PROGRAMS += test_native_smp
 endif
+
+PROGRAMS += test_usercopy

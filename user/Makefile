@@ -775,6 +775,11 @@ $(BIN_DIR)/test_signal_lifetime: $(SRC_DIR)/test_signal_lifetime.c $(BUILD_DIR)/
 	@$(CC) $(CFLAGS) -MMD -MP -MT "$@" -c $< -o $(BUILD_DIR)/test_signal_lifetime.o
 	@$(LD) $(LDFLAGS) -Ttext=$(USER_BASE) -o $@ $(BUILD_DIR)/lib/crt0.o $(BUILD_DIR)/test_signal_lifetime.o $(BUILD_DIR)/libc.a
 
+$(BIN_DIR)/test_usercopy: $(SRC_DIR)/test_usercopy.c $(BUILD_DIR)/libc.a | $(BIN_DIR)
+	@echo "  CC+LD   $@"
+	@$(CC) $(CFLAGS) -MMD -MP -MT "$@" -c $< -o $(BUILD_DIR)/test_usercopy.o
+	@$(LD) $(LDFLAGS) -Ttext=$(USER_BASE) -o $@ $(BUILD_DIR)/lib/crt0.o $(BUILD_DIR)/test_usercopy.o $(BUILD_DIR)/libc.a
+
 $(BIN_DIR)/test_native_memory: $(SRC_DIR)/test_native_memory.c $(BUILD_DIR)/libc.a | $(BIN_DIR)
 	@echo "  CC+LD   $@"
 	@$(CC) $(CFLAGS) -MMD -MP -MT "$@" -c $< -o $(BUILD_DIR)/test_native_memory.o

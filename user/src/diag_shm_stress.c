@@ -207,8 +207,13 @@ static void test_giant_context_window(void)
     volatile uint64_t *proto = (volatile uint64_t *)(uintptr_t)addr;
     proto[0] = 0; /* agents done count */
 
-    /* Fork 5 agent processes */
-    pid_t children[NUM_AGENTS];
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) {
+        TEST_FAIL("256mb_detach_before_fork");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    /* Fork with no inherited SHM mappings; creator retains the backing. */
+    pid_t children[NUM_AGENTS] = {0};
     int fork_ok = 1;
     for (int a = 0; a < NUM_AGENTS; a++) {
         children[a] = fork();
@@ -229,7 +234,7 @@ static void test_giant_context_window(void)
             unsigned long off = agent_offsets[a];
 
             /* Write 1MB chunk with yield() every 64KB to force context switches */
-            for (unsigned long i = 0; i < CHUNK_SIZE; i++) {
+            for (unsigned long i = (a == 0 ? 64UL : 0UL); i < CHUNK_SIZE; i++) {
                 cb[off + i] = pattern;
                 /* Yield every 64KB to stress TLB */
                 if ((i & 0xFFFF) == 0xFFFF) {
@@ -239,7 +244,7 @@ static void test_giant_context_window(void)
 
             /* Verify our own write survived context switches */
             int verify_ok = 1;
-            for (unsigned long i = 0; i < CHUNK_SIZE; i += 4096) {
+            for (unsigned long i = (a == 0 ? 64UL : 0UL); i < CHUNK_SIZE; i += 4096) {
                 if (cb[off + i] != pattern) {
                     verify_ok = 0;
                     break;
@@ -250,7 +255,7 @@ static void test_giant_context_window(void)
             volatile uint64_t *cp = (volatile uint64_t *)(uintptr_t)caddr;
             cp[1 + a] = verify_ok ? 0xD04E : 0xBAD;
 
-            syscall2(SYS_SHM_UNMAP, id, caddr);
+            if (syscall2(SYS_SHM_UNMAP, id, caddr) != 0) verify_ok = 0;
             _exit(verify_ok ? 0 : 1);
         }
     }
@@ -259,11 +264,11 @@ static void test_giant_context_window(void)
         TEST_FAIL("256mb_agent_fork");
         for (int a = 0; a < NUM_AGENTS; a++) {
             if (children[a] > 0) {
-                int s;
-                waitpid(children[a], &s, 0);
+                int s = -1;
+                if (waitpid(children[a], &s, 0) != children[a] || s != 0)
+                    TEST_FAIL("256mb_partial_spawn_cleanup");
             }
         }
-        syscall2(SYS_SHM_UNMAP, id, addr);
         syscall1(SYS_SHM_DESTROY, id);
         return;
     }
@@ -271,21 +276,29 @@ static void test_giant_context_window(void)
     /* Wait for all agents */
     int agents_ok = 1;
     for (int a = 0; a < NUM_AGENTS; a++) {
-        int s;
-        waitpid(children[a], &s, 0);
-        if (!WIFEXITED(s) || WEXITSTATUS(s) != 0) {
+        int s = -1;
+        if (waitpid(children[a], &s, 0) != children[a] || s != 0) {
             printf("    agent %d: exit status=%d\n", a, WEXITSTATUS(s));
             agents_ok = 0;
         }
     }
 
-    /* Parent verifies each agent's 1MB chunk */
+    addr = syscall2(SYS_SHM_MAP, id, 0);
+    if (addr < 0x10000) {
+        TEST_FAIL("256mb_parent_remap");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    base = (volatile uint8_t *)(uintptr_t)addr;
+    proto = (volatile uint64_t *)(uintptr_t)addr;
+
+    /* Parent verifies each agent's 1MB chunk, excluding protocol bytes. */
     int chunks_ok = 1;
     for (int a = 0; a < NUM_AGENTS; a++) {
         unsigned long off = agent_offsets[a];
         uint8_t expected = agent_patterns[a];
         /* Sample every 4KB within the 1MB chunk */
-        for (unsigned long i = 0; i < CHUNK_SIZE; i += 4096) {
+        for (unsigned long i = (a == 0 ? 64UL : 0UL); i < CHUNK_SIZE; i += 4096) {
             if (base[off + i] != expected) {
                 printf("    agent %d chunk: offset %lu expected 0x%02X got 0x%02X\n",
                        a, off + i, (unsigned)expected, (unsigned)base[off + i]);
@@ -322,8 +335,8 @@ static void test_giant_context_window(void)
     }
 
     /* Cleanup — this must free all 65,536 pages */
-    syscall2(SYS_SHM_UNMAP, id, addr);
-    syscall1(SYS_SHM_DESTROY, id);
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) TEST_FAIL("test_giant_context_window: final_detach");
+    if (syscall1(SYS_SHM_DESTROY, id) != 0) TEST_FAIL("test_giant_context_window: owner_close");
 }
 
 /* ============================================================================
@@ -449,8 +462,13 @@ static void test_tlb_stress(void)
 
     volatile uint8_t *base = (volatile uint8_t *)(uintptr_t)addr;
 
-    /* Fork 3 agents that all write to overlapping regions with heavy yielding */
-    pid_t ch[3];
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) {
+        TEST_FAIL("tlb_detach_before_fork");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    /* Fork 3 agents that write separate stripes with heavy yielding. */
+    pid_t ch[3] = {0};
     int forks_ok = 1;
     for (int a = 0; a < 3; a++) {
         ch[a] = fork();
@@ -478,7 +496,7 @@ static void test_tlb_stress(void)
                 if (cb[stripe + off] != pat) { ok = 0; break; }
             }
 
-            syscall2(SYS_SHM_UNMAP, id, ca);
+            if (syscall2(SYS_SHM_UNMAP, id, ca) != 0) ok = 0;
             _exit(ok ? 0 : 1);
         }
     }
@@ -486,9 +504,12 @@ static void test_tlb_stress(void)
     if (!forks_ok) {
         TEST_FAIL("tlb_stress_fork");
         for (int a = 0; a < 3; a++) {
-            if (ch[a] > 0) { int s; waitpid(ch[a], &s, 0); }
+            if (ch[a] > 0) {
+                int s = -1;
+                if (waitpid(ch[a], &s, 0) != ch[a] || s != 0)
+                    TEST_FAIL("tlb_partial_spawn_cleanup");
+            }
         }
-        syscall2(SYS_SHM_UNMAP, id, addr);
         syscall1(SYS_SHM_DESTROY, id);
         return;
     }
@@ -496,13 +517,20 @@ static void test_tlb_stress(void)
     /* Wait for all */
     int all_ok = 1;
     for (int a = 0; a < 3; a++) {
-        int s;
-        waitpid(ch[a], &s, 0);
-        if (!WIFEXITED(s) || WEXITSTATUS(s) != 0) {
+        int s = -1;
+        if (waitpid(ch[a], &s, 0) != ch[a] || s != 0) {
             printf("    TLB agent %d failed\n", a);
             all_ok = 0;
         }
     }
+
+    addr = syscall2(SYS_SHM_MAP, id, 0);
+    if (addr < 0x10000) {
+        TEST_FAIL("tlb_parent_remap");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    base = (volatile uint8_t *)(uintptr_t)addr;
 
     /* Parent verifies stripes */
     int stripes_ok = 1;
@@ -525,8 +553,8 @@ static void test_tlb_stress(void)
         TEST_FAIL("tlb_3agents_yield_per_page");
     }
 
-    syscall2(SYS_SHM_UNMAP, id, addr);
-    syscall1(SYS_SHM_DESTROY, id);
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) TEST_FAIL("test_tlb_stress: final_detach");
+    if (syscall1(SYS_SHM_DESTROY, id) != 0) TEST_FAIL("test_tlb_stress: owner_close");
 }
 
 /* ============================================================================

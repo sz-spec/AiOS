@@ -15,6 +15,7 @@
  */
 
 #include "../../../include/vos/user.h"
+#include "../../../include/vos/uaccess.h"
 #include "../../../include/vos/task.h"
 #include "../../../include/vos/scheduler.h"
 #include "../../../include/vos/vmm.h"
@@ -310,70 +311,18 @@ void vos3_fork_child_return(void)
 
 int vos3_copy_from_user(void* dst, const void* src, size_t len)
 {
-    if (dst == NULL || src == NULL) {
-        return VOS3_USER_ERR_INVALID;
-    }
-
-    /* Validate source is in user space */
-    uint64_t src_addr = (uint64_t)(uintptr_t)src;
-    uint64_t src_end = src_addr + len;
-
-    if (src_addr >= VOS3_USER_END || src_end > VOS3_USER_END) {
-        return VOS3_USER_ERR_FAULT;
-    }
-
-    /* TODO: Handle page faults properly */
-    memcpy(dst, src, len);
-
-    return VOS3_USER_OK;
+    if (dst == NULL || src == NULL) return VOS3_USER_ERR_INVALID;
+    return copy_from_user(dst, src, len);
 }
 
 int vos3_copy_to_user(void* dst, const void* src, size_t len)
 {
-    if (dst == NULL || src == NULL) {
-        return VOS3_USER_ERR_INVALID;
-    }
-
-    /* Validate destination is in user space */
-    uint64_t dst_addr = (uint64_t)(uintptr_t)dst;
-    uint64_t dst_end = dst_addr + len;
-
-    if (dst_addr >= VOS3_USER_END || dst_end > VOS3_USER_END) {
-        return VOS3_USER_ERR_FAULT;
-    }
-
-    /* TODO: Handle page faults properly */
-    memcpy(dst, src, len);
-
-    return VOS3_USER_OK;
+    if (dst == NULL || src == NULL) return VOS3_USER_ERR_INVALID;
+    return copy_to_user(dst, src, len);
 }
 
 int64_t vos3_strncpy_from_user(char* dst, const char* src, size_t max)
 {
-    if (dst == NULL || src == NULL || max == 0U) {
-        return VOS3_USER_ERR_INVALID;
-    }
-
-    /* Validate source is in user space */
-    uint64_t src_addr = (uint64_t)(uintptr_t)src;
-    if (src_addr >= VOS3_USER_END) {
-        return VOS3_USER_ERR_FAULT;
-    }
-
-    /* Copy character by character with bounds checking */
-    size_t i;
-    for (i = 0U; i < max - 1U; i++) {
-        /* Check each character address */
-        if (src_addr + i >= VOS3_USER_END) {
-            return VOS3_USER_ERR_FAULT;
-        }
-
-        dst[i] = src[i];
-        if (src[i] == '\0') {
-            return (int64_t)i;
-        }
-    }
-
-    dst[i] = '\0';
-    return (int64_t)i;
+    if (dst == NULL || src == NULL || max == 0U) return VOS3_USER_ERR_INVALID;
+    return strncpy_from_user(dst, src, max);
 }

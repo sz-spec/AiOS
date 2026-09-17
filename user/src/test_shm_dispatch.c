@@ -135,10 +135,15 @@ static void test_cross_process_context(void)
     ctx[1] = 8192;               /* Token count */
     ctx[2] = 0xDEADBEEFCAFEULL; /* Checksum placeholder */
 
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) {
+        TEST_FAIL("cross_process_context: detach_before_fork");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+
     pid_t child = fork();
     if (child < 0) {
         TEST_FAIL("cross_process_context: fork");
-        syscall2(SYS_SHM_UNMAP, id, addr);
         syscall1(SYS_SHM_DESTROY, id);
         return;
     }
@@ -148,7 +153,7 @@ static void test_cross_process_context(void)
         long caddr = syscall2(SYS_SHM_MAP, id, 0);
         if (caddr < 0x10000) {
             printf("[FAIL] shm_dispatch: cross_process_context: child_map\n");
-            syscall1(SYS_EXIT, 1);
+            _exit(1);
         }
 
         volatile uint64_t* cctx = (volatile uint64_t*)(uintptr_t)caddr;
@@ -161,25 +166,33 @@ static void test_cross_process_context(void)
             printf("[PASS] shm_dispatch: cross_process_context: child_read\n");
         } else {
             printf("[FAIL] shm_dispatch: cross_process_context: child_read\n");
+            syscall2(SYS_SHM_UNMAP, id, caddr);
+            _exit(2);
         }
 
-        syscall2(SYS_SHM_UNMAP, id, caddr);
-        syscall1(SYS_EXIT, 0);
+        _exit(syscall2(SYS_SHM_UNMAP, id, caddr) == 0 ? 0 : 3);
     }
 
     /* Parent: wait for child */
-    int status;
-    waitpid(child, &status, 0);
+    int status = -1;
+    int child_ok = waitpid(child, &status, 0) == child && status == 0;
+    addr = syscall2(SYS_SHM_MAP, id, 0);
+    if (addr < 0x10000) {
+        TEST_FAIL("cross_process_context: parent_remap");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    ctx = (volatile uint64_t*)(uintptr_t)addr;
 
     /* Verify child wrote back */
-    if (ctx[3] == 0xC41DACULL) {
+    if (child_ok && ctx[3] == 0xC41DACULL) {
         TEST_PASS("cross_process_context: parent_verify_child");
     } else {
         TEST_FAIL("cross_process_context: parent_verify_child");
     }
 
-    syscall2(SYS_SHM_UNMAP, id, addr);
-    syscall1(SYS_SHM_DESTROY, id);
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) TEST_FAIL("test_cross_process_context: final_detach");
+    if (syscall1(SYS_SHM_DESTROY, id) != 0) TEST_FAIL("test_cross_process_context: owner_close");
 }
 
 /* ============================================================================
@@ -188,7 +201,7 @@ static void test_cross_process_context(void)
 
 static void test_linux_abi_shmget(void)
 {
-    /* Use Linux shmget(29) to create SHM — same handler as VOS3 SHM_CREATE(70) */
+    /* Use Linux shmget(29) to create SHM — same handler as VOS3 SHM_CREATE(410) */
     long id = syscall3(LINUX_SHMGET, (long)"linux_abi_1", 4096, 0);
     if (id < 0) {
         TEST_FAIL("linux_abi_shmget: create_via_29");
@@ -196,8 +209,8 @@ static void test_linux_abi_shmget(void)
     }
     TEST_PASS("linux_abi_shmget: create_via_29");
 
-    /* Use Linux shmctl(31) to destroy — same handler as VOS3 SHM_DESTROY(71) */
-    long ret = syscall1(LINUX_SHMCTL, id);
+    /* Use Linux shmctl(31) to destroy — same handler as VOS3 SHM_DESTROY(411) */
+    long ret = syscall2(LINUX_SHMCTL, id, 0);
     if (ret < 0) {
         TEST_FAIL("linux_abi_shmget: destroy_via_31");
     } else {
@@ -257,7 +270,7 @@ static void test_linux_abi_cross_compat(void)
     long addr = syscall2(SYS_SHM_MAP, id, 0);  /* VOS3 map */
     if (addr < 0x10000) {
         TEST_FAIL("linux_abi_cross_compat: map_vos3");
-        syscall1(LINUX_SHMCTL, id);
+        syscall2(LINUX_SHMCTL, id, 0);
         return;
     }
 
@@ -356,17 +369,22 @@ static void test_multi_agent_concurrent(void)
      */
     slots[0] = 0xA6E4700;  /* parent marker */
 
-    /* Fork child 1 */
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) {
+        TEST_FAIL("multi_agent_concurrent: detach_before_fork");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+
+    /* Fork both workers before remapping in parent. */
     pid_t child1 = fork();
     if (child1 == 0) {
         long c1addr = syscall2(SYS_SHM_MAP, id, 0);
         if (c1addr < 0x10000) {
-            syscall1(SYS_EXIT, 1);
+            _exit(1);
         }
         volatile uint64_t* c1 = (volatile uint64_t*)(uintptr_t)c1addr;
         c1[1] = 0xA6E4701;  /* child 1 marker */
-        syscall2(SYS_SHM_UNMAP, id, c1addr);
-        syscall1(SYS_EXIT, 0);
+        _exit(syscall2(SYS_SHM_UNMAP, id, c1addr) == 0 ? 0 : 2);
     }
 
     /* Fork child 2 */
@@ -374,21 +392,27 @@ static void test_multi_agent_concurrent(void)
     if (child2 == 0) {
         long c2addr = syscall2(SYS_SHM_MAP, id, 0);
         if (c2addr < 0x10000) {
-            syscall1(SYS_EXIT, 1);
+            _exit(1);
         }
         volatile uint64_t* c2 = (volatile uint64_t*)(uintptr_t)c2addr;
         c2[2] = 0xA6E4702;  /* child 2 marker */
-        syscall2(SYS_SHM_UNMAP, id, c2addr);
-        syscall1(SYS_EXIT, 0);
+        _exit(syscall2(SYS_SHM_UNMAP, id, c2addr) == 0 ? 0 : 2);
     }
 
     /* Wait for both children */
-    int s1, s2;
-    waitpid(child1, &s1, 0);
-    waitpid(child2, &s2, 0);
+    int s1 = -1, s2 = -1;
+    int first_ok = child1 > 0 && waitpid(child1, &s1, 0) == child1 && s1 == 0;
+    int second_ok = child2 > 0 && waitpid(child2, &s2, 0) == child2 && s2 == 0;
+    addr = syscall2(SYS_SHM_MAP, id, 0);
+    if (addr < 0x10000) {
+        TEST_FAIL("multi_agent_concurrent: parent_remap");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    slots = (volatile uint64_t*)(uintptr_t)addr;
 
     /* Verify all 3 agents wrote to their slots */
-    if (slots[0] == 0xA6E4700 && slots[1] == 0xA6E4701 && slots[2] == 0xA6E4702) {
+    if (first_ok && second_ok && slots[0] == 0xA6E4700 && slots[1] == 0xA6E4701 && slots[2] == 0xA6E4702) {
         TEST_PASS("multi_agent_concurrent: three_agents_shared");
     } else {
         printf("    slots: [0]=0x%lx [1]=0x%lx [2]=0x%lx\n",
@@ -397,8 +421,8 @@ static void test_multi_agent_concurrent(void)
         TEST_FAIL("multi_agent_concurrent: three_agents_shared");
     }
 
-    syscall2(SYS_SHM_UNMAP, id, addr);
-    syscall1(SYS_SHM_DESTROY, id);
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) TEST_FAIL("test_multi_agent_concurrent: final_detach");
+    if (syscall1(SYS_SHM_DESTROY, id) != 0) TEST_FAIL("test_multi_agent_concurrent: owner_close");
 }
 
 /* ============================================================================

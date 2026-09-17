@@ -1,0 +1,19 @@
+# Bounded user-copy fault recovery — 2026-09-17
+
+Implementation author: `/root/mcp_upgrade`. Independent source/test reviewer: `/root/math_build_review`. The coordinator owns the real guest workload and native runs. Native runtime results are pending; the author does not independently audit their own implementation.
+
+`copy_from_user` and `copy_to_user` now use separate assembly `REP MOVSB` instructions with exact static fault and recovery labels. A recovery match requires kernel CPL, a supervisor data fault with no reserved/fetch/other error bits, the exact corresponding instruction address, nonzero remaining count, matching read/write direction, CR2 equal to the current user-side RSI/RDI, and a validated remaining user range. No task, CPU, or global continuation pointer is stored. Recovery returns `-EFAULT` through the original call stack so syscall cleanup can run. A copied prefix may already exist; this is not atomic-copy semantics.
+
+The page-fault handler preserves COW resolution before recovery. Demand paging additionally recognizes this exact validated copy context, checks the existing VMA access policy, and retries valid lazy accesses. Unresolved matched faults redirect only RIP and clear saved AC. Fault handling clears active AC when SMAP is enabled; a successful fault resolution retries with the saved copy state. The wrapper clears AC on normal/error return. The assembly explicitly clears DF and uses only caller-saved registers. Unrelated kernel faults never match this recovery mechanism.
+
+Preflight walks all four page-table levels and requires effective USER permissions for populated mappings. Writes also require effective WRITE, or COW on an actual leaf supported by the existing VMM handler. This prevents supervisor copying from bypassing PROT_NONE or low-address supervisor mappings. Missing entries proceed to the bounded fault/demand path. String helpers use the same safe byte-copy operation. All three legacy `vos3_copy_from_user`, `vos3_copy_to_user`, and `vos3_strncpy_from_user` entry points delegate to the unified implementation while preserving their existing `-2` invalid-argument convention.
+
+## Validation and limits
+
+The actual user-copy translation unit, including assembly labels, compiled to an x86-64 ELF object. Freestanding syntax checks passed for the copy code, interrupt integration, and legacy wrappers. Logs retain the existing Clang warning about the GCC-only `-Wstringop-overflow` diagnostic pragma.
+
+`scripts/test_usercopy_permissions.py` compiles the actual preflight function and VMM flag helpers against simulated page tables. It covers USER and WRITE denial at every level, COW leaf acceptance, nonleaf read-only denial, huge leaves, missing entries, cross-page boundaries, and absent address spaces. The independent reviewer's `scripts/test_usercopy_recovery.py` exercises the actual range validator, exact matcher, preflight, and wrappers with mocked raw copying/SMAP hooks. It checks malformed fault tuples, overflow/range rejection, copy errors, AC cleanup, and legacy wrapper behavior. Neither harness executes a hardware page fault or proves SMAP instruction behavior.
+
+The guest workload covers unmapped/cross-page input and output, paths, read-only/PROT_NONE rejection, continued valid I/O, COW parent preservation, and untouched lazy copyout. Its result must be recorded after the final rebuild; no guest pass is inferred from host tests.
+
+Concurrent shared-address-space mutation between permission preflight and copying remains outside this serialized qualification. This change does not establish general SMP page-table lifetime safety. Existing AI policy enforcement remains before terminal recovery; it has not been replaced with a generic fault escape. The preexisting broad kernel-user-address fatal-fault behavior remains for faults outside the exact copy sites.
