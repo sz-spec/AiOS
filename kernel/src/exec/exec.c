@@ -19,6 +19,7 @@
 #include "../../include/vos/vmm.h"
 #include "../../include/vos/pmm.h"
 #include "../../include/vos/heap.h"
+#include "../../include/vos/ipc.h"
 #include "../../include/vos/vfs.h"
 #include "../../include/vos/user.h"
 #include "../../include/vos/string.h"
@@ -372,12 +373,6 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
                   (unsigned long long)interp_info.base);
     }
 
-    /* Success - destroy old address space if it was user-specific */
-    if (old_as != NULL && old_as != kernel_space) {
-        VOS3_DEBUG("exec: Destroying old address space");
-        vos3_vmm_destroy_address_space(old_as);
-    }
-
     /* Set program break (heap start) in address space — uses MAIN program's brk */
     new_as->brk = elf_info.brk;
     new_as->brk_start = elf_info.brk;
@@ -412,7 +407,8 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
         uint64_t page_addr = stack_top - ((i + 1U) * VOS3_PAGE_SIZE);
         uint64_t phys = vos3_pmm_alloc(0);
         if (phys == 0ULL) {
-            return VOS3_ELF_ERR_NOMEM;
+            result = VOS3_ELF_ERR_NOMEM;
+            goto exec_rollback;
         }
 
         result = vos3_vmm_map_user(page_addr, phys,
@@ -420,7 +416,8 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
                                     VOS3_PTE_USER | VOS3_PTE_NO_EXECUTE);
         if (result != 0) {
             vos3_pmm_free(phys);
-            return VOS3_ELF_ERR_NOMEM;
+            result = VOS3_ELF_ERR_NOMEM;
+            goto exec_rollback;
         }
 
         void* kaddr = vos3_vmm_get_kernel_addr(page_addr);
@@ -461,8 +458,17 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
                               elf_info.has_interp ? auxv : NULL, auxv_count,
                               &user_sp, &argc);
     if (result != VOS3_ELF_OK) {
-        return result;
+        goto exec_rollback;
     }
+
+    /* Commit signal dispositions only after all fallible ELF/stack work.
+     * On allocation failure the old image and its dispositions stay intact. */
+    if (vos3_signal_task_exec(current) != VOS3_IPC_OK) {
+        result = VOS3_ELF_ERR_NOMEM;
+        goto exec_rollback;
+    }
+    if (old_as != NULL && old_as != kernel_space)
+        vos3_vmm_destroy_address_space(old_as);
 
     /* Update task name */
     const char* name = argv[0];
@@ -505,6 +511,13 @@ int vos3_exec(const char* path, const char* argv[], const char* envp[])
 
     /* Should never reach here */
     return VOS3_ELF_ERR_INVALID;
+
+exec_rollback:
+    current->address_space = old_as != NULL ? old_as : kernel_space;
+    vos3_vmm_switch_address_space(current->address_space);
+    vos3_vmm_destroy_address_space(new_as);
+    current->mmap_next = old_mmap_next;
+    return result;
 }
 
 /* ============================================================================
@@ -547,6 +560,7 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
 
     /* Copy parent task */
     memcpy(child, parent, sizeof(vos3_task_t));
+    child->signal_state = NULL; /* Never alias the copied per-task signal state. */
 #ifdef NATIVE_SMP_WORKLOAD
     child->native_smp_reported = 0;
 #endif
@@ -707,7 +721,9 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
                (unsigned long long)(uintptr_t)parent->address_space);
 
     /* Register in task table (needed for signal delivery, task lookup) */
-    if (vos3_task_register(child) != 0) {
+    if (vos3_signal_task_clone(child, parent, 0) != VOS3_IPC_OK ||
+        vos3_task_register(child) != 0) {
+        vos3_signal_task_destroy(child);
         VOS3_ERROR("fork: failed to register child in task table");
         vos3_vmm_destroy_address_space(child->address_space);
         if (child->fd_table) {

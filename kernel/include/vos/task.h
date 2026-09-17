@@ -350,6 +350,7 @@ typedef struct vos3_task {
     /* Immutable per-registration security principal; never a PID/TID alias.
      * Assigned before publication; fork/clone registration replaces copied value. */
     uint64_t identity_cookie;
+    struct vos3_signal_state* signal_state; /**< Owned; appended to preserve assembly offsets. */
 } __attribute__((aligned(VOS3_CACHE_LINE_SIZE))) vos3_task_t;
 
 /* ============================================================================

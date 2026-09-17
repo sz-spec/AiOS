@@ -58,6 +58,15 @@ sighandler_t signal(int sig, sighandler_t handler)
 
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact)
 {
+    struct sigaction kernel_act;
+    if (act != NULL && act->sa_handler != SIG_DFL && act->sa_handler != SIG_IGN) {
+        kernel_act = *act;
+        if (!(kernel_act.sa_flags & SA_RESTORER) || kernel_act.sa_restorer == NULL) {
+            kernel_act.sa_flags |= SA_RESTORER;
+            kernel_act.sa_restorer = __restore_rt;
+        }
+        act = &kernel_act;
+    }
     long result = syscall4(SYS_RT_SIGACTION,
                            (long)sig,
                            (long)act,

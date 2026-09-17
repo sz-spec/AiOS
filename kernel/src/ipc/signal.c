@@ -21,19 +21,11 @@
 #include "../../include/vos/string.h"
 #include "../../include/vos/syscall.h"
 #include "../../include/vos/user.h"
+#include "../../include/vos/uaccess.h"
 
 /* ============================================================================
  * SIGNAL PENDING STORAGE
  * ============================================================================ */
-
-/*
- * Signal pending info is stored per-task.
- * We use a simple array indexed by task ID.
- * In a real implementation, this would be part of the task structure.
- */
-
-/** @brief Signal pending info per task */
-static vos3_sigpending_t* g_sig_pending[VOS3_MAX_TASKS];
 
 /** @brief Signal lock */
 static vos3_spinlock_t g_sig_lock = VOS3_SPINLOCK_INIT;
@@ -96,25 +88,119 @@ static const vos3_sigdefault_t g_sig_defaults[VOS3_SIG_MAX + 1] = {
 /**
  * @brief Get or create signal pending info for a task
  */
-static vos3_sigpending_t* sig_get_pending(vos3_tid_t tid)
+static uint64_t sig_lock(void)
 {
-    if (tid >= VOS3_MAX_TASKS) {
-        return NULL;
-    }
+    uint64_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_sig_lock);
+    return flags;
+}
 
-    if (g_sig_pending[tid] == NULL) {
-        g_sig_pending[tid] = (vos3_sigpending_t*)vos3_kzalloc(sizeof(vos3_sigpending_t));
-        if (g_sig_pending[tid] != NULL) {
-            /* Initialize with default handlers */
-            for (int i = 0; i <= VOS3_SIG_MAX; i++) {
-                g_sig_pending[tid]->actions[i].handler = VOS3_SIG_DFL;
-                g_sig_pending[tid]->actions[i].mask = 0U;
-                g_sig_pending[tid]->actions[i].flags = 0U;
-            }
-        }
-    }
+static void sig_unlock(uint64_t flags)
+{
+    vos3_spinlock_unlock(&g_sig_lock);
+    vos3_irq_restore(flags);
+}
 
-    return g_sig_pending[tid];
+static vos3_signal_state_t* sig_get_pending(vos3_task_t* task)
+{
+    return task == NULL ? NULL : task->signal_state;
+}
+
+static vos3_signal_actions_t* sig_alloc_actions(void)
+{
+    vos3_signal_actions_t* actions = vos3_kzalloc(sizeof(*actions));
+    if (actions != NULL) actions->refs = 1;
+    return actions; /* SIG_DFL == 0; all masks/flags/restorers initially clear */
+}
+
+int vos3_signal_task_init(vos3_task_t* task)
+{
+    if (task == NULL || task->signal_state != NULL) return VOS3_IPC_ERR_INVALID;
+    vos3_signal_state_t* state = vos3_kzalloc(sizeof(*state));
+    if (state == NULL) return VOS3_IPC_ERR_NOMEM;
+    state->handlers = sig_alloc_actions();
+    if (state->handlers == NULL) {
+        vos3_kfree(state);
+        return VOS3_IPC_ERR_NOMEM;
+    }
+    task->signal_state = state;
+    return VOS3_IPC_OK;
+}
+
+int vos3_signal_task_clone(vos3_task_t* child, const vos3_task_t* parent,
+                           int share_handlers)
+{
+    if (child == NULL || parent == NULL || child->signal_state != NULL)
+        return VOS3_IPC_ERR_INVALID;
+    vos3_signal_state_t* state = vos3_kzalloc(sizeof(*state));
+    if (state == NULL) return VOS3_IPC_ERR_NOMEM;
+    vos3_signal_actions_t* actions = share_handlers ? NULL : sig_alloc_actions();
+    if (!share_handlers && actions == NULL) {
+        vos3_kfree(state);
+        return VOS3_IPC_ERR_NOMEM;
+    }
+    uint64_t flags = sig_lock();
+    const vos3_signal_state_t* source = parent->signal_state;
+    if (source == NULL || source->handlers == NULL ||
+        source->handlers->refs == 0 ||
+        (share_handlers && source->handlers->refs == UINT32_MAX)) {
+        sig_unlock(flags);
+        vos3_kfree(actions);
+        vos3_kfree(state);
+        return VOS3_IPC_ERR_INVALID;
+    }
+    if (share_handlers) {
+        actions = source->handlers;
+        actions->refs++;
+    } else {
+        memcpy(actions->actions, source->handlers->actions, sizeof(actions->actions));
+    }
+    state->blocked = source->blocked;
+    state->pending = 0;
+    state->handlers = actions;
+    child->signal_state = state;
+    sig_unlock(flags);
+    return VOS3_IPC_OK;
+}
+
+void vos3_signal_task_destroy(vos3_task_t* task)
+{
+    if (task == NULL) return;
+    vos3_signal_actions_t* release = NULL;
+    uint64_t flags = sig_lock();
+    vos3_signal_state_t* state = task->signal_state;
+    task->signal_state = NULL;
+    if (state != NULL && state->handlers != NULL && state->handlers->refs > 0) {
+        if (--state->handlers->refs == 0) release = state->handlers;
+    }
+    sig_unlock(flags);
+    vos3_kfree(release);
+    vos3_kfree(state);
+}
+
+int vos3_signal_task_exec(vos3_task_t* task)
+{
+    if (task == NULL) return VOS3_IPC_ERR_INVALID;
+    vos3_signal_actions_t* actions = sig_alloc_actions();
+    if (actions == NULL) return VOS3_IPC_ERR_NOMEM;
+    vos3_signal_actions_t* release = NULL;
+    uint64_t flags = sig_lock();
+    vos3_signal_state_t* state = task->signal_state;
+    if (state == NULL || state->handlers == NULL || state->handlers->refs == 0) {
+        sig_unlock(flags);
+        vos3_kfree(actions);
+        return VOS3_IPC_ERR_INVALID;
+    }
+    for (int sig = 1; sig <= VOS3_SIG_MAX; sig++) {
+        if (state->handlers->actions[sig].handler == VOS3_SIG_IGN)
+            actions->actions[sig].handler = VOS3_SIG_IGN;
+    }
+    if (--state->handlers->refs == 0) release = state->handlers;
+    state->handlers = actions;
+    /* POSIX: exec retains blocked mask and pending signals. */
+    sig_unlock(flags);
+    vos3_kfree(release);
+    return VOS3_IPC_OK;
 }
 
 /**
@@ -174,20 +260,36 @@ static void sig_do_default(vos3_task_t* task, int signum)
 
 void vos3_signal_init_task(vos3_task_t* task)
 {
-    if (task == NULL) {
-        return;
+    /* Legacy explicit initializer; never reset an already live task. */
+    if (task != NULL && task->signal_state == NULL)
+        (void)vos3_signal_task_init(task);
+}
+
+/**
+ * @brief Check if current task can send signal to target
+ */
+int vos3_signal_check_permission(vos3_task_t* sender, vos3_task_t* target, int sig)
+{
+    if (sender == NULL || target == NULL) {
+        return -3;  /* ESRCH */
     }
 
-    vos3_spinlock_lock(&g_sig_lock);
-
-    /* Allocate signal pending info */
-    vos3_sigpending_t* sp = sig_get_pending(task->tid);
-    if (sp != NULL) {
-        sp->pending = 0U;
-        sp->blocked = 0U;
+    /* Root can send any signal */
+    if (sender->uid == 0U) {
+        return 0;
     }
 
-    vos3_spinlock_unlock(&g_sig_lock);
+    /* Same user can send signals */
+    if (sender->uid == target->uid) {
+        return 0;
+    }
+
+    /* SIGCONT to same session */
+    if (sig == VOS3_SIGCONT && sender->sid == target->sid) {
+        return 0;
+    }
+
+    return -1;  /* EPERM */
 }
 
 int vos3_signal_send(vos3_tid_t tid, int signum)
@@ -196,23 +298,26 @@ int vos3_signal_send(vos3_tid_t tid, int signum)
         return VOS3_IPC_ERR_INVALID;
     }
 
+    uint64_t lookup_flags = vos3_irq_save();
     vos3_task_t* task = vos3_task_get(tid);
     if (task == NULL) {
+        vos3_irq_restore(lookup_flags);
         return VOS3_IPC_ERR_NOTFOUND;
     }
 
-    vos3_spinlock_lock(&g_sig_lock);
+    uint64_t irq_flags = sig_lock();
 
-    vos3_sigpending_t* sp = sig_get_pending(tid);
+    vos3_signal_state_t* sp = sig_get_pending(task);
     if (sp == NULL) {
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
+        vos3_irq_restore(lookup_flags);
         return VOS3_IPC_ERR_NOMEM;
     }
 
     /* Set signal bit in pending mask */
     sp->pending |= (1U << (uint32_t)signum);
 
-    vos3_spinlock_unlock(&g_sig_lock);
+    sig_unlock(irq_flags);
 
     VOS3_DEBUG("Signal %d sent to task '%s' (tid=%u)", signum, task->name, tid);
 
@@ -221,6 +326,7 @@ int vos3_signal_send(vos3_tid_t tid, int signum)
         vos3_task_wake(task);
     }
 
+    vos3_irq_restore(lookup_flags);
     return VOS3_IPC_OK;
 }
 
@@ -239,18 +345,21 @@ vos3_sighandler_t vos3_signal_handler(int signum, vos3_sighandler_t handler)
         return VOS3_SIG_ERR;
     }
 
-    vos3_spinlock_lock(&g_sig_lock);
+    if ((current->flags & VOS3_TASK_FLAG_USER) != 0U &&
+        handler != VOS3_SIG_DFL && handler != VOS3_SIG_IGN) return VOS3_SIG_ERR;
 
-    vos3_sigpending_t* sp = sig_get_pending(current->tid);
+    uint64_t irq_flags = sig_lock();
+
+    vos3_signal_state_t* sp = sig_get_pending(current);
     if (sp == NULL) {
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
         return VOS3_SIG_ERR;
     }
 
-    vos3_sighandler_t old = sp->actions[signum].handler;
-    sp->actions[signum].handler = handler;
+    vos3_sighandler_t old = sp->handlers->actions[signum].handler;
+    sp->handlers->actions[signum].handler = handler;
 
-    vos3_spinlock_unlock(&g_sig_lock);
+    sig_unlock(irq_flags);
 
     return old;
 }
@@ -271,23 +380,37 @@ int vos3_sigaction(int signum, const vos3_sigaction_t* act,
         return VOS3_IPC_ERR_INVALID;
     }
 
-    vos3_spinlock_lock(&g_sig_lock);
+    if (act != NULL) {
+        uint32_t supported = VOS3_SA_RESTART | VOS3_SA_NODEFER |
+                             VOS3_SA_RESETHAND | VOS3_SA_RESTORER;
+        if ((act->flags & ~supported) != 0) return VOS3_IPC_ERR_INVALID;
+        if ((current->flags & VOS3_TASK_FLAG_USER) != 0U &&
+            act->handler != VOS3_SIG_DFL && act->handler != VOS3_SIG_IGN &&
+            (((act->flags & VOS3_SA_RESTORER) == 0) || act->sa_restorer == 0 ||
+             !access_ok((void*)(uintptr_t)act->handler, 1) ||
+             !access_ok((void*)(uintptr_t)act->sa_restorer, 1)))
+            return VOS3_IPC_ERR_INVALID;
+    }
 
-    vos3_sigpending_t* sp = sig_get_pending(current->tid);
+    uint64_t irq_flags = sig_lock();
+
+    vos3_signal_state_t* sp = sig_get_pending(current);
     if (sp == NULL) {
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
         return VOS3_IPC_ERR_NOMEM;
     }
 
     if (oldact != NULL) {
-        *oldact = sp->actions[signum];
+        *oldact = sp->handlers->actions[signum];
     }
 
     if (act != NULL) {
-        sp->actions[signum] = *act;
+        sp->handlers->actions[signum] = *act;
+        sp->handlers->actions[signum].mask &=
+            ~((1U << VOS3_SIGKILL) | (1U << VOS3_SIGSTOP) | 1U);
     }
 
-    vos3_spinlock_unlock(&g_sig_lock);
+    sig_unlock(irq_flags);
 
     return VOS3_IPC_OK;
 }
@@ -299,11 +422,11 @@ int vos3_sigprocmask(int how, const uint32_t* set, uint32_t* oldset)
         return VOS3_IPC_ERR_INVALID;
     }
 
-    vos3_spinlock_lock(&g_sig_lock);
+    uint64_t irq_flags = sig_lock();
 
-    vos3_sigpending_t* sp = sig_get_pending(current->tid);
+    vos3_signal_state_t* sp = sig_get_pending(current);
     if (sp == NULL) {
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
         return VOS3_IPC_ERR_NOMEM;
     }
 
@@ -313,7 +436,7 @@ int vos3_sigprocmask(int how, const uint32_t* set, uint32_t* oldset)
 
     if (set != NULL) {
         /* Cannot block SIGKILL or SIGSTOP */
-        uint32_t mask = *set & ~((1U << VOS3_SIGKILL) | (1U << VOS3_SIGSTOP));
+        uint32_t mask = *set & ~((1U << VOS3_SIGKILL) | (1U << VOS3_SIGSTOP) | 1U);
 
         switch (how) {
             case VOS3_SIG_BLOCK:
@@ -329,12 +452,12 @@ int vos3_sigprocmask(int how, const uint32_t* set, uint32_t* oldset)
                 break;
 
             default:
-                vos3_spinlock_unlock(&g_sig_lock);
+                sig_unlock(irq_flags);
                 return VOS3_IPC_ERR_INVALID;
         }
     }
 
-    vos3_spinlock_unlock(&g_sig_lock);
+    sig_unlock(irq_flags);
 
     return VOS3_IPC_OK;
 }
@@ -352,11 +475,11 @@ int vos3_sigwait(const uint32_t* set)
 
     /* Wait for a signal in the set */
     for (;;) {
-        vos3_spinlock_lock(&g_sig_lock);
+        uint64_t irq_flags = sig_lock();
 
-        vos3_sigpending_t* sp = sig_get_pending(current->tid);
+        vos3_signal_state_t* sp = sig_get_pending(current);
         if (sp == NULL) {
-            vos3_spinlock_unlock(&g_sig_lock);
+            sig_unlock(irq_flags);
             return VOS3_IPC_ERR_NOMEM;
         }
 
@@ -368,13 +491,13 @@ int vos3_sigwait(const uint32_t* set)
                 if ((ready & (1U << (uint32_t)sig)) != 0U) {
                     /* Clear the signal */
                     sp->pending &= ~(1U << (uint32_t)sig);
-                    vos3_spinlock_unlock(&g_sig_lock);
+                    sig_unlock(irq_flags);
                     return sig;
                 }
             }
         }
 
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
 
         /* Block until a signal arrives */
         vos3_task_block();
@@ -388,18 +511,18 @@ void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t syscall_result)
         return;
     }
 
-    vos3_spinlock_lock(&g_sig_lock);
+    uint64_t irq_flags = sig_lock();
 
-    vos3_sigpending_t* sp = sig_get_pending(current->tid);
+    vos3_signal_state_t* sp = sig_get_pending(current);
     if (sp == NULL || sp->pending == 0U) {
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
         return;
     }
 
     /* Check for unblocked pending signals */
     uint32_t deliverable = sp->pending & ~sp->blocked;
     if (deliverable == 0U) {
-        vos3_spinlock_unlock(&g_sig_lock);
+        sig_unlock(irq_flags);
         return;
     }
 
@@ -412,9 +535,19 @@ void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t syscall_result)
         /* Clear the signal */
         sp->pending &= ~(1U << (uint32_t)sig);
 
-        vos3_sigaction_t action = sp->actions[sig];
+        vos3_sigaction_t action = sp->handlers->actions[sig];
+        uint32_t saved_blocked = sp->blocked;
+        if (action.handler != VOS3_SIG_DFL && action.handler != VOS3_SIG_IGN) {
+            sp->blocked |= action.mask;
+            if ((action.flags & VOS3_SA_NODEFER) == 0)
+                sp->blocked |= 1U << (uint32_t)sig;
+            sp->blocked &= ~((1U << VOS3_SIGKILL) | (1U << VOS3_SIGSTOP) | 1U);
+            if ((action.flags & VOS3_SA_RESETHAND) != 0)
+                memset(&sp->handlers->actions[sig], 0, sizeof(vos3_sigaction_t));
+        }
 
-        vos3_spinlock_unlock(&g_sig_lock);
+
+        sig_unlock(irq_flags);
 
         VOS3_INFO("[SIG] Delivering signal %d to '%s', handler=%p",
                   sig, current->name, (void*)(uintptr_t)action.handler);
@@ -434,9 +567,15 @@ void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t syscall_result)
          * kernel-context handler call (legacy VOS3 tests).
          */
         if ((action.flags & VOS3_SA_RESTORER) == 0 || action.sa_restorer == 0) {
+            if ((current->flags & VOS3_TASK_FLAG_USER) != 0U ||
+                (current->flags & VOS3_TASK_FLAG_KERNEL) == 0U) {
+                vos3_task_exit(128 + VOS3_SIGSEGV);
+                return;
+            }
             VOS3_INFO("[SIG] Kernel-mode handler %p for signal %d (no SA_RESTORER)",
                       (void *)(uintptr_t)action.handler, sig);
             action.handler(sig);
+            (void)vos3_sigprocmask(VOS3_SIG_SETMASK, &saved_blocked, NULL);
             return;
         }
 
@@ -450,7 +589,15 @@ void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t syscall_result)
 
         /* Allocate sigframe on user stack with correct ABI alignment.
          * At handler entry, RSP must be 16n+8 (as if 'call' pushed ret addr). */
-        uint64_t new_rsp = user_rsp - sizeof(vos3_sigframe_t);
+        if (!access_ok((void*)(uintptr_t)action.handler, 1) ||
+            !access_ok((void*)(uintptr_t)action.sa_restorer, 1) ||
+            user_rsp < 128U + sizeof(vos3_sigframe_t) + 24U ||
+            !access_ok((void*)(uintptr_t)user_rsp, 1)) {
+            vos3_task_exit(128 + VOS3_SIGSEGV);
+            return;
+        }
+        /* Preserve the interrupted function's 128-byte SysV red zone. */
+        uint64_t new_rsp = user_rsp - 128U - sizeof(vos3_sigframe_t);
         new_rsp = (new_rsp & ~0xFULL) - 8ULL;
 
         /* Build the signal frame */
@@ -473,12 +620,13 @@ void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t syscall_result)
         sf.saved_r15  = frame->r15;
         sf.saved_rsp  = user_rsp;
         sf.signo      = (uint64_t)sig;
+        sf.saved_blocked = saved_blocked;
 
         /* Write sigframe to user stack */
         if (vos3_copy_to_user((void *)new_rsp, &sf, sizeof(sf)) != 0) {
             VOS3_WARN("[SIG] Failed to write sigframe to user stack at 0x%llx",
                       (unsigned long long)new_rsp);
-            sig_do_default(current, sig);
+            vos3_task_exit(128 + VOS3_SIGSEGV);
             return;
         }
 
@@ -494,5 +642,5 @@ void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t syscall_result)
         return;
     }
 
-    vos3_spinlock_unlock(&g_sig_lock);
+    sig_unlock(irq_flags);
 }

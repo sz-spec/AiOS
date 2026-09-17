@@ -1,6 +1,8 @@
 # Canonical native user-program manifest, shared with the kernel embedder.
 PROGRAMS := init sh cat grep wc head date uptime uname ai_test ai_diag ai_stat ai_top ai_stress ai_exploit business_sim setup_wizard ws_switch vos3_admin ai_audit udp_test tcp_test disk_test bench_csw bench_isolate bench_persist bench_overhead bench_sigpipe_test bench_bugfix_test bench_phase13_test bench_procfs_test bench_poll_test ps bench_fs_test bench_net_test bench_stress_test bench_fuzz_test bench_sched_test bench_app_isolation_test test_posix_fs test_epoll bench_thread_test stress_thread test_posix_core test_futex test_net_dispatch test_shm_dispatch diag_shm_stress fake_interp hello_dyn test_pt_interp auxv_interp hello_auxv ld-musl-x86_64.so.1 hello_musl test_dynlink test_signal_musl test_env_musl test_fileio_musl test_malloc_musl test_fork_musl test_pipe_musl test_stat_musl test_pthread_musl test_ai_guard test_net_e2e test_integration test_sustained test_stress_mt bench_ai_throughput bench_csw_1ms bench_soak_5min bench_hugepage_tlb bench_ai_scale test_npu_direct test_ai_latency bench_2026_frontier test_agent_chaos test_advanced_chaos test_model_load test_health_check test_agent_cluster test_torture test_ai_exploit_v2 test_max_saturation test_vmm_soak test_security_check
 
+PROGRAMS += test_signal_lifetime
+
 ifeq ($(NATIVE_ISOLATION_TEST),1)
 PROGRAMS += test_native_isolation
 endif

@@ -332,46 +332,57 @@ static void test_shm_cross_process(void)
         return;
     }
 
-    /* Parent writes initial value */
+    /* Initialize backing, then detach before fork. Fork intentionally rejects
+     * an address space with SHM mappings; the creator reference retains the
+     * region while neither process has it mapped. */
     volatile unsigned int *p = (volatile unsigned int *)addr;
     *p = 0xCAFE;
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) {
+        TEST_FAIL("shm_cross_process: detach before fork");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
 
     pid_t child = fork();
     if (child < 0) {
         TEST_FAIL("shm_cross_process: fork");
-        syscall2(SYS_SHM_UNMAP, id, addr);
         syscall1(SYS_SHM_DESTROY, id);
         return;
     }
 
     if (child == 0) {
-        /* Child: map same SHM, verify parent's value, write own value */
         long caddr = syscall2(SYS_SHM_MAP, id, 0);
-        if (caddr <= 0) exit(1);
-
+        if (caddr < 0x10000) exit(1);
         volatile unsigned int *cp = (volatile unsigned int *)caddr;
-        if (*cp != 0xCAFE) exit(2);
-
-        *cp = 0xBEEF;
-
-        syscall2(SYS_SHM_UNMAP, id, caddr);
-        exit(0);
+        int child_result = (*cp == 0xCAFE) ? 0 : 2;
+        if (child_result == 0) {
+            *cp = 0xBEEF;
+            if (*cp != 0xBEEF) child_result = 3;
+        }
+        if (syscall2(SYS_SHM_UNMAP, id, caddr) != 0) child_result = 4;
+        exit(child_result);
     }
 
-    /* Parent: wait for child, then verify child's write */
-    int status;
-    waitpid(child, &status, 0);
-
-    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        printf("    (child exit status: %d)\n",
-               WIFEXITED(status) ? WEXITSTATUS(status) : -1);
+    int status = -1;
+    pid_t waited = waitpid(child, &status, 0);
+    if (waited != child || status != 0) {
+        printf("    (waitpid=%d, child=%d, raw status=%d)\n",
+               (int)waited, (int)child, status);
         TEST_FAIL("shm_cross_process: child read parent value");
-        syscall2(SYS_SHM_UNMAP, id, addr);
         syscall1(SYS_SHM_DESTROY, id);
         return;
     }
     TEST_PASS("shm_cross_process: child read parent value");
 
+    /* Map anew: do not read the detached virtual address. The child's write
+     * must survive its unmap and exit through the same retained SHM backing. */
+    addr = syscall2(SYS_SHM_MAP, id, 0);
+    if (addr < 0x10000) {
+        TEST_FAIL("shm_cross_process: parent remap");
+        syscall1(SYS_SHM_DESTROY, id);
+        return;
+    }
+    p = (volatile unsigned int *)addr;
     if (*p == 0xBEEF) {
         TEST_PASS("shm_cross_process: parent reads child value");
     } else {
@@ -379,8 +390,10 @@ static void test_shm_cross_process(void)
         TEST_FAIL("shm_cross_process: parent reads child value");
     }
 
-    syscall2(SYS_SHM_UNMAP, id, addr);
-    syscall1(SYS_SHM_DESTROY, id);
+    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0)
+        TEST_FAIL("shm_cross_process: parent detach");
+    if (syscall1(SYS_SHM_DESTROY, id) != 0)
+        TEST_FAIL("shm_cross_process: owner close");
 }
 
 /* ============================================================================

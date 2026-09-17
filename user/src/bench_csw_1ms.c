@@ -120,21 +120,23 @@ static void test_yield_csw_cost(void)
         return;
     }
 
-    int ITERS = 2000;
+    enum { ITERS = 2000, WARMUP = 50 };
 
     if (pid == 0) {
         /* Child: echo back via pipes */
         close(pipe_a[1]);
         close(pipe_b[0]);
         char buf;
-        for (int i = 0; i < ITERS; i++) {
+        int exchanged = 0;
+        for (int i = 0; i < ITERS + WARMUP; i++) {
             if (read(pipe_a[0], &buf, 1) != 1) break;
             buf++;
             if (write(pipe_b[1], &buf, 1) != 1) break;
+            exchanged++;
         }
         close(pipe_a[0]);
         close(pipe_b[1]);
-        syscall1(SYS_EXIT, 0);
+        syscall1(SYS_EXIT, exchanged == ITERS + WARMUP ? 0 : 1);
         for(;;);
     }
 
@@ -143,11 +145,15 @@ static void test_yield_csw_cost(void)
     close(pipe_b[1]);
 
     /* Warm up */
-    for (int i = 0; i < 50; i++) {
+    int warmup_ok = 1;
+    for (int i = 0; i < WARMUP; i++) {
         char tok = 0x42;
         char rpl;
-        write(pipe_a[1], &tok, 1);
-        read(pipe_b[0], &rpl, 1);
+        if (write(pipe_a[1], &tok, 1) != 1 ||
+            read(pipe_b[0], &rpl, 1) != 1 || rpl != tok + 1) {
+            warmup_ok = 0;
+            break;
+        }
     }
 
     unsigned long long total = 0;
@@ -159,13 +165,13 @@ static void test_yield_csw_cost(void)
     #define MAX_SAMPLES 500
     unsigned long long samples[MAX_SAMPLES];
 
-    for (int i = 0; i < ITERS; i++) {
+    for (int i = 0; warmup_ok && i < ITERS; i++) {
         char tok = 0x42;
         char rpl;
 
         unsigned long long s = rdtsc();
-        write(pipe_a[1], &tok, 1);
-        read(pipe_b[0], &rpl, 1);
+        if (write(pipe_a[1], &tok, 1) != 1 ||
+            read(pipe_b[0], &rpl, 1) != 1 || rpl != tok + 1) break;
         unsigned long long e = rdtsc();
 
         unsigned long long d = e - s;
@@ -179,10 +185,10 @@ static void test_yield_csw_cost(void)
 
     close(pipe_a[1]);
     close(pipe_b[0]);
-    int status;
-    syscall4(SYS_WAIT4, pid, (long)&status, 0, 0);
+    int status = -1;
+    long waited = syscall4(SYS_WAIT4, pid, (long)&status, 0, 0);
 
-    if (success > 0) {
+    if (warmup_ok && success == ITERS && waited == pid && status == 0) {
         unsigned long long avg = total / (unsigned long long)success;
         unsigned long long per_switch = avg / 2;
 
@@ -206,7 +212,7 @@ static void test_yield_csw_cost(void)
 
         TEST_PASS("yield_csw_measured");
     } else {
-        TEST_FAIL("yield_csw_measured", "no successful iterations");
+        TEST_FAIL("yield_csw_measured", "incomplete exchange or unsuccessful child");
     }
 }
 

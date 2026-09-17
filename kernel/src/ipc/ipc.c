@@ -14,6 +14,7 @@
  */
 
 #include "../../include/vos/ipc.h"
+#include "../../include/vos/scheduler.h"
 #include "../../include/vos/syscall.h"
 #include "../../include/vos/console.h"
 #include "../../include/vos/uaccess.h"
@@ -408,8 +409,15 @@ static int64_t sys_pipe_close(vos3_syscall_frame_t* frame)
  */
 static int64_t sys_kill(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi > UINT32_MAX || frame->rsi == 0 ||
+        frame->rsi > VOS3_SIG_MAX) return -22;
     vos3_tid_t tid = (vos3_tid_t)frame->rdi;
     int signum = (int)frame->rsi;
+
+    vos3_task_t* sender = vos3_sched_current();
+    vos3_task_t* target = vos3_task_get(tid);
+    int permission = vos3_signal_check_permission(sender, target, signum);
+    if (permission != 0) return permission;
 
     return (int64_t)vos3_signal_send(tid, signum);
 }

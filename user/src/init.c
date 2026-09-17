@@ -363,6 +363,7 @@ int main(int argc, char *argv[], char *envp[])
     RUN_BENCH("test_pt_interp",  TEST_PT_INTERP_PATH);
     RUN_BENCH("test_dynlink",   TEST_DYNLINK_PATH);
     RUN_BENCH("test_signal_musl", TEST_SIGNAL_MUSL_PATH);
+    RUN_BENCH("test_signal_lifetime", "/bin/test_signal_lifetime");
     RUN_BENCH("test_env_musl",    TEST_ENV_MUSL_PATH);
     RUN_BENCH("test_fileio_musl", TEST_FILEIO_MUSL_PATH);
     RUN_BENCH("test_malloc_musl", TEST_MALLOC_MUSL_PATH);

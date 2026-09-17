@@ -460,6 +460,14 @@ vos3_task_t* vos3_task_create(const char* name,
     task->cpu_ticks_used = 0ULL;
     task->cpu_ticks_limit = 0ULL;
 
+    if (vos3_signal_task_init(task) != VOS3_IPC_OK) {
+        vos3_kfree(task->fd_table);
+        vos3_kfree(task->xsave_area_raw);
+        vos3_vmap_stack_free(task->kernel_stack, task->kernel_stack_guard);
+        vos3_kfree(task);
+        return NULL;
+    }
+
     /* Add to task table (hash map — keyed by tid) */
     vos3_spinlock_lock(&g_task_lock);
 
@@ -467,6 +475,7 @@ vos3_task_t* vos3_task_create(const char* name,
     task->identity_cookie = slot < 0 ? 0 : alloc_identity_cookie();
     if (slot < 0 || task->identity_cookie == 0) {
         vos3_spinlock_unlock(&g_task_lock);
+        vos3_signal_task_destroy(task);
         /* Newly created table is empty; no file references were published. */
         vos3_kfree(task->fd_table);
         vos3_kfree(task->xsave_area_raw);
@@ -600,6 +609,8 @@ void vos3_task_destroy(vos3_task_t* task)
     vos3_vmm_destroy_address_space(task->address_space);
     task->address_space = NULL;
 
+    vos3_signal_task_destroy(task);
+
     VOS3_DEBUG("Destroyed task '%s' (tid=%u)", task->name, task->tid);
 
     vos3_kfree(task);
@@ -722,6 +733,7 @@ void vos3_task_reap(void)
         vos3_vmm_destroy_address_space(task->address_space);
         task->address_space = NULL;
 
+        vos3_signal_task_destroy(task);
         vos3_kfree(task);
     }
 
@@ -750,6 +762,9 @@ int vos3_task_register(vos3_task_t* task)
     if (task == NULL) {
         return -1;
     }
+
+    if (task->signal_state == NULL && vos3_signal_task_init(task) != VOS3_IPC_OK)
+        return -1;
 
     vos3_spinlock_lock(&g_task_lock);
 

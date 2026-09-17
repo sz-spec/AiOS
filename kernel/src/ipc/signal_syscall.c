@@ -60,33 +60,6 @@ static int sig_validate(int sig)
     return sig;
 }
 
-/**
- * @brief Check if current task can send signal to target
- */
-static int sig_check_permission(vos3_task_t* sender, vos3_task_t* target, int sig)
-{
-    if (sender == NULL || target == NULL) {
-        return -3;  /* ESRCH */
-    }
-
-    /* Root can send any signal */
-    if (sender->uid == 0U) {
-        return 0;
-    }
-
-    /* Same user can send signals */
-    if (sender->uid == target->uid) {
-        return 0;
-    }
-
-    /* SIGCONT to same session */
-    if (sig == SIGCONT && sender->sid == target->sid) {
-        return 0;
-    }
-
-    return -1;  /* EPERM */
-}
-
 /* ============================================================================
  * SYSCALL HANDLERS
  * ============================================================================ */
@@ -124,7 +97,7 @@ static int64_t sys_kill(int32_t pid, int sig)
             return -3;  /* ESRCH */
         }
 
-        result = sig_check_permission(current, target, sig);
+        result = vos3_signal_check_permission(current, target, sig);
         if (result != 0) {
             return (int64_t)result;
         }
@@ -140,7 +113,7 @@ static int64_t sys_kill(int32_t pid, int sig)
         for (vos3_tid_t i = 0U; i < VOS3_MAX_TASKS; i++) {
             vos3_task_t* task = vos3_task_get(i);
             if (task != NULL && task->pgid == pgid) {
-                if (sig_check_permission(current, task, sig) == 0) {
+                if (vos3_signal_check_permission(current, task, sig) == 0) {
                     if (sig != 0) {
                         vos3_signal_send(task->tid, sig);
                     }
@@ -159,7 +132,7 @@ static int64_t sys_kill(int32_t pid, int sig)
         for (vos3_tid_t i = 0U; i < VOS3_MAX_TASKS; i++) {
             vos3_task_t* task = vos3_task_get(i);
             if (task != NULL && task->pid != 1U && task != current) {
-                if (sig_check_permission(current, task, sig) == 0) {
+                if (vos3_signal_check_permission(current, task, sig) == 0) {
                     if (sig != 0) {
                         vos3_signal_send(task->tid, sig);
                     }
@@ -179,7 +152,7 @@ static int64_t sys_kill(int32_t pid, int sig)
         for (vos3_tid_t i = 0U; i < VOS3_MAX_TASKS; i++) {
             vos3_task_t* task = vos3_task_get(i);
             if (task != NULL && task->pgid == pgid) {
-                if (sig_check_permission(current, task, sig) == 0) {
+                if (vos3_signal_check_permission(current, task, sig) == 0) {
                     if (sig != 0) {
                         vos3_signal_send(task->tid, sig);
                     }
@@ -213,13 +186,30 @@ typedef struct musl_k_sigaction {
     uint32_t mask[2];
 } musl_k_sigaction_t;
 
+static int sig_decode_user_flags(uint64_t flags, uint32_t* decoded)
+{
+    uint32_t low = (uint32_t)flags;
+    /* musl's public sa_flags is signed int, assigned to unsigned long in
+     * k_sigaction. SA_RESETHAND therefore legitimately sign-extends. */
+    if (flags != (uint64_t)low &&
+        flags != (uint64_t)(int64_t)(int32_t)low) return -22;
+    const uint32_t supported = 0x10000000U | 0x40000000U |
+                               0x80000000U | VOS3_SA_RESTORER;
+    if ((low & ~supported) != 0) return -22;
+    *decoded = (low & VOS3_SA_RESTORER) |
+        ((low & 0x10000000U) ? VOS3_SA_RESTART : 0) |
+        ((low & 0x40000000U) ? VOS3_SA_NODEFER : 0) |
+        ((low & 0x80000000U) ? VOS3_SA_RESETHAND : 0);
+    return 0;
+}
+
 /**
  * @brief sys_rt_sigaction - Get/set signal action (musl-compatible ABI)
  */
 static int64_t sys_rt_sigaction(int sig, const void* act, void* oldact,
                                  size_t sigsetsize)
 {
-    (void)sigsetsize;
+    if (sigsetsize != sizeof(uint64_t)) return -22;
 
     int vsig = sig_validate(sig);
     if (vsig < 0) {
@@ -250,9 +240,11 @@ static int64_t sys_rt_sigaction(int sig, const void* act, void* oldact,
         }
 
         kact.handler = (vos3_sighandler_t)(uintptr_t)user_act.handler;
-        kact.flags = (uint32_t)user_act.flags;
+        if (sig_decode_user_flags(user_act.flags, &kact.flags) != 0) return -22;
         kact.sa_restorer = user_act.restorer;
-        kact.mask = user_act.mask[0];  /* mask[1] is for signals 65-128, unsupported */
+        /* Linux bit 0 denotes signal 1; internal bit 1 denotes signal 1.
+         * Signals 32..64 are not implemented; their mask bits are ignored. */
+        kact.mask = (user_act.mask[0] & 0x7fffffffU) << 1;
     }
 
     int result = vos3_sigaction(sig,
@@ -262,9 +254,12 @@ static int64_t sys_rt_sigaction(int sig, const void* act, void* oldact,
     if (result == 0 && oldact != NULL) {
         musl_k_sigaction_t user_oldact;
         user_oldact.handler = (uint64_t)(uintptr_t)koldact.handler;
-        user_oldact.flags = koldact.flags;
+        user_oldact.flags = (koldact.flags & VOS3_SA_RESTORER) |
+            ((koldact.flags & VOS3_SA_RESTART) ? 0x10000000ULL : 0) |
+            ((koldact.flags & VOS3_SA_NODEFER) ? 0x40000000ULL : 0) |
+            ((koldact.flags & VOS3_SA_RESETHAND) ? 0x80000000ULL : 0);
         user_oldact.restorer = koldact.sa_restorer;
-        user_oldact.mask[0] = koldact.mask;
+        user_oldact.mask[0] = koldact.mask >> 1;
         user_oldact.mask[1] = 0;
 
         if (vos3_copy_to_user(oldact, &user_oldact, sizeof(user_oldact)) != 0) {
@@ -281,7 +276,7 @@ static int64_t sys_rt_sigaction(int sig, const void* act, void* oldact,
 static int64_t sys_rt_sigprocmask(int how, const void* set, void* oldset,
                                    size_t sigsetsize)
 {
-    (void)sigsetsize;
+    if (sigsetsize != sizeof(uint64_t)) return -22;
 
     /* Phase 29: Validate user pointers before any kernel work */
     if (set != NULL && !access_ok(set, sizeof(uint64_t))) {
@@ -300,7 +295,7 @@ static int64_t sys_rt_sigprocmask(int how, const void* set, void* oldset,
         if (vos3_copy_from_user(&user_set, set, sizeof(user_set)) != 0) {
             return -14;  /* EFAULT */
         }
-        kset = (uint32_t)user_set;
+        kset = ((uint32_t)user_set & 0x7fffffffU) << 1;
     }
 
     int result = vos3_sigprocmask(how,
@@ -308,7 +303,7 @@ static int64_t sys_rt_sigprocmask(int how, const void* set, void* oldset,
                                    oldset != NULL ? &koldset : NULL);
 
     if (result == 0 && oldset != NULL) {
-        uint64_t user_oldset = koldset;
+        uint64_t user_oldset = koldset >> 1;
         if (vos3_copy_to_user(oldset, &user_oldset, sizeof(user_oldset)) != 0) {
             return -14;  /* EFAULT */
         }
@@ -437,6 +432,7 @@ static int64_t signal_syscall_handler(vos3_syscall_frame_t* frame)
                 uint64_t saved_r15;
                 uint64_t saved_rsp;
                 uint64_t signo;
+                uint64_t saved_blocked;
             } sigframe_data_t;
 
             sigframe_data_t sfd;
@@ -446,6 +442,16 @@ static int64_t signal_syscall_handler(vos3_syscall_frame_t* frame)
                           (unsigned long long)user_rsp);
                 return -14;  /* EFAULT */
             }
+
+            /* A user-supplied frame must not select kernel addresses or
+             * acquire IOPL/NT/VM/AC privileges through IRETQ. */
+            if (!access_ok((void*)(uintptr_t)sfd.saved_rcx, 1) ||
+                !access_ok((void*)(uintptr_t)sfd.saved_rsp, 1) ||
+                sfd.saved_rcx == 0 || sfd.saved_rsp == 0) return -14;
+            sfd.saved_r11 = (sfd.saved_r11 & 0x0000000000000CD5ULL) | 0x202ULL;
+            uint32_t saved_mask = (uint32_t)sfd.saved_blocked;
+            if (vos3_sigprocmask(VOS3_SIG_SETMASK, &saved_mask, NULL) != 0)
+                return -22;
 
             /* Restore all frame registers */
             frame->rdi = sfd.saved_rdi;
@@ -480,13 +486,15 @@ static int64_t signal_syscall_handler(vos3_syscall_frame_t* frame)
             int32_t tid = (int32_t)arg1;
             int     sig = (int)arg2;
 
-            if (sig < 0 || sig > VOS3_SIG_MAX) {
+            if (tid <= 0 || sig < 0 || sig > VOS3_SIG_MAX) {
                 return -22;  /* EINVAL */
             }
             vos3_task_t* target = vos3_task_get((vos3_tid_t)tid);
             if (target == NULL) {
                 return -3;   /* ESRCH */
             }
+            int permission = vos3_signal_check_permission(vos3_sched_current(), target, sig);
+            if (permission != 0) return permission;
             if (sig == 0) {
                 return 0;
             }
@@ -502,7 +510,7 @@ static int64_t signal_syscall_handler(vos3_syscall_frame_t* frame)
             int32_t tid  = (int32_t)arg2;
             int     sig  = (int)arg3;
 
-            if (sig < 0 || sig > VOS3_SIG_MAX) {
+            if (tgid <= 0 || tid <= 0 || sig < 0 || sig > VOS3_SIG_MAX) {
                 return -22;  /* EINVAL */
             }
 
@@ -511,10 +519,13 @@ static int64_t signal_syscall_handler(vos3_syscall_frame_t* frame)
                 return -3;   /* ESRCH */
             }
 
-            /* Verify thread group if tgid is positive */
-            if (tgid > 0 && (int32_t)target->tgid != tgid) {
+            /* A thread-directed request must identify its actual group. */
+            if ((int32_t)target->tgid != tgid) {
                 return -3;   /* ESRCH — tid not in this tgid */
             }
+
+            int permission = vos3_signal_check_permission(vos3_sched_current(), target, sig);
+            if (permission != 0) return permission;
 
             if (sig == 0) {
                 return 0;    /* Signal 0 = existence check only */

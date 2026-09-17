@@ -467,6 +467,7 @@ typedef struct vos3_sigframe {
     uint64_t saved_r15;
     uint64_t saved_rsp;      /**< Original user RSP */
     uint64_t signo;          /**< Signal number (for debugging) */
+    uint64_t saved_blocked;  /**< Internal pre-handler mask, restored via sigprocmask */
 } __attribute__((packed)) vos3_sigframe_t;
 
 /**
@@ -478,6 +479,28 @@ typedef struct vos3_sigpending {
     vos3_sigaction_t actions[VOS3_SIG_MAX + 1];  /**< Signal actions */
 } vos3_sigpending_t;
 
+/* Pending/mask belong to each task. Only dispositions may be shared. */
+typedef struct vos3_signal_actions {
+    uint32_t refs; /* protected by the signal lock, checked before increment */
+    vos3_sigaction_t actions[VOS3_SIG_MAX + 1];
+} vos3_signal_actions_t;
+
+typedef struct vos3_signal_state {
+    uint32_t pending;
+    uint32_t blocked;
+    vos3_signal_actions_t* handlers;
+} vos3_signal_state_t;
+
+/* Initialize/clone before publication; destroy only after task retirement.
+ * Clone starts with no pending signals and inherits the blocked mask.
+ * Exec atomically detaches dispositions, resets caught handlers, retains IGN.
+ * No API pins a remotely looked-up task: callers own task lifetime. */
+int vos3_signal_task_init(vos3_task_t* task);
+int vos3_signal_task_clone(vos3_task_t* child, const vos3_task_t* parent,
+                           int share_handlers);
+void vos3_signal_task_destroy(vos3_task_t* task);
+int vos3_signal_task_exec(vos3_task_t* task);
+
 /* Signal Functions */
 
 /**
@@ -487,6 +510,9 @@ typedef struct vos3_sigpending {
  * @return 0 on success, negative error on failure
  */
 int vos3_signal_send(vos3_tid_t tid, int signum);
+
+/* Shared syscall authorization; internal kernel senders use signal_send. */
+int vos3_signal_check_permission(vos3_task_t* sender, vos3_task_t* target, int sig);
 
 /**
  * @brief Set signal handler

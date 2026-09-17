@@ -75,7 +75,7 @@ static void test_sigpipe_with_handler(void)
     /* Install SIGPIPE handler */
     g_sigpipe_received = 0;
 
-    struct sigaction sa;
+    struct sigaction sa = {0};
     sa.sa_handler = sigpipe_handler;
     sa.sa_flags = 0;
     sigaction(13, &sa, NULL);  /* 13 = SIGPIPE */
@@ -129,7 +129,7 @@ static void test_sigpipe_cross_process(void)
     /* Install handler */
     g_sigpipe_received = 0;
 
-    struct sigaction sa;
+    struct sigaction sa = {0};
     sa.sa_handler = sigpipe_handler;
     sa.sa_flags = 0;
     sigaction(13, &sa, NULL);

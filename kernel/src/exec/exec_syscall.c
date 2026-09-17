@@ -19,6 +19,7 @@
 #include "../../include/vos/syscall.h"
 #include "../../include/vos/user.h"
 #include "../../include/vos/heap.h"
+#include "../../include/vos/ipc.h"
 #include "../../include/vos/string.h"
 #include "../../include/vos/console.h"
 #include "../../include/vos/vmm.h"
@@ -251,6 +252,9 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     uint64_t child_stack = frame->rsi;   /* top of new thread stack */
     uint64_t tls        = frame->r8;     /* TLS base if CLONE_SETTLS */
 
+    if (((flags & CLONE_SIGHAND) && !(flags & CLONE_VM)) ||
+        ((flags & CLONE_THREAD) && !(flags & CLONE_SIGHAND))) return -22;
+
     /* If not sharing VM, just fork */
     if (!(flags & CLONE_VM)) {
         uint64_t user_rsp = frame->user_rsp;
@@ -294,6 +298,7 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         return -12;  /* ENOMEM */
     }
     memcpy(child, parent, sizeof(vos3_task_t));
+    child->signal_state = NULL; /* Never alias the copied per-task signal state. */
 
     /* Assign new TID; PID = parent's PID for CLONE_THREAD (Linux TGID semantics) */
     static uint32_t s_thread_pid = 300U;
@@ -453,7 +458,9 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     child->prev  = NULL;
 
     /* Register and schedule */
-    if (vos3_task_register(child) != 0) {
+    if (vos3_signal_task_clone(child, parent, (flags & CLONE_SIGHAND) != 0) != VOS3_IPC_OK ||
+        vos3_task_register(child) != 0) {
+        vos3_signal_task_destroy(child);
         VOS3_ERROR("sys_clone: failed to register thread in task table");
         if (child->fd_table != NULL &&
             __atomic_sub_fetch(&child->fd_table->ref_count, 1U, __ATOMIC_ACQ_REL) == 0) {
