@@ -31,6 +31,19 @@ pytestmark = pytest.mark.skipif(
 )
 
 
+@pytest.fixture(autouse=True)
+def isolated_rotation_state():
+    """Do not carry the deliberate hard-failure latch between test cases."""
+    from core.security import rotation_manager
+    from services.crypto_keyring import KEYRING
+
+    rotation_manager._reset_for_tests()
+    KEYRING._reset_for_tests()
+    yield
+    rotation_manager._reset_for_tests()
+    KEYRING._reset_for_tests()
+
+
 # ---------------------------------------------------------------------------
 # Atomic hybrid mint
 # ---------------------------------------------------------------------------

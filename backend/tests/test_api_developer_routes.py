@@ -1,5 +1,7 @@
 """Tests for api/developer_routes.py — Developer portal routes."""
 
+from unittest.mock import AsyncMock, patch
+
 
 class TestDeveloperRoutes:
     def test_register_developer_201(self, client):
@@ -42,7 +44,13 @@ class TestDeveloperRoutes:
         assert resp.status_code == 201
 
     def test_get_profile_404(self, client):
-        resp = client.get("/api/developers/profile/nonexistent-user-xyz")
+        repository = AsyncMock()
+        repository.get_profile.return_value = None
+        with patch(
+            "core.repositories.get_async_developer_repository", return_value=repository
+        ):
+            resp = client.get("/api/developers/profile/nonexistent-user-xyz")
+        repository.get_profile.assert_awaited_once_with(user_id="nonexistent-user-xyz")
         assert resp.status_code == 404
 
     def test_register_missing_fields_422(self, client):

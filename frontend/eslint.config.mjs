@@ -1,33 +1,9 @@
-// frontend/eslint.config.mjs
-//
-// ESLint 9 flat config. Replaces the legacy .eslintrc.json setup that
-// was driven by `next lint` (deprecated in Next.js 15 + removed in
-// Next.js 16). The .eslintrc.json is preserved for IDE plugins that
-// still read it.
-//
-// Migration notes (Sprint 16 / CI debt cleanup):
-//   - Next.js 16.x: `next lint` parses subsequent positional args as a
-//     project-directory, which broke our CI invocation `next lint`
-//     (interpreted as `next lint=$cwd/lint` → directory-not-found).
-//   - Fix per Next.js 16 docs: invoke ESLint directly via `eslint .`
-//     and provide a flat-config file that re-uses next/core-web-vitals.
-//   - FlatCompat shim allows reusing the eslintrc preset until the
-//     next-eslint package publishes a native flat-config export.
-
-import { FlatCompat } from "@eslint/eslintrc";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+// Use the native flat preset exported by the installed Next.js 16 config.
+import nextVitals from "eslint-config-next/core-web-vitals";
 
 export default [
   // Re-use the existing Next.js preset.
-  ...compat.extends("next/core-web-vitals"),
+  ...nextVitals,
   {
     // Ignore generated + vendored directories.
     ignores: [

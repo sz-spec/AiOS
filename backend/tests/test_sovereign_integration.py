@@ -197,20 +197,13 @@ def decode_telemetry_to_json(frame_bytes: bytes) -> Dict[str, Any]:
 # Helper: lightweight DevMemory without ChromaDB
 # ---------------------------------------------------------------------------
 def _make_test_memory(persist_dir: str = "/tmp/test_sovereign_mem") -> DevMemory:
-    """Create a minimal DevMemory bypassing ChromaDB/embeddings."""
-    mem = DevMemory.__new__(DevMemory)
-    mem._initialized = False
-    mem._collection = None
-    mem._bm25_index = None
-    mem._bm25_corpus_ids = []
-    mem._embedding_model = None
-    mem._client = None
-    mem.MEMORY_TYPES = DevMemory.MEMORY_TYPES
-    mem.persist_dir = persist_dir
-    mem.collection_name = "test_sovereign"
-    mem.embedding_model_name = "test"
-    Path(persist_dir).mkdir(parents=True, exist_ok=True)
-    return mem
+    """Initialize real fallback state without loading external models."""
+    with patch.object(DevMemory, "_init_chromadb"), patch.object(
+        DevMemory, "_init_embeddings"
+    ):
+        return DevMemory(
+            persist_dir=persist_dir, collection_name="test_sovereign", embedding_model="test"
+        )
 
 
 # ===================================================================

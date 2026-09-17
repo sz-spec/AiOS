@@ -568,20 +568,13 @@ class TestMemorySyncSpatialScoping:
 
     @staticmethod
     def _make_test_memory(persist_dir: str = "/tmp/test_v32_mem") -> DevMemory:
-        """Create a minimal DevMemory bypassing ChromaDB/embeddings."""
-        mem = DevMemory.__new__(DevMemory)
-        mem._initialized = False
-        mem._collection = None
-        mem._bm25_index = None
-        mem._bm25_corpus_ids = []
-        mem._embedding_model = None
-        mem._client = None
-        mem.MEMORY_TYPES = DevMemory.MEMORY_TYPES
-        mem.persist_dir = persist_dir
-        mem.collection_name = "test"
-        mem.embedding_model_name = "test"
-        Path(persist_dir).mkdir(parents=True, exist_ok=True)
-        return mem
+        """Initialize real fallback state without loading external models."""
+        with patch.object(DevMemory, "_init_chromadb"), patch.object(
+            DevMemory, "_init_embeddings"
+        ):
+            return DevMemory(
+                persist_dir=persist_dir, collection_name="test", embedding_model="test"
+            )
 
     # ---------------------------------------------------------------
     # 3.1  Write permissions definition
@@ -883,9 +876,10 @@ class TestSystemStability:
             config = yaml.safe_load(f)
 
         assert "local-default" in config["fallback_chain"]
-        # Verify order: cloud first, local last
+        # Kernel and local inference precede cloud fallback (W2.1e/W2.1b).
         chain = config["fallback_chain"]
-        assert chain.index("local-default") == len(chain) - 1
+        assert chain[:2] == ["kernel-default", "local-default"]
+        assert all(chain.index(provider) > 1 for provider in ("claude-opus", "gpt", "gemini"))
 
     # ---------------------------------------------------------------
     # 4.5  Router YAML: local model entries exist

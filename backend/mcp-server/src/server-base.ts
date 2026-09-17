@@ -1,7 +1,7 @@
 // v-os-mcp-agent-server/src/server.ts
 // V OS MCP Agent Server - Hybrid Architecture Implementation
 
-import { FastMCP, imageContent, UserError } from "fastmcp";
+import { FastMCP, UserError } from "fastmcp";
 import { z } from "zod";
 
 // ============================================================================
@@ -12,7 +12,7 @@ interface VSessionData {
   userId: string;
   permissions: string[];
   activeAgentId?: string;
-  context: Map<string, any>;
+  context: Map<string, unknown>;
   headers: Record<string, string>;
 }
 
@@ -135,8 +135,8 @@ class MultiProviderManager {
   async *chat(
     provider: string,
     model: string,
-    messages: Array<{ role: string; content: string }>,
-    systemPrompt?: string
+    _messages: Array<{ role: string; content: string }>,
+    _systemPrompt?: string
   ): AsyncGenerator<string> {
     // In production, this would call actual APIs
     // For now, simulating streaming response
@@ -153,16 +153,16 @@ class MultiProviderManager {
  * Context Manager - Manages conversation context
  */
 class ContextManager {
-  private contexts: Map<string, Map<string, any>> = new Map();
+  private contexts: Map<string, Map<string, unknown>> = new Map();
 
-  getContext(sessionId: string): Map<string, any> {
+  getContext(sessionId: string): Map<string, unknown> {
     if (!this.contexts.has(sessionId)) {
       this.contexts.set(sessionId, new Map());
     }
     return this.contexts.get(sessionId)!;
   }
 
-  addToContext(sessionId: string, key: string, value: any): void {
+  addToContext(sessionId: string, key: string, value: unknown): void {
     this.getContext(sessionId).set(key, value);
   }
 
@@ -273,15 +273,12 @@ server.addTool({
 
     // Stream response
     if (args.streaming) {
-      let fullResponse = "";
-      
       for await (const chunk of providerManager.chat(
         agent.provider,
         agent.model || "default",
         messages,
         agent.systemPrompt
       )) {
-        fullResponse += chunk;
         await streamContent({ type: "text", text: chunk });
       }
 
@@ -320,7 +317,7 @@ server.addTool({
     title: "Select V OS Agent",
   },
   canAccess: (auth) => auth?.permissions.includes("agents") ?? false,
-  execute: async (args, { session, log }) => {
+  execute: async (args, { log }) => {
     const agent = router.getAgent(args.agentId);
 
     if (!agent) {
@@ -381,7 +378,7 @@ server.addTool({
     title: "Add Context",
   },
   canAccess: (auth) => auth?.permissions.includes("context") ?? false,
-  execute: async (args, { session, log }) => {
+  execute: async (args, { log }) => {
     const sessionId = session?.userId || "default";
 
     contextManager.addToContext(sessionId, args.key, {
@@ -404,7 +401,7 @@ server.addTool({
     title: "Clear Context",
   },
   canAccess: (auth) => auth?.permissions.includes("context") ?? false,
-  execute: async (args, { session, log }) => {
+  execute: async (args, { log }) => {
     const sessionId = session?.userId || "default";
     contextManager.clearContext(sessionId);
     log.info("Context cleared");

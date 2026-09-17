@@ -10,7 +10,7 @@
  * 40% faster than manual review with AI suggestions
  */
 
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import { requireWebhookSecret, verifyGitHubSignature } from './webhook_auth';
 import { Octokit } from '@octokit/rest';
 import Anthropic from '@anthropic-ai/sdk';
@@ -294,11 +294,11 @@ async function postReviewComment(
 }
 
 async function logReview(
-  owner: string,
-  repo: string,
-  prNumber: number,
-  findings: ReviewFinding[],
-  durationMs: number
+  _owner: string,
+  _repo: string,
+  _prNumber: number,
+  _findings: ReviewFinding[],
+  _durationMs: number
 ): Promise<void> {
   // No-op: review logging not configured
 }
@@ -308,7 +308,7 @@ async function logReview(
 // ============================================
 
 reviewQueue.process(async (job) => {
-  const { owner, repo, prNumber, deliveryId } = job.data as ReviewJob;
+  const { owner, repo, prNumber } = job.data as ReviewJob;
   const startTime = Date.now();
 
   console.log(`Processing review for ${owner}/${repo}#${prNumber}`);

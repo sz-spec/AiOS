@@ -257,4 +257,5 @@ class TestChatAPI:
                 },
             )
         data = response.json()
-        assert data["model"] == "claude-opus-4-20250514"
+        assert data["model"] == "claude-opus-4"
+        assert mock_client.messages.create.call_args.kwargs["model"] == data["model"]

@@ -447,7 +447,8 @@ class TestUseCredits:
         assert response.status_code == 400
 
     def test_use_credits_insufficient_balance_returns_402(self, client, mock_stripe):
-        mock_stripe.get_token_balance = AsyncMock(return_value=50)
+        # The atomic mutation decides affordability; a separate pre-read races.
+        mock_stripe.use_tokens = AsyncMock(side_effect=RuntimeError("insufficient_credits"))
         response = client.post(
             "/api/billing/credits/use",
             json={
@@ -458,8 +459,8 @@ class TestUseCredits:
         assert response.status_code == 402
         detail = response.json()["detail"]
         assert detail["error"] == "insufficient_credits"
-        assert detail["balance"] == 50
         assert detail["required"] == 100
+        mock_stripe.get_token_balance.assert_not_awaited()
 
     def test_use_credits_use_tokens_fails_returns_402(self, client, mock_stripe):
         mock_stripe.get_token_balance = AsyncMock(return_value=500)
@@ -473,6 +474,7 @@ class TestUseCredits:
         )
         assert response.status_code == 402
         assert "Failed to deduct" in response.json()["detail"]
+        mock_stripe.get_token_balance.assert_not_awaited()
 
 
 # ---------------------------------------------------------------------------
@@ -481,7 +483,24 @@ class TestUseCredits:
 
 
 class TestRefundCredits:
-    def test_refund_returns_200(self, client):
+    def test_refund_without_database_fails_closed(self, client, mock_stripe):
+        response = client.post("/api/billing/credits/refund", json={"amount": 50, "reason": "failed"})
+        assert response.status_code == 503
+        mock_stripe.add_tokens.assert_not_awaited()
+
+    def test_refund_without_prior_deduction_fails_closed(self, client, mock_stripe):
+        mock_stripe.convex = MagicMock()
+        mock_stripe.convex.query = AsyncMock(return_value=[])
+        response = client.post("/api/billing/credits/refund", json={"amount": 50, "reason": "failed"})
+        assert response.status_code == 403
+        mock_stripe.convex.query.assert_awaited_once_with(
+            "billing:getTransactions", {"userId": "test_user_123", "limit": 200}
+        )
+        mock_stripe.add_tokens.assert_not_awaited()
+
+    def test_refund_returns_200(self, client, mock_stripe):
+        mock_stripe.convex = MagicMock()
+        mock_stripe.convex.query = AsyncMock(return_value=[{"amount": -50}])
         response = client.post(
             "/api/billing/credits/refund",
             json={
@@ -491,7 +510,9 @@ class TestRefundCredits:
         )
         assert response.status_code == 200
 
-    def test_refund_returns_success_payload(self, client):
+    def test_refund_returns_success_payload(self, client, mock_stripe):
+        mock_stripe.convex = MagicMock()
+        mock_stripe.convex.query = AsyncMock(return_value=[{"amount": -75}])
         data = client.post(
             "/api/billing/credits/refund",
             json={

@@ -4,6 +4,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useBMAD, BMADMode } from '@/hooks/useBMAD';
 import { BMADWizard, BMADExpert, BMADParty } from '@/components/bmad';
+import { ViewModeSelector } from '@/components/bmad/ViewModeSelector';
 
 export default function BMADSessionPage() {
   return (
@@ -107,69 +108,14 @@ function BMADSessionContent() {
     );
   }
 
-  // View mode selector
-  const ViewModeSelector = () => (
-    <div style={{
-      position: 'fixed',
-      top: '16px',
-      right: '16px',
-      zIndex: 50,
-      display: 'flex',
-      backgroundColor: 'var(--bg-primary)',
-      borderRadius: '10px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      border: '1px solid var(--border-light)',
-      overflow: 'hidden',
-    }}>
-      {[
-        { mode: 'wizard' as const, label: 'Guided', icon: '&#127919;', color: 'var(--accent)' },
-        { mode: 'expert' as const, label: 'Expert', icon: '&#128295;', color: '#8b5cf6' },
-        { mode: 'party' as const, label: 'Party', icon: '&#127881;', color: '#a855f7' },
-      ].map((item) => (
-        <button
-          key={item.mode}
-          onClick={() => {
-            setViewMode(item.mode);
-            router.replace(`/studio/${sessionId}?view=${item.mode}`);
-          }}
-          style={{
-            padding: '8px 16px',
-            fontSize: '13px',
-            fontWeight: 500,
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-            backgroundColor: viewMode === item.mode ? item.color : 'transparent',
-            color: viewMode === item.mode ? 'white' : 'var(--text-secondary)',
-          }}
-        >
-          <span dangerouslySetInnerHTML={{ __html: item.icon }} /> {item.label}
-        </button>
-      ))}
-      <button
-        onClick={() => router.push('/studio')}
-        style={{
-          padding: '8px 12px',
-          fontSize: '13px',
-          fontWeight: 500,
-          border: 'none',
-          borderLeft: '1px solid var(--border-light)',
-          backgroundColor: 'transparent',
-          color: 'var(--text-tertiary)',
-          cursor: 'pointer',
-        }}
-        title="Back to projects"
-      >
-        &#8592;
-      </button>
-    </div>
-  );
-
   // Render based on view mode
   if (viewMode === 'party') {
     return (
       <>
-        <ViewModeSelector />
+        <ViewModeSelector viewMode={viewMode} onModeChange={(mode) => {
+          setViewMode(mode);
+          router.replace(`/studio/${sessionId}?view=${mode}`);
+        }} onBack={() => router.push('/studio')} />
         <BMADParty sessionId={sessionId} />
       </>
     );
@@ -178,7 +124,10 @@ function BMADSessionContent() {
   if (viewMode === 'expert') {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)' }}>
-        <ViewModeSelector />
+        <ViewModeSelector viewMode={viewMode} onModeChange={(mode) => {
+          setViewMode(mode);
+          router.replace(`/studio/${sessionId}?view=${mode}`);
+        }} onBack={() => router.push('/studio')} />
         <BMADExpert sessionId={sessionId} />
       </div>
     );
@@ -187,7 +136,10 @@ function BMADSessionContent() {
   // Default to wizard view
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)' }}>
-      <ViewModeSelector />
+      <ViewModeSelector viewMode={viewMode} onModeChange={(mode) => {
+          setViewMode(mode);
+          router.replace(`/studio/${sessionId}?view=${mode}`);
+        }} onBack={() => router.push('/studio')} />
       <BMADWizard sessionId={sessionId} onSessionCreated={() => {}} />
 
       {/* Error Toast */}

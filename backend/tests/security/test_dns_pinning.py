@@ -24,7 +24,7 @@ sys.modules["vos3_runtime_firewall_under_test"] = rf
 _spec.loader.exec_module(rf)
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def fresh_firewall(monkeypatch):
     """Fresh firewall instance with deterministic policy (no env carryover)."""
     monkeypatch.delenv("VOS3_EGRESS_ALLOWLIST", raising=False)

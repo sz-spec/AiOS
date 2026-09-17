@@ -48,16 +48,19 @@ from dataclasses import dataclass
 # it merely gates and bills. Keeping the actual gradient code in CORE is
 # what lets unlicensed users run private training without paying for a
 # license they don't need.
-try:
-    from backend.services.finetune_engine import (  # type: ignore
-        SovereignFineTuner,
+if __package__ == "backend.pro":
+    from ..services.finetune_engine import (
+        FineTuneConfig,
         FineTuneDependencyError,
+        SovereignFineTuner,
     )
-except (
-    ImportError
-):  # pragma: no cover — backend may not be importable from every entrypoint
-    SovereignFineTuner = None  # type: ignore[assignment]
-    FineTuneDependencyError = RuntimeError  # type: ignore[assignment, misc]
+else:
+    # The supported backend-directory entry point imports this as pro.*.
+    from services.finetune_engine import (
+        FineTuneConfig,
+        FineTuneDependencyError,
+        SovereignFineTuner,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -148,19 +151,14 @@ def quota_for_org(org_id: str) -> OrgFineTuneQuota:
 class SovereignFineTunerPro:
     """PRO-gated entrypoint to the CORE fine-tuning engine."""
 
-    def __init__(self, org_id: str) -> None:
+    def __init__(self, org_id: str, config: FineTuneConfig) -> None:
         self.org_id = org_id
         if not _pro_license_active():
             raise ProLicenseRequired(
                 "fine-tuning requires a PRO license. Build is CORE or "
                 "VOS3_PRO is unset. See docs/strategy/OPEN_CORE_LICENSING.md."
             )
-        if SovereignFineTuner is None:
-            raise FineTuneDependencyError(
-                "backend.services.finetune_engine.SovereignFineTuner could not "
-                "be imported — check the heavyweight training deps install."
-            )
-        self._inner = SovereignFineTuner()
+        self._inner = SovereignFineTuner(config)
         self.quota = quota_for_org(org_id)
 
     def train(self, *args, **kwargs):  # type: ignore[no-untyped-def]

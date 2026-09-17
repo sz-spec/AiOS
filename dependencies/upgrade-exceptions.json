@@ -78,6 +78,7 @@
     {
       "ecosystem": "npm/frontend",
       "package": "typescript",
+      "additional_scopes": ["npm/backend/code_review"],
       "latest_observed": "7.0.2",
       "requested": "6.0.3",
       "resolved": "6.0.3",

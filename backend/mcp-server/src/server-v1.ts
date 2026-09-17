@@ -2,7 +2,7 @@
 // V OS MCP Agent Server - Updated with Security & Performance Improvements
 // Incorporates: CVE-2025-66414 fix, FastMCP 3.26.8 caching, SDK 1.25.2
 
-import { FastMCP, UserError } from "fastmcp";
+import { FastMCP } from "fastmcp";
 import { z } from "zod"; // v4.0.0+
 import { randomUUID } from "crypto";
 import { ToolRegistryCacheManager, createCachedToolRegistry } from "./caching/tool-registry-cache";
@@ -224,7 +224,7 @@ class MultiProviderManager {
     // In production: use actual OpenAI SDK
     // This demonstrates the reasoning_effort parameter from PR #617
     
-    const requestBody = {
+    const _requestBody = {
       model,
       messages,
       stream: true,
@@ -243,8 +243,8 @@ class MultiProviderManager {
 
   private async *chatAnthropic(
     model: string,
-    messages: Array<{ role: string; content: string }>,
-    options?: AgentSpec["providerOptions"]
+    _messages: Array<{ role: string; content: string }>,
+    _options?: AgentSpec["providerOptions"]
   ): AsyncGenerator<string> {
     // In production: use actual Anthropic SDK
     yield `[Anthropic/${model}] `;
@@ -253,8 +253,8 @@ class MultiProviderManager {
 
   private async *chatLocal(
     model: string,
-    messages: Array<{ role: string; content: string }>,
-    options?: AgentSpec["providerOptions"]
+    _messages: Array<{ role: string; content: string }>,
+    _options?: AgentSpec["providerOptions"]
   ): AsyncGenerator<string> {
     // PR #622: AugmentedLLM for LM Studio and local models
     const endpoint = CONFIG.providers.local.lmStudioEndpoint;
@@ -348,7 +348,7 @@ server.addTool({
     streamingHint: true,
     readOnlyHint: false,
   },
-  // @ts-ignore - cache option from wrapper
+  // @ts-expect-error -- legacy FastMCP cache extension is supplied by the wrapper
   cache: { enabled: false }, // Never cache chat responses
   canAccess: (auth) => auth?.permissions.includes("chat") ?? false,
   execute: async (args, { session, streamContent, reportProgress, log }) => {
@@ -397,7 +397,7 @@ server.addTool({
     title: "List V OS Agents",
     readOnlyHint: true,
   },
-  // @ts-ignore
+  // @ts-expect-error -- legacy FastMCP cache extension is supplied by the wrapper
   cache: {
     enabled: true,
     ttl: 10 * 60 * 1000, // 10 minutes - agent list rarely changes
@@ -420,7 +420,7 @@ server.addTool({
     title: "Cache Statistics",
     readOnlyHint: true,
   },
-  // @ts-ignore
+  // @ts-expect-error -- legacy FastMCP cache extension is supplied by the wrapper
   cache: { enabled: false },
   execute: async (_, { session }) => {
     const stats = cacheManager.getStats(session?.userId);

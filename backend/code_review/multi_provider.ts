@@ -139,7 +139,7 @@ class CopilotReviewer {
     return reviewableExtensions.some(ext => filename.endsWith(ext));
   }
 
-  private analyzeCode(filename: string, code: string, patch: string): ReviewFinding[] {
+  private analyzeCode(filename: string, code: string, _patch: string): ReviewFinding[] {
     // Pattern-based analysis (complements AI)
     const findings: ReviewFinding[] = [];
     const lines = code.split('\n');
@@ -311,7 +311,7 @@ Files to review:\n\n`;
       if (!jsonMatch) return [];
 
       const findings = JSON.parse(jsonMatch[0]);
-      return findings.map((f: any, i: number) => ({
+      return findings.map((f: Partial<ReviewFinding>, i: number) => ({
         id: `claude-${i}-${Date.now()}`,
         title: f.title || 'Unknown Issue',
         description: f.description || '',
@@ -389,7 +389,7 @@ Code:\n`;
       if (!jsonMatch) return [];
 
       const findings = JSON.parse(jsonMatch[0]);
-      return findings.map((f: any, i: number) => ({
+      return findings.map((f: Partial<ReviewFinding>, i: number) => ({
         id: `ollama-${i}-${Date.now()}`,
         title: f.title || 'Issue',
         description: f.description || '',
@@ -400,7 +400,7 @@ Code:\n`;
         suggestion: f.suggestion,
         confidence: 70, // Lower confidence for local models
       }));
-    } catch (err) {
+    } catch {
       return [];
     }
   }
@@ -611,7 +611,7 @@ export class MultiProviderCodeReview {
           if ('content' in content) {
             fileContents[file.filename] = Buffer.from(content.content, 'base64').toString();
           }
-        } catch (err) {
+        } catch {
           // Skip files that can't be fetched
         }
       }
@@ -686,7 +686,7 @@ export class MultiProviderCodeReview {
     };
   }
 
-  private async logReview(result: ReviewResult): Promise<void> {
+  private async logReview(_result: ReviewResult): Promise<void> {
     // No-op: review logging not configured
   }
 }

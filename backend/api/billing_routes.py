@@ -335,7 +335,7 @@ async def use_credits(
     # billing:useCredits reads, validates, and deducts in one Convex transaction.
     # It raises ConvexError("insufficient_credits") if balance would go negative.
     try:
-        await stripe_service.use_tokens(
+        deducted = await stripe_service.use_tokens(
             user_id=user_id,
             amount=credit_req.amount,
             reason=credit_req.reason,
@@ -353,6 +353,9 @@ async def use_credits(
             )
         logger.error("Credit deduction failed for user %s: %s", user_id, e)
         raise HTTPException(status_code=500, detail="Failed to deduct credits")
+
+    if not deducted:
+        raise HTTPException(status_code=402, detail="Failed to deduct credits")
 
     new_balance = await stripe_service.get_token_balance(user_id)
 

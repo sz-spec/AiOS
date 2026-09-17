@@ -4,7 +4,7 @@ VOS3 v20.5.2 — Open-Core Split Source-Shape Tests
 
 Validates the open-core dual-license scaffolding:
   - kernel/pro/ marker README documents the split
-  - backend/pro/ houses the relocated finetune_engine
+  - backend/pro/ gates the retained CORE finetune_engine
   - kernel/src/pro/license_check.c implements the boot-time gate
   - Makefile wires VOS3_BUILD_TYPE → VOS3_PRO define
   - pmm.c #ifdef VOS3_PRO gates 5,120-entry vs 256-entry hugepage pool
@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import os
 import re
+
+import pytest
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -50,17 +52,18 @@ def test_pro_directories_have_readmes():
 
 
 # ---------------------------------------------------------------------------
-# Test 2: backend/pro/finetune_engine.py is the relocated file
+# Test 2: PRO entry point wraps the retained CORE engine
 # ---------------------------------------------------------------------------
 
 
-def test_finetune_engine_relocated_to_backend_pro():
+def test_finetune_engine_pro_wraps_retained_core():
     assert _exists("backend/pro/finetune_engine.py")
     assert _exists("backend/pro/__init__.py")
-    # Old location must not exist
-    assert not _exists(
-        "backend/services/finetune_engine.py"
-    ), "Old location still present — git mv was incomplete"
+    # The reconstructed PRO module is a gate around the retained CORE engine.
+    assert _exists("backend/services/finetune_engine.py")
+    from pro import finetune_engine as pro_engine
+    from services.finetune_engine import SovereignFineTuner
+    assert pro_engine.SovereignFineTuner is SovereignFineTuner
     # Header must carry the proposed proprietary marker WITH legal caveat
     src = _read("backend/pro/finetune_engine.py")
     assert "LicenseRef-VOS3-Pro-Proprietary" in src
@@ -209,15 +212,29 @@ def test_kernel_pro_readme_explains_structural_compromise():
 
 
 # ---------------------------------------------------------------------------
-# Test 9: import path migration — finetune_engine via pro.* not services.*
+# Test 9: license denial and real CORE configuration/delegation
 # ---------------------------------------------------------------------------
 
 
-def test_finetune_engine_imported_from_new_path():
-    src = _read("backend/tests/test_finetune_rigor.py")
-    # Old import path must NOT appear (would mean the move was incomplete)
-    assert (
-        "from services.finetune_engine" not in src
-    ), "test_finetune_rigor.py still imports from old services.finetune_engine path"
-    # New import path MUST appear
-    assert "from pro.finetune_engine" in src
+def test_finetune_engine_license_and_config_delegation(monkeypatch):
+    from pro import finetune_engine as pro_engine
+    from services.finetune_engine import FineTuneConfig, SovereignFineTuner
+
+    cfg = FineTuneConfig(base_model="fixture", dataset_uri="/tmp/data", output_path="/tmp/out")
+    monkeypatch.delenv("VOS3_PRO", raising=False)
+    monkeypatch.delenv("VOS3_PRO_LICENSE_BYPASS_FOR_TEST", raising=False)
+    with pytest.raises(pro_engine.ProLicenseRequired):
+        pro_engine.SovereignFineTunerPro("org-fixture", cfg)
+    monkeypatch.setenv("VOS3_PRO", "1")
+    wrapper = pro_engine.SovereignFineTunerPro("org-fixture", cfg)
+    assert isinstance(wrapper._inner, SovereignFineTuner)
+    assert wrapper._inner.cfg is cfg
+    dataset = object()
+    calls = []
+    def train(engine, supplied):
+        calls.append((engine, supplied))
+        return "fixture-adapter"
+    monkeypatch.setattr(SovereignFineTuner, "train", train)
+    assert wrapper.train(dataset) == "fixture-adapter"
+    assert calls == [(wrapper._inner, dataset)]
+    assert wrapper.quota.max_concurrent_runs > 0

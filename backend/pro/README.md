@@ -5,31 +5,29 @@ This directory contains backend components classified as **PRO**
 
 ## Files in this directory
 
-- `finetune_engine.py` — QLoRA fine-tuning pipeline with MMR audit
-  trail and TPM PCR-11 sealing. Was at `backend/services/finetune_engine.py`
-  in v20.2.1; physically relocated here in v20.5.2.
+- `finetune_engine.py` — PRO control-plane wrapper around the retained CORE
+  engine in `backend/services/finetune_engine.py`. The wrapper checks the current
+  environment-based license gate and exposes organization quota metadata.
+  It does not implement cryptographic license validation or hard quota enforcement.
 
-## Import path note
+## Import and configuration
 
-Code that previously did:
+The CORE engine remains available for private training:
+
 ```python
-from services.finetune_engine import SovereignFineTuner
+from services.finetune_engine import FineTuneConfig, SovereignFineTuner
 ```
 
-Now must use:
+The PRO entry point requires the organization and the same explicit configuration:
+
 ```python
-from pro.finetune_engine import SovereignFineTuner
+from pro.finetune_engine import SovereignFineTunerPro
+trainer = SovereignFineTunerPro(org_id="example", config=config)
 ```
 
-The `backend/` root is on `sys.path` for tests and the running FastAPI
-process, so `pro.*` imports resolve naturally.
-
-## Why this directory IS physically separated (vs. kernel/pro/)
-
-Python imports are dynamic and path-based — relocating a Python module
-is a simple `git mv` plus an import-path update. There is no analog to
-the kernel's Makefile pattern-rule constraint that forced the kernel
-PRO files to stay under `kernel/src/`.
+Both the backend-directory `pro.*` and repository-root `backend.pro.*` package
+layouts resolve the corresponding CORE engine. Heavy training dependencies remain
+lazy requirements of the CORE training operation.
 
 ## Legal note
 

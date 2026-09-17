@@ -37,11 +37,25 @@ interface CacheStats {
   avgAccessTime: number;
 }
 
-interface ToolCacheKey {
-  toolName: string;
-  argsHash: string;
-  sessionId?: string;
+interface RedisCacheClient {
+  get(key: string): Promise<string | null>;
+  setex(key: string, seconds: number, value: string): Promise<unknown>;
+  del(key: string): Promise<unknown>;
+  keys(pattern: string): Promise<string[]>;
 }
+interface CachedToolContext { session?: { userId?: string }; }
+interface CachedToolDefinition {
+  name: string;
+  execute: (args: Record<string, unknown>, context: CachedToolContext) => Promise<unknown>;
+  cache?: { enabled?: boolean; ttl?: number; sessionScoped?: boolean;
+    cacheKeyFn?: (args: Record<string, unknown>) => string };
+  [property: string]: unknown;
+}
+interface CacheableToolServer {
+  addTool(tool: CachedToolDefinition): unknown;
+  on(event: string, listener: () => void): unknown;
+}
+
 
 // ============================================================================
 // CACHE LAYERS ARCHITECTURE
@@ -74,10 +88,10 @@ interface ToolCacheKey {
  * Perfect for avoiding duplicate tool calls within a single MCP request
  */
 export class RequestCache {
-  private cache = new Map<string, any>();
+  private cache = new Map<string, unknown>();
 
   get<T>(key: string): T | undefined {
-    return this.cache.get(key);
+    return this.cache.get(key) as T | undefined;
   }
 
   set<T>(key: string, value: T): void {
@@ -298,7 +312,7 @@ class InMemoryGlobalCache implements GlobalCacheProvider {
  * Redis implementation for distributed deployments
  */
 class RedisGlobalCache implements GlobalCacheProvider {
-  constructor(private redis: any) {} // ioredis instance
+  constructor(private redis: RedisCacheClient) {} // ioredis instance
 
   async get(key: string): Promise<string | null> {
     return this.redis.get(key);
@@ -326,7 +340,7 @@ class RedisGlobalCache implements GlobalCacheProvider {
  * Implements multi-layer caching with automatic invalidation
  */
 export class ToolRegistryCacheManager {
-  private sessionCaches = new Map<string, SessionCache<any>>();
+  private sessionCaches = new Map<string, SessionCache<unknown>>();
   private globalCache: GlobalCacheProvider;
   private config: CacheConfig;
 
@@ -341,7 +355,7 @@ export class ToolRegistryCacheManager {
 
   constructor(
     config: Partial<CacheConfig> = {},
-    redisClient?: any
+    redisClient?: RedisCacheClient
   ) {
     this.config = {
       enabled: true,
@@ -361,7 +375,7 @@ export class ToolRegistryCacheManager {
   // Session Cache Management
   // -------------------------------------------------------------------------
 
-  private getSessionCache(sessionId: string): SessionCache<any> {
+  private getSessionCache(sessionId: string): SessionCache<unknown> {
     if (!this.sessionCaches.has(sessionId)) {
       this.sessionCaches.set(
         sessionId,
@@ -386,12 +400,12 @@ export class ToolRegistryCacheManager {
    */
   async getCachedToolList(
     sessionId: string,
-    fetchFn: () => Promise<any[]>
-  ): Promise<any[]> {
+    fetchFn: () => Promise<unknown[]>
+  ): Promise<unknown[]> {
     const cache = this.getSessionCache(sessionId);
     const key = `${this.KEY_PREFIX.TOOL_LIST}:${sessionId}`;
 
-    return cache.getStaleWhileRevalidate(key, fetchFn);
+    return cache.getStaleWhileRevalidate(key, fetchFn) as Promise<unknown[]>;
   }
 
   /**
@@ -419,7 +433,7 @@ export class ToolRegistryCacheManager {
    */
   private generateToolResultKey(
     toolName: string,
-    args: Record<string, any>,
+    args: Record<string, unknown>,
     sessionId?: string
   ): string {
     const argsHash = createHash("sha256")
@@ -438,7 +452,7 @@ export class ToolRegistryCacheManager {
    */
   async getCachedToolResult<T>(
     toolName: string,
-    args: Record<string, any>,
+    args: Record<string, unknown>,
     sessionId: string,
     fetchFn: () => Promise<T>,
     options?: {
@@ -447,7 +461,7 @@ export class ToolRegistryCacheManager {
       /** Whether this result is session-specific */
       sessionScoped?: boolean;
       /** Custom cache key generator */
-      cacheKeyFn?: (args: Record<string, any>) => string;
+      cacheKeyFn?: (args: Record<string, unknown>) => string;
     }
   ): Promise<T> {
     if (!this.config.enabled) {
@@ -510,7 +524,7 @@ export class ToolRegistryCacheManager {
     const key = `vos:route:${messageKey}`;
     const cache = this.getSessionCache(sessionId);
 
-    return cache.getOrSet(key, routeFn);
+    return cache.getOrSet(key, routeFn) as Promise<string>;
   }
 
   // -------------------------------------------------------------------------
@@ -523,8 +537,8 @@ export class ToolRegistryCacheManager {
   async getCachedContext(
     sessionId: string,
     contextKey: string,
-    fetchFn: () => Promise<any>
-  ): Promise<any> {
+    fetchFn: () => Promise<unknown>
+  ): Promise<unknown> {
     const key = `${this.KEY_PREFIX.CONTEXT}:${sessionId}:${contextKey}`;
     const cache = this.getSessionCache(sessionId);
 
@@ -606,13 +620,13 @@ export class ToolRegistryCacheManager {
  * Example integration with FastMCP server
  */
 export function createCachedToolRegistry(
-  server: any, // FastMCP instance
+  server: CacheableToolServer, // structural caching adapter
   cacheManager: ToolRegistryCacheManager
 ) {
   // Wrap addTool to support caching
   const originalAddTool = server.addTool.bind(server);
 
-  server.addTool = (toolConfig: any) => {
+  server.addTool = (toolConfig: CachedToolDefinition) => {
     const { execute, cache: cacheOptions, ...rest } = toolConfig;
 
     if (cacheOptions?.enabled === false) {
@@ -621,7 +635,7 @@ export function createCachedToolRegistry(
     }
 
     // Wrap execute with caching
-    const cachedExecute = async (args: any, context: any) => {
+    const cachedExecute = async (args: Record<string, unknown>, context: CachedToolContext) => {
       const sessionId = context.session?.userId || "default";
 
       return cacheManager.getCachedToolResult(
@@ -711,4 +725,4 @@ server.addTool({
 });
 */
 
-export { RequestCache, GlobalCacheProvider, InMemoryGlobalCache, RedisGlobalCache };
+export { GlobalCacheProvider, InMemoryGlobalCache, RedisGlobalCache };

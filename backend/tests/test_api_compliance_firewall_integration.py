@@ -72,13 +72,15 @@ class TestSemanticFirewallWiring:
         r = client.post("/api/chat/completions", json=_payload(_INJECTION))
         assert r.status_code == 400, r.text
 
-    def test_rejection_payload_is_firewall_tagged(self, client):
+    def test_rejection_payload_is_firewall_tagged(self, client, caplog):
         detail = client.post(
             "/api/chat/completions", json=_payload(_INJECTION)
         ).json()["detail"]
         assert detail["error"] == "input_rejected_by_semantic_firewall"
-        assert detail["confidence"] >= 0.9  # high-risk verdict
-        assert detail["reason"]  # audit-grade rationale carried through
+        assert detail == {"error": "input_rejected_by_semantic_firewall"}
+        # The anti-oracle boundary keeps diagnostics server-side.
+        assert "confidence=0.90" in caplog.text
+        assert "banned-substring:high-" in caplog.text
 
     def test_injection_rejected_on_stream_endpoint_too(self, client):
         # Pre-flight runs before the SSE generator -> clean 400, not a mid-stream frame.

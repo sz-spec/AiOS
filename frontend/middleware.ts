@@ -1,7 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import crypto from 'crypto'
 
 // Routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
@@ -23,7 +22,7 @@ const CSRF_HEADER = 'x-csrf-token'
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
   // Generate CSP nonce for this request
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const nonce = btoa(globalThis.crypto.randomUUID())
 
   // --- CSRF double-submit cookie validation ---
   if (CSRF_METHODS.has(request.method)) {
@@ -83,7 +82,7 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
   // --- Set or refresh CSRF cookie (double-submit pattern) ---
   const existingCsrf = request.cookies.get(CSRF_COOKIE)?.value
   if (!existingCsrf) {
-    const csrfToken = crypto.randomUUID()
+    const csrfToken = globalThis.crypto.randomUUID()
     response.cookies.set(CSRF_COOKIE, csrfToken, {
       httpOnly: false,       // JS must be able to read this to send in header
       secure: process.env.NODE_ENV === 'production',

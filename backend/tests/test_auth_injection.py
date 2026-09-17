@@ -15,6 +15,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+from tests.handoff_fixtures import handoff_sessions, make_builder, invoke_node
 
 # Ensure backend root is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -232,11 +233,33 @@ class TestPipelineIntegration:
         """Create a MultiAgentBuilder with mock agents."""
         from ai.agents.multi_agent import MultiAgentBuilder
 
-        builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+        builder = make_builder()
         builder.agents = {}
         builder.config = {}
         builder.memory_saver = None
         return builder
+
+    def test_frontend_rejects_unsigned_architecture_before_agent(self):
+        from ai.agents.inter_agent_provenance import InterAgentMessageInvalid
+        builder = self._make_builder()
+        agent = MagicMock()
+        builder.agents["frontend"] = agent
+        with pytest.raises(InterAgentMessageInvalid):
+            builder._frontend_node({"architecture": {"auth_strategy": "clerk"}, "messages": []})
+        agent.invoke.assert_not_called()
+
+    def test_frontend_rejects_changed_signed_architecture(self):
+        from ai.agents.inter_agent_provenance import InterAgentMessageInvalid
+        builder = self._make_builder()
+        architect = MagicMock()
+        architect.invoke.return_value = {"architecture": {"stack": "React"}}
+        builder.agents["architect"] = architect
+        signed = invoke_node(builder, "architect", {"requirements": "calculator", "messages": []})
+        agent = MagicMock()
+        builder.agents["frontend"] = agent
+        with pytest.raises(InterAgentMessageInvalid):
+            invoke_node(builder, "frontend", {**signed, "architecture": {"stack": "tampered"}})
+        agent.invoke.assert_not_called()
 
     def test_architect_node_sets_auth_strategy(self):
         """_architect_node sets auth_strategy in architecture when keywords match."""
@@ -250,8 +273,8 @@ class TestPipelineIntegration:
             "messages": [],
         }
 
-        # Call the unwrapped function (bypass @monitor_node)
-        result = builder._architect_node.__wrapped__(builder, state)
+        # Run the node inside a real signed handoff session.
+        result = invoke_node(builder, "architect", state)
 
         assert result["architecture"]["auth_strategy"] == "clerk"
         assert result["architecture"]["stack"] == "React"  # original data preserved
@@ -264,7 +287,7 @@ class TestPipelineIntegration:
         builder.agents["architect"] = mock_agent
 
         state = {"requirements": "Build a calculator", "messages": []}
-        result = builder._architect_node.__wrapped__(builder, state)
+        result = invoke_node(builder, "architect", state)
 
         assert "auth_strategy" not in result["architecture"]
 
@@ -282,7 +305,7 @@ class TestPipelineIntegration:
             "messages": [],
         }
 
-        result = builder._frontend_node.__wrapped__(builder, state)
+        result = invoke_node(builder, "frontend", state)
 
         # Should have original + 5 clerk frontend template files
         assert "src/App.tsx" in result["frontend_code"]
@@ -305,7 +328,7 @@ class TestPipelineIntegration:
             "messages": [],
         }
 
-        result = builder._backend_node.__wrapped__(builder, state)
+        result = invoke_node(builder, "backend", state)
 
         # Should have original + 4 custom_jwt backend template files
         assert "routes/items.py" in result["backend_code"]

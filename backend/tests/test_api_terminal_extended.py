@@ -18,7 +18,7 @@ env vars only available in deployment.
 """
 
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import sys
@@ -47,6 +47,19 @@ _DEV_USER = AuthenticatedUser(
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def local_chat_dispatcher():
+    """Exercise request validation with a deterministic provider, never cloud."""
+    response = MagicMock(content="test response", usage_metadata={})
+    llm = MagicMock()
+    llm.ainvoke = AsyncMock(return_value=response)
+    resolution = MagicMock(llm=llm, model_id="test-model")
+    dispatcher = MagicMock()
+    dispatcher.resolve.return_value = resolution
+    with patch("services.llm_dispatcher.get_dispatcher", return_value=dispatcher):
+        yield dispatcher
 
 
 @pytest.fixture

@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class UnifiedRunnerTests(unittest.TestCase):
     def run_fixture(self, args=(), backend="exit 0", kernel="exit 0", frontend=0,
-                    missing=None):
+                    missing=None, test_only=""):
         with tempfile.TemporaryDirectory(prefix="vos-runner-test-") as directory:
             root = Path(directory)
             shutil.copyfile(ROOT / "run_all_tests.sh", root / "run_all_tests.sh")
@@ -26,7 +26,7 @@ class UnifiedRunnerTests(unittest.TestCase):
                            + str(frontend) + '\n')
             npm.chmod(0o755)
             env = dict(os.environ, PATH=str(root / "bin") + os.pathsep + os.environ["PATH"],
-                       TMPDIR=str(root))
+                       TMPDIR=str(root), TEST_ONLY=test_only)
             result = subprocess.run(["bash", "run_all_tests.sh", *args], cwd=root,
                                     env=env, text=True, capture_output=True, timeout=10)
             counts = {name: (root / (name + ".count")).read_text().count("invoked")
@@ -50,6 +50,23 @@ class UnifiedRunnerTests(unittest.TestCase):
         result, counts = self.run_fixture(args=("--no-kernal",))
         self.assertEqual(result.returncode, 2)
         self.assertEqual(sum(counts.values()), 0)
+
+    def test_filtered_kernel_runs_and_reports_partial_scope(self):
+        result, counts = self.run_fixture(
+            test_only="bench_app_isolation_test",
+            kernel='test "$TEST_ONLY" = "bench_app_isolation_test" || exit 17')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(counts, dict(backend=1, frontend=1, kernel=1))
+        self.assertIn("filtered kernel workload passed", result.stdout)
+        self.assertIn("TEST_ONLY=bench_app_isolation_test", result.stdout)
+        self.assertIn("partial test run", result.stdout)
+        self.assertNotIn("All requested test layers passed", result.stdout)
+
+    def test_filtered_kernel_failure_still_fails_aggregate(self):
+        result, counts = self.run_fixture(test_only="bench_app_isolation_test", kernel="exit 4")
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertEqual(counts, dict(backend=1, frontend=1, kernel=1))
+        self.assertNotIn("filtered kernel workload passed", result.stdout)
 
     def test_failures_do_not_stop_other_layers_or_turn_green(self):
         for kwargs in ({"backend": "exit 7"}, {"frontend": 9}, {"kernel": "exit 3"}):

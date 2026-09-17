@@ -39,6 +39,9 @@ run_layer() {
 run_layer Backend backend bash run_tests.sh --no-cov-on-fail
 run_layer Frontend frontend npm run test -- --run
 if [ "$RUN_KERNEL" -eq 1 ]; then
+    if [ -n "${TEST_ONLY:-}" ]; then
+        echo "Kernel: filtered workload (TEST_ONLY=$TEST_ONLY); partial test run"
+    fi
     run_layer Kernel kernel bash run_tests.sh
 else
     echo "Kernel: NOT REQUESTED (--no-kernel); partial test run"
@@ -48,7 +51,11 @@ if [ "$OVERALL" -ne 0 ]; then
     exit 1
 fi
 if [ "$RUN_KERNEL" -eq 1 ]; then
-    echo "All requested test layers passed."
+    if [ -n "${TEST_ONLY:-}" ]; then
+        echo "Requested hosted layers and filtered kernel workload passed (TEST_ONLY=$TEST_ONLY); partial test run."
+    else
+        echo "All requested test layers passed."
+    fi
 else
     echo "Requested hosted layers passed; kernel tests were not run."
 fi

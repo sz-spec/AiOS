@@ -212,7 +212,7 @@ async function test32KRule(): Promise<number> {
   }
 
   // Test that orchestration phases with large context escalate to Mistral
-  const largeDecision = await router.getModelForPipelinePhase("aggregator", 5, largeState);
+  const _largeDecision = await router.getModelForPipelinePhase("aggregator", 5, largeState);
 
   // The 32K rule should trigger for orchestration phases
   const largeContext = calculateStateContext(largeState);
@@ -416,7 +416,7 @@ async function testConfidenceScoring(): Promise<number> {
       fail(`Simple task: unexpected low confidence ${simpleDecision.confidence}`);
       failed++;
     }
-  } catch (e) {
+  } catch {
     pass("Simple task: routing completed (interactive mode may not be available)");
     passed++;
   }
@@ -445,7 +445,7 @@ async function testConfidenceScoring(): Promise<number> {
       pass(`Complex task: Using model ${complexDecision.modelId}`);
       passed++;
     }
-  } catch (e) {
+  } catch {
     pass("Complex task: routing completed (may use fallback)");
     passed++;
   }

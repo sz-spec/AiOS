@@ -509,14 +509,19 @@ static void test_agent_swarm(void)
     printf("  Spawned %d threads, waiting for completion...\n",
            NUM_FPU_THREADS - spawn_errors);
 
-    /* Wait for all threads to complete.
+    /* Successful children claim dense slots through g_fpu_slot's atomic
+     * counter. Failed clone calls create no worker/result slot to wait for.
+     * Keep the final all-32 success requirement below unchanged. */
+    const int spawned = NUM_FPU_THREADS - spawn_errors;
+
+    /* Wait for all successfully created threads to complete.
      * On a single-core OS, we must yield() so threads get CPU time.
      * Pure pause-spin would starve them (they'd only run on timer preempt). */
     unsigned int yields = 0;
     int all_done = 0;
     while (!all_done && yields < SPIN_LIMIT) {
         all_done = 1;
-        for (int i = 0; i < NUM_FPU_THREADS; i++) {
+        for (int i = 0; i < spawned; i++) {
             if (g_fpu_results[i] == 0) {
                 all_done = 0;
                 break;

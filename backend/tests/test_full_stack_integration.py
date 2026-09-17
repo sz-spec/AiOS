@@ -18,8 +18,9 @@ from main import app
 
 
 @pytest.fixture
-def client():
-    return TestClient(app, base_url="http://localhost")
+def client(session_client):
+    # Use the real CSRF token configured by the shared client fixture.
+    return session_client
 
 
 # ---------------------------------------------------------------------------

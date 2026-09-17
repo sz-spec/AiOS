@@ -3,6 +3,19 @@
 import { useState, useEffect } from 'react';
 import { Zap, Brain, Sliders, Wifi, WifiOff } from 'lucide-react';
 
+const StatusDot = ({ active }: { active: boolean }) => (
+  <span
+    style={{
+      display: 'inline-block',
+      width: 8,
+      height: 8,
+      borderRadius: '50%',
+      backgroundColor: active ? '#22c55e' : '#ef4444',
+      marginRight: 6,
+    }}
+  />
+);
+
 interface ModelSelectorProps {
   onModelChange?: (config: ModelConfig) => void;
 }
@@ -93,18 +106,7 @@ export function ModelSelector({ onModelChange }: ModelSelectorProps) {
     onModelChange?.({ mode, speed, manualModels: updated });
   };
 
-  const StatusDot = ({ active }: { active: boolean }) => (
-    <span
-      style={{
-        display: 'inline-block',
-        width: 8,
-        height: 8,
-        borderRadius: '50%',
-        backgroundColor: active ? '#22c55e' : '#ef4444',
-        marginRight: 6,
-      }}
-    />
-  );
+
 
   return (
     <div style={{ padding: '24px', maxWidth: '480px' }}>

@@ -18,6 +18,17 @@ from unittest.mock import MagicMock
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Allocate disposable, process-local storage before application imports create
+# keyring/database singletons. Never let tests rotate a developer's real keys.
+import tempfile
+
+_TEST_STORAGE = tempfile.TemporaryDirectory(prefix="vos-backend-tests-")
+os.environ["VOS3_KEYRING_MODE"] = "local"
+os.environ["VOS3_KEYRING_PATH"] = str(Path(_TEST_STORAGE.name) / "secrets.enc")
+os.environ["VOS3_KEYRING_SEED_OVERRIDE"] = "disposable-test-keyring-only"
+os.environ["VOS3_LOCAL_DB_PATH"] = str(Path(_TEST_STORAGE.name) / "vos.db")
+os.environ["VOS3_APP_DATA_DIR"] = str(Path(_TEST_STORAGE.name) / "app-data")
+
 # Set test environment before any test imports main (which creates the app).
 # VOS3_ALLOW_DEV_MODE: Auth middleware skips JWT verification in dev mode.
 os.environ.setdefault("VOS3_ALLOW_DEV_MODE", "true")
@@ -379,34 +390,6 @@ def test_config():
 # =============================================================================
 
 
-# Sprint-23 QA stabilization: pre-existing perf/load/crypto-stress tests that
-# hang or run far past a unit-test budget under CI's xdist run (which has NO
-# per-test timeout — the cause of the 6h Backend/Test stalls). Gated out of the
-# standard unit CI; they belong in a dedicated perf job. Matched by base test
-# name (parametrized variants included). See SESSION_HANDOVER_LOCK Sprint-23 QA.
-_KNOWN_CI_HANGS = {
-    "test_benchmark_returns_within_documented_envelope",
-    "test_build_throughput_above_floor",
-    "test_digest_bit_avalanche",
-    "test_digest_byte_frequency_passes_chi_square",
-    "test_digest_cross_payload_distinct",
-    "test_no_heap_growth_across_1000_sign_verify_cycles",
-    "test_per_frame_latency_scales_with_payload",
-    "test_per_frame_latency_under_5ms",
-    "test_perf_budget_on_current_host",
-    "test_readers_dont_starve_during_rotation",
-    "test_rotate_produces_new_fingerprint",
-    "test_rotation_emits_audit_event",
-    "test_rotation_is_atomic_under_reads",
-    "test_rotation_revokes_old_key",
-    "test_schedule_rotation_accepts_cron_expression",
-    "test_throughput_scales_sublinearly",
-    "test_verify_throughput_above_floor",
-    "test_permission_gate_cache_lookup_constant_time",
-    "test_health_endpoint_no_leak",
-}
-
-
 def pytest_configure(config):
     """Configure pytest markers."""
     config.addinivalue_line(
@@ -424,22 +407,13 @@ def pytest_configure(config):
 
 def pytest_collection_modifyitems(config, items):
     """Auto-mark tests based on their location AND skip silicon tests unless
-    --silicon was passed (Sprint 14.2 Gap 3). Also skip-gate the known
-    pre-existing CI hangs (Sprint-23 QA)."""
+    --silicon was passed (Sprint 14.2 Gap 3)."""
     silicon_opted_in = config.getoption("--silicon", default=False)
     skip_silicon = pytest.mark.skip(
         reason="silicon-required test; pass --silicon (see "
         "docs/silicon_ci.md) to run."
     )
-    skip_hang = pytest.mark.skip(
-        reason="pre-existing hang / perf-stress test gated out of the unit CI "
-        "(Sprint-23 QA) — run in a dedicated perf job."
-    )
     for item in items:
-        # Sprint-23 QA — skip-gate known hangs (perf/load/crypto-stress).
-        base = getattr(item, "originalname", None) or item.name.split("[")[0]
-        if base in _KNOWN_CI_HANGS:
-            item.add_marker(skip_hang)
         # Sprint 14.2 — skip @pytest.mark.silicon unless explicitly opted in.
         # Use get_closest_marker (not keyword check) because item.keywords
         # also contains path-component words like "silicon" from the
@@ -762,7 +736,11 @@ def user_a_client(_app):
     )
     from fastapi.testclient import TestClient
 
-    c = TestClient(_app)
+    from middleware.csrf import _peek_csrf_token_for_tests
+
+    c = TestClient(
+        _app, headers={"X-CSRF-Token": _peek_csrf_token_for_tests()}
+    )
     yield c
     _app.dependency_overrides.pop(get_current_user, None)
 
@@ -777,7 +755,11 @@ def user_b_client(_app):
     )
     from fastapi.testclient import TestClient
 
-    c = TestClient(_app)
+    from middleware.csrf import _peek_csrf_token_for_tests
+
+    c = TestClient(
+        _app, headers={"X-CSRF-Token": _peek_csrf_token_for_tests()}
+    )
     yield c
     _app.dependency_overrides.pop(get_current_user, None)
 
@@ -795,7 +777,11 @@ def admin_client(_app):
     )
     from fastapi.testclient import TestClient
 
-    c = TestClient(_app)
+    from middleware.csrf import _peek_csrf_token_for_tests
+
+    c = TestClient(
+        _app, headers={"X-CSRF-Token": _peek_csrf_token_for_tests()}
+    )
     yield c
     _app.dependency_overrides.pop(get_current_user, None)
 

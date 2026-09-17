@@ -20,6 +20,7 @@ import json
 import struct
 import zlib
 import pytest
+from tests.handoff_fixtures import handoff_sessions, make_builder, invoke_node
 from unittest.mock import MagicMock, patch
 
 from langchain_core.messages import AIMessage
@@ -308,10 +309,10 @@ class TestVisionRouting:
     """Verify _route_entry dispatches correctly based on state."""
 
     def _get_builder(self):
-        """Create a MultiAgentBuilder instance without triggering full init."""
+        """Create a fully initialized builder with a mocked LLM."""
         from ai.agents.multi_agent import MultiAgentBuilder
 
-        builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+        builder = make_builder()
         return builder
 
     def test_route_entry_returns_vision_with_image(self):
@@ -344,7 +345,7 @@ class TestVisionNodeState:
     def _get_builder(self):
         from ai.agents.multi_agent import MultiAgentBuilder
 
-        return MultiAgentBuilder.__new__(MultiAgentBuilder)
+        return make_builder()
 
     def test_vision_node_populates_analysis_and_theme(self):
         """Vision node returns both vision_analysis and vision_theme dicts."""
@@ -461,7 +462,7 @@ class TestArchitectContextInjection:
         # Create builder with mocked agents
         mock_llm = MagicMock()
         with patch("ai.agents.multi_agent.LLM", return_value=mock_llm):
-            builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+            builder = make_builder()
             builder.llm = mock_llm
             builder.agents = {"architect": mock_architect}
             builder.logger = MagicMock()
@@ -473,7 +474,7 @@ class TestArchitectContextInjection:
             "architecture": None,
         }
 
-        builder._architect_node(state)
+        invoke_node(builder, "architect", state)
 
         # Architect should have been called with augmented requirements
         assert len(captured_requirements) == 1
@@ -512,7 +513,7 @@ class TestArchitectContextInjection:
 
         mock_llm = MagicMock()
         with patch("ai.agents.multi_agent.LLM", return_value=mock_llm):
-            builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+            builder = make_builder()
             builder.llm = mock_llm
             builder.agents = {"architect": mock_architect}
             builder.logger = MagicMock()
@@ -522,7 +523,7 @@ class TestArchitectContextInjection:
             "vision_analysis": None,
             "architecture": None,
         }
-        builder._architect_node(state)
+        invoke_node(builder, "architect", state)
 
         assert len(captured_requirements) == 1
         assert captured_requirements[0] == "Build a simple app"
@@ -567,7 +568,7 @@ class TestFrontendContextInjection:
 
         mock_llm = MagicMock()
         with patch("ai.agents.multi_agent.LLM", return_value=mock_llm):
-            builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+            builder = make_builder()
             builder.llm = mock_llm
             builder.agents = {"frontend": mock_frontend}
             builder.logger = MagicMock()
@@ -580,7 +581,7 @@ class TestFrontendContextInjection:
             "architecture": {},
         }
 
-        builder._frontend_node(state)
+        invoke_node(builder, "frontend", state)
 
         assert len(captured_requirements) == 1
         augmented = captured_requirements[0]
@@ -626,7 +627,7 @@ class TestFrontendContextInjection:
 
         mock_llm = MagicMock()
         with patch("ai.agents.multi_agent.LLM", return_value=mock_llm):
-            builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+            builder = make_builder()
             builder.llm = mock_llm
             builder.agents = {"frontend": mock_frontend}
             builder.logger = MagicMock()
@@ -637,7 +638,7 @@ class TestFrontendContextInjection:
             "vision_theme": None,
             "architecture": {},
         }
-        builder._frontend_node(state)
+        invoke_node(builder, "frontend", state)
 
         assert captured_requirements[0] == "Build a plain app"
         assert "## Design System" not in captured_requirements[0]
@@ -683,7 +684,7 @@ class TestACIDStyling:
             "vision_theme": vision_result["vision_theme"],
             "architecture": {},
         }
-        frontend_result = builder._frontend_node(state)
+        frontend_result = invoke_node(builder, "frontend", state)
 
         # Step 3: ACID ASSERTIONS
         frontend_code = frontend_result.get("frontend_code", {})
@@ -736,7 +737,7 @@ class TestACIDStyling:
             "vision_theme": vision_result["vision_theme"],
             "architecture": {},
         }
-        frontend_result = builder._frontend_node(state)
+        frontend_result = invoke_node(builder, "frontend", state)
 
         frontend_code = frontend_result.get("frontend_code", {})
         tailwind_config = frontend_code.get("tailwind.config.js", "")
@@ -779,7 +780,7 @@ class TestACIDStyling:
             "vision_theme": theme.to_dict(),
             "architecture": {},
         }
-        result = builder._frontend_node(state)
+        result = invoke_node(builder, "frontend", state)
 
         frontend_code = result.get("frontend_code", {})
         # Agent-generated files must win
@@ -829,7 +830,7 @@ class TestACIDStyling:
             "vision_theme": vision_result["vision_theme"],
             "architecture": None,
         }
-        arch_result = builder._architect_node(arch_state)
+        arch_result = invoke_node(builder, "architect", arch_state)
 
         # Verify architect received Neon Pink in context
         assert ACID_PRIMARY in architect_captured[0]
@@ -856,7 +857,7 @@ class TestACIDStyling:
             "vision_theme": vision_result["vision_theme"],
             "architecture": arch_result.get("architecture", {}),
         }
-        front_result = builder._frontend_node(front_state)
+        front_result = invoke_node(builder, "frontend", front_state)
 
         # Verify frontend received design tokens
         assert ACID_PRIMARY in frontend_captured[0]
@@ -884,7 +885,7 @@ class TestACIDStyling:
         """Create a minimal MultiAgentBuilder for testing."""
         from ai.agents.multi_agent import MultiAgentBuilder
 
-        builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+        builder = make_builder()
         builder.llm = MagicMock()
         builder.agents = {}
         builder.logger = MagicMock()
@@ -914,7 +915,7 @@ class TestStyleOnlyFlow:
         """State with vision_theme but no vision_image routes to architect."""
         from ai.agents.multi_agent import MultiAgentBuilder
 
-        builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+        builder = make_builder()
 
         # Style-only: vision_theme is set, but vision_image is None
         state = {
@@ -928,7 +929,7 @@ class TestStyleOnlyFlow:
         from ai.agents.multi_agent import MultiAgentBuilder
         from services.theme_engine import ThemeEngine
 
-        builder = MultiAgentBuilder.__new__(MultiAgentBuilder)
+        builder = make_builder()
         builder.llm = MagicMock()
         builder.logger = MagicMock()
 
@@ -948,7 +949,7 @@ class TestStyleOnlyFlow:
             "architecture": {},
         }
 
-        result = builder._frontend_node(state)
+        result = invoke_node(builder, "frontend", state)
         frontend_code = result.get("frontend_code", {})
 
         # Theme files should be injected even without vision_analysis

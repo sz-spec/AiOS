@@ -19,6 +19,10 @@ Integration tests use ``TestClient`` to exercise the middleware stack.
 """
 
 import time
+from starlette.responses import Response
+
+_OK_RESPONSE = Response("ok", status_code=200)
+
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
@@ -226,28 +230,28 @@ class TestRateLimitMiddleware:
     @pytest.mark.asyncio
     async def test_health_endpoint_exempt(self):
         """GET /health should bypass rate limiting entirely."""
-        call_next = AsyncMock(return_value="ok")
+        call_next = AsyncMock(return_value=_OK_RESPONSE)
         request = self._make_request(path="/health")
         result = await rate_limit_middleware(request, call_next)
-        assert result == "ok"
+        assert result is _OK_RESPONSE
         call_next.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_root_endpoint_exempt(self):
         """GET / should bypass rate limiting entirely."""
-        call_next = AsyncMock(return_value="ok")
+        call_next = AsyncMock(return_value=_OK_RESPONSE)
         request = self._make_request(path="/")
         result = await rate_limit_middleware(request, call_next)
-        assert result == "ok"
+        assert result is _OK_RESPONSE
         call_next.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_normal_request_passes_within_limit(self):
         """A single standard API request within burst should pass."""
-        call_next = AsyncMock(return_value="ok")
+        call_next = AsyncMock(return_value=_OK_RESPONSE)
         request = self._make_request(path="/api/test", host="normal_test_ip")
         result = await rate_limit_middleware(request, call_next)
-        assert result == "ok"
+        assert result is _OK_RESPONSE
 
     @pytest.mark.asyncio
     async def test_xff_spoofing_does_not_bypass_limit(self):
@@ -258,7 +262,7 @@ class TestRateLimitMiddleware:
         original_limiter = rl_mod._limiter
         rl_mod._limiter = TokenBucket(rate=0, burst=2)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
 
             # Same real IP, different XFF
             for xff_ip in ["1.1.1.1", "2.2.2.2"]:
@@ -292,7 +296,7 @@ class TestStandardLimiterExhaustion:
         # Use a small burst for test speed
         rl_mod._limiter = TokenBucket(rate=0, burst=5)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
             ip = "burst_test_ip"
 
             for i in range(5):
@@ -301,7 +305,7 @@ class TestStandardLimiterExhaustion:
                 req.client.host = ip
                 req.headers = {}
                 result = await rate_limit_middleware(req, call_next)
-                assert result == "ok", f"Request {i} should pass"
+                assert result is _OK_RESPONSE, f"Request {i} should pass"
 
             # 6th request -- should be 429
             req = MagicMock()
@@ -321,7 +325,7 @@ class TestStandardLimiterExhaustion:
         original_limiter = rl_mod._limiter
         rl_mod._limiter = TokenBucket(rate=0, burst=1)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
             ip = "retry_after_test_ip"
 
             req = MagicMock()
@@ -349,7 +353,7 @@ class TestStandardLimiterExhaustion:
         original_limiter = rl_mod._limiter
         rl_mod._limiter = TokenBucket(rate=0, burst=2)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
 
             # Exhaust IP-A
             for _ in range(2):
@@ -373,7 +377,7 @@ class TestStandardLimiterExhaustion:
             req.client.host = "ip_b_independent"
             req.headers = {}
             result = await rate_limit_middleware(req, call_next)
-            assert result == "ok"
+            assert result is _OK_RESPONSE
         finally:
             rl_mod._limiter = original_limiter
 
@@ -394,7 +398,7 @@ class TestAuthLimiterExhaustion:
         original_auth_limiter = rl_mod._auth_limiter
         rl_mod._auth_limiter = TokenBucket(rate=0, burst=5)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
             ip = "auth_burst_ip"
 
             for i in range(5):
@@ -403,7 +407,7 @@ class TestAuthLimiterExhaustion:
                 req.client.host = ip
                 req.headers = {}
                 result = await rate_limit_middleware(req, call_next)
-                assert result == "ok", f"Auth request {i} should pass"
+                assert result is _OK_RESPONSE, f"Auth request {i} should pass"
 
             # 6th auth request -- 429
             req = MagicMock()
@@ -423,7 +427,7 @@ class TestAuthLimiterExhaustion:
         original_auth_limiter = rl_mod._auth_limiter
         rl_mod._auth_limiter = TokenBucket(rate=0, burst=1)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
             ip = "auth_retry_ip"
 
             req = MagicMock()
@@ -452,7 +456,7 @@ class TestAuthLimiterExhaustion:
         rl_mod._limiter = TokenBucket(rate=0, burst=5)
         rl_mod._auth_limiter = TokenBucket(rate=0, burst=1)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
             ip = "cross_limiter_ip"
 
             # Exhaust auth limiter
@@ -475,7 +479,7 @@ class TestAuthLimiterExhaustion:
             req3.client.host = ip
             req3.headers = {}
             result = await rate_limit_middleware(req3, call_next)
-            assert result == "ok"
+            assert result is _OK_RESPONSE
         finally:
             rl_mod._limiter = orig_limiter
             rl_mod._auth_limiter = orig_auth
@@ -500,7 +504,7 @@ class TestCleanupIntegration:
         rl_mod._limiter = TokenBucket(rate=10000, burst=2000)
         rl_mod._cleanup_counter = 998  # 2 more to trigger
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
 
             for i in range(3):
                 req = MagicMock()
@@ -557,7 +561,7 @@ class TestConcurrentRapidFire:
         orig_auth = rl_mod._auth_limiter
         rl_mod._auth_limiter = TokenBucket(rate=0, burst=5)
         try:
-            call_next = AsyncMock(return_value="ok")
+            call_next = AsyncMock(return_value=_OK_RESPONSE)
             ip = "rapid_auth_ip"
             results = []
 
@@ -569,7 +573,7 @@ class TestConcurrentRapidFire:
                 result = await rate_limit_middleware(req, call_next)
                 results.append(result)
 
-            ok_count = sum(1 for r in results if r == "ok")
+            ok_count = sum(1 for r in results if r is _OK_RESPONSE)
             blocked_count = sum(
                 1 for r in results if hasattr(r, "status_code") and r.status_code == 429
             )
