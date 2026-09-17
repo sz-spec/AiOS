@@ -1,0 +1,64 @@
+{
+  "commit": "81c7f774e617cbc88092353c2dec96ffe6d30783",
+  "passed": true,
+  "artifacts": {
+    "iso_sha256": "9a6c7a4a5d611a17365946bb7ea8d1d0582225023b82c075f582a6980198e677",
+    "kernel_sha256": "62703e8a8340e592ea01bd0c7ffc5ca7cffd170906bdc5867a59f553fb429891",
+    "user_test_sha256": "1a01cf9010c28bbc76484a5af9445b7938ee72edb64c03cf28818d75e16587af",
+    "classifier_sha256": "5532eb08928267d923d134ce99b624fccd982210438d38e3cf7c2a6f698457bc"
+  },
+  "boots": [
+    {
+      "case": "bios1",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 1,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    },
+    {
+      "case": "bios4",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 4,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    },
+    {
+      "case": "uefi1",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 1,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    },
+    {
+      "case": "uefi4",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 4,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    }
+  ]
+}

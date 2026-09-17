@@ -29,3 +29,32 @@ Additional source findings outside this ownership fix: the group/broadcast `sys_
 Source inspection confirmed that legacy syscall 450 and Linux `tkill`/`tgkill` variants bypassed the permission policy already present in `kill(62)`. The policy now resides in `vos3_signal_check_permission`, shared by all these public variants: root or matching UID may send, and SIGCONT additionally permits matching sessions. Missing identities fail closed. Internal kernel timer/pipe senders keep their separate internal API. Legacy 450 retains its TID-based ABI and rejection of signal zero, and now rejects truncated high-bit arguments. POSIX signal-zero probes also enforce permission. `tgkill` requires positive IDs and the actual matching thread group.
 
 `scripts/test_signal_authorization.py` compiles the actual legacy wrapper and shared policy, checking foreign UID/session denial with zero send calls, same-UID/root success, the SIGCONT-only session exception, missing identities, wide arguments, and propagation of send errors. The independent reviewer's `scripts/test_signal_return.py` compiles the actual full dispatcher and actual common policy, testing tkill/tgkill allow/deny cases, forged return addresses, complete register restoration, and every RFLAGS bit. Together with lifecycle and flag-decoder tests, all four host modules passed in the combined run recorded at `/private/tmp/vos-goal-native-20260917-signal-host-combined.log`. Mocked task lookup/uaccess do not prove concurrent lifetime safety or hardware return behavior. Final native qualification after the ABI and authorization follow-ups remains pending.
+
+## Full native run and integration snapshot
+
+Native source commit: `81c7f77` (hosted-only changes followed in `99f8c22`). The final worktree ISO build completed and the complete **56-program** BIOS/one-vCPU benchmark sequence reached its halt marker. Thirteen programs still exited nonzero, so the suite correctly remains **failed**. Final ISO SHA-256: `f5c67e4df8bf5843a8db48efadc217464c219135fa546aa4681773b2e9e04a7e`, unchanged across the run. This includes the final flag decoder and signal authorization changes.
+
+`bench_sigpipe_test`, `test_signal_musl`, `test_signal_lifetime`, `bench_phase13_test`, and `bench_csw_1ms` all exited zero. The signal workload checked actual user privilege level, blocked/pending delivery, independent fork dispositions, and exec reset/preservation. The filtered earlier run additionally forced 1,100 sequential fork/reap cycles before testing high identities; the full run already reached high identities and did not repeat that setup branch.
+
+Correct signal delivery exposed a benchmark bug: the context-switch child served 2,000 messages while its parent sent 50 warmup messages plus 2,000 measured messages. The corrected child serves all 2,050, and both sides check transfers, replies and child completion. Four actual-function host tests include the original-count mutation and short-I/O/child-failure negatives. The SIGPIPE fixture initializes its entire action structure. Phase13 now detaches its public SHM mapping before fork, then maps the same retained object in each process and verifies both directions, exact wait status and cleanup; mapped-SHM fork remains fail-closed. Existing networking cases in Phase13 that label unavailable scenarios as PASS have not been qualified by this change.
+
+Remaining nonzero programs: `bench_fuzz_test` (139), `stress_thread`, `test_shm_dispatch`, `diag_shm_stress`, `test_sustained`, `bench_ai_throughput`, `bench_2026_frontier`, `test_agent_chaos`, `test_advanced_chaos`, `test_health_check`, `test_agent_cluster`, `bench_ai_scale`, and `test_stress_mt`. The fuzz crash is associated with a kernel user-copy access into an unmapped user page. Other failures include mapped-SHM fork contracts, thread/task resource exhaustion, and zombie cleanup; these require further production or contract investigation, not skipped tests.
+
+The scripts discovery run passed **75 tests**. The final focused actual-source run passed **nine tests**. These host tests do not establish real CPU fault-return safety or remote SMP lifetime safety. Four clean-build firmware/CPU matrices are being recorded separately; this worktree benchmark is not itself a clean-archive qualification. Build logs retain compiler/linker and clock-skew warnings; no warning-free or byte-identical rebuild claim is made.
+
+Raw filtered, intermediate and final benchmark results, serial logs, final build output, and host test logs are preserved in [the evidence directory](native-signal-lifetime-2026-09-17/manifest.json), with SHA-256 digests. Earlier failing evidence is retained.
+
+## Clean archive qualification at 81c7f77
+
+All four images were built from a fresh Git archive using the pinned builder, with no previous generated outputs and unchanged source inputs. **15 of 16 boots passed**. The TLB matrix remains failed: UEFI/four-CPU workers completed their arithmetic and wait checks but both executed on APIC 1, so the unchanged observer correctly rejected missing worker CPU diversity. Every CPU's TLB replacement observations succeeded; that does not override the workload failure. The scheduler's first-dispatch ownership choice is under investigation. The original failed result and serial log are preserved.
+
+| Image | BIOS 1/4, UEFI 1/4 | ISO SHA-256 |
+|---|---|---|
+| Normal | all four passed | `1273e47c6de2b98b05855537974d191b551f117ab15b36d3ab959d3fbcc06c82` |
+| Isolation | all four passed | `33ccf7dea2b9c5660778e562b9222a994192addf634e65b8e52a5068a1649978` |
+| Memory | all four passed | `9a6c7a4a5d611a17365946bb7ea8d1d0582225023b82c075f582a6980198e677` |
+| TLB/AP workload | first three passed; UEFI4 failed | `e77a26c27ed1cc2c2eac873387ee0124f1c9b02c96c5973c441e8f5e568477fc` |
+
+Memory logs independently verified 12 cases, 51 user records, seven kernel checks and 11 expected faults in each configuration. Isolation verified four containment cases per configuration. These are emulator and scoped diagnostic results, not physical hardware qualification or complete concurrent process isolation.
+
+Staged-evidence secret scanning reported 568 candidates, all confined to four archived source manifests (142 repeated content hashes each). Each candidate was independently checked against the corresponding archived file's SHA-256 and staged manifest line. No secret suppression was added.

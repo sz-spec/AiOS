@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "failures": [],
+  "test_only": "signal",
+  "expected_programs": [
+    "test_signal_musl",
+    "test_signal_lifetime"
+  ],
+  "command": [
+    "qemu-system-x86_64",
+    "-machine",
+    "q35,accel=tcg",
+    "-m",
+    "3072",
+    "-cpu",
+    "qemu64,+rdrand,+rdseed",
+    "-smp",
+    "1",
+    "-display",
+    "none",
+    "-serial",
+    "stdio",
+    "-monitor",
+    "none",
+    "-no-reboot",
+    "-boot",
+    "d",
+    "-nic",
+    "user,model=virtio-net-pci",
+    "-cdrom",
+    "/Users/sz/Desktop/vos/vos 5/dist/vos5-signals-20260917.iso",
+    "-snapshot"
+  ],
+  "iso": "/Users/sz/Desktop/vos/vos 5/dist/vos5-signals-20260917.iso",
+  "iso_sha256": "537e86de502b825f28d1b63e9788f013531498d8b705be743f51707de9d21df7",
+  "init_source_sha256": "2fc8a4c7d8d515a2d026b4968709becd22d3cbc1b314ecdf236cb550faaca32d",
+  "started_programs": [
+    "test_signal_musl",
+    "test_signal_lifetime"
+  ],
+  "exits": [
+    [
+      "test_signal_musl",
+      "0"
+    ],
+    [
+      "test_signal_lifetime",
+      "0"
+    ]
+  ],
+  "partial": true,
+  "scope": "Selected benchmark subset",
+  "exit_status": "suite_observed",
+  "iso_sha256_after": "537e86de502b825f28d1b63e9788f013531498d8b705be743f51707de9d21df7"
+}

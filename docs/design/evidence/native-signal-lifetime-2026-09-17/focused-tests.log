@@ -1,0 +1,8 @@
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 2.605s
+
+OK
+signal_syscall.c sha256=4699722f50f2099f46cc5cede677e93695f81ed32e7082702d471fa3cb80d4e9
+signal.c sha256=1c2d8879dff6be36effa3c5dd2b7ea5672de43950e8f2225e9b08bbc4ce5eb45
+production-lifetime-sha256 b746d02373dfe7f1ac9133ca30262d08040332c066edbe8908e53f45e3597fde

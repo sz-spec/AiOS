@@ -1,0 +1,3037 @@
+multiboot2: Loading executable `boot():/boot/vos3.elf`...
+MB
+64
+LMOK
+HH
+
+ __      _____  _____ ____  
+ \ \    / / _ \/ ____|___ \ 
+  \ \  / / | | \___ \  __) |
+   \ \/ /| |_| |___) |/ __/ 
+    \__/  \___/|____/|_____|
+
+  VOS3 Kernel v3.1.0-GOLD-MASTER
+  Built: Nov 14 2023 22:13:20
+  Architecture: x86_64
+
+[INFO]  Kernel starting...
+[INFO]  Validating boot information
+[INFO]  Boot info validated: magic=0x564F5333, version=0x00010000
+[INFO]  Initializing GDT
+[INFO]  GDT: Initializing Global Descriptor Table
+[INFO]  GDT: Loaded at 0xFFFFFFFF832596C0, 4136 bytes
+[INFO]  GDT: BSP TSS loaded at selector 0x0028
+[INFO]  Initializing Per-CPU subsystem
+[INFO]  [PERCPU] x2APIC support: no (max 256 CPUs)
+[INFO]  [PERCPU] Initialized CPU 0 (APIC ID: 0)
+[INFO]  Initializing IDT
+[INFO]  IDT: Initializing Interrupt Descriptor Table
+[INFO]  IDT: Loaded at 0xFFFFFFFF8325AF10, 256 entries
+[INFO]  Setting up IST stacks
+[INFO]  [GDT-AUDIT] GDTR: base=0xFFFFFFFF832596C0, limit=4135 (517 entries)
+[INFO]  [GDT-AUDIT] PASS: 0 errors (CR0=0x80010013, CR4=0x620, EFER=0xD00)
+[INFO]  Initializing PIC
+[INFO]  PIC: Initializing 8259 PIC
+[INFO]  PIC: Remapped IRQs to vectors 32-47
+[INFO]  Registering interrupt handlers
+[INFO]  INT: Registering default interrupt handlers
+[INFO]  INT: Default handlers registered
+[INFO]  Initializing KASLR (address randomization)
+[KASLR] Stack offset: +0x10000000 (2MB aligned)
+[KASLR] Heap offset:  -0x3F0C000 (4KB aligned)
+[INFO]  Initializing Physical Memory Manager
+[INFO]  PMM: kernel reserved 0x2000000 - 0x5E73000 (63948 KiB)
+[INFO]  Memory Information:
+  Total RAM: 3071 MiB (3220696064 bytes)
+[INFO]  Kernel Layout:
+  Virtual:  0xFFFFFFFF82000000 - 0xFFFFFFFF85E73000
+  Physical: 0x0000000002000000 - 0x0000000005E73000
+  Size: 63948 KiB
+[INFO]  Sections:
+  .text:   0xFFFFFFFF82006000 - 0xFFFFFFFF82084D09 (519433 bytes)
+  .rodata: 0xFFFFFFFF82085000 - 0xFFFFFFFF828A670E (8525582 bytes)
+  .data:   0xFFFFFFFF828A7000 - 0xFFFFFFFF828A7448 (1096 bytes)
+  .bss:    0xFFFFFFFF828A8000 - 0xFFFFFFFF85E527B0 (56272816 bytes)
+[INFO]  Memory Map (10 entries):
+  [0] 0x000000000000 - 0x00000009FC00  639 KiB  Usable
+  [1] 0x00000009FC00 - 0x0000000A0000  1 KiB  Reserved
+  [2] 0x0000000F0000 - 0x000000100000  64 KiB  Reserved
+  [3] 0x000000100000 - 0x00007FFDF000  2095996 KiB  Usable
+  [4] 0x00007FFDF000 - 0x000080000000  132 KiB  Reserved
+  [5] 0x0000B0000000 - 0x0000C0000000  262144 KiB  Reserved
+  [6] 0x0000FED1C000 - 0x0000FED20000  16 KiB  Reserved
+  [7] 0x0000FFFC0000 - 0x000100000000  256 KiB  Reserved
+  [8] 0x000100000000 - 0x000140000000  1048576 KiB  Usable
+  [9] 0x00FD00000000 - 0x010000000000  12582912 KiB  Reserved
+[INFO]  PMM Statistics:
+  Total: 3071 MiB, Free: 1985 MiB, Used: 0 MiB
+[INFO]  [UEFI] Not booted via UEFI (legacy/Limine mode)
+[INFO]  Boot mode: Legacy/Limine
+[INFO]  PMM: reserved 256 HugePages (512 MB)
+[INFO]  Initializing Virtual Memory Manager
+[INFO]  VMM: Initializing Virtual Memory Manager
+[INFO]  VMM: PML4[0] identity map cleared (boot dual-address eliminated)
+[INFO]  VMM: PML4 at physical 0x0000000002001000, virtual 0xFFFF800002001000
+[INFO]  VMM: Initialization complete (TLB flush IPI: vector 0xFB)
+[INFO]  Initializing Kernel Heap
+[INFO]  Heap: Initializing kernel heap
+[INFO]  Heap: Initialization complete (8 size classes)
+[INFO]  Heap test: allocated 128 bytes at 0xFFFF80000000AF30
+[INFO]  Heap test: freed successfully
+[INFO]  Initializing CRC64-ECMA lookup table
+[INFO]  Scanning PCI bus (HAL Foundation)
+[PCI-ECAM] MCFG absent — Port-I/O fallback active
+[PCI] Scanning buses (recursive bridge enumeration)...
+[PCI] 00:00.0 8086:29C0 Bridge Device
+[PCI] 00:01.0 1234:1111 VGA Controller
+[PCI] 00:02.0 1AF4:1000 Network Controller
+[PCI] 00:1F.0 8086:2918 Bridge Device
+[PCI] 00:1F.2 8086:2922 AHCI Controller
+[PCI] 00:1F.3 8086:2930 Unknown
+[PCI] Scan complete: 6 devices found
+[INFO]  Initializing ACPI subsystem
+[ACPI] Initializing ACPI subsystem (RSDP at phys 0x28A9800)
+[ACPI] RSDP validated: revision=0, OEM='BOCHS '
+[ACPI] RSDP cross-check: contents match (diff addrs 0x28A9800 vs 0xF52C0) — PASS
+[ACPI] Walking RSDT at phys 0x7FFE2351 (ACPI 1.0 fallback)
+[ACPI] Parsing FADT (length=244)
+[ACPI] Parsing MADT (length=120)
+[ACPI] ACPI init complete: 1 CPUs, 1 IOAPICs, 5 ISOs, 0 NMIs, 5 tables
+  ACPI Revision: 1.0
+  OEM: BOCHS 
+  RSDP Cross-Check: PASS
+  LAPIC Address: 0xFEE00000
+  CPUs: 1
+    CPU 0: APIC_ID=0 ProcID=0 enabled [BSP]
+  IOAPICs: 1
+    IOAPIC 0: addr=0xFEC00000, GSI base=0
+  IRQ Source Overrides: 5
+    IRQ 0 -> GSI 2 (flags=0x0000)
+    IRQ 5 -> GSI 5 (flags=0x000D)
+    IRQ 9 -> GSI 9 (flags=0x000D)
+    IRQ 10 -> GSI 10 (flags=0x000D)
+    IRQ 11 -> GSI 11 (flags=0x000D)
+  FADT: SCI_INT=9, SMI_CMD=0xB2, PM_Profile=0
+  ACPI Tables (5): FACP APIC HPET MCFG WAET
+[INFO]  [STORAGE-HAL] Scanning 6 PCI devices for storage controllers
+[INFO]  [STORAGE-HAL] AHCI controller at 0:31.2
+[INFO]  [AHCI] HBA v1.0, 6 ports, PI=0x3F, ABAR=0xFEBD1000
+[INFO]  [AHCI] Port 2: device present (sig=0xEB140101, det=3)
+[INFO]  [AHCI] No SATA drives found on any port
+[INFO]  [STORAGE-HAL] VirtIO-Block registered as fallback device
+[INFO]  [STORAGE-HAL] 1 devices found, primary=VirtIO
+[INFO]  Probing ivshmem (Warp Drive)
+[IVSHMEM] not found
+[INFO]  Warp Drive not available (VBus fallback)
+[INFO]  [DMA-WARP] Engine initialized: 8 pending slots, 64 KB chunk
+[INFO]  Warp-Drive DMA engine active
+[HDA] Initializing Intel HD Audio driver (Phase 8.5)
+[HDA] WARN: No HD Audio controller found (class 0x04/0x03)
+[HDA] WARN: No HDA controller found — audio disabled
+[INFO]  HD Audio not available (rc=-1)
+[SYNTH] Autonomous Driver Synthesis: scanning 6 PCI devices
+[SYNTH] Auto-probe complete: 0 unknown device(s) analyzed, 0 result(s) recorded
+[INFO]  Driver Synthesis: 0 unknown device(s) auto-probed
+[NPU-DISP] Temporal Multi-Slicing initialized (rotation=120 ms, max_slots=8, max_switch=15 us)
+[INFO]  NPU Temporal Multi-Slicing active (250ms PASID rotation)
+[KTEXT] Boot CRC32C: AD7700E4 (519433 bytes)
+[INFO]  Initializing Merkle Mountain Range audit ledger
+[INFO]  [MMR] Merkle Mountain Range audit ledger initialized
+[INFO]  [HYPERV] Not running under Hyper-V
+[INFO]  [TPM2] No ACPI TPM2 table — running without hardware TPM
+[INFO]  [TPM2] For swtpm: add -chardev socket -tpmdev emulator -device tpm-crb to QEMU
+[PCI-ECAM] available — buses 00..FF mapped MMIO@0x00000000B0000000 (PCD=1, NX=1)
+[INFO]  Detecting CPU features
+[INFO]  CPU Information:
+  Vendor: AMD (AuthenticAMD)
+  Model:  QEMU Virtual CPU version 2.5+
+  Family: 0x0F, Model: 0x6B, Stepping: 1
+  Address: 40-bit physical, 48-bit virtual
+  Features: FPU TSC MSR PAE APIC MTRR PGE PAT SSE SSE2 SSE3 [VM] SYSCALL NX LM 
+[MICROCODE] revision=0x01000065 baseline=unknown below_baseline=unchecked
+[KPTI] mode=LEGACY_KAISER pcid=no invpcid=no smep=no smap=no sha-ni=no budget=5-30%
+[KPTI] note: hardware predates 2010 PCID; syscall-heavy regression 5-30% documented; consider hardware refresh.
+[KPTI] process-root transitions enabled; isolation=partial; retained=PML4[256,511]; CR3 reload uses PCID 0 with flush
+[VMM] MAXPHYADDR=40 → large_addr_mask=0xFFFFE00000
+[INFO]  Initializing FPU subsystem (XSAVE/lazy switching)
+[INFO]  FPU: Using FXSAVE fallback (XSAVE not available)
+[INFO]  FPU: Lazy context switching initialized
+[INFO]  [XSAVE] boot_init skipped — VOS3_HW_XSAVE not defined
+[INFO]  [APIC] init_mmio skipped — VOS3_HW_LAPIC not defined
+[INFO]  [IOAPIC] init skipped — VOS3_HW_IOAPIC not defined
+[INFO]  Initializing CET (Indirect Branch Tracking)
+[INFO]  [CET] CPUID leaf 7: IBT=0 SHSTK=0
+[INFO]  [CET] IBT not available — ENDBR64 present but unenforced
+[INFO]  Initializing Prefetch Engine (Claw Protocol)
+[INFO]  [PREFETCH] Claw Protocol initialized (reserve=16 HP/prediction)
+[INFO]  Initializing entropy subsystem
+[INFO]  [ENTROPY] RDRAND: available, RDSEED: available
+[INFO]  [ENTROPY] CSPRNG initialized (ChaCha20, 256-bit key)
+[STACK-GUARD] Canary re-seeded from entropy subsystem
+[INFO]  Detecting NUMA topology
+[NUMA] Initializing NUMA subsystem
+[NUMA] Detected 2 nodes: 1535 MB each
+[NUMA] 2 node(s) detected, 2 memory range(s)
+[INFO]  Initializing Scheduler
+[INFO]  Scheduler initialized
+[INFO]  Initializing SMP (waking Application Processors)
+[INFO]  [SMP] Initializing SMP subsystem
+[INFO]  [SMP] BSP LAPIC initialized
+[INFO]  [SMP] BSP APIC ID: 0
+[INFO]  [SMP] ACPI enumerated 1 CPUs
+[INFO]  [SMP] Single CPU system, SMP not needed
+[INFO]  SMP: 1 CPUs online
+[INFO]  [SCHED_CORE] topology table populated: 1 cpus
+[INFO]  [CYBER] SCHED_CORE sibling topology initialized
+[INFO]  Initializing Timer (PIT)
+[INFO]  Timer initialized: 100 Hz (divisor 11931)
+[INFO]  Initializing System Call Interface
+[INFO]  Initializing syscall interface
+[INFO]  Syscall interface initialized (LSTAR=0xFFFFFFFF82084AC0)
+[WARN]  Syscall 470: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82046DB0
+[WARN]  Syscall 471: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820473F0
+[WARN]  Syscall 472: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82046E40
+[WARN]  Syscall 473: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82046EE0
+[WARN]  Syscall 474: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82047B20
+[INFO]  [CONFIG] Delegation syscalls registered (200-212)
+[INFO]  Initializing User Mode Support
+[INFO]  Initializing user mode support
+[INFO]  User mode support initialized
+[INFO]    User space: 0x400000 - 0x7FFFFFFFFFFF
+[INFO]    User CS: 0x001B, User DS: 0x0023
+[INFO]  Initializing IPC Subsystem
+[INFO]  Initializing IPC subsystem
+[WARN]  Syscall 400: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028F20
+[WARN]  Syscall 401: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028F00
+[WARN]  Syscall 402: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028DF0
+[WARN]  Syscall 403: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028BC0
+[WARN]  Syscall 410: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028AD0
+[WARN]  Syscall 411: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028A70
+[WARN]  Syscall 412: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028A40
+[WARN]  Syscall 413: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028A10
+[WARN]  Syscall 414: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820289E0
+[WARN]  Syscall 415: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028910
+[WARN]  Syscall 29: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028AD0
+[WARN]  Syscall 30: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028A40
+[WARN]  Syscall 31: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028AA0
+[WARN]  Syscall 67: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028A10
+[WARN]  Syscall 420: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028800
+[WARN]  Syscall 421: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028720
+[WARN]  Syscall 422: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028640
+[WARN]  Syscall 423: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028620
+[WARN]  Syscall 450: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028600
+[WARN]  Syscall 451: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820285F0
+[WARN]  Syscall 452: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820284D0
+[WARN]  Syscall 453: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820283D0
+[WARN]  Syscall 454: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82028340
+[WARN]  Syscall 490: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202DC20
+[WARN]  Syscall 491: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202DB20
+[WARN]  Syscall 492: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202E420
+[WARN]  Syscall 493: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202DFD0
+[WARN]  Syscall 494: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202DA60
+[WARN]  Syscall 495: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202DE30
+[WARN]  Syscall 496: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202E7A0
+[WARN]  Syscall 497: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202E750
+[WARN]  Syscall 498: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202D9E0
+[WARN]  Syscall 503: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202D9C0
+[WARN]  Syscall 504: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202D9B0
+[INFO]  Dispatcher initialized: 64 agent slots
+[INFO]  IPC subsystem initialized
+[INFO]    Message queues: max 256
+[INFO]    Shared memory:  max 64 regions
+[INFO]    Pipes:          max 128
+[INFO]    Signals:        1-31
+[INFO]  Initializing Virtual File System
+[INFO]  Initializing Virtual File System
+[INFO]  Mounted 'none' on '/' (type=ramfs)
+[INFO]  procfs registered
+[INFO]  procfs mounted
+[INFO]  Mounted 'none' on '/proc' (type=procfs)
+[VBUS-FS] provenance side table initialized (1024 slots)
+[INFO]  VFS initialized
+[INFO]    Root filesystem: ramfs
+[INFO]    Max open files per task: 1024
+[INFO]  Initializing VirtIO Block Device
+[INFO]  [VIRTIO-BLK] Initializing VirtIO block driver...
+[WARN]  [VIRTIO-BLK] No VirtIO block device found on PCI bus
+[WARN]  VirtIO block device not available (error -1)
+[INFO]  Initializing vos3fs filesystem
+[vos3fs] Registering vos3fs filesystem type
+[vos3fs] ERROR: VirtIO block device not available
+[WARN]  vos3fs mount on /disk failed (error -5)
+[INFO]  Loading embedded user binaries
+[INFO]  Loading embedded binaries...
+[INFO]    Loaded: /bin/init (149504 bytes)
+[INFO]    Loaded: /bin/sh (130464 bytes)
+[INFO]    Loaded: /bin/cat (87312 bytes)
+[INFO]    Loaded: /bin/grep (92816 bytes)
+[INFO]    Loaded: /bin/wc (90088 bytes)
+[INFO]    Loaded: /bin/head (88632 bytes)
+[INFO]    Loaded: /bin/date (99128 bytes)
+[INFO]    Loaded: /bin/uptime (101488 bytes)
+[INFO]    Loaded: /bin/uname (98840 bytes)
+[INFO]    Loaded: /bin/ai_test (95016 bytes)
+[INFO]    Loaded: /bin/ai_diag (93608 bytes)
+[INFO]    Loaded: /bin/ai_stat (94424 bytes)
+[INFO]    Loaded: /bin/ai_top (99768 bytes)
+[INFO]    Loaded: /bin/ai_stress (102544 bytes)
+[INFO]    Loaded: /bin/ai_exploit (99136 bytes)
+[INFO]    Loaded: /bin/business_sim (121440 bytes)
+[INFO]    Loaded: /bin/setup_wizard (116432 bytes)
+[INFO]    Loaded: /bin/ws_switch (106944 bytes)
+[INFO]    Loaded: /bin/vos3_admin (111312 bytes)
+[INFO]    Loaded: /bin/ai_audit (107744 bytes)
+[INFO]    Loaded: /bin/udp_test (90336 bytes)
+[INFO]    Loaded: /bin/tcp_test (95480 bytes)
+[INFO]    Loaded: /bin/disk_test (88712 bytes)
+[INFO]    Loaded: /bin/bench_csw (90848 bytes)
+[INFO]    Loaded: /bin/bench_isolate (93360 bytes)
+[INFO]    Loaded: /bin/bench_persist (92712 bytes)
+[INFO]    Loaded: /bin/bench_overhead (92376 bytes)
+[INFO]    Loaded: /bin/bench_sigpipe_test (96368 bytes)
+[INFO]    Loaded: /bin/bench_bugfix_test (101272 bytes)
+[INFO]    Loaded: /bin/bench_phase13_test (112384 bytes)
+[INFO]    Loaded: /bin/bench_procfs_test (99056 bytes)
+[INFO]    Loaded: /bin/bench_poll_test (92664 bytes)
+[INFO]    Loaded: /bin/ps (90624 bytes)
+[INFO]    Loaded: /bin/bench_fs_test (112528 bytes)
+[INFO]    Loaded: /bin/bench_net_test (112136 bytes)
+[INFO]    Loaded: /bin/bench_stress_test (96744 bytes)
+[INFO]    Loaded: /bin/bench_fuzz_test (97536 bytes)
+[INFO]    Loaded: /bin/bench_sched_test (97360 bytes)
+[INFO]    Loaded: /bin/bench_app_isolation_test (98424 bytes)
+[INFO]    Loaded: /bin/test_posix_fs (116472 bytes)
+[INFO]    Loaded: /bin/test_epoll (107376 bytes)
+[INFO]    Loaded: /bin/bench_thread_test (90088 bytes)
+[INFO]    Loaded: /bin/stress_thread (99544 bytes)
+[INFO]    Loaded: /bin/test_posix_core (95816 bytes)
+[INFO]    Loaded: /bin/test_futex (94368 bytes)
+[INFO]    Loaded: /bin/test_net_dispatch (107736 bytes)
+[INFO]    Loaded: /bin/test_shm_dispatch (105752 bytes)
+[INFO]    Loaded: /bin/diag_shm_stress (111376 bytes)
+[INFO]    Loaded: /bin/fake_interp (4856 bytes)
+[INFO]    Loaded: /bin/hello_dyn (80256 bytes)
+[INFO]    Loaded: /bin/test_pt_interp (86040 bytes)
+[INFO]    Loaded: /bin/auxv_interp (16552 bytes)
+[INFO]    Loaded: /bin/hello_auxv (80256 bytes)
+[INFO]    Loaded: /bin/ld-musl-x86_64.so.1 (654440 bytes)
+[INFO]    Loaded: /bin/hello_musl (8944 bytes)
+[INFO]    Loaded: /bin/test_dynlink (114136 bytes)
+[INFO]    Loaded: /bin/test_signal_musl (11936 bytes)
+[INFO]    Loaded: /bin/test_env_musl (10928 bytes)
+[INFO]    Loaded: /bin/test_fileio_musl (10688 bytes)
+[INFO]    Loaded: /bin/test_malloc_musl (10856 bytes)
+[INFO]    Loaded: /bin/test_fork_musl (10152 bytes)
+[INFO]    Loaded: /bin/test_pipe_musl (11360 bytes)
+[INFO]    Loaded: /bin/test_stat_musl (12376 bytes)
+[INFO]    Loaded: /bin/test_pthread_musl (14232 bytes)
+[INFO]    Loaded: /bin/test_ai_guard (86744 bytes)
+[INFO]    Loaded: /bin/test_net_e2e (97144 bytes)
+[INFO]    Loaded: /bin/test_integration (117536 bytes)
+[INFO]    Loaded: /bin/test_sustained (98160 bytes)
+[INFO]    Loaded: /bin/test_stress_mt (24816 bytes)
+[INFO]    Loaded: /bin/bench_ai_throughput (99064 bytes)
+[INFO]    Loaded: /bin/bench_csw_1ms (101240 bytes)
+[INFO]    Loaded: /bin/bench_soak_5min (103040 bytes)
+[INFO]    Loaded: /bin/bench_hugepage_tlb (100608 bytes)
+[INFO]    Loaded: /bin/bench_ai_scale (113000 bytes)
+[INFO]    Loaded: /bin/test_npu_direct (92208 bytes)
+[INFO]    Loaded: /bin/test_ai_latency (100608 bytes)
+[INFO]    Loaded: /bin/bench_2026_frontier (132944 bytes)
+[INFO]    Loaded: /bin/test_agent_chaos (120280 bytes)
+[INFO]    Loaded: /bin/test_advanced_chaos (109664 bytes)
+[INFO]    Loaded: /bin/test_model_load (105696 bytes)
+[INFO]    Loaded: /bin/test_health_check (99160 bytes)
+[INFO]    Loaded: /bin/test_agent_cluster (116256 bytes)
+[INFO]    Loaded: /bin/test_torture (107744 bytes)
+[INFO]    Loaded: /bin/test_ai_exploit_v2 (109688 bytes)
+[INFO]    Loaded: /bin/test_max_saturation (101600 bytes)
+[INFO]    Loaded: /bin/test_vmm_soak (104024 bytes)
+[INFO]    Loaded: /bin/test_security_check (89464 bytes)
+[INFO]    Loaded: /bin/test_signal_lifetime (99592 bytes)
+[INFO]  Loaded 88 embedded binaries
+[INFO]  Registering file system syscalls
+[WARN]  Syscall 2: overwriting handler 0xFFFFFFFF82024740 with 0xFFFFFFFF8203EDD0
+[WARN]  Syscall 3: overwriting handler 0xFFFFFFFF82024760 with 0xFFFFFFFF8203EF10
+[WARN]  Syscall 0: overwriting handler 0xFFFFFFFF82024730 with 0xFFFFFFFF8203F5B0
+[WARN]  Syscall 1: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203F140
+[WARN]  Syscall 8: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820408F0
+[WARN]  Syscall 4: overwriting handler 0xFFFFFFFF82024790 with 0xFFFFFFFF82041AB0
+[WARN]  Syscall 5: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041420
+[WARN]  Syscall 76: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041390
+[WARN]  Syscall 77: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203E8C0
+[WARN]  Syscall 74: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041370
+[WARN]  Syscall 83: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820412E0
+[WARN]  Syscall 84: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041260
+[WARN]  Syscall 78: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203FF60
+[WARN]  Syscall 87: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820411E0
+[WARN]  Syscall 82: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041120
+[WARN]  Syscall 79: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041040
+[WARN]  Syscall 80: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040FC0
+[WARN]  Syscall 32: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040A40
+[WARN]  Syscall 33: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203FBE0
+[WARN]  Syscall 22: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203FA60
+[WARN]  Syscall 165: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040E70
+[WARN]  Syscall 166: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040DF0
+[WARN]  Syscall 137: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040CD0
+[WARN]  Syscall 7: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040A90
+[WARN]  Syscall 72: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040910
+[WARN]  Syscall 6: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041600
+[WARN]  Syscall 17: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040770
+[WARN]  Syscall 18: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820405F0
+[WARN]  Syscall 89: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040440
+[WARN]  Syscall 88: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040370
+[WARN]  Syscall 86: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820402B0
+[WARN]  Syscall 90: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040220
+[WARN]  Syscall 91: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040200
+[WARN]  Syscall 92: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040160
+[WARN]  Syscall 93: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82040140
+[WARN]  Syscall 217: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203FC40
+[WARN]  Syscall 292: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203FB00
+[WARN]  Syscall 293: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203F970
+[WARN]  Syscall 16: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203F7C0
+[WARN]  Syscall 19: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203F370
+[WARN]  Syscall 20: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203EF30
+[WARN]  Syscall 21: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203EE70
+[WARN]  Syscall 257: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203ED10
+[WARN]  Syscall 262: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82041840
+[WARN]  Syscall 318: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203EBB0
+[WARN]  Syscall 332: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203E6E0
+[WARN]  Syscall 280: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203E970
+[INFO]  Pipe subsystem initialized (64 max pipes)
+[INFO]  Registering epoll/select/eventfd syscalls (Task 1.3)
+[WARN]  Syscall 213: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203E5B0
+[WARN]  Syscall 232: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203D840
+[WARN]  Syscall 233: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203D5C0
+[WARN]  Syscall 291: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203E470
+[WARN]  Syscall 23: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203DB70
+[WARN]  Syscall 284: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8203D460
+[INFO]  Registering process syscalls
+[WARN]  Syscall 12: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 9: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 10: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 11: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 35: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 56: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 57: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 158: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 218: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 273: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 59: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 60: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 231: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 61: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 39: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 110: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 186: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 102: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 104: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 105: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 106: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 112: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 121: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[WARN]  Syscall 109: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82044A00
+[INFO]  Process syscalls registered
+[INFO]  Registering signal syscalls
+[WARN]  Syscall 62: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 13: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 14: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 34: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 37: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 15: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 200: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[WARN]  Syscall 234: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202C7B0
+[INFO]  Signal syscalls registered (kill/sigaction/sigprocmask/pause/alarm/rt_sigreturn/tgkill)
+[INFO]  Registering time syscalls
+[WARN]  Syscall 202: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820462B0
+[WARN]  Syscall 96: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820462B0
+[WARN]  Syscall 228: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820462B0
+[WARN]  Syscall 63: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820462B0
+[INFO]  Boot time set to 1771113600
+[INFO]  Time syscalls registered
+[INFO]  Initializing futex subsystem (Task 1.5)
+[WARN]  Syscall 202: overwriting handler 0xFFFFFFFF820462B0 with 0xFFFFFFFF8202D4C0
+[INFO]  futex(202) registered — 64 slots, 16 hash buckets
+[INFO]  Registering POSIX core syscalls (Task 1.5)
+[WARN]  Syscall 36: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202EA00
+[WARN]  Syscall 38: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202EA00
+[WARN]  Syscall 97: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202EA00
+[WARN]  Syscall 98: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202EA00
+[WARN]  Syscall 99: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202EA00
+[WARN]  Syscall 160: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8202EA00
+[INFO]  POSIX core syscalls registered (getrusage/getrlimit/setrlimit/setitimer/getitimer/sysinfo)
+[INFO]  Benchmark: TSC freq ~13735800 kHz (13735 MHz)
+[INFO]  Registering benchmark syscall (SYS_BENCH_READ=222)
+[WARN]  Syscall 222: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF8207F3C0
+[INFO]  Initializing AI Memory Guard
+[INFO]  [AI-GUARD] AI-KASLR v2: base=0xFFFF888740000000 (offset=0x640000000, entropy-subsystem)
+[INFO]  [AI-GUARD] Heartbeat page at VA=0xFFFFFFFFFFFFF000 phys=0x2479C000 (PWT)
+[INFO]  [AI-GUARD] Completion Ring: 62 entries at heartbeat+16
+[INFO]  [AI-GUARD] Submission Queue: 31 entries at heartbeat+1024 (SNTL=0x534E544C)
+[INFO]  [AI-GUARD] Doorbell matrix at heartbeat+2048
+[INFO]  [AI-GUARD] ****************************************************
+[INFO]  [AI-GUARD] Processor Tier Detected: LEGACY TIER
+[INFO]  [AI-GUARD] ****************************************************
+[INFO]  [AI-GUARD] SIMD: AVX2=0 AVX-512F=0 OSXSAVE=0 path=ERMS
+[INFO]  [SILICON] CR4=0x620 CR0.WP=1 — hardened
+[AI-GUARD] Subsystem initialized
+[AI-GUARD] PTE bits: MONITORED=9 PROTECTED=10 GUARD=11
+[INFO]  AI Guard subsystem ready
+[INFO]  [AI-MONITOR] Access monitoring initialized
+[INFO]  [AI-MONITOR] Config: threshold=10000 window=10 ticks
+[INFO]  Initializing Guardian Seal (Immutable Source Lock)
+[INFO]  [GUARDIAN] Seal initialized: .text size=519433 bytes, hash=10FC676C...
+[INFO]  [RECOVERY] Bridge initialized with sovereign key
+[INFO]  Initializing Vector VFS subsystem
+[INFO]  [VecVFS] Subsystem initialized (shards=1024, dim=64, payload=256B)
+[INFO]  Initializing Sovereign Neural Interface
+[INFO]  [SNI] Sovereign Neural Interface initialized (max_inject=3, sessions=4)
+[INFO]  Initializing vScreen Perception Layer
+[INFO]  [VSCREEN] Perception layer initialized (4 capture slots)
+[INFO]  Initializing Agentic Mesh Protocol
+[INFO]  [MESH] Agentic Mesh initialized (4 slots, trust=500 initial, SMP-safe)
+[INFO]  Initializing Sovereign Action Bridge
+[INFO]  [ACTION-BRIDGE] Sovereign Action Bridge initialized (16 slots, 64 audit ring, 15 default allowlist entries)
+[INFO]  Initializing vSpace Desktop Shell
+[INFO]  [vSpace] Desktop shell initialized (4 workspaces, 16 windows)
+[INFO]  Initializing Sovereign Clipboard
+[INFO]  [sClip] Sovereign Clipboard initialized (ring=16, 3-layer DLP)
+[INFO]  [SOVEREIGN] VOS3 Build Mode: GENESIS_RC1
+[INFO]  [SOVEREIGN] Guardian Seal: Runtime SHA-256 of .text
+[INFO]  [SOVEREIGN] Audit Suite: STRIPPED
+[INFO]  [SOVEREIGN] Optimization: -O3 (crypto/ai), -O2 (core)
+[INFO]  Initializing Device Subsystem
+[INFO]  Initializing device subsystem
+[INFO]  Initializing device subsystem
+[INFO]  Device subsystem initialized
+[INFO]    Max devices: 64
+[INFO]    Major range: 0-15
+[INFO]  Registering device syscalls
+[WARN]  Syscall 444: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82021400
+[INFO]  Initializing device drivers
+[INFO]  Registering memory devices
+[INFO]  Memory devices registered: null, zero, random, urandom
+[INFO]  Registering TTY devices
+[INFO]  TTY devices registered: console, tty
+[INFO]  Keyboard driver initialized (PS/2 Set 1, US QWERTY)
+[AI-TELEMETRY] Device initialized at /dev/ai_telemetry
+[AI-TELEMETRY] IOCTL commands: GET_STATS=0x4101 RESET=0x4102
+[INFO]  Device subsystem initialized
+[SMP-TELEMETRY] Device initialized at /dev/smp
+[INFO]  Initializing Network Subsystem (Phase 30)
+[INFO]  [VIRTIO-NET] Initializing hardened VirtIO network driver
+[INFO]  [VIRTIO-NET] Security: IRQ budget=32, MTU max=1522, Desc max=256
+[ERROR] [VIRTIO] Failed to map VirtQueue memory
+[ERROR] [VIRTIO-NET] Failed to initialize RX queue
+[WARN]  VirtIO-Net driver initialization failed (error -1)
+[INFO]  [NET] Initializing network subsystem
+[INFO]  [NET] Network subsystem initialized
+[INFO]  [NET] Security: Frame min=60 max=1522, IRQ budget=32
+[INFO]  [ARP] ARP subsystem initialized (cache size=64)
+[INFO]  [ARP-SEC] CVE-2026-25060: Strict ARP validation ENABLED
+[INFO]  [ARP-SEC]   - Gratuitous ARP: DROP (except gateway)
+[INFO]  [ARP-SEC]   - Unsolicited replies: DROP
+[INFO]  [IP] IPv4 subsystem initialized
+[INFO]  [IP] Security: Fragments=DROP, Checksum=VERIFY
+[INFO]  [ICMP] ICMP subsystem initialized
+[INFO]  [ICMP] Rate limit: 10 pings/sec (token bucket)
+[INFO]  [ICMP] Zero-allocation pool: 8 buffers x 1522 bytes
+[INFO]  [UDP] UDP subsystem initialized
+[INFO]  [UDP] Port hash table: 1024 entries (O(1) demux)
+[INFO]  [UDP] Max probe depth: 8
+[INFO]  [TCP] TCP subsystem initialized
+[INFO]  [TCP] PCB pool: 128 connections
+[INFO]  [TCP] MSS: 1460 bytes, Window: 65535 bytes
+[INFO]  [TCP-SEC] ISN randomization: ENABLED (RFC 6528)
+[INFO]  [SOCKET] Socket subsystem initialized
+[INFO]  [SOCKET] Pool size: 1024 sockets
+[INFO]  [SOCKET] FD range: 100-1123
+[INFO]  [SOCKET-SEC] Privileged ports (<1024): CAP_NET_ADMIN required
+[WARN]  Syscall 430: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072F50
+[WARN]  Syscall 431: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820731F0
+[WARN]  Syscall 435: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820734F0
+[WARN]  Syscall 436: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073950
+[WARN]  Syscall 432: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073CD0
+[WARN]  Syscall 433: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072D00
+[WARN]  Syscall 434: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073EF0
+[WARN]  Syscall 437: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82074170
+[WARN]  Syscall 438: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82074380
+[WARN]  Syscall 41: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072F50
+[WARN]  Syscall 42: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073EF0
+[WARN]  Syscall 43: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072D00
+[WARN]  Syscall 44: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820734F0
+[WARN]  Syscall 45: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073950
+[WARN]  Syscall 46: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820734F0
+[WARN]  Syscall 47: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073950
+[WARN]  Syscall 49: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF820731F0
+[WARN]  Syscall 50: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82073CD0
+[WARN]  Syscall 441: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072690
+[WARN]  Syscall 440: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072730
+[WARN]  Syscall 54: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072690
+[WARN]  Syscall 55: overwriting handler 0xFFFFFFFF820248E0 with 0xFFFFFFFF82072730
+[INFO]  [SOCKET] Registered socket syscalls (VOS3: 150-162, Linux: 41-55)
+[INFO]  [SOCKET] Protocol dispatch via socket_ops vtable (UDP + TCP)
+[INFO]  [NET-SEC] ========================================
+[INFO]  [NET-SEC] Running 'Packet of Death' security tests
+[INFO]  [NET-SEC] Zero Trust Network Defense Active
+[INFO]  [NET-SEC] ========================================
+[WARN]  [NET-SEC] Ethernet RX: Oversized packet rejected (2522 > 1522)
+[INFO]  [NET-SEC] Test: Oversized packet correctly REJECTED
+[WARN]  [NET-SEC] Ethernet RX: Undersized packet rejected (10 < 60)
+[INFO]  [NET-SEC] Test: Undersized packet correctly REJECTED
+[WARN]  [NET-SEC] Ethernet RX: Buffer not validated
+[INFO]  [NET-SEC] Test: Unvalidated buffer correctly REJECTED
+[INFO]  [NET-SEC] Test: Simulating flood attack (1000 packets)...
+[ERROR] [FLOOD-TEST] Driver not initialized
+[WARN]  [NET-SEC] Test: Flood test skipped (driver not ready)
+[INFO]  [NET-SEC] ========================================
+[INFO]  [NET-SEC] All 4/4 security tests PASSED
+[INFO]  [NET-SEC] Network stack is CVE-hardened
+[INFO]  [NET-SEC] DoS attack throttling: ACTIVE
+[INFO]  [NET-SEC] MAC filtering: ENABLED (no promiscuous)
+[INFO]  [NET-SEC] ========================================
+[INFO]  [DAY4] ========================================
+[INFO]  [DAY4] Protocol Stack Tests (Fast AND Secure)
+[INFO]  [DAY4] ========================================
+[INFO]  [DAY4] Test 1: ICMP Ping Request -> Reply
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [DAY4]   [PASS] Echo Reply generated
+[INFO]  [DAY4] Test 2: ICMP Rate Limiting (Token Bucket)
+[INFO]  [ICMP-TEST] Sending 50 pings to test rate limiting...
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[INFO]  [ICMP] Echo Reply: 127.0.0.1 -> 192.168.0.1 id=1 seq=1 (zero-alloc)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[WARN]  [ICMP-SEC] Rate limited (>10 pings/sec)
+[INFO]  [ICMP-TEST] Result: 30/50 rate limited
+[INFO]  [DAY4]   [PASS] Rate limiting active: 30/50 throttled
+[INFO]  [DAY4] ========================================
+[INFO]  [DAY4] All 2/2 protocol tests PASSED
+[INFO]  [DAY4] Performance: likely()/unlikely() optimized
+[INFO]  [DAY4] Security: Fragments=DROP, Gratuitous ARP=DROP
+[INFO]  [DAY4] ========================================
+[INFO]  Enabling interrupts
+[INFO]  Creating kernel tasks
+[INFO]  Creating kernel tasks...
+[INFO]  Kernel tasks created
+[INFO]  Checking system configuration
+[INFO]  [CONFIG] System not provisioned - wizard required
+[INFO]  =================================================
+[INFO]    HEADLESS AUDIT MODE - Phase 25 Stress Test     
+[INFO]  =================================================
+[INFO]  Bypassing provisioning, spawning init directly...
+[INFO]  Spawning init process...
+[INFO]  Init task created (PID 1)
+[INFO]  Kernel initialization complete!
+
+VOS3 HEADLESS AUDIT MODE.
+Running Phase 25 Stress Test...
+[INFO]  Bridge polling task created
+[INFO]  Boot-secret scrub: skipped 1 unmapped page(s) (low identity / KPTI-stripped; TS-2026-PF_MEMSET_SCRUB)
+[INFO]  Boot secrets scrubbed (32-bit stack + 64KB boot stack)
+[INFO]  Starting scheduler (SMP-aware)
+[INFO]  First task: init (CPU 0)
+[INFO]  Init: Kernel init task starting
+[INFO]  Init: Found init at '/bin/init'
+[INFO]  Init: Executing '/bin/init'
+[INFO]  exec: Loading '/bin/init' (pid=1)
+[INFO]  exec: Starting 'init' at 0x403EBF (sp=0x7FFFFFEFFF70)
+
+===========================================
+  VOS3 Init System (PID 1)
+===========================================
+
+Init: Starting system initialization...
+Init: Environment configured
+
+===========================================
+  VOS3 WEEK 2 BENCHMARK VERIFICATION
+  Running all benchmark programs
+===========================================
+
+=== /bin directory listing ===
+  [FOUND] /bin/bench_csw
+  [FOUND] /bin/bench_isolate
+  [FOUND] /bin/bench_persist
+  [FOUND] /bin/bench_overhead
+  [FOUND] /bin/bench_sigpipe_test
+  [FOUND] /bin/init
+  [FOUND] /bin/sh
+  [FOUND] /bin/cat
+  [FOUND] /bin/ai_audit
+  [FOUND] /bin/ai_exploit
+  Found 10 / 10 expected binaries
+
+  TEST FILTER: "signal"
+  (only running tests matching filter)
+
+=== SKIP: bench_csw ===
+=== SKIP: test_max_saturation ===
+=== SKIP: bench_isolate ===
+=== SKIP: bench_persist ===
+=== SKIP: bench_overhead ===
+=== SKIP: bench_sigpipe_test ===
+=== SKIP: ai_exploit ===
+=== SKIP: bench_bugfix_test ===
+=== SKIP: bench_phase13_test ===
+=== SKIP: bench_procfs_test ===
+=== SKIP: bench_poll_test ===
+=== SKIP: bench_fs_test ===
+=== SKIP: bench_net_test ===
+=== SKIP: bench_stress_test ===
+=== SKIP: bench_fuzz_test ===
+=== SKIP: bench_sched_test ===
+=== SKIP: bench_app_isolation_test ===
+=== SKIP: test_posix_fs ===
+=== SKIP: test_epoll ===
+=== SKIP: test_posix_core ===
+=== SKIP: test_futex ===
+=== SKIP: bench_thread_test ===
+=== SKIP: stress_thread ===
+=== SKIP: test_net_dispatch ===
+=== SKIP: test_shm_dispatch ===
+=== SKIP: diag_shm_stress ===
+=== SKIP: bench_hugepage_tlb ===
+=== SKIP: test_pt_interp ===
+=== SKIP: test_dynlink ===
+=== Running: test_signal_musl ===
+[INFO]  fork: Created child pid=100 from parent pid=1
+[INFO]  exec: Loading '/bin/test_signal_musl' (pid=100)
+[INFO]  exec: ELF has PT_INTERP='/bin/ld-musl-x86_64.so.1', loading interpreter at 0x40000000
+[INFO]  exec: Interpreter loaded, entry=0x40021240, base=0x40000000
+[INFO]  exec: Starting 'test_signal_musl' at 0x40021240 (sp=0x7FFFFFEFFEA0) [via interpreter]
+[PASS] test_signal: sigaction_setup
+[INFO]  [SIG] Delivering signal 10 to 'test_signal_musl', handler=0x0000000000400420
+[INFO]  [SIG] Frame: handler=0x0000000000400420 signum=10 rsp=0x7FFFFFEFFC88 restorer=0x400696F5
+[INFO]  [SIG] rt_sigreturn: restored RIP=0x400570F1 RSP=0x7FFFFFEFFDB0 RAX=0x0
+[PASS] test_signal: raise_sigusr1
+[INFO]  [SIG] Delivering signal 10 to 'test_signal_musl', handler=0x0000000000000001
+[PASS] test_signal: sig_ign
+[INFO]  [SIG] Delivering signal 12 to 'test_signal_musl', handler=0x0000000000400420
+[INFO]  [SIG] Frame: handler=0x0000000000400420 signum=12 rsp=0x7FFFFFEFFC88 restorer=0x400696F5
+[INFO]  [SIG] rt_sigreturn: restored RIP=0x400570F1 RSP=0x7FFFFFEFFDB0 RAX=0x0
+[PASS] test_signal: raise_sigusr2
+[INFO]  [SIG] Delivering signal 10 to 'test_signal_musl', handler=0x0000000000400420
+[INFO]  [SIG] Frame: handler=0x0000000000400420 signum=10 rsp=0x7FFFFFEFFC88 restorer=0x400696F5
+[INFO]  [SIG] rt_sigreturn: restored RIP=0x400570F1 RSP=0x7FFFFFEFFDB0 RAX=0x0
+[PASS] test_signal: re_raise_sigusr1
+[INFO]  Task 'test_signal_musl' (pid=100) exiting with code 0
+=== test_signal_musl: exit=0 ===
+
+=== Running: test_signal_lifetime ===
+[INFO]  fork: Created child pid=101 from parent pid=1
+[INFO]  exec: Loading '/bin/test_signal_lifetime' (pid=101)
+[INFO]  exec: Starting 'test_signal_lifetime' at 0x4001AB (sp=0x7FFFFFEFFF60)
+[INFO]  fork: Created child pid=102 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=102) exiting with code 0
+[INFO]  fork: Created child pid=103 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=103) exiting with code 0
+[INFO]  fork: Created child pid=104 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=104) exiting with code 0
+[INFO]  fork: Created child pid=105 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=105) exiting with code 0
+[INFO]  fork: Created child pid=106 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=106) exiting with code 0
+[INFO]  fork: Created child pid=107 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=107) exiting with code 0
+[INFO]  fork: Created child pid=108 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=108) exiting with code 0
+[INFO]  fork: Created child pid=109 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=109) exiting with code 0
+[INFO]  fork: Created child pid=110 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=110) exiting with code 0
+[INFO]  fork: Created child pid=111 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=111) exiting with code 0
+[INFO]  fork: Created child pid=112 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=112) exiting with code 0
+[INFO]  fork: Created child pid=113 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=113) exiting with code 0
+[INFO]  fork: Created child pid=114 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=114) exiting with code 0
+[INFO]  fork: Created child pid=115 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=115) exiting with code 0
+[INFO]  fork: Created child pid=116 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=116) exiting with code 0
+[INFO]  fork: Created child pid=117 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=117) exiting with code 0
+[INFO]  fork: Created child pid=118 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=118) exiting with code 0
+[INFO]  fork: Created child pid=119 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=119) exiting with code 0
+[INFO]  fork: Created child pid=120 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=120) exiting with code 0
+[INFO]  fork: Created child pid=121 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=121) exiting with code 0
+[INFO]  fork: Created child pid=122 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=122) exiting with code 0
+[INFO]  fork: Created child pid=123 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=123) exiting with code 0
+[INFO]  fork: Created child pid=124 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=124) exiting with code 0
+[INFO]  fork: Created child pid=125 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=125) exiting with code 0
+[INFO]  fork: Created child pid=126 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=126) exiting with code 0
+[INFO]  fork: Created child pid=127 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=127) exiting with code 0
+[INFO]  fork: Created child pid=128 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=128) exiting with code 0
+[INFO]  fork: Created child pid=129 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=129) exiting with code 0
+[INFO]  fork: Created child pid=130 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=130) exiting with code 0
+[INFO]  fork: Created child pid=131 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=131) exiting with code 0
+[INFO]  fork: Created child pid=132 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=132) exiting with code 0
+[INFO]  fork: Created child pid=133 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=133) exiting with code 0
+[INFO]  fork: Created child pid=134 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=134) exiting with code 0
+[INFO]  fork: Created child pid=135 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=135) exiting with code 0
+[INFO]  fork: Created child pid=136 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=136) exiting with code 0
+[INFO]  fork: Created child pid=137 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=137) exiting with code 0
+[INFO]  fork: Created child pid=138 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=138) exiting with code 0
+[INFO]  fork: Created child pid=139 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=139) exiting with code 0
+[INFO]  fork: Created child pid=140 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=140) exiting with code 0
+[INFO]  fork: Created child pid=141 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=141) exiting with code 0
+[INFO]  fork: Created child pid=142 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=142) exiting with code 0
+[INFO]  fork: Created child pid=143 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=143) exiting with code 0
+[INFO]  fork: Created child pid=144 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=144) exiting with code 0
+[INFO]  fork: Created child pid=145 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=145) exiting with code 0
+[INFO]  fork: Created child pid=146 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=146) exiting with code 0
+[INFO]  fork: Created child pid=147 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=147) exiting with code 0
+[INFO]  fork: Created child pid=148 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=148) exiting with code 0
+[INFO]  fork: Created child pid=149 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=149) exiting with code 0
+[INFO]  fork: Created child pid=150 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=150) exiting with code 0
+[INFO]  fork: Created child pid=151 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=151) exiting with code 0
+[INFO]  fork: Created child pid=152 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=152) exiting with code 0
+[INFO]  fork: Created child pid=153 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=153) exiting with code 0
+[INFO]  fork: Created child pid=154 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=154) exiting with code 0
+[INFO]  fork: Created child pid=155 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=155) exiting with code 0
+[INFO]  fork: Created child pid=156 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=156) exiting with code 0
+[INFO]  Task 'test_signal_lifetime' (pid=157) exiting with code 0
+[INFO]  fork: Created child pid=157 from parent pid=101
+[INFO]  fork: Created child pid=158 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=158) exiting with code 0
+[INFO]  fork: Created child pid=159 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=159) exiting with code 0
+[INFO]  fork: Created child pid=160 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=160) exiting with code 0
+[INFO]  fork: Created child pid=161 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=161) exiting with code 0
+[INFO]  fork: Created child pid=162 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=162) exiting with code 0
+[INFO]  fork: Created child pid=163 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=163) exiting with code 0
+[INFO]  fork: Created child pid=164 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=164) exiting with code 0
+[INFO]  fork: Created child pid=165 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=165) exiting with code 0
+[INFO]  fork: Created child pid=166 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=166) exiting with code 0
+[INFO]  fork: Created child pid=167 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=167) exiting with code 0
+[INFO]  fork: Created child pid=168 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=168) exiting with code 0
+[INFO]  fork: Created child pid=169 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=169) exiting with code 0
+[INFO]  fork: Created child pid=170 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=170) exiting with code 0
+[INFO]  fork: Created child pid=171 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=171) exiting with code 0
+[INFO]  fork: Created child pid=172 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=172) exiting with code 0
+[INFO]  fork: Created child pid=173 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=173) exiting with code 0
+[INFO]  fork: Created child pid=174 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=174) exiting with code 0
+[INFO]  fork: Created child pid=175 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=175) exiting with code 0
+[INFO]  fork: Created child pid=176 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=176) exiting with code 0
+[INFO]  fork: Created child pid=177 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=177) exiting with code 0
+[INFO]  fork: Created child pid=178 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=178) exiting with code 0
+[INFO]  fork: Created child pid=179 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=179) exiting with code 0
+[INFO]  fork: Created child pid=180 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=180) exiting with code 0
+[INFO]  fork: Created child pid=181 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=181) exiting with code 0
+[INFO]  fork: Created child pid=182 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=182) exiting with code 0
+[INFO]  fork: Created child pid=183 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=183) exiting with code 0
+[INFO]  fork: Created child pid=184 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=184) exiting with code 0
+[INFO]  fork: Created child pid=185 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=185) exiting with code 0
+[INFO]  fork: Created child pid=186 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=186) exiting with code 0
+[INFO]  fork: Created child pid=187 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=187) exiting with code 0
+[INFO]  fork: Created child pid=188 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=188) exiting with code 0
+[INFO]  fork: Created child pid=189 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=189) exiting with code 0
+[INFO]  fork: Created child pid=190 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=190) exiting with code 0
+[INFO]  fork: Created child pid=191 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=191) exiting with code 0
+[INFO]  fork: Created child pid=192 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=192) exiting with code 0
+[INFO]  fork: Created child pid=193 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=193) exiting with code 0
+[INFO]  fork: Created child pid=194 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=194) exiting with code 0
+[INFO]  fork: Created child pid=195 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=195) exiting with code 0
+[INFO]  fork: Created child pid=196 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=196) exiting with code 0
+[INFO]  fork: Created child pid=197 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=197) exiting with code 0
+[INFO]  fork: Created child pid=198 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=198) exiting with code 0
+[INFO]  fork: Created child pid=199 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=199) exiting with code 0
+[INFO]  fork: Created child pid=200 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=200) exiting with code 0
+[INFO]  fork: Created child pid=201 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=201) exiting with code 0
+[INFO]  fork: Created child pid=202 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=202) exiting with code 0
+[INFO]  fork: Created child pid=203 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=203) exiting with code 0
+[INFO]  fork: Created child pid=204 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=204) exiting with code 0
+[INFO]  fork: Created child pid=205 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=205) exiting with code 0
+[INFO]  fork: Created child pid=206 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=206) exiting with code 0
+[INFO]  fork: Created child pid=207 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=207) exiting with code 0
+[INFO]  fork: Created child pid=208 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=208) exiting with code 0
+[INFO]  fork: Created child pid=209 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=209) exiting with code 0
+[INFO]  fork: Created child pid=210 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=210) exiting with code 0
+[INFO]  fork: Created child pid=211 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=211) exiting with code 0
+[INFO]  fork: Created child pid=[INFO]  Task 'test_signal_lifetime' (pid=212) exiting with code 0
+212 from parent pid=101
+[INFO]  fork: Created child pid=213 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=213) exiting with code 0
+[INFO]  fork: Created child pid=214 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=214) exiting with code 0
+[INFO]  fork: Created child pid=215 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=215) exiting with code 0
+[INFO]  fork: Created child pid=216 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=216) exiting with code 0
+[INFO]  fork: Created child pid=217 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=217) exiting with code 0
+[INFO]  fork: Created child pid=218 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=218) exiting with code 0
+[INFO]  fork: Created child pid=219 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=219) exiting with code 0
+[INFO]  fork: Created child pid=220 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=220) exiting with code 0
+[INFO]  fork: Created child pid=221 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=221) exiting with code 0
+[INFO]  fork: Created child pid=222 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=222) exiting with code 0
+[INFO]  fork: Created child pid=223 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=223) exiting with code 0
+[INFO]  fork: Created child pid=224 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=224) exiting with code 0
+[INFO]  fork: Created child pid=225 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=225) exiting with code 0
+[INFO]  fork: Created child pid=226 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=226) exiting with code 0
+[INFO]  fork: Created child pid=227 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=227) exiting with code 0
+[INFO]  fork: Created child pid=228 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=228) exiting with code 0
+[INFO]  fork: Created child pid=229 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=229) exiting with code 0
+[INFO]  fork: Created child pid=230 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=230) exiting with code 0
+[INFO]  fork: Created child pid=231 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=231) exiting with code 0
+[INFO]  fork: Created child pid=232 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=232) exiting with code 0
+[INFO]  fork: Created child pid=233 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=233) exiting with code 0
+[INFO]  fork: Created child pid=234 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=234) exiting with code 0
+[INFO]  fork: Created child pid=235 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=235) exiting with code 0
+[INFO]  fork: Created child pid=236 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=236) exiting with code 0
+[INFO]  fork: Created child pid=237 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=237) exiting with code 0
+[INFO]  fork: Created child pid=238 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=238) exiting with code 0
+[INFO]  fork: Created child pid=239 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=239) exiting with code 0
+[INFO]  fork: Created child pid=240 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=240) exiting with code 0
+[INFO]  fork: Created child pid=241 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=241) exiting with code 0
+[INFO]  fork: Created child pid=242 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=242) exiting with code 0
+[INFO]  fork: Created child pid=243 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=243) exiting with code 0
+[INFO]  fork: Created child pid=244 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=244) exiting with code 0
+[INFO]  fork: Created child pid=245 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=245) exiting with code 0
+[INFO]  fork: Created child pid=246 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=246) exiting with code 0
+[INFO]  fork: Created child pid=247 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=247) exiting with code 0
+[INFO]  fork: Created child pid=248 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=248) exiting with code 0
+[INFO]  fork: Created child pid=249 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=249) exiting with code 0
+[INFO]  fork: Created child pid=250 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=250) exiting with code 0
+[INFO]  fork: Created child pid=251 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=251) exiting with code 0
+[INFO]  fork: Created child pid=252 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=252) exiting with code 0
+[INFO]  fork: Created child pid=253 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=253) exiting with code 0
+[INFO]  fork: Created child pid=254 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=254) exiting with code 0
+[INFO]  fork: Created child pid=255 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=255) exiting with code 0
+[INFO]  fork: Created child pid=256 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=256) exiting with code 0
+[INFO]  fork: Created child pid=257 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=257) exiting with code 0
+[INFO]  fork: Created child pid=258 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=258) exiting with code 0
+[INFO]  fork: Created child pid=259 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=259) exiting with code 0
+[INFO]  fork: Created child pid=260 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=260) exiting with code 0
+[INFO]  fork: Created child pid=261 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=261) exiting with code 0
+[INFO]  fork: Created child pid=262 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=262) exiting with code 0
+[INFO]  fork: Created child pid=263 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=263) exiting with code 0
+[INFO]  fork: Created child pid=264 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=264) exiting with code 0
+[INFO]  fork: Created child pid=265 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=265) exiting with code 0
+[INFO]  fork: Created child pid=266 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=266) exiting with code 0
+[INFO]  fork: Created child pid=267 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=267) exiting with code 0
+[INFO]  fork: Created child pid=268 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=268) exiting with code 0
+[INFO]  fork: Created child pid=269 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=269) exiting with code 0
+[INFO]  fork: Created child pid=270 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=270) exiting with code 0
+[INFO]  fork: Created child pid=271 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=271) exiting with code 0
+[INFO]  fork: Created child pid=272 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=272) exiting with code 0
+[INFO]  fork: Created child pid=273 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=273) exiting with code 0
+[INFO]  fork: Created child pid=274 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=274) exiting with code 0
+[INFO]  fork: Created child pid=275 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=275) exiting with code 0
+[INFO]  fork: Created child pid=276 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=276) exiting with code 0
+[INFO]  fork: Created child pid=277 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=277) exiting with code 0
+[INFO]  fork: Created child pid=278 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=278) exiting with code 0
+[INFO]  fork: Created child pid=279 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=279) exiting with code 0
+[INFO]  fork: Created child pid=280 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=280) exiting with code 0
+[INFO]  fork: Created child pid=281 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=281) exiting with code 0
+[INFO]  fork: Created child pid=282 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=282) exiting with code 0
+[INFO]  fork: Created child pid=283 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=283) exiting with code 0
+[INFO]  fork: Created child pid=284 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=284) exiting with code 0
+[INFO]  fork: Created child pid=285 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=285) exiting with code 0
+[INFO]  fork: Created child pid=286 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=286) exiting with code 0
+[INFO]  fork: Created child pid=287 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=287) exiting with code 0
+[INFO]  fork: Created child pid=288 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=288) exiting with code 0
+[INFO]  fork: Created child pid=289 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=289) exiting with code 0
+[INFO]  fork: Created child pid=290 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=290) exiting with code 0
+[INFO]  fork: Created child pid=291 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=291) exiting with code 0
+[INFO]  fork: Created child pid=292 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=292) exiting with code 0
+[INFO]  fork: Created child pid=293 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=293) exiting with code 0
+[INFO]  fork: Created child pid=294 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=294) exiting with code 0
+[INFO]  fork: Created child pid=295 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=295) exiting with code 0
+[INFO]  fork: Created child pid=296 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=296) exiting with code 0
+[INFO]  fork: Created child pid=297 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=297) exiting with code 0
+[INFO]  fork: Created child pid=298 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=298) exiting with code 0
+[INFO]  fork: Created child pid=299 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=299) exiting with code 0
+[INFO]  fork: Created child pid=300 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=300) exiting with code 0
+[INFO]  fork: Created child pid=301 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=301) exiting with code 0
+[INFO]  fork: Created child pid=302 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=302) exiting with code 0
+[INFO]  fork: Created child pid=303 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=303) exiting with code 0
+[INFO]  fork: Created child pid=304 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=304) exiting with code 0
+[INFO]  fork: Created child pid=305 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=305) exiting with code 0
+[INFO]  fork: Created child pid=306 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=306) exiting with code 0
+[INFO]  fork: Created child pid=307 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=307) exiting with code 0
+[INFO]  fork: Created child pid=308 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=308) exiting with code 0
+[INFO]  fork: Created child pid=309 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=309) exiting with code 0
+[INFO]  fork: Created child pid=310 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=310) exiting with code 0
+[INFO]  fork: Created child pid=311 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=311) exiting with code 0
+[INFO]  fork: Created child pid=312 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=312) exiting with code 0
+[INFO]  fork: Created child pid=313 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=313) exiting with code 0
+[INFO]  fork: Created child pid=314 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=314) exiting with code 0
+[INFO]  fork: Created child pid=315 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=315) exiting with code 0
+[INFO]  fork: Created child pid=316 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=316) exiting with code 0
+[INFO]  fork: Created child pid=317 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=317) exiting with code 0
+[INFO]  fork: Created child pid=318 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=318) exiting with code 0
+[INFO]  fork: Created child pid=319 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=319) exiting with code 0
+[INFO]  fork: Created child pid=320 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=320) exiting with code 0
+[INFO]  fork: Created child pid=321 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=321) exiting with code 0
+[INFO]  fork: Created child pid=322 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=322) exiting with code 0
+[INFO]  fork: Created child pid=323 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=323) exiting with code 0
+[INFO]  fork: Created child pid=324 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=324) exiting with code 0
+[INFO]  fork: Created child pid=325 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=325) exiting with code 0
+[INFO]  fork: Created child pid=326 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=326) exiting with code 0
+[INFO]  fork: Created child pid=327 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=327) exiting with code 0
+[INFO]  fork: Created child pid=328 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=328) exiting with code 0
+[INFO]  fork: Created child pid=329 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=329) exiting with code 0
+[INFO]  fork: Created child pid=330 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=330) exiting with code 0
+[INFO]  fork: Created child pid=331 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=331) exiting with code 0
+[INFO]  fork: Created child pid=332 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=332) exiting with code 0
+[INFO]  fork: Created child pid=333 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=333) exiting with code 0
+[INFO]  fork: Created child pid=334 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=334) exiting with code 0
+[INFO]  fork: Created child pid=335 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=335) exiting with code 0
+[INFO]  fork: Created child pid=336 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=336) exiting with code 0
+[INFO]  fork: Created child pid=337 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=337) exiting with code 0
+[INFO]  fork: Created child pid=338 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=338) exiting with code 0
+[INFO]  fork: Created child pid=339 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=339) exiting with code 0
+[INFO]  fork: Created child pid=340 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=340) exiting with code 0
+[INFO]  fork: Created child pid=341 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=341) exiting with code 0
+[INFO]  fork: Created child pid=342 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=342) exiting with code 0
+[INFO]  fork: Created child pid=343 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=343) exiting with code 0
+[INFO]  fork: Created child pid=344 from parent pid[INFO]  Task 'test_signal_lifetime' (pid=344) exiting with code 0
+=101
+[INFO]  fork: Created child pid=345 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=345) exiting with code 0
+[INFO]  fork: Created child pid=346 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=346) exiting with code 0
+[INFO]  fork: Created child pid=347 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=347) exiting with code 0
+[INFO]  fork: Created child pid=348 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=348) exiting with code 0
+[INFO]  fork: Created child pid=349 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=349) exiting with code 0
+[INFO]  fork: Created child pid=350 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=350) exiting with code 0
+[INFO]  fork: Created child pid=351 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=351) exiting with code 0
+[INFO]  fork: Created child pid=352 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=352) exiting with code 0
+[INFO]  fork: Created child pid=353 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=353) exiting with code 0
+[INFO]  fork: Created child pid=354 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=354) exiting with code 0
+[INFO]  fork: Created child pid=355 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=355) exiting with code 0
+[INFO]  fork: Created child pid=356 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=356) exiting with code 0
+[INFO]  fork: Created child pid=357 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=357) exiting with code 0
+[INFO]  fork: Created child pid=358 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=358) exiting with code 0
+[INFO]  fork: Created child pid=359 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=359) exiting with code 0
+[INFO]  fork: Created child pid=360 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=360) exiting with code 0
+[INFO]  fork: Created child pid=361 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=361) exiting with code 0
+[INFO]  fork: Created child pid=362 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=362) exiting with code 0
+[INFO]  fork: Created child pid=363 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=363) exiting with code 0
+[INFO]  fork: Created child pid=364 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=364) exiting with code 0
+[INFO]  fork: Created child pid=365 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=365) exiting with code 0
+[INFO]  fork: Created child pid=366 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=366) exiting with code 0
+[INFO]  fork: Created child pid=367 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=367) exiting with code 0
+[INFO]  fork: Created child pid=368 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=368) exiting with code 0
+[INFO]  fork: Created child pid=369 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=369) exiting with code 0
+[INFO]  fork: Created child pid=370 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=370) exiting with code 0
+[INFO]  fork: Created child pid=371 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=371) exiting with code 0
+[INFO]  fork: Created child pid=372 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=372) exiting with code 0
+[INFO]  fork: Created child pid=373 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=373) exiting with code 0
+[INFO]  fork: Created child pid=374 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=374) exiting with code 0
+[INFO]  fork: Created child pid=375 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=375) exiting with code 0
+[INFO]  fork: Created child pid=376 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=376) exiting with code 0
+[INFO]  fork: Created child pid=377 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=377) exiting with code 0
+[INFO]  fork: Created child pid=378 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=378) exiting with code 0
+[INFO]  fork: Created child pid=379 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=379) exiting with code 0
+[INFO]  fork: Created child pid=380 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=380) exiting with code 0
+[INFO]  fork: Created child pid=381 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=381) exiting with code 0
+[INFO]  fork: Created child pid=382 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=382) exiting with code 0
+[INFO]  fork: Created child pid=383 from paren[INFO]  Task 'test_signal_lifetime' (pid=383) exiting with code 0
+t pid=101
+[INFO]  fork: Created child pid=384 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=384) exiting with code 0
+[INFO]  fork: Created child pid=385 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=385) exiting with code 0
+[INFO]  fork: Created child pid=386 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=386) exiting with code 0
+[INFO]  fork: Created child pid=387 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=387) exiting with code 0
+[INFO]  fork: Created child pid=388 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=388) exiting with code 0
+[INFO]  fork: Created child pid=389 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=389) exiting with code 0
+[INFO]  fork: Created child pid=390 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=390) exiting with code 0
+[INFO]  fork: Created child pid=391 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=391) exiting with code 0
+[INFO]  fork: Created child pid=392 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=392) exiting with code 0
+[INFO]  fork: Created child pid=393 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=393) exiting with code 0
+[INFO]  fork: Created child pid=394 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=394) exiting with code 0
+[INFO]  fork: Created child pid=395 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=395) exiting with code 0
+[INFO]  fork: Created child pid=396 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=396) exiting with code 0
+[INFO]  fork: Created child pid=397 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=397) exiting with code 0
+[INFO]  fork: Created child pid=398 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=398) exiting with code 0
+[INFO]  fork: Created child pid=399 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=399) exiting with code 0
+[INFO]  fork: Created child pid=400 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=400) exiting with code 0
+[INFO]  fork: Created child pid=401 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=401) exiting with code 0
+[INFO]  fork: Created child pid=402 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=402) exiting with code 0
+[INFO]  fork: Created child pid=403 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=403) exiting with code 0
+[INFO]  fork: Created child pid=404 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=404) exiting with code 0
+[INFO]  fork: Created child pid=405 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=405) exiting with code 0
+[INFO]  fork: Created child pid=406 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=406) exiting with code 0
+[INFO]  fork: Created child pid=407 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=407) exiting with code 0
+[INFO]  fork: Created child pid=408 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=408) exiting with code 0
+[INFO]  fork: Created child pid=409 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=409) exiting with code 0
+[INFO]  fork: Created child pid=410 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=410) exiting with code 0
+[INFO]  fork: Created child pid=411 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=411) exiting with code 0
+[INFO]  fork: Created child pid=412 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=412) exiting with code 0
+[INFO]  fork: Created child pid=413 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=413) exiting with code 0
+[INFO]  fork: Created child pid=414 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=414) exiting with code 0
+[INFO]  fork: Created child pid=415 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=415) exiting with code 0
+[INFO]  fork: Created child pid=416 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=416) exiting with code 0
+[INFO]  fork: Created child pid=417 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=417) exiting with code 0
+[INFO]  fork: Created child pid=418 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=418) exiting with code 0
+[INFO]  fork: Created child pid=419 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=419) exiting with code 0
+[INFO]  fork: Created child pid=420 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=420) exiting with code 0
+[INFO]  fork: Created child pid=421 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=421) exiting with code 0
+[INFO]  fork: Created child pid=422 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=422) exiting with code 0
+[INFO]  fork: Created child pid=423 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=423) exiting with code 0
+[INFO]  fork: Created child pid=424 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=424) exiting with code 0
+[INFO]  fork: Created child pid=425 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=425) exiting with code 0
+[INFO]  fork: Created child pid=426 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=426) exiting with code 0
+[INFO]  fork: Created child pid=427 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=427) exiting with code 0
+[INFO]  fork: Created child pid=428 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=428) exiting with code 0
+[INFO]  fork: Created child pid=429 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=429) exiting with code 0
+[INFO]  fork: Created child pid=430 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=430) exiting with code 0
+[INFO]  fork: Created child pid=431 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=431) exiting with code 0
+[INFO]  fork: Created child pid=432 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=432) exiting with code 0
+[INFO]  fork: Created child pid=433 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=433) exiting with code 0
+[INFO]  fork: Created child pid=434 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=434) exiting with code 0
+[INFO]  fork: Created child pid=435 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=435) exiting with code 0
+[INFO]  fork: Created child pid=436 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=436) exiting with code 0
+[INFO]  fork: Created child pid=437 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=437) exiting with code 0
+[INFO]  fork: Created child pid=438 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=438) exiting with code 0
+[INFO]  fork: Created child pid=439 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=439) exiting with code 0
+[INFO]  fork: Created child pid=440 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=440) exiting with code 0
+[INFO]  fork: Created child pid=441 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=441) exiting with code 0
+[INFO]  fork: Created child pid=442 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=442) exiting with code 0
+[INFO]  fork: Created child pid=443 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=443) exiting with code 0
+[INFO]  fork: Created child pid=444 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=444) exiting with code 0
+[INFO]  fork: Created child pid=445 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=445) exiting with code 0
+[INFO]  fork: Created child pid=446 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=446) exiting with code 0
+[INFO]  fork: Created child pid=447 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=447) exiting with code 0
+[INFO]  fork: Created child pid=448 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=448) exiting with code 0
+[INFO]  fork: Created child pid=449 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=449) exiting with code 0
+[INFO]  fork: Created child pid=450 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=450) exiting with code 0
+[INFO]  fork: Created child pid=451 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=451) exiting with code 0
+[INFO]  fork: Created child pid=452 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=452) exiting with code 0
+[INFO]  fork: Created child pid=453 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=453) exiting with code 0
+[INFO]  fork: Created child pid=454 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=454) exiting with code 0
+[INFO]  fork: Created child pid=455 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=455) exiting with code 0
+[INFO]  fork: Created child pid=456 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=456) exiting with code 0
+[INFO]  fork: Created child pid=457 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=457) exiting with code 0
+[INFO]  fork: Created child pid=458 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=458) exiting with code 0
+[INFO]  fork: Created child pid=459 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=459) exiting with code 0
+[INFO]  fork: Created child pid=460 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=460) exiting with code 0
+[INFO]  fork: Created child pid=461 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=461) exiting with code 0
+[INFO]  fork: Created child pid=462 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=462) exiting with code 0
+[INFO]  fork: Created child pid=463 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=463) exiting with code 0
+[INFO]  fork: Created child pid=464 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=464) exiting with code 0
+[INFO]  fork: Created child pid=465 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=465) exiting with code 0
+[INFO]  fork: Created child pid=466 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=466) exiting with code 0
+[INFO]  fork: Created child pid=467 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=467) exiting with code 0
+[INFO]  fork: Created child pid=468 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=468) exiting with code 0
+[INFO]  fork: Created child pid=469 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=469) exiting with code 0
+[INFO]  fork: Created child pid=470 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=470) exiting with code 0
+[INFO]  fork: Created child pid=471 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=471) exiting with code 0
+[INFO]  fork: Created child pid=472 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=472) exiting with code 0
+[INFO]  fork: Created child pid=473 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=473) exiting with code 0
+[INFO]  fork: Created child pid=474 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=474) exiting with code 0
+[INFO]  fork: Created child pid=475 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=475) exiting with code 0
+[INFO]  fork: Created child pid=476 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=476) exiting with code 0
+[INFO]  fork: Created child pid=477 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=477) exiting with code 0
+[INFO]  fork: Created child pid=478 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=478) exiting with code 0
+[INFO]  fork: Created child pid=479 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=479) exiting with code 0
+[INFO]  fork: Created child pid=480 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=480) exiting with code 0
+[INFO]  fork: Created child pid=481 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=481) exiting with code 0
+[INFO]  fork: Created child pid=482 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=482) exiting with code 0
+[INFO]  fork: Created child pid=483 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=483) exiting with code 0
+[INFO]  fork: Created child pid=484 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=484) exiting with code 0
+[INFO]  fork: Created child pid=485 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=485) exiting with code 0
+[INFO]  fork: Created child pid=486 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=486) exiting with code 0
+[INFO]  fork: Created child pid=487 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=487) exiting with code 0
+[INFO]  fork: Created child pid=488 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=488) exiting with code 0
+[INFO]  fork: Created child pid=489 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=489) exiting with code 0
+[INFO]  fork: Created child pid=490 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=490) exiting with code 0
+[INFO]  fork: Created child pid=491 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=491) exiting with code 0
+[INFO]  fork: Created child pid=492 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=492) exiting with code 0
+[INFO]  fork: Created child pid=493 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=493) exiting with code 0
+[INFO]  fork: Created child pid=494 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=494) exiting with code 0
+[INFO]  fork: Created child pid=495 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=495) exiting with code 0
+[INFO]  fork: Created child pid=496 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=496) exiting with code 0
+[INFO]  fork: Created child pid=497 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=497) exiting with code 0
+[INFO]  fork: Created child pid=498 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=498) exiting with code 0
+[INFO]  fork: Created child pid=499 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=499) exiting with code 0
+[INFO]  fork: Created child pid=500 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=500) exiting with code 0
+[INFO]  fork: Created child pid=501 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=501) exiting with code 0
+[INFO]  fork: Created child pid=502 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=502) exiting with code 0
+[INFO]  fork: Created child pid=503 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=503) exiting with code 0
+[INFO]  fork: Created child pid=504 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=504) exiting with code 0
+[INFO]  fork: Created child pid=505 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=505) exiting with code 0
+[INFO]  fork: Created child pid=506 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=506) exiting with code 0
+[INFO]  fork: Created child pid=507 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=507) exiting with code 0
+[INFO]  fork: Created child pid=508 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=508) exiting with code 0
+[INFO]  fork: Created child pid=509 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=509) exiting with code 0
+[INFO]  fork: Created child pid=510 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=510) exiting with code 0
+[INFO]  fork: Created child pid=511 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=511) exiting with code 0
+[INFO]  fork: Created child pid=512 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=512) exiting with code 0
+[INFO]  fork: Created child pid=513 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=513) exiting with code 0
+[INFO]  fork: Created child pid=514 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=514) exiting with code 0
+[INFO]  fork: Created child pid=515 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=515) exiting with code 0
+[INFO]  fork: Created child pid=516 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=516) exiting with code 0
+[INFO]  fork: Created child pid=517 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=517) exiting with code 0
+[INFO]  fork: Created child pid=518 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=518) exiting with code 0
+[INFO]  fork: Created child pid=519 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=519) exiting with code 0
+[INFO]  fork: Created child pid=520 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=520) exiting with code 0
+[INFO]  fork: Created child pid=521 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=521) exiting with code 0
+[INFO]  fork: Created child pid=522 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=522) exiting with code 0
+[INFO]  fork: Created child pid=523 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=523) exiting with code 0
+[INFO]  fork: Created child pid=524 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=524) exiting with code 0
+[INFO]  fork: Created child pid=525 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=525) exiting with code 0
+[INFO]  fork: Created child pid=526 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=526) exiting with code 0
+[INFO]  fork: Created child pid=527 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=527) exiting with code 0
+[INFO]  fork: Created child pid=528 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=528) exiting with code 0
+[INFO]  fork: Created child pid=529 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=529) exiting with code 0
+[INFO]  fork: Created child pid=530 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=530) exiting with code 0
+[INFO]  fork: Created child pid=531 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=531) exiting with code 0
+[INFO]  fork: Created child pid=532 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=532) exiting with code 0
+[INFO]  fork: Created child pid=533 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=533) exiting with code 0
+[INFO]  fork: Created child pid=534 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=534) exiting with code 0
+[INFO]  fork: Created child pid=535 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=535) exiting with code 0
+[INFO]  fork: Created child pid=536 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=536) exiting with code 0
+[INFO]  fork: Created child pid=537 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=537) exiting with code 0
+[INFO]  fork: Created child pid=538 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=538) exiting with code 0
+[INFO]  fork: Created child pid=539 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=539) exiting with code 0
+[INFO]  fork: Created child pid=540 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=540) exiting with code 0
+[INFO]  fork: Created child pid=541 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=541) exiting with code 0
+[INFO]  fork: Created child pid=542 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=542) exiting with code 0
+[INFO]  fork: Created child pid=543 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=543) exiting with code 0
+[INFO]  fork: Created child pid=544 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=544) exiting with code 0
+[INFO]  fork: Created child pid=545 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=545) exiting with code 0
+[INFO]  fork: Created child pid=546 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=546) exiting with code 0
+[INFO]  fork: Created child pid=547 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=547) exiting with code 0
+[INFO]  fork: Created child pid=548 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=548) exiting with code 0
+[INFO]  fork: Created child pid=549 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=549) exiting with code 0
+[INFO]  fork: Created child pid=550 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=550) exiting with code 0
+[INFO]  fork: Created child pid=551 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=551) exiting with code 0
+[INFO]  fork: Created child pid=552 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=552) exiting with code 0
+[INFO]  fork: Created child pid=553 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=553) exiting with code 0
+[INFO]  fork: Created child pid=554 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=554) exiting with code 0
+[INFO]  fork: Created child pid=555 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=555) exiting with code 0
+[INFO]  fork: Created child pid=556 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=556) exiting with code 0
+[INFO]  fork: Created child pid=557 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=557) exiting with code 0
+[INFO]  fork: Created child pid=558 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=558) exiting with code 0
+[INFO]  fork: Created child pid=559 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=559) exiting with code 0
+[INFO]  fork: Created child pid=560 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=560) exiting with code 0
+[INFO]  fork: Created child pid=561 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=561) exiting with code 0
+[INFO]  fork: Created child pid=562 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=562) exiting with code 0
+[INFO]  fork: Created child pid=563 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=563) exiting with code 0
+[INFO]  fork: Created child pid=564 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=564) exiting with code 0
+[INFO]  fork: Created child pid=565 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=565) exiting with code 0
+[INFO]  fork: Created child pid=566 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=566) exiting with code 0
+[INFO]  fork: Created child pid=567 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=567) exiting with code 0
+[INFO]  fork: Created child pid=568 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=568) exiting with code 0
+[INFO]  fork: Created child pid=569 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=569) exiting with code 0
+[INFO]  fork: Created child pid=570 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=570) exiting with code 0
+[INFO]  Task 'test_signal_lifetime' (pid=571) exiting with code 0
+[INFO]  fork: Created child pid=571 from parent pid=101
+[INFO]  fork: Created child pid=572 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=572) exiting with code 0
+[INFO]  fork: Created child pid=573 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=573) exiting with code 0
+[INFO]  fork: Created child pid=574 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=574) exiting with code 0
+[INFO]  fork: Created child pid=575 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=575) exiting with code 0
+[INFO]  fork: Created child pid=576 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=576) exiting with code 0
+[INFO]  fork: Created child pid=577 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=577) exiting with code 0
+[INFO]  fork: Created child pid=578 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=578) exiting with code 0
+[INFO]  fork: Created child pid=579 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=579) exiting with code 0
+[INFO]  fork: Created child pid=580 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=580) exiting with code 0
+[INFO]  fork: Created child pid=581 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=581) exiting with code 0
+[INFO]  fork: Created child pid=582 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=582) exiting with code 0
+[INFO]  fork: Created child pid=583 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=583) exiting with code 0
+[INFO]  fork: Created child pid=584 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=584) exiting with code 0
+[INFO]  [INFO]  Task 'test_signal_lifetime' (pid=585) exiting with code 0
+fork: Created child pid=585 from parent pid=101
+[INFO]  fork: Created child pid=586 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=586) exiting with code 0
+[INFO]  fork: Created child pid=587 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=587) exiting with code 0
+[INFO]  fork: Created child pid=588 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=588) exiting with code 0
+[INFO]  fork: Created child pid=589 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=589) exiting with code 0
+[INFO]  fork: Created child pid=590 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=590) exiting with code 0
+[INFO]  fork: Created child pid=591 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=591) exiting with code 0
+[INFO]  fork: Created child pid=592 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=592) exiting with code 0
+[INFO]  fork: Created child pid=593 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=593) exiting with code 0
+[INFO]  fork: Created child pid=594 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=594) exiting with code 0
+[INFO]  fork: Created child pid=595 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=595) exiting with code 0
+[INFO]  fork: Created child pid=596 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=596) exiting with code 0
+[INFO]  fork: Created child pid=597 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=597) exiting with code 0
+[INFO]  fork: Created child pid=598 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=598) exiting with code 0
+[INFO]  fork: Created child pid=599 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=599) exiting with code 0
+[INFO]  fork: Created child pid=600 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=600) exiting with code 0
+[INFO]  fork: Created child pid=601 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=601) exiting with code 0
+[INFO]  fork: Created child pid=602 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=602) exiting with code 0
+[INFO]  fork: Created child pid=603 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=603) exiting with code 0
+[INFO]  fork: Created child pid=604 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=604) exiting with code 0
+[INFO]  fork: Created child pid=605 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=605) exiting with code 0
+[INFO]  fork: Created child pid=606 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=606) exiting with code 0
+[INFO]  fork: Created child pid=607 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=607) exiting with code 0
+[INFO]  fork: Created child pid=608 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=608) exiting with code 0
+[INFO]  fork: Created child pid=609 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=609) exiting with code 0
+[INFO]  fork: Created child pid=610 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=610) exiting with code 0
+[INFO]  fork: Created child pid=611 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=611) exiting with code 0
+[INFO]  fork: Created child pid=612 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=612) exiting with code 0
+[INFO]  fork: Created child pid=613 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=613) exiting with code 0
+[INFO]  fork: Created child pid=614 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=614) exiting with code 0
+[INFO]  fork: Created child pid=615 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=615) exiting with code 0
+[INFO]  fork: Created child pid=616 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=616) exiting with code 0
+[INFO]  fork: Created child pid=617 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=617) exiting with code 0
+[INFO]  fork: Created child pid=618 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=618) exiting with code 0
+[INFO]  fork: Created child pid=619 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=619) exiting with code 0
+[INFO]  fork: Created child pid=620 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=620) exiting with code 0
+[INFO]  fork: Created child pid=621 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=621) exiting with code 0
+[INFO]  fork: Created child pid=622 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=622) exiting with code 0
+[INFO]  fork: Created child pid=623 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=623) exiting with code 0
+[INFO]  fork: Created child pid=624 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=624) exiting with code 0
+[INFO]  fork: Created child pid=625 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=625) exiting with code 0
+[INFO]  fork: Created child pid=626 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=626) exiting with code 0
+[INFO]  fork: Created child pid=627 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=627) exiting with code 0
+[INFO]  fork: Created child pid=628 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=628) exiting with code 0
+[INFO]  fork: Created child pid=629 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=629) exiting with code 0
+[INFO]  fork: Created child pid=630 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=630) exiting with code 0
+[INFO]  fork: Created child pid=631 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=631) exiting with code 0
+[INFO]  fork: Created child pid=632 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=632) exiting with code 0
+[INFO]  fork: Created child pid=633 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=633) exiting with code 0
+[INFO]  fork: Created child pid=634 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=634) exiting with code 0
+[INFO]  fork: Created child pid=635 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=635) exiting with code 0
+[INFO]  fork: Created child pid=636 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=636) exiting with code 0
+[INFO]  fork: Created child pid=637 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=637) exiting with code 0
+[INFO]  fork: Created child pid=638 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=638) exiting with code 0
+[INFO]  fork: Created child pid=639 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=639) exiting with code 0
+[INFO]  fork: Created child pid=640 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=640) exiting with code 0
+[INFO]  fork: Created child pid=641 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=641) exiting with code 0
+[INFO]  fork: Created child pid=642 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=642) exiting with code 0
+[INFO]  fork: Created child pid=643 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=643) exiting with code 0
+[INFO]  fork: Created child pid=644 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=644) exiting with code 0
+[INFO]  fork: Created child pid=645 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=645) exiting with code 0
+[INFO]  fork: Created child pid=646 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=646) exiting with code 0
+[INFO]  fork: Created child pid=647 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=647) exiting with code 0
+[INFO]  fork: Created child pid=648 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=648) exiting with code 0
+[INFO]  fork: Created child pid=649 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=649) exiting with code 0
+[INFO]  fork: Created child pid=650 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=650) exiting with code 0
+[INFO]  fork: Created child pid=651 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=651) exiting with code 0
+[INFO]  fork: Created child pid=652 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=652) exiting with code 0
+[INFO]  fork: Created child pid=653 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=653) exiting with code 0
+[INFO]  fork: Created child pid=654 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=654) exiting with code 0
+[INFO]  fork: Created child pid=655 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=655) exiting with code 0
+[INFO]  fork: Created child pid=656 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=656) exiting with code 0
+[INFO]  fork: Created child pid=657 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=657) exiting with code 0
+[INFO]  fork: Created child pid=658 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=658) exiting with code 0
+[INFO]  fork: Created child pid=659 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=659) exiting with code 0
+[INFO]  fork: Created child pid=660 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=660) exiting with code 0
+[INFO]  fork: Created child pid=661 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=661) exiting with code 0
+[INFO]  fork: Created child pid=662 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=662) exiting with code 0
+[INFO]  fork: Created child pid=663 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=663) exiting with code 0
+[INFO]  fork: Created child pid=664 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=664) exiting with code 0
+[INFO]  fork: Created child pid=665 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=665) exiting with code 0
+[INFO]  fork: Created child pid=666 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=666) exiting with code 0
+[INFO]  fork: Created child pid=667 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=667) exiting with code 0
+[INFO]  fork: Created child pid=668 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=668) exiting with code 0
+[INFO]  fork: Created child pid=669 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=669) exiting with code 0
+[INFO]  fork: Created child pid=670 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=670) exiting with code 0
+[INFO]  fork: Created child pid=671 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=671) exiting with code 0
+[INFO]  fork: Created child pid=672 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=672) exiting with code 0
+[INFO]  fork: Created child pid=673 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=673) exiting with code 0
+[INFO]  fork: Created child pid=674 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=674) exiting with code 0
+[INFO]  fork: Created child pid=675 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=675) exiting with code 0
+[INFO]  fork: Created child pid=676 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=676) exiting with code 0
+[INFO]  fork: Created child pid=677 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=677) exiting with code 0
+[INFO]  fork: Created child pid=678 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=678) exiting with code 0
+[INFO]  fork: Created child pid=679 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=679) exiting with code 0
+[INFO]  fork: Created child pid=680 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=680) exiting with code 0
+[INFO]  fork: Created child pid=681 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=681) exiting with code 0
+[INFO]  fork: Created child pid=682 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=682) exiting with code 0
+[INFO]  fork: Created child pid=683 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=683) exiting with code 0
+[INFO]  fork: Created child pid=684 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=684) exiting with code 0
+[INFO]  fork: Created child pid=685 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=685) exiting with code 0
+[INFO]  fork: Created child pid=686 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=686) exiting with code 0
+[INFO]  fork: Created child pid=687 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=687) exiting with code 0
+[INFO]  fork: Created child pid=688 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=688) exiting with code 0
+[INFO]  fork: Created child pid=689 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=689) exiting with code 0
+[INFO]  fork: Created child pid=690 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=690) exiting with code 0
+[INFO]  fork: Created child pid=691 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=691) exiting with code 0
+[INFO]  fork: Created child pid=692 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=692) exiting with code 0
+[INFO]  fork: Created child pid=693 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=693) exiting with code 0
+[INFO]  fork: Created child pid=694 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=694) exiting with code 0
+[INFO]  fork: Created child pid=695 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=695) exiting with code 0
+[INFO]  fork: Created child pid=696 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=696) exiting with code 0
+[INFO]  fork: Created child pid=697 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=697) exiting with code 0
+[INFO]  fork: Created child pid=698 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=698) exiting with code 0
+[INFO]  fork: Created child pid=699 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=699) exiting with code 0
+[INFO]  fork: Created child pid=700 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=700) exiting with code 0
+[INFO]  fork: Created child pid=701 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=701) exiting with code 0
+[INFO]  fork: Created child pid=702 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=702) exiting with code 0
+[INFO]  fork: Created child pid=703 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=703) exiting with code 0
+[INFO]  fork: Created child pid=704 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=704) exiting with code 0
+[INFO]  fork: Created child pid=705 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=705) exiting with code 0
+[INFO]  fork: Created child pid=706 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=706) exiting with code 0
+[INFO]  fork: Created child pid=707 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=707) exiting with code 0
+[INFO]  fork: Created child pid=708 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=708) exiting with code 0
+[INFO]  fork: Created child pid=709 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=709) exiting with code 0
+[INFO]  fork: Created child pid=710 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=710) exiting with code 0
+[INFO]  fork: Created child pid=711 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=711) exiting with code 0
+[INFO]  fork: Created child pid=712 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=712) exiting with code 0
+[INFO]  fork: Created child pid=713 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=713) exiting with code 0
+[INFO]  fork: Created child pid=714 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=714) exiting with code 0
+[INFO]  fork: Created child pid=715 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=715) exiting with code 0
+[INFO]  fork: Created child pid=716 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=716) exiting with code 0
+[INFO]  fork: Created child pid=717 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=717) exiting with code 0
+[INFO]  fork: Created child pid=718 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=718) exiting with code 0
+[INFO]  fork: Created child pid=719 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=719) exiting with code 0
+[INFO]  fork: Created child pid=720 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=720) exiting with code 0
+[INFO]  fork: Created child pid=721 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=721) exiting with code 0
+[INFO]  fork: Created child pid=722 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=722) exiting with code 0
+[INFO]  fork: Created child pid=723 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=723) exiting with code 0
+[INFO]  fork: Created child pid=724 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=724) exiting with code 0
+[INFO]  fork: Created child pid=725 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=725) exiting with code 0
+[INFO]  fork: Created child pid=726 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=726) exiting with code 0
+[INFO]  fork: Created child pid=727 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=727) exiting with code 0
+[INFO]  fork: Created child pid=728 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=728) exiting with code 0
+[INFO]  fork: Created child pid=729 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=729) exiting with code 0
+[INFO]  fork: Created child pid=730 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=730) exiting with code 0
+[INFO]  fork: Created child pid=731 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=731) exiting with code 0
+[INFO]  fork: Created child pid=732 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=732) exiting with code 0
+[INFO]  fork: Created child pid=733 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=733) exiting with code 0
+[INFO]  fork: Created child pid=734 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=734) exiting with code 0
+[INFO]  fork: Created child pid=735 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=735) exiting with code 0
+[INFO]  fork: Created child pid=736 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=736) exiting with code 0
+[INFO]  fork: Created child pid=737 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=737) exiting with code 0
+[INFO]  fork: Created child pid=738 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=738) exiting with code 0
+[INFO]  fork: Created child pid=739 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=739) exiting with code 0
+[INFO]  fork: Created child pid=740 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=740) exiting with code 0
+[INFO]  fork: Created child pid=741 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=741) exiting with code 0
+[INFO]  fork: Created child pid=742 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=742) exiting with code 0
+[INFO]  fork: Created child pid=743 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=743) exiting with code 0
+[INFO]  fork: Created child pid=744 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=744) exiting with code 0
+[INFO]  fork: Created child pid=745 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=745) exiting with code 0
+[INFO]  fork: Created child pid=746 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=746) exiting with code 0
+[INFO]  fork: Created child pid=747 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=747) exiting with code 0
+[INFO]  fork: Created child pid=748 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=748) exiting with code 0
+[INFO]  fork: Created child pid=749 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=749) exiting with code 0
+[INFO]  fork: Created child pid=750 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=750) exiting with code 0
+[INFO]  fork: Created child pid=751 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=751) exiting with code 0
+[INFO]  fork: Created child pid=752 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=752) exiting with code 0
+[INFO]  fork: Created child pid=753 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=753) exiting with code 0
+[INFO]  fork: Created child pid=754 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=754) exiting with code 0
+[INFO]  fork: Created child pid=755 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=755) exiting with code 0
+[INFO]  fork: Created child pid=756 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=756) exiting with code 0
+[INFO]  fork: Created child pid=757 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=757) exiting with code 0
+[INFO]  fork: Created child pid=758 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=758) exiting with code 0
+[INFO]  fork: Created child pid=759 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=759) exiting with code 0
+[INFO]  fork: Created child pid=760 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=760) exiting with code 0
+[INFO]  fork: Created child pid=761 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=761) exiting with code 0
+[INFO]  fork: Created child pid=762 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=762) exiting with code 0
+[INFO]  fork: Created child pid=763 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=763) exiting with code 0
+[INFO]  fork: Created child pid=764 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=764) exiting with code 0
+[INFO]  fork: Created child pid=765 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=765) exiting with code 0
+[INFO]  fork: Created child pid=766 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=766) exiting with code 0
+[INFO]  fork: Created child pid=767 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=767) exiting with code 0
+[INFO]  fork: Created child pid=768 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=768) exiting with code 0
+[INFO]  fork: Created child pid=769 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=769) exiting with code 0
+[INFO]  fork: Created child pid=770 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=770) exiting with code 0
+[INFO]  fork: Created child pid=771 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=771) exiting with code 0
+[INFO]  fork: Created child pid=772 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=772) exiting with code 0
+[INFO]  fork: Created child pid=773 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=773) exiting with code 0
+[INFO]  fork: Created child pid=774 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=774) exiting with code 0
+[INFO]  fork: Created child pid=775 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=775) exiting with code 0
+[INFO]  fork: Created child pid=776 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=776) exiting with code 0
+[INFO]  fork: Created child pid=777 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=777) exiting with code 0
+[INFO]  fork: Created child pid=778 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=778) exiting with code 0
+[INFO]  fork: Created child pid=779 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=779) exiting with code 0
+[INFO]  fork: Created child pid=780 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=780) exiting with code 0
+[INFO]  fork: Created child pid=781 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=781) exiting with code 0
+[INFO]  fork: Created child pid=782 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=782) exiting with code 0
+[INFO]  fork: Created child pid=783 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=783) exiting with code 0
+[INFO]  fork: Created child pid=784 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=784) exiting with code 0
+[INFO]  fork: Created child pid=785 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=785) exiting with code 0
+[INFO]  fork: Created child pid=786 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=786) exiting with code 0
+[INFO]  fork: Created child pid=787 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=787) exiting with code 0
+[INFO]  fork: Created child pid=788 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=788) exiting with code 0
+[INFO]  fork: Created child pid=789 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=789) exiting with code 0
+[INFO]  fork: Created child pid=790 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=790) exiting with code 0
+[INFO]  fork: Created child pid=791 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=791) exiting with code 0
+[INFO]  fork: Created child pid=792 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=792) exiting with code 0
+[INFO]  fork: Created child pid=793 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=793) exiting with code 0
+[INFO]  fork: Created child pid=794 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=794) exiting with code 0
+[INFO]  fork: Created child pid=795 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=795) exiting with code 0
+[INFO]  fork: Created child pid=796 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=796) exiting with code 0
+[INFO]  fork: Created child pid=797 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=797) exiting with code 0
+[INFO]  fork: Created child pid=798 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=798) exiting with code 0
+[INFO]  fork: Created child pid=799 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=799) exiting with code 0
+[INFO]  fork: Created child pid=800 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=800) exiting with code 0
+[INFO]  fork: Created child pid=801 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=801) exiting with code 0
+[INFO]  fork: Created child pid=802 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=802) exiting with code 0
+[INFO]  fork: Created child pid=803 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=803) exiting with code 0
+[INFO]  fork: Created child pid=804 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=804) exiting with code 0
+[INFO]  fork: Created child pid=805 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=805) exiting with code 0
+[INFO]  fork: Created child pid=806 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=806) exiting with code 0
+[INFO]  fork: Created child pid=807 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=807) exiting with code 0
+[INFO]  fork: Created child pid=808 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=808) exiting with code 0
+[INFO]  fork: Created child pid=809 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=809) exiting with code 0
+[INFO]  fork: Created child pid=810 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=810) exiting with code 0
+[INFO]  fork: Created child pid=811 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=811) exiting with code 0
+[INFO]  fork: Created child pid=812 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=812) exiting with code 0
+[INFO]  fork: Created child pid=813 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=813) exiting with code 0
+[INFO]  fork: Created child pid=814 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=814) exiting with code 0
+[INFO]  fork: Created child pid=815 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=815) exiting with code 0
+[INFO]  fork: Created child pid=816 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=816) exiting with code 0
+[INFO]  fork: Created child pid=817 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=817) exiting with code 0
+[INFO]  fork: Created child pid=818 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=818) exiting with code 0
+[INFO]  fork: Created child pid=819 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=819) exiting with code 0
+[INFO]  fork: Created child pid=820 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=820) exiting with code 0
+[INFO]  fork: Created child pid=821 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=821) exiting with code 0
+[INFO]  fork: Created child pid=822 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=822) exiting with code 0
+[INFO]  fork: Created child pid=823 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=823) exiting with code 0
+[INFO]  fork: Created child pid=824 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=824) exiting with code 0
+[INFO]  fork: Created child pid=825 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=825) exiting with code 0
+[INFO]  fork: Created child pid=826 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=826) exiting with code 0
+[INFO]  fork: Created child pid=827 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=827) exiting with code 0
+[INFO]  fork: Created child pid=828 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=828) exiting with code 0
+[INFO]  fork: Created child pid=829 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=829) exiting with code 0
+[INFO]  fork: Created child pid=830 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=830) exiting with code 0
+[INFO]  fork: Created child pid=831 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=831) exiting with code 0
+[INFO]  fork: Created child pid=832 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=832) exiting with code 0
+[INFO]  fork: Created child pid=833 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=833) exiting with code 0
+[INFO]  fork: Created child pid=834 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=834) exiting with code 0
+[INFO]  fork: Created child pid=835 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=835) exiting with code 0
+[INFO]  fork: Created child pid=836 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=836) exiting with code 0
+[INFO]  fork: Created child pid=837 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=837) exiting with code 0
+[INFO]  fork: Created child pid=838 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=838) exiting with code 0
+[INFO]  fork: Created child pid=839 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=839) exiting with code 0
+[INFO]  fork: Created child pid=840 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=840) exiting with code 0
+[INFO]  fork: Created child pid=841 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=841) exiting with code 0
+[INFO]  fork: Created child pid=842 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=842) exiting with code 0
+[INFO]  fork: Created child pid=843 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=843) exiting with code 0
+[INFO]  fork: Created child pid=844 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=844) exiting with code 0
+[INFO]  fork: Created child pid=845 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=845) exiting with code 0
+[INFO]  fork: Created child pid=846 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=846) exiting with code 0
+[INFO]  fork: Created child pid=847 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=847) exiting with code 0
+[INFO]  fork: Created child pid=848 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=848) exiting with code 0
+[INFO]  fork: Created child pid=849 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=849) exiting with code 0
+[INFO]  fork: Created child pid=850 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=850) exiting with code 0
+[INFO]  fork: Created child pid=851 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=851) exiting with code 0
+[INFO]  fork: Created child pid=852 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=852) exiting with code 0
+[INFO]  fork: Created child pid=853 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=853) exiting with code 0
+[INFO]  fork: Created child pid=854 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=854) exiting with code 0
+[INFO]  fork: Created child pid=855 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=855) exiting with code 0
+[INFO]  fork: Created child pid=856 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=856) exiting with code 0
+[INFO]  fork: Created child pid=857 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=857) exiting with code 0
+[INFO]  fork: Created child pid=858 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=858) exiting with code 0
+[INFO]  fork: Created child pid=859 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=859) exiting with code 0
+[INFO]  fork: Created child pid=860 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=860) exiting with code 0
+[INFO]  fork: Created child pid=861 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=861) exiting with code 0
+[INFO]  fork: Created child pid=862 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=862) exiting with code 0
+[INFO]  fork: Created child pid=863 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=863) exiting with code 0
+[INFO]  fork: Created child pid=864 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=864) exiting with code 0
+[INFO]  fork: Created child pid=865 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=865) exiting with code 0
+[INFO]  fork: Created child pid=866 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=866) exiting with code 0
+[INFO]  fork: Created child pid=867 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=867) exiting with code 0
+[INFO]  fork: Created child pid=868 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=868) exiting with code 0
+[INFO]  fork: Created child pid=869 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=869) exiting with code 0
+[INFO]  fork: Created child pid=870 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=870) exiting with code 0
+[INFO]  fork: Created child pid=871 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=871) exiting with code 0
+[INFO]  fork: Created child pid=872 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=872) exiting with code 0
+[INFO]  fork: Created child pid=873 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=873) exiting with code 0
+[INFO]  fork: Created child pid=874 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=874) exiting with code 0
+[INFO]  fork: Created child pid=875 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=875) exiting with code 0
+[INFO]  fork: Created child pid=876 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=876) exiting with code 0
+[INFO]  fork: Created child pid=877 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=877) exiting with code 0
+[INFO]  fork: Created child pid=878 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=878) exiting with code 0
+[INFO]  fork: Created child pid=879 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=879) exiting with code 0
+[INFO]  fork: Created child pid=880 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=880) exiting with code 0
+[INFO]  fork: Created child pid=881 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=881) exiting with code 0
+[INFO]  fork: Created child pid=882 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=882) exiting with code 0
+[INFO]  fork: Created child pid=883 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=883) exiting with code 0
+[INFO]  fork: Created child pid=884 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=884) exiting with code 0
+[INFO]  fork: Created child pid=885 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=885) exiting with code 0
+[INFO]  fork: Created child pid=886 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=886) exiting with code 0
+[INFO]  fork: Created child pid=887 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=887) exiting with code 0
+[INFO]  fork: Created child pid=888 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=888) exiting with code 0
+[INFO]  fork: Created child pid=889 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=889) exiting with code 0
+[INFO]  fork: Created child pid=890 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=890) exiting with code 0
+[INFO]  fork: Created child pid=891 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=891) exiting with code 0
+[INFO]  fork: Created child pid=892 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=892) exiting with code 0
+[INFO]  fork: Created child pid=893 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=893) exiting with code 0
+[INFO]  fork: Created child pid=894 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=894) exiting with code 0
+[INFO]  fork: Created child pid=895 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=895) exiting with code 0
+[INFO]  fork: Created child pid=896 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=896) exiting with code 0
+[INFO]  fork: Created child pid=897 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=897) exiting with code 0
+[INFO]  fork: Created child pid=898 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=898) exiting with code 0
+[INFO]  fork: Created child pid=899 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=899) exiting with code 0
+[INFO]  fork: Created child pid=900 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=900) exiting with code 0
+[INFO]  fork: Created child pid=901 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=901) exiting with code 0
+[INFO]  fork: Created child pid=902 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=902) exiting with code 0
+[INFO]  fork: Created child pid=903 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=903) exiting with code 0
+[INFO]  fork: Created child pid=904 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=904) exiting with code 0
+[INFO]  fork: Created child pid=905 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=905) exiting with code 0
+[INFO]  fork: Created child pid=906 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=906) exiting with code 0
+[INFO]  fork: Created child pid=907 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=907) exiting with code 0
+[INFO]  fork: Created child pid=908 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=908) exiting with code 0
+[INFO]  fork: Created child pid=909 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=909) exiting with code 0
+[INFO]  fork: Created child pid=910 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=910) exiting with code 0
+[INFO]  fork: Created child pid=911 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=911) exiting with code 0
+[INFO]  fork: Created child pid=912 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=912) exiting with code 0
+[INFO]  fork: Created child pid=913 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=913) exiting with code 0
+[INFO]  fork: Created child pid=914 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=914) exiting with code 0
+[INFO]  fork: Created child pid=915 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=915) exiting with code 0
+[INFO]  fork: Created child pid=916 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=916) exiting with code 0
+[INFO]  fork: Created child pid=917 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=917) exiting with code 0
+[INFO]  fork: Created child pid=918 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=918) exiting with code 0
+[INFO]  fork: Created child pid=919 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=919) exiting with code 0
+[INFO]  fork: Created child pid=920 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=920) exiting with code 0
+[INFO]  fork: Created child pid=921 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=921) exiting with code 0
+[INFO]  fork: Created child pid=922 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=922) exiting with code 0
+[INFO]  fork: Created child pid=923 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=923) exiting with code 0
+[INFO]  fork: Created child pid=924 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=924) exiting with code 0
+[INFO]  fork: Created child pid=925 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=925) exiting with code 0
+[INFO]  fork: Created child pid=926 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=926) exiting with code 0
+[INFO]  fork: Created child pid=927 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=927) exiting with code 0
+[INFO]  fork: Created child pid=928 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=928) exiting with code 0
+[INFO]  fork: Created child pid=929 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=929) exiting with code 0
+[INFO]  fork: Created child pid=930 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=930) exiting with code 0
+[INFO]  fork: Created child pid=931 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=931) exiting with code 0
+[INFO]  fork: Created child pid=932 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=932) exiting with code 0
+[INFO]  fork: Created child pid=933 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=933) exiting with code 0
+[INFO]  fork: Created child pid=934 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=934) exiting with code 0
+[INFO]  fork: Created child pid=935 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=935) exiting with code 0
+[INFO]  fork: Created child pid=936 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=936) exiting with code 0
+[INFO]  fork: Created child pid=937 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=937) exiting with code 0
+[INFO]  fork: Created child pid=938 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=938) exiting with code 0
+[INFO]  fork: Created child pid=939 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=939) exiting with code 0
+[INFO]  fork: Created child pid=940 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=940) exiting with code 0
+[INFO]  fork: Created child pid=941 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=941) exiting with code 0
+[INFO]  fork: Created child pid=942 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=942) exiting with code 0
+[INFO]  fork: Created child pid=943 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=943) exiting with code 0
+[INFO]  fork: Created child pid=944 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=944) exiting with code 0
+[INFO]  fork: Created child pid=945 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=945) exiting with code 0
+[INFO]  fork: Created child pid=946 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=946) exiting with code 0
+[INFO]  fork: Created child pid=947 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=947) exiting with code 0
+[INFO]  fork: Created child pid=948 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=948) exiting with code 0
+[INFO]  fork: Created child pid=949 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=949) exiting with code 0
+[INFO]  fork: Created child pid=950 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=950) exiting with code 0
+[INFO]  fork: Created child pid=951 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=951) exiting with code 0
+[INFO]  fork: Created child pid=952 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=952) exiting with code 0
+[INFO]  fork: Created child pid=953 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=953) exiting with code 0
+[INFO]  fork: Created child pid=954 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=954) exiting with code 0
+[INFO]  fork: Created child pid=955 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=955) exiting with code 0
+[INFO]  fork: Created child pid=956 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=956) exiting with code 0
+[INFO]  fork: Created child pid=957 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=957) exiting with code 0
+[INFO]  fork: Created child pid=958 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=958) exiting with code 0
+[INFO]  fork: Created child pid=959 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=959) exiting with code 0
+[INFO]  fork: Created child pid=960 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=960) exiting with code 0
+[INFO]  fork: Created child pid=961 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=961) exiting with code 0
+[INFO]  fork: Created child pid=962 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=962) exiting with code 0
+[INFO]  fork: Created child pid=963 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=963) exiting with code 0
+[INFO]  fork: Created child pid=964 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=964) exiting with code 0
+[INFO]  fork: Created child pid=965 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=965) exiting with code 0
+[INFO]  fork: Created child pid=966 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=966) exiting with code 0
+[INFO]  fork: Created child pid=967 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=967) exiting with code 0
+[INFO]  fork: Created child pid=968 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=968) exiting with code 0
+[INFO]  fork: Created child pid=969 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=969) exiting with code 0
+[INFO]  fork: Created child pid=970 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=970) exiting with code 0
+[INFO]  fork: Created child pid=971 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=971) exiting with code 0
+[INFO]  fork: Created child pid=972 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=972) exiting with code 0
+[INFO]  fork: Created child pid=973 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=973) exiting with code 0
+[INFO]  fork: Created child pid=974 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=974) exiting with code 0
+[INFO]  fork: Created child pid=975 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=975) exiting with code 0
+[INFO]  fork: Created child pid=976 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=976) exiting with code 0
+[INFO]  fork: Created child pid=977 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=977) exiting with code 0
+[INFO]  fork: Created child pid=978 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=978) exiting with code 0
+[INFO]  fork: Created child pid=979 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=979) exiting with code 0
+[INFO]  fork: Created child pid=980 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=980) exiting with code 0
+[INFO]  fork: Created child pid=981 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=981) exiting with code 0
+[INFO]  fork: Created child pid=982 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=982) exiting with code 0
+[INFO]  fork: Created child pid=983 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=983) exiting with code 0
+[INFO]  fork: Created child pid=984 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=984) exiting with code 0
+[INFO]  fork: Created child pid=985 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=985) exiting with code 0
+[INFO]  fork: Created child pid=986 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=986) exiting with code 0
+[INFO]  fork: Created child pid=987 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=987) exiting with code 0
+[INFO]  fork: Created child pid=988 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=988) exiting with code 0
+[INFO]  fork: Created child pid=989 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=989) exiting with code 0
+[INFO]  fork: Created child pid=990 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=990) exiting with code 0
+[INFO]  fork: Created child pid=991 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=991) exiting with code 0
+[INFO]  fork: Created child pid=992 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=992) exiting with code 0
+[INFO]  fork: Created child pid=993 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=993) exiting with code 0
+[INFO]  fork: Created child pid=994 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=994) exiting with code 0
+[INFO]  fork: Created child pid=995 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=995) exiting with code 0
+[INFO]  fork: Created child pid=996 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=996) exiting with code 0
+[INFO]  fork: Created child pid=997 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=997) exiting with code 0
+[INFO]  fork: Created child pid=998 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=998) exiting with code 0
+[INFO]  fork: Created child pid=999 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=999) exiting with code 0
+[INFO]  fork: Created child pid=1000 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1000) exiting with code 0
+[INFO]  fork: Created child pid=1001 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1001) exiting with code 0
+[INFO]  fork: Created child pid=1002 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1002) exiting with code 0
+[INFO]  fork: Created child pid=1003 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1003) exiting with code 0
+[INFO]  fork: Created child pid=1004 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1004) exiting with code 0
+[INFO]  fork: Created child pid=1005 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1005) exiting with code 0
+[INFO]  fork: Created child pid=1006 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1006) exiting with code 0
+[INFO]  fork: Created child pid=1007 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1007) exiting with code 0
+[INFO]  fork: Created child pid=1008 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1008) exiting with code 0
+[INFO]  fork: Created child pid=1009 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1009) exiting with code 0
+[INFO]  fork: Created child pid=1010 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1010) exiting with code 0
+[INFO]  fork: Created child pid=1011 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1011) exiting with code 0
+[INFO]  fork: Created child pid=1012 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1012) exiting with code 0
+[INFO]  fork: Created child pid=1013 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1013) exiting with code 0
+[INFO]  fork: Created child pid=1014 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1014) exiting with code 0
+[INFO]  fork: Created child pid=1015 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1015) exiting with code 0
+[INFO]  fork: Created child pid=1016 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1016) exiting with code 0
+[INFO]  fork: Created child pid=1017 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1017) exiting with code 0
+[INFO]  fork: Created child pid=1018 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1018) exiting with code 0
+[INFO]  fork: Created child pid=1019 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1019) exiting with code 0
+[INFO]  fork: Created child pid=1020 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1020) exiting with code 0
+[INFO]  fork: Created child pid=1021 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1021) exiting with code 0
+[INFO]  fork: Created child pid=1022 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1022) exiting with code 0
+[INFO]  fork: Created child pid=1023 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1023) exiting with code 0
+[INFO]  fork: Created child pid=1024 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1024) exiting with code 0
+[INFO]  fork: Created child pid=1025 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1025) exiting with code 0
+[INFO]  fork: Created child pid=1026 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1026) exiting with code 0
+[INFO]  fork: Created child pid=1027 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1027) exiting with code 0
+[INFO]  fork: Created child pid=1028 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1028) exiting with code 0
+[INFO]  fork: Created child pid=1029 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1029) exiting with code 0
+[INFO]  fork: Created child pid=1030 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1030) exiting with code 0
+[INFO]  fork: Created child pid=1031 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1031) exiting with code 0
+[INFO]  fork: Created child pid=1032 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1032) exiting with code 0
+[INFO]  fork: Created child pid=1033 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1033) exiting with code 0
+[INFO]  fork: Created child pid=1034 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1034) exiting with code 0
+[INFO]  fork: Created child pid=1035 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1035) exiting with code 0
+[INFO]  fork: Created child pid=1036 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1036) exiting with code 0
+[INFO]  fork: Created child pid=1037 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1037) exiting with code 0
+[INFO]  fork: Created child pid=1038 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1038) exiting with code 0
+[INFO]  fork: Created child pid=1039 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1039) exiting with code 0
+[INFO]  fork: Created child pid=1040 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1040) exiting with code 0
+[INFO]  fork: Created child pid=1041 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1041) exiting with code 0
+[INFO]  fork: Created child pid=1042 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1042) exiting with code 0
+[INFO]  fork: Created child pid=1043 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1043) exiting with code 0
+[INFO]  fork: Created child pid=1044 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1044) exiting with code 0
+[INFO]  fork: Created child pid=1045 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1045) exiting with code 0
+[INFO]  fork: Created child pid=1046 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1046) exiting with code 0
+[INFO]  fork: Created child pid=1047 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1047) exiting with code 0
+[INFO]  fork: Created child pid=1048 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1048) exiting with code 0
+[INFO]  fork: Created child pid=1049 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1049) exiting with code 0
+[INFO]  fork: Created child pid=1050 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1050) exiting with code 0
+[INFO]  fork: Created child pid=1051 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1051) exiting with code 0
+[INFO]  fork: Created child pid=1052 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1052) exiting with code 0
+[INFO]  fork: Created child pid=1053 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1053) exiting with code 0
+[INFO]  fork: Created child pid=1054 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1054) exiting with code 0
+[INFO]  fork: Created child pid=1055 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1055) exiting with code 0
+[INFO]  fork: Created child pid=1056 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1056) exiting with code 0
+[INFO]  fork: Created child pid=1057 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1057) exiting with code 0
+[INFO]  fork: Created child pid=1058 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1058) exiting with code 0
+[INFO]  fork: Created child pid=1059 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1059) exiting with code 0
+[INFO]  fork: Created child pid=1060 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1060) exiting with code 0
+[INFO]  fork: Created child pid=1061 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1061) exiting with code 0
+[INFO]  fork: Created child pid=1062 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1062) exiting with code 0
+[INFO]  fork: Created child pid=1063 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1063) exiting with code 0
+[INFO]  fork: Created child pid=1064 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1064) exiting with code 0
+[INFO]  fork: Created child pid=1065 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1065) exiting with code 0
+[INFO]  fork: Created child pid=1066 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1066) exiting with code 0
+[INFO]  fork: Created child pid=1067 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1067) exiting with code 0
+[INFO]  fork: Created child pid=1068 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1068) exiting with code 0
+[INFO]  fork: Created child pid=1069 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1069) exiting with code 0
+[INFO]  fork: Created child pid=1070 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1070) exiting with code 0
+[INFO]  fork: Created child pid=1071 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1071) exiting with code 0
+[INFO]  fork: Created child pid=1072 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1072) exiting with code 0
+[INFO]  fork: Created child pid=1073 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1073) exiting with code 0
+[INFO]  fork: Created child pid=1074 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1074) exiting with code 0
+[INFO]  fork: Created child pid=1075 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1075) exiting with code 0
+[INFO]  fork: Created child pid=1076 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1076) exiting with code 0
+[INFO]  fork: Created child pid=1077 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1077) exiting with code 0
+[INFO]  fork: Created child pid=1078 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1078) exiting with code 0
+[INFO]  fork: Created child pid=1079 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1079) exiting with code 0
+[INFO]  fork: Created child pid=1080 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1080) exiting with code 0
+[INFO]  fork: Created child pid=1081 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1081) exiting with code 0
+[INFO]  fork: Created child pid=1082 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1082) exiting with code 0
+[INFO]  fork: Created child pid=1083 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1083) exiting with code 0
+[INFO]  fork: Created child pid=1084 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1084) exiting with code 0
+[INFO]  fork: Created child pid=1085 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1085) exiting with code 0
+[INFO]  fork: Created child pid=1086 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1086) exiting with code 0
+[INFO]  fork: Created child pid=1087 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1087) exiting with code 0
+[INFO]  fork: Created child pid=1088 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1088) exiting with code 0
+[INFO]  fork: Created child pid=1089 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1089) exiting with code 0
+[INFO]  fork: Created child pid=1090 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1090) exiting with code 0
+[INFO]  fork: Created child pid=1091 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1091) exiting with code 0
+[INFO]  fork: Created child pid=1092 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1092) exiting with code 0
+[INFO]  fork: Created child pid=1093 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1093) exiting with code 0
+[INFO]  fork: Created child pid=1094 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1094) exiting with code 0
+[INFO]  fork: Created child pid=1095 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1095) exiting with code 0
+[INFO]  fork: Created child pid=1096 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1096) exiting with code 0
+[INFO]  fork: Created child pid=1097 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1097) exiting with code 0
+[INFO]  fork: Created child pid=1098 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1098) exiting with code 0
+[INFO]  fork: Created child pid=1099 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1099) exiting with code 0
+[INFO]  fork: Created child pid=1100 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1100) exiting with code 0
+[INFO]  fork: Created child pid=1101 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1101) exiting with code 0
+[INFO]  fork: Created child pid=1102 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1102) exiting with code 0
+[INFO]  fork: Created child pid=1103 from parent[INFO]  Task 'test_signal_lifetime' (pid=1103) exiting with code 0
+ pid=101
+[INFO]  fork: Created child pid=1104 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1104) exiting with code 0
+[INFO]  fork: Created child pid=1105 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1105) exiting with code 0
+[INFO]  fork: Created child pid=1106 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1106) exiting with code 0
+[INFO]  fork: Created child pid=1107 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1107) exiting with code 0
+[INFO]  fork: Created child pid=1108 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1108) exiting with code 0
+[INFO]  fork: Created child pid=1109 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1109) exiting with code 0
+[INFO]  fork: Created child pid=1110 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1110) exiting with code 0
+[INFO]  fork: Created child pid=1111 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1111) exiting with code 0
+[INFO]  fork: Created child pid=1112 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1112) exiting with code 0
+[INFO]  fork: Created child pid=1113 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1113) exiting with code 0
+[INFO]  fork: Created child pid=1114 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1114) exiting with code 0
+[INFO]  fork: Created child pid=1115 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1115) exiting with code 0
+[INFO]  fork: Created child pid=1116 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1116) exiting with code 0
+[INFO]  fork: Created child pid=1117 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1117) exiting with code 0
+[INFO]  fork: Created child pid=1118 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1118) exiting with code 0
+[INFO]  fork: Created child pid=1119 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1119) exiting with code 0
+[INFO]  fork: Created child pid=1120 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1120) exiting with code 0
+[INFO]  fork: Created child pid=1121 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1121) exiting with code 0
+[INFO]  fork: Created child pid=1122 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1122) exiting with code 0
+[INFO]  fork: Created child pid=1123 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1123) exiting with code 0
+[INFO]  fork: Created child pid=1124 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1124) exiting with code 0
+[INFO]  fork: Created child pid=1125 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1125) exiting with code 0
+[INFO]  fork: Created child pid=1126 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1126) exiting with code 0
+[INFO]  fork: Created child pid=1127 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1127) exiting with code 0
+[INFO]  fork: Created child pid=1128 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1128) exiting with code 0
+[INFO]  fork: Created child pid=1129 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1129) exiting with code 0
+[INFO]  fork: Created child pid=1130 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1130) exiting with code 0
+[INFO]  fork: Created child pid=1131 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1131) exiting with code 0
+[INFO]  fork: Created child pid=1132 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1132) exiting with code 0
+[INFO]  fork: Created child pid=1133 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1133) exiting with code 0
+[INFO]  fork: Created child pid=1134 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1134) exiting with code 0
+[INFO]  fork: Created child pid=1135 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1135) exiting with code 0
+[INFO]  fork: Created child pid=1136 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1136) exiting with code 0
+[INFO]  fork: Created child pid=1137 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1137) exiting with code 0
+[INFO]  fork: Created child pid=1138 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1138) exiting with code 0
+[INFO]  fork: Created child pid=1139 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1139) exiting with code 0
+[INFO]  fork: Created child pid=1140 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1140) exiting with code 0
+[INFO]  fork: Created child pid=1141 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1141) exiting with code 0
+[INFO]  fork: Created child pid=1142 from parent pid=1[INFO]  Task 'test_signal_lifetime' (pid=1142) exiting with code 0
+01
+[INFO]  fork: Created child pid=1143 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1143) exiting with code 0
+[INFO]  fork: Created child pid=1144 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1144) exiting with code 0
+[INFO]  fork: Created child pid=1145 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1145) exiting with code 0
+[INFO]  fork: Created child pid=1146 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1146) exiting with code 0
+[INFO]  fork: Created child pid=1147 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1147) exiting with code 0
+[INFO]  fork: Created child pid=1148 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1148) exiting with code 0
+[INFO]  fork: Created child pid=1149 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1149) exiting with code 0
+[INFO]  fork: Created child pid=1150 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1150) exiting with code 0
+[INFO]  fork: Created child pid=1151 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1151) exiting with code 0
+[INFO]  fork: Created child pid=1152 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1152) exiting with code 0
+[INFO]  fork: Created child pid=1153 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1153) exiting with code 0
+[INFO]  fork: Created child pid=1154 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1154) exiting with code 0
+[INFO]  fork: Created child pid=1155 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1155) exiting with code 0
+[INFO]  fork: Created child pid=1156 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1156) exiting with code 0
+[INFO]  fork: Created child pid=1157 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1157) exiting with code 0
+[INFO]  fork: Created child pid=1158 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1158) exiting with code 0
+[INFO]  fork: Created child pid=1159 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1159) exiting with code 0
+[INFO]  fork: Created child pid=1160 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1160) exiting with code 0
+[INFO]  fork: Created child pid=1161 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1161) exiting with code 0
+[INFO]  fork: Created child pid=1162 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1162) exiting with code 0
+[INFO]  fork: Created child pid=1163 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1163) exiting with code 0
+[INFO]  fork: Created child pid=1164 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1164) exiting with code 0
+[INFO]  fork: Created child pid=1165 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1165) exiting with code 0
+[INFO]  fork: Created child pid=1166 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1166) exiting with code 0
+[INFO]  fork: Created child pid=1167 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1167) exiting with code 0
+[INFO]  fork: Created child pid=1168 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1168) exiting with code 0
+[INFO]  fork: Created child pid=1169 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1169) exiting with code 0
+[INFO]  fork: Created child pid=1170 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1170) exiting with code 0
+[INFO]  fork: Created child pid=1171 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1171) exiting with code 0
+[INFO]  fork: Created child pid=1172 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1172) exiting with code 0
+[INFO]  fork: Created child pid=1173 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1173) exiting with code 0
+[INFO]  fork: Created child pid=1174 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1174) exiting with code 0
+[INFO]  fork: Created child pid=1175 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1175) exiting with code 0
+[INFO]  fork: Created child pid=1176 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1176) exiting with code 0
+[INFO]  fork: Created child pid=1177 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1177) exiting with code 0
+[INFO]  fork: Created child pid=1178 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1178) exiting with code 0
+[INFO]  fork: Created child pid=1179 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1179) exiting with code 0
+[INFO]  fork: Created child pid=1180 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1180) exiting with code 0
+[INFO]  fork: Created child pid=1181 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1181) exiting with code 0
+[INFO]  fork: Created child pid=1182 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1182) exiting with code 0
+[INFO]  fork: Created child pid=1183 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1183) exiting with code 0
+[INFO]  fork: Created child pid=1184 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1184) exiting with code 0
+[INFO]  fork: Created child pid=1185 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1185) exiting with code 0
+[INFO]  fork: Created child pid=1186 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1186) exiting with code 0
+[INFO]  fork: Created child pid=1187 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1187) exiting with code 0
+[INFO]  fork: Created child pid=1188 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1188) exiting with code 0
+[INFO]  fork: Created child pid=1189 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1189) exiting with code 0
+[INFO]  fork: Created child pid=1190 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1190) exiting with code 0
+[INFO]  fork: Created child pid=1191 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1191) exiting with code 0
+[INFO]  fork: Created child pid=1192 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1192) exiting with code 0
+[INFO]  fork: Created child pid=1193 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1193) exiting with code 0
+[INFO]  fork: Created child pid=1194 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1194) exiting with code 0
+[INFO]  fork: Created child pid=1195 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1195) exiting with code 0
+[INFO]  fork: Created child pid=1196 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1196) exiting with code 0
+[INFO]  fork: Creat[INFO]  Task 'test_signal_lifetime' (pid=1197) exiting with code 0
+ed child pid=1197 from parent pid=101
+[INFO]  fork: Created child pid=1198 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1198) exiting with code 0
+[INFO]  fork: Created child pid=1199 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1199) exiting with code 0
+[INFO]  fork: Created child pid=1200 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1200) exiting with code 0
+[INFO]  fork: Created child pid=1201 from parent pid=101
+[INFO]  Task 'test_signal_lifetime' (pid=1201) exiting with code 0
+[INFO]  fork: Created child pid=1202 from parent pid=101
+[PASS] signal_lifetime: identity_exceeds_old_table_bound
+[PASS] signal_lifetime: install_high_identity_handler
+[INFO]  [SIG] Delivering signal 10 to 'test_signal_lifetime', handler=0x00000000004001F0
+[INFO]  [SIG] Frame: handler=0x00000000004001F0 signum=10 rsp=0x7FFFFFEFFCD8 restorer=0x40343A
+[INFO]  [SIG] rt_sigreturn: restored RIP=0x40341D RSP=0x7FFFFFEFFE00 RAX=0x0
+[PASS] signal_lifetime: handler_executes_only_in_ring3
+[PASS] signal_lifetime: raw_missing_restorer_rejected
+[PASS] signal_lifetime: raw_kernel_handler_rejected
+[PASS] signal_lifetime: rejected_actions_leave_previous_handler
+[PASS] signal_lifetime: blocked_signal_stays_pending
+[INFO]  fork: Created child pid=1203 from parent pid=1202
+[INFO]  [SIG] Delivering signal 10 to 'test_signal_lifetime', handler=0x00000000004001F0
+[INFO]  [SIG] Frame: handler=0x00000000004001F0 signum=10 rsp=0x7FFFFFEFFCD8 restorer=0x40343A
+[INFO]  [SIG] rt_sigreturn: restored RIP=0x40341D RSP=0x7FFFFFEFFE00 RAX=0x0
+[INFO]  Task 'test_signal_lifetime' (pid=1203) exiting with code 0
+[PASS] signal_lifetime: fork_inherits_handler_mask_but_not_pending
+[PASS] signal_lifetime: fork_handler_changes_do_not_modify_parent
+[INFO]  [SIG] Delivering signal 10 to 'test_signal_lifetime', handler=0x00000000004001F0
+[INFO]  [SIG] Frame: handler=0x00000000004001F0 signum=10 rsp=0x7FFFFFEFFCF8 restorer=0x40343A
+[INFO]  [SIG] rt_sigreturn: restored RIP=0x4033E0 RSP=0x7FFFFFEFFE18 RAX=0x0
+[PASS] signal_lifetime: parent_pending_signal_survives_child
+[INFO]  fork: Created child pid=1204 from parent pid=1202
+[INFO]  exec: Loading '/bin/test_signal_lifetime' (pid=1204)
+[INFO]  exec: Starting 'test_signal_lifetime' at 0x4001AB (sp=0x7FFFFFEFFFA0)
+[PASS] signal_lifetime: exec_resets_caught_handler
+[PASS] signal_lifetime: exec_preserves_ignored_handler
+[PASS] signal_lifetime: exec_preserves_blocked_mask
+[INFO]  Task 'test_signal_lifetime' (pid=1204) exiting with code 0
+[PASS] signal_lifetime: exec_signal_state_controls
+[INFO]  Task 'test_signal_lifetime' (pid=1202) exiting with code 0
+[PASS] signal_lifetime: high_identity_child_controls
+[INFO]  Task 'test_signal_lifetime' (pid=101) exiting with code 0
+=== test_signal_lifetime: exit=0 ===
+
+=== SKIP: test_env_musl ===
+=== SKIP: test_fileio_musl ===
+=== SKIP: test_malloc_musl ===
+=== SKIP: test_fork_musl ===
+=== SKIP: test_pipe_musl ===
+=== SKIP: test_stat_musl ===
+=== SKIP: test_pthread_musl ===
+=== SKIP: test_ai_guard ===
+=== SKIP: test_integration ===
+=== SKIP: test_sustained ===
+=== SKIP: bench_ai_throughput ===
+=== SKIP: bench_csw_1ms ===
+=== SKIP: test_npu_direct ===
+=== SKIP: test_ai_latency ===
+=== SKIP: bench_2026_frontier ===
+=== SKIP: test_agent_chaos ===
+=== SKIP: test_advanced_chaos ===
+=== SKIP: test_model_load ===
+=== SKIP: test_health_check ===
+=== SKIP: test_agent_cluster ===
+=== SKIP: test_torture ===
+=== SKIP: test_ai_exploit_v2 ===
+=== SKIP: test_security_check ===
+=== SKIP: test_vmm_soak ===
+=== SKIP: bench_ai_scale ===
+=== SKIP: test_stress_mt ===
+===========================================
+  WEEK 2 BENCHMARK SUITE: COMPLETE
+===========================================
+
+Init: All benchmarks executed. System halting.
+[INFO]  [BRIDGE] Task started — hybrid burst-poll, Phase 4.2.18
+qemu-system-x86_64: terminating on signal 15 from pid 92017 (<unknown process>)

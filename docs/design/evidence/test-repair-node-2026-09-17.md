@@ -68,3 +68,5 @@ No concrete false-pass was found in those exercised controls. Remaining limits:
 ## Independent billing guard review
 
 Reviewed `backend/api/billing_routes.py`, `backend/tools/stripe_service.py` and `frontend/convex/billing.ts`. Rejecting a false `use_tokens` result prevents a success response when no debit occurred. The Convex mutation retains ownership checks, balance validation and debit/ledger updates within the mutation; the route did not introduce a pre-read debit race. An unavailable billing backend currently produces the same HTTP 402 rejection as an unsuccessful debit, which is an error-classification limitation, not an observed authorization bypass. This was a source review, not a live payment-system test.
+
+The final hook test/type/lint artifacts are also preserved portably under [the current-round evidence manifest](native-signal-lifetime-2026-09-17/manifest.json), as `frontend-hooks-*`. Earlier absolute paths remain local-only.

@@ -1,0 +1,41 @@
+{
+  "passed": false,
+  "build_container_name": "vos5-native-clean-ccbd94d11640",
+  "build_command": [
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_SMP_WORKLOAD=1",
+    "BUILD_DIR=build/native-smp",
+    "INSTALLER_ISO=../dist/vos5-smp.iso",
+    "NATIVE_SMP_TEST=1",
+    "NATIVE_TLB_TEST=1"
+  ],
+  "scope": "kernel translation replacement and actual AP user execution; no shared-user-VM isolation proof",
+  "network": "none",
+  "source_date_epoch": 1700000000,
+  "harness_sha256": "7d7672a5dbd457c6e58a65ac42d59ee6bd6e6a362ed4a736cf08b43c272687f7",
+  "commit": "81c7f774e617cbc88092353c2dec96ffe6d30783",
+  "git_tree": "8a07e085d1635b8e55c44130d53a9765dcc5c517",
+  "archive_sha256": "f7362e59edc2f5141951edb750918d69b6b38dfd3e3fb0a2f0e36aae36252a11",
+  "initial_generated_outputs_absent": true,
+  "source_files": 5962,
+  "source_manifest_sha256": "d46c1dffc2480dd1d616d336d2feb2239b53e6ae88aa5bb716d7491915088913",
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "build_exit": 0,
+  "source_inputs_unchanged": true,
+  "iso_sha256": "e77a26c27ed1cc2c2eac873387ee0124f1c9b02c96c5973c441e8f5e568477fc",
+  "iso_bytes": 12943360,
+  "kernel_sha256": "332ebed29121df203530033802e3c0d928b1d03058eefe23890cdb89ed3ce206",
+  "user_test_sha256": "cb65e27bc559bb36b6a7c16421b25663a8f31cd7d8ae1efa566bd2408295d32b",
+  "classifier_sha256": "c56a1535d637fe752e95f64d50be563d87e20d3fd3e162e492435578c8e172d7",
+  "qemu_version": "QEMU emulator version 10.2.2",
+  "firmware_sha256": {
+    "code": "33090cc07675baa5190d9f1e84bf5176b33bcbfa9bacac522961150cdb6dbb2a",
+    "vars_template": "5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e"
+  },
+  "error": "AssertionError: uefi4",
+  "build_container_removed": true,
+  "elapsed_seconds": 147.31
+}

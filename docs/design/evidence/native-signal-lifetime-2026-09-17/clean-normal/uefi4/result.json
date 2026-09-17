@@ -1,0 +1,20 @@
+{
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 4,
+  "ram_mb": 1024,
+  "acceleration": "tcg",
+  "observation_seconds": 35,
+  "exit_status": "observation_timeout",
+  "pmm": true,
+  "vmm": true,
+  "scheduler": true,
+  "wizard_output": true,
+  "online_cpus": 4,
+  "failures": [],
+  "passed": true,
+  "scope": "VM boot to user-space setup; not installation, AI inference, or physical hardware qualification",
+  "iso_sha256": "1273e47c6de2b98b05855537974d191b551f117ab15b36d3ab959d3fbcc06c82",
+  "iso_sha256_after": "1273e47c6de2b98b05855537974d191b551f117ab15b36d3ab959d3fbcc06c82",
+  "artifact_unchanged": true
+}
