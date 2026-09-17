@@ -1,0 +1,3 @@
+# Preserve exact captured evidence bytes across Git checkouts.
+*.log -text
+*.txt -text
