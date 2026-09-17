@@ -146,6 +146,39 @@ static void __attribute__((noreturn)) child_work(int index)
     for (;;) ;
 }
 
+/* Reap every owned PID, including entries after a failed fork. A bounded
+ * WNOHANG sweep keeps one slow child from hiding other completed children. */
+static int reap_owned_children(pid_t* children, int slots, int* reaped)
+{
+    unsigned long started = get_uptime_ms();
+    int bad = 0;
+    *reaped = 0;
+    for (unsigned int sweep = 0; sweep < 100000U; sweep++) {
+        int pending = 0;
+        for (int i = 0; i < slots; i++) {
+            if (children[i] <= 0) continue;
+            int status = -1;
+            long ret = syscall4(SYS_WAIT4, children[i], (long)&status, 1, 0);
+            if (ret == children[i]) {
+                (*reaped)++;
+                if (status != 0) bad++;
+                children[i] = 0;
+            } else if (ret != 0) {
+                bad++;
+                children[i] = 0;
+            } else {
+                pending++;
+            }
+        }
+        if (pending == 0) return bad;
+        if (get_uptime_ms() - started >= 30000UL) break;
+        syscall0(SYS_SCHED_YIELD);
+    }
+    for (int i = 0; i < slots; i++)
+        if (children[i] > 0) bad++;
+    return bad;
+}
+
 /* ═══════════════════════════════════════════════════════════════════ */
 int main(int argc, char* argv[])
 {
@@ -159,9 +192,13 @@ int main(int argc, char* argv[])
 
     /* ── Phase 0: Baseline telemetry ────────────────────────────── */
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("baseline_telemetry", "sysinfo failed");
+        return 1;
+    }
     unsigned long baseline_free  = info.free_pages;
     unsigned int  baseline_tasks = info.nr_tasks;
+    unsigned int baseline_zombies = info.nr_zombies;
     printf("[TELEMETRY] baseline tasks=%u free=%lu/%lu\n",
            info.nr_tasks, info.free_pages, info.total_pages);
 
@@ -232,7 +269,8 @@ int main(int argc, char* argv[])
         printf("  Extra fork unexpectedly succeeded (pid=%ld)\n", extra);
         TEST_FAIL("fork_overflow_rejected", "fork should fail at capacity");
         int st = 0;
-        syscall4(SYS_WAIT4, extra, (long)&st, 0, 0);
+        if (syscall4(SYS_WAIT4, extra, (long)&st, 0, 0) != extra || st != 0)
+            TEST_FAIL("overflow_child_cleanup", "unexpected child wait failed");
     }
 
     /* ── Phase 3: P99 Syscall Latency Under Full Saturation ─────── */
@@ -296,68 +334,48 @@ int main(int argc, char* argv[])
         TEST_FAIL("csw_overhead_sub_us", "CSW overhead too high");
     }
 
-    /* ── Phase 5: Verify Child Exit Codes ─────────────────────────
-     * COW page-table teardown via wait4() takes 5-30 minutes per child
-     * in QEMU (1013 COW-sharing children → extremely slow refcount
-     * decrement across entire page table hierarchy).
-     *
-     * Verify via zombie count that all children ran to completion,
-     * then WNOHANG-reap a small sample to verify actual exit codes. */
-#ifndef WNOHANG
-#define WNOHANG 1
-#endif
-#define REAP_SAMPLE 20
+    /* ── Phase 5: Verify and reap ALL child exit codes ───────────── */
     printf("\n--- Phase 5: Verify Child Exit Codes ---\n");
-    get_sysinfo(&info);
-    printf("  Zombies: %u  (expected: %d)\n", info.nr_zombies, fork_ok);
-
-    if (info.nr_zombies >= (unsigned int)(fork_ok - 2)) {
+    int reaped = 0;
+    int child_errors = reap_owned_children(s_children, TARGET_FORKS, &reaped);
+    printf("  Children: %d spawned, %d reaped, %d errors\n",
+           fork_ok, reaped, child_errors);
+    if (reaped == fork_ok && child_errors == 0 && fork_ok > 0) {
         TEST_PASS("all_children_exited");
+        TEST_PASS("fpu_integrity");
     } else {
-        printf("  (only %u of %d children became zombies)\n",
-               info.nr_zombies, fork_ok);
-        TEST_FAIL("all_children_exited", "children did not exit cleanly");
+        TEST_FAIL("all_children_exited", "missing or unsuccessful child exit");
+        TEST_FAIL("fpu_integrity", "not all FPU child results verified");
     }
 
-    /* FPU integrity: reap a sample of children with WNOHANG and verify
-     * each exited with code 0 (FPU checksum was non-zero). */
-    int fpu_ok = 0, fpu_fail = 0;
-    int sample_count = (fork_ok < REAP_SAMPLE) ? fork_ok : REAP_SAMPLE;
-    for (int i = 0; i < sample_count; i++) {
-        if (s_children[i] <= 0) continue;
-        int st = -1;
-        long ret = syscall4(SYS_WAIT4, (long)s_children[i], (long)&st, WNOHANG, 0);
-        if (ret > 0) {
-            int code = (st >> 8) & 0xFF;
-            if (code == 0) fpu_ok++;
-            else           fpu_fail++;
+    /* wait removes zombies; the deferred physical reaper needs ticks. */
+    unsigned long cleanup_started = get_uptime_ms();
+    int cleanup_ok = 0;
+    for (unsigned int sweep = 0; sweep < 100000U; sweep++) {
+        if (get_sysinfo(&info) >= 0 && info.nr_tasks <= baseline_tasks &&
+            info.nr_zombies <= baseline_zombies) {
+            cleanup_ok = 1;
+            break;
         }
-        /* ret==0 means not yet zombie (shouldn't happen), ret<0 means error */
+        if (get_uptime_ms() - cleanup_started >= 5000UL) break;
+        syscall0(SYS_SCHED_YIELD);
     }
-    printf("  FPU sample: %d reaped, %d OK, %d FAIL\n",
-           fpu_ok + fpu_fail, fpu_ok, fpu_fail);
-    if (fpu_ok > 0 && fpu_fail == 0) {
-        TEST_PASS("fpu_integrity");
-    } else if (fpu_ok + fpu_fail == 0) {
-        printf("  (no children reaped — WNOHANG returned 0 for all)\n");
-        TEST_FAIL("fpu_integrity", "could not verify any exit codes");
-    } else {
-        printf("  (%d children had non-zero exit code)\n", fpu_fail);
-        TEST_FAIL("fpu_integrity", "FPU corruption detected");
-    }
+    if (cleanup_ok) TEST_PASS("owned_children_reclaimed");
+    else TEST_FAIL("owned_children_reclaimed", "task or zombie count exceeds baseline");
 
     /* ── Phase 6: Final Telemetry ────────────────────────────────── */
     printf("\n--- Phase 6: Final Telemetry ---\n");
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("final_telemetry", "sysinfo failed");
+        return 1;
+    }
     long page_delta = (long)baseline_free - (long)info.free_pages;
     printf("[TELEMETRY] final tasks=%u zombies=%u free=%lu delta=%ld pages\n",
            info.nr_tasks, info.nr_zombies, info.free_pages, page_delta);
 
-    /* Memory accounting: zombies hold ~34 pages each (kernel stack +
-     * page tables + FPU state + task struct).  With 1013 zombies that's
-     * ~34K pages (~136 MB).  Verify actual usage is proportional. */
-    long expected_pages = (long)info.nr_zombies * 40;  /* generous per-zombie */
-    if (page_delta < expected_pages + 2000) {
+    /* After all children are reaped, retained zombie memory is not an
+     * acceptable allowance. Keep the original fixed 2000-page tolerance. */
+    if (cleanup_ok && page_delta < 2000) {
         TEST_PASS("no_memory_leak");
     } else {
         printf("  (leaked %ld pages = %ld KB)\n", page_delta, page_delta * 4);
