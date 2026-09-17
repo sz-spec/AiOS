@@ -39,7 +39,7 @@ static struct {
     size_t      head;
     size_t      tail;
     size_t      count;
-    vos3_mutex_t lock;
+    vos3_spinlock_t lock;
     vos3_semaphore_t sem;
 } g_tty_input;
 
@@ -112,18 +112,23 @@ void vos3_tty_input_char(char c)
             break;
     }
 
-    vos3_mutex_lock(&g_tty_input.lock);
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_tty_input.lock);
 
+    int inserted = 0;
     if (g_tty_input.count < TTY_INPUT_BUFSIZE) {
         g_tty_input.buffer[g_tty_input.head] = c;
         g_tty_input.head = (g_tty_input.head + 1U) % TTY_INPUT_BUFSIZE;
         g_tty_input.count++;
-
-        /* Signal waiting readers */
-        vos3_sem_post(&g_tty_input.sem);
+        inserted = 1;
     }
 
-    vos3_mutex_unlock(&g_tty_input.lock);
+    vos3_spinlock_unlock(&g_tty_input.lock);
+    vos3_irq_restore(flags);
+
+    /* Wake outside the buffer lock.  sem_post itself is IRQ-safe and never
+     * blocks, so this path is valid from the keyboard ISR. */
+    if (inserted) vos3_sem_post(&g_tty_input.sem);
 
     /* Echo character to console */
     if (c == '\n') {
@@ -188,16 +193,18 @@ static int64_t console_read(vos3_device_t* dev, vos3_file_t* file,
 
     while (read_count < count) {
         /* Wait for input */
-        vos3_sem_wait(&g_tty_input.sem);
+        if (vos3_sem_wait_status(&g_tty_input.sem) != VOS3_SYNC_OK) break;
 
-        vos3_mutex_lock(&g_tty_input.lock);
+        vos3_irqflags_t flags = vos3_irq_save();
+        vos3_spinlock_lock(&g_tty_input.lock);
 
         if (g_tty_input.count > 0U) {
             char c = g_tty_input.buffer[g_tty_input.tail];
             g_tty_input.tail = (g_tty_input.tail + 1U) % TTY_INPUT_BUFSIZE;
             g_tty_input.count--;
 
-            vos3_mutex_unlock(&g_tty_input.lock);
+            vos3_spinlock_unlock(&g_tty_input.lock);
+            vos3_irq_restore(flags);
 
             *p++ = c;
             read_count++;
@@ -207,7 +214,8 @@ static int64_t console_read(vos3_device_t* dev, vos3_file_t* file,
                 break;
             }
         } else {
-            vos3_mutex_unlock(&g_tty_input.lock);
+            vos3_spinlock_unlock(&g_tty_input.lock);
+            vos3_irq_restore(flags);
         }
     }
 
@@ -297,7 +305,7 @@ int vos3_tty_init(void)
     g_tty_input.head = 0U;
     g_tty_input.tail = 0U;
     g_tty_input.count = 0U;
-    vos3_mutex_init(&g_tty_input.lock, "tty_input");
+    vos3_spinlock_init(&g_tty_input.lock);
     vos3_sem_init(&g_tty_input.sem, "tty_sem", 0U);
 
     g_tty_initialized = 1;

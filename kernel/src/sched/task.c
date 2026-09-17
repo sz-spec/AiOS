@@ -19,6 +19,7 @@
 #include "../../include/vos/heap.h"
 #include "../../include/vos/console.h"
 #include "../../include/vos/atomic.h"
+#include "../../include/vos/sync.h"
 #include "../../include/vos/string.h"
 #include "../../include/vos/vfs.h"
 #include "../../include/vos/vmm.h"
@@ -539,6 +540,10 @@ void vos3_task_destroy(vos3_task_t* task)
         return;
     }
 
+    /* Rendezvous with any queue wake and remove stale embedded membership
+     * before this task can be retired or freed. */
+    (void)vos3_wq_cancel(task);
+
     vos3_spinlock_lock(&g_task_lock);
 
     /* Remove from task table — set TOMBSTONE for hash probe continuity */
@@ -558,6 +563,7 @@ void vos3_task_destroy(vos3_task_t* task)
 
     __atomic_store_n(&task->state, VOS3_TASK_DEAD, __ATOMIC_RELEASE);
     vos3_shm_owner_exit(task->identity_cookie);
+    vos3_task_run_wait_cleanup(task);
 
     /* Free resources */
     if (task->kernel_stack != NULL) {
@@ -622,6 +628,8 @@ void vos3_task_defer_destroy(vos3_task_t* task)
         return;
     }
 
+    (void)vos3_wq_cancel(task);
+
     /* Remove from task table so no new lookups find it — TOMBSTONE for probe continuity */
     vos3_spinlock_lock(&g_task_lock);
 
@@ -648,11 +656,18 @@ void vos3_task_defer_destroy(vos3_task_t* task)
     vos3_irqflags_t flags = vos3_irq_save();
     vos3_spinlock_lock(&g_reaper_lock);
 
-    task->next = g_reaper_head;
-    g_reaper_head = task;
+    task->next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
+    __atomic_store_n(&g_reaper_head, task, __ATOMIC_RELEASE);
 
     vos3_spinlock_unlock(&g_reaper_lock);
     vos3_irq_restore(flags);
+    uint32_t owner_cpu = task->cpu_id;
+#ifdef NATIVE_SMP_TEST
+    if (task->sched_owner_plus_one != 0U) {
+        owner_cpu = task->sched_owner_plus_one - 1U;
+    }
+#endif
+    vos3_sched_request_deferred_cpu(owner_cpu);
 
     VOS3_DEBUG("Deferred destroy of task '%s' (tid=%u)", task->name, task->tid);
 }
@@ -660,7 +675,7 @@ void vos3_task_defer_destroy(vos3_task_t* task)
 void vos3_task_reap(void)
 {
     /* Quick check without locking */
-    if (g_reaper_head == NULL) {
+    if (__atomic_load_n(&g_reaper_head, __ATOMIC_ACQUIRE) == NULL) {
         return;
     }
 
@@ -668,8 +683,8 @@ void vos3_task_reap(void)
     vos3_spinlock_lock(&g_reaper_lock);
 
     /* Steal the entire list */
-    vos3_task_t* list = g_reaper_head;
-    g_reaper_head = NULL;
+    vos3_task_t* list = __atomic_exchange_n(&g_reaper_head, NULL,
+                                             __ATOMIC_ACQ_REL);
 
     vos3_spinlock_unlock(&g_reaper_lock);
     vos3_irq_restore(flags);
@@ -697,6 +712,7 @@ void vos3_task_reap(void)
 
         task->next = NULL;
         vos3_shm_owner_exit(task->identity_cookie);
+        vos3_task_run_wait_cleanup(task);
 
         VOS3_DEBUG("Reaping task '%s' (tid=%u)", task->name, task->tid);
 
@@ -744,11 +760,68 @@ void vos3_task_reap(void)
 
         vos3_task_t* tail = deferred;
         while (tail->next != NULL) { tail = tail->next; }
-        tail->next = g_reaper_head;
-        g_reaper_head = deferred;
+        tail->next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
+        __atomic_store_n(&g_reaper_head, deferred, __ATOMIC_RELEASE);
 
         vos3_spinlock_unlock(&g_reaper_lock);
         vos3_irq_restore(flags);
+    }
+}
+
+int vos3_task_reap_pending(void)
+{
+    return __atomic_load_n(&g_reaper_head, __ATOMIC_ACQUIRE) != NULL;
+}
+
+int vos3_task_arm_wait_cleanup(vos3_task_t* task,
+                               vos3_task_wait_cleanup_t cleanup,
+                               void* context)
+{
+    if (task == NULL || cleanup == NULL || context == NULL) return 0;
+    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    if (state == VOS3_TASK_ZOMBIE || state == VOS3_TASK_DEAD) return 0;
+
+    if (__atomic_load_n(&task->wait_cleanup, __ATOMIC_ACQUIRE) != NULL) {
+        VOS3_PANIC("Task '%s' already has a wait cleanup", task->name);
+    }
+    __atomic_store_n(&task->wait_cleanup_context, context, __ATOMIC_RELAXED);
+    vos3_task_wait_cleanup_t expected = NULL;
+    if (!__atomic_compare_exchange_n(&task->wait_cleanup, &expected, cleanup,
+                                     0, __ATOMIC_RELEASE, __ATOMIC_ACQUIRE)) {
+        VOS3_PANIC("Task '%s' already has a wait cleanup", task->name);
+    }
+
+    state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    if (state == VOS3_TASK_ZOMBIE || state == VOS3_TASK_DEAD) {
+        return vos3_task_disarm_wait_cleanup(task, cleanup, context) ? 0 : -1;
+    }
+    return 1;
+}
+
+int vos3_task_disarm_wait_cleanup(vos3_task_t* task,
+                                  vos3_task_wait_cleanup_t cleanup,
+                                  void* context)
+{
+    if (task == NULL || cleanup == NULL) return 0;
+    if (__atomic_load_n(&task->wait_cleanup_context, __ATOMIC_ACQUIRE) != context)
+        return 0;
+    vos3_task_wait_cleanup_t expected = cleanup;
+    if (!__atomic_compare_exchange_n(&task->wait_cleanup, &expected, NULL,
+                                     0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        return 0;
+    __atomic_store_n(&task->wait_cleanup_context, NULL, __ATOMIC_RELEASE);
+    return 1;
+}
+
+void vos3_task_run_wait_cleanup(vos3_task_t* task)
+{
+    if (task == NULL) return;
+    vos3_task_wait_cleanup_t cleanup =
+        __atomic_exchange_n(&task->wait_cleanup, NULL, __ATOMIC_ACQ_REL);
+    if (cleanup != NULL) {
+        void* context = __atomic_exchange_n(&task->wait_cleanup_context, NULL,
+                                             __ATOMIC_ACQ_REL);
+        if (context != NULL) cleanup(context);
     }
 }
 
@@ -901,11 +974,21 @@ void vos3_task_wake(vos3_task_t* task)
         return;
     }
 
+    /* On the production UP path this makes membership cancellation and the
+     * READY publication one indivisible wake transition.  The queue helper
+     * nests irq_save safely when an embedded entry is present. */
+    vos3_irqflags_t flags = vos3_irq_save();
+    if (task->state == VOS3_TASK_BLOCKED) {
+        /* Signals and other external wake sources do not own the primitive's
+         * queue lock. Detach the embedded entry before it can be reused. */
+        (void)vos3_wq_cancel(task);
+    }
     if (task->state == VOS3_TASK_SLEEPING || task->state == VOS3_TASK_BLOCKED) {
         task->state = VOS3_TASK_READY;
         task->wake_time = 0ULL;
         vos3_sched_add_task(task);
     }
+    vos3_irq_restore(flags);
 }
 
 __attribute__((noreturn))
@@ -1087,29 +1170,35 @@ void vos3_task_kill(vos3_task_t* task, int signal)
         return;
     }
 
+    vos3_irqflags_t transition_flags = vos3_irq_save();
+
     /* Already dead or zombie — nothing to do */
     if (task->state == VOS3_TASK_ZOMBIE || task->state == VOS3_TASK_DEAD) {
+        vos3_irq_restore(transition_flags);
         return;
     }
 
     VOS3_INFO("[TASK] Killing task '%s' (pid=%u) with signal %d",
               task->name, task->pid, signal);
 
-    /* If the task is blocked or sleeping, wake it so the scheduler can
-     * remove it cleanly.  We set state=READY first; it will be immediately
-     * moved to ZOMBIE below. */
+    /* Detach a blocking entry before terminal publication.  Keep local IRQs
+     * disabled so a second wake cannot run the task between those steps. */
+    if (task->state == VOS3_TASK_BLOCKED) {
+        (void)vos3_wq_cancel(task);
+    }
     if (task->state == VOS3_TASK_BLOCKED || task->state == VOS3_TASK_SLEEPING) {
         task->wake_time = 0ULL;
-        task->state = VOS3_TASK_READY;
     }
 
     /* Set exit code and transition to zombie */
     task->exit_code = -signal;
     __atomic_store_n(&task->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
-    vos3_shm_owner_exit(task->identity_cookie);
 
-    /* Remove from scheduler run queue */
+    /* Remove before restoring IF: the timer must not select a terminal task
+     * from a run queue between publication and removal. */
     vos3_sched_remove_task(task);
+    vos3_irq_restore(transition_flags);
+    vos3_shm_owner_exit(task->identity_cookie);
 
     /* Wake parent if it's blocked (e.g. in waitpid) */
     vos3_task_t* parent = task->parent;
@@ -1135,9 +1224,7 @@ void vos3_task_unblock(vos3_task_t* task)
     if (task == NULL || task->state != VOS3_TASK_BLOCKED) {
         return;
     }
-
-    task->state = VOS3_TASK_READY;
-    vos3_sched_add_task(task);
+    vos3_task_wake(task);
 }
 
 /* ============================================================================

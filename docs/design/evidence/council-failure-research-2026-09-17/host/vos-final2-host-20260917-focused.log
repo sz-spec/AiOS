@@ -1,0 +1,11 @@
+test_blocked_receive_and_operation_stress_destroy_safely (scripts.test_msgqueue_lifetime.MessageQueueLifetimeTests.test_blocked_receive_and_operation_stress_destroy_safely) ... ok
+test_task_lifetime_paths_reset_and_run_wait_cleanup (scripts.test_msgqueue_lifetime.MessageQueueLifetimeTests.test_task_lifetime_paths_reset_and_run_wait_cleanup) ... ok
+test_task_wait_cleanup_has_exactly_one_owner (scripts.test_msgqueue_lifetime.MessageQueueLifetimeTests.test_task_wait_cleanup_has_exactly_one_owner) ... ok
+test_actual_policy_and_managed_ram (scripts.test_mmio_fail_closed.MMIOPolicy.test_actual_policy_and_managed_ram) ... ok
+test_epoch_and_nested_tree_timestamps (scripts.test_build_reproducibility.BuildReproducibilityTests.test_epoch_and_nested_tree_timestamps) ... ok
+test_target_flags_invalidate_actual_limine_state (scripts.test_build_reproducibility.BuildReproducibilityTests.test_target_flags_invalidate_actual_limine_state) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.280s
+
+OK

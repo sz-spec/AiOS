@@ -22,6 +22,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "unistd.h"
+#include "signal.h"
 #include "syscall.h"
 #include <stdint.h>
 
@@ -66,6 +67,7 @@ static int g_tests_failed = 0;
 
 /* SHM flags */
 #define VOS3_SHM_FLAG_HUGETLB   (1U << 4)
+#define VOS3_SHM_FLAG_PUBLIC    (1U << 6)
 
 /* Clone flags */
 #define CLONE_VM        0x00000100UL
@@ -156,9 +158,9 @@ static int soak_one_iteration(void)
 
     { spsc_slot_t tmp; while (spsc_pop(ring, &tmp) == 0); }
 
-    syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
-    syscall1(SYS_SHM_DESTROY, shm_id);
-    return 0;
+    long unmap_result = syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
+    long destroy_result = syscall1(SYS_SHM_DESTROY, shm_id);
+    return (unmap_result == 0 && destroy_result == 0) ? 0 : -1;
 }
 
 static void soak_5min_leak_check(void)
@@ -174,8 +176,11 @@ static void soak_5min_leak_check(void)
         return;
     }
 
-    vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    vos3_sysinfo_t info = {0};
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("soak_5min_leak_check: initial SYSINFO failed");
+        return;
+    }
     unsigned long baseline_free = info.free_pages;
     unsigned long start_ms = get_uptime_ms();
     unsigned long last_report_ms = start_ms;
@@ -190,7 +195,10 @@ static void soak_5min_leak_check(void)
 
         /* Periodic status report every ~3 seconds */
         if (now_ms - last_report_ms >= 3000) {
-            get_sysinfo(&info);
+            if (get_sysinfo(&info) < 0) {
+                failed = 1;
+                break;
+            }
             long delta = (long)baseline_free - (long)info.free_pages;
             printf("[SOAK] t=%lus free_pages=%lu delta=%ld iter=%d\n",
                    elapsed_sec, info.free_pages, delta, iterations);
@@ -206,7 +214,10 @@ static void soak_5min_leak_check(void)
     }
 
     /* Final sysinfo */
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("soak_5min_leak_check: final SYSINFO failed");
+        return;
+    }
     long final_delta = (long)baseline_free - (long)info.free_pages;
     if (final_delta < 0) final_delta = -final_delta;
 
@@ -244,16 +255,18 @@ static void agent_chaos_crash_recovery(void)
 {
     printf("\n--- Test: agent_chaos_crash_recovery ---\n");
 
-    /* Create SHM */
+    /* Create public SHM so independently forked address spaces can attach. */
     long shm_id = syscall3(SYS_SHM_CREATE, (long)"chaos_shm",
                            (long)CRASH_SHM_SIZE,
-                           (long)VOS3_SHM_FLAG_HUGETLB);
+                           (long)(VOS3_SHM_FLAG_HUGETLB |
+                                  VOS3_SHM_FLAG_PUBLIC));
     if (shm_id < 0) {
         TEST_FAIL("agent_chaos_crash_recovery: SHM_CREATE failed (%ld)", shm_id);
         return;
     }
 
-    /* Map in parent */
+    /* Initialize, then detach before fork.  Independent fork of an address
+     * space that still contains SHM is deliberately unsupported. */
     long base_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
     if (base_addr <= 0) {
         TEST_FAIL("agent_chaos_crash_recovery: SHM_MAP failed (%ld)", base_addr);
@@ -272,17 +285,29 @@ static void agent_chaos_crash_recovery(void)
         syscall1(SYS_SHM_DESTROY, shm_id);
         return;
     }
+    if (syscall2(SYS_SHM_UNMAP, shm_id, base_addr) != 0) {
+        TEST_FAIL("agent_chaos_crash_recovery: initial SHM_UNMAP failed");
+        syscall1(SYS_SHM_DESTROY, shm_id);
+        return;
+    }
 
     /* Fork child (producer) */
     pid_t child = fork();
     if (child < 0) {
         TEST_FAIL("agent_chaos_crash_recovery: fork failed");
-        syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
         syscall1(SYS_SHM_DESTROY, shm_id);
         return;
     }
 
     if (child == 0) {
+        long child_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+        if (child_addr <= 0) _exit(2);
+        ring = (spsc_ring_t*)child_addr;
+        slots_addr = ((uintptr_t)child_addr + sizeof(spsc_ring_t) + 63) &
+                     ~(uintptr_t)63;
+        /* slots is process-local metadata; rebuild it after each attach. */
+        ring->slots = (spsc_slot_t*)slots_addr;
+
         /* Child: push 100 messages with sequence numbers, then exit abruptly.
          * Does NOT send SPSC_MSG_DONE sentinel — simulates crash. */
         for (int i = 0; i < CRASH_MSG_COUNT; i++) {
@@ -304,10 +329,36 @@ static void agent_chaos_crash_recovery(void)
     }
 
     /* Parent: wait for child to die */
-    int status = 0;
-    waitpid(child, &status, 0);
+    int status = -1;
+    pid_t waited = waitpid(child, &status, 0);
+    int child_exit_ok = (waited == child && WIFEXITED(status) &&
+                         WEXITSTATUS(status) == 0);
+    if (!child_exit_ok) {
+        TEST_FAIL("agent_chaos_crash_recovery: wait failed (pid=%d status=%d)",
+                  (int)waited, status);
+        if (waited != child) {
+            int cleanup_status = 0;
+            (void)kill(child, SIGKILL);
+            (void)waitpid(child, &cleanup_status, 0);
+        }
+        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0) {
+            TEST_FAIL("agent_chaos_crash_recovery: cleanup destroy failed");
+        }
+        return;
+    }
 
-    int child_exit_ok = (WIFEXITED(status) && WEXITSTATUS(status) == 0);
+    /* Recover by attaching only after the producer has died. */
+    base_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+    if (base_addr <= 0) {
+        TEST_FAIL("agent_chaos_crash_recovery: recovery SHM_MAP failed (%ld)",
+                  base_addr);
+        syscall1(SYS_SHM_DESTROY, shm_id);
+        return;
+    }
+    ring = (spsc_ring_t*)base_addr;
+    slots_addr = ((uintptr_t)base_addr + sizeof(spsc_ring_t) + 63) &
+                 ~(uintptr_t)63;
+    ring->slots = (spsc_slot_t*)slots_addr;
 
     /* Pop messages with spin timeout (child is dead, so no more coming) */
     int received = 0;
@@ -335,26 +386,30 @@ static void agent_chaos_crash_recovery(void)
     }
 
     /* Cleanup SHM explicitly (child can't) */
-    syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
-    syscall1(SYS_SHM_DESTROY, shm_id);
+    long unmap_result = syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
+    long destroy_result = syscall1(SYS_SHM_DESTROY, shm_id);
+    int cleanup_ok = (unmap_result == 0 && destroy_result == 0);
 
     /* Let reaper clean up deferred-destroy tasks (runs every 2+ ticks) */
     syscall0(SYS_YIELD);
     syscall0(SYS_YIELD);
 
     /* Verify zombies cleaned up */
-    vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    vos3_sysinfo_t info = {0};
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("agent_chaos_crash_recovery: SYSINFO failed");
+        return;
+    }
 
     printf("  Child exit OK: %d, received: %d/%d, seq_ok: %d, zombies: %u\n",
            child_exit_ok, received, CRASH_MSG_COUNT, seq_ok, info.nr_zombies);
 
-    if (child_exit_ok && received == CRASH_MSG_COUNT && seq_ok &&
+    if (child_exit_ok && cleanup_ok && received == CRASH_MSG_COUNT && seq_ok &&
         info.nr_zombies <= 1) {
         TEST_PASS("agent_chaos_crash_recovery");
     } else {
-        TEST_FAIL("agent_chaos_crash_recovery: exit=%d recv=%d seq=%d zombies=%u",
-                  child_exit_ok, received, seq_ok, info.nr_zombies);
+        TEST_FAIL("agent_chaos_crash_recovery: exit=%d cleanup=%d recv=%d seq=%d zombies=%u",
+                  child_exit_ok, cleanup_ok, received, seq_ok, info.nr_zombies);
     }
 }
 
@@ -374,8 +429,11 @@ static void pressure_fragmentation(void)
 {
     printf("\n--- Test: pressure_fragmentation ---\n");
 
-    vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    vos3_sysinfo_t info = {0};
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("pressure_fragmentation: initial SYSINFO failed");
+        return;
+    }
     unsigned long baseline_free = info.free_pages;
     int failures = 0;
     int total_ops = 0;
@@ -387,6 +445,8 @@ static void pressure_fragmentation(void)
         long addrs[20];
         int created = 0;
 
+        /* Keep all twenty objects live, but attach them in bounded windows:
+         * an address space intentionally tracks at most sixteen SHM maps. */
         for (int j = 0; j < 20; j++) {
             /* Build unique name */
             char name[16];
@@ -404,21 +464,31 @@ static void pressure_fragmentation(void)
                 failures++;
                 break;
             }
-
-            addrs[j] = syscall2(SYS_SHM_MAP, ids[j], 0);
-            if (addrs[j] <= 0) {
-                syscall1(SYS_SHM_DESTROY, ids[j]);
-                failures++;
-                break;
-            }
             created++;
-            total_ops++;
         }
 
-        /* Cleanup all created */
+        for (int start = 0; start < created; start += 16) {
+            int end = start + 16;
+            if (end > created) end = created;
+            int mapped_end = start;
+            for (int j = start; j < end; j++) {
+                addrs[j] = syscall2(SYS_SHM_MAP, ids[j], 0);
+                if (addrs[j] <= 0) {
+                    failures++;
+                    break;
+                }
+                mapped_end = j + 1;
+                total_ops++;
+            }
+            for (int j = start; j < mapped_end; j++) {
+                if (syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]) != 0)
+                    failures++;
+            }
+            if (mapped_end != end) break;
+        }
+
         for (int j = 0; j < created; j++) {
-            syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]);
-            syscall1(SYS_SHM_DESTROY, ids[j]);
+            if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
         }
     }
 
@@ -447,7 +517,7 @@ static void pressure_fragmentation(void)
 
             addrs[j] = syscall2(SYS_SHM_MAP, ids[j], 0);
             if (addrs[j] <= 0) {
-                syscall1(SYS_SHM_DESTROY, ids[j]);
+                if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
                 failures++;
                 break;
             }
@@ -456,8 +526,8 @@ static void pressure_fragmentation(void)
         }
 
         for (int j = 0; j < created; j++) {
-            syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]);
-            syscall1(SYS_SHM_DESTROY, ids[j]);
+            if (syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]) != 0) failures++;
+            if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
         }
     }
 
@@ -483,7 +553,7 @@ static void pressure_fragmentation(void)
 
             addrs[created] = syscall2(SYS_SHM_MAP, ids[created], 0);
             if (addrs[created] <= 0) {
-                syscall1(SYS_SHM_DESTROY, ids[created]);
+                if (syscall1(SYS_SHM_DESTROY, ids[created]) != 0) failures++;
                 failures++;
                 break;
             }
@@ -507,7 +577,7 @@ static void pressure_fragmentation(void)
 
             addrs[created] = syscall2(SYS_SHM_MAP, ids[created], 0);
             if (addrs[created] <= 0) {
-                syscall1(SYS_SHM_DESTROY, ids[created]);
+                if (syscall1(SYS_SHM_DESTROY, ids[created]) != 0) failures++;
                 failures++;
                 break;
             }
@@ -516,20 +586,23 @@ static void pressure_fragmentation(void)
         }
 
         for (int j = 0; j < created; j++) {
-            syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]);
-            syscall1(SYS_SHM_DESTROY, ids[j]);
+            if (syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]) != 0) failures++;
+            if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
         }
     }
 
     /* Final check */
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("pressure_fragmentation: final SYSINFO failed");
+        return;
+    }
     long final_delta = (long)baseline_free - (long)info.free_pages;
     if (final_delta < 0) final_delta = -final_delta;
 
     printf("  Total ops: %d, failures: %d, leak_delta: %ld\n",
            total_ops, failures, final_delta);
 
-    if (failures == 0 && final_delta <= 50) {
+    if (failures == 0 && total_ops == 1115 && final_delta <= 50) {
         TEST_PASS("pressure_fragmentation");
     } else {
         TEST_FAIL("pressure_fragmentation: ops=%d failures=%d delta=%ld",

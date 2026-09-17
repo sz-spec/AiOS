@@ -1,0 +1,13 @@
+...................................................................................................
+----------------------------------------------------------------------
+Ran 99 tests in 57.364s
+
+OK
+production-function-sha256 21fdd7a285b3865b599432386a359ffe21e991e523362ce5f7bd7717d7acc958
+production-functions-sha256 09b1b6057247350d3ccce01d5b24350ca5ccc5eb116cb9fc4268e49c45eba0d2
+production-helper-sha256 4510ae463baaac19d8e2dd85305dcef76c36752a8e57060c7eb5c59219acaedb
+production-helper-sha256 f355f6d7b4622fe2a35550955fbdcd8519100de800c3af198da3e5947f9f768d
+production-lifetime-sha256 b746d02373dfe7f1ac9133ca30262d08040332c066edbe8908e53f45e3597fde
+signal_syscall.c sha256=4699722f50f2099f46cc5cede677e93695f81ed32e7082702d471fa3cb80d4e9
+signal.c sha256=1c2d8879dff6be36effa3c5dd2b7ea5672de43950e8f2225e9b08bbc4ce5eb45
+user_copy.c sha256=ca1814541936a011ef9c386a7f84601ca6c5523cc3b2e9623eddffed3508a27a

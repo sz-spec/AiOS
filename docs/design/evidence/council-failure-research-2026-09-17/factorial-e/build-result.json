@@ -1,0 +1,16 @@
+{
+  "exit_code": 0,
+  "source_unchanged": true,
+  "only_override": [
+    "user/src/test_npu_direct.c"
+  ],
+  "override_sha256": "b124c998075e63db50a6caba1cbd0d075113fde701b1ac9ae11924d99e417ab6",
+  "frontier_sha256": "07d0e1bdcf6dbc239051b0d68bbd69fa9f2b38bb32dcefed7cfd28ea0936f995",
+  "iso": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/source/dist/final-full.iso",
+  "iso_sha256": "9f53f3e3e50c75a0a24295bf5345a14bdce09508ac1feeb8d8073b227d7af98a",
+  "runtime": "Not launched; awaiting run-go",
+  "warnings": [
+    "make[1]: Warning: File 'build/native-full-final' has modification time 0.00034 s in the future",
+    "make[1]: warning:  Clock skew detected.  Your build may be incomplete."
+  ]
+}

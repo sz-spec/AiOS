@@ -306,6 +306,8 @@ void vos3_pmm_reserve_hugepages(uint32_t count);
  * @return Physical address of 2MB-aligned page, or 0 on failure
  */
 uint64_t vos3_pmm_alloc_huge(void);
+/** Allocate 1..16 physically consecutive 2MiB pages; release each with free_huge. */
+uint64_t vos3_pmm_alloc_huge_contiguous(uint32_t count);
 
 /**
  * @brief Return a 2MB HugePage to the reserved pool

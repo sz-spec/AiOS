@@ -121,11 +121,14 @@ typedef struct vos3_msgqueue {
     size_t max_count;           /**< Maximum messages */
     size_t max_msg_size;        /**< Maximum message size */
 
-    vos3_mutex_t lock;          /**< Queue lock */
+    vos3_spinlock_t lock;       /**< Short, non-sleeping message-list lock */
     vos3_semaphore_t sem_space; /**< Space available */
     vos3_semaphore_t sem_msgs;  /**< Messages available */
+    vos3_atomic32_t active_ops; /**< Registry reference plus operation pins */
+    volatile uint32_t closing;  /**< Removed from table; reject new pins */
 
     vos3_tid_t owner;           /**< Owner task */
+    uint64_t owner_identity;    /**< Non-reusable creator principal */
     uint32_t flags;             /**< Queue flags */
 } vos3_msgqueue_t;
 

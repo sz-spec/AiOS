@@ -1,0 +1,23 @@
+{
+  "freeze": {
+    "changed_files": [],
+    "unchanged": true
+  },
+  "build0": {
+    "changed_files": [],
+    "unchanged": true
+  },
+  "build1": {
+    "changed_files": [],
+    "unchanged": true
+  },
+  "working_tree": {
+    "changed_files": [
+      "README.md",
+      "docs/design/evidence/expert-council-2026-09-15/ACTIONS.md",
+      "docs/design/evidence/expert-council-2026-09-15/README.md"
+    ],
+    "unchanged": false
+  },
+  "scope": "All frozen file hashes checked; working-tree changes after freeze are documentation only. New evidence/docs are outside the frozen file set."
+}

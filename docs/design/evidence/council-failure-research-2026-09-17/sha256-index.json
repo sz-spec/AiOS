@@ -1,0 +1,317 @@
+{
+  "scope": "Original copied evidence only; generated experiment-matrix.md and this index excluded",
+  "files": [
+    {
+      "path": "final2-bios/result.json",
+      "original_path": "/private/tmp/vos-final2-bios-20260917/result.json",
+      "bytes": 6597,
+      "sha256": "0065adc86ddd770f419204ee045a59f9641e9ffcaecdd8e8d69ab11fc9bd9f95"
+    },
+    {
+      "path": "final2-bios/serial.log",
+      "original_path": "/private/tmp/vos-final2-bios-20260917/serial.log",
+      "bytes": 588643,
+      "sha256": "3326bbab29949e6596fe266aa9d95cde77458413459e74878274a135cbc57d7f"
+    },
+    {
+      "path": "final2-uefi/result.json",
+      "original_path": "/private/tmp/vos-final2-uefi-20260917/result.json",
+      "bytes": 7470,
+      "sha256": "f5e9c0d4c3a5192fc250b1f1463b987c3d2ed3d6b39ab88ad0865520d67ab8f5"
+    },
+    {
+      "path": "final2-uefi/serial.log",
+      "original_path": "/private/tmp/vos-final2-uefi-20260917/serial.log",
+      "bytes": 593904,
+      "sha256": "4143ffe3c7421299d949fa1a3d21f4bd5c784a449263f8f5b3abdfb5b83ee496"
+    },
+    {
+      "path": "final2-uefi/invocation.json",
+      "original_path": "/private/tmp/vos-final2-uefi-20260917/invocation.json",
+      "bytes": 2733,
+      "sha256": "6f6a9498db31c19114c030ce8add97af78271563293aa6df7625c3fe33f7aa24"
+    },
+    {
+      "path": "old-control/result.json",
+      "original_path": "/private/tmp/vos-final2-control-old-bios-20260917/result.json",
+      "bytes": 6441,
+      "sha256": "51e54f99a15567c1510b6d88bd5b7a44a18617751b92d769d703da79fa2bae5b"
+    },
+    {
+      "path": "old-control/serial.log",
+      "original_path": "/private/tmp/vos-final2-control-old-bios-20260917/serial.log",
+      "bytes": 585428,
+      "sha256": "c80f2c7670e0ee496f626e9f7c5bad0e4f1d96090ae45b9992da033068fc6558"
+    },
+    {
+      "path": "factorial-c/source-manifest.json",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/source-manifest.json",
+      "bytes": 926483,
+      "sha256": "9c4dc55abbf3a52594d2d3ce4df7ba7c078ff7913fe430358ea6fc65320755a6"
+    },
+    {
+      "path": "factorial-c/build-approved.log",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/build-approved.log",
+      "bytes": 403781,
+      "sha256": "576988b75658bc14712a42bdd7883833c4e1614de868653df17da02efba609c3"
+    },
+    {
+      "path": "factorial-c/runner.log",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/runner.log",
+      "bytes": 6657,
+      "sha256": "55f196d70f10da8c1dc4df4e8e6aceb29c505ac926c675ec79bc258e56e37f96"
+    },
+    {
+      "path": "factorial-c/build-command.json",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/build-command.json",
+      "bytes": 595,
+      "sha256": "55c6ad3fd322865cdef1e59bda64d3b6fa2a1a4e6b2d5ae2c0022346c520ef3d"
+    },
+    {
+      "path": "factorial-c/build-result.json",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/build-result.json",
+      "bytes": 438,
+      "sha256": "c0616551ddb950d552e24c6bde9e7f9a652611dc054bb03be0b7bb5465c07d0f"
+    },
+    {
+      "path": "factorial-c/build.log",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/build.log",
+      "bytes": 104,
+      "sha256": "0c659e3ca7649ac6c8c0343efb74f4dc0a993af8d880ccf508783756e528394b"
+    },
+    {
+      "path": "factorial-c/run/result.json",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/run/result.json",
+      "bytes": 6577,
+      "sha256": "bb070e6449130f52e65295410068886c5794df0d3487d683b97f48e21f30a527"
+    },
+    {
+      "path": "factorial-c/run/serial.log",
+      "original_path": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/run/serial.log",
+      "bytes": 697865,
+      "sha256": "c74ca11c99263379284db96e71c3092956d35b9cb2a60c6554995e86b102e5ac"
+    },
+    {
+      "path": "factorial-d/source-manifest.json",
+      "original_path": "/private/tmp/vos-factorial-d-oldkernel-newuser-20260917/source-manifest.json",
+      "bytes": 707690,
+      "sha256": "412a164d6dfcc58ad2164069085b1b5154a228f12e2f4bd36b705c6c8d565241"
+    },
+    {
+      "path": "factorial-d/result.json",
+      "original_path": "/private/tmp/vos-factorial-d-oldkernel-newuser-20260917/result.json",
+      "bytes": 8680,
+      "sha256": "ad7f06adfc526e064b377b1e0de62592cfd9dd7e6ceb360a219fe619ce094bd8"
+    },
+    {
+      "path": "factorial-d/runner.log",
+      "original_path": "/private/tmp/vos-factorial-d-oldkernel-newuser-20260917/runner.log",
+      "bytes": 6707,
+      "sha256": "14d5332dedb828a8eec359a4afa6315a79097640fb6cca8bad21b96727e9ffe8"
+    },
+    {
+      "path": "factorial-d/build.log",
+      "original_path": "/private/tmp/vos-factorial-d-oldkernel-newuser-20260917/build.log",
+      "bytes": 389882,
+      "sha256": "2780da3349b5a640addb361f2057d2cf473382429661a6f5964243ece80f2120"
+    },
+    {
+      "path": "factorial-d/run/result.json",
+      "original_path": "/private/tmp/vos-factorial-d-oldkernel-newuser-20260917/run/result.json",
+      "bytes": 6627,
+      "sha256": "a6d63bf54c02c68b6603243194a2da088ddb594ef822d771c68fb475d2ca73d5"
+    },
+    {
+      "path": "factorial-d/run/serial.log",
+      "original_path": "/private/tmp/vos-factorial-d-oldkernel-newuser-20260917/run/serial.log",
+      "bytes": 695117,
+      "sha256": "739b05a67009cb5618c38b72ef96a16d3f6e2ffaa72917b004bcf06e448978dd"
+    },
+    {
+      "path": "factorial-e/source-manifest.json",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/source-manifest.json",
+      "bytes": 926445,
+      "sha256": "b4176fcef0ba4e1c0c92ba02909bb7cbf0c0cdd16c0e6b8294dc8d01e9f28365"
+    },
+    {
+      "path": "factorial-e/runner.log",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/runner.log",
+      "bytes": 6710,
+      "sha256": "80bac20322ff4f521930bc52cef94ffd20bc2fdc13c93368e92c0f668efab103"
+    },
+    {
+      "path": "factorial-e/build-command.json",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/build-command.json",
+      "bytes": 596,
+      "sha256": "751fe27e947484afc75785e0320cca4486190bfc3254b4e119b5f34389a5f24a"
+    },
+    {
+      "path": "factorial-e/build-result.json",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/build-result.json",
+      "bytes": 712,
+      "sha256": "906bc09d7429c0f414987e5bb5bf2187ea9dc02380f7f330d805699e2ec10fc1"
+    },
+    {
+      "path": "factorial-e/build.log",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/build.log",
+      "bytes": 404263,
+      "sha256": "4c7df7e60d387dc5e9ecc9558ef76f88290a8bcc08ce3aaf068e1cfebeb34f39"
+    },
+    {
+      "path": "factorial-e/run/result.json",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/run/result.json",
+      "bytes": 6629,
+      "sha256": "7a3a44dc49990d0a33f06a2917d040092b1d7758903a69dfbcd597e11c12aad7"
+    },
+    {
+      "path": "factorial-e/run/serial.log",
+      "original_path": "/private/tmp/vos-factorial-e-oldnpu-newfrontier-20260917/run/serial.log",
+      "bytes": 688394,
+      "sha256": "ded2197bd90712d181500974252cfee295ee9f28f842a1ac8c5c49994f4c2e57"
+    },
+    {
+      "path": "factorial-f/source-manifest.json",
+      "original_path": "/private/tmp/vos-factorial-f-newnpu-oldfrontier-20260917/source-manifest.json",
+      "bytes": 696059,
+      "sha256": "5f7d6d2661ae1a272b4970fcc7d87d7dd872f149efa2e9276f2d57f582a5854a"
+    },
+    {
+      "path": "factorial-f/result.json",
+      "original_path": "/private/tmp/vos-factorial-f-newnpu-oldfrontier-20260917/result.json",
+      "bytes": 8642,
+      "sha256": "339b3084447c6d1fe57984f68a2aabe09e8285a5609069de94a5cbb7be4fe64f"
+    },
+    {
+      "path": "factorial-f/runner.log",
+      "original_path": "/private/tmp/vos-factorial-f-newnpu-oldfrontier-20260917/runner.log",
+      "bytes": 6710,
+      "sha256": "1beef2ec55cb6d88ab9d8964f5bac5973f1530283dd5398764b8ec119b14413b"
+    },
+    {
+      "path": "factorial-f/build.log",
+      "original_path": "/private/tmp/vos-factorial-f-newnpu-oldfrontier-20260917/build.log",
+      "bytes": 403947,
+      "sha256": "6a519277dbf4043480c56b38dc59e4793537cec80261839ec4b1eaff86b4458b"
+    },
+    {
+      "path": "factorial-f/run/result.json",
+      "original_path": "/private/tmp/vos-factorial-f-newnpu-oldfrontier-20260917/run/result.json",
+      "bytes": 6629,
+      "sha256": "0052642465704f71c86382b0ba3ecbd549d4f4a33e18cc8ef3c1d323c3fd2a7c"
+    },
+    {
+      "path": "factorial-f/run/serial.log",
+      "original_path": "/private/tmp/vos-factorial-f-newnpu-oldfrontier-20260917/run/serial.log",
+      "bytes": 590198,
+      "sha256": "96e088df26429633ec8d9e85532f245ea81fc4a773c57cb515c86418c8c549ad"
+    },
+    {
+      "path": "repro/result.json",
+      "original_path": "/private/tmp/vos-final2-repro-20260917/result.json",
+      "bytes": 3795,
+      "sha256": "7839901b69a1a2157b7b34a26fcd639824365c2f8f140dd2c56e235611163adf"
+    },
+    {
+      "path": "repro/independent-review.json",
+      "original_path": "/private/tmp/vos-final2-repro-20260917/independent-review.json",
+      "bytes": 4793,
+      "sha256": "526228c22d9669c6533b2bec723890c8afc13bd7108285eeb755de8c4514eac5"
+    },
+    {
+      "path": "repro/0/build.log",
+      "original_path": "/private/tmp/vos-final2-repro-20260917/0/build.log",
+      "bytes": 404262,
+      "sha256": "3b7bb9226332a9ca2794e560a95ee937b58f89b175f3c5a802f8d7348e4fbf95"
+    },
+    {
+      "path": "repro/1/build.log",
+      "original_path": "/private/tmp/vos-final2-repro-20260917/1/build.log",
+      "bytes": 404444,
+      "sha256": "cad2b8fff8c6af4eab7e3068f91bec622ee31a170a4e6db41333a50701703b70"
+    },
+    {
+      "path": "repro/source-manifest.json",
+      "original_path": "/private/tmp/vos-final2-20260917-source-manifest.json",
+      "bytes": 926311,
+      "sha256": "4889381173e32c153e3c82793c886ce542f00c4764036369e14438211be1afe5"
+    },
+    {
+      "path": "host/vos-final2-host-20260917-build-check.log",
+      "original_path": "/private/tmp/vos-final2-host-20260917-build-check.log",
+      "bytes": 298,
+      "sha256": "94325691dbdf992cbba7f2abb5778547db5850ee344a5cbe52dc551d27231a14"
+    },
+    {
+      "path": "host/vos-final2-host-20260917-diff-check.log",
+      "original_path": "/private/tmp/vos-final2-host-20260917-diff-check.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "host/vos-final2-host-20260917-inventory.json",
+      "original_path": "/private/tmp/vos-final2-host-20260917-inventory.json",
+      "bytes": 2227,
+      "sha256": "7832000c1c884feaa44a4feec683171df483188912e0e21eae23fdf77ec7c68c"
+    },
+    {
+      "path": "host/vos-final2-host-20260917-focused.log",
+      "original_path": "/private/tmp/vos-final2-host-20260917-focused.log",
+      "bytes": 1038,
+      "sha256": "b913e5ec4c0680fc7b8bcc954e981decd8c2336f987bc522414de1ea1066d807"
+    },
+    {
+      "path": "host/vos-final2-host-20260917-discovery.log",
+      "original_path": "/private/tmp/vos-final2-host-20260917-discovery.log",
+      "bytes": 910,
+      "sha256": "d6a616febffff466033efc3bad4a22cdd1afadb693c423288971fb78b2e61093"
+    },
+    {
+      "path": "drivers/vos-final2-repro-20260917.log",
+      "original_path": "/private/tmp/vos-final2-repro-20260917.log",
+      "bytes": 3795,
+      "sha256": "7839901b69a1a2157b7b34a26fcd639824365c2f8f140dd2c56e235611163adf"
+    },
+    {
+      "path": "drivers/vos-factorial-c-driver.py",
+      "original_path": "/private/tmp/vos-factorial-c-driver.py",
+      "bytes": 1961,
+      "sha256": "756d8c3d157de0133edf896d093387f88b2300b26003b3a3b6e8bfc58e5291c3"
+    },
+    {
+      "path": "drivers/vos-factorial-d-driver.py",
+      "original_path": "/private/tmp/vos-factorial-d-driver.py",
+      "bytes": 3090,
+      "sha256": "93f5b0bd2c6f2de27aa2975d4292b3c40c7c180ba262427f269490aefd0083d9"
+    },
+    {
+      "path": "drivers/vos-factorial-d-launcher.log",
+      "original_path": "/private/tmp/vos-factorial-d-launcher.log",
+      "bytes": 19,
+      "sha256": "b27e023c114e38b4d11cbe4ea80faf19f35d4d699f0b7c9e3847584c070d2d3c"
+    },
+    {
+      "path": "drivers/vos-factorial-e-prepare.py",
+      "original_path": "/private/tmp/vos-factorial-e-prepare.py",
+      "bytes": 1551,
+      "sha256": "8dd65fd9c5af58c527a765570f8c05e1a9aa237dd508fa01d9ed8b3bf994e884"
+    },
+    {
+      "path": "drivers/vos-factorial-f-driver.py",
+      "original_path": "/private/tmp/vos-factorial-f-driver.py",
+      "bytes": 3105,
+      "sha256": "a90ecd09ee0cb96ac934c626b18adc3fc35c5d6cc6a26ddf790e3b01512d0802"
+    },
+    {
+      "path": "drivers/vos-factorial-f-launcher.log",
+      "original_path": "/private/tmp/vos-factorial-f-launcher.log",
+      "bytes": 19,
+      "sha256": "b27e023c114e38b4d11cbe4ea80faf19f35d4d699f0b7c9e3847584c070d2d3c"
+    },
+    {
+      "path": "drivers/vos-final-uefi-runner.py",
+      "original_path": "/private/tmp/vos-final-uefi-runner.py",
+      "bytes": 3796,
+      "sha256": "2412394dde8105f87d1ff8404f2a7c1821163a4f145412e7f530783f936db719"
+    }
+  ]
+}

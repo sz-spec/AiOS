@@ -5,6 +5,13 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 kernel_elf="${KERNEL_ELF:-$repo_root/kernel/build/vos3.elf}"
 output_iso="${OUTPUT_ISO:-$repo_root/dist/vos5.iso}"
 limine_bin="${LIMINE_BUILD_DIR:-$repo_root/kernel/build/limine}/bin"
+export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"
+export TZ=UTC LC_ALL=C
+iso_date="$(python3 - "$SOURCE_DATE_EPOCH" <<'PY'
+import datetime, sys
+print(datetime.datetime.fromtimestamp(int(sys.argv[1]), datetime.timezone.utc).strftime('%Y%m%d%H%M%S00'))
+PY
+)"
 [[ -f "$kernel_elf" ]] || { echo "Kernel missing: $kernel_elf" >&2; exit 1; }
 command -v xorriso >/dev/null
 for artifact in limine limine-bios.sys limine-bios-cd.bin limine-uefi-cd.bin BOOTX64.EFI BOOTIA32.EFI; do
@@ -36,6 +43,7 @@ serial: yes
     path: boot():/boot/vos3.elf
 CONFIG
 xorriso -as mkisofs -R -r -J \
+    --modification-date="$iso_date" --set_all_file_dates "$iso_date" \
     -b boot/limine/limine-bios-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table \
     -hfsplus -apm-block-size 2048 \
     --efi-boot boot/limine/limine-uefi-cd.bin -efi-boot-part --efi-boot-image \

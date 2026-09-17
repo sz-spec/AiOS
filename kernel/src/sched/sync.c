@@ -23,6 +23,12 @@
  * WAIT QUEUE IMPLEMENTATION
  * ============================================================================ */
 
+/* Serializes embedded-entry ownership changes across all queues.  Queue
+ * operations always take this lock before a queue's own lock.  Besides
+ * preventing cross-queue ABA, this keeps cancel() from following an owner
+ * pointer while a destroy/wake path is detaching it. */
+static vos3_spinlock_t g_wait_membership_lock = VOS3_SPINLOCK_INIT;
+
 void vos3_wq_init(vos3_wait_queue_t* wq)
 {
     if (wq == NULL) {
@@ -33,6 +39,57 @@ void vos3_wq_init(vos3_wait_queue_t* wq)
     wq->tail = NULL;
     wq->count = 0U;
     vos3_spinlock_init(&wq->lock);
+}
+
+/* Queue the current task while the caller holds wq->lock.  Keeping this
+ * small operation separate lets condition-bearing primitives recheck their
+ * condition under the same queue lock before committing to sleep. */
+static void wq_enqueue_current_locked(vos3_wait_queue_t* wq,
+                                      vos3_task_t* current)
+{
+    vos3_wait_entry_t* entry = &current->wq_entry;
+    if (__atomic_load_n(&entry->queue, __ATOMIC_ACQUIRE) != NULL) {
+        VOS3_PANIC("Task '%s' already belongs to a wait queue",
+                   current->name);
+    }
+    entry->task = current;
+    entry->next = NULL;
+    __atomic_store_n(&entry->queue, wq, __ATOMIC_RELEASE);
+
+    if (wq->tail != NULL) {
+        wq->tail->next = entry;
+    } else {
+        wq->head = entry;
+    }
+    wq->tail = entry;
+    wq->count++;
+    current->state = VOS3_TASK_BLOCKED;
+}
+
+/* The membership lock is held and entry->queue is already NULL.  Do not call
+ * task_wake(), whose external-wake path deliberately enters cancellation. */
+static void wq_wake_detached(vos3_task_t* task)
+{
+    if (task != NULL && task->state == VOS3_TASK_BLOCKED) {
+        task->state = VOS3_TASK_READY;
+        task->wake_time = 0ULL;
+        vos3_sched_add_task(task);
+    }
+}
+
+/* Publish the current task before sleeping and return with local IRQs still
+ * disabled.  Callers may release a predicate lock after publication and
+ * before the first yield without opening a signal-before-enqueue window. */
+static vos3_irqflags_t wq_prepare_wait(vos3_wait_queue_t* wq,
+                                      vos3_task_t* current)
+{
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_wait_membership_lock);
+    vos3_spinlock_lock(&wq->lock);
+    wq_enqueue_current_locked(wq, current);
+    vos3_spinlock_unlock(&wq->lock);
+    vos3_spinlock_unlock(&g_wait_membership_lock);
+    return flags;
 }
 
 void vos3_wq_wait(vos3_wait_queue_t* wq)
@@ -46,29 +103,12 @@ void vos3_wq_wait(vos3_wait_queue_t* wq)
         return;
     }
 
-    /* Use embedded wait entry in task struct (avoids dangling stack pointers) */
-    vos3_wait_entry_t* entry = &current->wq_entry;
-    entry->task = current;
-    entry->next = NULL;
+    vos3_irqflags_t flags = wq_prepare_wait(wq, current);
 
-    vos3_spinlock_lock(&wq->lock);
-
-    /* Add to wait queue */
-    if (wq->tail != NULL) {
-        wq->tail->next = entry;
-    } else {
-        wq->head = entry;
-    }
-    wq->tail = entry;
-    wq->count++;
-
-    /* Block current task */
-    current->state = VOS3_TASK_BLOCKED;
-
-    vos3_spinlock_unlock(&wq->lock);
-
-    /* Yield to another task */
+    /* Keep local interrupts disabled until the blocked task has switched out;
+     * an ISR must not wake and requeue the still-executing context. */
     vos3_sched_yield();
+    vos3_irq_restore(flags);
 }
 
 int vos3_wq_wake_one(vos3_wait_queue_t* wq)
@@ -77,10 +117,14 @@ int vos3_wq_wake_one(vos3_wait_queue_t* wq)
         return 0;
     }
 
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_wait_membership_lock);
     vos3_spinlock_lock(&wq->lock);
 
     if (wq->head == NULL) {
         vos3_spinlock_unlock(&wq->lock);
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_irq_restore(flags);
         return 0;
     }
 
@@ -93,13 +137,13 @@ int vos3_wq_wake_one(vos3_wait_queue_t* wq)
     wq->count--;
 
     vos3_task_t* task = entry->task;
+    entry->next = NULL;
+    __atomic_store_n(&entry->queue, NULL, __ATOMIC_RELEASE);
 
     vos3_spinlock_unlock(&wq->lock);
-
-    /* Wake the task */
-    if (task != NULL) {
-        vos3_task_wake(task);
-    }
+    wq_wake_detached(task);
+    vos3_spinlock_unlock(&g_wait_membership_lock);
+    vos3_irq_restore(flags);
 
     return 1;
 }
@@ -112,18 +156,21 @@ size_t vos3_wq_wake_all(vos3_wait_queue_t* wq)
 
     size_t woken = 0U;
 
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_wait_membership_lock);
     vos3_spinlock_lock(&wq->lock);
 
     while (wq->head != NULL) {
         vos3_wait_entry_t* entry = wq->head;
         wq->head = entry->next;
+        if (wq->head == NULL) wq->tail = NULL;
+        if (wq->count > 0U) wq->count--;
 
         vos3_task_t* task = entry->task;
+        entry->next = NULL;
+        __atomic_store_n(&entry->queue, NULL, __ATOMIC_RELEASE);
         if (task != NULL) {
-            /* Unlock while waking to avoid holding lock too long */
-            vos3_spinlock_unlock(&wq->lock);
-            vos3_task_wake(task);
-            vos3_spinlock_lock(&wq->lock);
+            wq_wake_detached(task);
             woken++;
         }
     }
@@ -132,8 +179,48 @@ size_t vos3_wq_wake_all(vos3_wait_queue_t* wq)
     wq->count = 0U;
 
     vos3_spinlock_unlock(&wq->lock);
+    vos3_spinlock_unlock(&g_wait_membership_lock);
+    vos3_irq_restore(flags);
 
     return woken;
+}
+
+int vos3_wq_cancel(vos3_task_t* task)
+{
+    if (task == NULL) return 0;
+    vos3_wait_entry_t* entry = &task->wq_entry;
+
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_wait_membership_lock);
+    vos3_wait_queue_t* wq = __atomic_load_n(&entry->queue, __ATOMIC_ACQUIRE);
+    if (wq == NULL) {
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_irq_restore(flags);
+        return 0;
+    }
+    vos3_spinlock_lock(&wq->lock);
+    int removed = 0;
+    if (__atomic_load_n(&entry->queue, __ATOMIC_ACQUIRE) == wq) {
+        vos3_wait_entry_t* prev = NULL;
+        vos3_wait_entry_t* it = wq->head;
+        while (it != NULL && it != entry) {
+            prev = it;
+            it = it->next;
+        }
+        if (it == entry) {
+            if (prev != NULL) prev->next = entry->next;
+            else wq->head = entry->next;
+            if (wq->tail == entry) wq->tail = prev;
+            if (wq->count > 0U) wq->count--;
+            removed = 1;
+        }
+        entry->next = NULL;
+        __atomic_store_n(&entry->queue, NULL, __ATOMIC_RELEASE);
+    }
+    vos3_spinlock_unlock(&wq->lock);
+    vos3_spinlock_unlock(&g_wait_membership_lock);
+    vos3_irq_restore(flags);
+    return removed;
 }
 
 int vos3_wq_empty(const vos3_wait_queue_t* wq)
@@ -184,10 +271,19 @@ void vos3_mutex_lock(vos3_mutex_t* mutex)
 
     vos3_task_t* current = vos3_sched_current();
 
-    /* Try to acquire */
-    while (vos3_atomic32_cmpxchg(&mutex->state,
+    for (;;) {
+        if (vos3_atomic32_cmpxchg(&mutex->state,
                                   VOS3_MUTEX_UNLOCKED,
-                                  VOS3_MUTEX_LOCKED) != VOS3_MUTEX_UNLOCKED) {
+                                  VOS3_MUTEX_LOCKED) == VOS3_MUTEX_UNLOCKED) {
+            mutex->owner = current;
+            return;
+        }
+
+        if (current == NULL) {
+            VOS3_PANIC("Mutex '%s' contention without a current task",
+                       mutex->name ? mutex->name : "unnamed");
+        }
+
         /* Check for deadlock (recursive lock without recursion support) */
         if (mutex->owner == current) {
             VOS3_PANIC("Deadlock: task '%s' trying to relock mutex '%s'",
@@ -195,11 +291,28 @@ void vos3_mutex_lock(vos3_mutex_t* mutex)
                        mutex->name ? mutex->name : "unnamed");
         }
 
-        /* Wait for unlock */
-        vos3_wq_wait(&mutex->waiters);
+        /* Serialize the final lock-state check with waiter publication.
+         * unlock() stores UNLOCKED before taking this queue lock to wake a
+         * waiter.  Therefore it either precedes this retry, or observes the
+         * waiter after publication; no unlock can be lost between them. */
+        vos3_irqflags_t flags = vos3_irq_save();
+        vos3_spinlock_lock(&g_wait_membership_lock);
+        vos3_spinlock_lock(&mutex->waiters.lock);
+        if (vos3_atomic32_cmpxchg(&mutex->state,
+                                  VOS3_MUTEX_UNLOCKED,
+                                  VOS3_MUTEX_LOCKED) == VOS3_MUTEX_UNLOCKED) {
+            vos3_spinlock_unlock(&mutex->waiters.lock);
+            vos3_spinlock_unlock(&g_wait_membership_lock);
+            vos3_irq_restore(flags);
+            mutex->owner = current;
+            return;
+        }
+        wq_enqueue_current_locked(&mutex->waiters, current);
+        vos3_spinlock_unlock(&mutex->waiters.lock);
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_sched_yield();
+        vos3_irq_restore(flags);
     }
-
-    mutex->owner = current;
 }
 
 int vos3_mutex_trylock(vos3_mutex_t* mutex)
@@ -272,8 +385,16 @@ void vos3_sem_init(vos3_semaphore_t* sem, const char* name, uint32_t initial_cou
         return;
     }
 
+    if (initial_count > (uint32_t)INT32_MAX) {
+        VOS3_WARN("Semaphore '%s' initial count exceeds INT32_MAX",
+                  name ? name : "unnamed");
+        sem->magic = 0U;
+        return;
+    }
+
     sem->magic = VOS3_SEM_MAGIC;
     vos3_atomic32_store(&sem->count, (int32_t)initial_count);
+    vos3_atomic32_store(&sem->closed, 0);
     sem->max_count = -1;
     vos3_wq_init(&sem->waiters);
     sem->name = name;
@@ -282,7 +403,17 @@ void vos3_sem_init(vos3_semaphore_t* sem, const char* name, uint32_t initial_cou
 void vos3_sem_init_bounded(vos3_semaphore_t* sem, const char* name,
                            uint32_t initial_count, uint32_t max_count)
 {
+    if (sem == NULL) {
+        return;
+    }
+    if (max_count > (uint32_t)INT32_MAX || initial_count > max_count) {
+        VOS3_WARN("Semaphore '%s' has invalid bounds",
+                  name ? name : "unnamed");
+        sem->magic = 0U;
+        return;
+    }
     vos3_sem_init(sem, name, initial_count);
+    if (sem->magic != VOS3_SEM_MAGIC) return;
     sem->max_count = (int32_t)max_count;
 }
 
@@ -292,33 +423,78 @@ void vos3_sem_destroy(vos3_semaphore_t* sem)
         return;
     }
 
-    /* Wake all waiters before destroying */
-    vos3_wq_wake_all(&sem->waiters);
+    vos3_sem_close(sem);
 
     sem->magic = 0U;
 }
 
-void vos3_sem_wait(vos3_semaphore_t* sem)
+void vos3_sem_close(vos3_semaphore_t* sem)
 {
     if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
         return;
     }
 
+    vos3_atomic32_store(&sem->closed, 1);
+    (void)vos3_wq_wake_all(&sem->waiters);
+}
+
+int vos3_sem_wait_status(vos3_semaphore_t* sem)
+{
+    if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
+        return VOS3_SYNC_ERR_INVALID;
+    }
+
     for (;;) {
+        if (vos3_atomic32_load(&sem->closed) != 0) {
+            return VOS3_SYNC_ERR_CLOSED;
+        }
         int32_t count = vos3_atomic32_load(&sem->count);
 
         if (count > 0) {
             /* Try to decrement */
             if (vos3_atomic32_cmpxchg(&sem->count, count, count - 1) == count) {
-                return;  /* Successfully acquired */
+                return VOS3_SYNC_OK;
             }
             /* CAS failed, retry */
             continue;
         }
 
-        /* Count is 0, wait */
-        vos3_wq_wait(&sem->waiters);
+        /* Publish the waiter only after rechecking count under the same
+         * queue lock used by post()'s wake.  A post either increments before
+         * this recheck, or waits for the published waiter, closing the
+         * check-then-sleep lost-wakeup window. */
+        vos3_task_t* current = vos3_sched_current();
+        if (current == NULL) return VOS3_SYNC_ERR_INVALID;
+        vos3_irqflags_t flags = vos3_irq_save();
+        vos3_spinlock_lock(&g_wait_membership_lock);
+        vos3_spinlock_lock(&sem->waiters.lock);
+        for (;;) {
+            if (vos3_atomic32_load(&sem->closed) != 0) {
+                vos3_spinlock_unlock(&sem->waiters.lock);
+                vos3_spinlock_unlock(&g_wait_membership_lock);
+                vos3_irq_restore(flags);
+                return VOS3_SYNC_ERR_CLOSED;
+            }
+            count = vos3_atomic32_load(&sem->count);
+            if (count <= 0) break;
+            if (vos3_atomic32_cmpxchg(&sem->count, count, count - 1) == count) {
+                vos3_spinlock_unlock(&sem->waiters.lock);
+                vos3_spinlock_unlock(&g_wait_membership_lock);
+                vos3_irq_restore(flags);
+                return VOS3_SYNC_OK;
+            }
+        }
+        wq_enqueue_current_locked(&sem->waiters, current);
+        vos3_spinlock_unlock(&sem->waiters.lock);
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_sched_yield();
+        vos3_irq_restore(flags);
     }
+}
+
+void vos3_sem_wait(vos3_semaphore_t* sem)
+{
+    (void)vos3_sem_wait_status(sem);
 }
 
 int vos3_sem_trywait(vos3_semaphore_t* sem)
@@ -326,6 +502,7 @@ int vos3_sem_trywait(vos3_semaphore_t* sem)
     if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
         return 0;
     }
+    if (vos3_atomic32_load(&sem->closed) != 0) return 0;
 
     int32_t count = vos3_atomic32_load(&sem->count);
 
@@ -343,13 +520,15 @@ void vos3_sem_post(vos3_semaphore_t* sem)
     if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
         return;
     }
+    if (vos3_atomic32_load(&sem->closed) != 0) return;
 
     int32_t count;
     do {
         count = vos3_atomic32_load(&sem->count);
 
         /* Check max count */
-        if (sem->max_count >= 0 && count >= sem->max_count) {
+        if (count >= INT32_MAX ||
+            (sem->max_count >= 0 && count >= sem->max_count)) {
             VOS3_WARN("Semaphore '%s' at max count",
                          sem->name ? sem->name : "unnamed");
             return;
@@ -403,14 +582,20 @@ void vos3_cond_wait(vos3_condvar_t* cond, vos3_mutex_t* mutex)
     if (mutex == NULL || mutex->magic != VOS3_MUTEX_MAGIC) {
         return;
     }
+    if (!vos3_mutex_is_owner(mutex)) {
+        VOS3_WARN("Condition wait without owning mutex '%s'",
+                  mutex->name ? mutex->name : "unnamed");
+        return;
+    }
+    vos3_task_t* current = vos3_sched_current();
+    if (current == NULL) return;
 
-    /* Release mutex */
+    /* Publish while the predicate mutex is still held.  The signaler cannot
+     * both change the protected predicate and miss this waiter. */
+    vos3_irqflags_t flags = wq_prepare_wait(&cond->waiters, current);
     vos3_mutex_unlock(mutex);
-
-    /* Wait on condition */
-    vos3_wq_wait(&cond->waiters);
-
-    /* Reacquire mutex */
+    vos3_sched_yield();
+    vos3_irq_restore(flags);
     vos3_mutex_lock(mutex);
 }
 
@@ -424,11 +609,10 @@ int vos3_cond_timedwait(vos3_condvar_t* cond, vos3_mutex_t* mutex,
         return VOS3_SYNC_ERR_INVALID;
     }
 
-    /* TODO: Implement timeout support */
-    /* For now, just do a regular wait */
-    vos3_cond_wait(cond, mutex);
-
-    return VOS3_SYNC_OK;
+    /* No timer-to-wait-queue cancellation protocol exists yet.  Fail
+     * explicitly instead of blocking forever while claiming timeout support. */
+    (void)timeout_ms;
+    return VOS3_SYNC_ERR_UNSUPPORTED;
 }
 
 void vos3_cond_signal(vos3_condvar_t* cond)
@@ -460,9 +644,9 @@ void vos3_rwlock_init(vos3_rwlock_t* rwlock, const char* name)
     }
 
     rwlock->magic = VOS3_RWLOCK_MAGIC;
+    vos3_spinlock_init(&rwlock->state_lock);
     vos3_atomic32_store(&rwlock->readers, 0);
     vos3_atomic32_store(&rwlock->writers, 0);
-    vos3_atomic32_store(&rwlock->write_pending, 0);
     rwlock->writer = NULL;
     vos3_wq_init(&rwlock->read_waiters);
     vos3_wq_init(&rwlock->write_waiters);
@@ -487,23 +671,32 @@ void vos3_rwlock_rdlock(vos3_rwlock_t* rwlock)
         return;
     }
 
+    vos3_task_t* current = vos3_sched_current();
+    if (current == NULL) return;
     for (;;) {
-        /* Wait if there's a writer or pending writers */
-        while (vos3_atomic32_load(&rwlock->writers) > 0 ||
-               vos3_atomic32_load(&rwlock->write_pending) > 0) {
-            vos3_wq_wait(&rwlock->read_waiters);
-        }
-
-        /* Try to increment readers */
-        int32_t readers = vos3_atomic32_load(&rwlock->readers);
-        if (vos3_atomic32_cmpxchg(&rwlock->readers, readers, readers + 1) == readers) {
-            /* Double-check no writer snuck in */
-            if (vos3_atomic32_load(&rwlock->writers) == 0) {
-                return;
+        vos3_irqflags_t flags = vos3_irq_save();
+        vos3_spinlock_lock(&rwlock->state_lock);
+        if (vos3_atomic32_load(&rwlock->writers) == 0) {
+            int32_t readers = vos3_atomic32_load(&rwlock->readers);
+            if (readers == INT32_MAX) {
+                vos3_spinlock_unlock(&rwlock->state_lock);
+                vos3_irq_restore(flags);
+                VOS3_PANIC("Reader count saturated on '%s'",
+                           rwlock->name ? rwlock->name : "unnamed");
             }
-            /* Writer acquired, back out */
-            vos3_atomic32_fetch_sub(&rwlock->readers, 1);
+            vos3_atomic32_store(&rwlock->readers, readers + 1);
+            vos3_spinlock_unlock(&rwlock->state_lock);
+            vos3_irq_restore(flags);
+            return;
         }
+        vos3_spinlock_lock(&g_wait_membership_lock);
+        vos3_spinlock_lock(&rwlock->read_waiters.lock);
+        wq_enqueue_current_locked(&rwlock->read_waiters, current);
+        vos3_spinlock_unlock(&rwlock->read_waiters.lock);
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_spinlock_unlock(&rwlock->state_lock);
+        vos3_sched_yield();
+        vos3_irq_restore(flags);
     }
 }
 
@@ -513,20 +706,19 @@ int vos3_rwlock_tryrdlock(vos3_rwlock_t* rwlock)
         return 0;
     }
 
-    if (vos3_atomic32_load(&rwlock->writers) > 0 ||
-        vos3_atomic32_load(&rwlock->write_pending) > 0) {
-        return 0;
-    }
-
-    int32_t readers = vos3_atomic32_load(&rwlock->readers);
-    if (vos3_atomic32_cmpxchg(&rwlock->readers, readers, readers + 1) == readers) {
-        if (vos3_atomic32_load(&rwlock->writers) == 0) {
-            return 1;
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&rwlock->state_lock);
+    int acquired = 0;
+    if (vos3_atomic32_load(&rwlock->writers) == 0) {
+        int32_t readers = vos3_atomic32_load(&rwlock->readers);
+        if (readers < INT32_MAX) {
+            vos3_atomic32_store(&rwlock->readers, readers + 1);
+            acquired = 1;
         }
-        vos3_atomic32_fetch_sub(&rwlock->readers, 1);
     }
-
-    return 0;
+    vos3_spinlock_unlock(&rwlock->state_lock);
+    vos3_irq_restore(flags);
+    return acquired;
 }
 
 void vos3_rwlock_rdunlock(vos3_rwlock_t* rwlock)
@@ -535,11 +727,26 @@ void vos3_rwlock_rdunlock(vos3_rwlock_t* rwlock)
         return;
     }
 
-    int32_t readers = vos3_atomic32_fetch_sub(&rwlock->readers, 1);
-
-    /* If this was the last reader and there are pending writers, wake one */
-    if (readers == 1 && vos3_atomic32_load(&rwlock->write_pending) > 0) {
-        vos3_wq_wake_one(&rwlock->write_waiters);
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&rwlock->state_lock);
+    int32_t readers = vos3_atomic32_load(&rwlock->readers);
+    if (readers <= 0) {
+        vos3_spinlock_unlock(&rwlock->state_lock);
+        vos3_irq_restore(flags);
+        VOS3_WARN("Read unlock without reader ownership on '%s'",
+                  rwlock->name ? rwlock->name : "unnamed");
+        return;
+    }
+    vos3_atomic32_store(&rwlock->readers, readers - 1);
+    int became_idle = readers == 1;
+    vos3_spinlock_unlock(&rwlock->state_lock);
+    vos3_irq_restore(flags);
+    if (became_idle) {
+        /* Wake every contender.  Readers are never parked merely because a
+         * writer is queued, so killing a selected/queued writer cannot leave
+         * readers stranded.  The state lock remains the acquisition arbiter. */
+        (void)vos3_wq_wake_all(&rwlock->write_waiters);
+        (void)vos3_wq_wake_all(&rwlock->read_waiters);
     }
 }
 
@@ -549,22 +756,28 @@ void vos3_rwlock_wrlock(vos3_rwlock_t* rwlock)
         return;
     }
 
-    /* Mark write pending */
-    vos3_atomic32_fetch_add(&rwlock->write_pending, 1);
-
+    vos3_task_t* current = vos3_sched_current();
+    if (current == NULL) return;
+    vos3_irqflags_t flags;
     for (;;) {
-        /* Wait for no readers and no writer */
-        while (vos3_atomic32_load(&rwlock->readers) > 0 ||
-               vos3_atomic32_load(&rwlock->writers) > 0) {
-            vos3_wq_wait(&rwlock->write_waiters);
-        }
-
-        /* Try to acquire write lock */
-        if (vos3_atomic32_cmpxchg(&rwlock->writers, 0, 1) == 0) {
-            rwlock->writer = vos3_sched_current();
-            vos3_atomic32_fetch_sub(&rwlock->write_pending, 1);
+        flags = vos3_irq_save();
+        vos3_spinlock_lock(&rwlock->state_lock);
+        if (vos3_atomic32_load(&rwlock->readers) == 0 &&
+            vos3_atomic32_load(&rwlock->writers) == 0) {
+            vos3_atomic32_store(&rwlock->writers, 1);
+            rwlock->writer = current;
+            vos3_spinlock_unlock(&rwlock->state_lock);
+            vos3_irq_restore(flags);
             return;
         }
+        vos3_spinlock_lock(&g_wait_membership_lock);
+        vos3_spinlock_lock(&rwlock->write_waiters.lock);
+        wq_enqueue_current_locked(&rwlock->write_waiters, current);
+        vos3_spinlock_unlock(&rwlock->write_waiters.lock);
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_spinlock_unlock(&rwlock->state_lock);
+        vos3_sched_yield();
+        vos3_irq_restore(flags);
     }
 }
 
@@ -574,16 +787,18 @@ int vos3_rwlock_trywrlock(vos3_rwlock_t* rwlock)
         return 0;
     }
 
-    if (vos3_atomic32_load(&rwlock->readers) > 0) {
-        return 0;
-    }
-
-    if (vos3_atomic32_cmpxchg(&rwlock->writers, 0, 1) == 0) {
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&rwlock->state_lock);
+    int acquired = 0;
+    if (vos3_atomic32_load(&rwlock->readers) == 0 &&
+        vos3_atomic32_load(&rwlock->writers) == 0) {
+        vos3_atomic32_store(&rwlock->writers, 1);
         rwlock->writer = vos3_sched_current();
-        return 1;
+        acquired = 1;
     }
-
-    return 0;
+    vos3_spinlock_unlock(&rwlock->state_lock);
+    vos3_irq_restore(flags);
+    return acquired;
 }
 
 void vos3_rwlock_wrunlock(vos3_rwlock_t* rwlock)
@@ -592,15 +807,24 @@ void vos3_rwlock_wrunlock(vos3_rwlock_t* rwlock)
         return;
     }
 
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&rwlock->state_lock);
+    if (vos3_atomic32_load(&rwlock->writers) == 0 ||
+        rwlock->writer != vos3_sched_current()) {
+        vos3_spinlock_unlock(&rwlock->state_lock);
+        vos3_irq_restore(flags);
+        VOS3_WARN("Write unlock by non-owner on '%s'",
+                  rwlock->name ? rwlock->name : "unnamed");
+        return;
+    }
     rwlock->writer = NULL;
     vos3_atomic32_store(&rwlock->writers, 0);
-
-    /* Prefer writers over readers (writer-preferring rwlock) */
-    if (vos3_atomic32_load(&rwlock->write_pending) > 0) {
-        vos3_wq_wake_one(&rwlock->write_waiters);
-    } else {
-        vos3_wq_wake_all(&rwlock->read_waiters);
-    }
+    vos3_spinlock_unlock(&rwlock->state_lock);
+    vos3_irq_restore(flags);
+    /* Broadcast both classes.  A woken writer can be killed before it runs;
+     * waking only that task would otherwise strand every surviving waiter. */
+    (void)vos3_wq_wake_all(&rwlock->write_waiters);
+    (void)vos3_wq_wake_all(&rwlock->read_waiters);
 }
 
 /* ============================================================================
@@ -615,6 +839,7 @@ void vos3_barrier_init(vos3_barrier_t* barrier, const char* name, uint32_t count
 
     barrier->magic = VOS3_BARRIER_MAGIC;
     barrier->threshold = count;
+    vos3_spinlock_init(&barrier->state_lock);
     vos3_atomic32_store(&barrier->count, 0);
     vos3_atomic32_store(&barrier->generation, 0);
     vos3_wq_init(&barrier->waiters);
@@ -638,22 +863,46 @@ int vos3_barrier_wait(vos3_barrier_t* barrier)
         return 0;
     }
 
-    int32_t gen = vos3_atomic32_load(&barrier->generation);
-
-    int32_t count = vos3_atomic32_fetch_add(&barrier->count, 1) + 1;
-
-    if ((uint32_t)count >= barrier->threshold) {
-        /* Last thread to arrive - release everyone */
-        vos3_atomic32_store(&barrier->count, 0);
-        vos3_atomic32_fetch_add(&barrier->generation, 1);
+    vos3_task_t* current = vos3_sched_current();
+    if (current == NULL) return 0;
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&barrier->state_lock);
+    uint32_t gen = vos3_atomic_load32(&barrier->generation.value);
+    uint32_t count = vos3_atomic_load32(&barrier->count.value) + 1U;
+    if (count >= barrier->threshold) {
+        vos3_atomic_store32(&barrier->count.value, 0U);
+        /* Unsigned wrap is the intended generation comparison semantics. */
+        vos3_atomic_store32(&barrier->generation.value, gen + 1U);
+        vos3_spinlock_unlock(&barrier->state_lock);
+        vos3_irq_restore(flags);
         vos3_wq_wake_all(&barrier->waiters);
-        return 1;  /* This is the releasing thread */
+        return 1;
     }
+    vos3_atomic_store32(&barrier->count.value, count);
+    for (;;) {
+        vos3_spinlock_lock(&g_wait_membership_lock);
+        vos3_spinlock_lock(&barrier->waiters.lock);
+        if (vos3_atomic_load32(&barrier->generation.value) != gen) {
+            vos3_spinlock_unlock(&barrier->waiters.lock);
+            vos3_spinlock_unlock(&g_wait_membership_lock);
+            vos3_spinlock_unlock(&barrier->state_lock);
+            vos3_irq_restore(flags);
+            return 0;
+        }
+        wq_enqueue_current_locked(&barrier->waiters, current);
+        vos3_spinlock_unlock(&barrier->waiters.lock);
+        vos3_spinlock_unlock(&g_wait_membership_lock);
+        vos3_spinlock_unlock(&barrier->state_lock);
+        vos3_sched_yield();
+        vos3_irq_restore(flags);
 
-    /* Wait for barrier to release */
-    while (vos3_atomic32_load(&barrier->generation) == gen) {
-        vos3_wq_wait(&barrier->waiters);
+        flags = vos3_irq_save();
+        vos3_spinlock_lock(&barrier->state_lock);
+        if (vos3_atomic_load32(&barrier->generation.value) != gen) {
+            vos3_spinlock_unlock(&barrier->state_lock);
+            vos3_irq_restore(flags);
+            return 0;
+        }
+        /* Spurious external wake: retry checked publication. */
     }
-
-    return 0;
 }

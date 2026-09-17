@@ -33,8 +33,8 @@
 #define NUM_AGENTS      8
 #define SHM_SIZE        (4 * 1024 * 1024)  /* 4MB per SHM segment */
 #define SLICE_SIZE      (SHM_SIZE / NUM_AGENTS)  /* 512KB per agent */
-#define NUM_PASSES      8   /* 8 agents * 4MB * 8 passes = 256MB */
-#define TOTAL_DATA_MB   ((unsigned long)(NUM_AGENTS) * SHM_SIZE / (1024*1024) * NUM_PASSES)
+#define NUM_PASSES      8   /* 8 disjoint slices total 4MB per pass: 32MB */
+#define TOTAL_DATA_MB   ((unsigned long)SHM_SIZE / (1024*1024) * NUM_PASSES)
 
 /* Test framework */
 static int g_pass = 0;
@@ -103,6 +103,36 @@ static int verify_agent_data(volatile unsigned char* base, int agent_id, int pas
     return 0;
 }
 
+/* Parent must be detached before fork; independent SHM fork is unsupported.
+ * Each child explicitly acquires and releases its own public mapping. */
+static int run_agent_pass(long shm_id, int pass)
+{
+    pid_t children[NUM_AGENTS];
+    int errors = 0;
+    for (int a = 0; a < NUM_AGENTS; a++) {
+        long pid = syscall0(SYS_FORK);
+        children[a] = (pid_t)pid;
+        if (pid < 0) { errors++; continue; }
+        if (pid == 0) {
+            long address = syscall2(SYS_SHM_MAP, shm_id, 0);
+            int code = 21;
+            if (address >= 0x10000) {
+                agent_work((volatile unsigned char*)address, a, pass);
+                code = syscall2(SYS_SHM_UNMAP, shm_id, address) == 0 ? 0 : 22;
+            }
+            syscall1(SYS_EXIT, code);
+            for (;;) ;
+        }
+    }
+    for (int a = 0; a < NUM_AGENTS; a++) {
+        if (children[a] <= 0) continue;
+        int status = -1;
+        long result = syscall4(SYS_WAIT4, children[a], (long)&status, 0, 0);
+        if (result != children[a] || status != 0) errors++;
+    }
+    return errors;
+}
+
 int main(int argc, char* argv[])
 {
     (void)argc; (void)argv;
@@ -115,7 +145,7 @@ int main(int argc, char* argv[])
 
     /* Baseline telemetry */
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) { TEST_FAIL("baseline_telemetry", "sysinfo failed"); return 1; }
     unsigned long baseline_free = info.free_pages;
     printf("[TELEMETRY] baseline free=%lu total=%lu\n",
            info.free_pages, info.total_pages);
@@ -166,63 +196,32 @@ int main(int argc, char* argv[])
         printf("[PERF] Sequential:  %lu MB in <1 ms (too fast to measure)\n", seq_data_mb);
     }
 
-    /* Phase 2: Concurrent throughput (20 agents) */
+    /* Parent has no SHM mapping during independent fork. */
+    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) {
+        TEST_FAIL("parent_detach", "cannot safely fork with mapped SHM");
+        syscall1(SYS_SHM_DESTROY, shm_id);
+        return 1;
+    }
+    shm_base = NULL;
+    shm_addr = 0;
+
+    /* Phase 2: Concurrent throughput (8 agents, unchanged 8 passes). */
     unsigned long long t_conc_start = rdtsc();
     unsigned long ms_conc_start = get_uptime_ms();
     int errors = 0;
+    for (int pass = 0; pass < NUM_PASSES; pass++)
+        errors += run_agent_pass(shm_id, pass);
 
-    for (int pass = 0; pass < NUM_PASSES; pass++) {
-        /* Fork all agents */
-        pid_t children[NUM_AGENTS];
-        int fork_ok = 1;
-
-        for (int a = 0; a < NUM_AGENTS; a++) {
-            long pid = syscall0(SYS_FORK);
-            if (pid < 0) {
-                errors++;
-                children[a] = -1;
-                fork_ok = 0;
-                continue;
-            }
-            if (pid == 0) {
-                /* Child: map SHM, write to slice, exit */
-                long caddr = syscall2(SYS_SHM_MAP, shm_id, 0);
-                if (caddr > 0x10000) {
-                    agent_work((volatile unsigned char*)caddr, a, pass);
-                    syscall2(SYS_SHM_UNMAP, shm_id, caddr);
-                }
-                syscall1(SYS_EXIT, 0);
-                for(;;);
-            }
-            children[a] = (pid_t)pid;
-        }
-
-        /* Wait for all agents */
-        for (int a = 0; a < NUM_AGENTS; a++) {
-            if (children[a] > 0) {
-                int status = 0;
-                syscall4(SYS_WAIT4, children[a], (long)&status, 0, 0);
-            }
-        }
-
-        /* Verify last pass data integrity.
-         * Re-map SHM to get fresh PTEs (fork marks parent's PTEs COW,
-         * which may cause stale reads of pre-fork data instead of
-         * children's writes to the real SHM physical pages). */
-        if (pass == NUM_PASSES - 1) {
-            syscall2(SYS_SHM_UNMAP, shm_id, (long)shm_base);
-            long verify_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
-            volatile unsigned char* verify_base = (verify_addr > 0x10000)
-                ? (volatile unsigned char*)verify_addr : shm_base;
-            for (int a = 0; a < NUM_AGENTS; a++) {
-                if (verify_agent_data(verify_base, a, pass) < 0) {
-                    errors++;
-                }
-            }
-            shm_base = verify_base;
-            shm_addr = (long)verify_base;
-        }
+    /* No stale-address fallback: mapping failure is a test failure. */
+    shm_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+    if (shm_addr < 0x10000) {
+        TEST_FAIL("verification_map", "cannot read agent results");
+        syscall1(SYS_SHM_DESTROY, shm_id);
+        return 1;
     }
+    shm_base = (volatile unsigned char*)shm_addr;
+    for (int a = 0; a < NUM_AGENTS; a++)
+        if (verify_agent_data(shm_base, a, NUM_PASSES - 1) != 0) errors++;
 
     unsigned long long t_conc_end = rdtsc();
     unsigned long ms_conc_end = get_uptime_ms();
@@ -260,14 +259,14 @@ int main(int argc, char* argv[])
     printf(" (checksum=0x%llx)\n", chk);
 
     /* Final telemetry */
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) { TEST_FAIL("final_telemetry", "sysinfo failed"); }
     long page_delta = (long)baseline_free - (long)info.free_pages;
     printf("[TELEMETRY] final free=%lu delta=%ld pages tasks=%u zombies=%u\n",
            info.free_pages, page_delta, info.nr_tasks, info.nr_zombies);
 
     /* Cleanup */
-    syscall2(SYS_SHM_UNMAP, shm_id, shm_addr);
-    syscall1(SYS_SHM_DESTROY, shm_id);
+    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) TEST_FAIL("parent_unmap", "cleanup failed");
+    if (syscall1(SYS_SHM_DESTROY, shm_id) != 0) TEST_FAIL("creator_release", "cleanup failed");
 
     /* Verdicts */
     if (errors == 0) {
@@ -282,7 +281,7 @@ int main(int argc, char* argv[])
         TEST_FAIL("no_zombie_leak", "zombie accumulation");
     }
 
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) { TEST_FAIL("cleanup_telemetry", "sysinfo failed"); return 1; }
     long final_delta = (long)baseline_free - (long)info.free_pages;
     if (final_delta < 500) {  /* allow 500 pages (~2MB) for fork+SHM overhead */
         TEST_PASS("no_memory_leak");

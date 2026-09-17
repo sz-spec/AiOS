@@ -1,0 +1,480 @@
+{
+  "scope": "Independent hashes of eight artifacts per build and frozen BIOS classifier; no source-tree rescan or UEFI classification",
+  "all_16_hashes_match": true,
+  "pair_artifact_maps_equal": true,
+  "artifact_checks": [
+    {
+      "run": 0,
+      "path": "dist/final-full.iso",
+      "expected": "bcd3e545f38de19ce0c248dae1701be9f7c4386cd6453d5dbeac53932429d62c",
+      "actual": "bcd3e545f38de19ce0c248dae1701be9f7c4386cd6453d5dbeac53932429d62c",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/native-full-final/vos3.elf",
+      "expected": "dd44631c660b99aee079959a17cff97c25f156baf1ac415d1045e59e8dc8c8d4",
+      "actual": "dd44631c660b99aee079959a17cff97c25f156baf1ac415d1045e59e8dc8c8d4",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/limine/bin/limine",
+      "expected": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+      "actual": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/limine/bin/limine-bios.sys",
+      "expected": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+      "actual": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/limine/bin/limine-bios-cd.bin",
+      "expected": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+      "actual": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/limine/bin/limine-uefi-cd.bin",
+      "expected": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+      "actual": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/limine/bin/BOOTX64.EFI",
+      "expected": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+      "actual": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+      "matches": true
+    },
+    {
+      "run": 0,
+      "path": "kernel/build/limine/bin/BOOTIA32.EFI",
+      "expected": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e",
+      "actual": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "dist/final-full.iso",
+      "expected": "bcd3e545f38de19ce0c248dae1701be9f7c4386cd6453d5dbeac53932429d62c",
+      "actual": "bcd3e545f38de19ce0c248dae1701be9f7c4386cd6453d5dbeac53932429d62c",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/native-full-final/vos3.elf",
+      "expected": "dd44631c660b99aee079959a17cff97c25f156baf1ac415d1045e59e8dc8c8d4",
+      "actual": "dd44631c660b99aee079959a17cff97c25f156baf1ac415d1045e59e8dc8c8d4",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/limine/bin/limine",
+      "expected": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+      "actual": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/limine/bin/limine-bios.sys",
+      "expected": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+      "actual": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/limine/bin/limine-bios-cd.bin",
+      "expected": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+      "actual": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/limine/bin/limine-uefi-cd.bin",
+      "expected": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+      "actual": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/limine/bin/BOOTX64.EFI",
+      "expected": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+      "actual": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+      "matches": true
+    },
+    {
+      "run": 1,
+      "path": "kernel/build/limine/bin/BOOTIA32.EFI",
+      "expected": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e",
+      "actual": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e",
+      "matches": true
+    }
+  ],
+  "bios_classifier_sha256": "70df3612378cab2da8b1eeccdda11e473f2af96edb51134ff900480fb3549743",
+  "bios_classification": {
+    "passed": false,
+    "failures": [
+      "Missing, nonzero, duplicated or reordered benchmark exit status",
+      "Failure diagnostic: \\[FAIL\\]",
+      "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+    ],
+    "expected_programs": [
+      "bench_csw",
+      "test_max_saturation",
+      "bench_isolate",
+      "bench_persist",
+      "bench_overhead",
+      "bench_sigpipe_test",
+      "ai_exploit",
+      "bench_bugfix_test",
+      "bench_phase13_test",
+      "bench_procfs_test",
+      "bench_poll_test",
+      "bench_fs_test",
+      "bench_net_test",
+      "bench_stress_test",
+      "bench_fuzz_test",
+      "test_usercopy",
+      "bench_sched_test",
+      "bench_app_isolation_test",
+      "test_posix_fs",
+      "test_epoll",
+      "test_posix_core",
+      "test_futex",
+      "bench_thread_test",
+      "stress_thread",
+      "test_net_dispatch",
+      "test_shm_dispatch",
+      "diag_shm_stress",
+      "bench_hugepage_tlb",
+      "test_pt_interp",
+      "test_dynlink",
+      "test_signal_musl",
+      "test_signal_lifetime",
+      "test_env_musl",
+      "test_fileio_musl",
+      "test_malloc_musl",
+      "test_fork_musl",
+      "test_pipe_musl",
+      "test_stat_musl",
+      "test_pthread_musl",
+      "test_ai_guard",
+      "test_integration",
+      "test_sustained",
+      "bench_ai_throughput",
+      "bench_csw_1ms",
+      "test_npu_direct",
+      "test_ai_latency",
+      "bench_2026_frontier",
+      "test_agent_chaos",
+      "test_advanced_chaos",
+      "test_model_load",
+      "test_health_check",
+      "test_agent_cluster",
+      "test_torture",
+      "test_ai_exploit_v2",
+      "test_security_check",
+      "bench_ai_scale",
+      "test_stress_mt"
+    ],
+    "started_programs": [
+      "bench_csw",
+      "test_max_saturation",
+      "bench_isolate",
+      "bench_persist",
+      "bench_overhead",
+      "bench_sigpipe_test",
+      "ai_exploit",
+      "bench_bugfix_test",
+      "bench_phase13_test",
+      "bench_procfs_test",
+      "bench_poll_test",
+      "bench_fs_test",
+      "bench_net_test",
+      "bench_stress_test",
+      "bench_fuzz_test",
+      "test_usercopy",
+      "bench_sched_test",
+      "bench_app_isolation_test",
+      "test_posix_fs",
+      "test_epoll",
+      "test_posix_core",
+      "test_futex",
+      "bench_thread_test",
+      "stress_thread",
+      "test_net_dispatch",
+      "test_shm_dispatch",
+      "diag_shm_stress",
+      "bench_hugepage_tlb",
+      "test_pt_interp",
+      "test_dynlink",
+      "test_signal_musl",
+      "test_signal_lifetime",
+      "test_env_musl",
+      "test_fileio_musl",
+      "test_malloc_musl",
+      "test_fork_musl",
+      "test_pipe_musl",
+      "test_stat_musl",
+      "test_pthread_musl",
+      "test_ai_guard",
+      "test_integration",
+      "test_sustained",
+      "bench_ai_throughput",
+      "bench_csw_1ms",
+      "test_npu_direct",
+      "test_ai_latency",
+      "bench_2026_frontier",
+      "test_agent_chaos",
+      "test_advanced_chaos",
+      "test_model_load",
+      "test_health_check",
+      "test_agent_cluster",
+      "test_torture",
+      "test_ai_exploit_v2",
+      "test_security_check",
+      "bench_ai_scale",
+      "test_stress_mt"
+    ],
+    "exits": [
+      [
+        "bench_csw",
+        "0"
+      ],
+      [
+        "test_max_saturation",
+        "0"
+      ],
+      [
+        "bench_isolate",
+        "0"
+      ],
+      [
+        "bench_persist",
+        "0"
+      ],
+      [
+        "bench_overhead",
+        "0"
+      ],
+      [
+        "bench_sigpipe_test",
+        "0"
+      ],
+      [
+        "ai_exploit",
+        "0"
+      ],
+      [
+        "bench_bugfix_test",
+        "0"
+      ],
+      [
+        "bench_phase13_test",
+        "0"
+      ],
+      [
+        "bench_procfs_test",
+        "0"
+      ],
+      [
+        "bench_poll_test",
+        "0"
+      ],
+      [
+        "bench_fs_test",
+        "0"
+      ],
+      [
+        "bench_net_test",
+        "0"
+      ],
+      [
+        "bench_stress_test",
+        "0"
+      ],
+      [
+        "bench_fuzz_test",
+        "0"
+      ],
+      [
+        "test_usercopy",
+        "0"
+      ],
+      [
+        "bench_sched_test",
+        "0"
+      ],
+      [
+        "bench_app_isolation_test",
+        "0"
+      ],
+      [
+        "test_posix_fs",
+        "0"
+      ],
+      [
+        "test_epoll",
+        "0"
+      ],
+      [
+        "test_posix_core",
+        "0"
+      ],
+      [
+        "test_futex",
+        "0"
+      ],
+      [
+        "bench_thread_test",
+        "0"
+      ],
+      [
+        "stress_thread",
+        "0"
+      ],
+      [
+        "test_net_dispatch",
+        "0"
+      ],
+      [
+        "test_shm_dispatch",
+        "0"
+      ],
+      [
+        "diag_shm_stress",
+        "0"
+      ],
+      [
+        "bench_hugepage_tlb",
+        "0"
+      ],
+      [
+        "test_pt_interp",
+        "0"
+      ],
+      [
+        "test_dynlink",
+        "0"
+      ],
+      [
+        "test_signal_musl",
+        "0"
+      ],
+      [
+        "test_signal_lifetime",
+        "0"
+      ],
+      [
+        "test_env_musl",
+        "0"
+      ],
+      [
+        "test_fileio_musl",
+        "0"
+      ],
+      [
+        "test_malloc_musl",
+        "0"
+      ],
+      [
+        "test_fork_musl",
+        "0"
+      ],
+      [
+        "test_pipe_musl",
+        "0"
+      ],
+      [
+        "test_stat_musl",
+        "0"
+      ],
+      [
+        "test_pthread_musl",
+        "0"
+      ],
+      [
+        "test_ai_guard",
+        "0"
+      ],
+      [
+        "test_integration",
+        "0"
+      ],
+      [
+        "test_sustained",
+        "0"
+      ],
+      [
+        "bench_ai_throughput",
+        "0"
+      ],
+      [
+        "bench_csw_1ms",
+        "0"
+      ],
+      [
+        "test_npu_direct",
+        "0"
+      ],
+      [
+        "test_ai_latency",
+        "0"
+      ],
+      [
+        "bench_2026_frontier",
+        "0"
+      ],
+      [
+        "test_agent_chaos",
+        "0"
+      ],
+      [
+        "test_advanced_chaos",
+        "0"
+      ],
+      [
+        "test_model_load",
+        "0"
+      ],
+      [
+        "test_health_check",
+        "1"
+      ],
+      [
+        "test_agent_cluster",
+        "0"
+      ],
+      [
+        "test_torture",
+        "0"
+      ],
+      [
+        "test_ai_exploit_v2",
+        "0"
+      ],
+      [
+        "test_security_check",
+        "0"
+      ],
+      [
+        "bench_ai_scale",
+        "0"
+      ],
+      [
+        "test_stress_mt",
+        "0"
+      ]
+    ],
+    "partial": false,
+    "scope": "Complete BENCH_MODE program sequence"
+  },
+  "bios_record_matches": true,
+  "bios_iso_matches": true
+}

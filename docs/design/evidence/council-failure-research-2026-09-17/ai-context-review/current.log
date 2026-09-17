@@ -1,0 +1,6 @@
+test_global_and_app_registry_detach_before_free (scripts.test_ai_context_lifetime.AIContextLifetimeTests.test_global_and_app_registry_detach_before_free) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.520s
+
+OK

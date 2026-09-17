@@ -383,93 +383,82 @@ static void hugepage_hard_wall(void)
 static void shm_id_collision(void)
 {
     printf("\n--- Test: shm_id_collision ---\n");
-
-    pid_t children[COLLISION_CHILDREN];
-
-    /* Fork all 10 children first */
+    int start[2], reports[2], release[2];
+    if (pipe(start) != 0) { TEST_FAIL("collision: start pipe%s", ""); return; }
+    if (pipe(reports) != 0) {
+        close(start[0]); close(start[1]);
+        TEST_FAIL("collision: report pipe%s", ""); return;
+    }
+    if (pipe(release) != 0) {
+        close(start[0]); close(start[1]); close(reports[0]); close(reports[1]);
+        TEST_FAIL("collision: release pipe%s", ""); return;
+    }
+    pid_t children[COLLISION_CHILDREN] = {0};
+    int spawned = 0, errors = 0;
     for (int i = 0; i < COLLISION_CHILDREN; i++) {
         pid_t pid = fork();
-        if (pid < 0) {
-            TEST_FAIL("shm_id_collision: fork %d failed", i);
-            for (int j = 0; j < i; j++) {
-                int s;
-                waitpid(children[j], &s, 0);
-            }
-            return;
-        }
-
+        if (pid < 0) { errors++; break; }
         if (pid == 0) {
-            /* Child: yield to let parent finish forking all children */
-            for (int y = 0; y < 30; y++)
-                syscall0(SYS_YIELD);
-
-            /* Now try to create "global_brain" */
-            long ret = syscall3(SYS_SHM_CREATE, (long)"global_brain",
-                                (long)4096, 0L);
-
-            if (ret == -EEXIST) {
-                /* Name collision — expected for 9 of 10 */
-                _exit(0);
-            }
-
-            if (ret < 0 || ret == (long)0xFFFFFFFFU) {
-                /* Unexpected error */
-                _exit(2);
-            }
-
-            /* Success — we are the winner */
-            long addr = syscall2(SYS_SHM_MAP, ret, 0);
-            if (addr > 0) {
-                volatile uint8_t* p = (volatile uint8_t*)addr;
-                *p = 0xAA;
-                uint8_t val = *p;
-                (void)val;
-                syscall2(SYS_SHM_UNMAP, ret, addr);
-            }
-
-            /* Do NOT destroy — parent will clean up after all children exit.
-             * This ensures later children see the name and get EEXIST. */
-            _exit(1);  /* exit(1) = winner */
+            close(start[1]); close(reports[0]); close(release[1]);
+            char token;
+            if (read(start[0], &token, 1) != 1) _exit(2);
+            close(start[0]);
+            long id = syscall3(SYS_SHM_CREATE, (long)"global_brain", 4096, 0);
+            long report = id;
+            int code = 0;
+            if (id > 0) {
+                long addr = syscall2(SYS_SHM_MAP, id, 0);
+                if (addr < 0x10000) code = 2;
+                else {
+                    volatile uint8_t* p = (volatile uint8_t*)addr;
+                    *p = 0xAA;
+                    if (*p != 0xAA) code = 2;
+                    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) code = 2;
+                }
+            } else if (id != -EEXIST) code = 2;
+            if (write(reports[1], &report, sizeof(report)) != sizeof(report)) code = 2;
+            close(reports[1]);
+            /* Keep creator alive until every attempt has been collected. */
+            if (id > 0 && read(release[0], &token, 1) != 0) code = 2;
+            close(release[0]);
+            _exit(code); /* Owner exit, rather than foreign destroy, retires it. */
         }
-
-        children[i] = pid;
+        children[spawned++] = pid;
     }
-
-    /* Parent: collect results */
-    int success_count = 0;
-    int eexist_count = 0;
-    int error_count = 0;
-
-    for (int i = 0; i < COLLISION_CHILDREN; i++) {
-        int status = 0;
-        waitpid(children[i], &status, 0);
-
-        if (WIFEXITED(status)) {
-            int code = WEXITSTATUS(status);
-            if (code == 1) success_count++;
-            else if (code == 0) eexist_count++;
-            else error_count++;
-        } else {
-            error_count++;
-        }
+    close(start[0]); close(reports[1]); close(release[0]);
+    char token = 'G';
+    for (int i = 0; i < spawned; i++)
+        if (write(start[1], &token, 1) != 1) errors++;
+    close(start[1]);
+    int winners = 0, collisions = 0;
+    long winner_id = 0;
+    for (int i = 0; i < spawned; i++) {
+        long report = 0;
+        if (read(reports[0], &report, sizeof(report)) != sizeof(report)) { errors++; break; }
+        if (report > 0) { winners++; winner_id = report; }
+        else if (report == -EEXIST) collisions++;
+        else errors++;
     }
-
-    /* Parent cleanup: destroy the SHM region left by the winner.
-     * No "find by name" syscall, so iterate possible IDs. */
-    for (int id = 1; id < 64; id++) {
-        syscall1(SYS_SHM_DESTROY, (long)id);
+    close(reports[0]);
+    /* Closing the gate releases every winner, even a broken multiwinner run. */
+    close(release[1]);
+    for (int i = 0; i < spawned; i++) {
+        int status = -1;
+        if (waitpid(children[i], &status, 0) != children[i] || status != 0) errors++;
     }
-
-    printf("  Winners: %d, EEXIST: %d, Errors: %d\n",
-           success_count, eexist_count, error_count);
-
-    if (success_count == 1 && eexist_count == (COLLISION_CHILDREN - 1) &&
-        error_count == 0) {
+    int retired = 0;
+    unsigned long began = get_uptime_ms();
+    for (unsigned int attempt = 0; winner_id > 0 && attempt < 100000U; attempt++) {
+        if (syscall1(414, winner_id) == 0) { retired = 1; break; }
+        if (get_uptime_ms() - began >= 5000UL) break;
+        syscall0(SYS_YIELD);
+    }
+    printf("  Winners: %d, EEXIST: %d, Errors: %d, Retired: %d\n",
+           winners, collisions, errors, retired);
+    if (spawned == COLLISION_CHILDREN && winners == 1 &&
+        collisions == COLLISION_CHILDREN - 1 && errors == 0 && retired)
         TEST_PASS("shm_id_collision");
-    } else {
-        TEST_FAIL("shm_id_collision: win=%d eexist=%d err=%d",
-                  success_count, eexist_count, error_count);
-    }
+    else TEST_FAIL("shm_id_collision: win=%d eexist=%d err=%d", winners, collisions, errors);
 }
 
 /* ============================================================================

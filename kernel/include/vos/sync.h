@@ -134,6 +134,7 @@ int vos3_mutex_is_owner(const vos3_mutex_t* mutex);
 typedef struct vos3_semaphore {
     uint32_t magic;                 /**< Magic for validation */
     vos3_atomic32_t count;          /**< Current count */
+    vos3_atomic32_t closed;         /**< Closed wait channel */
     int32_t max_count;              /**< Maximum count (-1 for unlimited) */
     vos3_wait_queue_t waiters;      /**< Waiting tasks */
     const char* name;               /**< Debug name */
@@ -143,6 +144,7 @@ typedef struct vos3_semaphore {
 #define VOS3_SEM_INIT(n, c) { \
     .magic = VOS3_SEM_MAGIC, \
     .count = { (int32_t)(c) }, \
+    .closed = { 0 }, \
     .max_count = -1, \
     .waiters = { NULL, NULL, 0U, VOS3_SPINLOCK_INIT }, \
     .name = (n) \
@@ -173,10 +175,27 @@ void vos3_sem_init_bounded(vos3_semaphore_t* sem, const char* name,
 void vos3_sem_destroy(vos3_semaphore_t* sem);
 
 /**
+ * @brief Close a semaphore and wake current waiters
+ *
+ * The containing object must remain alive until every awakened operation has
+ * observed the closed result and released its own lifetime reference.
+ *
+ * @param[in] sem Semaphore to close
+ */
+void vos3_sem_close(vos3_semaphore_t* sem);
+
+/**
  * @brief Wait on semaphore (blocking, decrements count)
  * @param[in] sem Semaphore to wait on
  */
 void vos3_sem_wait(vos3_semaphore_t* sem);
+
+/**
+ * @brief Wait on a semaphore and report closure
+ * @param[in] sem Semaphore to wait on
+ * @return VOS3_SYNC_OK on acquisition, or a negative error code
+ */
+int vos3_sem_wait_status(vos3_semaphore_t* sem);
 
 /**
  * @brief Try to wait on semaphore (non-blocking)
@@ -276,9 +295,9 @@ void vos3_cond_broadcast(vos3_condvar_t* cond);
  */
 typedef struct vos3_rwlock {
     uint32_t magic;                 /**< Magic for validation */
+    vos3_spinlock_t state_lock;     /**< Serializes ownership state */
     vos3_atomic32_t readers;        /**< Reader count */
     vos3_atomic32_t writers;        /**< Writer count (0 or 1) */
-    vos3_atomic32_t write_pending;  /**< Writers waiting */
     struct vos3_task* writer;       /**< Current writer */
     vos3_wait_queue_t read_waiters; /**< Readers waiting */
     vos3_wait_queue_t write_waiters;/**< Writers waiting */
@@ -288,9 +307,9 @@ typedef struct vos3_rwlock {
 /** @brief Static RW lock initializer */
 #define VOS3_RWLOCK_INIT(n) { \
     .magic = VOS3_RWLOCK_MAGIC, \
+    .state_lock = VOS3_SPINLOCK_INIT, \
     .readers = { 0 }, \
     .writers = { 0 }, \
-    .write_pending = { 0 }, \
     .writer = NULL, \
     .read_waiters = { NULL, NULL, 0U, VOS3_SPINLOCK_INIT }, \
     .write_waiters = { NULL, NULL, 0U, VOS3_SPINLOCK_INIT }, \
@@ -361,6 +380,7 @@ void vos3_rwlock_wrunlock(vos3_rwlock_t* rwlock);
 typedef struct vos3_barrier {
     uint32_t magic;                 /**< Magic for validation */
     uint32_t threshold;             /**< Number of threads required */
+    vos3_spinlock_t state_lock;     /**< Serializes generation/arrival state */
     vos3_atomic32_t count;          /**< Current waiting count */
     vos3_atomic32_t generation;     /**< Generation counter */
     vos3_wait_queue_t waiters;      /**< Waiting tasks */
@@ -425,6 +445,13 @@ size_t vos3_wq_wake_all(vos3_wait_queue_t* wq);
  */
 int vos3_wq_empty(const vos3_wait_queue_t* wq);
 
+/**
+ * @brief Remove a task's embedded entry from its current wait queue
+ * @param[in] task Task being woken by an external event
+ * @return 1 if an entry was removed, 0 if the task was not queued
+ */
+int vos3_wq_cancel(vos3_task_t* task);
+
 /* ============================================================================
  * ERROR CODES
  * ============================================================================ */
@@ -434,6 +461,8 @@ int vos3_wq_empty(const vos3_wait_queue_t* wq);
 #define VOS3_SYNC_ERR_TIMEOUT   (-2)
 #define VOS3_SYNC_ERR_DEADLOCK  (-3)
 #define VOS3_SYNC_ERR_NOTOWNER  (-4)
+#define VOS3_SYNC_ERR_UNSUPPORTED (-5)
+#define VOS3_SYNC_ERR_CLOSED    (-6)
 
 #ifdef __cplusplus
 }

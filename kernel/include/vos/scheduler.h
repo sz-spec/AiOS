@@ -126,6 +126,16 @@ void vos3_sched_tick(void);
  */
 void vos3_sched_reschedule(void);
 
+/** Drain deferred resources in process context with interrupts enabled.
+ * Caller must hold no subsystem locks. IRQ-disabled calls are no-ops. */
+void vos3_sched_process_deferred(void);
+
+/** Mark deferred work pending on the current CPU. IRQ-safe and nonblocking. */
+void vos3_sched_request_deferred(void);
+
+/** Mark deferred work pending on a specific scheduler owner CPU. */
+void vos3_sched_request_deferred_cpu(uint32_t cpu_id);
+
 /**
  * @brief Yield CPU to another task
  * @note Voluntary context switch

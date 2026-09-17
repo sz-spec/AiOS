@@ -1,0 +1,3570 @@
+diff --git a/kernel/include/vos/ipc.h b/kernel/include/vos/ipc.h
+index dfb6389..7df8be2 100644
+--- a/kernel/include/vos/ipc.h
++++ b/kernel/include/vos/ipc.h
+@@ -121,11 +121,14 @@ typedef struct vos3_msgqueue {
+     size_t max_count;           /**< Maximum messages */
+     size_t max_msg_size;        /**< Maximum message size */
+ 
+-    vos3_mutex_t lock;          /**< Queue lock */
++    vos3_spinlock_t lock;       /**< Short, non-sleeping message-list lock */
+     vos3_semaphore_t sem_space; /**< Space available */
+     vos3_semaphore_t sem_msgs;  /**< Messages available */
++    vos3_atomic32_t active_ops; /**< Registry reference plus operation pins */
++    volatile uint32_t closing;  /**< Removed from table; reject new pins */
+ 
+     vos3_tid_t owner;           /**< Owner task */
++    uint64_t owner_identity;    /**< Non-reusable creator principal */
+     uint32_t flags;             /**< Queue flags */
+ } vos3_msgqueue_t;
+ 
+diff --git a/kernel/include/vos/pmm.h b/kernel/include/vos/pmm.h
+index b0dbea1..b7bc6cc 100644
+--- a/kernel/include/vos/pmm.h
++++ b/kernel/include/vos/pmm.h
+@@ -306,6 +306,8 @@ void vos3_pmm_reserve_hugepages(uint32_t count);
+  * @return Physical address of 2MB-aligned page, or 0 on failure
+  */
+ uint64_t vos3_pmm_alloc_huge(void);
++/** Allocate 1..16 physically consecutive 2MiB pages; release each with free_huge. */
++uint64_t vos3_pmm_alloc_huge_contiguous(uint32_t count);
+ 
+ /**
+  * @brief Return a 2MB HugePage to the reserved pool
+diff --git a/kernel/include/vos/scheduler.h b/kernel/include/vos/scheduler.h
+index bc8166e..ec3305f 100644
+--- a/kernel/include/vos/scheduler.h
++++ b/kernel/include/vos/scheduler.h
+@@ -126,6 +126,16 @@ void vos3_sched_tick(void);
+  */
+ void vos3_sched_reschedule(void);
+ 
++/** Drain deferred resources in process context with interrupts enabled.
++ * Caller must hold no subsystem locks. IRQ-disabled calls are no-ops. */
++void vos3_sched_process_deferred(void);
++
++/** Mark deferred work pending on the current CPU. IRQ-safe and nonblocking. */
++void vos3_sched_request_deferred(void);
++
++/** Mark deferred work pending on a specific scheduler owner CPU. */
++void vos3_sched_request_deferred_cpu(uint32_t cpu_id);
++
+ /**
+  * @brief Yield CPU to another task
+  * @note Voluntary context switch
+diff --git a/kernel/include/vos/sync.h b/kernel/include/vos/sync.h
+index 14ecea6..156bf90 100644
+--- a/kernel/include/vos/sync.h
++++ b/kernel/include/vos/sync.h
+@@ -134,6 +134,7 @@ int vos3_mutex_is_owner(const vos3_mutex_t* mutex);
+ typedef struct vos3_semaphore {
+     uint32_t magic;                 /**< Magic for validation */
+     vos3_atomic32_t count;          /**< Current count */
++    vos3_atomic32_t closed;         /**< Closed wait channel */
+     int32_t max_count;              /**< Maximum count (-1 for unlimited) */
+     vos3_wait_queue_t waiters;      /**< Waiting tasks */
+     const char* name;               /**< Debug name */
+@@ -143,6 +144,7 @@ typedef struct vos3_semaphore {
+ #define VOS3_SEM_INIT(n, c) { \
+     .magic = VOS3_SEM_MAGIC, \
+     .count = { (int32_t)(c) }, \
++    .closed = { 0 }, \
+     .max_count = -1, \
+     .waiters = { NULL, NULL, 0U, VOS3_SPINLOCK_INIT }, \
+     .name = (n) \
+@@ -172,12 +174,29 @@ void vos3_sem_init_bounded(vos3_semaphore_t* sem, const char* name,
+  */
+ void vos3_sem_destroy(vos3_semaphore_t* sem);
+ 
++/**
++ * @brief Close a semaphore and wake current waiters
++ *
++ * The containing object must remain alive until every awakened operation has
++ * observed the closed result and released its own lifetime reference.
++ *
++ * @param[in] sem Semaphore to close
++ */
++void vos3_sem_close(vos3_semaphore_t* sem);
++
+ /**
+  * @brief Wait on semaphore (blocking, decrements count)
+  * @param[in] sem Semaphore to wait on
+  */
+ void vos3_sem_wait(vos3_semaphore_t* sem);
+ 
++/**
++ * @brief Wait on a semaphore and report closure
++ * @param[in] sem Semaphore to wait on
++ * @return VOS3_SYNC_OK on acquisition, or a negative error code
++ */
++int vos3_sem_wait_status(vos3_semaphore_t* sem);
++
+ /**
+  * @brief Try to wait on semaphore (non-blocking)
+  * @param[in] sem Semaphore to try to wait on
+@@ -276,9 +295,9 @@ void vos3_cond_broadcast(vos3_condvar_t* cond);
+  */
+ typedef struct vos3_rwlock {
+     uint32_t magic;                 /**< Magic for validation */
++    vos3_spinlock_t state_lock;     /**< Serializes ownership state */
+     vos3_atomic32_t readers;        /**< Reader count */
+     vos3_atomic32_t writers;        /**< Writer count (0 or 1) */
+-    vos3_atomic32_t write_pending;  /**< Writers waiting */
+     struct vos3_task* writer;       /**< Current writer */
+     vos3_wait_queue_t read_waiters; /**< Readers waiting */
+     vos3_wait_queue_t write_waiters;/**< Writers waiting */
+@@ -288,9 +307,9 @@ typedef struct vos3_rwlock {
+ /** @brief Static RW lock initializer */
+ #define VOS3_RWLOCK_INIT(n) { \
+     .magic = VOS3_RWLOCK_MAGIC, \
++    .state_lock = VOS3_SPINLOCK_INIT, \
+     .readers = { 0 }, \
+     .writers = { 0 }, \
+-    .write_pending = { 0 }, \
+     .writer = NULL, \
+     .read_waiters = { NULL, NULL, 0U, VOS3_SPINLOCK_INIT }, \
+     .write_waiters = { NULL, NULL, 0U, VOS3_SPINLOCK_INIT }, \
+@@ -361,6 +380,7 @@ void vos3_rwlock_wrunlock(vos3_rwlock_t* rwlock);
+ typedef struct vos3_barrier {
+     uint32_t magic;                 /**< Magic for validation */
+     uint32_t threshold;             /**< Number of threads required */
++    vos3_spinlock_t state_lock;     /**< Serializes generation/arrival state */
+     vos3_atomic32_t count;          /**< Current waiting count */
+     vos3_atomic32_t generation;     /**< Generation counter */
+     vos3_wait_queue_t waiters;      /**< Waiting tasks */
+@@ -425,6 +445,13 @@ size_t vos3_wq_wake_all(vos3_wait_queue_t* wq);
+  */
+ int vos3_wq_empty(const vos3_wait_queue_t* wq);
+ 
++/**
++ * @brief Remove a task's embedded entry from its current wait queue
++ * @param[in] task Task being woken by an external event
++ * @return 1 if an entry was removed, 0 if the task was not queued
++ */
++int vos3_wq_cancel(vos3_task_t* task);
++
+ /* ============================================================================
+  * ERROR CODES
+  * ============================================================================ */
+@@ -434,6 +461,8 @@ int vos3_wq_empty(const vos3_wait_queue_t* wq);
+ #define VOS3_SYNC_ERR_TIMEOUT   (-2)
+ #define VOS3_SYNC_ERR_DEADLOCK  (-3)
+ #define VOS3_SYNC_ERR_NOTOWNER  (-4)
++#define VOS3_SYNC_ERR_UNSUPPORTED (-5)
++#define VOS3_SYNC_ERR_CLOSED    (-6)
+ 
+ #ifdef __cplusplus
+ }
+diff --git a/kernel/include/vos/task.h b/kernel/include/vos/task.h
+index df85b12..bb1953e 100644
+--- a/kernel/include/vos/task.h
++++ b/kernel/include/vos/task.h
+@@ -144,9 +144,11 @@ typedef struct __attribute__((packed)) vos3_cpu_state {
+  * @brief Wait queue entry — embedded in vos3_task_t to avoid dangling
+  *        stack pointers when a task blocks on a wait queue.
+  */
++struct vos3_wait_queue;
+ typedef struct vos3_wait_entry {
+     struct vos3_task* task;         /**< Waiting task */
+     struct vos3_wait_entry* next;   /**< Next in queue */
++    struct vos3_wait_queue* queue;  /**< Owning queue, NULL when detached */
+ } vos3_wait_entry_t;
+ 
+ /* ============================================================================
+@@ -165,6 +167,9 @@ struct vos3_ai_guard_ctx;
+  */
+ typedef void (*vos3_task_entry_t)(void* arg);
+ 
++/** @brief Cleanup for a resource pin held while a task is blocked. */
++typedef void (*vos3_task_wait_cleanup_t)(void* context);
++
+ /**
+  * @brief Task structure
+  */
+@@ -288,7 +293,7 @@ typedef struct vos3_task {
+     uint32_t            fpu_initialized; /**< 1 if FPU state has been saved at least once */
+ 
+     /* ===== Per-process mmap bump allocator (Phase v17 K-C5) ===== */
+-    uint64_t            mmap_next;      /**< Next virtual address for mmap (per-process) */
++    uint64_t            mmap_next;      /**< Legacy layout field; AS mmap_next is authoritative */
+ 
+     /* ===== Wait Queue Entry (embedded to avoid stack-allocated dangling pointers) ===== */
+     vos3_wait_entry_t   wq_entry;       /**< Embedded wait queue entry for blocking */
+@@ -351,6 +356,8 @@ typedef struct vos3_task {
+      * Assigned before publication; fork/clone registration replaces copied value. */
+     uint64_t identity_cookie;
+     struct vos3_signal_state* signal_state; /**< Owned; appended to preserve assembly offsets. */
++    vos3_task_wait_cleanup_t wait_cleanup;  /**< Claimed once by resume or final reaper. */
++    void* wait_cleanup_context;             /**< Context published before wait_cleanup. */
+ } __attribute__((aligned(VOS3_CACHE_LINE_SIZE))) vos3_task_t;
+ 
+ /* ============================================================================
+@@ -400,6 +407,28 @@ void vos3_task_destroy(vos3_task_t* task);
+  */
+ void vos3_task_defer_destroy(vos3_task_t* task);
+ 
++/** @return nonzero while at least one task awaits deferred destruction. */
++int vos3_task_reap_pending(void);
++
++/**
++ * @brief Register one resource pin that must survive a blocking wait.
++ * @return 1 when armed, 0 if the task is terminal/invalid, -1 if cleanup won.
++ */
++int vos3_task_arm_wait_cleanup(vos3_task_t* task,
++                               vos3_task_wait_cleanup_t cleanup,
++                               void* context);
++
++/**
++ * @brief Claim a registered pin back after a normal wake.
++ * @return 1 if the caller reclaimed the pin, 0 if no matching pin remained.
++ */
++int vos3_task_disarm_wait_cleanup(vos3_task_t* task,
++                                  vos3_task_wait_cleanup_t cleanup,
++                                  void* context);
++
++/** @brief Run a stranded wait cleanup after the task is permanently quiescent. */
++void vos3_task_run_wait_cleanup(vos3_task_t* task);
++
+ /**
+  * @brief Reap dead tasks (free deferred resources)
+  *
+diff --git a/kernel/include/vos/vmm.h b/kernel/include/vos/vmm.h
+index 54ca625..9d934ff 100644
+--- a/kernel/include/vos/vmm.h
++++ b/kernel/include/vos/vmm.h
+@@ -336,6 +336,7 @@ typedef struct vos3_address_space {
+         size_t size;
+     } shm_mappings[VOS3_AS_MAX_SHM];
+     uint32_t shm_count;
++    uint64_t mmap_next;         /**< Shared mmap cursor, protected by lock */
+ } vos3_address_space_t;
+ 
+ /**
+@@ -416,6 +417,9 @@ int vos3_vmm_virt_to_phys(uintptr_t virt, uintptr_t* phys);
+  * @return 1 if mapped, 0 if not mapped
+  */
+ int vos3_vmm_is_mapped(uintptr_t virt);
++/* Requires AS lock; bounded read-only check: 0, EEXIST, EAGAIN, or error. */
++int vos3_vmm_check_unmapped_locked(vos3_address_space_t* as, uintptr_t start, size_t size);
++int vos3_vmm_munmap_range(vos3_address_space_t* as, uintptr_t start, size_t size);
+ 
+ /**
+  * @brief Get page table entry for virtual address
+@@ -424,8 +428,6 @@ int vos3_vmm_is_mapped(uintptr_t virt);
+  * @return 0 on success, negative error code on failure
+  */
+ int vos3_vmm_get_pte(uintptr_t virt, vos3_pte_t* pte);
+-/* Reject unsupported huge user leaves before destructive VMA edits. */
+-int vos3_vmm_validate_user_unmap(uintptr_t start, size_t size);
+ 
+ /**
+  * @brief Write a PTE value directly (read-modify-write pattern)
+diff --git a/kernel/src/arch/x86_64/syscall.c b/kernel/src/arch/x86_64/syscall.c
+index b3b79b4..5f35aed 100644
+--- a/kernel/src/arch/x86_64/syscall.c
++++ b/kernel/src/arch/x86_64/syscall.c
+@@ -758,6 +758,11 @@ int64_t vos3_syscall_dispatch(vos3_syscall_frame_t* frame)
+     /* Call handler */
+     int64_t result = handler(frame);
+ 
++    /* The handler released subsystem locks; syscall_entry still has IF set.
++     * Blocking wait/exit and timer continuations can all reschedule IRQ-off,
++     * so they cannot be the sole opportunities to reclaim retired resources. */
++    vos3_sched_process_deferred();
++
+     /* Deliver pending signals before returning to user space */
+     extern void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t result);
+     vos3_signal_deliver(frame, result);
+diff --git a/kernel/src/drivers/tty.c b/kernel/src/drivers/tty.c
+index 3f98ceb..703f3bb 100644
+--- a/kernel/src/drivers/tty.c
++++ b/kernel/src/drivers/tty.c
+@@ -39,7 +39,7 @@ static struct {
+     size_t      head;
+     size_t      tail;
+     size_t      count;
+-    vos3_mutex_t lock;
++    vos3_spinlock_t lock;
+     vos3_semaphore_t sem;
+ } g_tty_input;
+ 
+@@ -112,18 +112,23 @@ void vos3_tty_input_char(char c)
+             break;
+     }
+ 
+-    vos3_mutex_lock(&g_tty_input.lock);
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&g_tty_input.lock);
+ 
++    int inserted = 0;
+     if (g_tty_input.count < TTY_INPUT_BUFSIZE) {
+         g_tty_input.buffer[g_tty_input.head] = c;
+         g_tty_input.head = (g_tty_input.head + 1U) % TTY_INPUT_BUFSIZE;
+         g_tty_input.count++;
+-
+-        /* Signal waiting readers */
+-        vos3_sem_post(&g_tty_input.sem);
++        inserted = 1;
+     }
+ 
+-    vos3_mutex_unlock(&g_tty_input.lock);
++    vos3_spinlock_unlock(&g_tty_input.lock);
++    vos3_irq_restore(flags);
++
++    /* Wake outside the buffer lock.  sem_post itself is IRQ-safe and never
++     * blocks, so this path is valid from the keyboard ISR. */
++    if (inserted) vos3_sem_post(&g_tty_input.sem);
+ 
+     /* Echo character to console */
+     if (c == '\n') {
+@@ -188,16 +193,18 @@ static int64_t console_read(vos3_device_t* dev, vos3_file_t* file,
+ 
+     while (read_count < count) {
+         /* Wait for input */
+-        vos3_sem_wait(&g_tty_input.sem);
++        if (vos3_sem_wait_status(&g_tty_input.sem) != VOS3_SYNC_OK) break;
+ 
+-        vos3_mutex_lock(&g_tty_input.lock);
++        vos3_irqflags_t flags = vos3_irq_save();
++        vos3_spinlock_lock(&g_tty_input.lock);
+ 
+         if (g_tty_input.count > 0U) {
+             char c = g_tty_input.buffer[g_tty_input.tail];
+             g_tty_input.tail = (g_tty_input.tail + 1U) % TTY_INPUT_BUFSIZE;
+             g_tty_input.count--;
+ 
+-            vos3_mutex_unlock(&g_tty_input.lock);
++            vos3_spinlock_unlock(&g_tty_input.lock);
++            vos3_irq_restore(flags);
+ 
+             *p++ = c;
+             read_count++;
+@@ -207,7 +214,8 @@ static int64_t console_read(vos3_device_t* dev, vos3_file_t* file,
+                 break;
+             }
+         } else {
+-            vos3_mutex_unlock(&g_tty_input.lock);
++            vos3_spinlock_unlock(&g_tty_input.lock);
++            vos3_irq_restore(flags);
+         }
+     }
+ 
+@@ -297,7 +305,7 @@ int vos3_tty_init(void)
+     g_tty_input.head = 0U;
+     g_tty_input.tail = 0U;
+     g_tty_input.count = 0U;
+-    vos3_mutex_init(&g_tty_input.lock, "tty_input");
++    vos3_spinlock_init(&g_tty_input.lock);
+     vos3_sem_init(&g_tty_input.sem, "tty_sem", 0U);
+ 
+     g_tty_initialized = 1;
+diff --git a/kernel/src/exec/exec.c b/kernel/src/exec/exec.c
+index 2fdd788..c1b8803 100644
+--- a/kernel/src/exec/exec.c
++++ b/kernel/src/exec/exec.c
+@@ -561,6 +561,11 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
+     /* Copy parent task */
+     memcpy(child, parent, sizeof(vos3_task_t));
+     child->signal_state = NULL; /* Never alias the copied per-task signal state. */
++    child->wait_cleanup = NULL;
++    child->wait_cleanup_context = NULL;
++    child->wq_entry.task = NULL;
++    child->wq_entry.next = NULL;
++    child->wq_entry.queue = NULL;
+ #ifdef NATIVE_SMP_WORKLOAD
+     child->native_smp_reported = 0;
+ #endif
+diff --git a/kernel/src/exec/exec_syscall.c b/kernel/src/exec/exec_syscall.c
+index f91265b..94c546f 100644
+--- a/kernel/src/exec/exec_syscall.c
++++ b/kernel/src/exec/exec_syscall.c
+@@ -26,6 +26,7 @@
+ #include "../../include/vos/pmm.h"
+ #include "../../include/vos/uaccess.h"
+ #include "../../include/vos/vfs.h"
++#include "../../include/vos/atomic.h"
+ 
+ /* ============================================================================
+  * SYSCALL NUMBERS
+@@ -109,9 +110,7 @@ static inline uint64_t exec_rdmsr(uint32_t msr)
+ 
+ /** @brief User-space base for mmap allocations (bump allocator) */
+ #define VOS3_MMAP_BASE  0x0000000030000000ULL
+-/* Phase v17 (K-C5): g_mmap_next moved to vos3_task_t.mmap_next (per-process).
+- * Legacy global kept only as fallback for init task before task struct exists. */
+-static uint64_t g_mmap_next = VOS3_MMAP_BASE;
++/* mmap reservation state belongs to the shared address-space descriptor. */
+ 
+ /* ============================================================================
+  * HELPER FUNCTIONS
+@@ -299,6 +298,11 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
+     }
+     memcpy(child, parent, sizeof(vos3_task_t));
+     child->signal_state = NULL; /* Never alias the copied per-task signal state. */
++    child->wait_cleanup = NULL;
++    child->wait_cleanup_context = NULL;
++    child->wq_entry.task = NULL;
++    child->wq_entry.next = NULL;
++    child->wq_entry.queue = NULL;
+ 
+     /* Assign new TID; PID = parent's PID for CLONE_THREAD (Linux TGID semantics) */
+     static uint32_t s_thread_pid = 300U;
+@@ -1152,6 +1156,20 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
+     }
+ 
+     vos3_address_space_t* as = task->address_space;
++    /* Acquire backing outside the address-space lock: final put may close. */
++    vos3_file_t* backing = NULL;
++    if (!(flags & MAP_ANONYMOUS)) {
++        backing = task->fd_table ? vos3_fd_get(task->fd_table, fd) : NULL;
++        if (backing == NULL) return -9;
++        if ((backing->flags & VOS3_O_ACCMODE) == VOS3_O_WRONLY ||
++            !backing->ops || !backing->ops->read || !backing->ops->lseek) {
++            vos3_fd_put(backing);
++            return -13;
++        }
++    }
++    int64_t result;
++    vos3_irqflags_t irq = vos3_irq_save();
++    vos3_spinlock_acquire(&as->lock);
+ 
+     /* Find free VMA slot */
+     vos3_vma_t* vma = NULL;
+@@ -1163,55 +1181,45 @@ static int64_t sys_mmap(uint64_t addr, uint64_t length, int prot,
+     }
+     if (vma == NULL) {
+         VOS3_DEBUG("[MMAP] No free VMA slots");
+-        return -12;  /* ENOMEM */
++        result = -12;
++        goto mmap_out;
+     }
+ 
+     /* Fixed overlap replacement is deliberately unsupported until transactional. */
+     uint64_t base = (flags & MAP_FIXED) ? addr :
+-        (task->mmap_next >= VOS3_MMAP_BASE ? task->mmap_next : g_mmap_next);
++        (as->mmap_next >= VOS3_MMAP_BASE ? as->mmap_next : VOS3_MMAP_BASE);
+     uint64_t rounded;
+-    if (!user_mapping_range(base, length, &rounded)) return -22;
++    if (!user_mapping_range(base, length, &rounded)) { result = -22; goto mmap_out; }
+     for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+         vos3_vma_t* existing = &as->vmas[i];
+-        if (existing->valid && base < existing->vm_end && base + length > existing->vm_start)
+-            return -17; /* EEXIST: never overwrite another mapping. */
++        if (existing->valid && base < existing->vm_end && base + length > existing->vm_start) {
++            result = -17; goto mmap_out;
++        } /* EEXIST: never overwrite another mapping. */
+     }
+     if ((as->brk_start && base < as->brk && base + length > as->brk_start) ||
+         (task->user_stack && base < (uintptr_t)task->user_stack + task->user_stack_size &&
+-         base + length > (uintptr_t)task->user_stack)) return -17;
+-    for (uint64_t va = base; va < base + length; va += VOS3_PAGE_SIZE)
+-        if (vos3_vmm_is_mapped((uintptr_t)va)) return -17;
++         base + length > (uintptr_t)task->user_stack)) { result = -17; goto mmap_out; }
++    result = vos3_vmm_check_unmapped_locked(as, base, length);
++    if (result != 0) goto mmap_out;
+ 
+     /* Record VMA — NO physical memory allocated yet (demand paging) */
+     vma->vm_start = base;
+     vma->vm_end = base + length;
+     vma->vm_prot = prot;
+     vma->vm_flags = flags;
+-    if (flags & MAP_ANONYMOUS) {
+-        vma->vm_file = NULL;
+-    } else {
+-        vos3_file_t* backing = task->fd_table ? vos3_fd_get(task->fd_table, fd) : NULL;
+-        if (backing == NULL) {
+-            vma->valid = 0;
+-            return -9;  /* EBADF */
+-        }
+-        if ((backing->flags & VOS3_O_ACCMODE) == VOS3_O_WRONLY ||
+-            !backing->ops || !backing->ops->read || !backing->ops->lseek) {
+-            vos3_fd_put(backing);
+-            return -13;
+-        }
+-        vma->vm_file = backing;
+-    }
++    vma->vm_file = backing;
++    backing = NULL; /* Ownership transfers only after all fallible checks. */
+     vma->vm_offset = offset;
+     vma->valid = 1;
+     as->num_vmas++;
+-    if (!(flags & MAP_FIXED)) task->mmap_next = base + length;
++    if (!(flags & MAP_FIXED)) as->mmap_next = base + length;
++    result = (int64_t)base;
+ 
+-    VOS3_DEBUG("[MMAP] Mapped anonymous region 0x%llx-0x%llx (size=%llu)",
+-               (unsigned long long)base, (unsigned long long)(base + length),
+-               (unsigned long long)length);
+-
+-    return (int64_t)base;
++mmap_out:
++    vos3_spinlock_release(&as->lock);
++    vos3_irq_restore(irq);
++    if (backing != NULL) vos3_fd_put(backing);
++    return result;
+ }
+ 
+ /**
+@@ -1223,60 +1231,7 @@ static int64_t sys_munmap(uint64_t addr, uint64_t length)
+     if (!user_mapping_range(addr, length, &size)) return -22;
+     vos3_task_t* task = vos3_sched_current();
+     if (!task || !task->address_space) return -22;
+-    vos3_address_space_t* as = task->address_space;
+-    uint64_t end = addr + size;
+-    int split_slot = -1, split_index = -1;
+-    vos3_file_t* split_file = NULL;
+-    int page_check = vos3_vmm_validate_user_unmap((uintptr_t)addr, (size_t)size);
+-    if (page_check != 0) return page_check;
+-    /* A contiguous removal can split at most one nonoverlapping VMA. Reserve
+-       its metadata/backing reference before changing any mapping. */
+-    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+-        vos3_vma_t* v = &as->vmas[i];
+-        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
+-        if (addr > v->vm_start && end < v->vm_end) {
+-            if (split_index >= 0) return -22; /* Reject corrupt overlapping VMAs. */
+-            split_index = (int)i;
+-        }
+-    }
+-    if (split_index >= 0) {
+-        for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i)
+-            if (!as->vmas[i].valid) { split_slot = (int)i; break; }
+-        if (split_slot < 0) return -12;
+-        vos3_vma_t* v = &as->vmas[split_index];
+-        if (v->vm_file) {
+-            split_file = v->vm_file;
+-            int retained = vos3_file_retain(split_file);
+-            if (retained != 0) return retained;
+-        }
+-    }
+-    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+-        if ((int)i == split_slot) continue;
+-        vos3_vma_t* v = &as->vmas[i];
+-        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
+-        uint64_t lo = addr > v->vm_start ? addr : v->vm_start;
+-        uint64_t hi = end < v->vm_end ? end : v->vm_end;
+-        vos3_vmm_unmap_range((uintptr_t)lo, (size_t)(hi - lo));
+-        if (lo == v->vm_start && hi == v->vm_end) {
+-            vos3_file_t* backing = v->vm_file;
+-            v->valid = 0; v->vm_file = NULL;
+-            if (as->num_vmas) --as->num_vmas;
+-            if (backing) vos3_fd_put(backing);
+-        } else if (lo == v->vm_start) {
+-            v->vm_offset += hi - v->vm_start; v->vm_start = hi;
+-        } else if (hi == v->vm_end) {
+-            v->vm_end = lo;
+-        } else {
+-            vos3_vma_t* tail = &as->vmas[split_slot];
+-            *tail = *v;
+-            tail->vm_start = hi;
+-            tail->vm_offset += hi - v->vm_start;
+-            tail->vm_file = split_file;
+-            v->vm_end = lo;
+-            ++as->num_vmas;
+-        }
+-    }
+-    return 0; /* Unmapped holes are already absent. */
++    return vos3_vmm_munmap_range(task->address_space, addr, size);
+ }
+ 
+ /* ============================================================================
+diff --git a/kernel/src/ipc/msgqueue.c b/kernel/src/ipc/msgqueue.c
+index 505323c..e054274 100644
+--- a/kernel/src/ipc/msgqueue.c
++++ b/kernel/src/ipc/msgqueue.c
+@@ -27,41 +27,115 @@
+ /** @brief Message queue table */
+ static vos3_msgqueue_t* g_msgq_table[VOS3_IPC_MAX_OBJECTS];
+ 
++/** @brief Per-slot generations; zero means the slot has never been issued. */
++static uint32_t g_msgq_generation[VOS3_IPC_MAX_OBJECTS];
++
+ /** @brief Message queue table lock */
+ static vos3_spinlock_t g_msgq_lock = VOS3_SPINLOCK_INIT;
+ 
+ /** @brief Next message queue ID */
+-static vos3_ipc_id_t g_next_msgq_id __attribute__((unused)) = 1U;
++#define VOS3_MSGQ_SLOT_BITS       8U
++#define VOS3_MSGQ_SLOT_MASK       ((vos3_ipc_id_t)0xFFU)
++#define VOS3_MSGQ_GENERATION_MAX  ((uint32_t)0x007FFFFFU)
++
++_Static_assert(VOS3_IPC_MAX_OBJECTS == 256U,
++               "Message queue handle encoding requires 256 registry slots");
+ 
+ /* ============================================================================
+  * INTERNAL HELPERS
+  * ============================================================================ */
+ 
+ /**
+- * @brief Get message queue by ID
++ * @brief Pin a message queue by ID
+  */
+-static vos3_msgqueue_t* msgq_get(vos3_ipc_id_t id)
++static size_t msgq_slot(vos3_ipc_id_t id)
+ {
+-    if (id == VOS3_IPC_INVALID || id >= VOS3_IPC_MAX_OBJECTS) {
+-        return NULL;
++    return (size_t)(id & VOS3_MSGQ_SLOT_MASK);
++}
++
++static int msgq_id_valid(vos3_ipc_id_t id)
++{
++    size_t slot = msgq_slot(id);
++    uint32_t generation = id >> VOS3_MSGQ_SLOT_BITS;
++    return id != VOS3_IPC_INVALID && id != VOS3_IPC_EEXIST &&
++           slot > 0U && slot < VOS3_IPC_MAX_OBJECTS && generation != 0U;
++}
++
++static void msgq_finalize(vos3_msgqueue_t* mq)
++{
++    vos3_ipc_id_t id = mq->id;
++    /* Reaching zero references proves the registry and every operation have
++     * relinquished the object, so no list lock is needed during finalization. */
++    vos3_msgq_entry_t* entry = mq->head;
++    while (entry != NULL) {
++        vos3_msgq_entry_t* next = entry->next;
++        vos3_kfree(entry);
++        entry = next;
++    }
++    mq->head = NULL;
++    mq->tail = NULL;
++    mq->count = 0U;
++    vos3_sem_destroy(&mq->sem_space);
++    vos3_sem_destroy(&mq->sem_msgs);
++    mq->magic = 0U;
++    vos3_kfree(mq);
++    VOS3_DEBUG("Finalized message queue (id=%u)", id);
++    (void)id;
++}
++
++/** @brief Drop a lifetime reference; the 1->0 owner performs finalization. */
++static void msgq_put_ref(vos3_msgqueue_t* mq)
++{
++    int32_t previous = vos3_atomic32_fetch_sub(&mq->active_ops, 1);
++    if (previous <= 0) {
++        VOS3_PANIC("Message queue reference underflow");
+     }
++    if (previous == 1) {
++        msgq_finalize(mq);
++    }
++}
++
++static void msgq_put_wait_ref(void* context)
++{
++    msgq_put_ref((vos3_msgqueue_t*)context);
++}
+ 
+-    vos3_msgqueue_t* mq = g_msgq_table[id];
+-    if (mq == NULL || mq->magic != VOS3_MSGQ_MAGIC) {
++static vos3_msgqueue_t* msgq_get_ref(vos3_ipc_id_t id)
++{
++    if (!msgq_id_valid(id)) return NULL;
++    size_t slot = msgq_slot(id);
++
++    vos3_spinlock_lock(&g_msgq_lock);
++    vos3_msgqueue_t* mq = g_msgq_table[slot];
++    if (mq == NULL || mq->id != id || mq->magic != VOS3_MSGQ_MAGIC ||
++        __atomic_load_n(&mq->closing, __ATOMIC_ACQUIRE) != 0U) {
++        vos3_spinlock_unlock(&g_msgq_lock);
+         return NULL;
+     }
+ 
++    if (vos3_atomic32_load(&mq->active_ops) == INT32_MAX) {
++        vos3_spinlock_unlock(&g_msgq_lock);
++        return NULL;
++    }
++    (void)vos3_atomic32_fetch_add(&mq->active_ops, 1);
++    vos3_spinlock_unlock(&g_msgq_lock);
+     return mq;
+ }
+ 
+ /**
+  * @brief Find free slot in message queue table
+  */
+-static vos3_ipc_id_t msgq_alloc_id(void)
++static vos3_ipc_id_t msgq_alloc_id(size_t* slot_out)
+ {
+-    for (vos3_ipc_id_t i = 1U; i < VOS3_IPC_MAX_OBJECTS; i++) {
++    for (size_t i = 1U; i < VOS3_IPC_MAX_OBJECTS; i++) {
+         if (g_msgq_table[i] == NULL) {
+-            return i;
++            uint32_t generation = g_msgq_generation[i];
++            if (generation >= VOS3_MSGQ_GENERATION_MAX) continue;
++            generation++;
++            g_msgq_generation[i] = generation;
++            *slot_out = i;
++            return (vos3_ipc_id_t)((generation << VOS3_MSGQ_SLOT_BITS) |
++                                   (uint32_t)i);
+         }
+     }
+     return VOS3_IPC_INVALID;
+@@ -89,7 +163,8 @@ vos3_ipc_id_t vos3_msgq_create(const char* name, size_t max_msgs, size_t max_siz
+ 
+     vos3_spinlock_lock(&g_msgq_lock);
+ 
+-    vos3_ipc_id_t id = msgq_alloc_id();
++    size_t slot = 0U;
++    vos3_ipc_id_t id = msgq_alloc_id(&slot);
+     if (id == VOS3_IPC_INVALID) {
+         vos3_spinlock_unlock(&g_msgq_lock);
+         vos3_kfree(mq);
+@@ -115,20 +190,27 @@ vos3_ipc_id_t vos3_msgq_create(const char* name, size_t max_msgs, size_t max_siz
+     mq->max_count = max_msgs;
+     mq->max_msg_size = max_size;
+ 
+-    vos3_mutex_init(&mq->lock, "msgq_lock");
++    vos3_spinlock_init(&mq->lock);
+     vos3_sem_init(&mq->sem_space, "msgq_space", (uint32_t)max_msgs);
+     vos3_sem_init(&mq->sem_msgs, "msgq_msgs", 0U);
++    /* One registry reference keeps the object alive until destroy detaches it. */
++    vos3_atomic32_store(&mq->active_ops, 1);
++    __atomic_store_n(&mq->closing, 0U, __ATOMIC_RELEASE);
+ 
+     vos3_task_t* current = vos3_sched_current();
+     mq->owner = current ? current->tid : 0U;
++    mq->owner_identity = current ? current->identity_cookie : 0U;
+     mq->flags = 0U;
+ 
+-    g_msgq_table[id] = mq;
++    g_msgq_table[slot] = mq;
++
++    char log_name[sizeof(mq->name)];
++    memcpy(log_name, mq->name, sizeof(log_name));
+ 
+     vos3_spinlock_unlock(&g_msgq_lock);
+ 
+     VOS3_DEBUG("Created message queue '%s' (id=%u, max=%zu, size=%zu)",
+-               mq->name, id, max_msgs, max_size);
++               log_name, id, max_msgs, max_size);
+ 
+     return id;
+ }
+@@ -137,39 +219,37 @@ int vos3_msgq_destroy(vos3_ipc_id_t id)
+ {
+     vos3_spinlock_lock(&g_msgq_lock);
+ 
+-    vos3_msgqueue_t* mq = msgq_get(id);
+-    if (mq == NULL) {
++    if (!msgq_id_valid(id)) {
+         vos3_spinlock_unlock(&g_msgq_lock);
+         return VOS3_IPC_ERR_NOTFOUND;
+     }
+-
+-    /* Remove from table */
+-    g_msgq_table[id] = NULL;
+-
+-    vos3_spinlock_unlock(&g_msgq_lock);
+-
+-    /* Free all pending messages */
+-    vos3_mutex_lock(&mq->lock);
+-
+-    vos3_msgq_entry_t* entry = mq->head;
+-    while (entry != NULL) {
+-        vos3_msgq_entry_t* next = entry->next;
+-        vos3_kfree(entry);
+-        entry = next;
++    size_t slot = msgq_slot(id);
++    vos3_msgqueue_t* mq = g_msgq_table[slot];
++    if (mq == NULL || mq->id != id || mq->magic != VOS3_MSGQ_MAGIC ||
++        __atomic_load_n(&mq->closing, __ATOMIC_ACQUIRE) != 0U) {
++        vos3_spinlock_unlock(&g_msgq_lock);
++        return VOS3_IPC_ERR_NOTFOUND;
+     }
+ 
+-    vos3_mutex_unlock(&mq->lock);
++    vos3_task_t* current = vos3_sched_current();
++    if (mq->owner_identity != 0U &&
++        (current == NULL || current->identity_cookie == 0U ||
++         current->identity_cookie != mq->owner_identity)) {
++        vos3_spinlock_unlock(&g_msgq_lock);
++        return VOS3_IPC_ERR_ACCESS;
++    }
+ 
+-    /* Destroy synchronization primitives */
+-    vos3_mutex_destroy(&mq->lock);
+-    vos3_sem_destroy(&mq->sem_space);
+-    vos3_sem_destroy(&mq->sem_msgs);
++    /* Stop new references before waking blocked operations. */
++    __atomic_store_n(&mq->closing, 1U, __ATOMIC_RELEASE);
++    g_msgq_table[slot] = NULL;
+ 
+-    /* Clear magic and free */
+-    mq->magic = 0U;
+-    vos3_kfree(mq);
++    vos3_spinlock_unlock(&g_msgq_lock);
+ 
+-    VOS3_DEBUG("Destroyed message queue (id=%u)", id);
++    vos3_sem_close(&mq->sem_space);
++    vos3_sem_close(&mq->sem_msgs);
++    VOS3_DEBUG("Detached message queue (id=%u)", id);
++    /* Drop the registry reference. The last operation/reaper pin finalizes. */
++    msgq_put_ref(mq);
+ 
+     return VOS3_IPC_OK;
+ }
+@@ -177,22 +257,42 @@ int vos3_msgq_destroy(vos3_ipc_id_t id)
+ int vos3_msgq_send(vos3_ipc_id_t id, uint32_t type,
+                    const void* data, size_t size, uint32_t flags)
+ {
+-    vos3_msgqueue_t* mq = msgq_get(id);
++    vos3_msgqueue_t* mq = msgq_get_ref(id);
+     if (mq == NULL) {
+         return VOS3_IPC_ERR_NOTFOUND;
+     }
+ 
+     if (size > mq->max_msg_size) {
++        msgq_put_ref(mq);
+         return VOS3_IPC_ERR_INVALID;
+     }
+ 
+     /* Wait for space (or try) */
+     if ((flags & VOS3_MSGQ_FLAG_NONBLOCK) != 0U) {
+         if (vos3_sem_trywait(&mq->sem_space) == 0) {
++            msgq_put_ref(mq);
+             return VOS3_IPC_ERR_WOULDBLOCK;
+         }
+     } else {
+-        vos3_sem_wait(&mq->sem_space);
++        vos3_task_t* waiting = vos3_sched_current();
++        int armed = vos3_task_arm_wait_cleanup(waiting, msgq_put_wait_ref, mq);
++        if (armed <= 0) {
++            if (armed == 0) msgq_put_ref(mq);
++            return VOS3_IPC_ERR_INTR;
++        }
++        int wait_result = vos3_sem_wait_status(&mq->sem_space);
++        if (!vos3_task_disarm_wait_cleanup(waiting, msgq_put_wait_ref, mq)) {
++            return VOS3_IPC_ERR_INTR;
++        }
++        if (wait_result != VOS3_SYNC_OK) {
++            msgq_put_ref(mq);
++            return VOS3_IPC_ERR_NOTFOUND;
++        }
++    }
++
++    if (__atomic_load_n(&mq->closing, __ATOMIC_ACQUIRE) != 0U) {
++        msgq_put_ref(mq);
++        return VOS3_IPC_ERR_NOTFOUND;
+     }
+ 
+     /* Allocate message entry */
+@@ -200,6 +300,7 @@ int vos3_msgq_send(vos3_ipc_id_t id, uint32_t type,
+     vos3_msgq_entry_t* entry = (vos3_msgq_entry_t*)vos3_kmalloc(entry_size);
+     if (entry == NULL) {
+         vos3_sem_post(&mq->sem_space);  /* Return the space */
++        msgq_put_ref(mq);
+         return VOS3_IPC_ERR_NOMEM;
+     }
+ 
+@@ -218,7 +319,16 @@ int vos3_msgq_send(vos3_ipc_id_t id, uint32_t type,
+     }
+ 
+     /* Add to queue */
+-    vos3_mutex_lock(&mq->lock);
++    vos3_irqflags_t lock_flags = vos3_irq_save();
++    vos3_spinlock_lock(&mq->lock);
++
++    if (__atomic_load_n(&mq->closing, __ATOMIC_ACQUIRE) != 0U) {
++        vos3_spinlock_unlock(&mq->lock);
++        vos3_irq_restore(lock_flags);
++        vos3_kfree(entry);
++        msgq_put_ref(mq);
++        return VOS3_IPC_ERR_NOTFOUND;
++    }
+ 
+     if (mq->tail != NULL) {
+         mq->tail->next = entry;
+@@ -228,18 +338,21 @@ int vos3_msgq_send(vos3_ipc_id_t id, uint32_t type,
+     mq->tail = entry;
+     mq->count++;
+ 
+-    vos3_mutex_unlock(&mq->lock);
++    vos3_spinlock_unlock(&mq->lock);
++    vos3_irq_restore(lock_flags);
+ 
+     /* Signal message available */
+     vos3_sem_post(&mq->sem_msgs);
+ 
++    msgq_put_ref(mq);
++
+     return VOS3_IPC_OK;
+ }
+ 
+ int64_t vos3_msgq_recv(vos3_ipc_id_t id, uint32_t* type_out,
+                        void* data, size_t max_size, uint32_t flags)
+ {
+-    vos3_msgqueue_t* mq = msgq_get(id);
++    vos3_msgqueue_t* mq = msgq_get_ref(id);
+     if (mq == NULL) {
+         return VOS3_IPC_ERR_NOTFOUND;
+     }
+@@ -247,18 +360,40 @@ int64_t vos3_msgq_recv(vos3_ipc_id_t id, uint32_t* type_out,
+     /* Wait for message (or try) */
+     if ((flags & VOS3_MSGQ_FLAG_NONBLOCK) != 0U) {
+         if (vos3_sem_trywait(&mq->sem_msgs) == 0) {
++            msgq_put_ref(mq);
+             return VOS3_IPC_ERR_WOULDBLOCK;
+         }
+     } else {
+-        vos3_sem_wait(&mq->sem_msgs);
++        vos3_task_t* waiting = vos3_sched_current();
++        int armed = vos3_task_arm_wait_cleanup(waiting, msgq_put_wait_ref, mq);
++        if (armed <= 0) {
++            if (armed == 0) msgq_put_ref(mq);
++            return VOS3_IPC_ERR_INTR;
++        }
++        int wait_result = vos3_sem_wait_status(&mq->sem_msgs);
++        if (!vos3_task_disarm_wait_cleanup(waiting, msgq_put_wait_ref, mq)) {
++            return VOS3_IPC_ERR_INTR;
++        }
++        if (wait_result != VOS3_SYNC_OK) {
++            msgq_put_ref(mq);
++            return VOS3_IPC_ERR_NOTFOUND;
++        }
++    }
++
++    if (__atomic_load_n(&mq->closing, __ATOMIC_ACQUIRE) != 0U) {
++        msgq_put_ref(mq);
++        return VOS3_IPC_ERR_NOTFOUND;
+     }
+ 
+     /* Get message from queue */
+-    vos3_mutex_lock(&mq->lock);
++    vos3_irqflags_t lock_flags = vos3_irq_save();
++    vos3_spinlock_lock(&mq->lock);
+ 
+     vos3_msgq_entry_t* entry = mq->head;
+     if (entry == NULL) {
+-        vos3_mutex_unlock(&mq->lock);
++        vos3_spinlock_unlock(&mq->lock);
++        vos3_irq_restore(lock_flags);
++        msgq_put_ref(mq);
+         return VOS3_IPC_ERR_EMPTY;
+     }
+ 
+@@ -268,7 +403,8 @@ int64_t vos3_msgq_recv(vos3_ipc_id_t id, uint32_t* type_out,
+     }
+     mq->count--;
+ 
+-    vos3_mutex_unlock(&mq->lock);
++    vos3_spinlock_unlock(&mq->lock);
++    vos3_irq_restore(lock_flags);
+ 
+     /* Copy message data */
+     size_t copy_size = entry->msg.header.size;
+@@ -288,6 +424,8 @@ int64_t vos3_msgq_recv(vos3_ipc_id_t id, uint32_t* type_out,
+     vos3_kfree(entry);
+     vos3_sem_post(&mq->sem_space);
+ 
++    msgq_put_ref(mq);
++
+     return (int64_t)copy_size;
+ }
+ 
+@@ -301,10 +439,12 @@ vos3_ipc_id_t vos3_msgq_find(const char* name)
+ 
+     for (vos3_ipc_id_t i = 1U; i < VOS3_IPC_MAX_OBJECTS; i++) {
+         vos3_msgqueue_t* mq = g_msgq_table[i];
+-        if (mq != NULL && mq->magic == VOS3_MSGQ_MAGIC) {
++        if (mq != NULL && mq->magic == VOS3_MSGQ_MAGIC &&
++            __atomic_load_n(&mq->closing, __ATOMIC_ACQUIRE) == 0U) {
+             if (strcmp(mq->name, name) == 0) {
++                vos3_ipc_id_t found = mq->id;
+                 vos3_spinlock_unlock(&g_msgq_lock);
+-                return i;
++                return found;
+             }
+         }
+     }
+@@ -315,10 +455,16 @@ vos3_ipc_id_t vos3_msgq_find(const char* name)
+ 
+ int64_t vos3_msgq_count(vos3_ipc_id_t id)
+ {
+-    vos3_msgqueue_t* mq = msgq_get(id);
++    vos3_msgqueue_t* mq = msgq_get_ref(id);
+     if (mq == NULL) {
+         return VOS3_IPC_ERR_NOTFOUND;
+     }
+ 
+-    return (int64_t)mq->count;
++    vos3_irqflags_t lock_flags = vos3_irq_save();
++    vos3_spinlock_lock(&mq->lock);
++    int64_t count = (int64_t)mq->count;
++    vos3_spinlock_unlock(&mq->lock);
++    vos3_irq_restore(lock_flags);
++    msgq_put_ref(mq);
++    return count;
+ }
+diff --git a/kernel/src/ipc/shm.c b/kernel/src/ipc/shm.c
+index 57e9ecf..1f4a64a 100644
+--- a/kernel/src/ipc/shm.c
++++ b/kernel/src/ipc/shm.c
+@@ -338,47 +338,12 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
+         size = huge_count * VOS3_LARGE_PAGE_SIZE;
+         page_count = size / VOS3_PAGE_SIZE;
+ 
+-        /* Allocate hugepages into temp array, then sort for contiguity */
+-        uint64_t hp_addrs[16] = {0};  /* max 16 hugepages = 32MB per SHM */
+         if (huge_count > 16) {
+             vos3_kfree(shm);
+             return VOS3_IPC_INVALID;
+         }
+-
+-        for (size_t i = 0; i < huge_count; i++) {
+-            hp_addrs[i] = vos3_pmm_alloc_huge();
+-            if (hp_addrs[i] == 0) {
+-                for (size_t j = 0; j < i; j++)
+-                    vos3_pmm_free_huge(hp_addrs[j]);
+-                vos3_kfree(shm);
+-                return VOS3_IPC_INVALID;
+-            }
+-        }
+-
+-        /* Sort by physical address (insertion sort, tiny array) */
+-        for (size_t i = 1; i < huge_count; i++) {
+-            uint64_t key = hp_addrs[i];
+-            size_t j = i;
+-            while (j > 0 && hp_addrs[j - 1] > key) {
+-                hp_addrs[j] = hp_addrs[j - 1];
+-                j--;
+-            }
+-            hp_addrs[j] = key;
+-        }
+-
+-        /* Verify contiguity after sorting */
+-        phys_addr = hp_addrs[0];
+-        int contiguous = 1;
+-        for (size_t i = 1; i < huge_count; i++) {
+-            if (hp_addrs[i] != phys_addr + i * VOS3_LARGE_PAGE_SIZE) {
+-                contiguous = 0;
+-                break;
+-            }
+-        }
+-
+-        if (!contiguous) {
+-            for (size_t i = 0; i < huge_count; i++)
+-                vos3_pmm_free_huge(hp_addrs[i]);
++        phys_addr = vos3_pmm_alloc_huge_contiguous((uint32_t)huge_count);
++        if (phys_addr == 0) {
+             vos3_kfree(shm);
+             return VOS3_IPC_INVALID;
+         }
+@@ -670,6 +635,7 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
+ void vos3_shm_owner_exit(uint64_t identity)
+ {
+     if (identity == 0) return;
++    int queued = 0;
+     vos3_irqflags_t registry_flags = shm_registry_lock();
+     for (uint32_t slot = 1; slot < VOS3_SHM_MAX_REGIONS; ++slot) {
+         vos3_shm_region_t* shm = g_shm_table[slot];
+@@ -677,9 +643,11 @@ void vos3_shm_owner_exit(uint64_t identity)
+             shm->owner_identity == identity && !g_shm_creator_released[slot]) {
+             g_shm_creator_released[slot] = 1;
+             g_shm_pending_creators[slot] = shm->id;
++            queued = 1;
+         }
+     }
+     shm_registry_unlock(registry_flags);
++    if (queued) vos3_sched_request_deferred();
+ }
+ 
+ /* Safe process-context caller required, just like the address-space reaper.
+diff --git a/kernel/src/mm/pmm.c b/kernel/src/mm/pmm.c
+index 486820d..5ea459a 100644
+--- a/kernel/src/mm/pmm.c
++++ b/kernel/src/mm/pmm.c
+@@ -21,6 +21,7 @@
+ #include "../../include/vos/timer.h"
+ #include "../../include/vos/string.h"
+ #include "../../include/vos/percpu.h"
++#include "../../include/vos/heap.h"
+ 
+ /* ============================================================================
+  * STATIC DATA
+@@ -60,6 +61,16 @@ static uint32_t g_hugepage_pool_count = 0;
+ static uint32_t g_hugepage_pool_used  = 0;
+ static vos3_spinlock_t g_hugepage_lock = VOS3_SPINLOCK_INIT;
+ 
++/* Buddy fallback extents retain provenance until every issued huge page is
++ * returned. Metadata is allocated/freed outside g_hugepage_lock. */
++typedef struct huge_fallback {
++    uint64_t phys;
++    uint32_t count;
++    uint32_t live_mask;
++    struct huge_fallback* next;
++} huge_fallback_t;
++static huge_fallback_t* g_huge_fallbacks;
++
+ /* LIFO Recovery: per-slot release timestamp to prevent Context Collapse.
+  * Pages freed within the cooldown window are deferred during allocation. */
+ static uint64_t g_hugepage_release_tick[VOS3_HUGEPAGE_POOL_MAX];
+@@ -1188,12 +1199,24 @@ void vos3_pmm_reserve_hugepages(uint32_t count)
+ 
+         if (!all_free) continue;
+ 
+-        /* Allocate all 512 pages */
+-        for (size_t p = start; p < start + pages_per_huge; p++) {
+-            pmm_bitmap_set(p);
+-            vos3_pmm_zone_t zone = pmm_page_to_zone(p);
+-            pmm_stats_alloc(zone);
++        /* Bitmap fast allocators do not take this lock. Claim transactionally
++         * and do not overwrite the winning allocator's reference count. */
++        size_t claimed = 0;
++        for (; claimed < pages_per_huge; claimed++) {
++            size_t page = start + claimed;
++            if (pmm_bitmap_set(page)) break;
++            pmm_stats_alloc(pmm_page_to_zone(page));
++        }
++        if (claimed != pages_per_huge) {
++            for (size_t i = 0; i < claimed; i++) {
++                pmm_bitmap_clear(start + i);
++                pmm_stats_free(pmm_page_to_zone(start + i));
++            }
++            continue;
+         }
++        for (size_t i = 0; i < pages_per_huge; i++)
++            if (start + i < g_pmm.refcount_size)
++                vos3_atomic_store32(&g_pmm.refcount[start + i], 1U);
+ 
+         g_hugepage_pool[g_hugepage_pool_count++] = vos3_pmm_page_to_addr(start);
+     }
+@@ -1204,71 +1227,146 @@ void vos3_pmm_reserve_hugepages(uint32_t count)
+               g_hugepage_pool_count, g_hugepage_pool_count * 2);
+ }
+ 
++/* Preserve buddy fallback capacity without admitting foreign frees into the
++ * reserved pool. A power-of-two rounded buddy extent is freed only when all
++ * requested huge pages have been returned. */
++static uint64_t pmm_huge_fallback_alloc(uint32_t count)
++{
++    if (g_buddy_initialized == 0U || count == 0 || count > 16U) return 0;
++    huge_fallback_t* extent = vos3_kmalloc(sizeof(*extent));
++    if (extent == NULL) return 0;
++    uint32_t allocated = 1U;
++    while (allocated < count) allocated <<= 1U;
++    uint64_t phys = vos3_pmm_buddy_alloc((size_t)allocated * 512U, 0);
++    if (phys == 0 || (phys & ((uint64_t)allocated * VOS3_LARGE_PAGE_SIZE - 1U)) != 0) {
++        /* Buddy's emergency bitmap fallback need not preserve order alignment.
++         * Return its exact requested pages, never advertise a misaligned buddy. */
++        if (phys != 0) vos3_pmm_free_pages(phys, (size_t)allocated * 512U);
++        vos3_kfree(extent);
++        return 0;
++    }
++    extent->phys = phys;
++    extent->count = count;
++    extent->live_mask = (1U << count) - 1U;
++    vos3_irqflags_t irq = vos3_irq_save();
++    vos3_spinlock_acquire(&g_hugepage_lock);
++    extent->next = g_huge_fallbacks;
++    g_huge_fallbacks = extent;
++    vos3_spinlock_release(&g_hugepage_lock);
++    vos3_irq_restore(irq);
++    return phys;
++}
++
+ uint64_t vos3_pmm_alloc_huge(void)
+ {
+     vos3_irqflags_t f = vos3_irq_save();
+     vos3_spinlock_acquire(&g_hugepage_lock);
+-
+     uint64_t phys = 0;
+-    if (g_hugepage_pool_used < g_hugepage_pool_count)
++    if (g_hugepage_pool_used < g_hugepage_pool_count) {
++        g_hugepage_release_tick[g_hugepage_pool_used] = 0;
+         phys = g_hugepage_pool[g_hugepage_pool_used++];
+-
++    }
+     vos3_spinlock_release(&g_hugepage_lock);
+     vos3_irq_restore(f);
++    return phys != 0 ? phys : pmm_huge_fallback_alloc(1);
++}
+ 
+-    /* Phase 7.4 Emergency Replenishment: if the pre-reserved pool is
+-     * exhausted but the buddy allocator has Order-9+ contiguous blocks,
+-     * allocate from buddy as a last-resort path. This guarantees that
+-     * vos3_pmm_alloc_huge() succeeds whenever free memory > 30% and
+-     * the anti-fragmentation guard has preserved HP-capable blocks.
+-     * Lock ordering: hugepage_lock released above → buddy_lock safe. */
+-    if (phys == 0 && g_buddy_initialized != 0U) {
+-        uintptr_t buddy_phys = vos3_pmm_buddy_alloc(512, 0);
+-        if (buddy_phys != 0) {
+-            phys = (uint64_t)buddy_phys;
+-        }
++static void pmm_huge_swap(uint32_t a, uint32_t b)
++{
++    uint64_t phys = g_hugepage_pool[a], tick = g_hugepage_release_tick[a];
++    g_hugepage_pool[a] = g_hugepage_pool[b];
++    g_hugepage_release_tick[a] = g_hugepage_release_tick[b];
++    g_hugepage_pool[b] = phys;
++    g_hugepage_release_tick[b] = tick;
++}
++static void pmm_huge_sift(uint32_t base, uint32_t root, uint32_t length)
++{
++    while (root < length / 2U) {
++        uint32_t child = root * 2U + 1U;
++        if (child + 1U < length && g_hugepage_pool[base + child] < g_hugepage_pool[base + child + 1U]) child++;
++        if (g_hugepage_pool[base + root] >= g_hugepage_pool[base + child]) break;
++        pmm_huge_swap(base + root, base + child);
++        root = child;
+     }
+-
+-    return phys;
+ }
+ 
+-void vos3_pmm_free_huge(uint64_t phys)
++uint64_t vos3_pmm_alloc_huge_contiguous(uint32_t count)
+ {
++    if (count == 0 || count > 16U) return 0;
++    if (count == 1) return vos3_pmm_alloc_huge();
+     vos3_irqflags_t f = vos3_irq_save();
+     vos3_spinlock_acquire(&g_hugepage_lock);
+-
+-    if (g_hugepage_pool_used > 0) {
+-        /* Find the freed page in the used region [0..used-1] and swap it
+-         * with the last used entry to maintain contiguous used/free layout.
+-         * K-HIGH-3 fix: the old code blindly decremented and overwrote the
+-         * last active slot, silently losing a live hugepage mapping. */
+-        uint32_t found = UINT32_MAX;
+-        for (uint32_t i = 0; i < g_hugepage_pool_used; i++) {
+-            if (g_hugepage_pool[i] == phys) {
+-                found = i;
+-                break;
+-            }
+-        }
+-        --g_hugepage_pool_used;
+-        if (found != UINT32_MAX && found != g_hugepage_pool_used) {
+-            /* Swap with last used entry */
+-            g_hugepage_pool[found] = g_hugepage_pool[g_hugepage_pool_used];
+-            g_hugepage_release_tick[found] = g_hugepage_release_tick[g_hugepage_pool_used];
+-        }
+-        g_hugepage_pool[g_hugepage_pool_used] = phys;
+-        g_hugepage_release_tick[g_hugepage_pool_used] = vos3_timer_get_ticks();
+-    } else {
+-        /* Pool underflow — return 512 x 4KB pages to regular PMM to avoid
+-         * silently losing 2MB of physical memory. */
+-        VOS3_WARN("[PMM] free_huge: pool underflow for phys=0x%llx, "
+-                  "returning to 4KB pool", (unsigned long long)phys);
+-        for (uint32_t i = 0; i < 512; i++) {
+-            vos3_pmm_free(phys + i * VOS3_PAGE_SIZE);
++    /* Sort only the free partition; active ownership and timestamps stay
++     * paired. Select a whole contiguous run before publishing any ownership. */
++    /* Heapsort bounds the IRQ-disabled sort to O(pool_count log pool_count). */
++    uint32_t available = g_hugepage_pool_count - g_hugepage_pool_used;
++    for (uint32_t i = available / 2U; i > 0; i--)
++        pmm_huge_sift(g_hugepage_pool_used, i - 1U, available);
++    for (uint32_t n = available; n > 1U; n--) {
++        pmm_huge_swap(g_hugepage_pool_used, g_hugepage_pool_used + n - 1U);
++        pmm_huge_sift(g_hugepage_pool_used, 0, n - 1U);
++    }
++    uint64_t result = 0;
++    uint32_t run = 0;
++    for (uint32_t i = g_hugepage_pool_used; i < g_hugepage_pool_count; i++) {
++        run = (run && g_hugepage_pool[i] - g_hugepage_pool[i - 1] == VOS3_LARGE_PAGE_SIZE) ? run + 1 : 1;
++        if (run == count) { result = g_hugepage_pool[i + 1 - count]; break; }
++    }
++    if (result != 0) {
++        for (uint32_t n = 0; n < count; n++) {
++            uint32_t index = g_hugepage_pool_used;
++            while (index < g_hugepage_pool_count &&
++                   g_hugepage_pool[index] != result + n * VOS3_LARGE_PAGE_SIZE) index++;
++            uint32_t front = g_hugepage_pool_used++;
++            g_hugepage_pool[index] = g_hugepage_pool[front];
++            g_hugepage_release_tick[index] = g_hugepage_release_tick[front];
++            g_hugepage_pool[front] = result + n * VOS3_LARGE_PAGE_SIZE;
++            g_hugepage_release_tick[front] = 0;
+         }
+     }
++    vos3_spinlock_release(&g_hugepage_lock);
++    vos3_irq_restore(f);
++    return result != 0 ? result : pmm_huge_fallback_alloc(count);
++}
+ 
++void vos3_pmm_free_huge(uint64_t phys)
++{
++    if (phys == 0 || (phys & (VOS3_LARGE_PAGE_SIZE - 1U)) != 0) return;
++    vos3_irqflags_t f = vos3_irq_save();
++    vos3_spinlock_acquire(&g_hugepage_lock);
++    for (uint32_t i = 0; i < g_hugepage_pool_used; i++) {
++        if (g_hugepage_pool[i] != phys) continue;
++        uint32_t last = --g_hugepage_pool_used;
++        g_hugepage_pool[i] = g_hugepage_pool[last];
++        g_hugepage_release_tick[i] = g_hugepage_release_tick[last];
++        g_hugepage_pool[last] = phys;
++        g_hugepage_release_tick[last] = vos3_timer_get_ticks();
++        vos3_spinlock_release(&g_hugepage_lock);
++        vos3_irq_restore(f);
++        return;
++    }
++    huge_fallback_t** link = &g_huge_fallbacks;
++    huge_fallback_t* retired = NULL;
++    for (; *link != NULL; link = &(*link)->next) {
++        huge_fallback_t* extent = *link;
++        if (phys < extent->phys) continue;
++        uint64_t index = (phys - extent->phys) / VOS3_LARGE_PAGE_SIZE;
++        if (index >= extent->count) continue;
++        uint32_t bit = 1U << index;
++        if ((extent->live_mask & bit) == 0) break; /* Duplicate return. */
++        extent->live_mask &= ~bit;
++        if (extent->live_mask == 0) { *link = extent->next; retired = extent; }
++        break;
++    }
+     vos3_spinlock_release(&g_hugepage_lock);
+     vos3_irq_restore(f);
++    if (retired != NULL) {
++        uint32_t allocated = 1U;
++        while (allocated < retired->count) allocated <<= 1U;
++        vos3_pmm_buddy_free(retired->phys, (size_t)allocated * 512U);
++        vos3_kfree(retired);
++    }
++    /* Unknown/duplicate addresses must never decrement or overwrite the pool. */
+ }
+ 
+ uint64_t vos3_pmm_alloc_colored_hugepage(uint8_t color)
+@@ -1555,6 +1653,9 @@ static int buddy_range_alloc(size_t start, size_t count)
+         vos3_pmm_zone_t zone = pmm_page_to_zone(start + i);
+         pmm_stats_alloc(zone);
+     }
++    for (size_t i = 0; i < count; i++)
++        if (start + i < g_pmm.refcount_size)
++            vos3_atomic_store32(&g_pmm.refcount[start + i], 1U);
+     return 0;
+ }
+ 
+@@ -1566,6 +1667,10 @@ static int buddy_range_alloc(size_t start, size_t count)
+ static void buddy_range_free(size_t start, size_t count)
+ {
+     for (size_t i = 0; i < count; i++) {
++        /* Caller exclusively owns this extent. Clear refs before publishing
++         * free bitmap bits to lock-free allocation. */
++        if (start + i < g_pmm.refcount_size)
++            vos3_atomic_store32(&g_pmm.refcount[start + i], 0U);
+         int was_set = pmm_bitmap_clear(start + i);
+         if (was_set) {
+             vos3_pmm_zone_t zone = pmm_page_to_zone(start + i);
+diff --git a/kernel/src/mm/vmm.c b/kernel/src/mm/vmm.c
+index 003e0bf..907dfce 100644
+--- a/kernel/src/mm/vmm.c
++++ b/kernel/src/mm/vmm.c
+@@ -24,6 +24,7 @@
+ #include "../../include/vos/percpu.h"
+ #include "../../include/vos/entry_state.h"
+ #include "../../include/vos/vfs.h"
++#include "../../include/vos/heap.h"
+ /* Note: AI PTE bit constants (VOS3_PTE_AI_MASK etc.) are now defined
+  * directly in vmm.h, eliminating the vmm -> ai_guard layering violation.
+  * ai_guard.h includes vmm.h and re-exports them. */
+@@ -695,26 +696,128 @@ size_t vos3_vmm_unmap_range(uintptr_t virt_start, size_t size)
+     return unmapped;
+ }
+ 
+-int vos3_vmm_validate_user_unmap(uintptr_t start, size_t size)
++/* Caller holds as->lock with interrupts disabled. At most 4096 walks
++ * (four levels each): sparse reservations skip absent subtrees. Dense empty
++ * page tables beyond this budget return EAGAIN without changing any state. */
++int vos3_vmm_check_unmapped_locked(vos3_address_space_t* as,
++                                  uintptr_t start, size_t size)
+ {
+-    if ((start & 4095U) || !size || (size & 4095U) ||
+-        start > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - start + 1U) return -22;
+-    vos3_task_t* task = vos3_sched_current();
+-    if (!task || !task->address_space) return -22;
+-    vos3_address_space_t* as = task->address_space;
++    if (!as || !as->pml4 || (start & 4095U) || !size || (size & 4095U) ||
++        start > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - start + 1U)
++        return -22;
++    uintptr_t end = start + size;
++    unsigned int budget = 4096U;
++    for (uintptr_t va = start; va < end;) {
++        if (budget == 0U) return -11;
++        --budget;
++        int level = 0;
++        vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
++        if (!pte || level < 1 || level > 4) return -5;
++        if (vos3_pte_is_present(*pte)) return -17;
++        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
++        va = (va | (span - 1U)) + 1U;
++    }
++    return 0;
++}
++
++/* Serialize VMA splitting and PTE removal with mmap/mprotect. The bounded
++ * journal is allocated before disabling interrupts; last page/file releases
++ * occur after unlock. No mutation occurs on any preflight failure. */
++int vos3_vmm_munmap_range(vos3_address_space_t* as, uintptr_t addr, size_t size)
++{
++    if (!as || !as->pml4 || (addr & 4095U) || !size || (size & 4095U) ||
++        addr > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - addr + 1U)
++        return -22;
++    struct removed_page { vos3_pte_t* entry; uintptr_t phys, va; };
++    size_t capacity = size / VOS3_PAGE_SIZE;
++    if (capacity > 4096U) capacity = 4096U;
++    struct removed_page* pages = vos3_kmalloc(capacity * sizeof(*pages));
++    if (!pages) return -12;
++    vos3_file_t* files[VOS3_MAX_VMAS];
++    unsigned page_count = 0, file_count = 0, budget = 4096U;
++    int result = 0;
+     vos3_irqflags_t irq = vos3_irq_save();
+     vos3_spinlock_acquire(&as->lock);
+-    int result = 0;
+-    for (uintptr_t va = start; va < start + size;) {
+-        int level = 4;
++    for (uintptr_t va = addr; va < addr + size;) {
++        if (!budget--) { result = -11; goto finish; }
++        int level = 0;
+         vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+-        if (pte && vos3_pte_is_present(*pte) && level != 4) { result = -95; break; }
+-        /* Skip an absent subtree rather than scanning every page in a hole. */
++        if (!pte || level < 1 || level > 4) { result = -5; goto finish; }
++        if (vos3_pte_is_present(*pte)) {
++            if (level != 4) { result = -95; goto finish; }
++            if (vos3_vmm_find_vma(as, va)) {
++                pages[page_count++] = (struct removed_page){pte,
++                    address_in_shm(as, va) ? 0 : vos3_pte_get_addr(*pte), va};
++            }
++        }
+         uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
+-        va = (va | (span - 1)) + 1;
++        va = (va | (span - 1U)) + 1U;
++    }
++    uint64_t end = addr + size;
++    int split_slot = -1, split_index = -1;
++    vos3_file_t* split_file = NULL;
++
++    /* A contiguous removal can split at most one nonoverlapping VMA. Reserve
++       its metadata/backing reference before changing any mapping. */
++    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
++        vos3_vma_t* v = &as->vmas[i];
++        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
++        if (addr > v->vm_start && end < v->vm_end) {
++            if (split_index >= 0) { result = -22; goto finish; } /* Reject corrupt overlapping VMAs. */
++            split_index = (int)i;
++        }
++    }
++    if (split_index >= 0) {
++        for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i)
++            if (!as->vmas[i].valid) { split_slot = (int)i; break; }
++        if (split_slot < 0) { result = -12; goto finish; }
++        vos3_vma_t* v = &as->vmas[split_index];
++        if (v->vm_file) {
++            split_file = v->vm_file;
++            int retained = vos3_file_retain(split_file);
++            if (retained != 0) { result = retained; goto finish; }
++        }
+     }
++    for (unsigned i = 0; i < page_count; ++i) {
++        *pages[i].entry = 0;
++        vos3_atomic_fetch_sub64(&g_vmm_stats.pages_mapped, 1ULL);
++        vos3_vmm_invlpg(pages[i].va);
++    }
++    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
++        if ((int)i == split_slot) continue;
++        vos3_vma_t* v = &as->vmas[i];
++        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
++        uint64_t lo = addr > v->vm_start ? addr : v->vm_start;
++        uint64_t hi = end < v->vm_end ? end : v->vm_end;
++
++        if (lo == v->vm_start && hi == v->vm_end) {
++            vos3_file_t* backing = v->vm_file;
++            v->valid = 0; v->vm_file = NULL;
++            if (as->num_vmas) --as->num_vmas;
++            if (backing) files[file_count++] = backing;
++        } else if (lo == v->vm_start) {
++            v->vm_offset += hi - v->vm_start; v->vm_start = hi;
++        } else if (hi == v->vm_end) {
++            v->vm_end = lo;
++        } else {
++            vos3_vma_t* tail = &as->vmas[split_slot];
++            *tail = *v;
++            tail->vm_start = hi;
++            tail->vm_offset += hi - v->vm_start;
++            tail->vm_file = split_file;
++            v->vm_end = lo;
++            ++as->num_vmas;
++        }
++    }
++finish:
+     vos3_spinlock_release(&as->lock);
+     vos3_irq_restore(irq);
++    if (result == 0) {
++        for (unsigned i = 0; i < page_count; ++i)
++            if (pages[i].phys) vos3_pmm_free(pages[i].phys);
++    }
++    for (unsigned i = 0; i < file_count; ++i) vos3_fd_put(files[i]);
++    vos3_kfree(pages);
+     return result;
+ }
+ 
+@@ -933,13 +1036,30 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
+     vos3_irqflags_t irq = vos3_irq_save();
+     vos3_spinlock_acquire(&as->lock);
+ 
+-    for (uintptr_t va = addr; va < end; va += VOS3_PAGE_SIZE) {
+-        int level;
++    unsigned walk_budget = 4096U;
++    for (uintptr_t va = addr; va < end;) {
++        if (!walk_budget--) { error = -11; goto abort; }
++        int level = 0;
+         vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+-        int resident = pte && vos3_pte_is_present(*pte);
+-        if (!resident && !vos3_vmm_find_vma(as, va)) goto abort;
++        if (!pte || level < 1 || level > 4) { error = -5; goto abort; }
++        int resident = vos3_pte_is_present(*pte);
+         /* Partial huge-page permission splitting is not implemented. */
+         if (resident && level != 4) { error = -95; goto abort; }
++        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
++        uintptr_t next = (va | (span - 1U)) + 1U;
++        if (next > end) next = end;
++        if (!resident) {
++            /* The whole skipped hole must be covered, not just its first byte. */
++            uintptr_t covered = va;
++            unsigned cover_budget = VOS3_MAX_VMAS;
++            while (covered < next) {
++                if (!cover_budget--) goto abort;
++                vos3_vma_t* vma = vos3_vmm_find_vma(as, covered);
++                if (!vma || vma->vm_end <= covered) goto abort;
++                covered = vma->vm_end;
++            }
++        }
++        va = next;
+     }
+     for (unsigned i = 0; i < VOS3_MAX_VMAS; ++i) {
+         vos3_vma_t old = as->vmas[i];
+@@ -965,10 +1085,12 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
+     }
+     for (unsigned i = 0; i < VOS3_MAX_VMAS; ++i) as->vmas[i] = planned[i];
+     as->num_vmas = count;
+-    for (uintptr_t va = addr; va < end; va += VOS3_PAGE_SIZE) {
++    for (uintptr_t va = addr; va < end;) {
+         int level;
+         vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+-        if (!pte || !vos3_pte_is_present(*pte)) continue;
++        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
++        uintptr_t next = (va | (span - 1U)) + 1U;
++        if (!vos3_pte_is_present(*pte)) { va = next; continue; }
+         uint64_t value = *pte & ~(VOS3_PTE_USER | VOS3_PTE_WRITABLE |
+                                   VOS3_PTE_NO_EXECUTE | VOS3_PTE_COW);
+         if (prot) value |= VOS3_PTE_USER;
+@@ -979,6 +1101,7 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
+         }
+         *pte = value;
+         vos3_vmm_invlpg(va);
++        va = next;
+     }
+     vos3_spinlock_release(&as->lock);
+     vos3_irq_restore(irq);
+@@ -1079,6 +1202,7 @@ vos3_address_space_t* vos3_vmm_create_address_space(void)
+     as->flags = 0U;
+     as->brk = 0ULL;
+     as->brk_start = 0ULL;
++    as->mmap_next = 0x0000000030000000ULL;
+ 
+     /* Explicitly clear user-space entries (0-255) - they should already be zero
+      * from alloc_page_table, but be defensive */
+@@ -1235,6 +1359,7 @@ void vos3_vmm_destroy_address_space(vos3_address_space_t* as)
+     g_retired_spaces = as;
+     vos3_spinlock_release(&g_retired_lock);
+     vos3_irq_restore(irq);
++    vos3_sched_request_deferred();
+ }
+ 
+ void vos3_vmm_reap_address_spaces(void)
+@@ -1714,39 +1839,39 @@ vos3_address_space_t* vos3_vmm_clone_cow(vos3_address_space_t* src)
+     vos3_irqflags_t irqflags = vos3_irq_save();
+     vos3_spinlock_acquire(&src->lock);
+ 
+-    /* Clone page tables with COW semantics */
+-    dst->pml4 = clone_pt_level_cow(src->pml4, 4, 0);
+-
+-    vos3_spinlock_release(&src->lock);
+-    vos3_irq_restore(irqflags);
+-
+-    if (dst->pml4 == NULL) {
+-        VOS3_ERROR("VMM: clone_cow - failed to clone page tables");
+-        free_page_table(dst->user_pml4);
+-        vos3_pmm_free(phys);
+-        return NULL;
+-    }
+-
+-    dst->pml4_phys = vos3_virt_to_phys((const void*)dst->pml4);
+-    dst->lock = VOS3_SPINLOCK_INIT;
+-    dst->ref_count = 1U;
++    /* Snapshot page tables and all VMA backing ownership in one transaction. */
++    dst->mmap_next = src->mmap_next;
+     dst->flags = src->flags;
+     dst->brk = src->brk;
+     dst->brk_start = src->brk_start;
+-
+-    /* Copy VMA descriptors (mmap regions) */
+-    for (uint32_t i = 0; i < VOS3_MAX_VMAS; i++) {
++    dst->lock = VOS3_SPINLOCK_INIT;
++    dst->ref_count = 1U;
++    int snapshot_error = src->shm_count != 0;
++    for (uint32_t i = 0; !snapshot_error && i < VOS3_MAX_VMAS; i++) {
+         vos3_vma_t part = src->vmas[i];
+         if (part.valid && part.vm_file && vos3_file_retain(part.vm_file) != 0) {
+-            /* Only earlier entries have acquired backing ownership. The
+-             * zeroed remaining entries must not release borrowed references. */
+-            vos3_vmm_destroy_address_space(dst);
+-            vos3_vmm_flush_tlb();
+-            return NULL;
++            snapshot_error = 1;
++            break;
+         }
+         dst->vmas[i] = part;
+     }
+-    dst->num_vmas = src->num_vmas;
++    if (!snapshot_error) {
++        dst->num_vmas = src->num_vmas;
++        dst->pml4 = clone_pt_level_cow(src->pml4, 4, 0);
++    }
++    vos3_spinlock_release(&src->lock);
++    vos3_irq_restore(irqflags);
++
++    if (snapshot_error || !dst->pml4) {
++        for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i)
++            if (dst->vmas[i].valid && dst->vmas[i].vm_file)
++                vos3_fd_put(dst->vmas[i].vm_file);
++        free_page_table(dst->user_pml4);
++        vos3_pmm_free(phys);
++        vos3_vmm_flush_tlb();
++        return NULL;
++    }
++    dst->pml4_phys = vos3_virt_to_phys((const void*)dst->pml4);
+ 
+     /* Flush TLB to ensure parent sees read-only COW pages */
+     vos3_vmm_flush_tlb();
+diff --git a/kernel/src/sched/scheduler.c b/kernel/src/sched/scheduler.c
+index df8c11f..9dd098b 100644
+--- a/kernel/src/sched/scheduler.c
++++ b/kernel/src/sched/scheduler.c
+@@ -806,6 +806,7 @@ void vos3_sched_tick(void)
+             g_tcp_timer_acc = 0;
+             g_tcp_work_pending = 1;
+         }
++        vos3_sched_request_deferred();
+         /* Phase 3: AI load balancer — deferred to process context.
+          * vos3_dispatch_balance_check() acquires g_task_lock which would
+          * deadlock if called from ISR while a task holds that lock.
+@@ -816,6 +817,10 @@ void vos3_sched_tick(void)
+         g_cpu_sched_state[0].need_reschedule = 1;
+     }
+ 
++    /* Re-arm owner-local reaping after the two-tick stack grace period and
++     * for work that another CPU placed on the shared reaper list. */
++    if (vos3_task_reap_pending()) vos3_sched_request_deferred();
++
+     vos3_task_t* current = g_current_task[cpu_id];
+     if (current == NULL) {
+         return;
+@@ -878,25 +883,52 @@ void vos3_sched_tick(void)
+ /**
+  * @brief Process deferred work from ISR context
+  *
+- * Called from process context (reschedule, AP idle loop) to handle work
++ * Called from process context (syscall exit, reschedule, AP idle loop) to handle work
+  * that was flagged during the timer ISR but cannot safely run there.
+  * K-R2: task_reap() acquires locks.
+  * K-R3: ai_guard_reprotect_tick() modifies PTEs.
+  */
+-static void sched_process_deferred(void)
++static uint32_t g_deferred_active[256];
++static uint32_t g_deferred_pending[256];
++
++void vos3_sched_request_deferred(void)
++{
++    vos3_sched_request_deferred_cpu(get_cpu_id());
++}
++
++void vos3_sched_request_deferred_cpu(uint32_t cpu_id)
++{
++    if (cpu_id < 256U)
++        __atomic_store_n(&g_deferred_pending[cpu_id], 1U, __ATOMIC_RELEASE);
++}
++
++void vos3_sched_process_deferred(void)
+ {
+     /* No resource reclamation from an interrupt/IRQ-disabled continuation. */
+     uint64_t rflags;
+     __asm__ volatile ("pushfq; popq %0" : "=r"(rflags));
+     if (!(rflags & (1ULL << 9)))
+         return; /* Interrupt/IRQ-disabled context is not a reclamation point. */
++    /* A destructor may block/reschedule. Do not recursively drain work on
++     * this CPU while a previous safe point is still in progress. Current
++     * scheduling keeps executing contexts CPU-local (no live migration). */
++    uint32_t cpu = get_cpu_id();
++    if (cpu >= 256U || __atomic_exchange_n(&g_deferred_active[cpu], 1U, __ATOMIC_ACQUIRE))
++        return;
++    /* Empty syscall safe points are frequent. Producers publish this bit when
++     * they enqueue work, so the empty path takes no subsystem lock or scan. */
++    if (__atomic_exchange_n(&g_deferred_pending[cpu], 0U,
++                            __ATOMIC_ACQ_REL) == 0U) {
++        __atomic_store_n(&g_deferred_active[cpu], 0U, __ATOMIC_RELEASE);
++        return;
++    }
+     vos3_shm_reap_creators();
+     vos3_vmm_reap_address_spaces();
+ #ifdef NATIVE_SMP_TEST
+     /* Every owner must revisit its dead tasks. */
+     vos3_task_reap();
+-    if (get_cpu_id() != 0)
+-        return;
++    if (cpu != 0)
++        goto out;
+ #endif
+     if (g_reap_pending != 0) {
+         g_reap_pending = 0;
+@@ -912,6 +944,10 @@ static void sched_process_deferred(void)
+         g_tcp_work_pending = 0;
+         vos3_tcp_timer_tick();
+     }
++#ifdef NATIVE_SMP_TEST
++out:
++#endif
++    __atomic_store_n(&g_deferred_active[cpu], 0U, __ATOMIC_RELEASE);
+ }
+ 
+ void vos3_sched_reschedule(void)
+@@ -964,7 +1000,7 @@ void vos3_sched_reschedule(void)
+     /* K-R2/K-R3: Process deferred ISR work (reap + AI Guard reprotect)
+      * in process context where lock acquisition and PTE modification
+      * are safe. */
+-    sched_process_deferred();
++    vos3_sched_process_deferred();
+ 
+     /* Deferred balance check: runs in process context (IRQs enabled),
+      * safe to acquire g_task_lock.  Only runs on BSP (cpu 0).
+@@ -1218,7 +1254,7 @@ void vos3_sched_loop_ap(void)
+ #endif
+         /* K-R2/K-R3: Process deferred ISR work (reap + AI Guard reprotect)
+          * while idle — safe process context. */
+-        sched_process_deferred();
++        vos3_sched_process_deferred();
+ 
+ #ifdef NATIVE_SMP_TEST
+         /* Disable IRQs before the pending check; STI;HLT closes lost wakeups. */
+diff --git a/kernel/src/sched/sync.c b/kernel/src/sched/sync.c
+index 2478407..6f74d78 100644
+--- a/kernel/src/sched/sync.c
++++ b/kernel/src/sched/sync.c
+@@ -23,6 +23,12 @@
+  * WAIT QUEUE IMPLEMENTATION
+  * ============================================================================ */
+ 
++/* Serializes embedded-entry ownership changes across all queues.  Queue
++ * operations always take this lock before a queue's own lock.  Besides
++ * preventing cross-queue ABA, this keeps cancel() from following an owner
++ * pointer while a destroy/wake path is detaching it. */
++static vos3_spinlock_t g_wait_membership_lock = VOS3_SPINLOCK_INIT;
++
+ void vos3_wq_init(vos3_wait_queue_t* wq)
+ {
+     if (wq == NULL) {
+@@ -35,25 +41,21 @@ void vos3_wq_init(vos3_wait_queue_t* wq)
+     vos3_spinlock_init(&wq->lock);
+ }
+ 
+-void vos3_wq_wait(vos3_wait_queue_t* wq)
++/* Queue the current task while the caller holds wq->lock.  Keeping this
++ * small operation separate lets condition-bearing primitives recheck their
++ * condition under the same queue lock before committing to sleep. */
++static void wq_enqueue_current_locked(vos3_wait_queue_t* wq,
++                                      vos3_task_t* current)
+ {
+-    if (wq == NULL) {
+-        return;
+-    }
+-
+-    vos3_task_t* current = vos3_sched_current();
+-    if (current == NULL) {
+-        return;
+-    }
+-
+-    /* Use embedded wait entry in task struct (avoids dangling stack pointers) */
+     vos3_wait_entry_t* entry = &current->wq_entry;
++    if (__atomic_load_n(&entry->queue, __ATOMIC_ACQUIRE) != NULL) {
++        VOS3_PANIC("Task '%s' already belongs to a wait queue",
++                   current->name);
++    }
+     entry->task = current;
+     entry->next = NULL;
++    __atomic_store_n(&entry->queue, wq, __ATOMIC_RELEASE);
+ 
+-    vos3_spinlock_lock(&wq->lock);
+-
+-    /* Add to wait queue */
+     if (wq->tail != NULL) {
+         wq->tail->next = entry;
+     } else {
+@@ -61,14 +63,52 @@ void vos3_wq_wait(vos3_wait_queue_t* wq)
+     }
+     wq->tail = entry;
+     wq->count++;
+-
+-    /* Block current task */
+     current->state = VOS3_TASK_BLOCKED;
++}
+ 
++/* The membership lock is held and entry->queue is already NULL.  Do not call
++ * task_wake(), whose external-wake path deliberately enters cancellation. */
++static void wq_wake_detached(vos3_task_t* task)
++{
++    if (task != NULL && task->state == VOS3_TASK_BLOCKED) {
++        task->state = VOS3_TASK_READY;
++        task->wake_time = 0ULL;
++        vos3_sched_add_task(task);
++    }
++}
++
++/* Publish the current task before sleeping and return with local IRQs still
++ * disabled.  Callers may release a predicate lock after publication and
++ * before the first yield without opening a signal-before-enqueue window. */
++static vos3_irqflags_t wq_prepare_wait(vos3_wait_queue_t* wq,
++                                      vos3_task_t* current)
++{
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&g_wait_membership_lock);
++    vos3_spinlock_lock(&wq->lock);
++    wq_enqueue_current_locked(wq, current);
+     vos3_spinlock_unlock(&wq->lock);
++    vos3_spinlock_unlock(&g_wait_membership_lock);
++    return flags;
++}
++
++void vos3_wq_wait(vos3_wait_queue_t* wq)
++{
++    if (wq == NULL) {
++        return;
++    }
++
++    vos3_task_t* current = vos3_sched_current();
++    if (current == NULL) {
++        return;
++    }
++
++    vos3_irqflags_t flags = wq_prepare_wait(wq, current);
+ 
+-    /* Yield to another task */
++    /* Keep local interrupts disabled until the blocked task has switched out;
++     * an ISR must not wake and requeue the still-executing context. */
+     vos3_sched_yield();
++    vos3_irq_restore(flags);
+ }
+ 
+ int vos3_wq_wake_one(vos3_wait_queue_t* wq)
+@@ -77,10 +117,14 @@ int vos3_wq_wake_one(vos3_wait_queue_t* wq)
+         return 0;
+     }
+ 
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&g_wait_membership_lock);
+     vos3_spinlock_lock(&wq->lock);
+ 
+     if (wq->head == NULL) {
+         vos3_spinlock_unlock(&wq->lock);
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_irq_restore(flags);
+         return 0;
+     }
+ 
+@@ -93,13 +137,13 @@ int vos3_wq_wake_one(vos3_wait_queue_t* wq)
+     wq->count--;
+ 
+     vos3_task_t* task = entry->task;
++    entry->next = NULL;
++    __atomic_store_n(&entry->queue, NULL, __ATOMIC_RELEASE);
+ 
+     vos3_spinlock_unlock(&wq->lock);
+-
+-    /* Wake the task */
+-    if (task != NULL) {
+-        vos3_task_wake(task);
+-    }
++    wq_wake_detached(task);
++    vos3_spinlock_unlock(&g_wait_membership_lock);
++    vos3_irq_restore(flags);
+ 
+     return 1;
+ }
+@@ -112,18 +156,21 @@ size_t vos3_wq_wake_all(vos3_wait_queue_t* wq)
+ 
+     size_t woken = 0U;
+ 
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&g_wait_membership_lock);
+     vos3_spinlock_lock(&wq->lock);
+ 
+     while (wq->head != NULL) {
+         vos3_wait_entry_t* entry = wq->head;
+         wq->head = entry->next;
++        if (wq->head == NULL) wq->tail = NULL;
++        if (wq->count > 0U) wq->count--;
+ 
+         vos3_task_t* task = entry->task;
++        entry->next = NULL;
++        __atomic_store_n(&entry->queue, NULL, __ATOMIC_RELEASE);
+         if (task != NULL) {
+-            /* Unlock while waking to avoid holding lock too long */
+-            vos3_spinlock_unlock(&wq->lock);
+-            vos3_task_wake(task);
+-            vos3_spinlock_lock(&wq->lock);
++            wq_wake_detached(task);
+             woken++;
+         }
+     }
+@@ -132,10 +179,50 @@ size_t vos3_wq_wake_all(vos3_wait_queue_t* wq)
+     wq->count = 0U;
+ 
+     vos3_spinlock_unlock(&wq->lock);
++    vos3_spinlock_unlock(&g_wait_membership_lock);
++    vos3_irq_restore(flags);
+ 
+     return woken;
+ }
+ 
++int vos3_wq_cancel(vos3_task_t* task)
++{
++    if (task == NULL) return 0;
++    vos3_wait_entry_t* entry = &task->wq_entry;
++
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&g_wait_membership_lock);
++    vos3_wait_queue_t* wq = __atomic_load_n(&entry->queue, __ATOMIC_ACQUIRE);
++    if (wq == NULL) {
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_irq_restore(flags);
++        return 0;
++    }
++    vos3_spinlock_lock(&wq->lock);
++    int removed = 0;
++    if (__atomic_load_n(&entry->queue, __ATOMIC_ACQUIRE) == wq) {
++        vos3_wait_entry_t* prev = NULL;
++        vos3_wait_entry_t* it = wq->head;
++        while (it != NULL && it != entry) {
++            prev = it;
++            it = it->next;
++        }
++        if (it == entry) {
++            if (prev != NULL) prev->next = entry->next;
++            else wq->head = entry->next;
++            if (wq->tail == entry) wq->tail = prev;
++            if (wq->count > 0U) wq->count--;
++            removed = 1;
++        }
++        entry->next = NULL;
++        __atomic_store_n(&entry->queue, NULL, __ATOMIC_RELEASE);
++    }
++    vos3_spinlock_unlock(&wq->lock);
++    vos3_spinlock_unlock(&g_wait_membership_lock);
++    vos3_irq_restore(flags);
++    return removed;
++}
++
+ int vos3_wq_empty(const vos3_wait_queue_t* wq)
+ {
+     if (wq == NULL) {
+@@ -184,10 +271,19 @@ void vos3_mutex_lock(vos3_mutex_t* mutex)
+ 
+     vos3_task_t* current = vos3_sched_current();
+ 
+-    /* Try to acquire */
+-    while (vos3_atomic32_cmpxchg(&mutex->state,
++    for (;;) {
++        if (vos3_atomic32_cmpxchg(&mutex->state,
+                                   VOS3_MUTEX_UNLOCKED,
+-                                  VOS3_MUTEX_LOCKED) != VOS3_MUTEX_UNLOCKED) {
++                                  VOS3_MUTEX_LOCKED) == VOS3_MUTEX_UNLOCKED) {
++            mutex->owner = current;
++            return;
++        }
++
++        if (current == NULL) {
++            VOS3_PANIC("Mutex '%s' contention without a current task",
++                       mutex->name ? mutex->name : "unnamed");
++        }
++
+         /* Check for deadlock (recursive lock without recursion support) */
+         if (mutex->owner == current) {
+             VOS3_PANIC("Deadlock: task '%s' trying to relock mutex '%s'",
+@@ -195,11 +291,28 @@ void vos3_mutex_lock(vos3_mutex_t* mutex)
+                        mutex->name ? mutex->name : "unnamed");
+         }
+ 
+-        /* Wait for unlock */
+-        vos3_wq_wait(&mutex->waiters);
++        /* Serialize the final lock-state check with waiter publication.
++         * unlock() stores UNLOCKED before taking this queue lock to wake a
++         * waiter.  Therefore it either precedes this retry, or observes the
++         * waiter after publication; no unlock can be lost between them. */
++        vos3_irqflags_t flags = vos3_irq_save();
++        vos3_spinlock_lock(&g_wait_membership_lock);
++        vos3_spinlock_lock(&mutex->waiters.lock);
++        if (vos3_atomic32_cmpxchg(&mutex->state,
++                                  VOS3_MUTEX_UNLOCKED,
++                                  VOS3_MUTEX_LOCKED) == VOS3_MUTEX_UNLOCKED) {
++            vos3_spinlock_unlock(&mutex->waiters.lock);
++            vos3_spinlock_unlock(&g_wait_membership_lock);
++            vos3_irq_restore(flags);
++            mutex->owner = current;
++            return;
++        }
++        wq_enqueue_current_locked(&mutex->waiters, current);
++        vos3_spinlock_unlock(&mutex->waiters.lock);
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_sched_yield();
++        vos3_irq_restore(flags);
+     }
+-
+-    mutex->owner = current;
+ }
+ 
+ int vos3_mutex_trylock(vos3_mutex_t* mutex)
+@@ -272,8 +385,16 @@ void vos3_sem_init(vos3_semaphore_t* sem, const char* name, uint32_t initial_cou
+         return;
+     }
+ 
++    if (initial_count > (uint32_t)INT32_MAX) {
++        VOS3_WARN("Semaphore '%s' initial count exceeds INT32_MAX",
++                  name ? name : "unnamed");
++        sem->magic = 0U;
++        return;
++    }
++
+     sem->magic = VOS3_SEM_MAGIC;
+     vos3_atomic32_store(&sem->count, (int32_t)initial_count);
++    vos3_atomic32_store(&sem->closed, 0);
+     sem->max_count = -1;
+     vos3_wq_init(&sem->waiters);
+     sem->name = name;
+@@ -282,7 +403,17 @@ void vos3_sem_init(vos3_semaphore_t* sem, const char* name, uint32_t initial_cou
+ void vos3_sem_init_bounded(vos3_semaphore_t* sem, const char* name,
+                            uint32_t initial_count, uint32_t max_count)
+ {
++    if (sem == NULL) {
++        return;
++    }
++    if (max_count > (uint32_t)INT32_MAX || initial_count > max_count) {
++        VOS3_WARN("Semaphore '%s' has invalid bounds",
++                  name ? name : "unnamed");
++        sem->magic = 0U;
++        return;
++    }
+     vos3_sem_init(sem, name, initial_count);
++    if (sem->magic != VOS3_SEM_MAGIC) return;
+     sem->max_count = (int32_t)max_count;
+ }
+ 
+@@ -292,40 +423,86 @@ void vos3_sem_destroy(vos3_semaphore_t* sem)
+         return;
+     }
+ 
+-    /* Wake all waiters before destroying */
+-    vos3_wq_wake_all(&sem->waiters);
++    vos3_sem_close(sem);
+ 
+     sem->magic = 0U;
+ }
+ 
+-void vos3_sem_wait(vos3_semaphore_t* sem)
++void vos3_sem_close(vos3_semaphore_t* sem)
+ {
+     if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
+         return;
+     }
+ 
++    vos3_atomic32_store(&sem->closed, 1);
++    (void)vos3_wq_wake_all(&sem->waiters);
++}
++
++int vos3_sem_wait_status(vos3_semaphore_t* sem)
++{
++    if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
++        return VOS3_SYNC_ERR_INVALID;
++    }
++
+     for (;;) {
++        if (vos3_atomic32_load(&sem->closed) != 0) {
++            return VOS3_SYNC_ERR_CLOSED;
++        }
+         int32_t count = vos3_atomic32_load(&sem->count);
+ 
+         if (count > 0) {
+             /* Try to decrement */
+             if (vos3_atomic32_cmpxchg(&sem->count, count, count - 1) == count) {
+-                return;  /* Successfully acquired */
++                return VOS3_SYNC_OK;
+             }
+             /* CAS failed, retry */
+             continue;
+         }
+ 
+-        /* Count is 0, wait */
+-        vos3_wq_wait(&sem->waiters);
++        /* Publish the waiter only after rechecking count under the same
++         * queue lock used by post()'s wake.  A post either increments before
++         * this recheck, or waits for the published waiter, closing the
++         * check-then-sleep lost-wakeup window. */
++        vos3_task_t* current = vos3_sched_current();
++        if (current == NULL) return VOS3_SYNC_ERR_INVALID;
++        vos3_irqflags_t flags = vos3_irq_save();
++        vos3_spinlock_lock(&g_wait_membership_lock);
++        vos3_spinlock_lock(&sem->waiters.lock);
++        for (;;) {
++            if (vos3_atomic32_load(&sem->closed) != 0) {
++                vos3_spinlock_unlock(&sem->waiters.lock);
++                vos3_spinlock_unlock(&g_wait_membership_lock);
++                vos3_irq_restore(flags);
++                return VOS3_SYNC_ERR_CLOSED;
++            }
++            count = vos3_atomic32_load(&sem->count);
++            if (count <= 0) break;
++            if (vos3_atomic32_cmpxchg(&sem->count, count, count - 1) == count) {
++                vos3_spinlock_unlock(&sem->waiters.lock);
++                vos3_spinlock_unlock(&g_wait_membership_lock);
++                vos3_irq_restore(flags);
++                return VOS3_SYNC_OK;
++            }
++        }
++        wq_enqueue_current_locked(&sem->waiters, current);
++        vos3_spinlock_unlock(&sem->waiters.lock);
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_sched_yield();
++        vos3_irq_restore(flags);
+     }
+ }
+ 
++void vos3_sem_wait(vos3_semaphore_t* sem)
++{
++    (void)vos3_sem_wait_status(sem);
++}
++
+ int vos3_sem_trywait(vos3_semaphore_t* sem)
+ {
+     if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
+         return 0;
+     }
++    if (vos3_atomic32_load(&sem->closed) != 0) return 0;
+ 
+     int32_t count = vos3_atomic32_load(&sem->count);
+ 
+@@ -343,13 +520,15 @@ void vos3_sem_post(vos3_semaphore_t* sem)
+     if (sem == NULL || sem->magic != VOS3_SEM_MAGIC) {
+         return;
+     }
++    if (vos3_atomic32_load(&sem->closed) != 0) return;
+ 
+     int32_t count;
+     do {
+         count = vos3_atomic32_load(&sem->count);
+ 
+         /* Check max count */
+-        if (sem->max_count >= 0 && count >= sem->max_count) {
++        if (count >= INT32_MAX ||
++            (sem->max_count >= 0 && count >= sem->max_count)) {
+             VOS3_WARN("Semaphore '%s' at max count",
+                          sem->name ? sem->name : "unnamed");
+             return;
+@@ -403,14 +582,20 @@ void vos3_cond_wait(vos3_condvar_t* cond, vos3_mutex_t* mutex)
+     if (mutex == NULL || mutex->magic != VOS3_MUTEX_MAGIC) {
+         return;
+     }
++    if (!vos3_mutex_is_owner(mutex)) {
++        VOS3_WARN("Condition wait without owning mutex '%s'",
++                  mutex->name ? mutex->name : "unnamed");
++        return;
++    }
++    vos3_task_t* current = vos3_sched_current();
++    if (current == NULL) return;
+ 
+-    /* Release mutex */
++    /* Publish while the predicate mutex is still held.  The signaler cannot
++     * both change the protected predicate and miss this waiter. */
++    vos3_irqflags_t flags = wq_prepare_wait(&cond->waiters, current);
+     vos3_mutex_unlock(mutex);
+-
+-    /* Wait on condition */
+-    vos3_wq_wait(&cond->waiters);
+-
+-    /* Reacquire mutex */
++    vos3_sched_yield();
++    vos3_irq_restore(flags);
+     vos3_mutex_lock(mutex);
+ }
+ 
+@@ -424,11 +609,10 @@ int vos3_cond_timedwait(vos3_condvar_t* cond, vos3_mutex_t* mutex,
+         return VOS3_SYNC_ERR_INVALID;
+     }
+ 
+-    /* TODO: Implement timeout support */
+-    /* For now, just do a regular wait */
+-    vos3_cond_wait(cond, mutex);
+-
+-    return VOS3_SYNC_OK;
++    /* No timer-to-wait-queue cancellation protocol exists yet.  Fail
++     * explicitly instead of blocking forever while claiming timeout support. */
++    (void)timeout_ms;
++    return VOS3_SYNC_ERR_UNSUPPORTED;
+ }
+ 
+ void vos3_cond_signal(vos3_condvar_t* cond)
+@@ -460,9 +644,9 @@ void vos3_rwlock_init(vos3_rwlock_t* rwlock, const char* name)
+     }
+ 
+     rwlock->magic = VOS3_RWLOCK_MAGIC;
++    vos3_spinlock_init(&rwlock->state_lock);
+     vos3_atomic32_store(&rwlock->readers, 0);
+     vos3_atomic32_store(&rwlock->writers, 0);
+-    vos3_atomic32_store(&rwlock->write_pending, 0);
+     rwlock->writer = NULL;
+     vos3_wq_init(&rwlock->read_waiters);
+     vos3_wq_init(&rwlock->write_waiters);
+@@ -487,23 +671,32 @@ void vos3_rwlock_rdlock(vos3_rwlock_t* rwlock)
+         return;
+     }
+ 
++    vos3_task_t* current = vos3_sched_current();
++    if (current == NULL) return;
+     for (;;) {
+-        /* Wait if there's a writer or pending writers */
+-        while (vos3_atomic32_load(&rwlock->writers) > 0 ||
+-               vos3_atomic32_load(&rwlock->write_pending) > 0) {
+-            vos3_wq_wait(&rwlock->read_waiters);
+-        }
+-
+-        /* Try to increment readers */
+-        int32_t readers = vos3_atomic32_load(&rwlock->readers);
+-        if (vos3_atomic32_cmpxchg(&rwlock->readers, readers, readers + 1) == readers) {
+-            /* Double-check no writer snuck in */
+-            if (vos3_atomic32_load(&rwlock->writers) == 0) {
+-                return;
++        vos3_irqflags_t flags = vos3_irq_save();
++        vos3_spinlock_lock(&rwlock->state_lock);
++        if (vos3_atomic32_load(&rwlock->writers) == 0) {
++            int32_t readers = vos3_atomic32_load(&rwlock->readers);
++            if (readers == INT32_MAX) {
++                vos3_spinlock_unlock(&rwlock->state_lock);
++                vos3_irq_restore(flags);
++                VOS3_PANIC("Reader count saturated on '%s'",
++                           rwlock->name ? rwlock->name : "unnamed");
+             }
+-            /* Writer acquired, back out */
+-            vos3_atomic32_fetch_sub(&rwlock->readers, 1);
++            vos3_atomic32_store(&rwlock->readers, readers + 1);
++            vos3_spinlock_unlock(&rwlock->state_lock);
++            vos3_irq_restore(flags);
++            return;
+         }
++        vos3_spinlock_lock(&g_wait_membership_lock);
++        vos3_spinlock_lock(&rwlock->read_waiters.lock);
++        wq_enqueue_current_locked(&rwlock->read_waiters, current);
++        vos3_spinlock_unlock(&rwlock->read_waiters.lock);
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_spinlock_unlock(&rwlock->state_lock);
++        vos3_sched_yield();
++        vos3_irq_restore(flags);
+     }
+ }
+ 
+@@ -513,20 +706,19 @@ int vos3_rwlock_tryrdlock(vos3_rwlock_t* rwlock)
+         return 0;
+     }
+ 
+-    if (vos3_atomic32_load(&rwlock->writers) > 0 ||
+-        vos3_atomic32_load(&rwlock->write_pending) > 0) {
+-        return 0;
+-    }
+-
+-    int32_t readers = vos3_atomic32_load(&rwlock->readers);
+-    if (vos3_atomic32_cmpxchg(&rwlock->readers, readers, readers + 1) == readers) {
+-        if (vos3_atomic32_load(&rwlock->writers) == 0) {
+-            return 1;
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&rwlock->state_lock);
++    int acquired = 0;
++    if (vos3_atomic32_load(&rwlock->writers) == 0) {
++        int32_t readers = vos3_atomic32_load(&rwlock->readers);
++        if (readers < INT32_MAX) {
++            vos3_atomic32_store(&rwlock->readers, readers + 1);
++            acquired = 1;
+         }
+-        vos3_atomic32_fetch_sub(&rwlock->readers, 1);
+     }
+-
+-    return 0;
++    vos3_spinlock_unlock(&rwlock->state_lock);
++    vos3_irq_restore(flags);
++    return acquired;
+ }
+ 
+ void vos3_rwlock_rdunlock(vos3_rwlock_t* rwlock)
+@@ -535,11 +727,26 @@ void vos3_rwlock_rdunlock(vos3_rwlock_t* rwlock)
+         return;
+     }
+ 
+-    int32_t readers = vos3_atomic32_fetch_sub(&rwlock->readers, 1);
+-
+-    /* If this was the last reader and there are pending writers, wake one */
+-    if (readers == 1 && vos3_atomic32_load(&rwlock->write_pending) > 0) {
+-        vos3_wq_wake_one(&rwlock->write_waiters);
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&rwlock->state_lock);
++    int32_t readers = vos3_atomic32_load(&rwlock->readers);
++    if (readers <= 0) {
++        vos3_spinlock_unlock(&rwlock->state_lock);
++        vos3_irq_restore(flags);
++        VOS3_WARN("Read unlock without reader ownership on '%s'",
++                  rwlock->name ? rwlock->name : "unnamed");
++        return;
++    }
++    vos3_atomic32_store(&rwlock->readers, readers - 1);
++    int became_idle = readers == 1;
++    vos3_spinlock_unlock(&rwlock->state_lock);
++    vos3_irq_restore(flags);
++    if (became_idle) {
++        /* Wake every contender.  Readers are never parked merely because a
++         * writer is queued, so killing a selected/queued writer cannot leave
++         * readers stranded.  The state lock remains the acquisition arbiter. */
++        (void)vos3_wq_wake_all(&rwlock->write_waiters);
++        (void)vos3_wq_wake_all(&rwlock->read_waiters);
+     }
+ }
+ 
+@@ -549,22 +756,28 @@ void vos3_rwlock_wrlock(vos3_rwlock_t* rwlock)
+         return;
+     }
+ 
+-    /* Mark write pending */
+-    vos3_atomic32_fetch_add(&rwlock->write_pending, 1);
+-
++    vos3_task_t* current = vos3_sched_current();
++    if (current == NULL) return;
++    vos3_irqflags_t flags;
+     for (;;) {
+-        /* Wait for no readers and no writer */
+-        while (vos3_atomic32_load(&rwlock->readers) > 0 ||
+-               vos3_atomic32_load(&rwlock->writers) > 0) {
+-            vos3_wq_wait(&rwlock->write_waiters);
+-        }
+-
+-        /* Try to acquire write lock */
+-        if (vos3_atomic32_cmpxchg(&rwlock->writers, 0, 1) == 0) {
+-            rwlock->writer = vos3_sched_current();
+-            vos3_atomic32_fetch_sub(&rwlock->write_pending, 1);
++        flags = vos3_irq_save();
++        vos3_spinlock_lock(&rwlock->state_lock);
++        if (vos3_atomic32_load(&rwlock->readers) == 0 &&
++            vos3_atomic32_load(&rwlock->writers) == 0) {
++            vos3_atomic32_store(&rwlock->writers, 1);
++            rwlock->writer = current;
++            vos3_spinlock_unlock(&rwlock->state_lock);
++            vos3_irq_restore(flags);
+             return;
+         }
++        vos3_spinlock_lock(&g_wait_membership_lock);
++        vos3_spinlock_lock(&rwlock->write_waiters.lock);
++        wq_enqueue_current_locked(&rwlock->write_waiters, current);
++        vos3_spinlock_unlock(&rwlock->write_waiters.lock);
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_spinlock_unlock(&rwlock->state_lock);
++        vos3_sched_yield();
++        vos3_irq_restore(flags);
+     }
+ }
+ 
+@@ -574,16 +787,18 @@ int vos3_rwlock_trywrlock(vos3_rwlock_t* rwlock)
+         return 0;
+     }
+ 
+-    if (vos3_atomic32_load(&rwlock->readers) > 0) {
+-        return 0;
+-    }
+-
+-    if (vos3_atomic32_cmpxchg(&rwlock->writers, 0, 1) == 0) {
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&rwlock->state_lock);
++    int acquired = 0;
++    if (vos3_atomic32_load(&rwlock->readers) == 0 &&
++        vos3_atomic32_load(&rwlock->writers) == 0) {
++        vos3_atomic32_store(&rwlock->writers, 1);
+         rwlock->writer = vos3_sched_current();
+-        return 1;
++        acquired = 1;
+     }
+-
+-    return 0;
++    vos3_spinlock_unlock(&rwlock->state_lock);
++    vos3_irq_restore(flags);
++    return acquired;
+ }
+ 
+ void vos3_rwlock_wrunlock(vos3_rwlock_t* rwlock)
+@@ -592,15 +807,24 @@ void vos3_rwlock_wrunlock(vos3_rwlock_t* rwlock)
+         return;
+     }
+ 
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&rwlock->state_lock);
++    if (vos3_atomic32_load(&rwlock->writers) == 0 ||
++        rwlock->writer != vos3_sched_current()) {
++        vos3_spinlock_unlock(&rwlock->state_lock);
++        vos3_irq_restore(flags);
++        VOS3_WARN("Write unlock by non-owner on '%s'",
++                  rwlock->name ? rwlock->name : "unnamed");
++        return;
++    }
+     rwlock->writer = NULL;
+     vos3_atomic32_store(&rwlock->writers, 0);
+-
+-    /* Prefer writers over readers (writer-preferring rwlock) */
+-    if (vos3_atomic32_load(&rwlock->write_pending) > 0) {
+-        vos3_wq_wake_one(&rwlock->write_waiters);
+-    } else {
+-        vos3_wq_wake_all(&rwlock->read_waiters);
+-    }
++    vos3_spinlock_unlock(&rwlock->state_lock);
++    vos3_irq_restore(flags);
++    /* Broadcast both classes.  A woken writer can be killed before it runs;
++     * waking only that task would otherwise strand every surviving waiter. */
++    (void)vos3_wq_wake_all(&rwlock->write_waiters);
++    (void)vos3_wq_wake_all(&rwlock->read_waiters);
+ }
+ 
+ /* ============================================================================
+@@ -615,6 +839,7 @@ void vos3_barrier_init(vos3_barrier_t* barrier, const char* name, uint32_t count
+ 
+     barrier->magic = VOS3_BARRIER_MAGIC;
+     barrier->threshold = count;
++    vos3_spinlock_init(&barrier->state_lock);
+     vos3_atomic32_store(&barrier->count, 0);
+     vos3_atomic32_store(&barrier->generation, 0);
+     vos3_wq_init(&barrier->waiters);
+@@ -638,22 +863,46 @@ int vos3_barrier_wait(vos3_barrier_t* barrier)
+         return 0;
+     }
+ 
+-    int32_t gen = vos3_atomic32_load(&barrier->generation);
+-
+-    int32_t count = vos3_atomic32_fetch_add(&barrier->count, 1) + 1;
+-
+-    if ((uint32_t)count >= barrier->threshold) {
+-        /* Last thread to arrive - release everyone */
+-        vos3_atomic32_store(&barrier->count, 0);
+-        vos3_atomic32_fetch_add(&barrier->generation, 1);
++    vos3_task_t* current = vos3_sched_current();
++    if (current == NULL) return 0;
++    vos3_irqflags_t flags = vos3_irq_save();
++    vos3_spinlock_lock(&barrier->state_lock);
++    uint32_t gen = vos3_atomic_load32(&barrier->generation.value);
++    uint32_t count = vos3_atomic_load32(&barrier->count.value) + 1U;
++    if (count >= barrier->threshold) {
++        vos3_atomic_store32(&barrier->count.value, 0U);
++        /* Unsigned wrap is the intended generation comparison semantics. */
++        vos3_atomic_store32(&barrier->generation.value, gen + 1U);
++        vos3_spinlock_unlock(&barrier->state_lock);
++        vos3_irq_restore(flags);
+         vos3_wq_wake_all(&barrier->waiters);
+-        return 1;  /* This is the releasing thread */
++        return 1;
+     }
+-
+-    /* Wait for barrier to release */
+-    while (vos3_atomic32_load(&barrier->generation) == gen) {
+-        vos3_wq_wait(&barrier->waiters);
++    vos3_atomic_store32(&barrier->count.value, count);
++    for (;;) {
++        vos3_spinlock_lock(&g_wait_membership_lock);
++        vos3_spinlock_lock(&barrier->waiters.lock);
++        if (vos3_atomic_load32(&barrier->generation.value) != gen) {
++            vos3_spinlock_unlock(&barrier->waiters.lock);
++            vos3_spinlock_unlock(&g_wait_membership_lock);
++            vos3_spinlock_unlock(&barrier->state_lock);
++            vos3_irq_restore(flags);
++            return 0;
++        }
++        wq_enqueue_current_locked(&barrier->waiters, current);
++        vos3_spinlock_unlock(&barrier->waiters.lock);
++        vos3_spinlock_unlock(&g_wait_membership_lock);
++        vos3_spinlock_unlock(&barrier->state_lock);
++        vos3_sched_yield();
++        vos3_irq_restore(flags);
++
++        flags = vos3_irq_save();
++        vos3_spinlock_lock(&barrier->state_lock);
++        if (vos3_atomic_load32(&barrier->generation.value) != gen) {
++            vos3_spinlock_unlock(&barrier->state_lock);
++            vos3_irq_restore(flags);
++            return 0;
++        }
++        /* Spurious external wake: retry checked publication. */
+     }
+-
+-    return 0;
+ }
+diff --git a/kernel/src/sched/task.c b/kernel/src/sched/task.c
+index 437cddf..e1ad6d1 100644
+--- a/kernel/src/sched/task.c
++++ b/kernel/src/sched/task.c
+@@ -19,6 +19,7 @@
+ #include "../../include/vos/heap.h"
+ #include "../../include/vos/console.h"
+ #include "../../include/vos/atomic.h"
++#include "../../include/vos/sync.h"
+ #include "../../include/vos/string.h"
+ #include "../../include/vos/vfs.h"
+ #include "../../include/vos/vmm.h"
+@@ -539,6 +540,10 @@ void vos3_task_destroy(vos3_task_t* task)
+         return;
+     }
+ 
++    /* Rendezvous with any queue wake and remove stale embedded membership
++     * before this task can be retired or freed. */
++    (void)vos3_wq_cancel(task);
++
+     vos3_spinlock_lock(&g_task_lock);
+ 
+     /* Remove from task table — set TOMBSTONE for hash probe continuity */
+@@ -558,6 +563,7 @@ void vos3_task_destroy(vos3_task_t* task)
+ 
+     __atomic_store_n(&task->state, VOS3_TASK_DEAD, __ATOMIC_RELEASE);
+     vos3_shm_owner_exit(task->identity_cookie);
++    vos3_task_run_wait_cleanup(task);
+ 
+     /* Free resources */
+     if (task->kernel_stack != NULL) {
+@@ -622,6 +628,8 @@ void vos3_task_defer_destroy(vos3_task_t* task)
+         return;
+     }
+ 
++    (void)vos3_wq_cancel(task);
++
+     /* Remove from task table so no new lookups find it — TOMBSTONE for probe continuity */
+     vos3_spinlock_lock(&g_task_lock);
+ 
+@@ -648,11 +656,18 @@ void vos3_task_defer_destroy(vos3_task_t* task)
+     vos3_irqflags_t flags = vos3_irq_save();
+     vos3_spinlock_lock(&g_reaper_lock);
+ 
+-    task->next = g_reaper_head;
+-    g_reaper_head = task;
++    task->next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
++    __atomic_store_n(&g_reaper_head, task, __ATOMIC_RELEASE);
+ 
+     vos3_spinlock_unlock(&g_reaper_lock);
+     vos3_irq_restore(flags);
++    uint32_t owner_cpu = task->cpu_id;
++#ifdef NATIVE_SMP_TEST
++    if (task->sched_owner_plus_one != 0U) {
++        owner_cpu = task->sched_owner_plus_one - 1U;
++    }
++#endif
++    vos3_sched_request_deferred_cpu(owner_cpu);
+ 
+     VOS3_DEBUG("Deferred destroy of task '%s' (tid=%u)", task->name, task->tid);
+ }
+@@ -660,7 +675,7 @@ void vos3_task_defer_destroy(vos3_task_t* task)
+ void vos3_task_reap(void)
+ {
+     /* Quick check without locking */
+-    if (g_reaper_head == NULL) {
++    if (__atomic_load_n(&g_reaper_head, __ATOMIC_ACQUIRE) == NULL) {
+         return;
+     }
+ 
+@@ -668,8 +683,8 @@ void vos3_task_reap(void)
+     vos3_spinlock_lock(&g_reaper_lock);
+ 
+     /* Steal the entire list */
+-    vos3_task_t* list = g_reaper_head;
+-    g_reaper_head = NULL;
++    vos3_task_t* list = __atomic_exchange_n(&g_reaper_head, NULL,
++                                             __ATOMIC_ACQ_REL);
+ 
+     vos3_spinlock_unlock(&g_reaper_lock);
+     vos3_irq_restore(flags);
+@@ -697,6 +712,7 @@ void vos3_task_reap(void)
+ 
+         task->next = NULL;
+         vos3_shm_owner_exit(task->identity_cookie);
++        vos3_task_run_wait_cleanup(task);
+ 
+         VOS3_DEBUG("Reaping task '%s' (tid=%u)", task->name, task->tid);
+ 
+@@ -744,14 +760,71 @@ void vos3_task_reap(void)
+ 
+         vos3_task_t* tail = deferred;
+         while (tail->next != NULL) { tail = tail->next; }
+-        tail->next = g_reaper_head;
+-        g_reaper_head = deferred;
++        tail->next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
++        __atomic_store_n(&g_reaper_head, deferred, __ATOMIC_RELEASE);
+ 
+         vos3_spinlock_unlock(&g_reaper_lock);
+         vos3_irq_restore(flags);
+     }
+ }
+ 
++int vos3_task_reap_pending(void)
++{
++    return __atomic_load_n(&g_reaper_head, __ATOMIC_ACQUIRE) != NULL;
++}
++
++int vos3_task_arm_wait_cleanup(vos3_task_t* task,
++                               vos3_task_wait_cleanup_t cleanup,
++                               void* context)
++{
++    if (task == NULL || cleanup == NULL || context == NULL) return 0;
++    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
++    if (state == VOS3_TASK_ZOMBIE || state == VOS3_TASK_DEAD) return 0;
++
++    if (__atomic_load_n(&task->wait_cleanup, __ATOMIC_ACQUIRE) != NULL) {
++        VOS3_PANIC("Task '%s' already has a wait cleanup", task->name);
++    }
++    __atomic_store_n(&task->wait_cleanup_context, context, __ATOMIC_RELAXED);
++    vos3_task_wait_cleanup_t expected = NULL;
++    if (!__atomic_compare_exchange_n(&task->wait_cleanup, &expected, cleanup,
++                                     0, __ATOMIC_RELEASE, __ATOMIC_ACQUIRE)) {
++        VOS3_PANIC("Task '%s' already has a wait cleanup", task->name);
++    }
++
++    state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
++    if (state == VOS3_TASK_ZOMBIE || state == VOS3_TASK_DEAD) {
++        return vos3_task_disarm_wait_cleanup(task, cleanup, context) ? 0 : -1;
++    }
++    return 1;
++}
++
++int vos3_task_disarm_wait_cleanup(vos3_task_t* task,
++                                  vos3_task_wait_cleanup_t cleanup,
++                                  void* context)
++{
++    if (task == NULL || cleanup == NULL) return 0;
++    if (__atomic_load_n(&task->wait_cleanup_context, __ATOMIC_ACQUIRE) != context)
++        return 0;
++    vos3_task_wait_cleanup_t expected = cleanup;
++    if (!__atomic_compare_exchange_n(&task->wait_cleanup, &expected, NULL,
++                                     0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
++        return 0;
++    __atomic_store_n(&task->wait_cleanup_context, NULL, __ATOMIC_RELEASE);
++    return 1;
++}
++
++void vos3_task_run_wait_cleanup(vos3_task_t* task)
++{
++    if (task == NULL) return;
++    vos3_task_wait_cleanup_t cleanup =
++        __atomic_exchange_n(&task->wait_cleanup, NULL, __ATOMIC_ACQ_REL);
++    if (cleanup != NULL) {
++        void* context = __atomic_exchange_n(&task->wait_cleanup_context, NULL,
++                                             __ATOMIC_ACQ_REL);
++        if (context != NULL) cleanup(context);
++    }
++}
++
+ vos3_task_t* vos3_task_current(void)
+ {
+     return vos3_sched_current();
+@@ -901,11 +974,21 @@ void vos3_task_wake(vos3_task_t* task)
+         return;
+     }
+ 
++    /* On the production UP path this makes membership cancellation and the
++     * READY publication one indivisible wake transition.  The queue helper
++     * nests irq_save safely when an embedded entry is present. */
++    vos3_irqflags_t flags = vos3_irq_save();
++    if (task->state == VOS3_TASK_BLOCKED) {
++        /* Signals and other external wake sources do not own the primitive's
++         * queue lock. Detach the embedded entry before it can be reused. */
++        (void)vos3_wq_cancel(task);
++    }
+     if (task->state == VOS3_TASK_SLEEPING || task->state == VOS3_TASK_BLOCKED) {
+         task->state = VOS3_TASK_READY;
+         task->wake_time = 0ULL;
+         vos3_sched_add_task(task);
+     }
++    vos3_irq_restore(flags);
+ }
+ 
+ __attribute__((noreturn))
+@@ -1087,29 +1170,35 @@ void vos3_task_kill(vos3_task_t* task, int signal)
+         return;
+     }
+ 
++    vos3_irqflags_t transition_flags = vos3_irq_save();
++
+     /* Already dead or zombie — nothing to do */
+     if (task->state == VOS3_TASK_ZOMBIE || task->state == VOS3_TASK_DEAD) {
++        vos3_irq_restore(transition_flags);
+         return;
+     }
+ 
+     VOS3_INFO("[TASK] Killing task '%s' (pid=%u) with signal %d",
+               task->name, task->pid, signal);
+ 
+-    /* If the task is blocked or sleeping, wake it so the scheduler can
+-     * remove it cleanly.  We set state=READY first; it will be immediately
+-     * moved to ZOMBIE below. */
++    /* Detach a blocking entry before terminal publication.  Keep local IRQs
++     * disabled so a second wake cannot run the task between those steps. */
++    if (task->state == VOS3_TASK_BLOCKED) {
++        (void)vos3_wq_cancel(task);
++    }
+     if (task->state == VOS3_TASK_BLOCKED || task->state == VOS3_TASK_SLEEPING) {
+         task->wake_time = 0ULL;
+-        task->state = VOS3_TASK_READY;
+     }
+ 
+     /* Set exit code and transition to zombie */
+     task->exit_code = -signal;
+     __atomic_store_n(&task->state, VOS3_TASK_ZOMBIE, __ATOMIC_RELEASE);
+-    vos3_shm_owner_exit(task->identity_cookie);
+ 
+-    /* Remove from scheduler run queue */
++    /* Remove before restoring IF: the timer must not select a terminal task
++     * from a run queue between publication and removal. */
+     vos3_sched_remove_task(task);
++    vos3_irq_restore(transition_flags);
++    vos3_shm_owner_exit(task->identity_cookie);
+ 
+     /* Wake parent if it's blocked (e.g. in waitpid) */
+     vos3_task_t* parent = task->parent;
+@@ -1135,9 +1224,7 @@ void vos3_task_unblock(vos3_task_t* task)
+     if (task == NULL || task->state != VOS3_TASK_BLOCKED) {
+         return;
+     }
+-
+-    task->state = VOS3_TASK_READY;
+-    vos3_sched_add_task(task);
++    vos3_task_wake(task);
+ }
+ 
+ /* ============================================================================
+diff --git a/scripts/test_shm_exit.py b/scripts/test_shm_exit.py
+index bde9f8b..7ef53e1 100644
+--- a/scripts/test_shm_exit.py
++++ b/scripts/test_shm_exit.py
+@@ -36,10 +36,12 @@ static uint8_t g_shm_creator_released[64];
+ static uint32_t g_shm_pending_creators[64];
+ static vos3_task_t caller={11};
+ static unsigned locked,freed,backings;
++static unsigned deferred_requests;
+ static void check(int ok,const char *why){if(!ok){fprintf(stderr,"FAIL %s\n",why);exit(1);}}
+ static uint64_t shm_registry_lock(void){check(!locked,"nested registry lock");locked=1;return 0;}
+ static void shm_registry_unlock(uint64_t flags){(void)flags;check(locked,"unlock ownership");locked=0;}
+ static vos3_task_t *vos3_sched_current(void){return &caller;}
++static void vos3_sched_request_deferred(void){deferred_requests++;}
+ static void vos3_vmm_unmap_pages(uintptr_t a,size_t n){(void)a;(void)n;check(!locked,"VMM outside lock");}
+ static void vos3_pmm_free_huge(uintptr_t p){(void)p;check(!locked,"huge outside lock");backings++;}
+ static void vos3_pmm_free_pages(uintptr_t p,size_t n){(void)p;check(!locked,"PMM outside lock");backings+=(unsigned)n;}
+@@ -53,6 +55,7 @@ int main(void){
+  uint32_t a=region(1,11,1),b=region(2,11,2),other=region(3,22,1);
+  vos3_shm_owner_exit(0);check(!g_shm_pending_creators[1],"zero owner ignored");
+  vos3_shm_owner_exit(11);vos3_shm_owner_exit(11);
++ check(deferred_requests==1,"creator release publishes deferred work once");
+  check(shm_get(a)->ref_count==1&&shm_get(b)->ref_count==2&&!freed,"transfer preserves existing pins");
+  check(g_shm_pending_creators[1]==a&&g_shm_pending_creators[2]==b&&!g_shm_pending_creators[3],"full handles and unrelated owner");
+  check(shm_release_owned(a,1)==-22&&shm_get(a)->ref_count==1,"explicit after exit cannot steal pending pin");
+diff --git a/user/src/bench_ai_throughput.c b/user/src/bench_ai_throughput.c
+index a6929c8..a9862d0 100644
+--- a/user/src/bench_ai_throughput.c
++++ b/user/src/bench_ai_throughput.c
+@@ -33,8 +33,8 @@
+ #define NUM_AGENTS      8
+ #define SHM_SIZE        (4 * 1024 * 1024)  /* 4MB per SHM segment */
+ #define SLICE_SIZE      (SHM_SIZE / NUM_AGENTS)  /* 512KB per agent */
+-#define NUM_PASSES      8   /* 8 agents * 4MB * 8 passes = 256MB */
+-#define TOTAL_DATA_MB   ((unsigned long)(NUM_AGENTS) * SHM_SIZE / (1024*1024) * NUM_PASSES)
++#define NUM_PASSES      8   /* 8 disjoint slices total 4MB per pass: 32MB */
++#define TOTAL_DATA_MB   ((unsigned long)SHM_SIZE / (1024*1024) * NUM_PASSES)
+ 
+ /* Test framework */
+ static int g_pass = 0;
+@@ -103,6 +103,36 @@ static int verify_agent_data(volatile unsigned char* base, int agent_id, int pas
+     return 0;
+ }
+ 
++/* Parent must be detached before fork; independent SHM fork is unsupported.
++ * Each child explicitly acquires and releases its own public mapping. */
++static int run_agent_pass(long shm_id, int pass)
++{
++    pid_t children[NUM_AGENTS];
++    int errors = 0;
++    for (int a = 0; a < NUM_AGENTS; a++) {
++        long pid = syscall0(SYS_FORK);
++        children[a] = (pid_t)pid;
++        if (pid < 0) { errors++; continue; }
++        if (pid == 0) {
++            long address = syscall2(SYS_SHM_MAP, shm_id, 0);
++            int code = 21;
++            if (address >= 0x10000) {
++                agent_work((volatile unsigned char*)address, a, pass);
++                code = syscall2(SYS_SHM_UNMAP, shm_id, address) == 0 ? 0 : 22;
++            }
++            syscall1(SYS_EXIT, code);
++            for (;;) ;
++        }
++    }
++    for (int a = 0; a < NUM_AGENTS; a++) {
++        if (children[a] <= 0) continue;
++        int status = -1;
++        long result = syscall4(SYS_WAIT4, children[a], (long)&status, 0, 0);
++        if (result != children[a] || status != 0) errors++;
++    }
++    return errors;
++}
++
+ int main(int argc, char* argv[])
+ {
+     (void)argc; (void)argv;
+@@ -115,7 +145,7 @@ int main(int argc, char* argv[])
+ 
+     /* Baseline telemetry */
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) { TEST_FAIL("baseline_telemetry", "sysinfo failed"); return 1; }
+     unsigned long baseline_free = info.free_pages;
+     printf("[TELEMETRY] baseline free=%lu total=%lu\n",
+            info.free_pages, info.total_pages);
+@@ -166,63 +196,32 @@ int main(int argc, char* argv[])
+         printf("[PERF] Sequential:  %lu MB in <1 ms (too fast to measure)\n", seq_data_mb);
+     }
+ 
+-    /* Phase 2: Concurrent throughput (20 agents) */
++    /* Parent has no SHM mapping during independent fork. */
++    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) {
++        TEST_FAIL("parent_detach", "cannot safely fork with mapped SHM");
++        syscall1(SYS_SHM_DESTROY, shm_id);
++        return 1;
++    }
++    shm_base = NULL;
++    shm_addr = 0;
++
++    /* Phase 2: Concurrent throughput (8 agents, unchanged 8 passes). */
+     unsigned long long t_conc_start = rdtsc();
+     unsigned long ms_conc_start = get_uptime_ms();
+     int errors = 0;
++    for (int pass = 0; pass < NUM_PASSES; pass++)
++        errors += run_agent_pass(shm_id, pass);
+ 
+-    for (int pass = 0; pass < NUM_PASSES; pass++) {
+-        /* Fork all agents */
+-        pid_t children[NUM_AGENTS];
+-        int fork_ok = 1;
+-
+-        for (int a = 0; a < NUM_AGENTS; a++) {
+-            long pid = syscall0(SYS_FORK);
+-            if (pid < 0) {
+-                errors++;
+-                children[a] = -1;
+-                fork_ok = 0;
+-                continue;
+-            }
+-            if (pid == 0) {
+-                /* Child: map SHM, write to slice, exit */
+-                long caddr = syscall2(SYS_SHM_MAP, shm_id, 0);
+-                if (caddr > 0x10000) {
+-                    agent_work((volatile unsigned char*)caddr, a, pass);
+-                    syscall2(SYS_SHM_UNMAP, shm_id, caddr);
+-                }
+-                syscall1(SYS_EXIT, 0);
+-                for(;;);
+-            }
+-            children[a] = (pid_t)pid;
+-        }
+-
+-        /* Wait for all agents */
+-        for (int a = 0; a < NUM_AGENTS; a++) {
+-            if (children[a] > 0) {
+-                int status = 0;
+-                syscall4(SYS_WAIT4, children[a], (long)&status, 0, 0);
+-            }
+-        }
+-
+-        /* Verify last pass data integrity.
+-         * Re-map SHM to get fresh PTEs (fork marks parent's PTEs COW,
+-         * which may cause stale reads of pre-fork data instead of
+-         * children's writes to the real SHM physical pages). */
+-        if (pass == NUM_PASSES - 1) {
+-            syscall2(SYS_SHM_UNMAP, shm_id, (long)shm_base);
+-            long verify_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+-            volatile unsigned char* verify_base = (verify_addr > 0x10000)
+-                ? (volatile unsigned char*)verify_addr : shm_base;
+-            for (int a = 0; a < NUM_AGENTS; a++) {
+-                if (verify_agent_data(verify_base, a, pass) < 0) {
+-                    errors++;
+-                }
+-            }
+-            shm_base = verify_base;
+-            shm_addr = (long)verify_base;
+-        }
++    /* No stale-address fallback: mapping failure is a test failure. */
++    shm_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
++    if (shm_addr < 0x10000) {
++        TEST_FAIL("verification_map", "cannot read agent results");
++        syscall1(SYS_SHM_DESTROY, shm_id);
++        return 1;
+     }
++    shm_base = (volatile unsigned char*)shm_addr;
++    for (int a = 0; a < NUM_AGENTS; a++)
++        if (verify_agent_data(shm_base, a, NUM_PASSES - 1) != 0) errors++;
+ 
+     unsigned long long t_conc_end = rdtsc();
+     unsigned long ms_conc_end = get_uptime_ms();
+@@ -260,14 +259,14 @@ int main(int argc, char* argv[])
+     printf(" (checksum=0x%llx)\n", chk);
+ 
+     /* Final telemetry */
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) { TEST_FAIL("final_telemetry", "sysinfo failed"); }
+     long page_delta = (long)baseline_free - (long)info.free_pages;
+     printf("[TELEMETRY] final free=%lu delta=%ld pages tasks=%u zombies=%u\n",
+            info.free_pages, page_delta, info.nr_tasks, info.nr_zombies);
+ 
+     /* Cleanup */
+-    syscall2(SYS_SHM_UNMAP, shm_id, shm_addr);
+-    syscall1(SYS_SHM_DESTROY, shm_id);
++    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) TEST_FAIL("parent_unmap", "cleanup failed");
++    if (syscall1(SYS_SHM_DESTROY, shm_id) != 0) TEST_FAIL("creator_release", "cleanup failed");
+ 
+     /* Verdicts */
+     if (errors == 0) {
+@@ -282,7 +281,7 @@ int main(int argc, char* argv[])
+         TEST_FAIL("no_zombie_leak", "zombie accumulation");
+     }
+ 
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) { TEST_FAIL("cleanup_telemetry", "sysinfo failed"); return 1; }
+     long final_delta = (long)baseline_free - (long)info.free_pages;
+     if (final_delta < 500) {  /* allow 500 pages (~2MB) for fork+SHM overhead */
+         TEST_PASS("no_memory_leak");
+diff --git a/user/src/test_advanced_chaos.c b/user/src/test_advanced_chaos.c
+index 3714a09..2d2f04a 100644
+--- a/user/src/test_advanced_chaos.c
++++ b/user/src/test_advanced_chaos.c
+@@ -383,93 +383,82 @@ static void hugepage_hard_wall(void)
+ static void shm_id_collision(void)
+ {
+     printf("\n--- Test: shm_id_collision ---\n");
+-
+-    pid_t children[COLLISION_CHILDREN];
+-
+-    /* Fork all 10 children first */
++    int start[2], reports[2], release[2];
++    if (pipe(start) != 0) { TEST_FAIL("collision: start pipe%s", ""); return; }
++    if (pipe(reports) != 0) {
++        close(start[0]); close(start[1]);
++        TEST_FAIL("collision: report pipe%s", ""); return;
++    }
++    if (pipe(release) != 0) {
++        close(start[0]); close(start[1]); close(reports[0]); close(reports[1]);
++        TEST_FAIL("collision: release pipe%s", ""); return;
++    }
++    pid_t children[COLLISION_CHILDREN] = {0};
++    int spawned = 0, errors = 0;
+     for (int i = 0; i < COLLISION_CHILDREN; i++) {
+         pid_t pid = fork();
+-        if (pid < 0) {
+-            TEST_FAIL("shm_id_collision: fork %d failed", i);
+-            for (int j = 0; j < i; j++) {
+-                int s;
+-                waitpid(children[j], &s, 0);
+-            }
+-            return;
+-        }
+-
++        if (pid < 0) { errors++; break; }
+         if (pid == 0) {
+-            /* Child: yield to let parent finish forking all children */
+-            for (int y = 0; y < 30; y++)
+-                syscall0(SYS_YIELD);
+-
+-            /* Now try to create "global_brain" */
+-            long ret = syscall3(SYS_SHM_CREATE, (long)"global_brain",
+-                                (long)4096, 0L);
+-
+-            if (ret == -EEXIST) {
+-                /* Name collision — expected for 9 of 10 */
+-                _exit(0);
+-            }
+-
+-            if (ret < 0 || ret == (long)0xFFFFFFFFU) {
+-                /* Unexpected error */
+-                _exit(2);
+-            }
+-
+-            /* Success — we are the winner */
+-            long addr = syscall2(SYS_SHM_MAP, ret, 0);
+-            if (addr > 0) {
+-                volatile uint8_t* p = (volatile uint8_t*)addr;
+-                *p = 0xAA;
+-                uint8_t val = *p;
+-                (void)val;
+-                syscall2(SYS_SHM_UNMAP, ret, addr);
+-            }
+-
+-            /* Do NOT destroy — parent will clean up after all children exit.
+-             * This ensures later children see the name and get EEXIST. */
+-            _exit(1);  /* exit(1) = winner */
++            close(start[1]); close(reports[0]); close(release[1]);
++            char token;
++            if (read(start[0], &token, 1) != 1) _exit(2);
++            close(start[0]);
++            long id = syscall3(SYS_SHM_CREATE, (long)"global_brain", 4096, 0);
++            long report = id;
++            int code = 0;
++            if (id > 0) {
++                long addr = syscall2(SYS_SHM_MAP, id, 0);
++                if (addr < 0x10000) code = 2;
++                else {
++                    volatile uint8_t* p = (volatile uint8_t*)addr;
++                    *p = 0xAA;
++                    if (*p != 0xAA) code = 2;
++                    if (syscall2(SYS_SHM_UNMAP, id, addr) != 0) code = 2;
++                }
++            } else if (id != -EEXIST) code = 2;
++            if (write(reports[1], &report, sizeof(report)) != sizeof(report)) code = 2;
++            close(reports[1]);
++            /* Keep creator alive until every attempt has been collected. */
++            if (id > 0 && read(release[0], &token, 1) != 0) code = 2;
++            close(release[0]);
++            _exit(code); /* Owner exit, rather than foreign destroy, retires it. */
+         }
+-
+-        children[i] = pid;
++        children[spawned++] = pid;
+     }
+-
+-    /* Parent: collect results */
+-    int success_count = 0;
+-    int eexist_count = 0;
+-    int error_count = 0;
+-
+-    for (int i = 0; i < COLLISION_CHILDREN; i++) {
+-        int status = 0;
+-        waitpid(children[i], &status, 0);
+-
+-        if (WIFEXITED(status)) {
+-            int code = WEXITSTATUS(status);
+-            if (code == 1) success_count++;
+-            else if (code == 0) eexist_count++;
+-            else error_count++;
+-        } else {
+-            error_count++;
+-        }
++    close(start[0]); close(reports[1]); close(release[0]);
++    char token = 'G';
++    for (int i = 0; i < spawned; i++)
++        if (write(start[1], &token, 1) != 1) errors++;
++    close(start[1]);
++    int winners = 0, collisions = 0;
++    long winner_id = 0;
++    for (int i = 0; i < spawned; i++) {
++        long report = 0;
++        if (read(reports[0], &report, sizeof(report)) != sizeof(report)) { errors++; break; }
++        if (report > 0) { winners++; winner_id = report; }
++        else if (report == -EEXIST) collisions++;
++        else errors++;
+     }
+-
+-    /* Parent cleanup: destroy the SHM region left by the winner.
+-     * No "find by name" syscall, so iterate possible IDs. */
+-    for (int id = 1; id < 64; id++) {
+-        syscall1(SYS_SHM_DESTROY, (long)id);
++    close(reports[0]);
++    /* Closing the gate releases every winner, even a broken multiwinner run. */
++    close(release[1]);
++    for (int i = 0; i < spawned; i++) {
++        int status = -1;
++        if (waitpid(children[i], &status, 0) != children[i] || status != 0) errors++;
+     }
+-
+-    printf("  Winners: %d, EEXIST: %d, Errors: %d\n",
+-           success_count, eexist_count, error_count);
+-
+-    if (success_count == 1 && eexist_count == (COLLISION_CHILDREN - 1) &&
+-        error_count == 0) {
+-        TEST_PASS("shm_id_collision");
+-    } else {
+-        TEST_FAIL("shm_id_collision: win=%d eexist=%d err=%d",
+-                  success_count, eexist_count, error_count);
++    int retired = 0;
++    unsigned long began = get_uptime_ms();
++    for (unsigned int attempt = 0; winner_id > 0 && attempt < 100000U; attempt++) {
++        if (syscall1(414, winner_id) == 0) { retired = 1; break; }
++        if (get_uptime_ms() - began >= 5000UL) break;
++        syscall0(SYS_YIELD);
+     }
++    printf("  Winners: %d, EEXIST: %d, Errors: %d, Retired: %d\n",
++           winners, collisions, errors, retired);
++    if (spawned == COLLISION_CHILDREN && winners == 1 &&
++        collisions == COLLISION_CHILDREN - 1 && errors == 0 && retired)
++        TEST_PASS("shm_id_collision");
++    else TEST_FAIL("shm_id_collision: win=%d eexist=%d err=%d", winners, collisions, errors);
+ }
+ 
+ /* ============================================================================
+diff --git a/user/src/test_agent_chaos.c b/user/src/test_agent_chaos.c
+index 368a699..12971e2 100644
+--- a/user/src/test_agent_chaos.c
++++ b/user/src/test_agent_chaos.c
+@@ -22,6 +22,7 @@
+ #include "stdlib.h"
+ #include "string.h"
+ #include "unistd.h"
++#include "signal.h"
+ #include "syscall.h"
+ #include <stdint.h>
+ 
+@@ -66,6 +67,7 @@ static int g_tests_failed = 0;
+ 
+ /* SHM flags */
+ #define VOS3_SHM_FLAG_HUGETLB   (1U << 4)
++#define VOS3_SHM_FLAG_PUBLIC    (1U << 6)
+ 
+ /* Clone flags */
+ #define CLONE_VM        0x00000100UL
+@@ -156,9 +158,9 @@ static int soak_one_iteration(void)
+ 
+     { spsc_slot_t tmp; while (spsc_pop(ring, &tmp) == 0); }
+ 
+-    syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
+-    syscall1(SYS_SHM_DESTROY, shm_id);
+-    return 0;
++    long unmap_result = syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
++    long destroy_result = syscall1(SYS_SHM_DESTROY, shm_id);
++    return (unmap_result == 0 && destroy_result == 0) ? 0 : -1;
+ }
+ 
+ static void soak_5min_leak_check(void)
+@@ -174,8 +176,11 @@ static void soak_5min_leak_check(void)
+         return;
+     }
+ 
+-    vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    vos3_sysinfo_t info = {0};
++    if (get_sysinfo(&info) < 0) {
++        TEST_FAIL("soak_5min_leak_check: initial SYSINFO failed");
++        return;
++    }
+     unsigned long baseline_free = info.free_pages;
+     unsigned long start_ms = get_uptime_ms();
+     unsigned long last_report_ms = start_ms;
+@@ -190,7 +195,10 @@ static void soak_5min_leak_check(void)
+ 
+         /* Periodic status report every ~3 seconds */
+         if (now_ms - last_report_ms >= 3000) {
+-            get_sysinfo(&info);
++            if (get_sysinfo(&info) < 0) {
++                failed = 1;
++                break;
++            }
+             long delta = (long)baseline_free - (long)info.free_pages;
+             printf("[SOAK] t=%lus free_pages=%lu delta=%ld iter=%d\n",
+                    elapsed_sec, info.free_pages, delta, iterations);
+@@ -206,7 +214,10 @@ static void soak_5min_leak_check(void)
+     }
+ 
+     /* Final sysinfo */
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) < 0) {
++        TEST_FAIL("soak_5min_leak_check: final SYSINFO failed");
++        return;
++    }
+     long final_delta = (long)baseline_free - (long)info.free_pages;
+     if (final_delta < 0) final_delta = -final_delta;
+ 
+@@ -244,16 +255,18 @@ static void agent_chaos_crash_recovery(void)
+ {
+     printf("\n--- Test: agent_chaos_crash_recovery ---\n");
+ 
+-    /* Create SHM */
++    /* Create public SHM so independently forked address spaces can attach. */
+     long shm_id = syscall3(SYS_SHM_CREATE, (long)"chaos_shm",
+                            (long)CRASH_SHM_SIZE,
+-                           (long)VOS3_SHM_FLAG_HUGETLB);
++                           (long)(VOS3_SHM_FLAG_HUGETLB |
++                                  VOS3_SHM_FLAG_PUBLIC));
+     if (shm_id < 0) {
+         TEST_FAIL("agent_chaos_crash_recovery: SHM_CREATE failed (%ld)", shm_id);
+         return;
+     }
+ 
+-    /* Map in parent */
++    /* Initialize, then detach before fork.  Independent fork of an address
++     * space that still contains SHM is deliberately unsupported. */
+     long base_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+     if (base_addr <= 0) {
+         TEST_FAIL("agent_chaos_crash_recovery: SHM_MAP failed (%ld)", base_addr);
+@@ -272,17 +285,29 @@ static void agent_chaos_crash_recovery(void)
+         syscall1(SYS_SHM_DESTROY, shm_id);
+         return;
+     }
++    if (syscall2(SYS_SHM_UNMAP, shm_id, base_addr) != 0) {
++        TEST_FAIL("agent_chaos_crash_recovery: initial SHM_UNMAP failed");
++        syscall1(SYS_SHM_DESTROY, shm_id);
++        return;
++    }
+ 
+     /* Fork child (producer) */
+     pid_t child = fork();
+     if (child < 0) {
+         TEST_FAIL("agent_chaos_crash_recovery: fork failed");
+-        syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
+         syscall1(SYS_SHM_DESTROY, shm_id);
+         return;
+     }
+ 
+     if (child == 0) {
++        long child_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
++        if (child_addr <= 0) _exit(2);
++        ring = (spsc_ring_t*)child_addr;
++        slots_addr = ((uintptr_t)child_addr + sizeof(spsc_ring_t) + 63) &
++                     ~(uintptr_t)63;
++        /* slots is process-local metadata; rebuild it after each attach. */
++        ring->slots = (spsc_slot_t*)slots_addr;
++
+         /* Child: push 100 messages with sequence numbers, then exit abruptly.
+          * Does NOT send SPSC_MSG_DONE sentinel — simulates crash. */
+         for (int i = 0; i < CRASH_MSG_COUNT; i++) {
+@@ -304,10 +329,36 @@ static void agent_chaos_crash_recovery(void)
+     }
+ 
+     /* Parent: wait for child to die */
+-    int status = 0;
+-    waitpid(child, &status, 0);
++    int status = -1;
++    pid_t waited = waitpid(child, &status, 0);
++    int child_exit_ok = (waited == child && WIFEXITED(status) &&
++                         WEXITSTATUS(status) == 0);
++    if (!child_exit_ok) {
++        TEST_FAIL("agent_chaos_crash_recovery: wait failed (pid=%d status=%d)",
++                  (int)waited, status);
++        if (waited != child) {
++            int cleanup_status = 0;
++            (void)kill(child, SIGKILL);
++            (void)waitpid(child, &cleanup_status, 0);
++        }
++        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0) {
++            TEST_FAIL("agent_chaos_crash_recovery: cleanup destroy failed");
++        }
++        return;
++    }
+ 
+-    int child_exit_ok = (WIFEXITED(status) && WEXITSTATUS(status) == 0);
++    /* Recover by attaching only after the producer has died. */
++    base_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
++    if (base_addr <= 0) {
++        TEST_FAIL("agent_chaos_crash_recovery: recovery SHM_MAP failed (%ld)",
++                  base_addr);
++        syscall1(SYS_SHM_DESTROY, shm_id);
++        return;
++    }
++    ring = (spsc_ring_t*)base_addr;
++    slots_addr = ((uintptr_t)base_addr + sizeof(spsc_ring_t) + 63) &
++                 ~(uintptr_t)63;
++    ring->slots = (spsc_slot_t*)slots_addr;
+ 
+     /* Pop messages with spin timeout (child is dead, so no more coming) */
+     int received = 0;
+@@ -335,26 +386,30 @@ static void agent_chaos_crash_recovery(void)
+     }
+ 
+     /* Cleanup SHM explicitly (child can't) */
+-    syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
+-    syscall1(SYS_SHM_DESTROY, shm_id);
++    long unmap_result = syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
++    long destroy_result = syscall1(SYS_SHM_DESTROY, shm_id);
++    int cleanup_ok = (unmap_result == 0 && destroy_result == 0);
+ 
+     /* Let reaper clean up deferred-destroy tasks (runs every 2+ ticks) */
+     syscall0(SYS_YIELD);
+     syscall0(SYS_YIELD);
+ 
+     /* Verify zombies cleaned up */
+-    vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    vos3_sysinfo_t info = {0};
++    if (get_sysinfo(&info) < 0) {
++        TEST_FAIL("agent_chaos_crash_recovery: SYSINFO failed");
++        return;
++    }
+ 
+     printf("  Child exit OK: %d, received: %d/%d, seq_ok: %d, zombies: %u\n",
+            child_exit_ok, received, CRASH_MSG_COUNT, seq_ok, info.nr_zombies);
+ 
+-    if (child_exit_ok && received == CRASH_MSG_COUNT && seq_ok &&
++    if (child_exit_ok && cleanup_ok && received == CRASH_MSG_COUNT && seq_ok &&
+         info.nr_zombies <= 1) {
+         TEST_PASS("agent_chaos_crash_recovery");
+     } else {
+-        TEST_FAIL("agent_chaos_crash_recovery: exit=%d recv=%d seq=%d zombies=%u",
+-                  child_exit_ok, received, seq_ok, info.nr_zombies);
++        TEST_FAIL("agent_chaos_crash_recovery: exit=%d cleanup=%d recv=%d seq=%d zombies=%u",
++                  child_exit_ok, cleanup_ok, received, seq_ok, info.nr_zombies);
+     }
+ }
+ 
+@@ -374,8 +429,11 @@ static void pressure_fragmentation(void)
+ {
+     printf("\n--- Test: pressure_fragmentation ---\n");
+ 
+-    vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    vos3_sysinfo_t info = {0};
++    if (get_sysinfo(&info) < 0) {
++        TEST_FAIL("pressure_fragmentation: initial SYSINFO failed");
++        return;
++    }
+     unsigned long baseline_free = info.free_pages;
+     int failures = 0;
+     int total_ops = 0;
+@@ -387,6 +445,8 @@ static void pressure_fragmentation(void)
+         long addrs[20];
+         int created = 0;
+ 
++        /* Keep all twenty objects live, but attach them in bounded windows:
++         * an address space intentionally tracks at most sixteen SHM maps. */
+         for (int j = 0; j < 20; j++) {
+             /* Build unique name */
+             char name[16];
+@@ -404,21 +464,31 @@ static void pressure_fragmentation(void)
+                 failures++;
+                 break;
+             }
++            created++;
++        }
+ 
+-            addrs[j] = syscall2(SYS_SHM_MAP, ids[j], 0);
+-            if (addrs[j] <= 0) {
+-                syscall1(SYS_SHM_DESTROY, ids[j]);
+-                failures++;
+-                break;
++        for (int start = 0; start < created; start += 16) {
++            int end = start + 16;
++            if (end > created) end = created;
++            int mapped_end = start;
++            for (int j = start; j < end; j++) {
++                addrs[j] = syscall2(SYS_SHM_MAP, ids[j], 0);
++                if (addrs[j] <= 0) {
++                    failures++;
++                    break;
++                }
++                mapped_end = j + 1;
++                total_ops++;
+             }
+-            created++;
+-            total_ops++;
++            for (int j = start; j < mapped_end; j++) {
++                if (syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]) != 0)
++                    failures++;
++            }
++            if (mapped_end != end) break;
+         }
+ 
+-        /* Cleanup all created */
+         for (int j = 0; j < created; j++) {
+-            syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]);
+-            syscall1(SYS_SHM_DESTROY, ids[j]);
++            if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
+         }
+     }
+ 
+@@ -447,7 +517,7 @@ static void pressure_fragmentation(void)
+ 
+             addrs[j] = syscall2(SYS_SHM_MAP, ids[j], 0);
+             if (addrs[j] <= 0) {
+-                syscall1(SYS_SHM_DESTROY, ids[j]);
++                if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
+                 failures++;
+                 break;
+             }
+@@ -456,8 +526,8 @@ static void pressure_fragmentation(void)
+         }
+ 
+         for (int j = 0; j < created; j++) {
+-            syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]);
+-            syscall1(SYS_SHM_DESTROY, ids[j]);
++            if (syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]) != 0) failures++;
++            if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
+         }
+     }
+ 
+@@ -483,7 +553,7 @@ static void pressure_fragmentation(void)
+ 
+             addrs[created] = syscall2(SYS_SHM_MAP, ids[created], 0);
+             if (addrs[created] <= 0) {
+-                syscall1(SYS_SHM_DESTROY, ids[created]);
++                if (syscall1(SYS_SHM_DESTROY, ids[created]) != 0) failures++;
+                 failures++;
+                 break;
+             }
+@@ -507,7 +577,7 @@ static void pressure_fragmentation(void)
+ 
+             addrs[created] = syscall2(SYS_SHM_MAP, ids[created], 0);
+             if (addrs[created] <= 0) {
+-                syscall1(SYS_SHM_DESTROY, ids[created]);
++                if (syscall1(SYS_SHM_DESTROY, ids[created]) != 0) failures++;
+                 failures++;
+                 break;
+             }
+@@ -516,20 +586,23 @@ static void pressure_fragmentation(void)
+         }
+ 
+         for (int j = 0; j < created; j++) {
+-            syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]);
+-            syscall1(SYS_SHM_DESTROY, ids[j]);
++            if (syscall2(SYS_SHM_UNMAP, ids[j], addrs[j]) != 0) failures++;
++            if (syscall1(SYS_SHM_DESTROY, ids[j]) != 0) failures++;
+         }
+     }
+ 
+     /* Final check */
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) < 0) {
++        TEST_FAIL("pressure_fragmentation: final SYSINFO failed");
++        return;
++    }
+     long final_delta = (long)baseline_free - (long)info.free_pages;
+     if (final_delta < 0) final_delta = -final_delta;
+ 
+     printf("  Total ops: %d, failures: %d, leak_delta: %ld\n",
+            total_ops, failures, final_delta);
+ 
+-    if (failures == 0 && final_delta <= 50) {
++    if (failures == 0 && total_ops == 1115 && final_delta <= 50) {
+         TEST_PASS("pressure_fragmentation");
+     } else {
+         TEST_FAIL("pressure_fragmentation: ops=%d failures=%d delta=%ld",
+diff --git a/user/src/test_agent_cluster.c b/user/src/test_agent_cluster.c
+index a2a868f..1de27f5 100644
+--- a/user/src/test_agent_cluster.c
++++ b/user/src/test_agent_cluster.c
+@@ -330,6 +330,7 @@ typedef struct {
+     volatile uint32_t visited[BFS_NODES / 32]; /* 256-bit visited bitmap */
+     volatile uint32_t result_count;            /* Nodes discovered */
+     volatile uint32_t done_agents;             /* Agents that finished */
++    volatile uint32_t processed_items;          /* Exact shared work count */
+ } graph_state_t;
+ 
+ /**
+@@ -430,6 +431,12 @@ static void distributed_bfs_32_agents(void)
+     graph->visited[0] |= 1U;
+     graph->result_count = 1;
+     graph->done_agents = 0;
++    graph->processed_items = 0;
++    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) {
++        TEST_FAIL("distributed_bfs_32_agents: detach failed%s", "");
++        syscall1(SYS_SHM_DESTROY, shm_id);
++        return;
++    }
+ 
+     /* Submit initial work item (node 0) */
+     dispatch_item_t seed;
+@@ -440,16 +447,16 @@ static void distributed_bfs_32_agents(void)
+     seed.payload_size = 1;
+ 
+     /* Fork 32 agents */
+-    pid_t agents[BFS_AGENTS];
++    pid_t agents[BFS_AGENTS] = {0};
+     int fork_ok = 1;
+ 
+     for (int i = 0; i < BFS_AGENTS; i++) {
+         pid_t pid = fork();
+         if (pid == 0) {
+-            /* Child: must re-map SHM to get true shared pages (fork COW breaks sharing) */
++            /* Each worker acquires its own public mapping after fork. */
+             long child_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+             if (child_addr <= 0) {
+-                syscall1(SYS_EXIT, 1);
++                _exit(1);
+             }
+             graph_state_t* g = (graph_state_t*)(unsigned long)child_addr;
+ 
+@@ -462,11 +469,11 @@ static void distributed_bfs_32_agents(void)
+             long slot = agent_register(name, CAP_SEARCH);
+             if (slot < 0) {
+                 syscall2(SYS_SHM_UNMAP, shm_id, child_addr);
+-                syscall1(SYS_EXIT, 1);
++                _exit(1);
+             }
+ 
+             unsigned long deadline = get_uptime_ms() + 5000; /* 5s timeout */
+-            int items_done = 0;
++            int items_done = 0, worker_errors = 0;
+             dispatch_item_t work;
+ 
+             while (get_uptime_ms() < deadline) {
+@@ -500,12 +507,12 @@ static void distributed_bfs_32_agents(void)
+                                 new_work.priority = 2;
+                                 new_work.payload_addr = (uint64_t)(unsigned long)nb;
+                                 new_work.payload_size = 1;
+-                                dispatch_submit(&new_work);
++                                if (dispatch_submit(&new_work) < 0) worker_errors++;
+                             }
+                         }
+                     }
+ 
+-                    dispatch_complete(slot, (long)work.item_id);
++                    if (dispatch_complete(slot, (long)work.item_id) < 0) worker_errors++;
+                     items_done++;
+                 } else {
+                     /* No work available — check if BFS is done */
+@@ -517,9 +524,11 @@ static void distributed_bfs_32_agents(void)
+             }
+ 
+             __atomic_fetch_add(&g->done_agents, 1, __ATOMIC_SEQ_CST);
+-            agent_deregister(slot);
+-            syscall2(SYS_SHM_UNMAP, shm_id, child_addr);
+-            syscall1(SYS_EXIT, items_done > 255 ? 255 : items_done);
++            __atomic_fetch_add(&g->processed_items, (uint32_t)items_done, __ATOMIC_SEQ_CST);
++            if (g->result_count != (uint32_t)expected) worker_errors++;
++            if (agent_deregister(slot) < 0) worker_errors++;
++            if (syscall2(SYS_SHM_UNMAP, shm_id, child_addr) != 0) worker_errors++;
++            _exit(worker_errors ? 2 : 0);
+         }
+         if (pid < 0) {
+             fork_ok = 0;
+@@ -528,30 +537,34 @@ static void distributed_bfs_32_agents(void)
+     }
+ 
+     /* Submit the seed work item after agents are forked */
+-    dispatch_submit(&seed);
++    if (dispatch_submit(&seed) < 0) fork_ok = 0;
+ 
+     /* Wait for all agents */
+-    int total_items = 0;
+     for (int i = 0; i < BFS_AGENTS; i++) {
+         if (agents[i] <= 0) continue;
+-        int status = 0;
+-        waitpid(agents[i], &status, 0);
+-        if (WIFEXITED(status)) {
+-            total_items += WEXITSTATUS(status);
+-        }
++        int status = -1;
++        if (waitpid(agents[i], &status, 0) != agents[i] || status != 0) fork_ok = 0;
+     }
+-
++    shm_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
++    if (shm_addr < 0x10000) {
++        TEST_FAIL("distributed_bfs_32_agents: verification remap failed%s", "");
++        syscall1(SYS_SHM_DESTROY, shm_id);
++        return;
++    }
++    graph = (graph_state_t*)(unsigned long)shm_addr;
++    int total_items = (int)graph->processed_items;
++    int all_done = graph->done_agents == BFS_AGENTS;
+     uint32_t discovered = graph->result_count;
+     printf("  discovered: %u / %d expected\n", discovered, expected);
+     printf("  total work items processed: %d\n", total_items);
+     printf("  agents completed: %u / %d\n", graph->done_agents, BFS_AGENTS);
+ 
+     /* Cleanup SHM */
+-    syscall2(SYS_SHM_UNMAP, shm_id, shm_addr);
+-    syscall1(SYS_SHM_DESTROY, shm_id);
++    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) fork_ok = 0;
++    if (syscall1(SYS_SHM_DESTROY, shm_id) != 0) fork_ok = 0;
+ 
+-    /* Verify: discovered should be >= expected (atomic races may over-count slightly) */
+-    if (fork_ok && discovered >= (uint32_t)expected && total_items > 0) {
++    /* Atomic first-visit accounting must exactly match the reference. */
++    if (fork_ok && all_done && discovered == (uint32_t)expected && total_items > 0) {
+         TEST_PASS("distributed_bfs_32_agents");
+     } else if (!fork_ok) {
+         TEST_FAIL("distributed_bfs_32_agents: fork failed%s", "");

@@ -1,0 +1,16 @@
+test_global_and_app_registry_detach_before_free (scripts.test_ai_context_lifetime.AIContextLifetimeTests.test_global_and_app_registry_detach_before_free) ... FAIL
+
+======================================================================
+FAIL: test_global_and_app_registry_detach_before_free (scripts.test_ai_context_lifetime.AIContextLifetimeTests.test_global_and_app_registry_detach_before_free)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/sz/Desktop/vos/vos 5/scripts/test_ai_context_lifetime.py", line 132, in test_global_and_app_registry_detach_before_free
+    self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: -6 != 0 : Assertion failed: (__atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE) != ptr), function assert_detached, file test.c, line 52.
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.631s
+
+FAILED (failures=1)

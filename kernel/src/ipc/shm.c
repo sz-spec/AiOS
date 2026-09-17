@@ -338,47 +338,12 @@ vos3_ipc_id_t vos3_shm_create(const char* name, size_t size, uint32_t flags)
         size = huge_count * VOS3_LARGE_PAGE_SIZE;
         page_count = size / VOS3_PAGE_SIZE;
 
-        /* Allocate hugepages into temp array, then sort for contiguity */
-        uint64_t hp_addrs[16] = {0};  /* max 16 hugepages = 32MB per SHM */
         if (huge_count > 16) {
             vos3_kfree(shm);
             return VOS3_IPC_INVALID;
         }
-
-        for (size_t i = 0; i < huge_count; i++) {
-            hp_addrs[i] = vos3_pmm_alloc_huge();
-            if (hp_addrs[i] == 0) {
-                for (size_t j = 0; j < i; j++)
-                    vos3_pmm_free_huge(hp_addrs[j]);
-                vos3_kfree(shm);
-                return VOS3_IPC_INVALID;
-            }
-        }
-
-        /* Sort by physical address (insertion sort, tiny array) */
-        for (size_t i = 1; i < huge_count; i++) {
-            uint64_t key = hp_addrs[i];
-            size_t j = i;
-            while (j > 0 && hp_addrs[j - 1] > key) {
-                hp_addrs[j] = hp_addrs[j - 1];
-                j--;
-            }
-            hp_addrs[j] = key;
-        }
-
-        /* Verify contiguity after sorting */
-        phys_addr = hp_addrs[0];
-        int contiguous = 1;
-        for (size_t i = 1; i < huge_count; i++) {
-            if (hp_addrs[i] != phys_addr + i * VOS3_LARGE_PAGE_SIZE) {
-                contiguous = 0;
-                break;
-            }
-        }
-
-        if (!contiguous) {
-            for (size_t i = 0; i < huge_count; i++)
-                vos3_pmm_free_huge(hp_addrs[i]);
+        phys_addr = vos3_pmm_alloc_huge_contiguous((uint32_t)huge_count);
+        if (phys_addr == 0) {
             vos3_kfree(shm);
             return VOS3_IPC_INVALID;
         }
@@ -670,6 +635,7 @@ static int shm_release_owned(vos3_ipc_id_t id, int creator)
 void vos3_shm_owner_exit(uint64_t identity)
 {
     if (identity == 0) return;
+    int queued = 0;
     vos3_irqflags_t registry_flags = shm_registry_lock();
     for (uint32_t slot = 1; slot < VOS3_SHM_MAX_REGIONS; ++slot) {
         vos3_shm_region_t* shm = g_shm_table[slot];
@@ -677,9 +643,11 @@ void vos3_shm_owner_exit(uint64_t identity)
             shm->owner_identity == identity && !g_shm_creator_released[slot]) {
             g_shm_creator_released[slot] = 1;
             g_shm_pending_creators[slot] = shm->id;
+            queued = 1;
         }
     }
     shm_registry_unlock(registry_flags);
+    if (queued) vos3_sched_request_deferred();
 }
 
 /* Safe process-context caller required, just like the address-space reaper.

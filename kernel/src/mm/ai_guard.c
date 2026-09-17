@@ -611,6 +611,13 @@ void vos3_ai_guard_ctx_destroy(vos3_ai_guard_ctx_t* ctx)
         return;
     }
 
+    /* Remove global publication before releasing any region or the context.
+     * A reader that already loaded ctx still needs a lifetime pin, even on
+     * UP with preemption. This ordering does not provide that protection. */
+    vos3_ai_guard_ctx_t* registered = ctx;
+    (void)__atomic_compare_exchange_n(&g_global_ctx, &registered, NULL, 0,
+                                      __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE);
+
     /* Free all regions */
     vos3_ai_guard_region_t* region = ctx->regions;
     while (region != NULL) {
@@ -1228,7 +1235,7 @@ vos3_ai_guard_ctx_t* g_global_ctx = NULL;
 /** @brief Provide global context for telemetry */
 vos3_ai_guard_ctx_t* vos3_ai_guard_get_global_ctx(void)
 {
-    return g_global_ctx;
+    return __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
 }
 
 int vos3_ai_guard_set_integrity_auto(vos3_ai_guard_region_t* region,
@@ -1279,7 +1286,8 @@ int vos3_ai_guard_get_integrity_config(vos3_ai_guard_region_t* region,
 
 void vos3_ai_guard_integrity_tick(uint64_t current_tick)
 {
-    vos3_ai_guard_ctx_t* ctx = g_global_ctx;
+    vos3_ai_guard_ctx_t* ctx =
+        __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
     if (ctx == NULL) {
         return;
     }
@@ -1489,7 +1497,8 @@ void vos3_wpg_tick(uint64_t current_tick)
 
 void vos3_ai_guard_reprotect_tick(void)
 {
-    vos3_ai_guard_ctx_t* ctx = g_global_ctx;
+    vos3_ai_guard_ctx_t* ctx =
+        __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
     if (ctx == NULL) {
         return;
     }
@@ -1882,7 +1891,8 @@ int vos3_ai_guard_set_reclaim_callback(vos3_ai_guard_region_t* region,
  */
 static vos3_ai_guard_region_t* find_eviction_candidate(void)
 {
-    vos3_ai_guard_ctx_t* ctx = g_global_ctx;
+    vos3_ai_guard_ctx_t* ctx =
+        __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
     if (ctx == NULL) {
         return NULL;
     }
@@ -2097,9 +2107,9 @@ void vos3_ai_guard_pressure_tick(void)
  */
 static void register_global_ctx(vos3_ai_guard_ctx_t* ctx)
 {
-    if (g_global_ctx == NULL) {
-        g_global_ctx = ctx;
-    }
+    vos3_ai_guard_ctx_t* expected = NULL;
+    (void)__atomic_compare_exchange_n(&g_global_ctx, &expected, ctx, 0,
+                                      __ATOMIC_RELEASE, __ATOMIC_RELAXED);
 }
 
 /* ============================================================================
@@ -2126,7 +2136,7 @@ int vos3_ai_guard_create_app_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    if (g_app_contexts[app_id] != NULL) {
+    if (__atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE) != NULL) {
         vos3_console_printf("[AI-GUARD] App context %u already exists\n", app_id);
         return VOS3_AI_GUARD_ERR_INVALID;
     }
@@ -2136,11 +2146,13 @@ int vos3_ai_guard_create_app_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_NOMEM;
     }
 
-    g_app_contexts[app_id] = ctx;
+    /* Concurrent create/destroy still requires lifecycle serialization;
+     * pointer publication alone does not supply ownership or reader pins. */
+    __atomic_store_n(&g_app_contexts[app_id], ctx, __ATOMIC_RELEASE);
 
     /* App_id 0 is the system context */
-    if (app_id == 0U && g_global_ctx == NULL) {
-        g_global_ctx = ctx;
+    if (app_id == 0U) {
+        register_global_ctx(ctx);
     }
 
     vos3_console_printf("[AI-GUARD] Created app context %u\n", app_id);
@@ -2153,7 +2165,9 @@ int vos3_ai_guard_destroy_app_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    if (g_app_contexts[app_id] == NULL) {
+    vos3_ai_guard_ctx_t* ctx =
+        __atomic_exchange_n(&g_app_contexts[app_id], NULL, __ATOMIC_ACQ_REL);
+    if (ctx == NULL) {
         return VOS3_AI_GUARD_ERR_NOTFOUND;
     }
 
@@ -2162,14 +2176,9 @@ int vos3_ai_guard_destroy_app_ctx(uint8_t app_id)
         g_active_app_id = 0U;
     }
 
-    vos3_ai_guard_ctx_destroy(g_app_contexts[app_id]);
-
-    /* Clear the global context pointer if this was it */
-    if (g_app_contexts[app_id] == g_global_ctx) {
-        g_global_ctx = NULL;
-    }
-
-    g_app_contexts[app_id] = NULL;
+    /* The table is detached before the destructor clears the global pointer
+     * and before either pointer can expose released storage. */
+    vos3_ai_guard_ctx_destroy(ctx);
 
     vos3_console_printf("[AI-GUARD] Destroyed app context %u\n", app_id);
     return VOS3_AI_GUARD_OK;
@@ -2181,7 +2190,7 @@ int vos3_ai_guard_switch_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    if (g_app_contexts[app_id] == NULL) {
+    if (__atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE) == NULL) {
         return VOS3_AI_GUARD_ERR_NOTFOUND;
     }
 
@@ -2201,7 +2210,7 @@ vos3_ai_guard_ctx_t* vos3_ai_guard_get_app_ctx(uint8_t app_id)
     if (app_id >= VOS3_MAX_APP_CONTEXTS) {
         return NULL;
     }
-    return g_app_contexts[app_id];
+    return __atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE);
 }
 
 int vos3_ai_guard_check_app_access(uintptr_t fault_addr, uint8_t current_app_id)
@@ -2221,7 +2230,8 @@ int vos3_ai_guard_check_app_access(uintptr_t fault_addr, uint8_t current_app_id)
             continue;  /* Skip our own context */
         }
 
-        vos3_ai_guard_ctx_t* ctx = g_app_contexts[id];
+        vos3_ai_guard_ctx_t* ctx =
+            __atomic_load_n(&g_app_contexts[id], __ATOMIC_ACQUIRE);
         if (ctx == NULL) {
             continue;
         }
@@ -2253,21 +2263,11 @@ int vos3_ai_guard_check_app_access(uintptr_t fault_addr, uint8_t current_app_id)
 
 int vos3_ai_guard_check_hardware_access(uintptr_t phys_addr, size_t size)
 {
+    /* P0: user MMIO remains unavailable until an enumerated BAR registry,
+     * immutable owner authorization and enforced IOMMU domains exist.
+     * An AI context alone grants no physical-device capability. */
     (void)phys_addr;
     (void)size;
-
-    /* Get the active app context */
-    uint8_t app_id = vos3_ai_guard_get_active_app_id();
-    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_get_app_ctx(app_id);
-
-    /* Tasks with an AI guard context are authorized for hardware access */
-    if (ctx != NULL) {
-        return VOS3_AI_GUARD_OK;
-    }
-
-    /* No context = not an AI workload = deny hardware access */
-    VOS3_WARN("AI Guard: hardware access denied (no AI context, app_id=%u)",
-              (unsigned)app_id);
     return VOS3_AI_GUARD_ERR_PERM;
 }
 
@@ -2278,7 +2278,8 @@ int vos3_ai_guard_get_app_status(uint8_t app_id, uint64_t* mem_used,
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    vos3_ai_guard_ctx_t* ctx = g_app_contexts[app_id];
+    vos3_ai_guard_ctx_t* ctx =
+        __atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE);
     if (ctx == NULL) {
         return VOS3_AI_GUARD_ERR_NOTFOUND;
     }
@@ -2326,7 +2327,8 @@ uint64_t vos3_ai_guard_scrub_model_regions(uint8_t app_id)
         return 0;
     }
 
-    vos3_ai_guard_ctx_t* ctx = g_app_contexts[app_id];
+    vos3_ai_guard_ctx_t* ctx =
+        __atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE);
     if (ctx == NULL) {
         return 0;
     }

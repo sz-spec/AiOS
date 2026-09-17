@@ -24,7 +24,13 @@ def state(output):
     return {'sources': {str(p.relative_to(ROOT)): sha(p) for p in sorted(paths)},
             'tools': versions, 'target': target,
             'environment': {k: os.environ.get(k, '') for k in
-                            ['CC', 'CFLAGS', 'CPPFLAGS', 'LDFLAGS', 'SOURCE_DATE_EPOCH']},
+                            ['CC', 'CC_FOR_BUILD', 'CFLAGS', 'CPPFLAGS', 'LDFLAGS',
+                             'LIBS', 'CFLAGS_FOR_BUILD', 'CFLAGS_FOR_TARGET',
+                             'CPPFLAGS_FOR_TARGET', 'LDFLAGS_FOR_TARGET',
+                             'NASMFLAGS_FOR_TARGET', 'NASMENV', 'SOURCE_DATE_EPOCH',
+                             'CC_FOR_TARGET', 'LD_FOR_TARGET', 'OBJCOPY_FOR_TARGET',
+                             'OBJDUMP_FOR_TARGET', 'READELF_FOR_TARGET', 'STRIP',
+                             'INSTALL', 'SED', 'GREP', 'AWK']},
             'artifacts': {name: sha(output/name) for name in ARTIFACTS}}
 
 def main():

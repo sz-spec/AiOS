@@ -24,6 +24,13 @@ The [review council](docs/design/evidence/expert-council-2026-09-15/README.md)
 records twenty specialized reviews by three reviewing agents and one coordinator.
 Its findings and the lifetime qualification limits remain explicit.
 
+The [60-day failure review](docs/design/evidence/expert-council-failures-60d-2026-09-17.md)
+records the current defects, recent primary engineering research and recommended
+acceptance gates. Clean builds now produce byte-identical ISO artifacts for the
+recorded source and pinned builder. Full-suite health throughput still fails;
+context-reader lifetime, build clock warnings, physical hardware and deployment
+remain open. Matching ISO bytes do not establish release readiness.
+
 The [native isolation gate](docs/design/evidence/native-isolation-qualification.md)
 tests four direct user-mode read/write attempts against another process and a
 supervisor kernel page, with correlated faults and continued victim progress.
@@ -44,8 +51,9 @@ separate, unqualified gates.
 now observes stale kernel translations replaced on every tested CPU, with a
 negative control that deliberately omits one CPU's invalidation. The normal
 kernel uses per-CPU generation acknowledgements and fails closed on incomplete
-shootdowns. Shared-user-VM lifetime, concurrent permission revocation and the
-existing COW/cognitive PTE-bit collision remain unresolved.
+shootdowns. The later shared-VM stage corrected the COW/cognitive PTE-bit
+collision and qualified bounded sequential lifetime transitions. Concurrent
+shared-user-VM mutation and remote permission revocation remain unresolved.
 
 The governing architecture is recorded in
 [core requirements](docs/design/CORE_REQUIREMENTS.md), alongside the supplied

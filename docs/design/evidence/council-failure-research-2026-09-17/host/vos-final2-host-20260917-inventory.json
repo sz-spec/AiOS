@@ -1,0 +1,70 @@
+{
+  "generated_utc": "2026-09-17T13:20:45.213104+00:00",
+  "repo": "/Users/sz/Desktop/vos/vos 5",
+  "base_head": "c1899b568a7974b46e31841c260cb0f7deb11f33",
+  "diff": {
+    "command": "git diff --binary HEAD",
+    "sha256": "abc6e7fc0b01ad7adcb3e3041355f7621a2f68fa267ef392ae3cd84936dc9f6f",
+    "size_bytes": 168481,
+    "scope": "Tracked working-tree/index differences against HEAD; excludes untracked files. Captured at inventory generation, not a claim tree was frozen during earlier tests."
+  },
+  "logs": [
+    {
+      "path": "/private/tmp/vos-final2-host-20260917-discovery.log",
+      "sha256": "d6a616febffff466033efc3bad4a22cdd1afadb693c423288971fb78b2e61093",
+      "size_bytes": 910,
+      "command": "python3 -m unittest discover -s scripts -p 'test_*.py'",
+      "exit_code": 0,
+      "result": {
+        "tests": 99,
+        "seconds": 57.364
+      }
+    },
+    {
+      "path": "/private/tmp/vos-final2-host-20260917-build-check.log",
+      "sha256": "94325691dbdf992cbba7f2abb5778547db5850ee344a5cbe52dc551d27231a14",
+      "size_bytes": 298,
+      "command": "make native-build-check",
+      "exit_code": 0,
+      "result": {
+        "groups": [
+          {
+            "tests": 3,
+            "seconds": 28.541
+          },
+          {
+            "tests": 1,
+            "seconds": 0.004
+          },
+          {
+            "tests": 1,
+            "seconds": 0.904
+          }
+        ]
+      }
+    },
+    {
+      "path": "/private/tmp/vos-final2-host-20260917-focused.log",
+      "sha256": "b913e5ec4c0680fc7b8bcc954e981decd8c2336f987bc522414de1ea1066d807",
+      "size_bytes": 1038,
+      "command": "python3 -m unittest scripts.test_msgqueue_lifetime scripts.test_mmio_fail_closed scripts.test_build_reproducibility -v",
+      "exit_code": 0,
+      "result": {
+        "tests": 6,
+        "seconds": 4.28
+      }
+    },
+    {
+      "path": "/private/tmp/vos-final2-host-20260917-diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": {
+        "empty_output": true
+      }
+    }
+  ],
+  "all_commands_completed": true,
+  "source_changes_by_inventory": false
+}

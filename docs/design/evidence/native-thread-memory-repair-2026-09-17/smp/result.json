@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "builder": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--mount",
+    "type=bind,src=/private/tmp/vos5-smp-final/source,dst=/vos3",
+    "-w",
+    "/vos3",
+    "-e",
+    "SOURCE_DATE_EPOCH=1700000000",
+    "-e",
+    "BUILD_JOBS=4",
+    "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+    "make",
+    "native",
+    "-j4",
+    "HEADLESS_AUDIT=1",
+    "NATIVE_SMP_WORKLOAD=1",
+    "NATIVE_SMP_TEST=1",
+    "BUILD_DIR=build/native-smp-final",
+    "INSTALLER_ISO=../dist/vos5-smp.iso"
+  ],
+  "commit": "c1899b568a7974b46e31841c260cb0f7deb11f33",
+  "dirty_diff_sha256": "94f998d771bfc2fba99f596d4eaeaad9b533f8ddca5bc505cd3fc3491068c627",
+  "scope": "diagnostic SMP only",
+  "cases": {
+    "bios1": {
+      "exit": 0,
+      "evidence": {
+        "passed": true,
+        "failures": [],
+        "worker_apic_ids": [
+          0
+        ],
+        "online_cpus": 1,
+        "scope": "single-CPU deterministic workload control",
+        "iso_sha256": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "iso_sha256_after": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "artifact_unchanged": true,
+        "firmware": "bios",
+        "cpu": "qemu64",
+        "smp": 1,
+        "observation_seconds": 45,
+        "exit_status": "observation_timeout"
+      }
+    },
+    "bios4": {
+      "exit": 0,
+      "evidence": {
+        "passed": true,
+        "failures": [],
+        "worker_apic_ids": [
+          0,
+          1
+        ],
+        "online_cpus": 4,
+        "scope": "actual user execution across CPU identities; no simultaneous execution/fairness proof",
+        "iso_sha256": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "iso_sha256_after": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "artifact_unchanged": true,
+        "firmware": "bios",
+        "cpu": "qemu64",
+        "smp": 4,
+        "observation_seconds": 45,
+        "exit_status": "observation_timeout"
+      }
+    },
+    "uefi1": {
+      "exit": 0,
+      "evidence": {
+        "passed": true,
+        "failures": [],
+        "worker_apic_ids": [
+          0
+        ],
+        "online_cpus": 1,
+        "scope": "single-CPU deterministic workload control",
+        "iso_sha256": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "iso_sha256_after": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "artifact_unchanged": true,
+        "firmware": "uefi",
+        "cpu": "qemu64",
+        "smp": 1,
+        "observation_seconds": 45,
+        "exit_status": "observation_timeout"
+      }
+    },
+    "uefi4": {
+      "exit": 0,
+      "evidence": {
+        "passed": true,
+        "failures": [],
+        "worker_apic_ids": [
+          0,
+          1
+        ],
+        "online_cpus": 4,
+        "scope": "actual user execution across CPU identities; no simultaneous execution/fairness proof",
+        "iso_sha256": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "iso_sha256_after": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+        "artifact_unchanged": true,
+        "firmware": "uefi",
+        "cpu": "qemu64",
+        "smp": 4,
+        "observation_seconds": 45,
+        "exit_status": "observation_timeout"
+      }
+    }
+  },
+  "build_exit": 0,
+  "iso_sha256": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+  "kernel_sha256": "22e20e399dce99556c1045a8c490fdccd2e9854f74b018f64c76a17a44e2f230",
+  "manifest_sha256": "cd9829304273c733e45295a40ff66b5fcb8926ed270203ede422b0ad02d4d92e",
+  "source_unchanged": true,
+  "source_changes": [],
+  "elapsed_seconds": 208.63704170798883
+}

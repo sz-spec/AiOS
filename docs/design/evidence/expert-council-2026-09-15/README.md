@@ -73,3 +73,26 @@ retirement before parent collection, mapped-survivor and no-double-release tests
 See the [creator-exit qualification](../native-shm-exit.md) for physical-page
 controls and the limits on zombie address spaces, concurrency and remote stopping.
 This supersedes the earlier absence of automatic creator-reference release.
+
+## Current review — 2026-09-17
+
+The [current technical council review](../expert-council-review-2026-09-17.md)
+records the new kernel, security, build, BIOS/UEFI and recent-source findings.
+The [product and hardware gap review](../expert-council-product-gaps-2026-09-17.md)
+turns those findings into measurable release gates. These reports preserve the
+same execution model: twenty specialized review roles rotated across the three
+available reviewing agents and the coordinator, not twenty independent people
+or an external certification.
+
+## Sixty-day failure review and experiment results — 2026-09-17
+
+The [consolidated failure council report](../expert-council-failures-60d-2026-09-17.md)
+extends recent-source research to July 19–September 17 and updates all known
+finding classes. It includes the full factorial performance matrix, the
+correction to the Frontier-only hypothesis, the bounded AI-context detach
+repair and independently reviewed recommendations. The
+[preserved raw evidence](../council-failure-research-2026-09-17/experiment-matrix.md)
+contains failed runs as well as passes. Byte-identical final2 builds are now
+verified for their frozen inputs and pinned builder; that supersedes the
+earlier absence of ISO reproducibility evidence, but not the open runtime,
+clock-skew, lifetime, hardware or release gates.

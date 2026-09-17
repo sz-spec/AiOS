@@ -336,6 +336,7 @@ typedef struct vos3_address_space {
         size_t size;
     } shm_mappings[VOS3_AS_MAX_SHM];
     uint32_t shm_count;
+    uint64_t mmap_next;         /**< Shared mmap cursor, protected by lock */
 } vos3_address_space_t;
 
 /**
@@ -416,6 +417,9 @@ int vos3_vmm_virt_to_phys(uintptr_t virt, uintptr_t* phys);
  * @return 1 if mapped, 0 if not mapped
  */
 int vos3_vmm_is_mapped(uintptr_t virt);
+/* Requires AS lock; bounded read-only check: 0, EEXIST, EAGAIN, or error. */
+int vos3_vmm_check_unmapped_locked(vos3_address_space_t* as, uintptr_t start, size_t size);
+int vos3_vmm_munmap_range(vos3_address_space_t* as, uintptr_t start, size_t size);
 
 /**
  * @brief Get page table entry for virtual address
@@ -424,8 +428,6 @@ int vos3_vmm_is_mapped(uintptr_t virt);
  * @return 0 on success, negative error code on failure
  */
 int vos3_vmm_get_pte(uintptr_t virt, vos3_pte_t* pte);
-/* Reject unsupported huge user leaves before destructive VMA edits. */
-int vos3_vmm_validate_user_unmap(uintptr_t start, size_t size);
 
 /**
  * @brief Write a PTE value directly (read-modify-write pattern)

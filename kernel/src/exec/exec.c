@@ -561,6 +561,11 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
     /* Copy parent task */
     memcpy(child, parent, sizeof(vos3_task_t));
     child->signal_state = NULL; /* Never alias the copied per-task signal state. */
+    child->wait_cleanup = NULL;
+    child->wait_cleanup_context = NULL;
+    child->wq_entry.task = NULL;
+    child->wq_entry.next = NULL;
+    child->wq_entry.queue = NULL;
 #ifdef NATIVE_SMP_WORKLOAD
     child->native_smp_reported = 0;
 #endif

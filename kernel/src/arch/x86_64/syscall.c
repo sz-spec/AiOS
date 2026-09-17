@@ -758,6 +758,11 @@ int64_t vos3_syscall_dispatch(vos3_syscall_frame_t* frame)
     /* Call handler */
     int64_t result = handler(frame);
 
+    /* The handler released subsystem locks; syscall_entry still has IF set.
+     * Blocking wait/exit and timer continuations can all reschedule IRQ-off,
+     * so they cannot be the sole opportunities to reclaim retired resources. */
+    vos3_sched_process_deferred();
+
     /* Deliver pending signals before returning to user space */
     extern void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t result);
     vos3_signal_deliver(frame, result);

@@ -1,0 +1,20 @@
+{
+  "scope": "Independent AI context detach review only; separate from council 52-file index",
+  "files": [
+    {
+      "path": "current.log",
+      "sha256": "446f87a636b158070a514d19873481a559a22f436874073f06ae3dbecb7eeef6",
+      "bytes": 258
+    },
+    {
+      "path": "baseline.log",
+      "sha256": "44976579392d7b2fe89d192fb35396d3d12e9d69670d87269648b979be90eed7",
+      "bytes": 1032
+    },
+    {
+      "path": "result.json",
+      "sha256": "16fd7c099e81fc4aed3565f93fa916ab9bb13b4d638e2476efd4b821af862e91",
+      "bytes": 338
+    }
+  ]
+}

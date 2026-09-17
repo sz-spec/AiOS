@@ -6,7 +6,7 @@
  *   T1: Massive Context (Gemini 3.1) — 1GB HugePage TLB hit rate >98%
  *   T2: Vision-Action Latency (GPT-5.4) — 128-byte SPSC >18M msgs/sec
  *   T3: Agent Team Isolation (Claude 4.6) — 32-thread XMM cold-boot zeroed
- *   T4: NPU-Direct Stress (Computer Use) — 60FPS WC injection, zero IRQ
+ *   T4: User MMIO denial — NPU hardware unavailable without authorized BAR registry
  *   T5: AI Guard Sandboxing (Red Team) — Guard revocation <10ms
  *
  * @version 1.0.0
@@ -80,9 +80,7 @@ static int g_scores[5] = {0, 0, 0, 0, 0};
 #define CLONE_SIGHAND   0x00000800UL
 #define CLONE_THREAD    0x00010000UL
 
-/* NPU constants */
-#define NPU_BAR_PHYS    0xFD000000ULL
-#define NPU_BAR_SIZE    (2UL * 1024 * 1024)   /* 2MB */
+/* User MMIO is unavailable until device capabilities are implemented. */
 
 /* HugePage constants */
 #define LARGE_PAGE_SIZE  (2UL * 1024 * 1024)   /* 2MB */
@@ -804,242 +802,32 @@ static void test_agent_isolation(void)
     }
 }
 
-/* ============================================================================
- * T4: NPU-DIRECT STRESS (Computer Use API)
- *
- * Create device SHM at NPU BAR (0xFD000000), simulate 60FPS frame injection.
- * Each frame: 32KB WC burst write using SSE2 MOVNTDQ (Non-Temporal Move).
- * MOVNTDQ bypasses L1/L2 cache — proves WC mapping effectiveness.
- * ============================================================================ */
-
-#define T4_FRAME_COUNT  60
-#define T4_FRAME_SIZE   (32UL * 1024)   /* 32KB per frame */
-#define T4_TARGET_FPS   60
-
-/**
- * @brief Non-temporal 16-byte streaming store (MOVNTDQ)
- *
- * Writes 128 bits from src to dst bypassing L1/L2 cache.
- * dst MUST be 16-byte aligned. Requires sfence after all NT stores.
- */
-static inline void movntdq_store_16(void* dst, const void* src)
-{
-    __asm__ volatile (
-        "movdqa  (%1), %%xmm0\n\t"
-        "movntdq %%xmm0, (%0)"
-        :
-        : "r" (dst), "r" (src)
-        : "xmm0", "memory"
-    );
-}
-
-/**
- * @brief Write a full frame (T4_FRAME_SIZE bytes) using MOVNTDQ streaming stores.
- *
- * Each 16-byte chunk is written with non-temporal hint, bypassing cache.
- * sfence at end flushes WC buffers to memory.
- */
-static void movntdq_write_frame(volatile void* base, int frame_id)
-{
-    /* 16-byte pattern for this frame */
-    xmm_pattern_t pattern __attribute__((aligned(16)));
-    pattern.lo = 0xA5A5A5A5A5A5A5A5ULL ^ ((uint64_t)(unsigned)frame_id << 32);
-    pattern.hi = 0xDEADBEEF00000000ULL | (uint64_t)(unsigned)frame_id;
-
-    unsigned long chunks = T4_FRAME_SIZE / 16;
-    char* dst = (char*)base;
-
-    for (unsigned long j = 0; j < chunks; j++) {
-        movntdq_store_16(dst + j * 16, &pattern);
-    }
-
-    /* sfence: flush WC write-combining buffers to memory */
-    __asm__ volatile ("sfence" ::: "memory");
-}
-
+/* T4: fail-closed user MMIO authorization; hardware score remains zero. */
 static void test_npu_direct_stress(void)
 {
-    printf("\n--- T4: NPU-Direct Stress (Computer Use API) ---\n");
-    printf("  Target: 60FPS WC injection at 0x%llX, zero kernel IRQ\n",
-           (unsigned long long)NPU_BAR_PHYS);
-
-    /* Create AI Guard app context */
-    long ctx_ret = syscall1(SYS_APP_CTX_CREATE, 8);  /* context 8 for frontier test */
-    if (ctx_ret < 0) {
-        printf("  [NOTE] App context creation returned %ld (may already exist)\n", ctx_ret);
-    }
-    syscall1(SYS_APP_CTX_SWITCH, 8);
-
-    /* Create device SHM */
-    long shm_id = syscall4(SYS_SHM_CREATE_DEVICE,
-                           (long)"npu_frontier",
-                           (long)NPU_BAR_PHYS,
-                           (long)NPU_BAR_SIZE,
-                           (long)VOS3_SHM_FLAG_DEVICE);
-    if (shm_id < 0) {
-        printf("  Device SHM creation failed: %ld\n", shm_id);
-        /* Still score partial credit for context creation */
-        g_scores[3] = 5;
-        syscall1(SYS_APP_CTX_SWITCH, 0);
-        syscall1(SYS_APP_CTX_DESTROY, 8);
-        TEST_FAIL("npu_direct_stress: device SHM failed (%ld)", shm_id);
+    g_scores[3] = 0;
+    printf("[UNAVAILABLE] NPU hardware/WC throughput: no authorized BAR registry\n");
+    if (syscall1(SYS_APP_CTX_CREATE, 7) < 0) {
+        TEST_FAIL("npu_mmio_denial: context creation failed");
         return;
     }
-
-    long addr = syscall2(SYS_SHM_MAP, shm_id, 0);
-    if (addr <= 0) {
-        /* Device MMIO range not mappable in this QEMU config — expected when
-         * no real PCI device exists at 0xFD000000.  Score partial credit for
-         * successful SHM creation + context lifecycle. */
-        printf("  [NOTE] Device SHM map returned %ld — QEMU has no PCI device at BAR\n", addr);
-        printf("  [NOTE] Context lifecycle validated (create/switch/destroy)\n");
-
-        syscall1(SYS_SHM_DESTROY, shm_id);
-        syscall1(SYS_APP_CTX_SWITCH, 0);
-        syscall1(SYS_APP_CTX_DESTROY, 8);
-
-        /* Fallback: exercise MOVNTDQ streaming stores on regular SHM region.
-         * MOVNTDQ bypasses L1/L2 cache — proves WC write path even in QEMU. */
-        printf("  Fallback: testing MOVNTDQ streaming stores on regular SHM...\n");
-        long fb_id = syscall3(SYS_SHM_CREATE, (long)"npu_fb", (long)NPU_BAR_SIZE, 0L);
-        int fb_ok = 0;
-        int nt_frames_ok = 0;
-        if (fb_id > 0) {
-            long fb_addr = syscall2(SYS_SHM_MAP, fb_id, 0);
-            if (fb_addr > 0) {
-                unsigned long long t0 = rdtsc();
-
-                /* Write 60 frames using MOVNTDQ non-temporal stores */
-                for (int f = 0; f < T4_FRAME_COUNT; f++) {
-                    movntdq_write_frame((volatile void*)fb_addr, f);
-                }
-                nt_frames_ok = 1;
-
-                unsigned long long t1 = rdtsc();
-
-                /* Verify last frame: MOVNTDQ wrote a uniform 16-byte pattern.
-                 * After sfence (inside movntdq_write_frame), data is visible. */
-                volatile uint64_t* vbase = (volatile uint64_t*)fb_addr;
-                uint64_t exp_lo = 0xA5A5A5A5A5A5A5A5ULL
-                                ^ ((uint64_t)(unsigned)(T4_FRAME_COUNT - 1) << 32);
-                uint64_t exp_hi = 0xDEADBEEF00000000ULL
-                                | (uint64_t)(unsigned)(T4_FRAME_COUNT - 1);
-                /* Check first 4 pairs (64 bytes) of last frame */
-                fb_ok = 1;
-                for (int c = 0; c < 4; c++) {
-                    if (vbase[c * 2] != exp_lo || vbase[c * 2 + 1] != exp_hi) {
-                        fb_ok = 0;
-                        break;
-                    }
-                }
-
-                unsigned long long elapsed = t1 - t0;
-                printf("[PERF] MOVNTDQ 60-frame burst: %llu cycles, verify=%s\n",
-                       elapsed, fb_ok ? "OK" : "FAIL");
-                printf("[PERF]   Store type:  Non-Temporal (cache bypass)\n");
-                printf("[PERF]   sfence:      After each frame\n");
-
-                syscall2(SYS_SHM_UNMAP, fb_id, fb_addr);
-            }
-            syscall1(SYS_SHM_DESTROY, fb_id);
-        }
-
-        /* Scoring: 20 points max
-         *   - App context lifecycle:       5 pts
-         *   - SHM allocation + mapping:    5 pts
-         *   - MOVNTDQ stores executed:     5 pts
-         *   - Data integrity verified:     5 pts
-         */
-        int score = 5;  /* context lifecycle OK */
-        if (fb_id > 0) score += 5;  /* SHM lifecycle OK */
-        if (nt_frames_ok) score += 5;  /* MOVNTDQ 60 frames written */
-        if (fb_ok) score += 5;  /* data integrity verified */
-        g_scores[3] = score;
-
-        if (fb_ok && nt_frames_ok) {
-            TEST_PASS("npu_direct_stress");
-        } else {
-            TEST_FAIL("npu_direct_stress: movntdq=%d verify=%d", nt_frames_ok, fb_ok);
-        }
+    if (syscall1(SYS_APP_CTX_SWITCH, 7) < 0) {
+        syscall1(SYS_APP_CTX_DESTROY, 7);
+        TEST_FAIL("npu_mmio_denial: context switch failed");
         return;
     }
-
-    printf("  Device SHM mapped at 0x%lx (%lu KB)\n", (unsigned long)addr,
-           NPU_BAR_SIZE / 1024);
-
-    /* Simulate 60 frames of MOVNTDQ streaming WC burst writes */
-    unsigned long long frame_cycles[T4_FRAME_COUNT];
-    unsigned long long max_frame = 0;
-    unsigned long long total_cycles = 0;
-    unsigned long ms_start = get_uptime_ms();
-
-    for (int f = 0; f < T4_FRAME_COUNT; f++) {
-        unsigned long long t0 = rdtsc();
-        movntdq_write_frame((volatile void*)addr, f);
-        unsigned long long t1 = rdtsc();
-        unsigned long long delta = t1 - t0;
-        frame_cycles[f] = delta;
-        total_cycles += delta;
-        if (delta > max_frame) max_frame = delta;
-    }
-
-    unsigned long ms_end = get_uptime_ms();
-    unsigned long elapsed_ms = ms_end - ms_start;
-    unsigned long long avg_cycles = total_cycles / T4_FRAME_COUNT;
-
-    /* Verify last frame (MOVNTDQ uniform 16-byte pattern) */
-    volatile uint64_t* vbase = (volatile uint64_t*)addr;
-    uint64_t exp_lo = 0xA5A5A5A5A5A5A5A5ULL
-                    ^ ((uint64_t)(unsigned)(T4_FRAME_COUNT - 1) << 32);
-    uint64_t exp_hi = 0xDEADBEEF00000000ULL
-                    | (uint64_t)(unsigned)(T4_FRAME_COUNT - 1);
-    int verify_ok = 1;
-    for (int c = 0; c < 4; c++) {
-        if (vbase[c * 2] != exp_lo || vbase[c * 2 + 1] != exp_hi) {
-            verify_ok = 0;
-            break;
-        }
-    }
-
-    unsigned long long effective_fps = 0;
-    if (elapsed_ms > 0) {
-        effective_fps = (unsigned long long)T4_FRAME_COUNT * 1000ULL / elapsed_ms;
-    }
-
-    printf("[PERF] NPU-Direct MOVNTDQ 60FPS Simulation:\n");
-    printf("[PERF]   Frames:         %d\n", T4_FRAME_COUNT);
-    printf("[PERF]   Frame size:     %lu KB\n", T4_FRAME_SIZE / 1024);
-    printf("[PERF]   Store type:     MOVNTDQ (Non-Temporal, cache bypass)\n");
-    printf("[PERF]   Avg cycles/frame: %llu\n", avg_cycles);
-    printf("[PERF]   Max cycles/frame: %llu\n", max_frame);
-    printf("[PERF]   Wall time:      %lu ms\n", elapsed_ms);
-    printf("[PERF]   Effective FPS:  %llu\n", effective_fps);
-    printf("[PERF]   Data verify:    %s\n", verify_ok ? "OK" : "FAIL");
-
-    /* Cleanup */
-    syscall2(SYS_SHM_UNMAP, shm_id, addr);
-    syscall1(SYS_SHM_DESTROY, shm_id);
-    syscall1(SYS_APP_CTX_SWITCH, 0);
-    syscall1(SYS_APP_CTX_DESTROY, 8);
-
-    /* Scoring: 20 points max
-     *   - App context lifecycle:       5 pts
-     *   - SHM allocation + mapping:    5 pts
-     *   - MOVNTDQ stores executed:     5 pts
-     *   - Data integrity verified:     5 pts
-     */
-    int score = 5;  /* context lifecycle */
-    score += 5;     /* device SHM mapped */
-    score += 5;     /* MOVNTDQ 60 frames */
-    if (verify_ok) score += 5;
-
-    g_scores[3] = score;
-
-    if (verify_ok) {
-        TEST_PASS("npu_direct_stress");
+    long id = syscall4(SYS_SHM_CREATE_DEVICE, (long)"unowned_mmio",
+                       (long)0xFD000000ULL, (long)4096,
+                       (long)VOS3_SHM_FLAG_DEVICE);
+    /* This is an unowned address, not an asserted device or RAM fixture. */
+    if (id >= 0 && id != (long)0xFFFFFFFFU) {
+        syscall1(SYS_SHM_DESTROY, id);
+        TEST_FAIL("npu_mmio_denial: unowned MMIO authorized");
     } else {
-        TEST_FAIL("npu_direct_stress: MOVNTDQ verify failed");
+        TEST_PASS("npu_mmio_denial (not hardware performance)");
     }
+    syscall1(SYS_APP_CTX_SWITCH, 0);
+    syscall1(SYS_APP_CTX_DESTROY, 7);
 }
 
 /* ============================================================================
@@ -1171,17 +959,9 @@ int main(int argc, char* argv[])
     int total = 0;
     for (int i = 0; i < 5; i++) total += g_scores[i];
 
-    const char* grade;
-    if      (total >= 95) grade = "A+";
-    else if (total >= 90) grade = "A";
-    else if (total >= 80) grade = "B+";
-    else if (total >= 70) grade = "B";
-    else if (total >= 60) grade = "C";
-    else                  grade = "D";
-
     printf("\n");
     printf("==========================================\n");
-    printf("  2026 FRONTIER AI READINESS SCORE\n");
+    printf("  2026 FRONTIER COVERAGE SCORE\n");
     printf("==========================================\n");
     printf("  T1: Massive Context  (Gemini 3.1)  %2d/20\n", g_scores[0]);
     printf("  T2: Vision-Action    (GPT-5.4)     %2d/20\n", g_scores[1]);
@@ -1190,7 +970,7 @@ int main(int argc, char* argv[])
     printf("  T5: AI Guard         (Red Team)    %2d/20\n", g_scores[4]);
     printf("  ----------------------------------------\n");
     printf("  TOTAL:                              %2d/100\n", total);
-    printf("  GRADE:                              %s\n", grade);
+    printf("  QUALIFICATION: INCOMPLETE — NPU hardware unavailable\n");
     printf("==========================================\n");
 
     printf("\n");

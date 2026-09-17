@@ -36,10 +36,12 @@ static uint8_t g_shm_creator_released[64];
 static uint32_t g_shm_pending_creators[64];
 static vos3_task_t caller={11};
 static unsigned locked,freed,backings;
+static unsigned deferred_requests;
 static void check(int ok,const char *why){if(!ok){fprintf(stderr,"FAIL %s\n",why);exit(1);}}
 static uint64_t shm_registry_lock(void){check(!locked,"nested registry lock");locked=1;return 0;}
 static void shm_registry_unlock(uint64_t flags){(void)flags;check(locked,"unlock ownership");locked=0;}
 static vos3_task_t *vos3_sched_current(void){return &caller;}
+static void vos3_sched_request_deferred(void){deferred_requests++;}
 static void vos3_vmm_unmap_pages(uintptr_t a,size_t n){(void)a;(void)n;check(!locked,"VMM outside lock");}
 static void vos3_pmm_free_huge(uintptr_t p){(void)p;check(!locked,"huge outside lock");backings++;}
 static void vos3_pmm_free_pages(uintptr_t p,size_t n){(void)p;check(!locked,"PMM outside lock");backings+=(unsigned)n;}
@@ -53,6 +55,7 @@ int main(void){
  uint32_t a=region(1,11,1),b=region(2,11,2),other=region(3,22,1);
  vos3_shm_owner_exit(0);check(!g_shm_pending_creators[1],"zero owner ignored");
  vos3_shm_owner_exit(11);vos3_shm_owner_exit(11);
+ check(deferred_requests==1,"creator release publishes deferred work once");
  check(shm_get(a)->ref_count==1&&shm_get(b)->ref_count==2&&!freed,"transfer preserves existing pins");
  check(g_shm_pending_creators[1]==a&&g_shm_pending_creators[2]==b&&!g_shm_pending_creators[3],"full handles and unrelated owner");
  check(shm_release_owned(a,1)==-22&&shm_get(a)->ref_count==1,"explicit after exit cannot steal pending pin");

@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "failures": [],
+  "worker_apic_ids": [
+    0,
+    1
+  ],
+  "online_cpus": 4,
+  "scope": "actual user execution across CPU identities; no simultaneous execution/fairness proof",
+  "iso_sha256": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+  "iso_sha256_after": "28acdee910cab6adcad1169ec182e2429d9aeebca5c179d09931a6900d6be5f3",
+  "artifact_unchanged": true,
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 4,
+  "observation_seconds": 45,
+  "exit_status": "observation_timeout"
+}

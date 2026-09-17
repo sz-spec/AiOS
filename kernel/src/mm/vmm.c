@@ -24,6 +24,7 @@
 #include "../../include/vos/percpu.h"
 #include "../../include/vos/entry_state.h"
 #include "../../include/vos/vfs.h"
+#include "../../include/vos/heap.h"
 /* Note: AI PTE bit constants (VOS3_PTE_AI_MASK etc.) are now defined
  * directly in vmm.h, eliminating the vmm -> ai_guard layering violation.
  * ai_guard.h includes vmm.h and re-exports them. */
@@ -695,26 +696,128 @@ size_t vos3_vmm_unmap_range(uintptr_t virt_start, size_t size)
     return unmapped;
 }
 
-int vos3_vmm_validate_user_unmap(uintptr_t start, size_t size)
+/* Caller holds as->lock with interrupts disabled. At most 4096 walks
+ * (four levels each): sparse reservations skip absent subtrees. Dense empty
+ * page tables beyond this budget return EAGAIN without changing any state. */
+int vos3_vmm_check_unmapped_locked(vos3_address_space_t* as,
+                                  uintptr_t start, size_t size)
 {
-    if ((start & 4095U) || !size || (size & 4095U) ||
-        start > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - start + 1U) return -22;
-    vos3_task_t* task = vos3_sched_current();
-    if (!task || !task->address_space) return -22;
-    vos3_address_space_t* as = task->address_space;
+    if (!as || !as->pml4 || (start & 4095U) || !size || (size & 4095U) ||
+        start > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - start + 1U)
+        return -22;
+    uintptr_t end = start + size;
+    unsigned int budget = 4096U;
+    for (uintptr_t va = start; va < end;) {
+        if (budget == 0U) return -11;
+        --budget;
+        int level = 0;
+        vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
+        if (!pte || level < 1 || level > 4) return -5;
+        if (vos3_pte_is_present(*pte)) return -17;
+        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
+        va = (va | (span - 1U)) + 1U;
+    }
+    return 0;
+}
+
+/* Serialize VMA splitting and PTE removal with mmap/mprotect. The bounded
+ * journal is allocated before disabling interrupts; last page/file releases
+ * occur after unlock. No mutation occurs on any preflight failure. */
+int vos3_vmm_munmap_range(vos3_address_space_t* as, uintptr_t addr, size_t size)
+{
+    if (!as || !as->pml4 || (addr & 4095U) || !size || (size & 4095U) ||
+        addr > VOS3_USER_SPACE_END || size > VOS3_USER_SPACE_END - addr + 1U)
+        return -22;
+    struct removed_page { vos3_pte_t* entry; uintptr_t phys, va; };
+    size_t capacity = size / VOS3_PAGE_SIZE;
+    if (capacity > 4096U) capacity = 4096U;
+    struct removed_page* pages = vos3_kmalloc(capacity * sizeof(*pages));
+    if (!pages) return -12;
+    vos3_file_t* files[VOS3_MAX_VMAS];
+    unsigned page_count = 0, file_count = 0, budget = 4096U;
+    int result = 0;
     vos3_irqflags_t irq = vos3_irq_save();
     vos3_spinlock_acquire(&as->lock);
-    int result = 0;
-    for (uintptr_t va = start; va < start + size;) {
-        int level = 4;
+    for (uintptr_t va = addr; va < addr + size;) {
+        if (!budget--) { result = -11; goto finish; }
+        int level = 0;
         vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
-        if (pte && vos3_pte_is_present(*pte) && level != 4) { result = -95; break; }
-        /* Skip an absent subtree rather than scanning every page in a hole. */
+        if (!pte || level < 1 || level > 4) { result = -5; goto finish; }
+        if (vos3_pte_is_present(*pte)) {
+            if (level != 4) { result = -95; goto finish; }
+            if (vos3_vmm_find_vma(as, va)) {
+                pages[page_count++] = (struct removed_page){pte,
+                    address_in_shm(as, va) ? 0 : vos3_pte_get_addr(*pte), va};
+            }
+        }
         uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
-        va = (va | (span - 1)) + 1;
+        va = (va | (span - 1U)) + 1U;
     }
+    uint64_t end = addr + size;
+    int split_slot = -1, split_index = -1;
+    vos3_file_t* split_file = NULL;
+
+    /* A contiguous removal can split at most one nonoverlapping VMA. Reserve
+       its metadata/backing reference before changing any mapping. */
+    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+        vos3_vma_t* v = &as->vmas[i];
+        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
+        if (addr > v->vm_start && end < v->vm_end) {
+            if (split_index >= 0) { result = -22; goto finish; } /* Reject corrupt overlapping VMAs. */
+            split_index = (int)i;
+        }
+    }
+    if (split_index >= 0) {
+        for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i)
+            if (!as->vmas[i].valid) { split_slot = (int)i; break; }
+        if (split_slot < 0) { result = -12; goto finish; }
+        vos3_vma_t* v = &as->vmas[split_index];
+        if (v->vm_file) {
+            split_file = v->vm_file;
+            int retained = vos3_file_retain(split_file);
+            if (retained != 0) { result = retained; goto finish; }
+        }
+    }
+    for (unsigned i = 0; i < page_count; ++i) {
+        *pages[i].entry = 0;
+        vos3_atomic_fetch_sub64(&g_vmm_stats.pages_mapped, 1ULL);
+        vos3_vmm_invlpg(pages[i].va);
+    }
+    for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i) {
+        if ((int)i == split_slot) continue;
+        vos3_vma_t* v = &as->vmas[i];
+        if (!v->valid || addr >= v->vm_end || end <= v->vm_start) continue;
+        uint64_t lo = addr > v->vm_start ? addr : v->vm_start;
+        uint64_t hi = end < v->vm_end ? end : v->vm_end;
+
+        if (lo == v->vm_start && hi == v->vm_end) {
+            vos3_file_t* backing = v->vm_file;
+            v->valid = 0; v->vm_file = NULL;
+            if (as->num_vmas) --as->num_vmas;
+            if (backing) files[file_count++] = backing;
+        } else if (lo == v->vm_start) {
+            v->vm_offset += hi - v->vm_start; v->vm_start = hi;
+        } else if (hi == v->vm_end) {
+            v->vm_end = lo;
+        } else {
+            vos3_vma_t* tail = &as->vmas[split_slot];
+            *tail = *v;
+            tail->vm_start = hi;
+            tail->vm_offset += hi - v->vm_start;
+            tail->vm_file = split_file;
+            v->vm_end = lo;
+            ++as->num_vmas;
+        }
+    }
+finish:
     vos3_spinlock_release(&as->lock);
     vos3_irq_restore(irq);
+    if (result == 0) {
+        for (unsigned i = 0; i < page_count; ++i)
+            if (pages[i].phys) vos3_pmm_free(pages[i].phys);
+    }
+    for (unsigned i = 0; i < file_count; ++i) vos3_fd_put(files[i]);
+    vos3_kfree(pages);
     return result;
 }
 
@@ -933,13 +1036,30 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
     vos3_irqflags_t irq = vos3_irq_save();
     vos3_spinlock_acquire(&as->lock);
 
-    for (uintptr_t va = addr; va < end; va += VOS3_PAGE_SIZE) {
-        int level;
+    unsigned walk_budget = 4096U;
+    for (uintptr_t va = addr; va < end;) {
+        if (!walk_budget--) { error = -11; goto abort; }
+        int level = 0;
         vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
-        int resident = pte && vos3_pte_is_present(*pte);
-        if (!resident && !vos3_vmm_find_vma(as, va)) goto abort;
+        if (!pte || level < 1 || level > 4) { error = -5; goto abort; }
+        int resident = vos3_pte_is_present(*pte);
         /* Partial huge-page permission splitting is not implemented. */
         if (resident && level != 4) { error = -95; goto abort; }
+        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
+        uintptr_t next = (va | (span - 1U)) + 1U;
+        if (next > end) next = end;
+        if (!resident) {
+            /* The whole skipped hole must be covered, not just its first byte. */
+            uintptr_t covered = va;
+            unsigned cover_budget = VOS3_MAX_VMAS;
+            while (covered < next) {
+                if (!cover_budget--) goto abort;
+                vos3_vma_t* vma = vos3_vmm_find_vma(as, covered);
+                if (!vma || vma->vm_end <= covered) goto abort;
+                covered = vma->vm_end;
+            }
+        }
+        va = next;
     }
     for (unsigned i = 0; i < VOS3_MAX_VMAS; ++i) {
         vos3_vma_t old = as->vmas[i];
@@ -965,10 +1085,12 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
     }
     for (unsigned i = 0; i < VOS3_MAX_VMAS; ++i) as->vmas[i] = planned[i];
     as->num_vmas = count;
-    for (uintptr_t va = addr; va < end; va += VOS3_PAGE_SIZE) {
+    for (uintptr_t va = addr; va < end;) {
         int level;
         vos3_pte_t* pte = walk_page_tables(as->pml4, va, 0, 1, &level);
-        if (!pte || !vos3_pte_is_present(*pte)) continue;
+        uintptr_t span = (uintptr_t)1 << (12 + 9 * (4 - level));
+        uintptr_t next = (va | (span - 1U)) + 1U;
+        if (!vos3_pte_is_present(*pte)) { va = next; continue; }
         uint64_t value = *pte & ~(VOS3_PTE_USER | VOS3_PTE_WRITABLE |
                                   VOS3_PTE_NO_EXECUTE | VOS3_PTE_COW);
         if (prot) value |= VOS3_PTE_USER;
@@ -979,6 +1101,7 @@ int vos3_vmm_mprotect_range(uintptr_t addr, size_t len, int prot)
         }
         *pte = value;
         vos3_vmm_invlpg(va);
+        va = next;
     }
     vos3_spinlock_release(&as->lock);
     vos3_irq_restore(irq);
@@ -1079,6 +1202,7 @@ vos3_address_space_t* vos3_vmm_create_address_space(void)
     as->flags = 0U;
     as->brk = 0ULL;
     as->brk_start = 0ULL;
+    as->mmap_next = 0x0000000030000000ULL;
 
     /* Explicitly clear user-space entries (0-255) - they should already be zero
      * from alloc_page_table, but be defensive */
@@ -1235,6 +1359,7 @@ void vos3_vmm_destroy_address_space(vos3_address_space_t* as)
     g_retired_spaces = as;
     vos3_spinlock_release(&g_retired_lock);
     vos3_irq_restore(irq);
+    vos3_sched_request_deferred();
 }
 
 void vos3_vmm_reap_address_spaces(void)
@@ -1714,39 +1839,39 @@ vos3_address_space_t* vos3_vmm_clone_cow(vos3_address_space_t* src)
     vos3_irqflags_t irqflags = vos3_irq_save();
     vos3_spinlock_acquire(&src->lock);
 
-    /* Clone page tables with COW semantics */
-    dst->pml4 = clone_pt_level_cow(src->pml4, 4, 0);
-
-    vos3_spinlock_release(&src->lock);
-    vos3_irq_restore(irqflags);
-
-    if (dst->pml4 == NULL) {
-        VOS3_ERROR("VMM: clone_cow - failed to clone page tables");
-        free_page_table(dst->user_pml4);
-        vos3_pmm_free(phys);
-        return NULL;
-    }
-
-    dst->pml4_phys = vos3_virt_to_phys((const void*)dst->pml4);
-    dst->lock = VOS3_SPINLOCK_INIT;
-    dst->ref_count = 1U;
+    /* Snapshot page tables and all VMA backing ownership in one transaction. */
+    dst->mmap_next = src->mmap_next;
     dst->flags = src->flags;
     dst->brk = src->brk;
     dst->brk_start = src->brk_start;
-
-    /* Copy VMA descriptors (mmap regions) */
-    for (uint32_t i = 0; i < VOS3_MAX_VMAS; i++) {
+    dst->lock = VOS3_SPINLOCK_INIT;
+    dst->ref_count = 1U;
+    int snapshot_error = src->shm_count != 0;
+    for (uint32_t i = 0; !snapshot_error && i < VOS3_MAX_VMAS; i++) {
         vos3_vma_t part = src->vmas[i];
         if (part.valid && part.vm_file && vos3_file_retain(part.vm_file) != 0) {
-            /* Only earlier entries have acquired backing ownership. The
-             * zeroed remaining entries must not release borrowed references. */
-            vos3_vmm_destroy_address_space(dst);
-            vos3_vmm_flush_tlb();
-            return NULL;
+            snapshot_error = 1;
+            break;
         }
         dst->vmas[i] = part;
     }
-    dst->num_vmas = src->num_vmas;
+    if (!snapshot_error) {
+        dst->num_vmas = src->num_vmas;
+        dst->pml4 = clone_pt_level_cow(src->pml4, 4, 0);
+    }
+    vos3_spinlock_release(&src->lock);
+    vos3_irq_restore(irqflags);
+
+    if (snapshot_error || !dst->pml4) {
+        for (uint32_t i = 0; i < VOS3_MAX_VMAS; ++i)
+            if (dst->vmas[i].valid && dst->vmas[i].vm_file)
+                vos3_fd_put(dst->vmas[i].vm_file);
+        free_page_table(dst->user_pml4);
+        vos3_pmm_free(phys);
+        vos3_vmm_flush_tlb();
+        return NULL;
+    }
+    dst->pml4_phys = vos3_virt_to_phys((const void*)dst->pml4);
 
     /* Flush TLB to ensure parent sees read-only COW pages */
     vos3_vmm_flush_tlb();

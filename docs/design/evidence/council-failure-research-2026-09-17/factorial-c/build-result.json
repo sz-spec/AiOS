@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "initial_attempt": "Sandbox Docker permission denied; original build.log retained. Approved rerun completed.",
+  "log": "build-approved.log",
+  "source_unchanged": true,
+  "iso": "/private/tmp/vos-factorial-c-newkernel-olduser-20260917/source/dist/final-full.iso",
+  "iso_sha256": "49188a78e05870281c23798ffc7216bd986e38e969e187c30f6ce337a35201ed",
+  "runtime": "Not launched; awaiting coordinator isolation slot"
+}

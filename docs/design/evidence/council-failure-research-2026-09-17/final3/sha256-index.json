@@ -1,0 +1,101 @@
+{
+  "scope": "Verbatim original evidence copies; generated index and follow-up documentation excluded",
+  "files": [
+    {
+      "path": "source-manifest.json",
+      "original_path": "/private/tmp/vos-final3-freeze-20260917/source-manifest.json",
+      "bytes": 950711,
+      "sha256": "e0fe76941a5eab65d982b19cbb9f1f1ff07bbb73d0894418416a6750b08e7fc4"
+    },
+    {
+      "path": "tracked-before-build.patch",
+      "original_path": "/private/tmp/vos-final3-freeze-20260917/tracked.patch",
+      "bytes": 174682,
+      "sha256": "78a5dbe9c53b47b805aa2eb037a7375e9fa123a17e86035bc624208c6bea1bfd"
+    },
+    {
+      "path": "repro/result.json",
+      "original_path": "/private/tmp/vos-final3-repro-20260917/result.json",
+      "bytes": 3795,
+      "sha256": "aa9f8034177e625c26bb9e31644da538491a134e3968a0ed6e8f45c08c69816e"
+    },
+    {
+      "path": "source-revalidation.json",
+      "original_path": "/private/tmp/vos-final3-repro-20260917/source-revalidation.json",
+      "bytes": 585,
+      "sha256": "044b6094ee2cb468108879482b0cf62d246d8a6c4ca295f668d341285a6ce67b"
+    },
+    {
+      "path": "repro/independent-review.json",
+      "original_path": "/private/tmp/vos-final3-repro-20260917/final3-independent-review.json",
+      "bytes": 11270,
+      "sha256": "eea8e98312ccd5d6edfc95d529d5b34778ac5d815f68d7c1ba1c944e8c36303c"
+    },
+    {
+      "path": "repro/0-build.log",
+      "original_path": "/private/tmp/vos-final3-repro-20260917/0/build.log",
+      "bytes": 404263,
+      "sha256": "91a90fe48dd126ca7a24f6648fb3e5b2dfec387bfa740f4ac65a16ded070d2e9"
+    },
+    {
+      "path": "repro/1-build.log",
+      "original_path": "/private/tmp/vos-final3-repro-20260917/1/build.log",
+      "bytes": 404263,
+      "sha256": "f34dfa2b9342bccf378e6064f8d924ed412e50ad54fc84f2a93a973a4fe1472b"
+    },
+    {
+      "path": "uefi/runner.py",
+      "original_path": "/private/tmp/vos-final-uefi-runner.py",
+      "bytes": 3796,
+      "sha256": "2412394dde8105f87d1ff8404f2a7c1821163a4f145412e7f530783f936db719"
+    },
+    {
+      "path": "bios/result.json",
+      "original_path": "/private/tmp/vos-final3-bios-20260917/result.json",
+      "bytes": 6597,
+      "sha256": "41e75a11db7217db27a2abf4da71f48e36fda7e09eec40df9830a6eeddca5ff8"
+    },
+    {
+      "path": "bios/serial.log",
+      "original_path": "/private/tmp/vos-final3-bios-20260917/serial.log",
+      "bytes": 593089,
+      "sha256": "f3dd526d9dc90b1e4ebc7bf7deee9097bcb04cf8a6f3c32ea199b5921548fd17"
+    },
+    {
+      "path": "uefi/result.json",
+      "original_path": "/private/tmp/vos-final3-uefi-20260917/result.json",
+      "bytes": 7470,
+      "sha256": "3aa692bdcb1b710d0448ed989157e909d88db06d7923801279a5e9fe24ca6290"
+    },
+    {
+      "path": "uefi/serial.log",
+      "original_path": "/private/tmp/vos-final3-uefi-20260917/serial.log",
+      "bytes": 594180,
+      "sha256": "f7cef4837fef05f98f13bc75dca5bc2b13ab2b178c656e2983cd2534f3e1e8ec"
+    },
+    {
+      "path": "uefi/invocation.json",
+      "original_path": "/private/tmp/vos-final3-uefi-20260917/invocation.json",
+      "bytes": 2733,
+      "sha256": "56aec8dcb1cf2f9fe2752045b5fad5e1aca932ed596e76341d5f3fb472063e21"
+    },
+    {
+      "path": "host/discovery.log",
+      "original_path": "/private/tmp/vos-final3-host-20260917-discovery.log",
+      "bytes": 912,
+      "sha256": "fb7a7aa287394941cf6bcc539cc6608d03a299b850f8736fbb935275b6bb950b"
+    },
+    {
+      "path": "host/build-check.log",
+      "original_path": "/private/tmp/vos-final3-host-20260917-build-check.log",
+      "bytes": 298,
+      "sha256": "6f1e3879367a4c7bfae2e341ed4720864ca4ec49adb9e163d56415d95d34d4fc"
+    },
+    {
+      "path": "uefi/independent-review.json",
+      "original_path": "/private/tmp/vos-final3-repro-20260917/final3-uefi-independent-review.json",
+      "bytes": 7413,
+      "sha256": "07ec0472262a2b76c8cb63569c7c88ca64859ce3bcdfdf06f1a17f735d75855c"
+    }
+  ]
+}

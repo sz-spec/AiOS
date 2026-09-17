@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "manifest_sha256": "e0fe76941a5eab65d982b19cbb9f1f1ff07bbb73d0894418416a6750b08e7fc4",
+  "builder": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "epoch": 1700000000,
+  "runs": [
+    {
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "vos-repro-b33749fd461b43df8517ff7779b04ea9",
+        "--network",
+        "none",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "--mount",
+        "type=bind,src=/private/tmp/vos-final3-repro-20260917/0/source,dst=/vos3",
+        "-w",
+        "/vos3",
+        "-e",
+        "SOURCE_DATE_EPOCH=1700000000",
+        "-e",
+        "BUILD_JOBS=4",
+        "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+        "make",
+        "native",
+        "-j4",
+        "BENCH_MODE=1",
+        "HEADLESS_AUDIT=1",
+        "BUILD_DIR=build/native-full-final",
+        "INSTALLER_ISO=../dist/final-full.iso"
+      ],
+      "source_unchanged": true,
+      "artifacts": {
+        "dist/final-full.iso": "bcd3e545f38de19ce0c248dae1701be9f7c4386cd6453d5dbeac53932429d62c",
+        "kernel/build/native-full-final/vos3.elf": "dd44631c660b99aee079959a17cff97c25f156baf1ac415d1045e59e8dc8c8d4",
+        "kernel/build/limine/bin/limine": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+        "kernel/build/limine/bin/limine-bios.sys": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+        "kernel/build/limine/bin/limine-bios-cd.bin": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+        "kernel/build/limine/bin/limine-uefi-cd.bin": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+        "kernel/build/limine/bin/BOOTX64.EFI": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+        "kernel/build/limine/bin/BOOTIA32.EFI": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e"
+      }
+    },
+    {
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "vos-repro-19edf5957fbc4215984d4d8121ad345c",
+        "--network",
+        "none",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "--mount",
+        "type=bind,src=/private/tmp/vos-final3-repro-20260917/1/source,dst=/vos3",
+        "-w",
+        "/vos3",
+        "-e",
+        "SOURCE_DATE_EPOCH=1700000000",
+        "-e",
+        "BUILD_JOBS=4",
+        "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+        "make",
+        "native",
+        "-j4",
+        "BENCH_MODE=1",
+        "HEADLESS_AUDIT=1",
+        "BUILD_DIR=build/native-full-final",
+        "INSTALLER_ISO=../dist/final-full.iso"
+      ],
+      "source_unchanged": true,
+      "artifacts": {
+        "dist/final-full.iso": "bcd3e545f38de19ce0c248dae1701be9f7c4386cd6453d5dbeac53932429d62c",
+        "kernel/build/native-full-final/vos3.elf": "dd44631c660b99aee079959a17cff97c25f156baf1ac415d1045e59e8dc8c8d4",
+        "kernel/build/limine/bin/limine": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+        "kernel/build/limine/bin/limine-bios.sys": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+        "kernel/build/limine/bin/limine-bios-cd.bin": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+        "kernel/build/limine/bin/limine-uefi-cd.bin": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+        "kernel/build/limine/bin/BOOTX64.EFI": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+        "kernel/build/limine/bin/BOOTIA32.EFI": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e"
+      }
+    }
+  ]
+}

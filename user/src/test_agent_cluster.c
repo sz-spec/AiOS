@@ -330,6 +330,7 @@ typedef struct {
     volatile uint32_t visited[BFS_NODES / 32]; /* 256-bit visited bitmap */
     volatile uint32_t result_count;            /* Nodes discovered */
     volatile uint32_t done_agents;             /* Agents that finished */
+    volatile uint32_t processed_items;          /* Exact shared work count */
 } graph_state_t;
 
 /**
@@ -430,6 +431,12 @@ static void distributed_bfs_32_agents(void)
     graph->visited[0] |= 1U;
     graph->result_count = 1;
     graph->done_agents = 0;
+    graph->processed_items = 0;
+    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) {
+        TEST_FAIL("distributed_bfs_32_agents: detach failed%s", "");
+        syscall1(SYS_SHM_DESTROY, shm_id);
+        return;
+    }
 
     /* Submit initial work item (node 0) */
     dispatch_item_t seed;
@@ -440,16 +447,16 @@ static void distributed_bfs_32_agents(void)
     seed.payload_size = 1;
 
     /* Fork 32 agents */
-    pid_t agents[BFS_AGENTS];
+    pid_t agents[BFS_AGENTS] = {0};
     int fork_ok = 1;
 
     for (int i = 0; i < BFS_AGENTS; i++) {
         pid_t pid = fork();
         if (pid == 0) {
-            /* Child: must re-map SHM to get true shared pages (fork COW breaks sharing) */
+            /* Each worker acquires its own public mapping after fork. */
             long child_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
             if (child_addr <= 0) {
-                syscall1(SYS_EXIT, 1);
+                _exit(1);
             }
             graph_state_t* g = (graph_state_t*)(unsigned long)child_addr;
 
@@ -462,11 +469,11 @@ static void distributed_bfs_32_agents(void)
             long slot = agent_register(name, CAP_SEARCH);
             if (slot < 0) {
                 syscall2(SYS_SHM_UNMAP, shm_id, child_addr);
-                syscall1(SYS_EXIT, 1);
+                _exit(1);
             }
 
             unsigned long deadline = get_uptime_ms() + 5000; /* 5s timeout */
-            int items_done = 0;
+            int items_done = 0, worker_errors = 0;
             dispatch_item_t work;
 
             while (get_uptime_ms() < deadline) {
@@ -500,12 +507,12 @@ static void distributed_bfs_32_agents(void)
                                 new_work.priority = 2;
                                 new_work.payload_addr = (uint64_t)(unsigned long)nb;
                                 new_work.payload_size = 1;
-                                dispatch_submit(&new_work);
+                                if (dispatch_submit(&new_work) < 0) worker_errors++;
                             }
                         }
                     }
 
-                    dispatch_complete(slot, (long)work.item_id);
+                    if (dispatch_complete(slot, (long)work.item_id) < 0) worker_errors++;
                     items_done++;
                 } else {
                     /* No work available — check if BFS is done */
@@ -517,9 +524,11 @@ static void distributed_bfs_32_agents(void)
             }
 
             __atomic_fetch_add(&g->done_agents, 1, __ATOMIC_SEQ_CST);
-            agent_deregister(slot);
-            syscall2(SYS_SHM_UNMAP, shm_id, child_addr);
-            syscall1(SYS_EXIT, items_done > 255 ? 255 : items_done);
+            __atomic_fetch_add(&g->processed_items, (uint32_t)items_done, __ATOMIC_SEQ_CST);
+            if (g->result_count != (uint32_t)expected) worker_errors++;
+            if (agent_deregister(slot) < 0) worker_errors++;
+            if (syscall2(SYS_SHM_UNMAP, shm_id, child_addr) != 0) worker_errors++;
+            _exit(worker_errors ? 2 : 0);
         }
         if (pid < 0) {
             fork_ok = 0;
@@ -528,30 +537,34 @@ static void distributed_bfs_32_agents(void)
     }
 
     /* Submit the seed work item after agents are forked */
-    dispatch_submit(&seed);
+    if (dispatch_submit(&seed) < 0) fork_ok = 0;
 
     /* Wait for all agents */
-    int total_items = 0;
     for (int i = 0; i < BFS_AGENTS; i++) {
         if (agents[i] <= 0) continue;
-        int status = 0;
-        waitpid(agents[i], &status, 0);
-        if (WIFEXITED(status)) {
-            total_items += WEXITSTATUS(status);
-        }
+        int status = -1;
+        if (waitpid(agents[i], &status, 0) != agents[i] || status != 0) fork_ok = 0;
     }
-
+    shm_addr = syscall2(SYS_SHM_MAP, shm_id, 0);
+    if (shm_addr < 0x10000) {
+        TEST_FAIL("distributed_bfs_32_agents: verification remap failed%s", "");
+        syscall1(SYS_SHM_DESTROY, shm_id);
+        return;
+    }
+    graph = (graph_state_t*)(unsigned long)shm_addr;
+    int total_items = (int)graph->processed_items;
+    int all_done = graph->done_agents == BFS_AGENTS;
     uint32_t discovered = graph->result_count;
     printf("  discovered: %u / %d expected\n", discovered, expected);
     printf("  total work items processed: %d\n", total_items);
     printf("  agents completed: %u / %d\n", graph->done_agents, BFS_AGENTS);
 
     /* Cleanup SHM */
-    syscall2(SYS_SHM_UNMAP, shm_id, shm_addr);
-    syscall1(SYS_SHM_DESTROY, shm_id);
+    if (syscall2(SYS_SHM_UNMAP, shm_id, shm_addr) != 0) fork_ok = 0;
+    if (syscall1(SYS_SHM_DESTROY, shm_id) != 0) fork_ok = 0;
 
-    /* Verify: discovered should be >= expected (atomic races may over-count slightly) */
-    if (fork_ok && discovered >= (uint32_t)expected && total_items > 0) {
+    /* Atomic first-visit accounting must exactly match the reference. */
+    if (fork_ok && all_done && discovered == (uint32_t)expected && total_items > 0) {
         TEST_PASS("distributed_bfs_32_agents");
     } else if (!fork_ok) {
         TEST_FAIL("distributed_bfs_32_agents: fork failed%s", "");

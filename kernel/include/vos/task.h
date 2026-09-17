@@ -144,9 +144,11 @@ typedef struct __attribute__((packed)) vos3_cpu_state {
  * @brief Wait queue entry — embedded in vos3_task_t to avoid dangling
  *        stack pointers when a task blocks on a wait queue.
  */
+struct vos3_wait_queue;
 typedef struct vos3_wait_entry {
     struct vos3_task* task;         /**< Waiting task */
     struct vos3_wait_entry* next;   /**< Next in queue */
+    struct vos3_wait_queue* queue;  /**< Owning queue, NULL when detached */
 } vos3_wait_entry_t;
 
 /* ============================================================================
@@ -164,6 +166,9 @@ struct vos3_ai_guard_ctx;
  * @brief Task entry function type
  */
 typedef void (*vos3_task_entry_t)(void* arg);
+
+/** @brief Cleanup for a resource pin held while a task is blocked. */
+typedef void (*vos3_task_wait_cleanup_t)(void* context);
 
 /**
  * @brief Task structure
@@ -288,7 +293,7 @@ typedef struct vos3_task {
     uint32_t            fpu_initialized; /**< 1 if FPU state has been saved at least once */
 
     /* ===== Per-process mmap bump allocator (Phase v17 K-C5) ===== */
-    uint64_t            mmap_next;      /**< Next virtual address for mmap (per-process) */
+    uint64_t            mmap_next;      /**< Legacy layout field; AS mmap_next is authoritative */
 
     /* ===== Wait Queue Entry (embedded to avoid stack-allocated dangling pointers) ===== */
     vos3_wait_entry_t   wq_entry;       /**< Embedded wait queue entry for blocking */
@@ -351,6 +356,8 @@ typedef struct vos3_task {
      * Assigned before publication; fork/clone registration replaces copied value. */
     uint64_t identity_cookie;
     struct vos3_signal_state* signal_state; /**< Owned; appended to preserve assembly offsets. */
+    vos3_task_wait_cleanup_t wait_cleanup;  /**< Claimed once by resume or final reaper. */
+    void* wait_cleanup_context;             /**< Context published before wait_cleanup. */
 } __attribute__((aligned(VOS3_CACHE_LINE_SIZE))) vos3_task_t;
 
 /* ============================================================================
@@ -399,6 +406,28 @@ void vos3_task_destroy(vos3_task_t* task);
  * @param[in] task Task to defer-destroy (must be in ZOMBIE state)
  */
 void vos3_task_defer_destroy(vos3_task_t* task);
+
+/** @return nonzero while at least one task awaits deferred destruction. */
+int vos3_task_reap_pending(void);
+
+/**
+ * @brief Register one resource pin that must survive a blocking wait.
+ * @return 1 when armed, 0 if the task is terminal/invalid, -1 if cleanup won.
+ */
+int vos3_task_arm_wait_cleanup(vos3_task_t* task,
+                               vos3_task_wait_cleanup_t cleanup,
+                               void* context);
+
+/**
+ * @brief Claim a registered pin back after a normal wake.
+ * @return 1 if the caller reclaimed the pin, 0 if no matching pin remained.
+ */
+int vos3_task_disarm_wait_cleanup(vos3_task_t* task,
+                                  vos3_task_wait_cleanup_t cleanup,
+                                  void* context);
+
+/** @brief Run a stranded wait cleanup after the task is permanently quiescent. */
+void vos3_task_run_wait_cleanup(vos3_task_t* task);
 
 /**
  * @brief Reap dead tasks (free deferred resources)

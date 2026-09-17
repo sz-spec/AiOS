@@ -28,3 +28,15 @@ A bounded review is not a certification of code that was not inspected.
 No finding is closed merely because several review roles agree. Final release
 approval requires the applicable tests and remaining capability decisions. The
 normal build keeps experimental AP scheduling and diagnostic fault injection off.
+
+## Updated dispositions — 2026-09-17
+
+The table above preserves the original review baseline. Current dispositions,
+causes, remaining gaps and recent primary research are consolidated in the
+[60-day failure review](../expert-council-failures-60d-2026-09-17.md).
+In particular, VMA transactions and bounded scanning have been repaired;
+two final2 builds now reproduce identical ISO bytes; the legacy pattern
+arithmetic uses explicit unsigned operations. Full runtime qualification
+remains failed on health throughput, and context-reader lifetime, remote
+revocation, physical hardware and deployment are still open. None of these
+bounded corrections establishes a production release.

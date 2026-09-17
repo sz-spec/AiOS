@@ -806,6 +806,7 @@ void vos3_sched_tick(void)
             g_tcp_timer_acc = 0;
             g_tcp_work_pending = 1;
         }
+        vos3_sched_request_deferred();
         /* Phase 3: AI load balancer — deferred to process context.
          * vos3_dispatch_balance_check() acquires g_task_lock which would
          * deadlock if called from ISR while a task holds that lock.
@@ -815,6 +816,10 @@ void vos3_sched_tick(void)
          * without this, a woken task waits for idle's time_slice to expire */
         g_cpu_sched_state[0].need_reschedule = 1;
     }
+
+    /* Re-arm owner-local reaping after the two-tick stack grace period and
+     * for work that another CPU placed on the shared reaper list. */
+    if (vos3_task_reap_pending()) vos3_sched_request_deferred();
 
     vos3_task_t* current = g_current_task[cpu_id];
     if (current == NULL) {
@@ -878,25 +883,52 @@ void vos3_sched_tick(void)
 /**
  * @brief Process deferred work from ISR context
  *
- * Called from process context (reschedule, AP idle loop) to handle work
+ * Called from process context (syscall exit, reschedule, AP idle loop) to handle work
  * that was flagged during the timer ISR but cannot safely run there.
  * K-R2: task_reap() acquires locks.
  * K-R3: ai_guard_reprotect_tick() modifies PTEs.
  */
-static void sched_process_deferred(void)
+static uint32_t g_deferred_active[256];
+static uint32_t g_deferred_pending[256];
+
+void vos3_sched_request_deferred(void)
+{
+    vos3_sched_request_deferred_cpu(get_cpu_id());
+}
+
+void vos3_sched_request_deferred_cpu(uint32_t cpu_id)
+{
+    if (cpu_id < 256U)
+        __atomic_store_n(&g_deferred_pending[cpu_id], 1U, __ATOMIC_RELEASE);
+}
+
+void vos3_sched_process_deferred(void)
 {
     /* No resource reclamation from an interrupt/IRQ-disabled continuation. */
     uint64_t rflags;
     __asm__ volatile ("pushfq; popq %0" : "=r"(rflags));
     if (!(rflags & (1ULL << 9)))
         return; /* Interrupt/IRQ-disabled context is not a reclamation point. */
+    /* A destructor may block/reschedule. Do not recursively drain work on
+     * this CPU while a previous safe point is still in progress. Current
+     * scheduling keeps executing contexts CPU-local (no live migration). */
+    uint32_t cpu = get_cpu_id();
+    if (cpu >= 256U || __atomic_exchange_n(&g_deferred_active[cpu], 1U, __ATOMIC_ACQUIRE))
+        return;
+    /* Empty syscall safe points are frequent. Producers publish this bit when
+     * they enqueue work, so the empty path takes no subsystem lock or scan. */
+    if (__atomic_exchange_n(&g_deferred_pending[cpu], 0U,
+                            __ATOMIC_ACQ_REL) == 0U) {
+        __atomic_store_n(&g_deferred_active[cpu], 0U, __ATOMIC_RELEASE);
+        return;
+    }
     vos3_shm_reap_creators();
     vos3_vmm_reap_address_spaces();
 #ifdef NATIVE_SMP_TEST
     /* Every owner must revisit its dead tasks. */
     vos3_task_reap();
-    if (get_cpu_id() != 0)
-        return;
+    if (cpu != 0)
+        goto out;
 #endif
     if (g_reap_pending != 0) {
         g_reap_pending = 0;
@@ -912,6 +944,10 @@ static void sched_process_deferred(void)
         g_tcp_work_pending = 0;
         vos3_tcp_timer_tick();
     }
+#ifdef NATIVE_SMP_TEST
+out:
+#endif
+    __atomic_store_n(&g_deferred_active[cpu], 0U, __ATOMIC_RELEASE);
 }
 
 void vos3_sched_reschedule(void)
@@ -964,7 +1000,7 @@ void vos3_sched_reschedule(void)
     /* K-R2/K-R3: Process deferred ISR work (reap + AI Guard reprotect)
      * in process context where lock acquisition and PTE modification
      * are safe. */
-    sched_process_deferred();
+    vos3_sched_process_deferred();
 
     /* Deferred balance check: runs in process context (IRQs enabled),
      * safe to acquire g_task_lock.  Only runs on BSP (cpu 0).
@@ -1218,7 +1254,7 @@ void vos3_sched_loop_ap(void)
 #endif
         /* K-R2/K-R3: Process deferred ISR work (reap + AI Guard reprotect)
          * while idle — safe process context. */
-        sched_process_deferred();
+        vos3_sched_process_deferred();
 
 #ifdef NATIVE_SMP_TEST
         /* Disable IRQs before the pending check; STI;HLT closes lost wakeups. */

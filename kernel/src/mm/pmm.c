@@ -21,6 +21,7 @@
 #include "../../include/vos/timer.h"
 #include "../../include/vos/string.h"
 #include "../../include/vos/percpu.h"
+#include "../../include/vos/heap.h"
 
 /* ============================================================================
  * STATIC DATA
@@ -59,6 +60,16 @@ static uint64_t g_hugepage_pool[VOS3_HUGEPAGE_POOL_MAX];
 static uint32_t g_hugepage_pool_count = 0;
 static uint32_t g_hugepage_pool_used  = 0;
 static vos3_spinlock_t g_hugepage_lock = VOS3_SPINLOCK_INIT;
+
+/* Buddy fallback extents retain provenance until every issued huge page is
+ * returned. Metadata is allocated/freed outside g_hugepage_lock. */
+typedef struct huge_fallback {
+    uint64_t phys;
+    uint32_t count;
+    uint32_t live_mask;
+    struct huge_fallback* next;
+} huge_fallback_t;
+static huge_fallback_t* g_huge_fallbacks;
 
 /* LIFO Recovery: per-slot release timestamp to prevent Context Collapse.
  * Pages freed within the cooldown window are deferred during allocation. */
@@ -1188,12 +1199,24 @@ void vos3_pmm_reserve_hugepages(uint32_t count)
 
         if (!all_free) continue;
 
-        /* Allocate all 512 pages */
-        for (size_t p = start; p < start + pages_per_huge; p++) {
-            pmm_bitmap_set(p);
-            vos3_pmm_zone_t zone = pmm_page_to_zone(p);
-            pmm_stats_alloc(zone);
+        /* Bitmap fast allocators do not take this lock. Claim transactionally
+         * and do not overwrite the winning allocator's reference count. */
+        size_t claimed = 0;
+        for (; claimed < pages_per_huge; claimed++) {
+            size_t page = start + claimed;
+            if (pmm_bitmap_set(page)) break;
+            pmm_stats_alloc(pmm_page_to_zone(page));
         }
+        if (claimed != pages_per_huge) {
+            for (size_t i = 0; i < claimed; i++) {
+                pmm_bitmap_clear(start + i);
+                pmm_stats_free(pmm_page_to_zone(start + i));
+            }
+            continue;
+        }
+        for (size_t i = 0; i < pages_per_huge; i++)
+            if (start + i < g_pmm.refcount_size)
+                vos3_atomic_store32(&g_pmm.refcount[start + i], 1U);
 
         g_hugepage_pool[g_hugepage_pool_count++] = vos3_pmm_page_to_addr(start);
     }
@@ -1204,71 +1227,146 @@ void vos3_pmm_reserve_hugepages(uint32_t count)
               g_hugepage_pool_count, g_hugepage_pool_count * 2);
 }
 
+/* Preserve buddy fallback capacity without admitting foreign frees into the
+ * reserved pool. A power-of-two rounded buddy extent is freed only when all
+ * requested huge pages have been returned. */
+static uint64_t pmm_huge_fallback_alloc(uint32_t count)
+{
+    if (g_buddy_initialized == 0U || count == 0 || count > 16U) return 0;
+    huge_fallback_t* extent = vos3_kmalloc(sizeof(*extent));
+    if (extent == NULL) return 0;
+    uint32_t allocated = 1U;
+    while (allocated < count) allocated <<= 1U;
+    uint64_t phys = vos3_pmm_buddy_alloc((size_t)allocated * 512U, 0);
+    if (phys == 0 || (phys & ((uint64_t)allocated * VOS3_LARGE_PAGE_SIZE - 1U)) != 0) {
+        /* Buddy's emergency bitmap fallback need not preserve order alignment.
+         * Return its exact requested pages, never advertise a misaligned buddy. */
+        if (phys != 0) vos3_pmm_free_pages(phys, (size_t)allocated * 512U);
+        vos3_kfree(extent);
+        return 0;
+    }
+    extent->phys = phys;
+    extent->count = count;
+    extent->live_mask = (1U << count) - 1U;
+    vos3_irqflags_t irq = vos3_irq_save();
+    vos3_spinlock_acquire(&g_hugepage_lock);
+    extent->next = g_huge_fallbacks;
+    g_huge_fallbacks = extent;
+    vos3_spinlock_release(&g_hugepage_lock);
+    vos3_irq_restore(irq);
+    return phys;
+}
+
 uint64_t vos3_pmm_alloc_huge(void)
 {
     vos3_irqflags_t f = vos3_irq_save();
     vos3_spinlock_acquire(&g_hugepage_lock);
-
     uint64_t phys = 0;
-    if (g_hugepage_pool_used < g_hugepage_pool_count)
+    if (g_hugepage_pool_used < g_hugepage_pool_count) {
+        g_hugepage_release_tick[g_hugepage_pool_used] = 0;
         phys = g_hugepage_pool[g_hugepage_pool_used++];
-
+    }
     vos3_spinlock_release(&g_hugepage_lock);
     vos3_irq_restore(f);
+    return phys != 0 ? phys : pmm_huge_fallback_alloc(1);
+}
 
-    /* Phase 7.4 Emergency Replenishment: if the pre-reserved pool is
-     * exhausted but the buddy allocator has Order-9+ contiguous blocks,
-     * allocate from buddy as a last-resort path. This guarantees that
-     * vos3_pmm_alloc_huge() succeeds whenever free memory > 30% and
-     * the anti-fragmentation guard has preserved HP-capable blocks.
-     * Lock ordering: hugepage_lock released above → buddy_lock safe. */
-    if (phys == 0 && g_buddy_initialized != 0U) {
-        uintptr_t buddy_phys = vos3_pmm_buddy_alloc(512, 0);
-        if (buddy_phys != 0) {
-            phys = (uint64_t)buddy_phys;
+static void pmm_huge_swap(uint32_t a, uint32_t b)
+{
+    uint64_t phys = g_hugepage_pool[a], tick = g_hugepage_release_tick[a];
+    g_hugepage_pool[a] = g_hugepage_pool[b];
+    g_hugepage_release_tick[a] = g_hugepage_release_tick[b];
+    g_hugepage_pool[b] = phys;
+    g_hugepage_release_tick[b] = tick;
+}
+static void pmm_huge_sift(uint32_t base, uint32_t root, uint32_t length)
+{
+    while (root < length / 2U) {
+        uint32_t child = root * 2U + 1U;
+        if (child + 1U < length && g_hugepage_pool[base + child] < g_hugepage_pool[base + child + 1U]) child++;
+        if (g_hugepage_pool[base + root] >= g_hugepage_pool[base + child]) break;
+        pmm_huge_swap(base + root, base + child);
+        root = child;
+    }
+}
+
+uint64_t vos3_pmm_alloc_huge_contiguous(uint32_t count)
+{
+    if (count == 0 || count > 16U) return 0;
+    if (count == 1) return vos3_pmm_alloc_huge();
+    vos3_irqflags_t f = vos3_irq_save();
+    vos3_spinlock_acquire(&g_hugepage_lock);
+    /* Sort only the free partition; active ownership and timestamps stay
+     * paired. Select a whole contiguous run before publishing any ownership. */
+    /* Heapsort bounds the IRQ-disabled sort to O(pool_count log pool_count). */
+    uint32_t available = g_hugepage_pool_count - g_hugepage_pool_used;
+    for (uint32_t i = available / 2U; i > 0; i--)
+        pmm_huge_sift(g_hugepage_pool_used, i - 1U, available);
+    for (uint32_t n = available; n > 1U; n--) {
+        pmm_huge_swap(g_hugepage_pool_used, g_hugepage_pool_used + n - 1U);
+        pmm_huge_sift(g_hugepage_pool_used, 0, n - 1U);
+    }
+    uint64_t result = 0;
+    uint32_t run = 0;
+    for (uint32_t i = g_hugepage_pool_used; i < g_hugepage_pool_count; i++) {
+        run = (run && g_hugepage_pool[i] - g_hugepage_pool[i - 1] == VOS3_LARGE_PAGE_SIZE) ? run + 1 : 1;
+        if (run == count) { result = g_hugepage_pool[i + 1 - count]; break; }
+    }
+    if (result != 0) {
+        for (uint32_t n = 0; n < count; n++) {
+            uint32_t index = g_hugepage_pool_used;
+            while (index < g_hugepage_pool_count &&
+                   g_hugepage_pool[index] != result + n * VOS3_LARGE_PAGE_SIZE) index++;
+            uint32_t front = g_hugepage_pool_used++;
+            g_hugepage_pool[index] = g_hugepage_pool[front];
+            g_hugepage_release_tick[index] = g_hugepage_release_tick[front];
+            g_hugepage_pool[front] = result + n * VOS3_LARGE_PAGE_SIZE;
+            g_hugepage_release_tick[front] = 0;
         }
     }
-
-    return phys;
+    vos3_spinlock_release(&g_hugepage_lock);
+    vos3_irq_restore(f);
+    return result != 0 ? result : pmm_huge_fallback_alloc(count);
 }
 
 void vos3_pmm_free_huge(uint64_t phys)
 {
+    if (phys == 0 || (phys & (VOS3_LARGE_PAGE_SIZE - 1U)) != 0) return;
     vos3_irqflags_t f = vos3_irq_save();
     vos3_spinlock_acquire(&g_hugepage_lock);
-
-    if (g_hugepage_pool_used > 0) {
-        /* Find the freed page in the used region [0..used-1] and swap it
-         * with the last used entry to maintain contiguous used/free layout.
-         * K-HIGH-3 fix: the old code blindly decremented and overwrote the
-         * last active slot, silently losing a live hugepage mapping. */
-        uint32_t found = UINT32_MAX;
-        for (uint32_t i = 0; i < g_hugepage_pool_used; i++) {
-            if (g_hugepage_pool[i] == phys) {
-                found = i;
-                break;
-            }
-        }
-        --g_hugepage_pool_used;
-        if (found != UINT32_MAX && found != g_hugepage_pool_used) {
-            /* Swap with last used entry */
-            g_hugepage_pool[found] = g_hugepage_pool[g_hugepage_pool_used];
-            g_hugepage_release_tick[found] = g_hugepage_release_tick[g_hugepage_pool_used];
-        }
-        g_hugepage_pool[g_hugepage_pool_used] = phys;
-        g_hugepage_release_tick[g_hugepage_pool_used] = vos3_timer_get_ticks();
-    } else {
-        /* Pool underflow — return 512 x 4KB pages to regular PMM to avoid
-         * silently losing 2MB of physical memory. */
-        VOS3_WARN("[PMM] free_huge: pool underflow for phys=0x%llx, "
-                  "returning to 4KB pool", (unsigned long long)phys);
-        for (uint32_t i = 0; i < 512; i++) {
-            vos3_pmm_free(phys + i * VOS3_PAGE_SIZE);
-        }
+    for (uint32_t i = 0; i < g_hugepage_pool_used; i++) {
+        if (g_hugepage_pool[i] != phys) continue;
+        uint32_t last = --g_hugepage_pool_used;
+        g_hugepage_pool[i] = g_hugepage_pool[last];
+        g_hugepage_release_tick[i] = g_hugepage_release_tick[last];
+        g_hugepage_pool[last] = phys;
+        g_hugepage_release_tick[last] = vos3_timer_get_ticks();
+        vos3_spinlock_release(&g_hugepage_lock);
+        vos3_irq_restore(f);
+        return;
     }
-
+    huge_fallback_t** link = &g_huge_fallbacks;
+    huge_fallback_t* retired = NULL;
+    for (; *link != NULL; link = &(*link)->next) {
+        huge_fallback_t* extent = *link;
+        if (phys < extent->phys) continue;
+        uint64_t index = (phys - extent->phys) / VOS3_LARGE_PAGE_SIZE;
+        if (index >= extent->count) continue;
+        uint32_t bit = 1U << index;
+        if ((extent->live_mask & bit) == 0) break; /* Duplicate return. */
+        extent->live_mask &= ~bit;
+        if (extent->live_mask == 0) { *link = extent->next; retired = extent; }
+        break;
+    }
     vos3_spinlock_release(&g_hugepage_lock);
     vos3_irq_restore(f);
+    if (retired != NULL) {
+        uint32_t allocated = 1U;
+        while (allocated < retired->count) allocated <<= 1U;
+        vos3_pmm_buddy_free(retired->phys, (size_t)allocated * 512U);
+        vos3_kfree(retired);
+    }
+    /* Unknown/duplicate addresses must never decrement or overwrite the pool. */
 }
 
 uint64_t vos3_pmm_alloc_colored_hugepage(uint8_t color)
@@ -1555,6 +1653,9 @@ static int buddy_range_alloc(size_t start, size_t count)
         vos3_pmm_zone_t zone = pmm_page_to_zone(start + i);
         pmm_stats_alloc(zone);
     }
+    for (size_t i = 0; i < count; i++)
+        if (start + i < g_pmm.refcount_size)
+            vos3_atomic_store32(&g_pmm.refcount[start + i], 1U);
     return 0;
 }
 
@@ -1566,6 +1667,10 @@ static int buddy_range_alloc(size_t start, size_t count)
 static void buddy_range_free(size_t start, size_t count)
 {
     for (size_t i = 0; i < count; i++) {
+        /* Caller exclusively owns this extent. Clear refs before publishing
+         * free bitmap bits to lock-free allocation. */
+        if (start + i < g_pmm.refcount_size)
+            vos3_atomic_store32(&g_pmm.refcount[start + i], 0U);
         int was_set = pmm_bitmap_clear(start + i);
         if (was_set) {
             vos3_pmm_zone_t zone = pmm_page_to_zone(start + i);

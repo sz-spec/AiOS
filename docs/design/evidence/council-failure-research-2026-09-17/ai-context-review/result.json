@@ -1,0 +1,11 @@
+{
+  "current": {
+    "exit": 0,
+    "source_sha256": "39c995cd46b61640398f153aa1265262991d047437fea063ac7af05145d2f254"
+  },
+  "baseline": {
+    "exit": 1,
+    "source_sha256": "e8554922b492e7b138e28d0c54060550ac7c89c7722d1cd445a079b72ec867d9"
+  },
+  "harness_sha256": "ef2f8a9f08842a0347e8b888e240f2de11332a5e939360c8edaa80f303c0428f"
+}
