@@ -655,6 +655,39 @@ void vos3_sched_start(void)
 /**
  * @brief Find CPU with lowest task count for load balancing
  */
+#ifdef NATIVE_SMP_TEST
+/* Protected by g_sched_lock; only first enqueue advances this cursor. */
+static uint32_t g_initial_cpu_cursor;
+
+static uint32_t assign_initial_cpu_locked(vos3_task_t* task)
+{
+    /* CLONE_VM siblings and waking tasks keep their established owner. */
+    if (task->sched_owner_plus_one != 0)
+        return task->sched_owner_plus_one - 1;
+
+    uint32_t target = 0;
+    if (g_sched_running != 0) {
+        uint32_t count = vos3_smp_cpu_count();
+        if (count > 256U) count = 256U;
+        if (count != 0) {
+            uint32_t start = g_initial_cpu_cursor % count;
+            for (uint32_t offset = 0; offset < count; offset++) {
+                uint32_t candidate = (start + offset) % count;
+                const vos3_smp_cpu_info_t* info = vos3_smp_get_cpu_info(candidate);
+                if (info != NULL && __atomic_load_n(&info->started, __ATOMIC_ACQUIRE) != 0) {
+                    target = candidate;
+                    g_initial_cpu_cursor = (candidate + 1U) % count;
+                    break;
+                }
+            }
+        }
+    }
+    /* BSP owns bootstrap tasks. AP readiness is published only after the
+     * AP's scheduler/entry state is initialized; failed CPUs are skipped. */
+    task->sched_owner_plus_one = target + 1U;
+    return target;
+}
+#else
 static uint32_t find_least_loaded_cpu(void)
 {
     uint32_t best_cpu = 0;
@@ -670,6 +703,7 @@ static uint32_t find_least_loaded_cpu(void)
 
     return best_cpu;
 }
+#endif
 
 void vos3_sched_add_task(vos3_task_t* task)
 {
@@ -695,11 +729,12 @@ void vos3_sched_add_task(vos3_task_t* task)
         task->state = VOS3_TASK_READY;
     }
 
-    /* Load balancing: assign to least loaded CPU */
-    uint32_t target_cpu = find_least_loaded_cpu();
 #ifdef NATIVE_SMP_TEST
-    if (task->sched_owner_plus_one != 0)
-        target_cpu = task->sched_owner_plus_one - 1;
+    /* Bind once before publication; a racing CPU cannot claim both new
+     * tasks merely by reaching the global run queue first. */
+    uint32_t target_cpu = assign_initial_cpu_locked(task);
+#else
+    uint32_t target_cpu = find_least_loaded_cpu();
 #endif
     task->cpu_id = target_cpu;
     g_cpu_sched_state[target_cpu].task_count++;
