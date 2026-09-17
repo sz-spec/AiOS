@@ -1,0 +1,30 @@
+x86_64-elf-gcc (GCC) 16.2.0
+Copyright (C) 2026 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+GNU ld (GNU Binutils) 2.47.20260726
+Copyright (C) 2026 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) a later version.
+This program has absolutely no warranty.
+GNU Make 4.4.1
+Built for aarch64-unknown-linux-gnu
+Copyright (C) 1988-2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+xorriso 1.5.6
+ISO 9660 Rock Ridge filesystem manipulator and CD/DVD/BD burn program
+Copyright (C) 2023, Thomas Schmitt <scdbackup@gmx.net>, libburnia project.
+xorriso version   :  1.5.6
+Version timestamp :  2023.06.07.180001
+Build timestamp   :  -none-given-
+libisofs   in use :  1.5.6  (min. 1.5.6)
+libjte     in use :  2.0.0  (min. 2.0.0)
+libburn    in use :  1.5.6  (min. 1.5.6)
+libburn OS adapter:  internal GNU/Linux SG_IO adapter sg-linux
+libisoburn in use :  1.5.6  (min. 1.5.6)
+Provided under GNU GPL version 3 or later, due to libreadline license.
+There is NO WARRANTY, to the extent permitted by law.
+xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.

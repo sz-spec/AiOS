@@ -1,0 +1,4376 @@
+{
+  "schema": 1,
+  "date": "2026-09-17",
+  "initial_revision": "53b9a44",
+  "current_milestone_revision": "cd0e2362f43fff2f7cb42aba437d0391f2d98cff",
+  "scope": "Exact initial failed/error node IDs; focused resolution is not a passing full suite",
+  "rules": [
+    "Only explicit PASSED for the identical node ID in a completed run can resolve an entry.",
+    "Latest completed rerun result governs; failures/errors/skips/xfails remain open.",
+    "Interrupted/worker-crash runs are excluded.",
+    "Overlapping run pass totals are never added.",
+    "Existing baseline skips/xfails and newly exposed failures are outside this initial195 inventory and remain separate gates."
+  ],
+  "counts": {
+    "resolved_in_focused_rerun": 174,
+    "open": 21
+  },
+  "initial_count": 195,
+  "initial_log_sha256": "36d8323c5155b37fc298e4d5fb7ec030a4ec7009b8fb220e44e6c8d76fd4d76c",
+  "completed_logs": [
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-focused.log",
+      "summary": "======================= 13 failed, 148 passed in 11.43s ========================",
+      "sha256": "a57ca2b3152f345c1fe832898eba1f3022680854d9087c38fa4ccce167170bd8"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log",
+      "summary": "============================= 85 passed in 23.26s ==============================",
+      "sha256": "18fb1774174c79d6842af2f2a9a4d755e28dbf0cadf0c41ffcda6f9d3473abeb"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log",
+      "summary": "======================== 1 failed, 128 passed in 12.54s ========================",
+      "sha256": "0287317467b4987f810959a0a7f8b4abc0bf47051bdb60c1fa02c61beaece616"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log",
+      "summary": "======================= 152 passed, 13 errors in 39.49s ========================",
+      "sha256": "6154921a5a2dff5dcf0e9d2d9aebf6859289ded1c1e44bed3dab90fd09a2ae12"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log",
+      "summary": "======================== 10 failed, 4 passed in 12.69s =========================",
+      "sha256": "835d732c9440ddb85d1fceaedb6c7627f8aa8dee1425eccf65bf842e18adebad"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log",
+      "summary": "============================== 14 passed in 7.27s ==============================",
+      "sha256": "a7392175b619b0d3ed69d275ae9bb3d96b3e28e214704148301a8ec682c78ec7"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-billing.log",
+      "summary": "============================== 59 passed in 8.07s ==============================",
+      "sha256": "85a09d8edcc253b50b0be2b03ef727697af86656ea0f8d39df8ab8602a11b892"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log",
+      "summary": "============================== 14 passed in 5.52s ==============================",
+      "sha256": "b47c139ca21e2a4ef56e51b5891e970304ffdb0f3e1d2d6c8dca2ea50dce9697"
+    },
+    {
+      "path": "/private/tmp/vos-goal-native-20260917-open-core.log",
+      "summary": "============================== 9 passed in 6.77s ===============================",
+      "sha256": "c2340b45c7daeffc62abfcd993118b62fd03a11e84ea1ab9281a695f760e6705"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log",
+      "summary": "============================== 36 passed in 6.65s ==============================",
+      "sha256": "bd88708b9b7bc58fa3288779f0c1676d136e25154db2bbb6e42d6dfcba886288"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-api-focused.log",
+      "summary": "======================= 13 failed, 153 passed in 12.94s ========================",
+      "sha256": "7a01be6c5818bf306de0e2423415e270ad35cd42a9196c4f07f7f641c01ceb6e"
+    },
+    {
+      "path": "/private/tmp/vos-goal-native-20260917-audit-flavors.log",
+      "summary": "======================== 2 passed in 163.52s (0:02:43) =========================",
+      "sha256": "a2227e6403b3d12dd08c586ca379af7adef37c4415ca679cead02d3a54c225fc"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log",
+      "summary": "============================== 94 passed in 9.10s ==============================",
+      "sha256": "58e685b4334e45d7280a648b40408b169cabde3bd4f06282f2ca5703b3834d87"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-billing-final.log",
+      "summary": "============================== 61 passed in 8.35s ==============================",
+      "sha256": "87c34aac6e4ba44dcfdcb15f24a3bbdaf65390a2a469890b8f1bc477884e7362"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-bola-r2.log",
+      "summary": "============================== 72 passed in 8.46s ==============================",
+      "sha256": "ab310daa784fdf2ffb129a6ba6b5442bc9f4da1503ffe3a7d140a695ad7a4f54"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-remaining-security.log",
+      "summary": "================== 10 failed, 68 passed, 2 xfailed in 12.33s ===================",
+      "sha256": "9d0f2b7fa18c5d906d4134e14177bc25645540a08dafa89fa753e694b71ffc71"
+    },
+    {
+      "path": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log",
+      "summary": "============================= 69 passed in 11.73s ==============================",
+      "sha256": "8078979e2987dbf1ad7c1cf43f30c164a06b4dec1cbe35db83cf4d49dc3e9d11"
+    },
+    {
+      "path": "/private/tmp/vos-goal-native-20260917-provenance-final.log",
+      "summary": "============================= 125 passed in 11.36s =============================",
+      "sha256": "d04bc8d8b567888fe7442aa7dc0ae665a61b5eb7fe3823b35a4d56a50fa70041"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-security-fixture-r2.log",
+      "summary": "=================== 2 failed, 35 passed, 3 xfailed in 11.69s ===================",
+      "sha256": "18c3b410756a669c12c96bcd5575aec52a25f33226bb2c446832344c32f8addf"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-merged-focused.log",
+      "summary": "================== 2 failed, 485 passed, 3 xfailed in 17.85s ===================",
+      "sha256": "e7a8c6c51a6987ab2bd16e0ab66373ff9ff4857ed69329e9ae933aad45c25fde"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log",
+      "summary": "================== 1 failed, 486 passed, 3 xfailed in 21.32s ===================",
+      "sha256": "5f953c96955b99542e855c07fbe4c7cca674b66006678e28505258bec0e9bf3a"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log",
+      "summary": "================== 1 failed, 486 passed, 3 xfailed in 17.85s ===================",
+      "sha256": "3d1f12eda10e6fa9c006273cf55a3a03c470b7c1044290b1845d28afde86bba8"
+    },
+    {
+      "path": "/private/tmp/vos-goal-native-20260917-environment-targets.log",
+      "summary": "========================= 6 failed, 33 passed in 9.47s =========================",
+      "sha256": "3e0567093e398605b6fd682daec0beb3b04e9e69b5c27cd62320c6d79c19ec70"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-cors-final.log",
+      "summary": "============================== 10 passed in 8.03s ==============================",
+      "sha256": "f94caa2445046895bc5519bb5d34e4f94705a1e4b469504e05afe483ac9b6f4e"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-memory-stress.log",
+      "summary": "=================== 1 failed, 1 passed in 749.81s (0:12:29) ====================",
+      "sha256": "797fa49ecb1b2b6e513538b4373f6bbd8af83d36925f5565c0a60431135badf7"
+    },
+    {
+      "path": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log",
+      "summary": "========================= 1 failed, 38 passed in 8.94s =========================",
+      "sha256": "9fc2761b38f6d787a05cb4bcc8357c3969cb930d36713ca9a14c95064a150865"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-health-allocation.log",
+      "summary": "============================== 1 failed in 15.08s ==============================",
+      "sha256": "d154c3711dd306809c2833c4088d4ce0a712c16c56f478363ac129ceb1b2c708"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-health-cold-warm.log",
+      "summary": "============================== 1 failed in 14.86s ==============================",
+      "sha256": "0207ba42fa8a492a440d46d5db141f5370626a76893151cb0ed7f3c2b90afc2d"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-ring-final.log",
+      "summary": "============================== 9 passed in 6.92s ===============================",
+      "sha256": "2537b6fd7febddcb0baad23537addd3930186720d4775ad412d4998e925a866d"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-health-cold-warm-r2.log",
+      "summary": "========================= 1 failed, 1 passed in 22.54s =========================",
+      "sha256": "ba9c1ecece871b218ea0e4fab12fe823369feb74dfa331f1793f49af709807e1"
+    }
+  ],
+  "excluded_logs": [
+    {
+      "log": "/private/tmp/vos-goal-backend-20260917-suite.log",
+      "reason": "interrupted or worker-crash run; not used as resolution evidence"
+    },
+    {
+      "log": "/private/tmp/vos-goal-backend-20260917-restored-tests.log",
+      "reason": "interrupted or worker-crash run; not used as resolution evidence"
+    }
+  ],
+  "entries": [
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_killer_feature_attestation.py::TestZeroCopyRingBuffer::test_create_attach_emit_consume",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_killer_feature_attestation.py::TestZeroCopyRingBuffer::test_zero_copy_producer_writes_in_place",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_killer_feature_attestation.py::TestZeroCopyRingBuffer::test_ring_full_raises",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_killer_feature_attestation.py::TestZeroCopyRingBuffer::test_oversize_payload_rejected",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_killer_feature_attestation.py::TestZeroCopyRingBuffer::test_attach_reads_layout",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-shm-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestMemorySyncSpatialScoping::test_snappy_allowed_infra_wing",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestMemorySyncSpatialScoping::test_local_default_allowed_logic_wings",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestMemorySyncSpatialScoping::test_cloud_unrestricted_write",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestMemorySyncSpatialScoping::test_atomic_write_default_model_origin",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestMemorySyncSpatialScoping::test_atomic_write_has_global_timestamp",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestMemorySyncSpatialScoping::test_atomic_write_has_model_origin",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestSystemStability::test_router_yaml_fallback_chain",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/owasp/test_owasp_bola.py::TestBolaMemory::test_query_memory_returns_only_own_data",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-bola-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_v32_stability.py::TestCrossLayerIntegration::test_terminal_routes_uses_tool_provider",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-focused.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "open",
+      "latest_completed_rerun": {
+        "status": "FAILED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_billing.py::TestUseCredits::test_use_credits_insufficient_balance_returns_402",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_billing.py::TestUseCredits::test_use_credits_use_tokens_fails_returns_402",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_billing.py::TestRefundCredits::test_refund_returns_200",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_billing.py::TestRefundCredits::test_refund_returns_success_payload",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-billing-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_sovereign_integration.py::TestSpatialScopingBreachAttempt::test_snappy_can_write_infra_wing",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_sovereign_integration.py::TestSpatialScopingBreachAttempt::test_local_default_can_write_kernel",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_sovereign_integration.py::TestSpatialScopingBreachAttempt::test_cloud_unrestricted_all_wings",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_sovereign_integration.py::TestAtomicGuardAudit::test_concurrent_spatial_scoping_500_writes",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_sovereign_integration.py::TestAtomicGuardAudit::test_memory_provenance_concurrent",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_sovereign_integration.py::TestCrossLayerIntegration::test_telemetry_to_snappy_pipeline",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-fixture-fixes.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/owasp/test_owasp_rate_limit.py::TestAuthLimiterExhaustion::test_auth_path_blocks_after_5_requests",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/owasp/test_owasp_rate_limit.py::TestAuthLimiterExhaustion::test_auth_429_has_retry_after_60",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/owasp/test_owasp_rate_limit.py::TestAuthLimiterExhaustion::test_auth_and_standard_limiters_are_independent",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/owasp/test_owasp_rate_limit.py::TestConcurrentRapidFire::test_rapid_fire_auth_path",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[0]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[1]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[2]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[3]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[4]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[5]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[6]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[7]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[8]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_inner_fault_after_outer_success[9]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_no_orphan_tempfiles_after_successful_runs[2]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_no_orphan_tempfiles_after_successful_runs[4]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_no_orphan_tempfiles_after_successful_runs[8]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_no_orphan_tempfiles_after_successful_runs[16]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_concurrent_executions_dont_share_state",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[0]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[1]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[2]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[3]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[4]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[5]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[6]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[7]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[8]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[9]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[10]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[11]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[12]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[13]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_per_invocation_context_isolation[14]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_stdout_isolation_between_runs",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_successful_run_does_not_emit_fail_closed_audit",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_macos_seatbelt_audit_row_emitted_per_spawn",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_macos_seatbelt_audit_row_counts_match_runs[1]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_macos_seatbelt_audit_row_counts_match_runs[3]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_macos_seatbelt_audit_row_counts_match_runs[5]",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_macos_seatbelt_blocks_outbound_network",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_nested_sandbox_isolation.py::test_failed_inner_does_not_taint_outer_state",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_router_agent.py::TestCodeExecutor::test_simple_print",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_router_agent.py::TestCodeExecutor::test_calculation",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_router_agent.py::TestCodeExecutor::test_no_output",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_load_security.py::TestSecurity::test_kernel_exec_args_pipe_injection_rejected",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-security-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_load_security.py::TestSecurity::test_jwt_strategy3_rejects_hs256_with_rsa_key",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-security-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_load_security.py::TestPerformance::test_oversized_payload_rejected",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-security-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_load_security.py::TestEUCompliance::test_eu_user_force_local",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-security-fixture-r2.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_auth_injection.py::TestPipelineIntegration::test_architect_node_sets_auth_strategy",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_auth_injection.py::TestPipelineIntegration::test_architect_node_no_auth_keywords",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_auth_injection.py::TestPipelineIntegration::test_frontend_node_injects_clerk_files",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_auth_injection.py::TestPipelineIntegration::test_backend_node_injects_custom_jwt_files",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_concurrent_10_legit_handshakes",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_workspace_mismatch_storm_30_rogues",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_identity_pk_pinning_mismatch_rejected",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_identity_pk_pinning_match_accepted",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_server_rejects_garbage_first_frame",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_server_rejects_oversized_first_frame",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_server_rejects_zero_length_first_frame",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_back_to_back_handshakes_5x",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/stress/test_p2p_sync_stress.py::test_premature_close_no_panic",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestArchitectContextInjection::test_architect_receives_vision_context",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestArchitectContextInjection::test_architect_without_vision_uses_original_requirements",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestFrontendContextInjection::test_frontend_receives_design_tokens",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestFrontendContextInjection::test_frontend_without_vision_uses_original_requirements",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestACIDStyling::test_acid_globals_css_contains_neon_pink",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestACIDStyling::test_acid_tailwind_config_has_primary_mapping",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestACIDStyling::test_acid_agent_generated_files_take_priority",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestACIDStyling::test_acid_full_chain_neon_pink_e2e",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_e2e_vision_flow.py::TestStyleOnlyFlow::test_style_only_frontend_still_injects_theme",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_beacon_envelope_is_signed_and_canonical",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_two_nodes_discover_each_other_via_udp",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_discovered_peer_table_mirrors_in_memory_state",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_repeated_beacons_dedupe_in_table",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_own_beacon_is_ignored",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_unsigned_beacon_is_rejected_and_audited",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_mark_stale_peers_demotes_idle_rows",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_handshake_succeeds_within_same_workspace_and_round_trips_payload",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_handshake_delta_returns_workspace_scoped_rows",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_session_close_blocks_further_send",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_rogue_workspace_beacon_blocks_and_audits",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_rogue_workspace_handshake_is_torn_down_with_audit",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_peers_route_lists_rows_including_rejected",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_blob_request_returns_notfound_when_catalog_has_no_match",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_blob_request_streams_catalog_file_end_to_end",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p6_2_p2p_sync.py::test_mesh_fetch_rejects_peer_returning_wrong_sha",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal_extended.py::TestChatRequestValidation::test_temperature_zero_accepted",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal_extended.py::TestChatRequestValidation::test_temperature_two_accepted",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal_extended.py::TestChatRequestValidation::test_max_tokens_one_accepted",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal_extended.py::TestChatRequestValidation::test_max_tokens_128000_accepted",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal_extended.py::TestModelSelection::test_explicit_valid_model_accepted",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal_extended.py::TestModelSelection::test_invalid_model_falls_back_gracefully",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/adversarial/test_cross_workspace_breakout.py::test_p2p_sync_workspace_mismatch_storm",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_handshake_then_compare_then_delta",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_handshake_session_metadata_carries_peer_id",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_compare_returns_hash_and_row_count",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_compare_unknown_table_returns_error",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_delta_empty_table_returns_empty_rows",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_unknown_op_returns_error_envelope",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_blob_request_notfound_e2e",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_two_sequential_clients_state_isolated",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_workspace_mismatch_fails_e2e",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_project_write_reflected_in_compare",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_server_serves_after_rejecting_3_rogues",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_session_close_after_handshake_blocks_send",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_discovery_then_sync_handshake",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_pinned_pk_match_succeeds_e2e",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_pinned_pk_mismatch_fails_e2e",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/e2e/test_p2p_full_e2e.py::test_session_close_idempotent_e2e",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_full_stack_integration.py::TestVCoreLifecycle::test_entity_crud_flow",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_full_stack_integration.py::TestVCoreLifecycle::test_entity_fields_and_records",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_full_stack_integration.py::TestAgentLifecycle::test_create_and_delete_agent",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_full_stack_integration.py::TestMemoryRoundtrip::test_memory_query",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-provenance-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_terminal.py::TestChatAPI::test_api_mode_model_selection",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_token_exhaustion_recovery.py::test_tempfiles_unlinked_after_successful_exit",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_returns_two_fingerprints",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_token_exhaustion_recovery.py::test_semaphore_released_after_fault",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/fortification_v3/test_token_exhaustion_recovery.py::test_semaphore_released_after_concurrent_failures",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_produces_fresh_fingerprints_each_call",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_memory_scaling.py::test_vmm_expansion_api_exists",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_memory_scaling.py::test_vmm_slot_isolation_via_static_va_base",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_memory_scaling.py::test_vmm_expansion_uses_pmm_alloc_huge",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_memory_scaling.py::test_vmm_expansion_caps_at_10gb_ceiling",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_persists_to_keyring",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_rolls_back_on_pqc_keygen_failure",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_rolls_back_on_pqc_write_failure",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_emits_single_audit_row_on_success",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotate_hybrid_emits_failure_audit_on_keygen_error",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_rotation_blocked_after_hard_fail_latched",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_clear_hard_fail_restores_normal_operation",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/crypto/test_pqc_rotation.py::test_concurrent_rotations_produce_distinct_serialized_fingerprints",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-pqc-isolated-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_finetune_rigor.py::test_mmr_finetune_step_declared_with_v20_2_1_tool_id",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_finetune_rigor.py::test_mmr_finetune_step_implementation_packs_four_u64_le",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_finetune_rigor.py::test_tpm_seal_adapter_declared_with_pcr_11",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_finetune_rigor.py::test_vos3_pud_size_defined_as_1gib",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_finetune_rigor.py::test_makefile_compiles_npu_ops",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_cors_options_no_auth_required",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-cors-final.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-cors-final.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_app_sandbox.py::TestProcessSandbox::test_execute_simple_code",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_app_sandbox.py::TestProcessSandbox::test_execute_with_context",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_app_sandbox.py::TestProcessSandbox::test_timeout_enforcement",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_app_sandbox.py::TestProcessSandbox::test_capture_stderr_on_error",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_app_sandbox.py::TestProcessSandbox::test_empty_code",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/red_team/test_hostile_tenant_leak.py::TestVBusCrossTenantFrameIsolation::test_attach_to_wrong_magic_segment_fails",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-ring-final.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-ring-final.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/red_team/test_hostile_tenant_leak.py::TestVBusCrossTenantFrameIsolation::test_two_distinct_rings_do_not_share_payload",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets.log"
+        },
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-native-20260917-environment-targets-unsandboxed.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-ring-final.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-ring-final.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_dns_pinning.py::test_pin_disabled_via_env",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/security/test_dns_pinning.py::test_pin_ttl_expiry_allows_new_pin",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_open_core_split.py::test_finetune_engine_relocated_to_backend_pro",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_open_core_split.py::test_finetune_engine_imported_from_new_path",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_vmm_security.py::test_vmm_wx_violation_calls_quarantine_handler",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_vmm_security.py::test_dispatcher_has_task_steering_logic",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_vmm_security.py::test_makefile_includes_v205_sources",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p5_3_os_sandbox.py::test_pen_external_socket_blocked_for_dns_hostname",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/audit/test_stress_75_rounds.py::test_round_a12_pro_has_dedupe_hint",
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-native-20260917-audit-flavors.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-native-20260917-audit-flavors.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_compliance_firewall_integration.py::TestSemanticFirewallWiring::test_rejection_payload_is_firewall_tagged",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-remaining-security.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-security-fixture-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "FAILED",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/test_api_developer_routes.py::TestDeveloperRoutes::test_get_profile_404",
+      "completed_rerun_history": [
+        {
+          "status": "FAILED",
+          "log": "/private/tmp/vos-goal-backend-20260917-api-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-bola-r2.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-merged-focused-final.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-sidecar-reproduction.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p4_1_sandbox.py::test_local_first_router_denies_app_without_llm_local_scope",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p4_1_sandbox.py::test_local_first_router_allows_app_with_llm_local_scope",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p4_1_sandbox.py::test_dispatcher_no_app_id_skips_gate",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p5_1_dashboard.py::test_toggle_revokes_scope_and_evicts_cache",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_locality_pinned_to_local_first",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_ollama_model_honors_env",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_healthcheck_reports_ready",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_resolver_returns_chat_ollama",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_chat_completion_routes_to_mock_ollama",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_mock_ollama_received_chat_post",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_1_local_llm.py::test_network_isolation_during_chat",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_p5_3_os_sandbox.py::test_loopback_connection_allowed_under_sandbox",
+      "completed_rerun_history": [],
+      "disposition": "open",
+      "latest_completed_rerun": null
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_25_dispatcher.py::test_local_first_env_selects_local_first_router",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_25_dispatcher.py::test_local_first_resolution_metadata",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    },
+    {
+      "initial_status": "ERROR",
+      "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
+      "nodeid": "tests/airgap/test_w6_25_dispatcher.py::test_chat_route_uses_dispatcher",
+      "completed_rerun_history": [
+        {
+          "status": "ERROR",
+          "log": "/private/tmp/vos-goal-backend-20260917-environment-rerun.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-fixtures.log"
+        },
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-combined.log"
+      }
+    }
+  ]
+}
