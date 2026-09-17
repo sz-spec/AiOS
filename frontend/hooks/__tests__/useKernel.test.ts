@@ -28,6 +28,28 @@ describe('useKernel', () => {
     expect(result.current.error).toBeNull();
   });
 
+  it('heartbeat uses the latest committed status action and stops when the kernel stops', async () => {
+    vi.useFakeTimers();
+    const initial = vi.fn(async () => {});
+    const replacement = vi.fn(async () => {});
+    useKernelStore.setState({ initialize: vi.fn(), isDesktop: true, qemuAlive: true, fetchStatus: initial });
+    const { unmount } = renderHook(() => useKernel());
+    try {
+      await act(async () => { await vi.advanceTimersByTimeAsync(5000); });
+      expect(initial).toHaveBeenCalledTimes(1);
+      await act(async () => { useKernelStore.setState({ fetchStatus: replacement }); });
+      await act(async () => { await vi.advanceTimersByTimeAsync(5000); });
+      expect(initial).toHaveBeenCalledTimes(1);
+      expect(replacement).toHaveBeenCalledTimes(1);
+      await act(async () => { useKernelStore.setState({ qemuAlive: false }); });
+      await act(async () => { await vi.advanceTimersByTimeAsync(10000); });
+      expect(replacement).toHaveBeenCalledTimes(1);
+    } finally {
+      unmount();
+      vi.useRealTimers();
+    }
+  });
+
   // ---- fetchStatus ----
 
   it('fetchStatus populates status on success', async () => {

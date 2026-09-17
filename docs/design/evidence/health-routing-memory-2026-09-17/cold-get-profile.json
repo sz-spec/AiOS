@@ -1,0 +1,21 @@
+{
+  "retained_bytes": 141765,
+  "requests": 1000,
+  "cold": true,
+  "threshold_bytes": 5242880,
+  "instrumentation": "same test snapshots captured; no warmup or extra collections",
+  "top_allocations": [
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/linecache.py:142: size=62.4 KiB (+62.4 KiB), count=631 (+631), average=101 B",
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/re/__init__.py:224: size=27.3 KiB (+27.3 KiB), count=595 (+595), average=47 B",
+    "/Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/anyio/streams/memory.py:122: size=16.2 KiB (+16.2 KiB), count=264 (+264), average=63 B",
+    "/Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/anyio/_core/_streams.py:51: size=11.7 KiB (+11.7 KiB), count=191 (+191), average=63 B",
+    "/Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/fastapi/applications.py:1067: size=4224 B (+4224 B), count=30 (+30), average=141 B",
+    "<frozen abc>:123: size=2566 B (+2566 B), count=21 (+21), average=122 B",
+    "/Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/httpx2/_models.py:164: size=1848 B (+1848 B), count=32 (+32), average=58 B",
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/_weakrefset.py:88: size=1536 B (+1536 B), count=2 (+2), average=768 B",
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/re/_compiler.py:766: size=720 B (+720 B), count=1 (+1), average=720 B",
+    "/Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/starlette/middleware/cors.py:68: size=665 B (+665 B), count=11 (+11), average=60 B",
+    "/Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/httpx2/_models.py:84: size=621 B (+621 B), count=9 (+9), average=69 B",
+    "/opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/weakref.py:428: size=568 B (+568 B), count=1 (+1), average=568 B"
+  ]
+}

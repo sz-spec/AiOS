@@ -50,3 +50,20 @@ Native source-contract failures include missing fine-tuning/VMM/dispatcher capab
 An untracked `backend/:memory:.ses` artifact was quarantined to `/private/tmp/vos-goal-backend-20260917-memory-artifact.ses`, mode 0600. Its payload was not printed. The exact producer remains unidentified; it recurred while multiple test processes were running, so the underlying path issue is not fixed. An audit-hook rerun of the combined focused set observed no Python `.ses` opens and did not change its modification time; concurrent or C-level creation remains possible. The recurrence was quarantined separately as `memory-artifact-r2.ses`. It must remain outside commits.
 
 No universal operating-system security, physical device support, cloud service integration, or all-tests-green claim follows from these results.
+
+
+## Follow-up: remaining air-gap cases
+
+On the clean `5e663bd` starting snapshot, the three previously unresolved air-gap modules were rerun with the required local OS permissions:
+
+```text
+.venv-upgrade/bin/python -m pytest
+  tests/airgap/test_p4_1_sandbox.py
+  tests/airgap/test_p5_1_dashboard.py
+  tests/airgap/test_p5_3_os_sandbox.py
+  -n 0 --timeout=90 --tb=short
+```
+
+The command ran from `backend/` using `../.venv-upgrade/bin/python`: **54 passed in 4.21 seconds**, exit 0. Evidence: `/private/tmp/vos-goal-backend-20260917-airgap-round2.log`. No production or test source changes were necessary. The run includes explicit negative checks for missing local-LLM scope, blocked cloud/network access, revoked scope/cache eviction, invalid app credentials and external DNS-name sockets, plus positive controls for granted scope and permitted loopback connections. It does not establish arbitrary external-network behavior or cloud availability. The DNS-negative test accepts a generic child `OSError` via its `BLOCKED:` marker, so that case alone cannot distinguish policy enforcement from an unavailable DNS/network path. The successful loopback control and explicit HTTP 403 scope/cache assertions provide separate, narrower evidence.
+
+All six previously unresolved air-gap node IDs now have explicit PASS records in a completed run. The updated exact-node inventory records **180 resolved in focused reruns and 15 open** out of the initial195; earlier milestone counts above remain historical. The original health-memory failure remains a separate, newly exposed case, and a corrected full-suite pass remains pending.

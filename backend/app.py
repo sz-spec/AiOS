@@ -36,6 +36,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 VOS3_VERSION = "3.1.0"
 
 
+class _HealthMethodNotAllowed:
+    """Own the exact health path's non-GET methods without scanning API routers."""
+
+    async def __call__(self, scope, receive, send):
+        raise StarletteHTTPException(status_code=405, headers={"Allow": "GET"})
+
+
 def _setup_sentry():
     """Initialize Sentry error tracking if configured."""
     dsn = os.environ.get("SENTRY_DSN")
@@ -271,6 +278,33 @@ def create_app() -> FastAPI:
                 },
             },
         },
+    )
+
+    # Keep the lightweight liveness route ahead of included API routers.
+    # FastAPI initializes included-route dependency/response schemas lazily
+    # while matching; a health poll should not materialize every API schema.
+    # All application middleware still wraps this route normally.
+    @application.get("/health")
+    async def health():
+        return {
+            "status": "healthy",
+            "version": VOS3_VERSION,
+            "services": {
+                "control_plane": "control_plane" in services,
+                "business_core": "business_core" in services,
+                "workflow_engine": "workflow_engine" in services,
+                "mission_control": "mission_control" in services,
+                "redis_checkpointer": "redis_checkpointer" in services,
+                "agent_registry": "agent_registry" in services,
+            },
+        }
+
+    # A GET-only route otherwise yields a partial match for POST/etc., making
+    # Starlette scan every included API branch before returning the same 405.
+    # An ASGI callable route accepts method matching, but always rejects here;
+    # application middleware and the normal HTTP exception handler still apply.
+    application.router.add_route(
+        "/health", _HealthMethodNotAllowed(), include_in_schema=False
     )
 
     # --- Content size limit middleware (outermost — runs before everything) ---
@@ -614,7 +648,9 @@ def create_app() -> FastAPI:
                 "request_id": req_id,
             },
         }
-        return JSONResponse(status_code=exc.status_code, content=content)
+        return JSONResponse(
+            status_code=exc.status_code, content=content, headers=exc.headers
+        )
 
     @application.exception_handler(Exception)
     async def global_exception_handler(request: Request, exc: Exception):
@@ -641,7 +677,7 @@ def create_app() -> FastAPI:
     routers = discover_routers()
     mount_routers(application, routers)
 
-    # --- Root + Health endpoints ---
+    # --- Root endpoint ---
     @application.get("/")
     async def root():
         return {
@@ -675,21 +711,6 @@ def create_app() -> FastAPI:
                 "developer_analytics": "/api/developers/analytics - Developer analytics and earnings",
             },
             "docs": "/docs",
-        }
-
-    @application.get("/health")
-    async def health():
-        return {
-            "status": "healthy",
-            "version": VOS3_VERSION,
-            "services": {
-                "control_plane": "control_plane" in services,
-                "business_core": "business_core" in services,
-                "workflow_engine": "workflow_engine" in services,
-                "mission_control": "mission_control" in services,
-                "redis_checkpointer": "redis_checkpointer" in services,
-                "agent_registry": "agent_registry" in services,
-            },
         }
 
     # Phase 38 (Gap G15): audit-readiness lockdown. When VOS3_AUDIT_LOCKDOWN is

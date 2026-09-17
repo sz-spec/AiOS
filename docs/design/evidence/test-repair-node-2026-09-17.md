@@ -6,7 +6,7 @@ Reviewer/implementer: `/root/rust_upgrade`, one actual agent. Node edits below a
 
 | Component | Commands / outcome |
 | --- | --- |
-| Frontend | `npm test`: initially 216 tests/18 files; after selector regression tests 218 tests passed; after the bounded Marketplace follow-up **220 tests/20 files passed**. `npm run type-check` passed after the final Marketplace changes. |
+| Frontend | `npm test`: initially 216 tests/18 files; after selector regression tests 218 tests passed; after the bounded Marketplace follow-up 220 tests/20 files passed; after BMAD and heartbeat follow-ups **223 tests/21 files passed**. `npm run type-check` passed after the final hook changes. |
 | Frontend build | `npm run build -- --webpack`: passed, 30 pages, after WebCrypto migration and before the final selector extraction. A production build after that extraction is not claimed here. |
 | MCP | `npm test -- --run`: **18 tests/3 files passed**; `npm run typecheck`, `npm run build`, and lint passed. Network-listening tests required the approved unsandboxed rerun after sandbox EPERM. |
 | TypeScript SDK | `npm test`: TypeScript build and **2 tests passed**. |
@@ -32,9 +32,17 @@ This passed; it is not runtime qualification of excluded legacy server variants.
 
 Final logs: `/private/tmp/vos-goal-node-20260917-marketplace-full-tests.log`, `marketplace-tests.log`, `marketplace-types.log` and `marketplace-lint.json` under the same prefix. The production build result above predates both the selector and Marketplace follow-ups; it is not presented as a rebuild of these final edits.
 
+## BMAD and kernel heartbeat follow-up
+
+`frontend/hooks/useBMAD.ts` declares artifact and approval loaders before their consuming session loader and includes both callbacks in its dependencies. Existing request paths, parallel loading and error behavior are unchanged. Two tests in `hooks/useBMAD-loading.test.ts` cover loading both dependent collections with the current authentication callback after rerender, and refusing dependent requests when the session request fails.
+
+`frontend/hooks/useKernel.ts` updates the heartbeat callback ref in an effect after commit, rather than during render. This preserves the stable polling interval without exposing a speculative render's callback. A fake-timer regression in `hooks/__tests__/useKernel.test.ts` verifies that a replacement action handles the next tick, the prior action is not reused, and polling stops when the kernel stops. It does not claim browser concurrency stress or live kernel connectivity.
+
+Final author review confirmed narrow callback ordering/dependency/ref changes with no request-policy changes or rule suppression. Full `npm test`: **223 passed in 21 files**; `npm run type-check`: passed. Exact final logs are `/private/tmp/vos-goal-node-20260917-hooks-final-tests.log`, `/private/tmp/vos-goal-node-20260917-hooks-final-types.log` and `/private/tmp/vos-goal-node-20260917-hooks-final-lint.json`. These hook edits have not received a new production build or browser qualification in this report.
+
 ## Remaining frontend gates
 
-Final lint reports **61 errors and 24 warnings**, down from 70 errors and 25 warnings. The seven static-component errors are resolved. The Marketplace follow-up also resolves one immutability error, one preserve-manual-memoization error and one exhaustive-deps warning. Remaining errors comprise 36 set-state-in-effect, 10 immutability, 11 refs and 4 preserve-manual-memoization findings. Lint remains a failing gate; passing unit tests do not override it.
+Final lint reports **58 errors and 23 warnings**, down from the original 70 errors and 25 warnings, through intermediate baselines of 63/25 and 61/24. The seven static-component errors are resolved. The Marketplace follow-up also resolves one immutability error, one preserve-manual-memoization error and one exhaustive-deps warning. The BMAD follow-up removes two more immutability errors and one dependency warning; the kernel heartbeat follow-up removes one refs error. Remaining errors comprise 36 set-state-in-effect, 8 immutability, 10 refs and 4 preserve-manual-memoization findings. Lint remains a failing gate; passing unit tests do not override it.
 
 An actual Chromium run was attempted with `npm run test:e2e -- --project=chromium --workers=1 --reporter=line --max-failures=1`. After the sandbox port restriction was resolved through escalation, the application failed for a missing Clerk publishable key. No browser case is claimed qualified. No Clerk authentication bypass, external account creation or invented key was introduced. Runtime-generated reports/instruction files were preserved outside the repository; the tracked Playwright HTML report was restored to its prior contents.
 

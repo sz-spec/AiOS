@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-09-17",
   "initial_revision": "53b9a44",
-  "current_milestone_revision": "cd0e2362f43fff2f7cb42aba437d0391f2d98cff",
+  "current_milestone_revision": "5e663bd14961ac4b011be87eb338dd7d45a02b21",
   "scope": "Exact initial failed/error node IDs; focused resolution is not a passing full suite",
   "rules": [
     "Only explicit PASSED for the identical node ID in a completed run can resolve an entry.",
@@ -12,8 +12,8 @@
     "Existing baseline skips/xfails and newly exposed failures are outside this initial195 inventory and remain separate gates."
   ],
   "counts": {
-    "resolved_in_focused_rerun": 174,
-    "open": 21
+    "resolved_in_focused_rerun": 180,
+    "open": 15
   },
   "initial_count": 195,
   "initial_log_sha256": "36d8323c5155b37fc298e4d5fb7ec030a4ec7009b8fb220e44e6c8d76fd4d76c",
@@ -167,6 +167,11 @@
       "path": "/private/tmp/vos-goal-backend-20260917-health-cold-warm-r2.log",
       "summary": "========================= 1 failed, 1 passed in 22.54s =========================",
       "sha256": "ba9c1ecece871b218ea0e4fab12fe823369feb74dfa331f1793f49af709807e1"
+    },
+    {
+      "path": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log",
+      "summary": "============================== 54 passed in 4.21s ==============================",
+      "sha256": "d46420f8b17ab263104b32b7ecfaeb43d1fe84089125be9b8eb82698b715a2c6"
     }
   ],
   "excluded_logs": [
@@ -4008,9 +4013,17 @@
       "initial_status": "FAILED",
       "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
       "nodeid": "tests/airgap/test_p5_3_os_sandbox.py::test_pen_external_socket_blocked_for_dns_hostname",
-      "completed_rerun_history": [],
-      "disposition": "open",
-      "latest_completed_rerun": null
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+      }
     },
     {
       "initial_status": "FAILED",
@@ -4096,33 +4109,65 @@
       "initial_status": "ERROR",
       "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
       "nodeid": "tests/airgap/test_p4_1_sandbox.py::test_local_first_router_denies_app_without_llm_local_scope",
-      "completed_rerun_history": [],
-      "disposition": "open",
-      "latest_completed_rerun": null
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+      }
     },
     {
       "initial_status": "ERROR",
       "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
       "nodeid": "tests/airgap/test_p4_1_sandbox.py::test_local_first_router_allows_app_with_llm_local_scope",
-      "completed_rerun_history": [],
-      "disposition": "open",
-      "latest_completed_rerun": null
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+      }
     },
     {
       "initial_status": "ERROR",
       "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
       "nodeid": "tests/airgap/test_p4_1_sandbox.py::test_dispatcher_no_app_id_skips_gate",
-      "completed_rerun_history": [],
-      "disposition": "open",
-      "latest_completed_rerun": null
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+      }
     },
     {
       "initial_status": "ERROR",
       "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
       "nodeid": "tests/airgap/test_p5_1_dashboard.py::test_toggle_revokes_scope_and_evicts_cache",
-      "completed_rerun_history": [],
-      "disposition": "open",
-      "latest_completed_rerun": null
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+      }
     },
     {
       "initial_status": "ERROR",
@@ -4296,9 +4341,17 @@
       "initial_status": "ERROR",
       "initial_log": "/private/tmp/vos-goal-backend-20260917-suite-r2.log",
       "nodeid": "tests/airgap/test_p5_3_os_sandbox.py::test_loopback_connection_allowed_under_sandbox",
-      "completed_rerun_history": [],
-      "disposition": "open",
-      "latest_completed_rerun": null
+      "completed_rerun_history": [
+        {
+          "status": "PASSED",
+          "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+        }
+      ],
+      "disposition": "resolved_in_focused_rerun",
+      "latest_completed_rerun": {
+        "status": "PASSED",
+        "log": "/private/tmp/vos-goal-backend-20260917-airgap-round2.log"
+      }
     },
     {
       "initial_status": "ERROR",

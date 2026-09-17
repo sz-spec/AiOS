@@ -210,6 +210,36 @@ export function useBMAD() {
     }
   }, [getToken]);
 
+  // -------------------------------------------------------------------------
+  // Artifacts
+  // -------------------------------------------------------------------------
+
+  const loadArtifacts = useCallback(async (sessionId: string) => {
+    try {
+      const response = await apiFetch(getToken, `/api/bmad/sessions/${sessionId}/artifacts`);
+      if (!response.ok) throw new Error('Failed to load artifacts');
+      const data = await response.json();
+      setArtifacts(data.artifacts);
+    } catch (err) {
+      console.error('Failed to load artifacts:', err);
+    }
+  }, [getToken]);
+
+  // -------------------------------------------------------------------------
+  // Approvals
+  // -------------------------------------------------------------------------
+
+  const loadApprovals = useCallback(async (sessionId: string) => {
+    try {
+      const response = await apiFetch(getToken, `/api/bmad/sessions/${sessionId}/approvals`);
+      if (!response.ok) throw new Error('Failed to load approvals');
+      const data = await response.json();
+      setApprovals(data.approvals);
+    } catch (err) {
+      console.error('Failed to load approvals:', err);
+    }
+  }, [getToken]);
+
   const loadSession = useCallback(async (sessionId: string): Promise<BMADSession | null> => {
     setIsLoading(true);
     setError(null);
@@ -232,7 +262,7 @@ export function useBMAD() {
     } finally {
       setIsLoading(false);
     }
-  }, [getToken]);
+  }, [getToken, loadArtifacts, loadApprovals]);
 
   const deleteSession = useCallback(async (sessionId: string): Promise<boolean> => {
     try {
@@ -433,36 +463,6 @@ export function useBMAD() {
     }
     setIsStreaming(false);
   }, []);
-
-  // -------------------------------------------------------------------------
-  // Artifacts
-  // -------------------------------------------------------------------------
-
-  const loadArtifacts = useCallback(async (sessionId: string) => {
-    try {
-      const response = await apiFetch(getToken, `/api/bmad/sessions/${sessionId}/artifacts`);
-      if (!response.ok) throw new Error('Failed to load artifacts');
-      const data = await response.json();
-      setArtifacts(data.artifacts);
-    } catch (err) {
-      console.error('Failed to load artifacts:', err);
-    }
-  }, [getToken]);
-
-  // -------------------------------------------------------------------------
-  // Approvals
-  // -------------------------------------------------------------------------
-
-  const loadApprovals = useCallback(async (sessionId: string) => {
-    try {
-      const response = await apiFetch(getToken, `/api/bmad/sessions/${sessionId}/approvals`);
-      if (!response.ok) throw new Error('Failed to load approvals');
-      const data = await response.json();
-      setApprovals(data.approvals);
-    } catch (err) {
-      console.error('Failed to load approvals:', err);
-    }
-  }, [getToken]);
 
   const resolveApproval = useCallback(async (
     sessionId: string,

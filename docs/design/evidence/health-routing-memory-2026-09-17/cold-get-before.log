@@ -1,0 +1,46 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Users/sz/Desktop/vos/vos 5/.venv-upgrade/bin/python
+cachedir: .pytest_cache
+benchmark: 5.3.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: /Users/sz/Desktop/vos/vos 5/backend
+configfile: pytest.ini
+plugins: cov-7.1.0, xdist-3.8.0, timeout-2.4.0, asyncio-1.4.0, benchmark-5.3.0, langsmith-0.12.4, anyio-4.15.1
+timeout: 90.0s
+timeout method: signal
+timeout func_only: False
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_health_endpoint_no_leak FAILED [100%]
+
+=================================== FAILURES ===================================
+_________________ TestMemoryLeaks.test_health_endpoint_no_leak _________________
+tests/perf/test_memory_leaks.py:71: in test_health_endpoint_no_leak
+    assert total_delta < 5 * 1024 * 1024, (
+E   AssertionError: Health endpoint retained 5.30 MB over 1000 requests
+E     Largest retained allocation deltas:
+E     <string>:32: size=812 KiB (+812 KiB), count=1053 (+1053), average=790 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/pydantic/fields.py:237: size=521 KiB (+521 KiB), count=2894 (+2894), average=184 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/pydantic/fields.py:280: size=328 KiB (+328 KiB), count=1553 (+1553), average=216 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/fastapi/dependencies/utils.py:281: size=324 KiB (+324 KiB), count=1802 (+1802), average=184 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/pydantic/fields.py:316: size=208 KiB (+208 KiB), count=806 (+806), average=264 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/pydantic/plugin/_schema_validator.py:51: size=185 KiB (+185 KiB), count=2326 (+2326), average=81 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/fastapi/routing.py:1021: size=133 KiB (+133 KiB), count=1044 (+1044), average=130 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/pydantic_core/core_schema.py:4333: size=122 KiB (+122 KiB), count=1665 (+1665), average=75 B
+E     /opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/re/_compiler.py:766: size=122 KiB (+122 KiB), count=345 (+345), average=363 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/fastapi/routing.py:1445: size=114 KiB (+114 KiB), count=1044 (+1044), average=112 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/fastapi/_compat/v2.py:163: size=107 KiB (+107 KiB), count=1612 (+1612), average=68 B
+E     /Users/sz/Desktop/vos/vos 5/.venv-upgrade/lib/python3.12/site-packages/pydantic/type_adapter.py:330: size=107 KiB (+107 KiB), count=806 (+806), average=136 B
+E   assert 5559252 < ((5 * 1024) * 1024)
+---------------------------- Captured stdout setup -----------------------------
+AUTH: Running in dev mode (VOS3_ALLOW_DEV_MODE=true, no authentication)
+[i] CORS: defaulting to Tauri-only origins (tauri://localhost, http://localhost:1420)
+Warning: JWT_SECRET not set, using ephemeral key (dev mode)
+---------------------------- Captured stderr setup -----------------------------
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 9643.15it/s]
+------------------------------ Captured log setup ------------------------------
+WARNING  middleware.csrf:csrf.py:86 VOS3_TAURI_IPC_SECRET not set; generated an ephemeral development secret. Set the environment variable for an explicit local handshake value.
+WARNING  src.efficiency.router:router.py:202 smart_router package not installed — using fallback model assignments
+=========================== short test summary info ============================
+FAILED tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_health_endpoint_no_leak
+============================== 1 failed in 18.73s ==============================

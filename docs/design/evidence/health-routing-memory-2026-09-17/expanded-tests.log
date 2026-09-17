@@ -1,0 +1,45 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /Users/sz/Desktop/vos/vos 5/.venv-upgrade/bin/python
+cachedir: .pytest_cache
+benchmark: 5.3.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: /Users/sz/Desktop/vos/vos 5/backend
+configfile: pytest.ini
+plugins: cov-7.1.0, xdist-3.8.0, timeout-2.4.0, asyncio-1.4.0, benchmark-5.3.0, langsmith-0.12.4, anyio-4.15.1
+timeout: 90.0s
+timeout method: signal
+timeout func_only: False
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 30 items
+
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_health_endpoint_no_leak PASSED [  3%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_token_bucket_cleanup_returns_memory PASSED [  6%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_rate_limiter_cleanup_removes_all PASSED [ 10%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_service_singleton_reimport PASSED [ 13%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_testclient_lifecycle PASSED [ 16%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_user_id_cache_bounded PASSED [ 20%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_json_serialization_no_accumulation PASSED [ 23%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_post_request_cycle_no_leak PASSED [ 26%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_token_bucket_stale_cleanup PASSED [ 30%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_authenticated_user_gc_collected PASSED [ 33%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_middleware_import_stability PASSED [ 36%]
+tests/perf/test_memory_leaks.py::TestMemoryLeaks::test_large_body_memory_returns PASSED [ 40%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[GET] PASSED [ 43%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[POST] PASSED [ 46%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[PUT] PASSED [ 50%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[PATCH] PASSED [ 53%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[DELETE] PASSED [ 56%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[HEAD] PASSED [ 60%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[OPTIONS] PASSED [ 63%]
+tests/perf/test_health_routing.py::test_cold_health_does_not_match_unrelated_router_branches[UNSUPPORTED] PASSED [ 66%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_rate_limited_blocks_before_auth PASSED [ 70%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_content_size_rejection_preserves_rate_limit PASSED [ 73%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_request_id_propagated PASSED [ 76%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_timing_header_on_success PASSED [ 80%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_timing_header_on_error PASSED [ 83%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_health_bypasses_rate_limit PASSED [ 86%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_content_size_before_rate_limit PASSED [ 90%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_cors_options_no_auth_required PASSED [ 93%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_request_id_passthrough PASSED [ 96%]
+tests/integration/test_middleware_chain.py::TestMiddlewareChain::test_slow_request_logged PASSED [100%]
+
+============================= 30 passed in 43.76s ==============================

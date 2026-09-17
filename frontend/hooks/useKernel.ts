@@ -72,7 +72,9 @@ export function useKernel() {
 
   // Stable ref for store.fetchStatus to avoid heartbeat interval churn
   const fetchStatusRef = useRef(store.fetchStatus);
-  fetchStatusRef.current = store.fetchStatus;
+  useEffect(() => {
+    fetchStatusRef.current = store.fetchStatus;
+  }, [store.fetchStatus]);
 
   // Health check heartbeat: poll status every 5s when kernel is running
   useEffect(() => {
