@@ -199,23 +199,28 @@ class TestMiddlewareChain:
         assert "too large" in body.get("detail", "").lower()
 
     # 8. CORS preflight OPTIONS request handled before auth -----------------
-    def test_cors_options_no_auth_required(self, _app):
+    def test_cors_options_no_auth_required(self, monkeypatch):
         """An OPTIONS preflight request should not require authentication."""
-        client = TestClient(_app)
+        from app import create_app
+        monkeypatch.delenv("ALLOWED_ORIGINS", raising=False)
+        client = TestClient(create_app())
 
         resp = client.options(
             "/api/test",
             headers={
-                "Origin": "http://localhost:3000",
+                "Origin": "tauri://localhost",
                 "Access-Control-Request-Method": "GET",
                 "Access-Control-Request-Headers": "Authorization",
             },
         )
-        # CORS middleware should handle this without hitting auth.
-        # Acceptable statuses: 200 (CORS handled), 204 (CORS no-content),
-        # 405 (method not allowed if CORS not configured), or 503 (service unavailable
-        # if middleware chain rejects before routing).
-        assert resp.status_code in (200, 204, 405, 503)
+        assert resp.status_code == 200
+        assert resp.headers["access-control-allow-origin"] == "tauri://localhost"
+        assert resp.headers["access-control-allow-credentials"] == "true"
+        rejected = client.options("/api/test", headers={
+            "Origin": "https://untrusted.example", "Access-Control-Request-Method": "GET"
+        })
+        assert rejected.status_code == 400
+        assert "access-control-allow-origin" not in rejected.headers
 
     # 9. Request with X-Request-ID header reused in response ----------------
     def test_request_id_passthrough(self):

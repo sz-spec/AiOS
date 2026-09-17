@@ -224,8 +224,7 @@ class TestVBusCrossTenantFrameIsolation:
             victim.emit(secret)
 
             # Adversary's ring is empty.
-            assert attacker.empty
-            with pytest.raises(Exception):  # RingEmpty
+            with pytest.raises(IndexError, match="^ring empty$"):
                 with attacker.consumer_slot() as _v:
                     pass
 
@@ -234,7 +233,9 @@ class TestVBusCrossTenantFrameIsolation:
             # the attacker's drain.
             with victim.consumer_slot() as v:
                 assert bytes(v) == secret
-            assert attacker.empty
+            with pytest.raises(IndexError, match="^ring empty$"):
+                with attacker.consumer_slot():
+                    pytest.fail("attacker ring exposed a payload after victim drain")
         finally:
             victim.close()
             victim.unlink()

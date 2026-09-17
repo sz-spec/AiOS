@@ -67,9 +67,11 @@ class TestMemoryLeaks:
 
         stats = snap2.compare_to(snap1, "lineno")
         total_delta = sum(s.size_diff for s in stats)
-        assert (
-            total_delta < 5 * 1024 * 1024
-        ), f"Health endpoint leaked {total_delta / 1024 / 1024:.2f} MB over 1000 requests"
+        top_allocations = "\n".join(str(stat) for stat in stats[:12])
+        assert total_delta < 5 * 1024 * 1024, (
+            f"Health endpoint retained {total_delta / 1024 / 1024:.2f} MB "
+            f"over 1000 requests\nLargest retained allocation deltas:\n{top_allocations}"
+        )
 
     # 2. TokenBucket with 10K unique IPs ------------------------------------
     def test_token_bucket_cleanup_returns_memory(self):
