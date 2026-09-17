@@ -1,0 +1,102 @@
+diff --git a/backend/tests/kernel/test_kpti_source.py b/backend/tests/kernel/test_kpti_source.py
+index 95e1506..e6dd874 100644
+--- a/backend/tests/kernel/test_kpti_source.py
++++ b/backend/tests/kernel/test_kpti_source.py
+@@ -80,3 +80,74 @@ def test_missing_root_is_rejected_without_modification(sync_root, missing_destin
+     before = bytes(page)
+     assert (sync_root(None, page) if missing_destination else sync_root(page, None)) == -1
+     assert bytes(page) == before
++
++
++def test_changed_retained_entries_and_accessed_bits_are_synchronized(sync_root):
++    full, user = Page(), Page()
++    for index in (0, 7, 255, 256, 511):
++        full[index] = (index + 1) * 4096 | 7
++    assert sync_root(user, full) == 0
++    for index in (0, 7, 255, 256, 511):
++        full[index] ^= 0x20  # Hardware accessed bit is part of the copied value.
++    full[7] = 0  # Revoke an existing user mapping.
++    full[255] = 0xFEDCB007  # Replace its physical target.
++    for index in range(257, 511):
++        user[index] = 0xBAD027
++    expected = list(full)[:257] + [0] * 254 + [full[511]]
++    original = list(full)
++    assert sync_root(user, full) == 0
++    assert list(user) == expected
++    assert list(full) == original
++
++
++def test_unchanged_root_performs_no_stores_in_readonly_subprocess(sync_root, tmp_path):
++    # Compile the same production C module into an isolated executable: a
++    # redundant store must fault, without terminating the pytest process.
++    compiler = shutil.which('cc') or shutil.which('clang')
++    source = tmp_path / 'readonly.c'
++    executable = tmp_path / 'readonly'
++    source.write_text(r'''
++#define _GNU_SOURCE
++#include <stdint.h>
++#include <stddef.h>
++#include <sys/mman.h>
++#include <unistd.h>
++#include "arch/x86_64/kpti_roots.h"
++#define CHECK(x) do { if (!(x)) return __LINE__; } while (0)
++int main(void) {
++    long page_size = sysconf(_SC_PAGESIZE);
++    CHECK(page_size >= 4096);
++    uint64_t *full = mmap(NULL, (size_t)page_size, PROT_READ | PROT_WRITE,
++                          MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++    uint64_t *user = mmap(NULL, (size_t)page_size, PROT_READ | PROT_WRITE,
++                          MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++    CHECK(full != MAP_FAILED && user != MAP_FAILED);
++    for (size_t i = 0; i < 512; i++) full[i] = ((i + 1) << 12) | 0x27;
++    CHECK(vos3_kpti_sync_root(user, full) == 0);
++    CHECK(mprotect(user, (size_t)page_size, PROT_READ) == 0);
++    /* All 512 destination entries already match, including forbidden zeroes. */
++    CHECK(vos3_kpti_sync_root(user, full) == 0);
++    CHECK(mprotect(user, (size_t)page_size, PROT_READ | PROT_WRITE) == 0);
++    full[2] = 0;
++    full[255] = 0x12345007;
++    full[256] ^= 0x20;
++    full[511] ^= 0x20;
++    user[300] = 0xBAD007;
++    CHECK(vos3_kpti_sync_root(user, full) == 0);
++    for (size_t i = 0; i < 512; i++) {
++        uint64_t expected = (i < 256 || i == 256 || i == 511) ? full[i] : 0;
++        CHECK(user[i] == expected);
++    }
++    CHECK(mprotect(user, (size_t)page_size, PROT_READ) == 0);
++    CHECK(vos3_kpti_sync_root(user, full) == 0);
++    CHECK(munmap(user, (size_t)page_size) == 0);
++    CHECK(munmap(full, (size_t)page_size) == 0);
++    return 0;
++}
++''')
++    subprocess.run([compiler, '-std=c11', '-O2', '-Werror',
++                    '-I', str(ROOT / 'include'), str(source),
++                    str(ROOT / 'src/arch/x86_64/kpti_roots.c'),
++                    '-o', str(executable)], check=True)
++    result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=10)
++    assert result.returncode == 0, (result.returncode, result.stdout, result.stderr)
+diff --git a/kernel/src/arch/x86_64/kpti_roots.c b/kernel/src/arch/x86_64/kpti_roots.c
+index 3c33395..3cbb136 100644
+--- a/kernel/src/arch/x86_64/kpti_roots.c
++++ b/kernel/src/arch/x86_64/kpti_roots.c
+@@ -10,9 +10,15 @@ int vos3_kpti_sync_root(uint64_t* restricted, const uint64_t* full)
+     if ((dst <= src && src - dst < bytes) ||
+         (src <= dst && dst - src < bytes)) return -1;
+ 
+-    for (size_t i = 0; i < 256; ++i) restricted[i] = full[i];
+-    for (size_t i = 256; i < 512; ++i) {
+-        restricted[i] = (i == 256 || i == 511) ? full[i] : 0;
++    /* Page-table entries can also be updated by hardware. Keep aligned entry
++     * accesses explicit, and avoid dirtying an unchanged root on every user
++     * return. Inspect every slot so removals and forbidden mappings still get
++     * synchronized; this does not replace the caller's lock or CR3 flush. */
++    for (size_t i = 0; i < 512; ++i) {
++        uint64_t desired = (i <= 256 || i == 511)
++            ? __atomic_load_n(&full[i], __ATOMIC_RELAXED) : 0;
++        if (__atomic_load_n(&restricted[i], __ATOMIC_RELAXED) != desired)
++            __atomic_store_n(&restricted[i], desired, __ATOMIC_RELAXED);
+     }
+     return 0;
+ }

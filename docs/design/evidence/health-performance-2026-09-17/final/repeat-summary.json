@@ -1,0 +1,52 @@
+[
+  {
+    "name": "uefi-1",
+    "command": [
+      "python3",
+      "/private/tmp/vos-final-uefi-runner.py",
+      "--source",
+      "/private/tmp/vos-health-final-20260917/source",
+      "--iso",
+      "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+      "--output",
+      "/private/tmp/vos-health-final-20260917/uefi-1",
+      "--seconds",
+      "500"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 122.76493770768866,
+    "passed": true
+  },
+  {
+    "name": "bios-2",
+    "command": [
+      "python3",
+      "/private/tmp/vos-health-observe.py",
+      "--source",
+      "/private/tmp/vos-health-final-20260917/source",
+      "--output",
+      "/private/tmp/vos-health-final-20260917/bios-2"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 121.47154316585511,
+    "passed": true
+  },
+  {
+    "name": "uefi-2",
+    "command": [
+      "python3",
+      "/private/tmp/vos-final-uefi-runner.py",
+      "--source",
+      "/private/tmp/vos-health-final-20260917/source",
+      "--iso",
+      "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+      "--output",
+      "/private/tmp/vos-health-final-20260917/uefi-2",
+      "--seconds",
+      "500"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 122.90084462519735,
+    "passed": true
+  }
+]

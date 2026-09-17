@@ -1,0 +1,6 @@
+START uefi-1
+DONE uefi-1 0 True
+START bios-2
+DONE bios-2 0 True
+START uefi-2
+DONE uefi-2 0 True

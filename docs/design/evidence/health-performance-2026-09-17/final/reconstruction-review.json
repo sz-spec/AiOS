@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "base_commit": "9728f7143fb0a012f0415cfff73b7f25cca5c37b",
+  "verified_files": 6321,
+  "method": "git archive base + saved tracked patch + frozen additions; every manifest file rehashed"
+}

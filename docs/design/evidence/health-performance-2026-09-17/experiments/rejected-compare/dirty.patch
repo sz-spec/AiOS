@@ -1,0 +1,23 @@
+diff --git a/kernel/src/arch/x86_64/kpti_roots.c b/kernel/src/arch/x86_64/kpti_roots.c
+index 3c33395..3cbb136 100644
+--- a/kernel/src/arch/x86_64/kpti_roots.c
++++ b/kernel/src/arch/x86_64/kpti_roots.c
+@@ -10,9 +10,15 @@ int vos3_kpti_sync_root(uint64_t* restricted, const uint64_t* full)
+     if ((dst <= src && src - dst < bytes) ||
+         (src <= dst && dst - src < bytes)) return -1;
+ 
+-    for (size_t i = 0; i < 256; ++i) restricted[i] = full[i];
+-    for (size_t i = 256; i < 512; ++i) {
+-        restricted[i] = (i == 256 || i == 511) ? full[i] : 0;
++    /* Page-table entries can also be updated by hardware. Keep aligned entry
++     * accesses explicit, and avoid dirtying an unchanged root on every user
++     * return. Inspect every slot so removals and forbidden mappings still get
++     * synchronized; this does not replace the caller's lock or CR3 flush. */
++    for (size_t i = 0; i < 512; ++i) {
++        uint64_t desired = (i <= 256 || i == 511)
++            ? __atomic_load_n(&full[i], __ATOMIC_RELAXED) : 0;
++        if (__atomic_load_n(&restricted[i], __ATOMIC_RELAXED) != desired)
++            __atomic_store_n(&restricted[i], desired, __ATOMIC_RELAXED);
+     }
+     return 0;
+ }

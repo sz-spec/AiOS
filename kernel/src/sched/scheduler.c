@@ -913,7 +913,14 @@ void vos3_sched_process_deferred(void)
      * this CPU while a previous safe point is still in progress. Current
      * scheduling keeps executing contexts CPU-local (no live migration). */
     uint32_t cpu = get_cpu_id();
-    if (cpu >= 256U || __atomic_exchange_n(&g_deferred_active[cpu], 1U, __ATOMIC_ACQUIRE))
+    if (cpu >= 256U)
+        return;
+    /* A zero observation consumes nothing: a racing producer leaves its
+     * release-published bit for the next safe point. Avoid locked exchanges
+     * on the frequent empty path; retain the guarded consuming path below. */
+    if (__atomic_load_n(&g_deferred_pending[cpu], __ATOMIC_ACQUIRE) == 0U)
+        return;
+    if (__atomic_exchange_n(&g_deferred_active[cpu], 1U, __ATOMIC_ACQUIRE))
         return;
     /* Empty syscall safe points are frequent. Producers publish this bit when
      * they enqueue work, so the empty path takes no subsystem lock or scan. */

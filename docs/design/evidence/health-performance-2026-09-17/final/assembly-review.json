@@ -1,0 +1,47 @@
+{
+  "scope": "Independent static inspection of pinned-builder ELF assembly; no runtime or throughput conclusions",
+  "elf": "/private/tmp/vos-health-final-20260917/source/kernel/build/native-full-final/vos3.elf",
+  "inputs": [
+    "kpti-roots.disassembly.txt",
+    "deferred.disassembly.txt",
+    "deferred-part.disassembly.txt"
+  ],
+  "root_sync": {
+    "copy_indices": [
+      0,
+      256
+    ],
+    "copy_iterations": 257,
+    "zero_indices": [
+      257,
+      510
+    ],
+    "zero_iterations": 127,
+    "zero_stores_per_iteration": 2,
+    "final_copy_index": 511,
+    "unconditional_destination_writes_success_path": 512,
+    "source_reads_success_path": 258,
+    "loop_conditional_branch_executions": 384,
+    "loop_branch_addresses": [
+      "0xffffffff8200f112",
+      "0xffffffff8200f156"
+    ],
+    "null_and_overlap_rejection_retained": true,
+    "destination_value_comparison_or_skip": false
+  },
+  "deferred": {
+    "public_wrapper": "IF check then tail-jump to vos3_sched_process_deferred.part.0",
+    "pending_load_address": "0xffffffff820285b2",
+    "pending_zero_branch_address": "0xffffffff820285ca",
+    "pending_zero_returns_before_memory_xchg": true,
+    "pending_zero_locked_rmw_count": 0,
+    "active_claim_memory_xchg_address": "0xffffffff820285d1",
+    "pending_consume_memory_xchg_address": "0xffffffff820285db",
+    "note": "Memory-operand xchg is implicitly locked even without printed lock prefix. These instructions remain on nonzero-pending path. get_cpu_id call remains before pending load."
+  },
+  "limits": [
+    "Static instruction-path analysis only; no new tests/builds/VMs",
+    "Source-language concurrency correctness is not established by this assembly inspection",
+    "Loop branch counts exclude argument-validation branches and interrupts"
+  ]
+}

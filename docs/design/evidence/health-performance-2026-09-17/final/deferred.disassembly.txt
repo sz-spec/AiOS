@@ -1,0 +1,19 @@
+
+/private/tmp/vos-health-final-20260917/source/kernel/build/native-full-final/vos3.elf:     file format elf64-x86-64
+
+
+Disassembly of section .text.boot32:
+
+Disassembly of section .text.boot64:
+
+Disassembly of section .text:
+
+ffffffff82028d10 <vos3_sched_process_deferred>:
+ffffffff82028d10:	f3 0f 1e fa          	endbr64
+ffffffff82028d14:	9c                   	pushf
+ffffffff82028d15:	58                   	pop    %rax
+ffffffff82028d16:	f6 c4 02             	test   $0x2,%ah
+ffffffff82028d19:	75 05                	jne    ffffffff82028d20 <vos3_sched_process_deferred+0x10>
+ffffffff82028d1b:	c3                   	ret
+ffffffff82028d1c:	0f 1f 40 00          	nopl   0x0(%rax)
+ffffffff82028d20:	e9 6b f8 ff ff       	jmp    ffffffff82028590 <vos3_sched_process_deferred.part.0>

@@ -1,0 +1,93 @@
+{
+  "scope": "Independent frozen-classifier replay and artifact/source comparison; single-vCPU QEMU TCG only",
+  "cases": {
+    "bios-1": {
+      "classifier_passed": true,
+      "classifier_failures": [],
+      "ordered_zero_exits": true,
+      "result_matches_classifier": true,
+      "health": {
+        "pushed": 86575,
+        "consumed": 86575,
+        "elapsed": 1000,
+        "throughput": 86575
+      },
+      "health_valid": true,
+      "iso_report_before_after_matches_actual": true
+    },
+    "uefi-1": {
+      "classifier_passed": true,
+      "classifier_failures": [],
+      "ordered_zero_exits": true,
+      "result_matches_classifier": true,
+      "health": {
+        "pushed": 90635,
+        "consumed": 90635,
+        "elapsed": 1000,
+        "throughput": 90635
+      },
+      "health_valid": true,
+      "iso_report_before_after_matches_actual": true
+    },
+    "bios-2": {
+      "classifier_passed": true,
+      "classifier_failures": [],
+      "ordered_zero_exits": true,
+      "result_matches_classifier": true,
+      "health": {
+        "pushed": 89345,
+        "consumed": 89345,
+        "elapsed": 1010,
+        "throughput": 88460
+      },
+      "health_valid": true,
+      "iso_report_before_after_matches_actual": true
+    },
+    "uefi-2": {
+      "classifier_passed": true,
+      "classifier_failures": [],
+      "ordered_zero_exits": true,
+      "result_matches_classifier": true,
+      "health": {
+        "pushed": 87786,
+        "consumed": 87786,
+        "elapsed": 1000,
+        "throughput": 87786
+      },
+      "health_valid": true,
+      "iso_report_before_after_matches_actual": true
+    }
+  },
+  "reproducibility_report_eight_artifacts_identical": true,
+  "first_artifacts_actual_hashes": {
+    "dist/final-full.iso": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+    "kernel/build/native-full-final/vos3.elf": "cc91274a6a07cb7c05031d5a503ca010bc3d5fbcf9550b938c169bf4b112f30b",
+    "kernel/build/limine/bin/limine": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+    "kernel/build/limine/bin/limine-bios.sys": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+    "kernel/build/limine/bin/limine-bios-cd.bin": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+    "kernel/build/limine/bin/limine-uefi-cd.bin": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171",
+    "kernel/build/limine/bin/BOOTX64.EFI": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+    "kernel/build/limine/bin/BOOTIA32.EFI": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e"
+  },
+  "first_artifacts_match_report": true,
+  "health_unchanged": {
+    "user/src/test_health_check.c": {
+      "baseline_path": "/private/tmp/vos-goal-final-native-20260917/source/user/src/test_health_check.c",
+      "baseline_sha256": "9d38806f5823262249e0fbd01d3555e785fea464eeb2825308c4b9a0bf29abae",
+      "final_sha256": "9d38806f5823262249e0fbd01d3555e785fea464eeb2825308c4b9a0bf29abae",
+      "identical": true
+    },
+    "kernel/build/native-full-final/user/bin/test_health_check": {
+      "baseline_path": "/private/tmp/vos-goal-final-native-20260917/source/kernel/build/native-full-final/user/bin/test_health_check",
+      "baseline_sha256": "28cac8eb9131f7f9c9bcac756542f5eb3d6af79d51de51a200085b239aa7b56a",
+      "final_sha256": "28cac8eb9131f7f9c9bcac756542f5eb3d6af79d51de51a200085b239aa7b56a",
+      "identical": true
+    }
+  },
+  "health_threshold_source_80000": true,
+  "limits": [
+    "Eight rebuilt artifact hashes are compared as reported; actual rehash in this review covers first-build artifacts only.",
+    "All zero exits do not turn unavailable NPU or incomplete hardware subtests into hardware qualification.",
+    "No physical-PC, Secure Boot, SMP throughput, or universal performance claim."
+  ]
+}

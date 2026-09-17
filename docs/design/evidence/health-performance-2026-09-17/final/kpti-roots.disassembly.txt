@@ -1,0 +1,57 @@
+
+/private/tmp/vos-health-final-20260917/source/kernel/build/native-full-final/vos3.elf:     file format elf64-x86-64
+
+
+Disassembly of section .text.boot32:
+
+Disassembly of section .text.boot64:
+
+Disassembly of section .text:
+
+ffffffff8200f0c0 <vos3_kpti_sync_root>:
+ffffffff8200f0c0:	f3 0f 1e fa          	endbr64
+ffffffff8200f0c4:	48 85 ff             	test   %rdi,%rdi
+ffffffff8200f0c7:	0f 84 ae 00 00 00    	je     ffffffff8200f17b <vos3_kpti_sync_root+0xbb>
+ffffffff8200f0cd:	48 85 f6             	test   %rsi,%rsi
+ffffffff8200f0d0:	0f 84 a5 00 00 00    	je     ffffffff8200f17b <vos3_kpti_sync_root+0xbb>
+ffffffff8200f0d6:	48 39 fe             	cmp    %rdi,%rsi
+ffffffff8200f0d9:	0f 82 8a 00 00 00    	jb     ffffffff8200f169 <vos3_kpti_sync_root+0xa9>
+ffffffff8200f0df:	48 89 f0             	mov    %rsi,%rax
+ffffffff8200f0e2:	48 29 f8             	sub    %rdi,%rax
+ffffffff8200f0e5:	48 3d ff 0f 00 00    	cmp    $0xfff,%rax
+ffffffff8200f0eb:	0f 86 8a 00 00 00    	jbe    ffffffff8200f17b <vos3_kpti_sync_root+0xbb>
+ffffffff8200f0f1:	31 c0                	xor    %eax,%eax
+ffffffff8200f0f3:	48 39 f7             	cmp    %rsi,%rdi
+ffffffff8200f0f6:	0f 84 7f 00 00 00    	je     ffffffff8200f17b <vos3_kpti_sync_root+0xbb>
+ffffffff8200f0fc:	0f 1f 40 00          	nopl   0x0(%rax)
+ffffffff8200f100:	48 8b 14 c6          	mov    (%rsi,%rax,8),%rdx
+ffffffff8200f104:	48 89 14 c7          	mov    %rdx,(%rdi,%rax,8)
+ffffffff8200f108:	48 83 c0 01          	add    $0x1,%rax
+ffffffff8200f10c:	48 3d 01 01 00 00    	cmp    $0x101,%rax
+ffffffff8200f112:	75 ec                	jne    ffffffff8200f100 <vos3_kpti_sync_root+0x40>
+ffffffff8200f114:	48 8d 87 08 08 00 00 	lea    0x808(%rdi),%rax
+ffffffff8200f11b:	48 8d 97 f8 0f 00 00 	lea    0xff8(%rdi),%rdx
+ffffffff8200f122:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ffffffff8200f129:	00 
+ffffffff8200f12a:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ffffffff8200f131:	00 00 00 00 
+ffffffff8200f135:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ffffffff8200f13c:	00 00 00 00 
+ffffffff8200f140:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
+ffffffff8200f147:	48 83 c0 10          	add    $0x10,%rax
+ffffffff8200f14b:	48 c7 40 f8 00 00 00 	movq   $0x0,-0x8(%rax)
+ffffffff8200f152:	00 
+ffffffff8200f153:	48 39 d0             	cmp    %rdx,%rax
+ffffffff8200f156:	75 e8                	jne    ffffffff8200f140 <vos3_kpti_sync_root+0x80>
+ffffffff8200f158:	48 8b 86 f8 0f 00 00 	mov    0xff8(%rsi),%rax
+ffffffff8200f15f:	48 89 87 f8 0f 00 00 	mov    %rax,0xff8(%rdi)
+ffffffff8200f166:	31 c0                	xor    %eax,%eax
+ffffffff8200f168:	c3                   	ret
+ffffffff8200f169:	48 89 f8             	mov    %rdi,%rax
+ffffffff8200f16c:	48 29 f0             	sub    %rsi,%rax
+ffffffff8200f16f:	48 3d ff 0f 00 00    	cmp    $0xfff,%rax
+ffffffff8200f175:	76 04                	jbe    ffffffff8200f17b <vos3_kpti_sync_root+0xbb>
+ffffffff8200f177:	31 c0                	xor    %eax,%eax
+ffffffff8200f179:	eb 85                	jmp    ffffffff8200f100 <vos3_kpti_sync_root+0x40>
+ffffffff8200f17b:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+ffffffff8200f180:	c3                   	ret

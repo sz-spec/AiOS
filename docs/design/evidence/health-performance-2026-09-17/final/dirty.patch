@@ -1,0 +1,40 @@
+diff --git a/kernel/src/arch/x86_64/kpti_roots.c b/kernel/src/arch/x86_64/kpti_roots.c
+index 3c33395..2bceb66 100644
+--- a/kernel/src/arch/x86_64/kpti_roots.c
++++ b/kernel/src/arch/x86_64/kpti_roots.c
+@@ -10,9 +10,11 @@ int vos3_kpti_sync_root(uint64_t* restricted, const uint64_t* full)
+     if ((dst <= src && src - dst < bytes) ||
+         (src <= dst && dst - src < bytes)) return -1;
+ 
+-    for (size_t i = 0; i < 256; ++i) restricted[i] = full[i];
+-    for (size_t i = 256; i < 512; ++i) {
+-        restricted[i] = (i == 256 || i == 511) ? full[i] : 0;
+-    }
++    /* The allowed slots form one contiguous range plus the kernel-image
++     * slot. Keep the same full synchronization, without testing the slot
++     * policy again on each iteration of the upper-half loop. */
++    for (size_t i = 0; i < 257; ++i) restricted[i] = full[i];
++    for (size_t i = 257; i < 511; ++i) restricted[i] = 0;
++    restricted[511] = full[511];
+     return 0;
+ }
+diff --git a/kernel/src/sched/scheduler.c b/kernel/src/sched/scheduler.c
+index a9c90ba..dc827c7 100644
+--- a/kernel/src/sched/scheduler.c
++++ b/kernel/src/sched/scheduler.c
+@@ -913,7 +913,14 @@ void vos3_sched_process_deferred(void)
+      * this CPU while a previous safe point is still in progress. Current
+      * scheduling keeps executing contexts CPU-local (no live migration). */
+     uint32_t cpu = get_cpu_id();
+-    if (cpu >= 256U || __atomic_exchange_n(&g_deferred_active[cpu], 1U, __ATOMIC_ACQUIRE))
++    if (cpu >= 256U)
++        return;
++    /* A zero observation consumes nothing: a racing producer leaves its
++     * release-published bit for the next safe point. Avoid locked exchanges
++     * on the frequent empty path; retain the guarded consuming path below. */
++    if (__atomic_load_n(&g_deferred_pending[cpu], __ATOMIC_ACQUIRE) == 0U)
++        return;
++    if (__atomic_exchange_n(&g_deferred_active[cpu], 1U, __ATOMIC_ACQUIRE))
+         return;
+     /* Empty syscall safe points are frequent. Producers publish this bit when
+      * they enqueue work, so the empty path takes no subsystem lock or scan. */

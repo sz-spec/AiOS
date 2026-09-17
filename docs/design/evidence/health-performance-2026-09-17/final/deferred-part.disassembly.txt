@@ -1,0 +1,73 @@
+
+/private/tmp/vos-health-final-20260917/source/kernel/build/native-full-final/vos3.elf:     file format elf64-x86-64
+
+
+Disassembly of section .text.boot32:
+
+Disassembly of section .text.boot64:
+
+Disassembly of section .text:
+
+ffffffff82028590 <vos3_sched_process_deferred.part.0>:
+ffffffff82028590:	55                   	push   %rbp
+ffffffff82028591:	48 89 e5             	mov    %rsp,%rbp
+ffffffff82028594:	48 83 ec 10          	sub    $0x10,%rsp
+ffffffff82028598:	e8 a3 6e ff ff       	call   ffffffff8201f440 <get_cpu_id>
+ffffffff8202859d:	3d ff 00 00 00       	cmp    $0xff,%eax
+ffffffff820285a2:	76 0c                	jbe    ffffffff820285b0 <vos3_sched_process_deferred.part.0+0x20>
+ffffffff820285a4:	c9                   	leave
+ffffffff820285a5:	c3                   	ret
+ffffffff820285a6:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+ffffffff820285ad:	00 00 00 
+ffffffff820285b0:	89 c0                	mov    %eax,%eax
+ffffffff820285b2:	8b 0c 85 a0 a7 27 83 	mov    -0x7cd85860(,%rax,4),%ecx
+ffffffff820285b9:	48 8d 14 85 00 00 00 	lea    0x0(,%rax,4),%rdx
+ffffffff820285c0:	00 
+ffffffff820285c1:	48 8d b2 a0 a7 27 83 	lea    -0x7cd85860(%rdx),%rsi
+ffffffff820285c8:	85 c9                	test   %ecx,%ecx
+ffffffff820285ca:	74 d8                	je     ffffffff820285a4 <vos3_sched_process_deferred.part.0+0x14>
+ffffffff820285cc:	b9 01 00 00 00       	mov    $0x1,%ecx
+ffffffff820285d1:	87 8a a0 ab 27 83    	xchg   %ecx,-0x7cd85460(%rdx)
+ffffffff820285d7:	85 c9                	test   %ecx,%ecx
+ffffffff820285d9:	75 c9                	jne    ffffffff820285a4 <vos3_sched_process_deferred.part.0+0x14>
+ffffffff820285db:	87 0e                	xchg   %ecx,(%rsi)
+ffffffff820285dd:	85 c9                	test   %ecx,%ecx
+ffffffff820285df:	74 35                	je     ffffffff82028616 <vos3_sched_process_deferred.part.0+0x86>
+ffffffff820285e1:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+ffffffff820285e5:	e8 96 47 00 00       	call   ffffffff8202cd80 <vos3_shm_reap_creators>
+ffffffff820285ea:	e8 01 51 fe ff       	call   ffffffff8200d6f0 <vos3_vmm_reap_address_spaces>
+ffffffff820285ef:	e8 cc 84 fe ff       	call   ffffffff82010ac0 <vos3_ai_guard_reap_contexts>
+ffffffff820285f4:	8b 35 b2 29 25 01    	mov    0x12529b2(%rip),%esi        # ffffffff8327afac <g_reap_pending>
+ffffffff820285fa:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff820285fe:	85 f6                	test   %esi,%esi
+ffffffff82028600:	75 26                	jne    ffffffff82028628 <vos3_sched_process_deferred.part.0+0x98>
+ffffffff82028602:	8b 0d a0 29 25 01    	mov    0x12529a0(%rip),%ecx        # ffffffff8327afa8 <g_ai_guard_dirty>
+ffffffff82028608:	85 c9                	test   %ecx,%ecx
+ffffffff8202860a:	75 54                	jne    ffffffff82028660 <vos3_sched_process_deferred.part.0+0xd0>
+ffffffff8202860c:	8b 15 92 29 25 01    	mov    0x1252992(%rip),%edx        # ffffffff8327afa4 <g_tcp_work_pending>
+ffffffff82028612:	85 d2                	test   %edx,%edx
+ffffffff82028614:	75 2a                	jne    ffffffff82028640 <vos3_sched_process_deferred.part.0+0xb0>
+ffffffff82028616:	c7 04 85 a0 ab 27 83 	movl   $0x0,-0x7cd85460(,%rax,4)
+ffffffff8202861d:	00 00 00 00 
+ffffffff82028621:	c9                   	leave
+ffffffff82028622:	c3                   	ret
+ffffffff82028623:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+ffffffff82028628:	c7 05 7a 29 25 01 00 	movl   $0x0,0x125297a(%rip)        # ffffffff8327afac <g_reap_pending>
+ffffffff8202862f:	00 00 00 
+ffffffff82028632:	e8 69 f3 ff ff       	call   ffffffff820279a0 <vos3_task_reap>
+ffffffff82028637:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff8202863b:	eb c5                	jmp    ffffffff82028602 <vos3_sched_process_deferred.part.0+0x72>
+ffffffff8202863d:	0f 1f 00             	nopl   (%rax)
+ffffffff82028640:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+ffffffff82028644:	c7 05 56 29 25 01 00 	movl   $0x0,0x1252956(%rip)        # ffffffff8327afa4 <g_tcp_work_pending>
+ffffffff8202864b:	00 00 00 
+ffffffff8202864e:	e8 cd b7 04 00       	call   ffffffff82073e20 <vos3_tcp_timer_tick>
+ffffffff82028653:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff82028657:	eb bd                	jmp    ffffffff82028616 <vos3_sched_process_deferred.part.0+0x86>
+ffffffff82028659:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ffffffff82028660:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+ffffffff82028664:	c7 05 3a 29 25 01 00 	movl   $0x0,0x125293a(%rip)        # ffffffff8327afa8 <g_ai_guard_dirty>
+ffffffff8202866b:	00 00 00 
+ffffffff8202866e:	e8 cd 96 fe ff       	call   ffffffff82011d40 <vos3_ai_guard_reprotect_tick>
+ffffffff82028673:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff82028677:	eb 93                	jmp    ffffffff8202860c <vos3_sched_process_deferred.part.0+0x7c>

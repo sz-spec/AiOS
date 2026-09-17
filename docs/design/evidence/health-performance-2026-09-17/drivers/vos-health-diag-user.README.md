@@ -1,0 +1,7 @@
+Diagnostic-only patch against HEAD user/src/test_health_check.c. No repository source modified; no compilation/VM performed.
+
+4096 GETTIME then4096 GETPID calls occur after ring initialization and before clone. TSC totals and guest milliseconds are printed only after loops; sink retains results. Producer samples its existing GETTIME condition once per256successful pushes, never an extra time syscall, with serialized lfence/rdtsc. Full retries cannot repeatedly sample the same push count. Counts: attempts=successful pushes+full_yields inside measured producer loop; excludes DONE enqueue/wait yields. Consumer empty_periods increments only on transition into empty polling, not every iteration, and is published before done. A period says nothing about its duration. Sample max includes interrupts/preemption and all syscall return work, not handler-exclusive cost.
+
+Original1000ms window,1024capacity,64byte slots,consumer protocol and80000/sec threshold remain. Added branch/counters/TSC, preclone warmup and altered text/register layout perturb execution; this image is diagnostic and cannot substitute for acceptance on uninstrumented code. Compare both baseline and candidate with the identical patch. TSC values are emulated-counter units, not calibrated hardware cycles. Existing volatile completion protocol is unchanged; this probe does not qualify SMP memory ordering.
+
+Apply only to a disposable HEAD source snapshot using git apply; freeze/hash resulting sources and record diagnostic label. No sysinfo ABI changes.
