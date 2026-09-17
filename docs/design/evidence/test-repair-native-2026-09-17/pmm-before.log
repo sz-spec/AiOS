@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_contiguous_refs_and_competing_claim_rollback (__main__.PMMContiguousTests.test_contiguous_refs_and_competing_claim_rollback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/sz/Desktop/vos/vos 5/scripts/test_pmm_contiguous.py", line 92, in test_contiguous_refs_and_competing_claim_rollback
+    self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : FAIL: each allocated page owns exactly one reference
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.411s
+
+FAILED (failures=1)
+production-functions-sha256 0e3b0b9954afe3708616dc261e156724909649f2fc1a87d572ec49ec8a17fd93

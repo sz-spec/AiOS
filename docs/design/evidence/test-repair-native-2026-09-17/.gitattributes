@@ -1,0 +1,2 @@
+# Serial evidence retains original CR/LF bytes for SHA-256 verification.
+*.log -text

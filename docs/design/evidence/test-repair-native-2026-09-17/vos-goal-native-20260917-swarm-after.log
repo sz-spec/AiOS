@@ -1,0 +1,7 @@
+test_partial_spawn_terminates_but_never_passes (scripts.test_bench_ai_scale.SwarmControllerTests.test_partial_spawn_terminates_but_never_passes) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.470s
+
+OK
+production-function-sha256 21fdd7a285b3865b599432386a359ffe21e991e523362ce5f7bd7717d7acc958

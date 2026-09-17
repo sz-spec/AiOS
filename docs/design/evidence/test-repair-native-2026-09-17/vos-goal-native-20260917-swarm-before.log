@@ -1,0 +1,32 @@
+F
+======================================================================
+FAIL: test_partial_spawn_terminates_but_never_passes (__main__.SwarmControllerTests.test_partial_spawn_terminates_but_never_passes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/sz/Desktop/vos/vos 5/scripts/test_bench_ai_scale.py", line 70, in test_partial_spawn_terminates_but_never_passes
+    self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : 
+--- Test 2: Agent Swarm (FPU/SSE2 Isolation, 32 threads) ---
+  clone() failed for thread 5: -11
+  clone() failed for thread 6: -11
+  clone() failed for thread 7: -11
+  clone() failed for thread 13: -11
+  clone() failed for thread 14: -11
+  clone() failed for thread 15: -11
+  clone() failed for thread 21: -11
+  clone() failed for thread 22: -11
+  clone() failed for thread 23: -11
+  clone() failed for thread 29: -11
+  clone() failed for thread 30: -11
+  clone() failed for thread 31: -11
+  Warning: 12 threads failed to spawn
+  Spawned 20 threads, waiting for completion...
+FAIL waiting on result slots of children never created
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.570s
+
+FAILED (failures=1)
+production-function-sha256 f64572c34800fd0c0f827f6e311d633cdff06b9087ba0d7f6838646848e7b272

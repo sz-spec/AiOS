@@ -1,0 +1,7 @@
+test_contiguous_refs_and_competing_claim_rollback (scripts.test_pmm_contiguous.PMMContiguousTests.test_contiguous_refs_and_competing_claim_rollback) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.417s
+
+OK
+production-functions-sha256 09b1b6057247350d3ccce01d5b24350ca5ccc5eb116cb9fc4268e49c45eba0d2
