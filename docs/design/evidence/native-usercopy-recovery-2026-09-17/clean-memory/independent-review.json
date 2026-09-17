@@ -1,0 +1,69 @@
+{
+  "commit": "052d99b331af71bb80c41c70000826555f73f918",
+  "passed": true,
+  "artifacts": {
+    "iso_sha256": "6f1a2ac3e67bdb24dd127401daa88390fd8cce8ccf94b49adf212ccd01b3483f",
+    "kernel_sha256": "eb8affdfbbec3501b5aec3bb4f3fc5133df863d3e822af62eeec65dfd224c25a",
+    "user_test_sha256": "1a01cf9010c28bbc76484a5af9445b7938ee72edb64c03cf28818d75e16587af",
+    "classifier_sha256": "5532eb08928267d923d134ce99b624fccd982210438d38e3cf7c2a6f698457bc"
+  },
+  "boots": [
+    {
+      "case": "bios1",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 1,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    },
+    {
+      "case": "bios4",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 4,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    },
+    {
+      "case": "uefi1",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 1,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    },
+    {
+      "case": "uefi4",
+      "user_records": 51,
+      "faults": 11,
+      "kernel_pass_markers": 7,
+      "classification": {
+        "passed": true,
+        "failures": [],
+        "cases_verified": 12,
+        "online_cpus": 4,
+        "scope": "12 observed sequential memory transition cases; no remote TLB/concurrent COW proof"
+      }
+    }
+  ],
+  "elapsed_seconds": 159.89,
+  "builder_image": "sha256:3a76dfcadbe157be8757d4f0655c53b2fc717fbe3720b457f474027d61ee32c6",
+  "source_inputs_unchanged": true,
+  "build_container_removed": true,
+  "build_warning": "Generated build directory mtime 0.0045 seconds in future; fresh source archive and absent initial generated outputs verified. No timestamp reproducibility claim."
+}

@@ -1,0 +1,15 @@
+.F.
+======================================================================
+FAIL: test_actual_fixup_range_permissions_and_cleanup (scripts.test_usercopy_recovery.UsercopyRecoveryTests.test_actual_fixup_range_permissions_and_cleanup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/sz/Desktop/vos/vos 5/scripts/test_usercopy_recovery.py", line 161, in test_actual_fixup_range_permissions_and_cleanup
+    self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: -6 != 0 : Assertion failed: (!user_pages_accessible((void*)0x4000,1,1)), function main, file test.c, line 287.
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.831s
+
+FAILED (failures=1)

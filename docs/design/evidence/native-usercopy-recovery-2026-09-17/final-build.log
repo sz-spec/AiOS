@@ -1,0 +1,131 @@
+Limine source, tools and artifacts unchanged.
+make[1]: Entering directory '/vos3/kernel'
+make[2]: Entering directory '/vos3/user'
+
+User-space build complete:
+total 8532
+drwxr-xr-x  92 root root   2944 Sep 17 08:05 .
+drwxr-xr-x 184 root root   5888 Sep 17 08:05 ..
+-rw-r--r--   1 root root  11474 Sep 17 08:05 .stamp
+-rwxr-xr-x   1 root root 107744 Sep 17 08:05 ai_audit
+-rwxr-xr-x   1 root root  93608 Sep 17 08:05 ai_diag
+-rwxr-xr-x   1 root root  99136 Sep 17 08:05 ai_exploit
+-rwxr-xr-x   1 root root  94424 Sep 17 08:05 ai_stat
+-rwxr-xr-x   1 root root 102544 Sep 17 08:05 ai_stress
+-rwxr-xr-x   1 root root  95016 Sep 17 08:05 ai_test
+-rwxr-xr-x   1 root root  99768 Sep 17 08:05 ai_top
+-rwxr-xr-x   1 root root  16552 Sep 17 08:05 auxv_interp
+-rwxr-xr-x   1 root root 132944 Sep 17 08:05 bench_2026_frontier
+-rwxr-xr-x   1 root root 113000 Sep 17 08:05 bench_ai_scale
+-rwxr-xr-x   1 root root  99064 Sep 17 08:05 bench_ai_throughput
+-rwxr-xr-x   1 root root  98424 Sep 17 08:05 bench_app_isolation_test
+-rwxr-xr-x   1 root root 101272 Sep 17 08:05 bench_bugfix_test
+-rwxr-xr-x   1 root root  90848 Sep 17 08:05 bench_csw
+-rwxr-xr-x   1 root root 101776 Sep 17 08:05 bench_csw_1ms
+-rwxr-xr-x   1 root root 112528 Sep 17 08:05 bench_fs_test
+-rwxr-xr-x   1 root root  97536 Sep 17 08:05 bench_fuzz_test
+-rwxr-xr-x   1 root root 100608 Sep 17 08:05 bench_hugepage_tlb
+-rwxr-xr-x   1 root root  93360 Sep 17 08:05 bench_isolate
+-rwxr-xr-x   1 root root 112136 Sep 17 08:05 bench_net_test
+-rwxr-xr-x   1 root root  92376 Sep 17 08:05 bench_overhead
+-rwxr-xr-x   1 root root  92712 Sep 17 08:05 bench_persist
+-rwxr-xr-x   1 root root 114032 Sep 17 08:05 bench_phase13_test
+-rwxr-xr-x   1 root root  92664 Sep 17 08:05 bench_poll_test
+-rwxr-xr-x   1 root root  99056 Sep 17 08:05 bench_procfs_test
+-rwxr-xr-x   1 root root  97360 Sep 17 08:05 bench_sched_test
+-rwxr-xr-x   1 root root  96368 Sep 17 08:05 bench_sigpipe_test
+-rwxr-xr-x   1 root root 103040 Sep 17 08:05 bench_soak_5min
+-rwxr-xr-x   1 root root  96744 Sep 17 08:05 bench_stress_test
+-rwxr-xr-x   1 root root  90088 Sep 17 08:05 bench_thread_test
+-rwxr-xr-x   1 root root 121440 Sep 17 08:05 business_sim
+-rwxr-xr-x   1 root root  87312 Sep 17 08:05 cat
+-rwxr-xr-x   1 root root  99128 Sep 17 08:05 date
+-rwxr-xr-x   1 root root 114688 Sep 17 08:05 diag_shm_stress
+-rwxr-xr-x   1 root root  88712 Sep 17 08:05 disk_test
+-rwxr-xr-x   1 root root   4856 Sep 17 08:05 fake_interp
+-rwxr-xr-x   1 root root  92816 Sep 17 08:05 grep
+-rwxr-xr-x   1 root root  88632 Sep 17 08:05 head
+-rwxr-xr-x   1 root root  80256 Sep 17 08:05 hello_auxv
+-rwxr-xr-x   1 root root  80256 Sep 17 08:05 hello_dyn
+-rwxr-xr-x   1 root root   8944 Sep 17 08:05 hello_musl
+-rwxr-xr-x   1 root root 141080 Sep 17 08:05 init
+-rwxr-xr-x   1 root root 654440 Sep 17 08:05 ld-musl-x86_64.so.1
+-rwxr-xr-x   1 root root  90624 Sep 17 08:05 ps
+-rwxr-xr-x   1 root root 116432 Sep 17 08:05 setup_wizard
+-rwxr-xr-x   1 root root 130464 Sep 17 08:05 sh
+-rwxr-xr-x   1 root root  99544 Sep 17 08:05 stress_thread
+-rwxr-xr-x   1 root root  95480 Sep 17 08:05 tcp_test
+-rwxr-xr-x   1 root root 109664 Sep 17 08:05 test_advanced_chaos
+-rwxr-xr-x   1 root root 120280 Sep 17 08:05 test_agent_chaos
+-rwxr-xr-x   1 root root 116256 Sep 17 08:05 test_agent_cluster
+-rwxr-xr-x   1 root root 109688 Sep 17 08:05 test_ai_exploit_v2
+-rwxr-xr-x   1 root root  86744 Sep 17 08:05 test_ai_guard
+-rwxr-xr-x   1 root root 100608 Sep 17 08:05 test_ai_latency
+-rwxr-xr-x   1 root root 114136 Sep 17 08:05 test_dynlink
+-rwxr-xr-x   1 root root  10928 Sep 17 08:05 test_env_musl
+-rwxr-xr-x   1 root root 107376 Sep 17 08:05 test_epoll
+-rwxr-xr-x   1 root root  10688 Sep 17 08:05 test_fileio_musl
+-rwxr-xr-x   1 root root  10152 Sep 17 08:05 test_fork_musl
+-rwxr-xr-x   1 root root  94368 Sep 17 08:05 test_futex
+-rwxr-xr-x   1 root root  99160 Sep 17 08:05 test_health_check
+-rwxr-xr-x   1 root root 117536 Sep 17 08:05 test_integration
+-rwxr-xr-x   1 root root  10856 Sep 17 08:05 test_malloc_musl
+-rwxr-xr-x   1 root root 105752 Sep 17 08:05 test_max_saturation
+-rwxr-xr-x   1 root root 105696 Sep 17 08:05 test_model_load
+-rwxr-xr-x   1 root root 107736 Sep 17 08:05 test_net_dispatch
+-rwxr-xr-x   1 root root  97144 Sep 17 08:05 test_net_e2e
+-rwxr-xr-x   1 root root  92208 Sep 17 08:05 test_npu_direct
+-rwxr-xr-x   1 root root  11360 Sep 17 08:05 test_pipe_musl
+-rwxr-xr-x   1 root root  95816 Sep 17 08:05 test_posix_core
+-rwxr-xr-x   1 root root 116472 Sep 17 08:05 test_posix_fs
+-rwxr-xr-x   1 root root  86040 Sep 17 08:05 test_pt_interp
+-rwxr-xr-x   1 root root  14232 Sep 17 08:05 test_pthread_musl
+-rwxr-xr-x   1 root root  89464 Sep 17 08:05 test_security_check
+-rwxr-xr-x   1 root root 108600 Sep 17 08:05 test_shm_dispatch
+-rwxr-xr-x   1 root root  99592 Sep 17 08:05 test_signal_lifetime
+-rwxr-xr-x   1 root root  11936 Sep 17 08:05 test_signal_musl
+-rwxr-xr-x   1 root root  12376 Sep 17 08:05 test_stat_musl
+-rwxr-xr-x   1 root root  24816 Sep 17 08:05 test_stress_mt
+-rwxr-xr-x   1 root root  98160 Sep 17 08:05 test_sustained
+-rwxr-xr-x   1 root root 107744 Sep 17 08:05 test_torture
+-rwxr-xr-x   1 root root  94776 Sep 17 08:05 test_usercopy
+-rwxr-xr-x   1 root root 104024 Sep 17 08:05 test_vmm_soak
+-rwxr-xr-x   1 root root  90336 Sep 17 08:05 udp_test
+-rwxr-xr-x   1 root root  98840 Sep 17 08:05 uname
+-rwxr-xr-x   1 root root 101488 Sep 17 08:05 uptime
+-rwxr-xr-x   1 root root 111312 Sep 17 08:05 vos3_admin
+-rwxr-xr-x   1 root root  90088 Sep 17 08:05 wc
+-rwxr-xr-x   1 root root 106944 Sep 17 08:05 ws_switch
+make[2]: Leaving directory '/vos3/user'
+=== Building vOS installer ISO ===
+xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
+
+xorriso : NOTE : Environment variable SOURCE_DATE_EPOCH encountered with value 1700000000
+Drive current: -outdev 'stdio:/tmp/vos5-iso.XqmWmv/vos5.iso'
+Media current: stdio file, overwriteable
+Media status : is blank
+Media summary: 0 sessions, 0 data blocks, 0 data, 1626g free
+Added to ISO image: directory '/'='/tmp/vos5-iso.XqmWmv/root'
+xorriso : UPDATE :      11 files added in 1 seconds
+xorriso : UPDATE :      11 files added in 1 seconds
+ISO image produced: 6350 sectors
+Written to medium : 6350 sectors at LBA 0
+Writing to 'stdio:/tmp/vos5-iso.XqmWmv/vos5.iso' completed successfully.
+
+Physical block size of 512 bytes.
+Installing to GPT. Logical block size of 512 bytes.
+Detected ISOHYBRID with a GUID partition table (GPT).
+Converting to MBR for improved compatibility...
+Conversion successful.
+No active partition found, some systems may not boot.
+Setting partition 1 as active to work around the issue...
+Installing to MBR.
+Stage 2 to be located at byte offset 0x1000.
+Reminder: Remember to copy the limine-bios.sys file in either
+          the root, /boot, /limine, or /boot/limine directories of
+          one of the partitions on the device, or boot will fail!
+Limine BIOS stages installed successfully.
+Built BIOS + UEFI image: ../dist/vos5-usercopy-final-20260917.iso
+735824feeb38f292949b9e88be431eb549b1aada0aaed029ae945e4956ed08b5  ../dist/vos5-usercopy-final-20260917.iso
+=== Installer ISO complete: ../dist/vos5-usercopy-final-20260917.iso ===
+make[1]: Leaving directory '/vos3/kernel'
