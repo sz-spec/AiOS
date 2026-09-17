@@ -58,3 +58,5 @@ All four images were built from a fresh Git archive using the pinned builder, wi
 Memory logs independently verified 12 cases, 51 user records, seven kernel checks and 11 expected faults in each configuration. Isolation verified four containment cases per configuration. These are emulator and scoped diagnostic results, not physical hardware qualification or complete concurrent process isolation.
 
 Staged-evidence secret scanning reported 568 candidates, all confined to four archived source manifests (142 repeated content hashes each). Each candidate was independently checked against the corresponding archived file's SHA-256 and staged manifest line. No secret suppression was added.
+
+Follow-up: the gated scheduler placement correction at `61ad277` passed all four clean TLB/AP configurations with the unchanged observer. See [the placement report](native-placement-2026-09-17/README.md). The other twelve passing configurations above remain tied to `81c7f77`; this is not a claim that all sixteen images were rebuilt from the later commit. The original failed UEFI4 result remains unchanged.

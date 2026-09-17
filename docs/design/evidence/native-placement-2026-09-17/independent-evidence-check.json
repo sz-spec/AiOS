@@ -1,0 +1,76 @@
+{
+  "complete": true,
+  "reviewer": "/root/mcp_upgrade",
+  "scope": "execution/evidence recheck; placement implementation authored by reviewer, independently reviewed by math agent",
+  "commit": "61ad2771f526b3744323c654f9fa4ed7b5781000",
+  "source_files_rehashed": 6034,
+  "source_inputs_unchanged": true,
+  "archive_sha256": "43c583b7bd8d3fafda9932df4a48e1cd5777a2aed227dd090ab4586f2beb4e47",
+  "manifest_file_sha256": "a65bedc5d95e23124d9a5da50c66e87534214d68b286dc880e20f803a731160e",
+  "manifest_canonical_sha256": "8712dc5be7a55c628476a73dccf770f3a59ea952e5347cae422f706f4b9a8e7f",
+  "iso_sha256": "6c67c003c750f29892eaa933a384cd628a1df2f9d3ac6e68e80c3a88e7e7f2a3",
+  "kernel_sha256": "b99ec12dbbdb291b2b1132e72baf56cd221ee4fcf996120678e7f96313dc2610",
+  "previous_failure": "../native-signal-lifetime-2026-09-17/clean-tlb/uefi4",
+  "boots": [
+    {
+      "configuration": "bios1",
+      "passed": true,
+      "checkpoints_verified": 16,
+      "worker_apics": {
+        "0": [
+          0
+        ],
+        "1": [
+          0
+        ]
+      },
+      "tlb_cpus_verified": 1,
+      "serial_sha256": "c0c9033ad81f897dbeba5e7797c51361c1e5da02318493787aca138bb6358275"
+    },
+    {
+      "configuration": "bios4",
+      "passed": true,
+      "checkpoints_verified": 16,
+      "worker_apics": {
+        "0": [
+          0
+        ],
+        "1": [
+          1
+        ]
+      },
+      "tlb_cpus_verified": 4,
+      "serial_sha256": "e3257fe4d589c20233060e40bdbaa94bae0f601f0e8426c96920b2f2ad445be2"
+    },
+    {
+      "configuration": "uefi1",
+      "passed": true,
+      "checkpoints_verified": 16,
+      "worker_apics": {
+        "0": [
+          0
+        ],
+        "1": [
+          0
+        ]
+      },
+      "tlb_cpus_verified": 1,
+      "serial_sha256": "855837c1d7976e5b9c6f6a1963e51e6ed4bc7c68a1e8593a3fc4ad49e82c97ff"
+    },
+    {
+      "configuration": "uefi4",
+      "passed": true,
+      "checkpoints_verified": 16,
+      "worker_apics": {
+        "0": [
+          0
+        ],
+        "1": [
+          1
+        ]
+      },
+      "tlb_cpus_verified": 4,
+      "serial_sha256": "11bee4b3bc26e976ec5236acdb0c609abe4962a9f89264441e17163304f1ee2b"
+    }
+  ]
+}
