@@ -924,6 +924,7 @@ void vos3_sched_process_deferred(void)
     }
     vos3_shm_reap_creators();
     vos3_vmm_reap_address_spaces();
+    vos3_ai_guard_reap_contexts();
 #ifdef NATIVE_SMP_TEST
     /* Every owner must revisit its dead tasks. */
     vos3_task_reap();

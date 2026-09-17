@@ -71,7 +71,7 @@ static vos3_spinlock_t g_telemetry_lock = VOS3_SPINLOCK_INIT;
 static vos3_device_t* g_ai_telemetry_dev = NULL;
 
 /** @brief External: Get global context list for snapshot */
-extern vos3_ai_guard_ctx_t* vos3_ai_guard_get_global_ctx(void);
+extern vos3_ai_guard_ctx_t* vos3_ai_guard_acquire_global_ctx(void);
 
 /* Forward declarations */
 int64_t vos3_ai_telemetry_read(void* buffer, size_t size);
@@ -224,7 +224,7 @@ static int ai_telemetry_ioctl(vos3_device_t* dev, vos3_file_t* file,
             memset(&stats, 0, sizeof(stats));
 
             /* Get global context for region stats */
-            vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_get_global_ctx();
+            vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_global_ctx();
             vos3_ai_guard_region_t* region = (ctx != NULL) ? ctx->regions : NULL;
 
             while (region != NULL) {
@@ -236,6 +236,8 @@ static int ai_telemetry_ioctl(vos3_device_t* dev, vos3_file_t* file,
                 region = region->next;
             }
 
+            if (ctx != NULL) vos3_ai_guard_ctx_put(ctx);
+            /* Context pins do not serialize concurrent region-list mutation. */
             stats.alert_count = g_alert_queue.count;
             stats.violation_count = g_violation_count;
             stats.overflow_count = g_alert_queue.overflow;
@@ -390,7 +392,7 @@ int64_t vos3_ai_telemetry_snapshot(void* buffer, size_t buffer_size)
     size_t remaining = buffer_size;
 
     /* Get global context */
-    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_get_global_ctx();
+    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_global_ctx();
 
     /* Count regions */
     uint32_t region_count = 0;
@@ -404,6 +406,7 @@ int64_t vos3_ai_telemetry_snapshot(void* buffer, size_t buffer_size)
 
     /* Write header */
     if (remaining < sizeof(vos3_ai_telemetry_header_t)) {
+        if (ctx != NULL) vos3_ai_guard_ctx_put(ctx);
         return -3;  /* Buffer too small */
     }
 
@@ -445,6 +448,7 @@ int64_t vos3_ai_telemetry_snapshot(void* buffer, size_t buffer_size)
         region = region->next;
     }
 
+    if (ctx != NULL) vos3_ai_guard_ctx_put(ctx);
     return (int64_t)offset;
 }
 

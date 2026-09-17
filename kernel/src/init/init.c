@@ -99,6 +99,10 @@ static void init_task_entry(void* arg)
     extern void vos3_test_vm_backing(void);
     vos3_test_vm_backing();
 #endif
+#ifdef AI_CONTEXT_LIFETIME_TEST
+    extern void vos3_test_ai_context_lifetime(void);
+    vos3_test_ai_context_lifetime();
+#endif
     int fd0 = vos3_open("/dev/console", VOS3_O_RDWR, 0U);
     if (fd0 < 0) {
         VOS3_ERROR("Init: Failed to open /dev/console for stdin (error %d)", fd0);

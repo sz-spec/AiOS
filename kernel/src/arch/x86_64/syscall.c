@@ -304,6 +304,7 @@ int64_t vos3_sys_blkdev_info(vos3_syscall_frame_t* frame)
  */
 int64_t vos3_sys_app_ctx_create(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi >= VOS3_MAX_APP_CONTEXTS) return VOS3_AI_GUARD_ERR_INVALID;
     uint8_t app_id = (uint8_t)frame->rdi;
     VOS3_DEBUG("sys_app_ctx_create(%u)", app_id);
     return (int64_t)vos3_ai_guard_create_app_ctx(app_id);
@@ -315,6 +316,7 @@ int64_t vos3_sys_app_ctx_create(vos3_syscall_frame_t* frame)
  */
 int64_t vos3_sys_app_ctx_destroy(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi >= VOS3_MAX_APP_CONTEXTS) return VOS3_AI_GUARD_ERR_INVALID;
     uint8_t app_id = (uint8_t)frame->rdi;
     VOS3_DEBUG("sys_app_ctx_destroy(%u)", app_id);
     return (int64_t)vos3_ai_guard_destroy_app_ctx(app_id);
@@ -326,6 +328,7 @@ int64_t vos3_sys_app_ctx_destroy(vos3_syscall_frame_t* frame)
  */
 int64_t vos3_sys_app_ctx_switch(vos3_syscall_frame_t* frame)
 {
+    if (frame->rdi >= VOS3_MAX_APP_CONTEXTS) return VOS3_AI_GUARD_ERR_INVALID;
     uint8_t app_id = (uint8_t)frame->rdi;
     VOS3_DEBUG("sys_app_ctx_switch(%u)", app_id);
     return (int64_t)vos3_ai_guard_switch_ctx(app_id);

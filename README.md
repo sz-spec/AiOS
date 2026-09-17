@@ -28,8 +28,15 @@ The [60-day failure review](docs/design/evidence/expert-council-failures-60d-202
 records the current defects, recent primary engineering research and recommended
 acceptance gates. Clean builds now produce byte-identical ISO artifacts for the
 recorded source and pinned builder. Full-suite health throughput still fails;
-context-reader lifetime, build clock warnings, physical hardware and deployment
+asynchronous task cancellation, build clock warnings, physical hardware and deployment
 remain open. Matching ISO bytes do not establish release readiness.
+
+The [AI-context lifetime checkpoint](docs/design/evidence/ai-context-lifetime-2026-09-17.md)
+adds retained readers, serialized publication and deferred final reclamation.
+Its contract requires continuations to complete: cancellation can still abandon
+pins or cleanup work. APPLOAD explicitly returns unsupported while safe task
+startup and authorization remain incomplete. Region mutation and full concurrent
+SMP are separate open gates.
 
 The [native isolation gate](docs/design/evidence/native-isolation-qualification.md)
 tests four direct user-mode read/write attempts against another process and a

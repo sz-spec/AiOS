@@ -30,10 +30,10 @@ Unknown defects cannot be enumerated by a finite review.
 
 | Finding | Evidence / established cause | Disposition and next acceptance gate |
 |---|---|---|
-| Full-suite health throughput | Latest final3 BIOS 38,776/s; UEFI 37,599/s; both 57 programs completed with health alone nonzero. Prior final2: 39,047/38,987/s. Old BIOS control 98,165/s. Exact cause remains open. | **Open.** Repeat controlled comparisons, then instrument scheduling, time calls and prior-workload state. Preserve 80K, workloads and failed samples. See matrix below and latest validation. |
+| Full-suite health throughput | Current retained-reader checkpoint: BIOS 37,923/s; UEFI 40,208/s; both 57 programs completed with health alone nonzero. Prior final3: 38,776/37,599/s; final2: 39,047/38,987/s. Old BIOS control 98,165/s. Exact cause remains open. | **Open.** Repeat controlled comparisons, then instrument scheduling, time calls and prior-workload state. Preserve 80K, workloads and failed samples. See the [current checkpoint](ai-context-lifetime-2026-09-17.md), historical matrix below and source validation. |
 | Crash-recovery test polling cost | After collecting its producer, `test_agent_chaos` still performs up to 500,000,000 empty-ring polls. Long silence after the child-exit log is therefore not by itself evidence of deadlock; final3 BIOS completed this test. | **Open test-efficiency issue.** In a separate diagnostic change, use the established producer-death/expected-count contract and explicit queue-empty checks to bound completion. Keep this out of the current performance comparison: changing prior work changes the experiment. |
-| AI-context publication after free | Destructor formerly released regions/context before removing global publication; actual-source regression fails on baseline and passes after ordering correction. | **Partially repaired.** Global/app detachment precedes release. Already-acquired readers remain unsafe under preemption, even UP; require reader ownership and lifecycle serialization before full closure. [Independent review](ai-context-detach-review-2026-09-17.md). |
-| AI context creation/authorization/inheritance | Duplicate create is still load-then-store; raw getters do not pin; active app identity is global. Guarded fork/clone inheritance is refused. Integrity success is conditional on CHECKSUMMED being enabled. | **Open/unsupported.** Define immutable caller ownership, atomic lifecycle transitions and retained/clone policy. Test unregistered, disabled, foreign and concurrent cases; do not lift ENOTSUP without that contract. |
+| AI-context publication and reader lifetime | Ordering-only repair is followed by retained lookup readers, one serialized registry and zero-reference deferred retirement. Competing creation discards its unpublished loser safely. | **Bounded repair; cancellation remains blocking.** Readers whose continuations complete are covered; asynchronous kill can abandon pins, detached cleanup work or deferred-active state. Region mutation remains separate. [Current checkpoint](ai-context-lifetime-2026-09-17.md), [cancellation diagnostic](ai-context-cancellation-review-2026-09-17.md). |
+| AI context authorization/inheritance/startup | Full-width syscall ID checks prevent truncation aliases; valid-ID ownership is still unbound and active app identity remains global. APPLOAD now returns unsupported because its old stack request/task publication path was unsafe and did not enqueue the task. Guarded fork/clone inheritance remains refused. | **Open/unsupported.** Immutable caller ownership, safe unpublished task construction/enqueue/startup/reaping, and retained/clone policy are prerequisites. Integrity success remains conditional on CHECKSUMMED being enabled. Do not lift ENOTSUP without the acceptance contract. [Caller review](ai-context-external-callers-2026-09-17.md). |
 | Arbitrary user MMIO authorization | An AI context authorized any non-PMM address; address and size were ignored. Hardcoded pseudo-NPU address had no verified device BAR. | **Exposure closed by denial; hardware feature unavailable.** Exact enumerated BAR ranges, immutable task/device capability and enforcing IOMMU are prerequisites. Denial-test exit 0 is not NPU performance validation. [MMIO evidence](mmio-fail-closed-2026-09-17.md). |
 | DMA and platform trust | Pass-through device setup does not provide a bounded second-level DMA domain. EFI loader boot does not establish a signed trust chain; broad direct-map/KPTI limits remain. | **Unverified.** Legal/illegal DMA, teardown/IOTLB invalidation, device reset; modified/revoked image rejection, rollback policy, firmware db/dbx and recovery tests on declared hardware. |
 | Shared mmap allocation and VMA mutation | Clone siblings used separate cursors for one address space; allocation could collide. Per-page overlap scanning admitted excessive IRQ-disabled work. Split/permission/backing changes needed a transaction. | **Bounded repair.** Shared cursor, serialized mmap/munmap/mprotect, bounded sparse preflight and fork snapshot now have host and guest coverage. Demand-fault readers, file-backed concurrency and remote TLB acknowledgement remain separate. [Repair record](native-thread-memory-repair-2026-09-17.md). |
@@ -43,7 +43,7 @@ Unknown defects cannot be enumerated by a finite review.
 | Waitqueues, synchronization and message queues | Lost wakeup/kill ordering, stale queue handles, find/destroy lifetime, reference cleanup and owner-zero destruction were concrete defects. | **Bounded repair.** Membership protocol, pins, generation handles and caller identity have regressions. Destroy-with-active-owner and general remote task lifecycle need independent hostile tests. |
 | Huge-page allocation/release | Foreign return changed pool accounting; page references were not initialized for some claims; arbitrary prefix selection missed available contiguous runs. | **Bounded repair.** Provenance, exact-once extent release and contiguous selection pass host/guest controls. Physical-address ABA and runtime pool-reservation concurrency remain unqualified. |
 | Earlier orphan/SHM failures | AP idle PID 1 could adopt user orphans; creator-first SHM leaked; creator identity/stale handles and creator-exit cleanup were incomplete. | **Previously repaired within linked sequential contracts.** See [dated dispositions](expert-council-2026-09-15/README.md). Independent SHM fork remains unsupported; arbitrary concurrent SHM lifetime/delegation is not certified. |
-| ISO byte differences | Limine build-ID inputs/private paths and ISO dates caused differences. final2 clean pair now matches ISO, kernel and six Limine artifacts byte for byte. | **Passed for recorded inputs and builder.** This is two builds on one host with one pinned builder, not independent compiler trust. Repeat after source changes and preserve inputs. |
+| ISO byte differences | Limine build-ID inputs/private paths and ISO dates caused differences. The retained-reader clean pair, following final2/final3, again matches ISO, kernel and six Limine artifacts byte for byte. | **Passed for recorded inputs and builder.** This is two builds on one host with one pinned builder, not independent compiler trust. Repeat after source changes and preserve inputs. |
 | Build clock-skew warnings | Small future mtimes remain on generated directories despite normalized source times. Cause not established. | **Open warning gate.** Compare bind-mounted and container-internal builds with clock/stat samples; do not suppress warnings or claim Docker causation without the experiment. |
 | Native network / hosted trust / updates | Native capability checks are PID-based bootstrap policy. Hosted offline credential tests do not prove live provider ACL/revocation. Update flow lacks a complete signed immutable release/anti-rollback chain. | **Open.** Per-principal capabilities, hostile packets/socket ownership, provider-backed identity tests, authenticated release manifests and recoverable update/rollback. GNU/musl publisher-signature provenance gaps remain distinct from hash equality. |
 | BIOS/UEFI/SMP and physical PCs | Separate diagnostic one/four-vCPU matrix observed CPL3 work on APIC 0 and 1. It did not prove full simultaneous four-core workloads or real devices. | **Bounded diagnostic pass, broader support unverified.** Keep experimental SMP distinct; require concurrency/revocation gates and exact Intel/AMD firmware/device matrices before expanding claims. |
@@ -122,11 +122,13 @@ were excluded from the 60-day evidence.
 
 ## Ordered work recommended by the council
 
-1. **Context and memory safety:** design a lock-protected acquire/pin and
-   detach/release protocol, with exact-once reclamation after the final reader.
-   Test reader-load versus destroy, duplicate create, foreign destroy and
-   preemption. Audit region lifetime separately; pinning only the outer
-   context does not make a mutable region list safe. Keep MMIO denied.
+1. **Context and memory safety:** qualify cancellation at explicit safe kernel
+   boundaries or provide complete ownership transfer/cleanup after a proven
+   stop. The retained-reader checkpoint does not cover abandoned continuations,
+   held locks or detached reclamation batches. Test cancellation against ordinary
+   completion, owner CPU acknowledgement, and renewed deferred progress. Define
+   foreign-destroy authorization. Audit region lifetime separately; pinning only
+   the outer context does not make a mutable region list safe. Keep MMIO denied.
 2. **Performance diagnosis:** use a frozen old/current pair, same QEMU,
    firmware and arguments; collect at least ten counterbalanced fresh-VM
    pairs with no concurrent builds/VMs. Predeclare order, sample count and
@@ -150,7 +152,17 @@ were excluded from the 60-day evidence.
    tested capabilities; close each unresolved eleven-source feature by an
    explicit implementation decision and behavioral acceptance test.
 
-## Latest source validation
+## Latest source validation: retained readers
+
+The [retained-reader checkpoint](ai-context-lifetime-2026-09-17.md) passes 106
+frozen-source host tests, the native build checks, a BIOS/UEFI 1/4-CPU diagnostic
+matrix, exact source reconstruction and an eight-artifact clean build comparison.
+Its full BENCH image completes all 57 programs on BIOS and UEFI with health alone
+failing. The context test covers controlled readers whose continuations complete;
+an independent cancellation diagnostic still reproduces an orphaned reference.
+The safety and performance gates remain open. All earlier logs below are preserved.
+
+## Previous source validation: final3
 
 The narrowed context-ordering repair passed **100 host discovery tests in
 56.215 seconds** and native-build-check's three groups (3 + 1 + 1 tests).

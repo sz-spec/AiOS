@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "scope": "Independent frozen-observer raw serial reclassification; reported pre/post ISO hashes agree; no new VM or race proof",
+  "observer_sha256": "38b20d8c8504bd84905cd5b14049109137938b0f14e024c6c9cc4a8b951276b6",
+  "base_observer_sha256": "49dec33814bc218c227f6342656d65365f424c3b3526df73e79c734172fb5d15",
+  "runs": [
+    {
+      "case": "bios-1",
+      "serial_sha256": "c081edcad7f00e577e147b9ec708de25038b1521c8e82e80e528e42e05eeae1e",
+      "iso_sha256": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+      "reclassified": {
+        "pmm": true,
+        "vmm": true,
+        "scheduler": true,
+        "wizard_output": true,
+        "online_cpus": 1,
+        "failures": [],
+        "passed": true,
+        "diagnostic_scope": "controlled kernel lifetime interleaving; not an SMP race proof"
+      }
+    },
+    {
+      "case": "bios-4",
+      "serial_sha256": "16ca519ccbbd61f0ef8e758ed7ee12cd8b7e5752af6869777f28c17eb822418f",
+      "iso_sha256": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+      "reclassified": {
+        "pmm": true,
+        "vmm": true,
+        "scheduler": true,
+        "wizard_output": true,
+        "online_cpus": 4,
+        "failures": [],
+        "passed": true,
+        "diagnostic_scope": "controlled kernel lifetime interleaving; not an SMP race proof"
+      }
+    },
+    {
+      "case": "uefi-1",
+      "serial_sha256": "7dccdc75fe0af98111be09f71ee5363aacf57b31973225667dae91a021b2c8ea",
+      "iso_sha256": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+      "reclassified": {
+        "pmm": true,
+        "vmm": true,
+        "scheduler": true,
+        "wizard_output": true,
+        "online_cpus": 1,
+        "failures": [],
+        "passed": true,
+        "diagnostic_scope": "controlled kernel lifetime interleaving; not an SMP race proof"
+      }
+    },
+    {
+      "case": "uefi-4",
+      "serial_sha256": "8b95181971d80ca0294882dd6fc584cea1bfc17e5b26a2657b8e9b2887203e75",
+      "iso_sha256": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+      "reclassified": {
+        "pmm": true,
+        "vmm": true,
+        "scheduler": true,
+        "wizard_output": true,
+        "online_cpus": 4,
+        "failures": [],
+        "passed": true,
+        "diagnostic_scope": "controlled kernel lifetime interleaving; not an SMP race proof"
+      }
+    }
+  ]
+}

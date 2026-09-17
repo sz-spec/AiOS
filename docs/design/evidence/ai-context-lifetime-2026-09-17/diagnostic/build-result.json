@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "source_unchanged": true,
+  "manifest_sha256": "ccf91c8de0c8bcc5e722ca82debec5beba4285e9ca5d33d9aa8e04728023f532",
+  "artifacts": {
+    "dist/ai-context-lifetime.iso": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+    "kernel/build/ai-context-lifetime/vos3.elf": "2fb34f154c53c4e21a6cc0a1c37d91424520be89ab4f00b98b26557895249a6d"
+  }
+}

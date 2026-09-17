@@ -1,0 +1,21 @@
+{
+  "qemu_version": "QEMU emulator version 10.2.2\nCopyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n",
+  "files": {
+    "qemu": {
+      "path": "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+      "sha256": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+    },
+    "uefi_code": {
+      "path": "/opt/homebrew/Cellar/qemu/10.2.2/share/qemu/edk2-x86_64-code.fd",
+      "sha256": "33090cc07675baa5190d9f1e84bf5176b33bcbfa9bacac522961150cdb6dbb2a"
+    },
+    "uefi_vars_template": {
+      "path": "/opt/homebrew/Cellar/qemu/10.2.2/share/qemu/edk2-i386-vars.fd",
+      "sha256": "5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e"
+    },
+    "bios": {
+      "path": "/opt/homebrew/Cellar/qemu/10.2.2/share/qemu/bios-256k.bin",
+      "sha256": "ae6f6aa973aaccc143f57aa960fb035fd9de4daee4ad0cd713322f8c259e7650"
+    }
+  }
+}

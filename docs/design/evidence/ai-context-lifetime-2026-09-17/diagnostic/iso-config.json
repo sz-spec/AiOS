@@ -1,0 +1,13 @@
+{
+  "VOS_ISO_LIMINE_BUILD_DIR": "build/limine",
+  "VOS_ISO_XORRISO": "xorriso 1.5.6",
+  "files": {
+    "../infra/build_iso.sh": "b30d4053240e812b517e0f5691022c352ef49960379c5b4f0ed0c81f37fb557b",
+    "build/limine/bin/BOOTIA32.EFI": "a692267e291729157107ff1f2fbee876b06153dea3e1bc66cb5b1e53a1365b6e",
+    "build/limine/bin/BOOTX64.EFI": "53c2e21de9210b28854d614719b5f1ccc3a20aa6eb5c6d779dfdfa14349f5490",
+    "build/limine/bin/limine": "df16fd5a3db78f0ef5163c174a0cee5decff8acf25f8e7457112f136875a7be2",
+    "build/limine/bin/limine-bios-cd.bin": "0afdcd46e40055c030c8f70ff546a816ee0845f489437ad360dd64671809790c",
+    "build/limine/bin/limine-bios.sys": "175c2c071e481ca9b9e4fcf9b046e0308f81dc8ac7d59232aabb4a6f307ea2a5",
+    "build/limine/bin/limine-uefi-cd.bin": "c901901b52bc90a0b764bec3be061abf27832a62029204c4cb74b0ec9c739171"
+  }
+}

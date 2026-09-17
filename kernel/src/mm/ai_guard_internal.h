@@ -98,9 +98,7 @@ extern vos3_spinlock_t g_cow_lock;
  * App Context State (defined in ai_guard.c)
  * ============================================================================ */
 
-extern vos3_ai_guard_ctx_t* g_global_ctx;
-extern vos3_ai_guard_ctx_t* g_app_contexts[VOS3_MAX_APP_CONTEXTS];
-extern uint8_t g_active_app_id;
+/* Context registries are private to ai_guard.c; acquire/put is mandatory. */
 
 /* ============================================================================
  * Internal Helper Functions (defined in ai_guard.c)

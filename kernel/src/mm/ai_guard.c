@@ -35,6 +35,19 @@
 
 #include "ai_guard_internal.h"
 #include "../../include/vos/entropy.h"  /* Stage 8: CPUID-gated entropy_extract for AI-KASLR */
+#include "../../include/vos/scheduler.h"
+
+/* One owner reference belongs either to a direct creator or an app slot.
+ * Global publication borrows that owner; all lookup readers acquire a pin
+ * while holding this IRQ-safe lock. No memory release runs under this lock. */
+static vos3_spinlock_t g_ai_ctx_registry_lock = VOS3_SPINLOCK_INIT;
+static vos3_ai_guard_ctx_t* g_global_ctx;
+static vos3_ai_guard_ctx_t* g_app_contexts[VOS3_MAX_APP_CONTEXTS];
+static vos3_ai_guard_ctx_t* g_retired_contexts;
+static uint8_t g_active_app_id;
+#ifdef AI_CONTEXT_LIFETIME_TEST
+static uint64_t g_finalized_contexts;
+#endif
 
 /* ============================================================================
  * v23.12: CPU SILICON HARDENING — SHARED BSP/AP HELPER
@@ -568,10 +581,58 @@ int vos3_ai_guard_init(void)
     return VOS3_AI_GUARD_OK;
 }
 
-/* Forward declaration for registration */
-static void register_global_ctx(vos3_ai_guard_ctx_t* ctx);
+static vos3_irqflags_t ai_ctx_registry_lock(void)
+{
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_ai_ctx_registry_lock);
+    return flags;
+}
 
-vos3_ai_guard_ctx_t* vos3_ai_guard_ctx_create(void)
+static void ai_ctx_registry_unlock(vos3_irqflags_t flags)
+{
+    vos3_spinlock_unlock(&g_ai_ctx_registry_lock);
+    vos3_irq_restore(flags);
+}
+
+static vos3_ai_guard_ctx_t* ai_ctx_retain_locked(vos3_ai_guard_ctx_t* ctx)
+{
+    if (ctx == NULL || ctx->closing || ctx->lifetime_refs == 0U ||
+        ctx->lifetime_refs == UINT32_MAX)
+        return NULL;
+    ctx->lifetime_refs++;
+    return ctx;
+}
+
+static void ai_ctx_put_locked(vos3_ai_guard_ctx_t* ctx)
+{
+    if (ctx->lifetime_refs == 0U ||
+        (ctx->lifetime_refs == 1U && !ctx->closing)) {
+        VOS3_PANIC("AI context reference ownership violation");
+        return;
+    }
+    if (--ctx->lifetime_refs == 0U) {
+        ctx->retired_next = g_retired_contexts;
+        g_retired_contexts = ctx;
+        /* This helper only stores a per-CPU pending bit; no locks/callbacks. */
+        vos3_sched_request_deferred();
+    }
+}
+
+static void ai_ctx_close_locked(vos3_ai_guard_ctx_t* ctx)
+{
+    if (ctx->closing) return;
+    ctx->closing = 1U;
+    if (g_global_ctx == ctx) g_global_ctx = NULL;
+    for (uint8_t id = 0; id < VOS3_MAX_APP_CONTEXTS; id++) {
+        if (g_app_contexts[id] != ctx) continue;
+        g_app_contexts[id] = NULL;
+        if (g_active_app_id == id) g_active_app_id = 0U;
+    }
+    ai_ctx_put_locked(ctx); /* Consume the creator/app registry owner. */
+}
+
+/* Allocate an initialized owner without exposing it to any reader. */
+static vos3_ai_guard_ctx_t* ai_ctx_alloc_unpublished(void)
 {
     if (!g_ai_guard_initialized) {
         vos3_ai_guard_init();
@@ -583,6 +644,9 @@ vos3_ai_guard_ctx_t* vos3_ai_guard_ctx_create(void)
     }
 
     ctx->lock = 0;
+    ctx->lifetime_refs = 1U;
+    ctx->closing = 0U;
+    ctx->retired_next = NULL;
     ctx->regions = NULL;
     ctx->region_count = 0;
     ctx->total_protected = 0;
@@ -599,25 +663,54 @@ vos3_ai_guard_ctx_t* vos3_ai_guard_ctx_create(void)
 
     __atomic_fetch_add(&g_ai_guard_stats.total_contexts, 1, __ATOMIC_RELAXED);
 
-    /* Register as global context for integrity/pressure ticks (Phase 17.5) */
-    register_global_ctx(ctx);
-
     return ctx;
+}
+
+vos3_ai_guard_ctx_t* vos3_ai_guard_ctx_create(void)
+{
+    vos3_ai_guard_ctx_t* ctx = ai_ctx_alloc_unpublished();
+    if (ctx == NULL) return NULL;
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    if (g_global_ctx == NULL) g_global_ctx = ctx;
+    ai_ctx_registry_unlock(flags);
+    return ctx;
+}
+
+vos3_ai_guard_ctx_t* vos3_ai_guard_acquire_global_ctx(void)
+{
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    vos3_ai_guard_ctx_t* ctx = ai_ctx_retain_locked(g_global_ctx);
+    ai_ctx_registry_unlock(flags);
+    return ctx;
+}
+
+vos3_ai_guard_ctx_t* vos3_ai_guard_acquire_app_ctx(uint8_t app_id)
+{
+    if (app_id >= VOS3_MAX_APP_CONTEXTS) return NULL;
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    vos3_ai_guard_ctx_t* ctx = ai_ctx_retain_locked(g_app_contexts[app_id]);
+    ai_ctx_registry_unlock(flags);
+    return ctx;
+}
+
+void vos3_ai_guard_ctx_put(vos3_ai_guard_ctx_t* ctx)
+{
+    if (ctx == NULL) return;
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    ai_ctx_put_locked(ctx);
+    ai_ctx_registry_unlock(flags);
 }
 
 void vos3_ai_guard_ctx_destroy(vos3_ai_guard_ctx_t* ctx)
 {
-    if (ctx == NULL) {
-        return;
-    }
+    if (ctx == NULL) return;
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    ai_ctx_close_locked(ctx);
+    ai_ctx_registry_unlock(flags);
+}
 
-    /* Remove global publication before releasing any region or the context.
-     * A reader that already loaded ctx still needs a lifetime pin, even on
-     * UP with preemption. This ordering does not provide that protection. */
-    vos3_ai_guard_ctx_t* registered = ctx;
-    (void)__atomic_compare_exchange_n(&g_global_ctx, &registered, NULL, 0,
-                                      __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE);
-
+static void ai_ctx_finalize(vos3_ai_guard_ctx_t* ctx)
+{
     /* Free all regions */
     vos3_ai_guard_region_t* region = ctx->regions;
     while (region != NULL) {
@@ -647,7 +740,37 @@ void vos3_ai_guard_ctx_destroy(vos3_ai_guard_ctx_t* ctx)
 
     vos3_kfree(ctx);
     __atomic_fetch_sub(&g_ai_guard_stats.total_contexts, 1, __ATOMIC_RELAXED);
+#ifdef AI_CONTEXT_LIFETIME_TEST
+    __atomic_fetch_add(&g_finalized_contexts, 1U, __ATOMIC_RELAXED);
+#endif
 }
+
+void vos3_ai_guard_reap_contexts(void)
+{
+    /* Last puts may occur in an ISR. Only safe task continuations reclaim. */
+    vos3_irqflags_t flags = vos3_irq_save();
+    if (!(flags & (1ULL << 9)) || vos3_sched_current() == NULL) {
+        vos3_irq_restore(flags);
+        return;
+    }
+    vos3_spinlock_lock(&g_ai_ctx_registry_lock);
+    vos3_ai_guard_ctx_t* list = g_retired_contexts;
+    g_retired_contexts = NULL;
+    vos3_spinlock_unlock(&g_ai_ctx_registry_lock);
+    vos3_irq_restore(flags);
+    while (list != NULL) {
+        vos3_ai_guard_ctx_t* next = list->retired_next;
+        ai_ctx_finalize(list);
+        list = next;
+    }
+}
+
+#ifdef AI_CONTEXT_LIFETIME_TEST
+uint64_t vos3_ai_guard_test_finalized_contexts(void)
+{
+    return __atomic_load_n(&g_finalized_contexts, __ATOMIC_RELAXED);
+}
+#endif
 
 void* vos3_ai_guard_alloc(vos3_ai_guard_ctx_t* ctx,
                           size_t size,
@@ -1229,15 +1352,6 @@ int vos3_ai_guard_get_workload_hint(vos3_ai_guard_region_t* region,
  * PHASE 17.5.1: INTEGRITY AUTOMATION
  * ============================================================================ */
 
-/** @brief Global list of all contexts (for integrity tick) */
-vos3_ai_guard_ctx_t* g_global_ctx = NULL;
-
-/** @brief Provide global context for telemetry */
-vos3_ai_guard_ctx_t* vos3_ai_guard_get_global_ctx(void)
-{
-    return __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
-}
-
 int vos3_ai_guard_set_integrity_auto(vos3_ai_guard_region_t* region,
                                       uint32_t interval, int auto_suspend)
 {
@@ -1286,8 +1400,7 @@ int vos3_ai_guard_get_integrity_config(vos3_ai_guard_region_t* region,
 
 void vos3_ai_guard_integrity_tick(uint64_t current_tick)
 {
-    vos3_ai_guard_ctx_t* ctx =
-        __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
+    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_global_ctx();
     if (ctx == NULL) {
         return;
     }
@@ -1338,6 +1451,8 @@ void vos3_ai_guard_integrity_tick(uint64_t current_tick)
 
         region = region->next;
     }
+
+    vos3_ai_guard_ctx_put(ctx);
 
     /* Phase 8.6: Weight Purity Guard — incremental SHA-256 scan */
     vos3_wpg_tick(current_tick);
@@ -1497,8 +1612,7 @@ void vos3_wpg_tick(uint64_t current_tick)
 
 void vos3_ai_guard_reprotect_tick(void)
 {
-    vos3_ai_guard_ctx_t* ctx =
-        __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
+    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_global_ctx();
     if (ctx == NULL) {
         return;
     }
@@ -1520,6 +1634,7 @@ void vos3_ai_guard_reprotect_tick(void)
         }
         region = region->next;
     }
+    vos3_ai_guard_ctx_put(ctx);
 }
 
 /* ============================================================================
@@ -1889,10 +2004,10 @@ int vos3_ai_guard_set_reclaim_callback(vos3_ai_guard_region_t* region,
  * 3. TENSOR (LRU)
  * 4. Never: PINNED or MODEL
  */
-static vos3_ai_guard_region_t* find_eviction_candidate(void)
+static vos3_ai_guard_region_t* find_eviction_candidate(vos3_ai_guard_ctx_t* ctx)
 {
-    vos3_ai_guard_ctx_t* ctx =
-        __atomic_load_n(&g_global_ctx, __ATOMIC_ACQUIRE);
+    /* Caller holds its context pin through use of the returned candidate.
+     * Concurrent region mutation remains a separate caller contract. */
     if (ctx == NULL) {
         return NULL;
     }
@@ -1950,9 +2065,11 @@ static vos3_ai_guard_region_t* find_eviction_candidate(void)
 size_t vos3_ai_guard_reclaim(size_t bytes_needed)
 {
     size_t freed = 0;
+    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_global_ctx();
+    if (ctx == NULL) return 0;
 
     while (freed < bytes_needed) {
-        vos3_ai_guard_region_t* victim = find_eviction_candidate();
+        vos3_ai_guard_region_t* victim = find_eviction_candidate(ctx);
         if (victim == NULL) {
             break;  /* No more candidates */
         }
@@ -1979,6 +2096,7 @@ size_t vos3_ai_guard_reclaim(size_t bytes_needed)
         }
     }
 
+    vos3_ai_guard_ctx_put(ctx);
     return freed;
 }
 
@@ -2102,25 +2220,9 @@ void vos3_ai_guard_pressure_tick(void)
  * CONTEXT REGISTRATION (for integrity/pressure ticks)
  * ============================================================================ */
 
-/**
- * @brief Register context as global (called from ctx_create)
- */
-static void register_global_ctx(vos3_ai_guard_ctx_t* ctx)
-{
-    vos3_ai_guard_ctx_t* expected = NULL;
-    (void)__atomic_compare_exchange_n(&g_global_ctx, &expected, ctx, 0,
-                                      __ATOMIC_RELEASE, __ATOMIC_RELAXED);
-}
-
 /* ============================================================================
  * PHASE N: PER-APP MEMORY ISOLATION
  * ============================================================================ */
-
-/** @brief Per-app context array (app_id 0 = system context = g_global_ctx) */
-vos3_ai_guard_ctx_t* g_app_contexts[VOS3_MAX_APP_CONTEXTS] = { NULL };
-
-/** @brief Currently active app_id */
-uint8_t g_active_app_id = 0U;
 
 /*
  * NOTE (Phase F): tag_pte_with_app_id() and get_app_id_from_pte() were removed.
@@ -2136,24 +2238,28 @@ int vos3_ai_guard_create_app_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    if (__atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE) != NULL) {
-        vos3_console_printf("[AI-GUARD] App context %u already exists\n", app_id);
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    if (g_app_contexts[app_id] != NULL) {
+        ai_ctx_registry_unlock(flags);
         return VOS3_AI_GUARD_ERR_INVALID;
     }
+    ai_ctx_registry_unlock(flags);
 
-    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_ctx_create();
+    vos3_ai_guard_ctx_t* ctx = ai_ctx_alloc_unpublished();
     if (ctx == NULL) {
         return VOS3_AI_GUARD_ERR_NOMEM;
     }
 
-    /* Concurrent create/destroy still requires lifecycle serialization;
-     * pointer publication alone does not supply ownership or reader pins. */
-    __atomic_store_n(&g_app_contexts[app_id], ctx, __ATOMIC_RELEASE);
-
-    /* App_id 0 is the system context */
-    if (app_id == 0U) {
-        register_global_ctx(ctx);
+    flags = ai_ctx_registry_lock();
+    if (g_app_contexts[app_id] != NULL) {
+        /* A concurrent creator won. This candidate was never published. */
+        ai_ctx_close_locked(ctx);
+        ai_ctx_registry_unlock(flags);
+        return VOS3_AI_GUARD_ERR_INVALID;
     }
+    g_app_contexts[app_id] = ctx;
+    if (g_global_ctx == NULL) g_global_ctx = ctx;
+    ai_ctx_registry_unlock(flags);
 
     vos3_console_printf("[AI-GUARD] Created app context %u\n", app_id);
     return VOS3_AI_GUARD_OK;
@@ -2165,20 +2271,14 @@ int vos3_ai_guard_destroy_app_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    vos3_ai_guard_ctx_t* ctx =
-        __atomic_exchange_n(&g_app_contexts[app_id], NULL, __ATOMIC_ACQ_REL);
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    vos3_ai_guard_ctx_t* ctx = g_app_contexts[app_id];
     if (ctx == NULL) {
+        ai_ctx_registry_unlock(flags);
         return VOS3_AI_GUARD_ERR_NOTFOUND;
     }
-
-    /* Switch to system context if we're destroying the active one */
-    if (g_active_app_id == app_id) {
-        g_active_app_id = 0U;
-    }
-
-    /* The table is detached before the destructor clears the global pointer
-     * and before either pointer can expose released storage. */
-    vos3_ai_guard_ctx_destroy(ctx);
+    ai_ctx_close_locked(ctx);
+    ai_ctx_registry_unlock(flags);
 
     vos3_console_printf("[AI-GUARD] Destroyed app context %u\n", app_id);
     return VOS3_AI_GUARD_OK;
@@ -2190,11 +2290,14 @@ int vos3_ai_guard_switch_ctx(uint8_t app_id)
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    if (__atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE) == NULL) {
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    if (g_app_contexts[app_id] == NULL) {
+        ai_ctx_registry_unlock(flags);
         return VOS3_AI_GUARD_ERR_NOTFOUND;
     }
 
     g_active_app_id = app_id;
+    ai_ctx_registry_unlock(flags);
 
     vos3_console_printf("[AI-GUARD] Switched to app context %u\n", app_id);
     return VOS3_AI_GUARD_OK;
@@ -2202,15 +2305,10 @@ int vos3_ai_guard_switch_ctx(uint8_t app_id)
 
 uint8_t vos3_ai_guard_get_active_app_id(void)
 {
-    return g_active_app_id;
-}
-
-vos3_ai_guard_ctx_t* vos3_ai_guard_get_app_ctx(uint8_t app_id)
-{
-    if (app_id >= VOS3_MAX_APP_CONTEXTS) {
-        return NULL;
-    }
-    return __atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE);
+    vos3_irqflags_t flags = ai_ctx_registry_lock();
+    uint8_t id = g_active_app_id;
+    ai_ctx_registry_unlock(flags);
+    return id;
 }
 
 int vos3_ai_guard_check_app_access(uintptr_t fault_addr, uint8_t current_app_id)
@@ -2230,8 +2328,12 @@ int vos3_ai_guard_check_app_access(uintptr_t fault_addr, uint8_t current_app_id)
             continue;  /* Skip our own context */
         }
 
-        vos3_ai_guard_ctx_t* ctx =
-            __atomic_load_n(&g_app_contexts[id], __ATOMIC_ACQUIRE);
+        vos3_irqflags_t flags = ai_ctx_registry_lock();
+        int published = g_app_contexts[id] != NULL;
+        vos3_ai_guard_ctx_t* ctx = ai_ctx_retain_locked(g_app_contexts[id]);
+        ai_ctx_registry_unlock(flags);
+        /* A present context that cannot be pinned must fail closed. */
+        if (published && ctx == NULL) return -1;
         if (ctx == NULL) {
             continue;
         }
@@ -2252,10 +2354,12 @@ int vos3_ai_guard_check_app_access(uintptr_t fault_addr, uint8_t current_app_id)
                     "app %u memory at %p\n",
                     current_app_id, id, (void*)fault_addr);
 
+                vos3_ai_guard_ctx_put(ctx);
                 return -1;  /* -EPERM */
             }
             region = region->next;
         }
+        vos3_ai_guard_ctx_put(ctx);
     }
 
     return 0;  /* Access allowed */
@@ -2278,8 +2382,7 @@ int vos3_ai_guard_get_app_status(uint8_t app_id, uint64_t* mem_used,
         return VOS3_AI_GUARD_ERR_INVALID;
     }
 
-    vos3_ai_guard_ctx_t* ctx =
-        __atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE);
+    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_app_ctx(app_id);
     if (ctx == NULL) {
         return VOS3_AI_GUARD_ERR_NOTFOUND;
     }
@@ -2291,6 +2394,7 @@ int vos3_ai_guard_get_app_status(uint8_t app_id, uint64_t* mem_used,
         *region_count = ctx->region_count;
     }
 
+    vos3_ai_guard_ctx_put(ctx);
     return VOS3_AI_GUARD_OK;
 }
 
@@ -2327,8 +2431,7 @@ uint64_t vos3_ai_guard_scrub_model_regions(uint8_t app_id)
         return 0;
     }
 
-    vos3_ai_guard_ctx_t* ctx =
-        __atomic_load_n(&g_app_contexts[app_id], __ATOMIC_ACQUIRE);
+    vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_app_ctx(app_id);
     if (ctx == NULL) {
         return 0;
     }
@@ -2376,6 +2479,7 @@ uint64_t vos3_ai_guard_scrub_model_regions(uint8_t app_id)
     }
 
     vos3_spinlock_release((vos3_spinlock_t *)&ctx->lock);
+    vos3_ai_guard_ctx_put(ctx);
 
     if (total_scrubbed > 0) {
         VOS3_INFO("[AI-GUARD] App %u: scrubbed %llu bytes across MODEL regions",

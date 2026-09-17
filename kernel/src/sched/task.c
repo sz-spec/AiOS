@@ -591,8 +591,9 @@ void vos3_task_destroy(vos3_task_t* task)
 
     /* Cleanup AI Guard context */
     if (task->ai_guard_ctx != NULL) {
-        vos3_ai_guard_ctx_destroy(task->ai_guard_ctx);
+        vos3_ai_guard_ctx_t* ctx = task->ai_guard_ctx;
         task->ai_guard_ctx = NULL;
+        vos3_ai_guard_ctx_put(ctx);
     }
 
     /* Release FPU ownership and free state buffer */
@@ -738,7 +739,9 @@ void vos3_task_reap(void)
             }
         }
         if (task->ai_guard_ctx != NULL) {
-            vos3_ai_guard_ctx_destroy(task->ai_guard_ctx);
+            vos3_ai_guard_ctx_t* ctx = task->ai_guard_ctx;
+            task->ai_guard_ctx = NULL;
+            vos3_ai_guard_ctx_put(ctx);
         }
         /* Release FPU ownership and free state buffer */
         vos3_fpu_release_owner(task);

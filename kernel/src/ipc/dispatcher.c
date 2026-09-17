@@ -674,8 +674,8 @@ int vos3_dispatcher_kill_all(void)
 
     /* Phase 5: Scrub ALL model regions across all app contexts */
     for (uint8_t app_id = 0; app_id < 8; app_id++) {
-        vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_get_app_ctx(app_id);
-        if (ctx != NULL) {
+        {
+            /* The operation owns its lookup/pin; no borrowed precheck. */
             uint64_t scrubbed = vos3_ai_guard_scrub_model_regions(app_id);
             if (scrubbed > 0) {
                 VOS3_INFO("[DISPATCH] KILL_ALL: scrubbed %llu bytes for app_id=%u",

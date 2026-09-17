@@ -1,0 +1,34 @@
+[
+  {
+    "case": "bios",
+    "command": [
+      "python3",
+      "scripts/native_bench.py",
+      "--iso",
+      "/private/tmp/vos-ai-context-repro-20260917/0/source/dist/final-full.iso",
+      "--output",
+      "/private/tmp/vos-ai-context-fullsuite-20260917/bios",
+      "--seconds",
+      "500"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 156.76072358433157
+  },
+  {
+    "case": "uefi",
+    "command": [
+      "python3",
+      "/private/tmp/vos-final-uefi-runner.py",
+      "--source",
+      "/private/tmp/vos-ai-context-repro-20260917/0/source",
+      "--iso",
+      "/private/tmp/vos-ai-context-repro-20260917/0/source/dist/final-full.iso",
+      "--output",
+      "/private/tmp/vos-ai-context-fullsuite-20260917/uefi",
+      "--seconds",
+      "500"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 158.4628490000032
+  }
+]

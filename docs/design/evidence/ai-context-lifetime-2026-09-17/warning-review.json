@@ -1,0 +1,619 @@
+{
+  "method": "Read complete UTF-8 logs with replacement decoding. Count lines matching warning:|Warning:|Clock skew. Extract compiler diagnostics using ^(.+?):\\d+:\\d+: warning: (.*), compare Counter(file,message), excluding source line/column. Linker output may interleave under parallel builds.",
+  "logs": {
+    "current": {
+      "path": "/private/tmp/vos-ai-context-native-20260917/build.log",
+      "sha256": "70b03d3556ff598af6086a9cbaaf3f043276865dde69e6766fdf741fa957c4da",
+      "bytes": 404567,
+      "warning_lines": 108,
+      "compiler_diagnostics": 83,
+      "normalized": [
+        {
+          "file": "lib/dns.c",
+          "message": "'ntohl' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "lib/dns.c",
+          "message": "'ntohs' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_APPEND' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_RDWR' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_WRONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/ai_exploit.c",
+          "message": "ISO C forbids conversion of function pointer to object pointer type [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/ai_stress.c",
+          "message": "variable 'quick_mode' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/smp.c",
+          "message": "variable 'woken' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val0' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val1' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val2' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val3' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val4' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'value' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_2026_frontier.c",
+          "message": "'get_sysinfo' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_2026_frontier.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 7
+        },
+        {
+          "file": "src/bench_ai_throughput.c",
+          "message": "unused variable 't_read_end' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_ai_throughput.c",
+          "message": "unused variable 't_read_start' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_csw_1ms.c",
+          "message": "variable 'counter' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_soak_5min.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/bench_soak_5min.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/bench_thread_test.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 7
+        },
+        {
+          "file": "src/cat.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/crypto/mlkem768.c",
+          "message": "writing 1 byte into a region of size 0 [-Wstringop-overflow=]",
+          "count": 2
+        },
+        {
+          "file": "src/drivers/virtio_net.c",
+          "message": "variable 'irq_packets' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/drivers/virtio_vbus.c",
+          "message": "unused variable 'host_features' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/grep.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/grep.c",
+          "message": "unused variable 'plen' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/head.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/mm/ai_slots.c",
+          "message": "variable 'unmapped' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/sched/task.c",
+          "message": "unused variable 'old_state' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_APPEND' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_RDWR' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_WRONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/test_advanced_chaos.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 2
+        },
+        {
+          "file": "src/test_agent_chaos.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 11
+        },
+        {
+          "file": "src/test_agent_cluster.c",
+          "message": "'get_sysinfo' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/test_ai_latency.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 4
+        },
+        {
+          "file": "src/test_epoll.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/test_futex.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 2
+        },
+        {
+          "file": "src/test_health_check.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/test_model_load.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "'g_errors' defined but not used [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "unused variable 'total_pages' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/unistd/getcwd.c",
+          "message": "function may return address of local variable [-Wreturn-local-addr]",
+          "count": 1
+        },
+        {
+          "file": "src/vos3_admin.c",
+          "message": "'get_permission_name' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/wc.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        }
+      ],
+      "clock_lines": [
+        "make[1]: Warning: File 'build/ai-context-lifetime' has modification time 8.9e-06 s in the future",
+        "make[1]: warning:  Clock skew detected.  Your build may be incomplete."
+      ]
+    },
+    "prior": {
+      "path": "/private/tmp/vos-final3-repro-20260917/0/build.log",
+      "sha256": "91a90fe48dd126ca7a24f6648fb3e5b2dfec387bfa740f4ac65a16ded070d2e9",
+      "bytes": 404263,
+      "warning_lines": 110,
+      "compiler_diagnostics": 85,
+      "normalized": [
+        {
+          "file": "lib/dns.c",
+          "message": "'ntohl' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "lib/dns.c",
+          "message": "'ntohs' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_APPEND' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_RDWR' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "lib/stdio.c",
+          "message": "'O_WRONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/ai_exploit.c",
+          "message": "ISO C forbids conversion of function pointer to object pointer type [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/ai_stress.c",
+          "message": "variable 'quick_mode' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/smp.c",
+          "message": "variable 'woken' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val0' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val1' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val2' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val3' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'val4' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/arch/x86_64/syscall.c",
+          "message": "unused variable 'value' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_2026_frontier.c",
+          "message": "'get_sysinfo' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_2026_frontier.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 7
+        },
+        {
+          "file": "src/bench_ai_throughput.c",
+          "message": "unused variable 't_read_end' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_ai_throughput.c",
+          "message": "unused variable 't_read_start' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_csw_1ms.c",
+          "message": "variable 'counter' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/bench_soak_5min.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/bench_soak_5min.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/bench_thread_test.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 7
+        },
+        {
+          "file": "src/cat.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/crypto/mlkem768.c",
+          "message": "writing 1 byte into a region of size 0 [-Wstringop-overflow=]",
+          "count": 2
+        },
+        {
+          "file": "src/drivers/virtio_net.c",
+          "message": "variable 'irq_packets' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/drivers/virtio_vbus.c",
+          "message": "unused variable 'host_features' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/grep.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/grep.c",
+          "message": "unused variable 'plen' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/head.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/init.c",
+          "message": "'is_provisioned' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/init.c",
+          "message": "'run_setup_wizard' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/mm/ai_slots.c",
+          "message": "variable 'unmapped' set but not used [-Wunused-but-set-variable=]",
+          "count": 1
+        },
+        {
+          "file": "src/sched/task.c",
+          "message": "unused variable 'old_state' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_APPEND' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_RDWR' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/sh.c",
+          "message": "'O_WRONLY' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/test_advanced_chaos.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 2
+        },
+        {
+          "file": "src/test_agent_chaos.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 11
+        },
+        {
+          "file": "src/test_agent_cluster.c",
+          "message": "'get_sysinfo' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/test_ai_latency.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 4
+        },
+        {
+          "file": "src/test_epoll.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/test_futex.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 2
+        },
+        {
+          "file": "src/test_health_check.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/test_model_load.c",
+          "message": "ISO C99 requires at least one argument for the '...' in a variadic macro [-Wpedantic]",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "'O_CREAT' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "'O_TRUNC' redefined",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "'g_errors' defined but not used [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/test_sustained.c",
+          "message": "unused variable 'total_pages' [-Wunused-variable]",
+          "count": 1
+        },
+        {
+          "file": "src/unistd/getcwd.c",
+          "message": "function may return address of local variable [-Wreturn-local-addr]",
+          "count": 1
+        },
+        {
+          "file": "src/vos3_admin.c",
+          "message": "'get_permission_name' defined but not used [-Wunused-function]",
+          "count": 1
+        },
+        {
+          "file": "src/wc.c",
+          "message": "'O_RDONLY' redefined",
+          "count": 1
+        }
+      ],
+      "clock_lines": [
+        "make[1]: Warning: File 'build/native-full-final' has modification time 0.00064 s in the future",
+        "make[1]: warning:  Clock skew detected.  Your build may be incomplete."
+      ]
+    }
+  },
+  "scope": "Read-only log comparison, not warning remediation, safety proof or performance attribution.",
+  "new_diagnostics": [],
+  "absent_prior_diagnostics": [
+    {
+      "file": "src/init.c",
+      "message": "'is_provisioned' defined but not used [-Wunused-function]",
+      "count": 1
+    },
+    {
+      "file": "src/init.c",
+      "message": "'run_setup_wizard' defined but not used [-Wunused-function]",
+      "count": 1
+    }
+  ],
+  "open_classes": [
+    "mlkem768.c stringop-overflow (two compiler diagnostics in both logs)",
+    "musl getcwd.c return-local-addr (both logs)",
+    "Missing .note.GNU-stack executable-stack implications",
+    "Ignored -z pack-relative-relocs=none; parallel stderr has interleaved linker lines",
+    "Macro redefinitions, pedantic variadic macros, unused values/functions",
+    "Build directory timestamp in future and final make clock-skew warning"
+  ],
+  "claims": {
+    "new_compiler_diagnostics": false,
+    "warnings_harmless": false,
+    "performance_cause_established": false,
+    "build_modes_identical": false
+  }
+}

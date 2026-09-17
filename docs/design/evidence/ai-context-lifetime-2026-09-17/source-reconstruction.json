@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "base_commit": "f8c0b827c650e66dd2059d8bb27a307cb69ff6da",
+  "manifest_count": 6255,
+  "actual_count": 6255,
+  "missing": [],
+  "extra": [],
+  "mismatched": [],
+  "method": [
+    "git archive --format=tar f8c0b827c650e66dd2059d8bb27a307cb69ff6da",
+    "tarfile extractall filter=data; validate relative member paths",
+    "git apply portable tracked.patch in new source tree",
+    "copy2 six frozen additions preserving paths/modes",
+    "SHA256 all files and exact path-set comparison"
+  ],
+  "manifest_sha256": "ccf91c8de0c8bcc5e722ca82debec5beba4285e9ca5d33d9aa8e04728023f532",
+  "commands": [
+    [
+      "git",
+      "archive",
+      "--format=tar",
+      "f8c0b827c650e66dd2059d8bb27a307cb69ff6da"
+    ],
+    [
+      "git",
+      "apply",
+      "--unsafe-paths",
+      "/Users/sz/Desktop/vos/vos 5/docs/design/evidence/ai-context-lifetime-2026-09-17/tracked.patch"
+    ]
+  ],
+  "note": "Patch hash verified against manifest; archive members validated and extracted with data filter. Exact final file-set equality verified."
+}

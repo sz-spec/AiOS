@@ -14,174 +14,23 @@ extern int vos3_ai_guard_destroy_app_ctx(uint8_t app_id);
 extern int vos3_ai_guard_get_app_status(uint8_t app_id, uint64_t* mem_used,
                                          size_t* region_count);
 extern uint8_t vos3_ai_guard_get_active_app_id(void);
-extern vos3_ai_guard_ctx_t* vos3_ai_guard_get_app_ctx(uint8_t app_id);
+extern vos3_ai_guard_ctx_t* vos3_ai_guard_acquire_app_ctx(uint8_t app_id);
 
 /* ============================================================================
  * APPLOAD — App Isolation (Phase N)
  * ============================================================================ */
 
-/**
- * @brief Appload request structure — shared between bridge task and child
- */
-typedef struct appload_request {
-    char            path[256];
-    uint8_t         app_id;
-    volatile int    started;
-} appload_request_t;
-
-/**
- * @brief Entry point for the appload child task
- */
-static void appload_child_entry(void* arg)
-{
-    appload_request_t* req = (appload_request_t*)arg;
-
-    __asm__ volatile ("sti" ::: "memory");
-
-    vos3_task_t* self = vos3_sched_current();
-    if (self == NULL) {
-        req->started = 1;
-        vos3_task_exit(-1);
-    }
-
-    /* Set app isolation fields */
-    self->flags |= VOS3_TASK_FLAG_APP;
-    self->app_id = req->app_id;
-
-    self->ai_guard_ctx = vos3_ai_guard_get_app_ctx(req->app_id);
-
-    /* fd 0: stdin from /dev/console */
-    int fd0 = vos3_open("/dev/console", VOS3_O_RDONLY, 0U);
-    if (fd0 < 0) {
-        VOS3_WARN("[APPLOAD] Failed to open /dev/console for stdin: %d", fd0);
-    }
-
-    /* Build stdout path: /tmp/app_N_stdout */
-    char stdout_path[32];
-    bridge_strcpy(stdout_path, "/tmp/app_", sizeof(stdout_path));
-    char nb[4];
-    uint_to_str((uint64_t)req->app_id, nb, 4);
-    size_t slen = bridge_strlen(stdout_path);
-    size_t nlen = bridge_strlen(nb);
-    if (slen + nlen < sizeof(stdout_path) - 8) {
-        bridge_strcpy(stdout_path + slen, nb, sizeof(stdout_path) - slen);
-        slen += nlen;
-        bridge_strcpy(stdout_path + slen, "_stdout", sizeof(stdout_path) - slen);
-    }
-
-    /* fd 1: stdout -> /tmp/app_N_stdout */
-    int fd1 = vos3_open(stdout_path,
-                         VOS3_O_WRONLY | VOS3_O_CREAT | VOS3_O_TRUNC, 0644U);
-    if (fd1 < 0) {
-        VOS3_ERROR("[APPLOAD] Failed to open stdout capture file: %d", fd1);
-        req->started = 1;
-        vos3_task_exit(-1);
-    }
-
-    /* fd 2: stderr -> same capture file */
-    int fd2 = vos3_open(stdout_path, VOS3_O_WRONLY | VOS3_O_APPEND, 0U);
-    if (fd2 < 0) {
-        VOS3_WARN("[APPLOAD] Failed to open stderr capture file: %d", fd2);
-    }
-
-    VOS3_INFO("[APPLOAD] App %u child (pid=%u) starting exec of '%s'",
-              req->app_id, self->pid, req->path);
-
-    /* Signal parent that we've started */
-    req->started = 1;
-
-    /* Build argv/envp */
-    const char* argv[] = { req->path, NULL };
-    const char* envp[] = {
-        "PATH=/bin:/sbin:/usr/bin:/usr/sbin",
-        "HOME=/",
-        "TERM=vt100",
-        NULL
-    };
-
-    int result = vos3_exec(req->path, argv, envp);
-
-    VOS3_ERROR("[APPLOAD] exec failed for app %u: %d", req->app_id, result);
-    vos3_task_exit(-1);
-}
-
-/**
- * @brief APPLOAD|app_id|binary_path — Create app context + load & run ELF
+/** APPLOAD is unavailable until startup ownership is implemented.
+ * The former task factory published a READY task without enqueueing it and
+ * passed a parent's stack request to the child. Reopening requires an
+ * unpublished owned-task factory, explicit enqueue, safe startup/reaping and
+ * authenticated administrator authorization. No partial launch is attempted.
  */
 void cmd_appload(const char* app_id_str, const char* binary_path)
 {
-    if (!app_id_str) { send_err(22, "missing app_id"); return; }
-
-    uint8_t app_id = (uint8_t)parse_uint(app_id_str);
-    if (app_id >= 8) { send_err(22, "app_id must be 0-7"); return; }
-
-    if (!binary_path || !binary_path[0]) { send_err(22, "missing binary_path"); return; }
-
-    vos3_inode_t st;
-    int rc = vos3_stat(binary_path, &st);
-    if (rc != 0) {
-        send_err(-rc, "binary not found");
-        return;
-    }
-    if (!VOS3_S_ISREG(st.mode)) {
-        send_err(13, "not a regular file");
-        return;
-    }
-
-    rc = vos3_ai_guard_create_app_ctx(app_id);
-    if (rc != 0) { send_err(-rc, "ctx create failed"); return; }
-
-    appload_request_t req;
-    bridge_strcpy(req.path, binary_path, sizeof(req.path));
-    req.app_id = app_id;
-    req.started = 0;
-
-    char task_name[16];
-    bridge_strcpy(task_name, "app_", sizeof(task_name));
-    char nb_name[4];
-    uint_to_str((uint64_t)app_id, nb_name, 4);
-    bridge_strcpy(task_name + 4, nb_name, sizeof(task_name) - 4);
-
-    vos3_task_t* child = vos3_task_create(task_name,
-                                           appload_child_entry,
-                                           &req,
-                                           VOS3_PRIORITY_NORMAL);
-    if (child == NULL) {
-        vos3_ai_guard_destroy_app_ctx(app_id);
-        send_err(12, "task create failed");
-        return;
-    }
-
-    vos3_task_t* bridge_task = vos3_sched_current();
-    if (bridge_task != NULL) {
-        child->parent = bridge_task;
-    }
-
-    VOS3_INFO("[BRIDGE] APPLOAD: spawned app_%u pid=%u for '%s'",
-              app_id, child->pid, binary_path);
-
-    uint32_t polls = 0;
-    const uint32_t max_polls = 500U;
-    while (!req.started && polls < max_polls) {
-        vos3_task_yield();
-        polls++;
-    }
-
-    char resp[128]; int ri = 0;
-    const char* k; const char* p; char nb[20];
-
-    k = "app_id="; while (*k) resp[ri++] = *k++;
-    uint_to_str(app_id, nb, 20); p = nb; while (*p) resp[ri++] = *p++;
-    resp[ri++] = ',';
-
-    k = "pid="; while (*k) resp[ri++] = *k++;
-    uint_to_str(child->pid, nb, 20); p = nb; while (*p) resp[ri++] = *p++;
-    resp[ri++] = ',';
-
-    k = "status=running"; while (*k) resp[ri++] = *k++;
-
-    resp[ri] = '\0';
-    send_ok(resp);
+    (void)app_id_str;
+    (void)binary_path;
+    send_err(95, "APPLOAD unsupported: safe owned task startup unavailable");
 }
 
 /**
@@ -447,7 +296,7 @@ void cmd_applist(void)
     int first = 1;
 
     for (uint8_t id = 0; id < 8; id++) {
-        vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_get_app_ctx(id);
+        vos3_ai_guard_ctx_t* ctx = vos3_ai_guard_acquire_app_ctx(id);
         if (!ctx) continue;
 
         if (!first && ri < 500) resp[ri++] = ';';
@@ -471,6 +320,7 @@ void cmd_applist(void)
         if (ri < 500) resp[ri++] = ':';
 
         uint_to_str(ctx->quota_used, nb, 20);
+        vos3_ai_guard_ctx_put(ctx);
         p = nb; while (*p && ri < 500) resp[ri++] = *p++;
     }
 

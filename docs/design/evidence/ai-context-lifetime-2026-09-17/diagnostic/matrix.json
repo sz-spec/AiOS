@@ -1,0 +1,78 @@
+[
+  {
+    "case": "bios-1",
+    "command": [
+      "python3",
+      "scripts/native_ai_context_smoke.py",
+      "--iso",
+      "/private/tmp/vos-ai-context-native-20260917/source/dist/ai-context-lifetime.iso",
+      "--output",
+      "/private/tmp/vos-ai-context-native-20260917/bios-1",
+      "--smp",
+      "1",
+      "--seconds",
+      "45"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 45.1240115002729
+  },
+  {
+    "case": "bios-4",
+    "command": [
+      "python3",
+      "scripts/native_ai_context_smoke.py",
+      "--iso",
+      "/private/tmp/vos-ai-context-native-20260917/source/dist/ai-context-lifetime.iso",
+      "--output",
+      "/private/tmp/vos-ai-context-native-20260917/bios-4",
+      "--smp",
+      "4",
+      "--seconds",
+      "45"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 45.108361041639
+  },
+  {
+    "case": "uefi-1",
+    "command": [
+      "python3",
+      "scripts/native_ai_context_smoke.py",
+      "--iso",
+      "/private/tmp/vos-ai-context-native-20260917/source/dist/ai-context-lifetime.iso",
+      "--output",
+      "/private/tmp/vos-ai-context-native-20260917/uefi-1",
+      "--smp",
+      "1",
+      "--seconds",
+      "45",
+      "--firmware-code",
+      "/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+      "--firmware-vars",
+      "/opt/homebrew/share/qemu/edk2-i386-vars.fd"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 45.10132045811042
+  },
+  {
+    "case": "uefi-4",
+    "command": [
+      "python3",
+      "scripts/native_ai_context_smoke.py",
+      "--iso",
+      "/private/tmp/vos-ai-context-native-20260917/source/dist/ai-context-lifetime.iso",
+      "--output",
+      "/private/tmp/vos-ai-context-native-20260917/uefi-4",
+      "--smp",
+      "4",
+      "--seconds",
+      "45",
+      "--firmware-code",
+      "/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+      "--firmware-vars",
+      "/opt/homebrew/share/qemu/edk2-i386-vars.fd"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 45.1194059997797
+  }
+]

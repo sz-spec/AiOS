@@ -1,0 +1,8 @@
+{
+  "diagnostic_reproduced": true,
+  "closure": false,
+  "exit": 0,
+  "production_sha256": "a956fa35f3c495969c28fcc7500326f01c80078879a8af7f4c2c974966242ff7",
+  "diagnostic_sha256": "59d1efe3f441feea81e2d2f1295c42ea12de6108eae3aeea3eba3d1c54162b18",
+  "scope": "Actual context functions; abandoned task continuation is modeled, production kill/reaper not executed"
+}

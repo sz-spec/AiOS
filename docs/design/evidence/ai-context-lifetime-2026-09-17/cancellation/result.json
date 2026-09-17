@@ -1,0 +1,8 @@
+{
+  "diagnostic_reproduced": true,
+  "closure": false,
+  "exit": 0,
+  "production_sha256": "62a000d26ddb49344a25e85b789787a29dc45b18430a796c9bef382052e996a4",
+  "diagnostic_sha256": "b565813018d6829b651cf4e0d4b1a887ba8baf4a62cc475938cf1af975b3c5a5",
+  "scope": "Frozen actual context functions; task abandonment modeled, not production task_kill/reap"
+}

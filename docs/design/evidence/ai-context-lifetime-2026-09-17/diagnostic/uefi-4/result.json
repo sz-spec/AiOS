@@ -1,0 +1,21 @@
+{
+  "firmware": "uefi",
+  "cpu": "qemu64",
+  "smp": 4,
+  "ram_mb": 1024,
+  "acceleration": "tcg",
+  "observation_seconds": 45,
+  "exit_status": "observation_timeout",
+  "pmm": true,
+  "vmm": true,
+  "scheduler": true,
+  "wizard_output": true,
+  "online_cpus": 4,
+  "failures": [],
+  "passed": true,
+  "diagnostic_scope": "controlled kernel lifetime interleaving; not an SMP race proof",
+  "scope": "VM boot to user-space setup; not installation, AI inference, or physical hardware qualification",
+  "iso_sha256": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+  "iso_sha256_after": "ace20c9bd21ca44ac4733f3a3736f62470eea16ce5854a87e9f49776a27960c5",
+  "artifact_unchanged": true
+}

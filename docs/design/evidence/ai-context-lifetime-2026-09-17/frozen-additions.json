@@ -1,0 +1,8 @@
+[
+  "docs/design/evidence/ai-context-cancellation-review-2026-09-17.md",
+  "docs/design/evidence/ai-context-external-callers-2026-09-17.md",
+  "kernel/src/tests/test_ai_context_lifetime.c",
+  "scripts/native_ai_context_smoke.py",
+  "scripts/test_ai_context_external_callers.py",
+  "scripts/test_native_ai_context_smoke.py"
+]

@@ -271,6 +271,11 @@ typedef struct vos3_ai_guard_ctx {
     /* ===== Lock ===== */
     uint64_t                lock;           /**< Spinlock for thread safety */
 
+    /* Registry lock protects lifetime, distinct from region mutation. */
+    uint32_t                lifetime_refs;  /**< One owner plus acquired pins */
+    uint32_t                closing;        /**< Detached; rejects new readers */
+    struct vos3_ai_guard_ctx* retired_next; /**< Zero-ref safe-point queue */
+
     /* ===== Regions ===== */
     vos3_ai_guard_region_t* regions;        /**< Head of regions list */
     size_t                  region_count;   /**< Number of active regions */
@@ -308,10 +313,27 @@ int vos3_ai_guard_init(void);
 vos3_ai_guard_ctx_t* vos3_ai_guard_ctx_create(void);
 
 /**
- * @brief Destroy an AI guard context
- * @param[in] ctx Context to destroy
+ * @brief Close a creator-owned context and consume its owner reference
+ * Publication is detached immediately; acquired readers keep storage alive.
+ * Caller must own a valid reference. Final reclamation is deferred.
  */
 void vos3_ai_guard_ctx_destroy(vos3_ai_guard_ctx_t* ctx);
+
+/** Registry lookup and retain are atomic. Every success requires ctx_put.
+ * A pin protects context destruction, not concurrent region removal or
+ * mutation. Region APIs still require caller serialization. The caller must
+ * reach ctx_put: asynchronous task cancellation does not unwind these pins. */
+vos3_ai_guard_ctx_t* vos3_ai_guard_acquire_global_ctx(void);
+vos3_ai_guard_ctx_t* vos3_ai_guard_acquire_app_ctx(uint8_t app_id);
+void vos3_ai_guard_ctx_put(vos3_ai_guard_ctx_t* ctx);
+
+/** Final reclamation requires a task continuation that completes, with IRQs
+ * enabled. No current task or IRQ-off is a no-op; IF alone is not an ISR test.
+ * Asynchronous cancellation of a reclamation continuation is not supported. */
+void vos3_ai_guard_reap_contexts(void);
+#ifdef AI_CONTEXT_LIFETIME_TEST
+uint64_t vos3_ai_guard_test_finalized_contexts(void);
+#endif
 
 /**
  * @brief Allocate AI-protected memory with guard pages
@@ -1168,13 +1190,6 @@ int vos3_ai_guard_switch_ctx(uint8_t app_id);
  * @return Current active app_id
  */
 uint8_t vos3_ai_guard_get_active_app_id(void);
-
-/**
- * @brief Get the AI guard context for an app_id
- * @param[in] app_id Application ID (0-7)
- * @return Context pointer, or NULL if not created
- */
-vos3_ai_guard_ctx_t* vos3_ai_guard_get_app_ctx(uint8_t app_id);
 
 /**
  * @brief Check memory access against app_id in PTE

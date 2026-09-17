@@ -311,6 +311,17 @@ C_SOURCES := \
     $(SRC_DIR)/hyperv/hyperv_bridge.c \
     $(SRC_DIR)/hyperv/hyperv_init.c
 
+ifeq ($(AI_CONTEXT_LIFETIME_TEST),1)
+ifneq ($(HEADLESS_AUDIT),1)
+$(error AI_CONTEXT_LIFETIME_TEST=1 requires HEADLESS_AUDIT=1)
+endif
+ifeq ($(BENCH_MODE),1)
+$(error AI_CONTEXT_LIFETIME_TEST=1 requires non-BENCH normal boot)
+endif
+CFLAGS += -DAI_CONTEXT_LIFETIME_TEST
+C_SOURCES += $(SRC_DIR)/tests/test_ai_context_lifetime.c
+endif
+
 ifeq ($(PROCESS_ROOTS_TEST),1)
 C_SOURCES += $(SRC_DIR)/tests/test_process_roots.c
 CFLAGS += -DVOS3_PROCESS_ROOTS_TEST
