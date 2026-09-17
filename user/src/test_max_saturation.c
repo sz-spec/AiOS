@@ -179,6 +179,24 @@ static int reap_owned_children(pid_t* children, int slots, int* reaped)
     return bad;
 }
 
+/* Logical removal precedes physical reclamation. Keep yielding until both
+ * recover, without widening the original fixed 2000-page tolerance. */
+static int await_owned_cleanup(vos3_sysinfo_t* info, unsigned int baseline_tasks,
+                               unsigned int baseline_zombies, unsigned long baseline_free)
+{
+    unsigned long started = get_uptime_ms();
+    for (unsigned int sweep = 0; sweep < 100000U; sweep++) {
+        if (get_sysinfo(info) < 0) return 0;
+        int memory_ready = info->free_pages >= baseline_free ||
+                           baseline_free - info->free_pages < 2000UL;
+        if (info->nr_tasks <= baseline_tasks &&
+            info->nr_zombies <= baseline_zombies && memory_ready) return 1;
+        if (get_uptime_ms() - started >= 5000UL) break;
+        syscall0(SYS_SCHED_YIELD);
+    }
+    return 0;
+}
+
 /* ═══════════════════════════════════════════════════════════════════ */
 int main(int argc, char* argv[])
 {
@@ -349,19 +367,10 @@ int main(int argc, char* argv[])
     }
 
     /* wait removes zombies; the deferred physical reaper needs ticks. */
-    unsigned long cleanup_started = get_uptime_ms();
-    int cleanup_ok = 0;
-    for (unsigned int sweep = 0; sweep < 100000U; sweep++) {
-        if (get_sysinfo(&info) >= 0 && info.nr_tasks <= baseline_tasks &&
-            info.nr_zombies <= baseline_zombies) {
-            cleanup_ok = 1;
-            break;
-        }
-        if (get_uptime_ms() - cleanup_started >= 5000UL) break;
-        syscall0(SYS_SCHED_YIELD);
-    }
+    int cleanup_ok = await_owned_cleanup(&info, baseline_tasks,
+                                         baseline_zombies, baseline_free);
     if (cleanup_ok) TEST_PASS("owned_children_reclaimed");
-    else TEST_FAIL("owned_children_reclaimed", "task or zombie count exceeds baseline");
+    else TEST_FAIL("owned_children_reclaimed", "logical or physical cleanup did not complete");
 
     /* ── Phase 6: Final Telemetry ────────────────────────────────── */
     printf("\n--- Phase 6: Final Telemetry ---\n");
