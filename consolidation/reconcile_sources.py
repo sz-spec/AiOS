@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import subprocess
+import warnings
 from collections import Counter, defaultdict
 from pathlib import Path
 from inventory import ROOT, SOURCE_ROOT, SOURCES, excluded
@@ -111,7 +112,11 @@ def symbols(path):
     text=path.read_text(errors='replace')
     if suffix=='.py':
         try:
-            tree=ast.parse(text)
+            # Legacy donor strings can emit SyntaxWarning on newer Python.
+            # They are parsed as review input and are never executed here.
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', SyntaxWarning)
+                tree=ast.parse(text)
             return sorted({n.name for n in ast.walk(tree) if isinstance(n,(ast.ClassDef,ast.FunctionDef,ast.AsyncFunctionDef))})
         except (SyntaxError,ValueError):return []
     if suffix in {'.ts','.tsx'}:
@@ -126,18 +131,27 @@ def component(path):
 
 def generate():
     OUT.mkdir(parents=True,exist_ok=True)
-    disposition_file=ROOT/'consolidation/native-source-dispositions.json'
     path_dispositions={}
-    if disposition_file.exists():
-        disposition_doc=json.loads(disposition_file.read_text())
-        for group in disposition_doc['dispositions']:
-            for decided_path in group['paths']:
-                if decided_path in path_dispositions:
-                    raise ValueError('duplicate source disposition: '+decided_path)
-                path_dispositions[decided_path]={
-                    'id':group['id'], 'disposition':group['disposition'],
-                    'state':group['state'], 'rationale':group['rationale'],
-                    'validation':group['validation']}
+    for disposition_file in [
+        ROOT/'consolidation/native-source-dispositions.json',
+        ROOT/'consolidation/non-native-source-dispositions.json',
+    ]:
+        if disposition_file.exists():
+            disposition_doc=json.loads(disposition_file.read_text())
+            for group in disposition_doc['dispositions']:
+                for decided_path in group['paths']:
+                    if decided_path in path_dispositions:
+                        raise ValueError('duplicate source disposition: '+decided_path)
+                    path_dispositions[decided_path]={
+                        'id':group['id'], 'disposition':group['disposition'],
+                        'state':group['state'], 'rationale':group['rationale'],
+                        'validation':group['validation']}
+                    for optional in (
+                        'category', 'license', 'security', 'classification_basis',
+                        'selected_source', 'source_fingerprint',
+                    ):
+                        if optional in group:
+                            path_dispositions[decided_path][optional]=group[optional]
     canonical,_=scan(ROOT)
     canonical={p:v for p,v in canonical.items() if not p.startswith(('consolidation/','docs/handoff/'))}
     by_hash=defaultdict(list)

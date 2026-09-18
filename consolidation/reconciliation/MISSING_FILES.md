@@ -2,1027 +2,1027 @@
 
 Excludes files retained under another path. Each item remains an integration decision, not an instruction to copy it blindly.
 
-- `.bandit` — VOS3 — root.configuration
-- `.git-blame-ignore-revs` — vos.v1 — root.configuration
-- `.github/ISSUE_TEMPLATE/app_review_appeal.md` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/ISSUE_TEMPLATE/bug_report.md` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/ISSUE_TEMPLATE/feature_request.md` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/backend.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/build-msi.yml` — vos.v1 — ci.workflows
-- `.github/workflows/cd_pipeline.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/ci.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/frontend.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/fuzz.yml` — vos/vos4, vos/vos4-track-5 — ci.workflows
-- `.github/workflows/kvm_verify.yml` — vos.v1 — ci.workflows
-- `.github/workflows/pr-checks.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/release.yml` — vos.v1 — ci.workflows
-- `.github/workflows/sbom.yml` — vos/vos4, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/security.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/security_audit.yml` — vos.v1 — ci.workflows
-- `.github/workflows/sigstore-sign.yml` — vos/vos4, vos/vos4-track-7 — ci.workflows
-- `.github/workflows/silicon_battery.yml` — vos.v1 — ci.workflows
-- `.github/workflows/slsa-provenance.yml` — vos/vos4, vos/vos4-track-7 — ci.workflows
-- `.gitmodules` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `AUTONOMOUS_RUN_LOG.md` — VOS3-Cyber — documentation
-- `COMPLIANCE_REPORT.md` — vos.v1 — documentation
-- `LICENSES/LicenseRef-VOS3-Sovereign-1.0.txt` — VOS3 — licensing
-- `NOTICE` — VOS3-Cyber — root.configuration
-- `PROJECT_STATUS.md` — VOS3-Cyber — documentation
-- `PROJECT_SUMMARY.md` — VOS3-Cyber — documentation
-- `STRATEGIC_RECOMMENDATIONS.md` — vos.v1 — documentation
-- `THIRD_PARTY_LICENSES.md` — VOS3 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/EXECUTIVE_VALUE_PROP.md` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/FINAL_SHA_MANIFEST.json` — VOS3, vos.v1 — root.configuration
-- `VOS3_ULTIMATE_HANDOFF_2026/FINAL_SHA_MANIFEST.preRefresh.bak.json` — vos.v1 — root.configuration
-- `VOS3_ULTIMATE_HANDOFF_2026/GLOBAL_SIGNATURE.txt` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/GLOBAL_VOS3_RELEASE_MANIFEST.json` — VOS3, vos.v1 — root.configuration
-- `VOS3_ULTIMATE_HANDOFF_2026/README.md` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/TITAN_VERIFICATION_REPORT.json` — VOS3, vos.v1 — root.configuration
-- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/BAREMETAL_BOOT.md` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/DEATH_BATTERY_60.md` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/LicenseRef-VOS3-Sovereign-1.0.txt` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/SILICON_VALIDATION_v20_3.md` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/VOS-DUE-DILIGENCE-SUMMARY.md` — VOS3, vos.v1 — documentation
-- `VOS3_ULTIMATE_HANDOFF_2026/verification/death_battery_runner.py` — VOS3, vos.v1 — root.configuration
-- `VOS3_ULTIMATE_HANDOFF_2026/verification/run_10day_full.sh` — VOS3, vos.v1 — root.configuration
-- `_bmad/_config/task-manifest.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/_config/workflow-manifest.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/analyst.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/architect.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/dev.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/pm.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/qa.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/quick-flow-solo-dev.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/sm.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/tech-writer/tech-writer-sidecar/documentation-standards.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/agents/tech-writer/tech-writer.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/agents/ux-designer.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/config.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/module-help.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/module.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/teams/default-party.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/teams/team-fullstack.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/product-brief.template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-02-vision.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-03-users.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-04-metrics.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-05-scope.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-06-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/create-product-brief/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-02-domain-analysis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-03-competitive-landscape.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-04-regulatory-focus.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-05-technical-trends.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-06-research-synthesis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-02-customer-behavior.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-03-customer-pain-points.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-04-customer-decisions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-05-competitive-analysis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-06-research-completion.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/research.template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-02-technical-overview.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-03-integration-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-04-architectural-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-05-implementation-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-06-research-synthesis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/workflow-domain-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/workflow-market-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/1-analysis/research/workflow-technical-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-02-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-03-success.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-04-journeys.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-05-domain.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-06-innovation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-07-project-type.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-08-scoping.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-09-functional.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-10-nonfunctional.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-11-polish.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-12-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-01-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-01b-legacy-conversion.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-02-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-03-edit.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-04-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-01-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-02-format-detection.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-02b-parity-check.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-03-density-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-04-brief-coverage-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-05-measurability-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-06-traceability-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-07-implementation-leakage-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-08-domain-compliance-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-09-project-type-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-10-smart-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-11-holistic-quality-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-12-completeness-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-13-report-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/templates/prd-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/workflow-create-prd.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/workflow-edit-prd.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-prd/workflow-validate-prd.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-02-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-03-core-experience.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-04-emotional-response.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-05-inspiration.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-06-design-system.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-07-defining-experience.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-08-visual-foundation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-09-design-directions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-10-user-journeys.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-11-component-strategy.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-12-ux-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-13-responsive-accessibility.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-14-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/ux-design-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-01-document-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-02-prd-analysis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-03-epic-coverage-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-04-ux-alignment.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-05-epic-quality-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-06-final-assessment.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/templates/readiness-report-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/architecture-decision-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-02-context.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-03-starter.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-04-decisions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-05-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-06-structure.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-07-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-08-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-01-validate-prerequisites.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-02-design-epics.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-03-create-stories.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-04-final-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/templates/epics-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/code-review/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/code-review/instructions.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/code-review/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/correct-course/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/correct-course/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/correct-course/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/create-story/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/create-story/instructions.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/create-story/template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/create-story/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/dev-story/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/dev-story/instructions.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/dev-story/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/retrospective/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/retrospective/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/sprint-planning/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/sprint-planning/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/sprint-planning/sprint-status-template.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/sprint-planning/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/4-implementation/sprint-status/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/4-implementation/sprint-status/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-01-mode-detection.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-02-context-gathering.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-03-execute.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-04-self-check.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-05-adversarial-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-06-resolve-findings.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-01-understand.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-02-investigate.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-03-generate.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-04-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/tech-spec-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/documentation-requirements.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/document-project/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/templates/deep-dive-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/templates/index-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/templates/project-overview-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/templates/project-scan-report-schema.json` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/document-project/templates/source-tree-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/document-project/workflows/deep-dive-instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/workflows/deep-dive.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/document-project/workflows/full-scan-instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/document-project/workflows/full-scan.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/bmm/workflows/generate-project-context/project-context-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/generate-project-context/steps/step-01-discover.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/generate-project-context/steps/step-02-generate.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/generate-project-context/steps/step-03-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/generate-project-context/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/qa/automate/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/qa/automate/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/bmm/workflows/qa/automate/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/agents/bmad-master.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/module-help.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/module.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/tasks/editorial-review-prose.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/tasks/editorial-review-structure.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/tasks/help.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/tasks/index-docs.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/tasks/review-adversarial-general.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/tasks/shard-doc.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/tasks/workflow.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/workflows/advanced-elicitation/methods.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/workflows/advanced-elicitation/workflow.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/workflows/brainstorming/brain-methods.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/core/workflows/brainstorming/steps/step-01-session-setup.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-02a-user-selected.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-02b-ai-recommended.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-02c-random-selection.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-02d-progressive-flow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-03-technique-execution.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/steps/step-04-idea-organization.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/brainstorming/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/party-mode/steps/step-01-agent-loading.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/party-mode/steps/step-02-discussion-orchestration.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/party-mode/steps/step-03-graceful-exit.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/core/workflows/party-mode/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/activation-rules.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/activation-steps.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/agent-command-header.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/agent.customize.template.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration
-- `_bmad/utility/agent-components/handler-action.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/handler-data.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/handler-exec.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/handler-multi.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/handler-tmpl.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/handler-validate-workflow.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/handler-workflow.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `_bmad/utility/agent-components/menu-handlers.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `backend/ai/agents/builder_agent.py` — VOS3 — backend.agents
-- `backend/convex/_generated/api.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/_generated/api.js` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/_generated/dataModel.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/_generated/server.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/_generated/server.js` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/agentStatus.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/apiKeys.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/auditLog.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/billing.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/builds.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/contextSnapshots.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/organizationMembers.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/organizations.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/projectMemory.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/projects.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/teams.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/tsconfig.json` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/convex/users.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
-- `backend/core/agent_memory.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.core
-- `backend/core/repositories/local_vault.py` — VOS3-Cyber — backend.core
-- `backend/core/repositories/storage_factory.py` — VOS3-Cyber — backend.core
-- `backend/core/vcore_bridge.py` — VOS3-Cyber — backend.core
-- `backend/mcp-server/src/framework/evidence/__test_adversarial.mjs` — VOS3 — backend.mcp
-- `backend/mcp-server/src/framework/evidence/evidence-ledger.ts` — VOS3 — backend.mcp
-- `backend/mcp-server/src/framework/runtime/__test_oversized.mjs` — VOS3 — backend.mcp
-- `backend/mcp-server/src/framework/runtime/sandbox.ts` — VOS3 — backend.mcp
-- `backend/mcp-server/src/framework/runtime/tenant-context.ts` — VOS3 — backend.mcp
-- `backend/mcp-server/src/framework/tools/default-tools.ts` — VOS3 — backend.mcp
-- `backend/mcp-server/src/framework/tools/internal-registry.ts` — VOS3 — backend.mcp
-- `backend/middleware/audit_logger.py` — VOS3 — backend.middleware
-- `backend/pyproject.toml` — VOS3-Cyber, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions
-- `backend/scripts/bench_vault_pool.py` — VOS3-Cyber — backend.extensions
-- `backend/scripts/executive_demo.py` — VOS3-Cyber — backend.extensions
-- `backend/services/evidence_bundle.py` — VOS3 — backend.services
-- `backend/services/evidence_bundle_mmr.py` — VOS3 — backend.services
-- `backend/services/fleet_manager.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.services
-- `backend/services/kernel_mmr_translator.py` — VOS3 — backend.services
-- `backend/src/llm.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions
-- `backend/tests/benchmarks/.gitignore` — VOS3-Cyber — backend.tests
-- `backend/tests/benchmarks/ioctl_fuzz.py` — VOS3-Cyber — backend.tests
-- `backend/tests/benchmarks/native_audit_bench` — VOS3-Cyber — backend.tests
-- `backend/tests/benchmarks/native_audit_bench.c` — VOS3-Cyber — backend.tests
-- `backend/tests/benchmarks/scheduler_jitter_sim.py` — VOS3-Cyber — backend.tests
-- `backend/tests/death_battery_runner.py` — VOS3 — backend.tests
-- `backend/tests/run_10day_full.sh` — VOS3 — backend.tests
-- `backend/tests/test_10day_battery.py` — VOS3 — backend.tests
-- `backend/tests/test_evidence_adversarial.py` — VOS3 — backend.tests
-- `backend/tests/test_kernel_mmr_wire.py` — VOS3 — backend.tests
-- `backend/tests/test_mmr_adversarial.py` — VOS3 — backend.tests
-- `backend/tests/test_sidechannel_entropy.py` — VOS3 — backend.tests
-- `backend/tests/test_speculative_pad.py` — VOS3 — backend.tests
-- `backend/tests/verify_p10_fleet.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.tests
-- `backend/tools/stripe_payments.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions
-- `backend/tools/themes_enhanced.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions
-- `backend/uv.lock` — VOS3-Cyber — backend.extensions
-- `desktop/src-tauri/tauri.dev.conf.json` — VOS3 — desktop.host
-- `docs/A_PLUS_PLUS_ROADMAP.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `docs/A_TRIPLE_PLUS_8AGENT_PLAN.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `docs/A_TRIPLE_PLUS_STATUS.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `docs/BAREMETAL_BOOT.md` — VOS3 — documentation
-- `docs/CHECKLIST-2026-01-29.md` — VOS3, VOS3-Cyber — documentation
-- `docs/COLD_BOOT_ANALYSIS.md` — VOS3-Cyber — documentation
-- `docs/CONTEXT_RESTORE.md` — VOS3, VOS3-Cyber — documentation
-- `docs/CRYPTO_HARDENING_PROOF.md` — VOS3-Cyber — documentation
-- `docs/DEATH_BATTERY_60.md` — VOS3 — documentation
-- `docs/DEPENDENCY_AUDIT.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `docs/EXIT_READY_SUMMARY.md` — VOS3-Cyber — documentation
-- `docs/FILE_REFERENCE.md` — VOS3, VOS3-Cyber — documentation
-- `docs/FINAL_DEPLOY_CHECKLIST.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `docs/FINAL_VERIFICATION.md` — VOS3-Cyber — documentation
-- `docs/HANDOVER_LOCK_v1.1_FINAL.md` — vos/vos4 — documentation
-- `docs/HARDWARE_ARCHITECTURE_SPEC_v21.7.md` — VOS3-Cyber — documentation
-- `docs/HITL_IMPACT_ASSESSMENT.md` — VOS3-Cyber — documentation
-- `docs/LICENSE_HEADERS.md` — VOS3 — documentation
-- `docs/OMEGA_DASHBOARD.md` — VOS3-Cyber — documentation
-- `docs/OWASP_AGENTIC_MAPPING.md` — vos/vos4, vos/vos4-track-1 — documentation
-- `docs/PHASE_3_PLAN.md` — VOS3, VOS3-Cyber — documentation
-- `docs/PHASE_4_1_BINARY_BRIDGE.md` — VOS3, VOS3-Cyber — documentation
-- `docs/PRD_vOS_Sovereign_Agent_OS.md` — vos.v1 — documentation
-- `docs/PROJECT_STATUS_VOS3.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `docs/REMEDIATION_v21.4.md` — VOS3-Cyber — documentation
-- `docs/REMEDIATION_v21.5.md` — VOS3-Cyber — documentation
-- `docs/ROADMAP.md` — VOS3-Cyber — documentation
-- `docs/SECURITY_CERTIFICATION.md` — VOS3-Cyber — documentation
-- `docs/SERVER_DEPLOYMENT_GUIDE_v21.7.md` — VOS3-Cyber — documentation
-- `docs/SESSION_FREEZE_2026-06-13.md` — vos.v1 — documentation
-- `docs/SHIP_MANIFEST.md` — VOS3-Cyber — documentation
-- `docs/SILICON_VALIDATION_v20_3.md` — VOS3 — documentation
-- `docs/SOVEREIGN_LOG.audit` — VOS3, VOS3-Cyber — documentation
-- `docs/SUPPLY_CHAIN.md` — vos/vos4, vos/vos4-track-7 — documentation
-- `docs/SUPREME_CERTIFICATE_v21.6.md` — VOS3-Cyber — documentation
-- `docs/SUPREME_DILIGENCE_CHECKLIST.md` — VOS3-Cyber — documentation
-- `docs/TODO-2026-01-29.md` — VOS3, VOS3-Cyber — documentation
-- `docs/VOS-2027-HARDWARE-SPEC.md` — VOS3 — documentation
-- `docs/VOS3_REGULATORY_PASSPORT.md` — VOS3-Cyber — documentation
-- `docs/WEBAUTHN_DESIGN_v21.7.md` — VOS3-Cyber — documentation
-- `docs/ZUSTAND-MIGRATION-PLAN.md` — VOS3, VOS3-Cyber — documentation
-- `docs/legacy/PROJECT_STATUS_VOS3.md` — VOS3-Cyber — documentation
-- `docs/legacy/VOS3_READY_TO_SHIP.md` — VOS3-Cyber — documentation
-- `docs/security/kernel_hardening_audit.md` — VOS3-Cyber — documentation
-- `docs/strategic/AUTONOMOUS_RUN_LOG.md` — VOS3 — documentation
-- `docs/strategic/FINAL_DEPLOY_CHECKLIST.md` — VOS3 — documentation
-- `docs/strategic/FINAL_LAUNCH_READINESS.md` — VOS3 — documentation
-- `docs/strategic/INDEX.md` — VOS3 — documentation
-- `docs/strategic/PROJECT_STATUS.md` — VOS3 — documentation
-- `docs/strategic/PROJECT_STATUS_VOS3.md` — VOS3 — documentation
-- `docs/strategic/PROJECT_SUMMARY.md` — VOS3 — documentation
-- `docs/strategic/VOS-DISCOVERY-REPORT.md` — VOS3 — documentation
-- `docs/strategic/VOS-DUE-DILIGENCE-SUMMARY.md` — VOS3 — documentation
-- `docs/strategic/VOS-EVIDENCE-MAPPING.md` — VOS3 — documentation
-- `docs/strategic/VOS-INFRASTRUCTURE-MAP.md` — VOS3 — documentation
-- `docs/strategic/VOS3_ARCHITECTURE.md` — VOS3 — documentation
-- `frontend/components/chat/PhaseIndicator.tsx` — VOS3-Cyber — frontend.product
-- `frontend/components/chat/ProvenanceReceipt.tsx` — VOS3-Cyber — frontend.product
-- `frontend/components/collab/PeerCursors.tsx` — VOS3, VOS3-Cyber, VOS-Cyber-Standard — frontend.product
-- `frontend/components/layout/Header.tsx` — VOS3-Cyber — frontend.product
-- `frontend/components/onboarding/SovereignWizard.tsx` — VOS3-Cyber — frontend.product
-- `frontend/components/preview/SandpackEmbed.tsx` — VOS3-Cyber — frontend.product
-- `frontend/convex/_generated/api.d.ts` — VOS3-Cyber — frontend.data
-- `frontend/convex/_generated/api.js` — VOS3-Cyber — frontend.data
-- `frontend/convex/_generated/dataModel.d.ts` — VOS3-Cyber — frontend.data
-- `frontend/convex/_generated/server.d.ts` — VOS3-Cyber — frontend.data
-- `frontend/convex/_generated/server.js` — VOS3-Cyber — frontend.data
-- `frontend/convex/blueprints.ts` — VOS3 — frontend.data
-- `frontend/convex/builders.ts` — VOS3 — frontend.data
-- `frontend/convex/crons.ts` — VOS3 — frontend.data
-- `frontend/convex/idempotency.ts` — VOS3 — frontend.data
-- `frontend/hooks/__tests__/useConvexChat.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/__tests__/useConvexMemory.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/__tests__/useConvexVCore.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/__tests__/useVos.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/useCollaborativeEditor.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard — frontend.product
-- `frontend/hooks/useConvexChat.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/useConvexMemory.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/useConvexVCore.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/useMemoryStore.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/hooks/useVos.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product
-- `frontend/lib/sse.ts` — VOS3-Cyber — frontend.product
-- `infra/fix_ts_callback_params.py` — VOS3-Cyber — infra.operations
-- `infra/package_vdr.sh` — VOS3-Cyber — infra.operations
-- `infra/persistence/active_context/SESSION_HANDOVER_LOCK.md` — vos.v1 — infra.operations
-- `kernel/boot/limine/.github/dependabot.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/.github/workflows/check.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/.github/workflows/qa.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/.github/workflows/release.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/.typos.toml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/PHILOSOPHY.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/PROTOCOL.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/README.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/bochsrc` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/cc-runtime/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/CREDITS.TXT` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/LICENSE.TXT` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/README` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/absvdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/absvsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/absvti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/adddf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/addsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/addtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/addvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/addvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/addvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ashldi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ashlti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ashrdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ashrti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/assembly.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/bswapdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/bswapsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/cc-runtime.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/clzdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/clzsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/clzti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/cmpdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/cmpti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/comparedf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/comparesf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/comparetf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ctzdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ctzsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ctzti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divdc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divdf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divmoddi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divmodsi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divmodti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divsc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divtc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/divxc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extendbfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extenddftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extendhfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extendhftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extendsfdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extendsftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/extendxftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ffsdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ffssi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ffsti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixdfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixdfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixdfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixsfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixsfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixsfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixtfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixtfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixtfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunsdfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunsdfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunsdfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunssfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunssfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunssfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunstfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunstfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunstfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunsxfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunsxfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixunsxfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixxfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fixxfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatdidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatdisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatditf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatdixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatsidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatsisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatsitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floattidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floattisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floattitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floattixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatundidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatundisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatunditf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatundixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatunsidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatunsisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatunsitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatuntidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatuntisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatuntitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/floatuntixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_add_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_compare_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_div_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_extend.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_extend_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_fixint_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_fixuint_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_lib.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_mode.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_mode.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_mul_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_trunc.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/fp_trunc_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_div_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_endianness.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_lib.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_math.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_mulo_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_mulv_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_to_fp.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_to_fp_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_types.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_util.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/int_util.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/lshrdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/lshrti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/moddi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/modsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/modti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/muldc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/muldf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/muldi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulodi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulosi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/muloti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulsc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/multc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/multf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/multi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/mulxc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negvdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negvsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/negvti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/paritydi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/paritysi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/parityti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/popcountdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/popcountsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/popcountti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/powidf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/powisf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/powitf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/powixf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/subdf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/subsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/subtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/subvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/subvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/subvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/truncdfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/truncdfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/truncdfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/truncsfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/truncsfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/trunctfdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/trunctfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/trunctfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/trunctfxf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/truncxfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ucmpdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/ucmpti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/udivdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/udivmoddi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/udivmodsi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/udivmodti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/udivsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/udivti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/umoddi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/umodsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/cc-runtime/umodti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/backends/fb.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/backends/fb.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/flanterm.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/flanterm/flanterm.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/fs/ext2.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/common/fs/ext2.s2.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/common/lib/mem.asm_x86_64` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/common/lib/mem.s2.asm_ia32` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/common/lib/rand.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/common/lib/stb_image.h.nopatch` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/libfdt/libfdt.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/common/protos/chainload_next.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/common/protos/chainload_next.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/decompressor.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/entry.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/linker.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/main.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/mem.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/tinf.patch` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/decompressor/tinf/tinf.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/decompressor/tinf/tinfgzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/decompressor/tinf/tinflate.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/.editorconfig` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/.github/workflows/build.yml` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/CONTRIBUTING.md` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Documentation/dt-object-internal.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Documentation/dtc-paper.bib` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Documentation/dtc-paper.tex` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Documentation/dts-format.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Documentation/manual.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/MANIFEST.in` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Makefile` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Makefile.convert-dtsv0` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Makefile.dtc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/Makefile.utils` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/README.license` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/TODO` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/VERSION.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/checks.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/convert-dtsv0-lexer.l` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/data.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/dtc-lexer.l` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/dtc-parser.y` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/dtc.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/dtc.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/dtdiff` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/fdtdump.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/fdtget.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/fdtoverlay.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/fdtput.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/flattree.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/fstree.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/libfdt/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/libfdt/Makefile.libfdt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/libfdt/TODO` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/libfdt/libfdt.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/libfdt/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/libfdt/version.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/livetree.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/meson_options.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/pylibfdt/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/pylibfdt/Makefile.pylibfdt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/pylibfdt/libfdt.i` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/pylibfdt/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/scripts/install-deps.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/scripts/kup-dtc` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/scripts/setlocalversion` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/setup.py` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/srcpos.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/srcpos.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/Makefile.tests` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/add_subnode_with_nops.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/addr_size_cells.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/addr_size_cells2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/addresses.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/aliases.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/appendprop.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/appendprop1.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/appendprop2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/appendprop_addrrange.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/asm_tree_dump.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-chosen.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-dma-ranges.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-empty-ranges.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-gpio.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph-child-address.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph-reg-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph-root1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph-root2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph-root3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph-root4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-graph.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-interrupt-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-interrupt-controller.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-interrupt-map-mask.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-interrupt-map-parent.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-interrupt-map.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-name-property.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-ncells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-octal-literal.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-phandle-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-reg-ranges.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-size-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/bad-string-props.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/base01.asm` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/base01.cmd` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/base01.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/base01.stderr` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/boot-cpuid.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/boot-cpuid.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/cell-overflow-results.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/cell-overflow.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/char_literal.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/char_literal.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/check_full.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/check_header.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/check_path.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/comments-cmp.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/comments.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/data.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/default-addr-size.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/del_node.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/del_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/delete_reinstate_multilabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/delete_reinstate_multilabel_ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dependencies.cmp` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dependencies.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/deps_inc1.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/deps_inc2.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/division-by-zero.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dtb_reverse.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dtbs_equal_ordered.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dtbs_equal_unordered.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dtc-checkfails.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dtc-fails.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dtc-fatal.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dumptrees.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dup-nodename.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dup-phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/dup-propname.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/embedded_nul.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/embedded_nul_equiv.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/empty.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/escapes.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/extra-terminating-null.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/extra-terminating-null.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fdtdump-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fdtdump.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fdtget-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fdtoverlay-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fdtput-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/find_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fixup-ref-to-path.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/fs_tree1.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_alias.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_mem_rsv.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_name.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_next_tag_invalid_prop_len.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_path.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_phandle.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/get_prop_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/getprop.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/good-gpio.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/incbin.bin` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/incbin.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/incbin.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include0.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include5.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include5a.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include6.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include7.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/include8.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/integer-expressions.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/label01.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/label_repeated.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/line_directives.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/lorem.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/mangle-layout.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/minusone-phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/move_and_save.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/multilabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/multilabel_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/node_check_compatible.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/node_offset_by_compatible.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/node_offset_by_phandle.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/node_offset_by_prop_value.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nonexist-label-ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nonexist-node-ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nonexist-node-ref2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nop_node.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nop_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nopulate.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/notfound.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nul-in-escape.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nul-in-line-info1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/nul-in-line-info2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/obsolete-chosen-interrupt-controller.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/omit-no-ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/open_pack.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_bad_index.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_base.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_empty.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_empty_index.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_index_trailing.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_empty_prop.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_only.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_only_sep.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_prop.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_base.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_base_manual_symbols.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_base_phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_bypath.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_local_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_long_path.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_manual_fixups.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_no_fixups.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_nosugar.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/overlay_overlay_simple.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/parent_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/path-references.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/path-references.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/path_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/path_offset_aliases.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/pci-bridge-bad1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/pci-bridge-bad2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/pci-bridge-ok.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/phandle-args-overflow.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/phandle_format.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/prop-after-subnode.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/property_iterate.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/property_iterate.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/propname_escapes.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/propname_escapes.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/pylibfdt_tests.py` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/references.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/references.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reg-ranges-root.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reg-without-unit-addr.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/relref_merge.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/relref_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label5.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/reuse-label6.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/root_node.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/run_tests.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/rw_oom.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/rw_tree1.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_dir/search_test.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_dir/search_test2.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_dir_b/search_paths_subdir.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_dir_b/search_test_b.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_dir_b/search_test_b2.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_dir_b/search_test_c.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_paths.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/search_paths_b.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/set_name.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/setprop.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/setprop_inplace.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/sized_cells.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/sized_cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/sourceoutput.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stacked_overlay_addlabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stacked_overlay_bar.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stacked_overlay_base.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stacked_overlay_base_nolabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stacked_overlay_baz.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/string_escapes.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stringlist.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/stringlist.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/subnode_iterate.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/subnode_iterate.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/subnode_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/supernode_atdepth_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/sw_states.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/sw_tree1.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test01.asm` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test01.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test01.stderr` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_kernel_dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_label_ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_props.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_delete.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_label_noderef.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_merge_labelled.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_merge_path.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong5.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong6.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong7.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong8.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/test_tree1_wrong9.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/testdata.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/tests.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/testutils.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/testutils.sh` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/trees.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/truncated_memrsv.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/truncated_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/truncated_string.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/type-preservation.dt.yaml` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/type-preservation.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/unit-addr-leading-0s.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/unit-addr-leading-0x.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/unit-addr-simple-bus-compatible.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/unit-addr-simple-bus-reg-mismatch.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/unit-addr-unique.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/unit-addr-without-reg.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/utilfdt_test.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/value-labels.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/value-labels.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/tests/zero-phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/treesource.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/util.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/util.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/version_gen.h.in` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/dtc/yamltree.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/float.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/iso646.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/limits.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdalign.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdarg.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdbool.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stddef.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdint.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdnoreturn.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/host/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/logo.png` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/man/man1/limine.1` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/COPYING` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/README` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/README.efilib` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/efiapi.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/efidef.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/efiprot.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/elf.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/loongarch64/efibind.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/protocol/efidbg.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/inc/efi/riscv64/efibind.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/crt0-efi-aarch64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/crt0-efi-ia32.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/crt0-efi-loongarch64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/crt0-efi-riscv64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/crt0-efi-x86_64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/elf_aarch64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/elf_ia32_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/elf_loongarch64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/elf_riscv64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/elf_x86_64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/nyu-efi.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/reloc_aarch64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/reloc_ia32.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/reloc_loongarch64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/reloc_riscv64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/nyu-efi/src/reloc_x86_64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/screenshot.png` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/bg.jpg` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/device_tree.dts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/e9print.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/e9print.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/limine.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/limine.conf` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/linker.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/memory.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/multiboot.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/multiboot.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/multiboot2.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/multiboot2.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/multiboot2_trampoline.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/multiboot_trampoline.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/test/test.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
-- `kernel/boot/limine/tinf/.editorconfig` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/.github/workflows/tinf-ci-workflow.yaml` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/CMakeLists.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/examples/tgunzip/tgunzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/src/adler32.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/src/crc32.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/src/tinf.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/src/tinfgzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/src/tinflate.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/src/tinfzlib.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/test/greatest.h` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/test/test_tinf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/tools/gengztest.py` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/tools/genzlibtest.py` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/tinf/tools/mkzdata.c` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/boot/limine/toolchain-files/bios-i686-toolchain.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `.bandit` — VOS3 — root.configuration — **legal-review / legal-review-open**
+- `.git-blame-ignore-revs` — vos.v1 — root.configuration — **needs-experiment / validation-open**
+- `.github/ISSUE_TEMPLATE/app_review_appeal.md` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **needs-experiment / validation-open**
+- `.github/ISSUE_TEMPLATE/bug_report.md` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **needs-experiment / validation-open**
+- `.github/ISSUE_TEMPLATE/feature_request.md` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **needs-experiment / validation-open**
+- `.github/workflows/backend.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/build-msi.yml` — vos.v1 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/cd_pipeline.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/ci.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/frontend.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/fuzz.yml` — vos/vos4, vos/vos4-track-5 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/kvm_verify.yml` — vos.v1 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/pr-checks.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/release.yml` — vos.v1 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/sbom.yml` — vos/vos4, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/security.yml` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/security_audit.yml` — vos.v1 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/sigstore-sign.yml` — vos/vos4, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/silicon_battery.yml` — vos.v1 — ci.workflows — **integrate-semantics / implementation-open**
+- `.github/workflows/slsa-provenance.yml` — vos/vos4, vos/vos4-track-7 — ci.workflows — **integrate-semantics / implementation-open**
+- `.gitmodules` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **superseded / resolved-source-choice**
+- `AUTONOMOUS_RUN_LOG.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `COMPLIANCE_REPORT.md` — vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `LICENSES/LicenseRef-VOS3-Sovereign-1.0.txt` — VOS3 — licensing — **legal-review / legal-review-open**
+- `NOTICE` — VOS3-Cyber — root.configuration — **legal-review / legal-review-open**
+- `PROJECT_STATUS.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `PROJECT_SUMMARY.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `STRATEGIC_RECOMMENDATIONS.md` — vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `THIRD_PARTY_LICENSES.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/EXECUTIVE_VALUE_PROP.md` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/FINAL_SHA_MANIFEST.json` — VOS3, vos.v1 — root.configuration — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/FINAL_SHA_MANIFEST.preRefresh.bak.json` — vos.v1 — root.configuration — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/GLOBAL_SIGNATURE.txt` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/GLOBAL_VOS3_RELEASE_MANIFEST.json` — VOS3, vos.v1 — root.configuration — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/README.md` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/TITAN_VERIFICATION_REPORT.json` — VOS3, vos.v1 — root.configuration — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/BAREMETAL_BOOT.md` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/DEATH_BATTERY_60.md` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/LicenseRef-VOS3-Sovereign-1.0.txt` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/SILICON_VALIDATION_v20_3.md` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/legal_strategic/VOS-DUE-DILIGENCE-SUMMARY.md` — VOS3, vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/verification/death_battery_runner.py` — VOS3, vos.v1 — root.configuration — **archive-provenance / resolved-source-choice**
+- `VOS3_ULTIMATE_HANDOFF_2026/verification/run_10day_full.sh` — VOS3, vos.v1 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/_config/task-manifest.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/_config/workflow-manifest.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/analyst.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/architect.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/dev.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/pm.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/qa.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/quick-flow-solo-dev.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/sm.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/tech-writer/tech-writer-sidecar/documentation-standards.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/tech-writer/tech-writer.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/agents/ux-designer.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/config.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/module-help.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/module.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/teams/default-party.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/teams/team-fullstack.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/product-brief.template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-02-vision.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-03-users.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-04-metrics.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-05-scope.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/steps/step-06-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/create-product-brief/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-02-domain-analysis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-03-competitive-landscape.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-04-regulatory-focus.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-05-technical-trends.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/domain-steps/step-06-research-synthesis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-02-customer-behavior.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-03-customer-pain-points.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-04-customer-decisions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-05-competitive-analysis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/market-steps/step-06-research-completion.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/research.template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-02-technical-overview.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-03-integration-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-04-architectural-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-05-implementation-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/technical-steps/step-06-research-synthesis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/workflow-domain-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/workflow-market-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/1-analysis/research/workflow-technical-research.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-02-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-03-success.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-04-journeys.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-05-domain.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-06-innovation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-07-project-type.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-08-scoping.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-09-functional.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-10-nonfunctional.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-11-polish.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-c/step-12-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-01-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-01b-legacy-conversion.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-02-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-03-edit.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-e/step-e-04-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-01-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-02-format-detection.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-02b-parity-check.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-03-density-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-04-brief-coverage-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-05-measurability-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-06-traceability-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-07-implementation-leakage-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-08-domain-compliance-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-09-project-type-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-10-smart-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-11-holistic-quality-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-12-completeness-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/steps-v/step-v-13-report-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/templates/prd-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/workflow-create-prd.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/workflow-edit-prd.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-prd/workflow-validate-prd.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-02-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-03-core-experience.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-04-emotional-response.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-05-inspiration.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-06-design-system.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-07-defining-experience.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-08-visual-foundation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-09-design-directions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-10-user-journeys.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-11-component-strategy.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-12-ux-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-13-responsive-accessibility.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/steps/step-14-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/ux-design-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/2-plan-workflows/create-ux-design/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-01-document-discovery.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-02-prd-analysis.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-03-epic-coverage-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-04-ux-alignment.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-05-epic-quality-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/steps/step-06-final-assessment.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/templates/readiness-report-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/check-implementation-readiness/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/architecture-decision-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-01-init.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-02-context.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-03-starter.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-04-decisions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-05-patterns.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-06-structure.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-07-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/steps/step-08-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-01-validate-prerequisites.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-02-design-epics.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-03-create-stories.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/steps/step-04-final-validation.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/templates/epics-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/code-review/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/code-review/instructions.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/code-review/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/correct-course/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/correct-course/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/correct-course/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/create-story/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/create-story/instructions.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/create-story/template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/create-story/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/dev-story/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/dev-story/instructions.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/dev-story/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/retrospective/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/retrospective/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/sprint-planning/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/sprint-planning/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/sprint-planning/sprint-status-template.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/sprint-planning/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/sprint-status/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/4-implementation/sprint-status/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-01-mode-detection.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-02-context-gathering.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-03-execute.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-04-self-check.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-05-adversarial-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/steps/step-06-resolve-findings.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-dev/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-01-understand.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-02-investigate.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-03-generate.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/steps/step-04-review.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/tech-spec-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/bmad-quick-flow/quick-spec/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/documentation-requirements.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/templates/deep-dive-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/templates/index-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/templates/project-overview-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/templates/project-scan-report-schema.json` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/templates/source-tree-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/workflows/deep-dive-instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/workflows/deep-dive.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/workflows/full-scan-instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/document-project/workflows/full-scan.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/generate-project-context/project-context-template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/generate-project-context/steps/step-01-discover.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/generate-project-context/steps/step-02-generate.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/generate-project-context/steps/step-03-complete.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/generate-project-context/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/qa/automate/checklist.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/qa/automate/instructions.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/bmm/workflows/qa/automate/workflow.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/agents/bmad-master.agent.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/module-help.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/module.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/editorial-review-prose.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/editorial-review-structure.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/help.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/index-docs.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/review-adversarial-general.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/shard-doc.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/tasks/workflow.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/advanced-elicitation/methods.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/advanced-elicitation/workflow.xml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/brain-methods.csv` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-01-session-setup.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-01b-continue.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-02a-user-selected.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-02b-ai-recommended.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-02c-random-selection.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-02d-progressive-flow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-03-technique-execution.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/steps/step-04-idea-organization.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/template.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/brainstorming/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/party-mode/steps/step-01-agent-loading.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/party-mode/steps/step-02-discussion-orchestration.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/party-mode/steps/step-03-graceful-exit.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/core/workflows/party-mode/workflow.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/activation-rules.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/activation-steps.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/agent-command-header.md` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/agent.customize.template.yaml` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — root.configuration — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-action.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-data.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-exec.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-multi.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-tmpl.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-validate-workflow.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/handler-workflow.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `_bmad/utility/agent-components/menu-handlers.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `backend/ai/agents/builder_agent.py` — VOS3 — backend.agents — **legal-review / legal-review-open**
+- `backend/convex/_generated/api.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/_generated/api.js` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/_generated/dataModel.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/_generated/server.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/_generated/server.js` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/agentStatus.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/apiKeys.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/auditLog.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/billing.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/builds.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/contextSnapshots.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/organizationMembers.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/organizations.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/projectMemory.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/projects.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/teams.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/tsconfig.json` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/convex/users.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex — **superseded / resolved-source-choice**
+- `backend/core/agent_memory.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.core — **integrate-semantics / implementation-open**
+- `backend/core/repositories/local_vault.py` — VOS3-Cyber — backend.core — **integrate-semantics / implementation-open**
+- `backend/core/repositories/storage_factory.py` — VOS3-Cyber — backend.core — **integrate-semantics / implementation-open**
+- `backend/core/vcore_bridge.py` — VOS3-Cyber — backend.core — **needs-experiment / validation-open**
+- `backend/mcp-server/src/framework/evidence/__test_adversarial.mjs` — VOS3 — backend.mcp — **legal-review / legal-review-open**
+- `backend/mcp-server/src/framework/evidence/evidence-ledger.ts` — VOS3 — backend.mcp — **legal-review / legal-review-open**
+- `backend/mcp-server/src/framework/runtime/__test_oversized.mjs` — VOS3 — backend.mcp — **legal-review / legal-review-open**
+- `backend/mcp-server/src/framework/runtime/sandbox.ts` — VOS3 — backend.mcp — **reject-stub / resolved-source-choice**
+- `backend/mcp-server/src/framework/runtime/tenant-context.ts` — VOS3 — backend.mcp — **reject-stub / resolved-source-choice**
+- `backend/mcp-server/src/framework/tools/default-tools.ts` — VOS3 — backend.mcp — **reject-stub / resolved-source-choice**
+- `backend/mcp-server/src/framework/tools/internal-registry.ts` — VOS3 — backend.mcp — **reject-stub / resolved-source-choice**
+- `backend/middleware/audit_logger.py` — VOS3 — backend.middleware — **legal-review / legal-review-open**
+- `backend/pyproject.toml` — VOS3-Cyber, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions — **superseded / resolved-source-choice**
+- `backend/scripts/bench_vault_pool.py` — VOS3-Cyber — backend.extensions — **archive-provenance / resolved-source-choice**
+- `backend/scripts/executive_demo.py` — VOS3-Cyber — backend.extensions — **archive-provenance / resolved-source-choice**
+- `backend/services/evidence_bundle.py` — VOS3 — backend.services — **legal-review / legal-review-open**
+- `backend/services/evidence_bundle_mmr.py` — VOS3 — backend.services — **legal-review / legal-review-open**
+- `backend/services/fleet_manager.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.services — **needs-experiment / validation-open**
+- `backend/services/kernel_mmr_translator.py` — VOS3 — backend.services — **legal-review / legal-review-open**
+- `backend/src/llm.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions — **superseded / resolved-source-choice**
+- `backend/tests/benchmarks/.gitignore` — VOS3-Cyber — backend.tests — **needs-experiment / validation-open**
+- `backend/tests/benchmarks/ioctl_fuzz.py` — VOS3-Cyber — backend.tests — **integrate-semantics / implementation-open**
+- `backend/tests/benchmarks/native_audit_bench` — VOS3-Cyber — backend.tests — **reject-stub / resolved-source-choice**
+- `backend/tests/benchmarks/native_audit_bench.c` — VOS3-Cyber — backend.tests — **integrate-semantics / implementation-open**
+- `backend/tests/benchmarks/scheduler_jitter_sim.py` — VOS3-Cyber — backend.tests — **integrate-semantics / implementation-open**
+- `backend/tests/death_battery_runner.py` — VOS3 — backend.tests — **reject-stub / resolved-source-choice**
+- `backend/tests/run_10day_full.sh` — VOS3 — backend.tests — **reject-stub / resolved-source-choice**
+- `backend/tests/test_10day_battery.py` — VOS3 — backend.tests — **reject-stub / resolved-source-choice**
+- `backend/tests/test_evidence_adversarial.py` — VOS3 — backend.tests — **legal-review / legal-review-open**
+- `backend/tests/test_kernel_mmr_wire.py` — VOS3 — backend.tests — **legal-review / legal-review-open**
+- `backend/tests/test_mmr_adversarial.py` — VOS3 — backend.tests — **legal-review / legal-review-open**
+- `backend/tests/test_sidechannel_entropy.py` — VOS3 — backend.tests — **legal-review / legal-review-open**
+- `backend/tests/test_speculative_pad.py` — VOS3 — backend.tests — **legal-review / legal-review-open**
+- `backend/tests/verify_p10_fleet.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.tests — **integrate-semantics / implementation-open**
+- `backend/tools/stripe_payments.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions — **superseded / resolved-source-choice**
+- `backend/tools/themes_enhanced.py` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions — **superseded / resolved-source-choice**
+- `backend/uv.lock` — VOS3-Cyber — backend.extensions — **superseded / resolved-source-choice**
+- `desktop/src-tauri/tauri.dev.conf.json` — VOS3 — desktop.host — **archive-provenance / resolved-source-choice**
+- `docs/A_PLUS_PLUS_ROADMAP.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/A_TRIPLE_PLUS_8AGENT_PLAN.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/A_TRIPLE_PLUS_STATUS.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/BAREMETAL_BOOT.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/CHECKLIST-2026-01-29.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/COLD_BOOT_ANALYSIS.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/CONTEXT_RESTORE.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/CRYPTO_HARDENING_PROOF.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/DEATH_BATTERY_60.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/DEPENDENCY_AUDIT.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/EXIT_READY_SUMMARY.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/FILE_REFERENCE.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/FINAL_DEPLOY_CHECKLIST.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/FINAL_VERIFICATION.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/HANDOVER_LOCK_v1.1_FINAL.md` — vos/vos4 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/HARDWARE_ARCHITECTURE_SPEC_v21.7.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/HITL_IMPACT_ASSESSMENT.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/LICENSE_HEADERS.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/OMEGA_DASHBOARD.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/OWASP_AGENTIC_MAPPING.md` — vos/vos4, vos/vos4-track-1 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/PHASE_3_PLAN.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/PHASE_4_1_BINARY_BRIDGE.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/PRD_vOS_Sovereign_Agent_OS.md` — vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/PROJECT_STATUS_VOS3.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/REMEDIATION_v21.4.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/REMEDIATION_v21.5.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/ROADMAP.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SECURITY_CERTIFICATION.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SERVER_DEPLOYMENT_GUIDE_v21.7.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SESSION_FREEZE_2026-06-13.md` — vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SHIP_MANIFEST.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SILICON_VALIDATION_v20_3.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SOVEREIGN_LOG.audit` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SUPPLY_CHAIN.md` — vos/vos4, vos/vos4-track-7 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SUPREME_CERTIFICATE_v21.6.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/SUPREME_DILIGENCE_CHECKLIST.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/TODO-2026-01-29.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/VOS-2027-HARDWARE-SPEC.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/VOS3_REGULATORY_PASSPORT.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/WEBAUTHN_DESIGN_v21.7.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/ZUSTAND-MIGRATION-PLAN.md` — VOS3, VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/legacy/PROJECT_STATUS_VOS3.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/legacy/VOS3_READY_TO_SHIP.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/security/kernel_hardening_audit.md` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/AUTONOMOUS_RUN_LOG.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/FINAL_DEPLOY_CHECKLIST.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/FINAL_LAUNCH_READINESS.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/INDEX.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/PROJECT_STATUS.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/PROJECT_STATUS_VOS3.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/PROJECT_SUMMARY.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/VOS-DISCOVERY-REPORT.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/VOS-DUE-DILIGENCE-SUMMARY.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/VOS-EVIDENCE-MAPPING.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/VOS-INFRASTRUCTURE-MAP.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `docs/strategic/VOS3_ARCHITECTURE.md` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `frontend/components/chat/PhaseIndicator.tsx` — VOS3-Cyber — frontend.product — **needs-experiment / validation-open**
+- `frontend/components/chat/ProvenanceReceipt.tsx` — VOS3-Cyber — frontend.product — **needs-experiment / validation-open**
+- `frontend/components/collab/PeerCursors.tsx` — VOS3, VOS3-Cyber, VOS-Cyber-Standard — frontend.product — **needs-experiment / validation-open**
+- `frontend/components/layout/Header.tsx` — VOS3-Cyber — frontend.product — **needs-experiment / validation-open**
+- `frontend/components/onboarding/SovereignWizard.tsx` — VOS3-Cyber — frontend.product — **needs-experiment / validation-open**
+- `frontend/components/preview/SandpackEmbed.tsx` — VOS3-Cyber — frontend.product — **needs-experiment / validation-open**
+- `frontend/convex/_generated/api.d.ts` — VOS3-Cyber — frontend.data — **superseded / resolved-source-choice**
+- `frontend/convex/_generated/api.js` — VOS3-Cyber — frontend.data — **superseded / resolved-source-choice**
+- `frontend/convex/_generated/dataModel.d.ts` — VOS3-Cyber — frontend.data — **superseded / resolved-source-choice**
+- `frontend/convex/_generated/server.d.ts` — VOS3-Cyber — frontend.data — **superseded / resolved-source-choice**
+- `frontend/convex/_generated/server.js` — VOS3-Cyber — frontend.data — **superseded / resolved-source-choice**
+- `frontend/convex/blueprints.ts` — VOS3 — frontend.data — **legal-review / legal-review-open**
+- `frontend/convex/builders.ts` — VOS3 — frontend.data — **legal-review / legal-review-open**
+- `frontend/convex/crons.ts` — VOS3 — frontend.data — **legal-review / legal-review-open**
+- `frontend/convex/idempotency.ts` — VOS3 — frontend.data — **legal-review / legal-review-open**
+- `frontend/hooks/__tests__/useConvexChat.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/__tests__/useConvexMemory.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/__tests__/useConvexVCore.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/__tests__/useVos.test.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/useCollaborativeEditor.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/useConvexChat.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/useConvexMemory.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/useConvexVCore.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/useMemoryStore.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/hooks/useVos.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — frontend.product — **needs-experiment / validation-open**
+- `frontend/lib/sse.ts` — VOS3-Cyber — frontend.product — **integrate-semantics / implementation-open**
+- `infra/fix_ts_callback_params.py` — VOS3-Cyber — infra.operations — **needs-experiment / validation-open**
+- `infra/package_vdr.sh` — VOS3-Cyber — infra.operations — **needs-experiment / validation-open**
+- `infra/persistence/active_context/SESSION_HANDOVER_LOCK.md` — vos.v1 — infra.operations — **archive-provenance / resolved-source-choice**
+- `kernel/boot/limine/.github/dependabot.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/.github/workflows/check.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/.github/workflows/qa.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/.github/workflows/release.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/.typos.toml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/PHILOSOPHY.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/PROTOCOL.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/README.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/bochsrc` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/CREDITS.TXT` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/LICENSE.TXT` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/README` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/absvdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/absvsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/absvti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/adddf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/addsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/addtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/addvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/addvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/addvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ashldi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ashlti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ashrdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ashrti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/assembly.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/bswapdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/bswapsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/cc-runtime.mk` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/clzdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/clzsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/clzti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/cmpdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/cmpti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/comparedf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/comparesf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/comparetf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ctzdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ctzsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ctzti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divdc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divdf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divmoddi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divmodsi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divmodti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divsc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divtc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/divxc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extendbfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extenddftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extendhfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extendhftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extendsfdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extendsftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/extendxftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ffsdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ffssi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ffsti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixdfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixdfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixdfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixsfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixsfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixsfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixtfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixtfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixtfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunsdfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunsdfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunsdfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunssfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunssfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunssfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunstfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunstfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunstfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunsxfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunsxfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixunsxfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixxfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fixxfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatdidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatdisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatditf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatdixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatsidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatsisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatsitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floattidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floattisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floattitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floattixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatundidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatundisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatunditf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatundixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatunsidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatunsisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatunsitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatuntidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatuntisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatuntitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/floatuntixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_add_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_compare_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_div_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_extend.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_extend_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_fixint_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_fixuint_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_lib.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_mode.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_mode.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_mul_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_trunc.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/fp_trunc_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_div_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_endianness.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_lib.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_math.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_mulo_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_mulv_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_to_fp.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_to_fp_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_types.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_util.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/int_util.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/lshrdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/lshrti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/moddi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/modsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/modti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/muldc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/muldf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/muldi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulodi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulosi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/muloti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulsc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/multc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/multf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/multi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/mulxc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negvdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negvsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/negvti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/paritydi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/paritysi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/parityti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/popcountdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/popcountsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/popcountti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/powidf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/powisf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/powitf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/powixf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/subdf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/subsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/subtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/subvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/subvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/subvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/truncdfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/truncdfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/truncdfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/truncsfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/truncsfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/trunctfdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/trunctfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/trunctfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/trunctfxf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/truncxfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ucmpdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/ucmpti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/udivdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/udivmoddi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/udivmodsi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/udivmodti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/udivsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/udivti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/umoddi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/umodsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/cc-runtime/umodti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/backends/fb.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/backends/fb.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/flanterm.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/flanterm/flanterm.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/fs/ext2.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/fs/ext2.s2.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/lib/mem.asm_x86_64` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/lib/mem.s2.asm_ia32` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/lib/rand.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/lib/stb_image.h.nopatch` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/libfdt/libfdt.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/protos/chainload_next.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/common/protos/chainload_next.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/decompressor.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/entry.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/linker.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/main.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/mem.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/tinf.patch` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/tinf/tinf.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/tinf/tinfgzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/decompressor/tinf/tinflate.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/.editorconfig` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/.github/workflows/build.yml` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/CONTRIBUTING.md` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Documentation/dt-object-internal.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Documentation/dtc-paper.bib` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Documentation/dtc-paper.tex` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Documentation/dts-format.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Documentation/manual.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/MANIFEST.in` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Makefile` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Makefile.convert-dtsv0` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Makefile.dtc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/Makefile.utils` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/README.license` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/TODO` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/VERSION.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/checks.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/convert-dtsv0-lexer.l` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/data.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/dtc-lexer.l` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/dtc-parser.y` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/dtc.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/dtc.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/dtdiff` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/fdtdump.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/fdtget.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/fdtoverlay.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/fdtput.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/flattree.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/fstree.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/libfdt/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/libfdt/Makefile.libfdt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/libfdt/TODO` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/libfdt/libfdt.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/libfdt/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/libfdt/version.lds` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/livetree.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/meson_options.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/pylibfdt/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/pylibfdt/Makefile.pylibfdt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/pylibfdt/libfdt.i` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/pylibfdt/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/scripts/install-deps.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/scripts/kup-dtc` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/scripts/setlocalversion` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/setup.py` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/srcpos.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/srcpos.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/Makefile.tests` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/add_subnode_with_nops.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/addr_size_cells.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/addr_size_cells2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/addresses.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/aliases.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/appendprop.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/appendprop1.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/appendprop2.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/appendprop_addrrange.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/asm_tree_dump.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-chosen.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-dma-ranges.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-empty-ranges.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-gpio.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph-child-address.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph-reg-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph-root1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph-root2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph-root3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph-root4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-graph.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-interrupt-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-interrupt-controller.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-interrupt-map-mask.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-interrupt-map-parent.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-interrupt-map.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-name-property.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-ncells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-octal-literal.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-phandle-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-reg-ranges.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-size-cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/bad-string-props.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/base01.asm` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/base01.cmd` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/base01.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/base01.stderr` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/boot-cpuid.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/boot-cpuid.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/cell-overflow-results.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/cell-overflow.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/char_literal.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/char_literal.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/check_full.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/check_header.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/check_path.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/comments-cmp.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/comments.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/data.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/default-addr-size.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/del_node.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/del_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/delete_reinstate_multilabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/delete_reinstate_multilabel_ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dependencies.cmp` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dependencies.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/deps_inc1.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/deps_inc2.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/division-by-zero.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dtb_reverse.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dtbs_equal_ordered.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dtbs_equal_unordered.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dtc-checkfails.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dtc-fails.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dtc-fatal.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dumptrees.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dup-nodename.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dup-phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/dup-propname.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/embedded_nul.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/embedded_nul_equiv.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/empty.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/escapes.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/extra-terminating-null.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/extra-terminating-null.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fdtdump-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fdtdump.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fdtget-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fdtoverlay-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fdtput-runtest.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/find_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fixup-ref-to-path.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/fs_tree1.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_alias.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_mem_rsv.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_name.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_next_tag_invalid_prop_len.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_path.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_phandle.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/get_prop_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/getprop.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/good-gpio.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/incbin.bin` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/incbin.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/incbin.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include0.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include5.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include5a.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include6.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include7.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/include8.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/integer-expressions.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/label01.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/label_repeated.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/line_directives.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/lorem.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/mangle-layout.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/minusone-phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/move_and_save.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/multilabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/multilabel_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/node_check_compatible.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/node_offset_by_compatible.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/node_offset_by_phandle.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/node_offset_by_prop_value.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nonexist-label-ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nonexist-node-ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nonexist-node-ref2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nop_node.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nop_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nopulate.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/notfound.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nul-in-escape.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nul-in-line-info1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/nul-in-line-info2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/obsolete-chosen-interrupt-controller.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/omit-no-ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/open_pack.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_bad_index.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_base.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_empty.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_empty_index.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_index_trailing.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_empty_prop.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_only.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_only_sep.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_bad_fixup_path_prop.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_base.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_base_manual_symbols.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_base_phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_bypath.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_local_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_long_path.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_manual_fixups.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_no_fixups.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_nosugar.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/overlay_overlay_simple.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/parent_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/path-references.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/path-references.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/path_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/path_offset_aliases.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/pci-bridge-bad1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/pci-bridge-bad2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/pci-bridge-ok.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/phandle-args-overflow.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/phandle_format.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/prop-after-subnode.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/property_iterate.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/property_iterate.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/propname_escapes.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/propname_escapes.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/pylibfdt_tests.py` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/references.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/references.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reg-ranges-root.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reg-without-unit-addr.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/relref_merge.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/relref_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label5.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/reuse-label6.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/root_node.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/run_tests.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/rw_oom.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/rw_tree1.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_dir/search_test.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_dir/search_test2.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_dir_b/search_paths_subdir.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_dir_b/search_test_b.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_dir_b/search_test_b2.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_dir_b/search_test_c.dtsi` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_paths.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/search_paths_b.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/set_name.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/setprop.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/setprop_inplace.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/sized_cells.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/sized_cells.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/sourceoutput.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stacked_overlay_addlabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stacked_overlay_bar.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stacked_overlay_base.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stacked_overlay_base_nolabel.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stacked_overlay_baz.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/string_escapes.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stringlist.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/stringlist.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/subnode_iterate.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/subnode_iterate.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/subnode_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/supernode_atdepth_offset.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/sw_states.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/sw_tree1.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test01.asm` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test01.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test01.stderr` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_kernel_dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_label_ref.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_props.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_delete.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_label_noderef.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_merge.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_merge_labelled.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_merge_path.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong1.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong2.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong3.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong4.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong5.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong6.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong7.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong8.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/test_tree1_wrong9.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/testdata.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/tests.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/testutils.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/testutils.sh` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/trees.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/truncated_memrsv.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/truncated_property.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/truncated_string.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/type-preservation.dt.yaml` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/type-preservation.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/unit-addr-leading-0s.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/unit-addr-leading-0x.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/unit-addr-simple-bus-compatible.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/unit-addr-simple-bus-reg-mismatch.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/unit-addr-unique.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/unit-addr-without-reg.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/utilfdt_test.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/value-labels.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/value-labels.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/tests/zero-phandle.dts` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/treesource.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/util.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/util.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/version_gen.h.in` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/dtc/yamltree.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/float.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/iso646.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/limits.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdalign.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdarg.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdbool.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stddef.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdint.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdnoreturn.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/host/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/logo.png` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/man/man1/limine.1` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/COPYING` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/README` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/README.efilib` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/efiapi.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/efidef.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/efiprot.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/elf.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/loongarch64/efibind.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/protocol/efidbg.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/inc/efi/riscv64/efibind.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-aarch64.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-ia32.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-loongarch64.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-riscv64.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-x86_64.S` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/elf_aarch64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/elf_ia32_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/elf_loongarch64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/elf_riscv64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/elf_x86_64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/nyu-efi.mk` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/reloc_aarch64.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/reloc_ia32.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/reloc_loongarch64.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/reloc_riscv64.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/nyu-efi/src/reloc_x86_64.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/screenshot.png` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/bg.jpg` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/device_tree.dts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/e9print.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/e9print.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/limine.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/limine.conf` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/linker.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/memory.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/multiboot.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/multiboot.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/multiboot2.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/multiboot2.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/multiboot2_trampoline.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/multiboot_trampoline.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/test/test.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/.editorconfig` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/.github/workflows/tinf-ci-workflow.yaml` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/CMakeLists.txt` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/examples/tgunzip/tgunzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/src/adler32.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/src/crc32.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/src/tinf.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/src/tinfgzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/src/tinflate.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/src/tinfzlib.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/test/greatest.h` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/test/test_tinf.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/tools/gengztest.py` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/tools/genzlibtest.py` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/tinf/tools/mkzdata.c` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
+- `kernel/boot/limine/toolchain-files/bios-i686-toolchain.mk` — VOS3, VOS-Cyber-Standard — native.bootloader — **superseded / resolved-source-choice**
 - `kernel/include/hal/npu_abstraction.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
 - `kernel/include/vos/ahci.h` — vos/vos4, vos/vos4-track-2 — native.abi — **reject-stub / resolved-source-choice**
 - `kernel/include/vos/cr4_pin.h` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.abi — **reject-stub / resolved-source-choice**
@@ -1054,102 +1054,102 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/tests/test_pcr_stability.c` — VOS3 — native.tests — **needs-experiment / implementation-open**
 - `kernel/tests/test_tpm_mock.c` — VOS3 — native.tests — **superseded / resolved-source-choice**
 - `kernel/tests/zero_copy_audit.md` — VOS3 — native.tests — **reject-stub / resolved-source-choice**
-- `out/vos-cyber-v21.0-vdr-20260426T142004Z.manifest.txt` — VOS3-Cyber — documentation
-- `out/vos-cyber-v21.0-vdr-20260426T142004Z.tar.gz` — VOS3-Cyber — root.configuration
-- `out/vos-cyber-v21.0-vdr-20260426T142004Z.tar.gz.sha512` — VOS3-Cyber — root.configuration
-- `requirements-experimental.txt` — VOS3 — documentation
-- `scripts/apply_spdx_headers.py` — VOS3 — tooling
-- `scripts/check_tailwind_v4.py` — VOS3 — tooling
-- `scripts/generate_requirements_lock.py` — VOS3 — tooling
-- `scripts/harden_api.sh` — VOS3-Cyber — tooling
-- `scripts/release_build.sh` — VOS3 — tooling
-- `scripts/remove_frontend_console.py` — VOS3 — tooling
-- `scripts/verify_pcr_stability.py` — VOS3 — tooling
-- `scripts/verify_sha_isolation.sh` — VOS3 — tooling
-- `sdk/vos-mcp-js/README.md` — VOS3 — sdk.clients
-- `sdk/vos-mcp-js/package-lock.json` — VOS3 — sdk.clients
-- `sdk/vos-mcp-js/package.json` — VOS3 — sdk.clients
-- `sdk/vos-mcp-js/src/index.ts` — VOS3 — sdk.clients
-- `sdk/vos-mcp-js/tsconfig.json` — VOS3 — sdk.clients
-- `sdk/vos-mcp-python/README.md` — VOS3 — sdk.clients
-- `sdk/vos-mcp-python/pyproject.toml` — VOS3 — sdk.clients
-- `sdk/vos-mcp-python/vos_mcp/__init__.py` — VOS3 — sdk.clients
-- `sdk/vos-windows-bridge/README.md` — VOS3 — sdk.clients
-- `sdk/vos-windows-bridge/VOS.WindowsBridge.csproj` — VOS3 — sdk.clients
-- `sdk/vos-windows-bridge/src/HyperVSocket.cs` — VOS3 — sdk.clients
-- `sdk/vos-windows-bridge/src/VOS.cs` — VOS3 — sdk.clients
-- `tests/fuzz/EXECUTOR_DESIGN.md` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/README.md` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/.gitignore` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/README.md` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/dispatch.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/go.mod` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/main.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/program.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/protocol.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/protocol_test.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/executor-mve/syscall_table.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/lint_stanzas.py` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/sys-vos3-prototype/README.md` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/sys-vos3-prototype/init.go` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/sys-vos3-prototype/manager.cfg.template` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/sys-vos3-prototype/vos3.txt` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/sys-vos3-prototype/vos3_amd64.txt` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/syzlang/vos3.txt` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/fuzz/triage/.gitkeep` — vos/vos4, vos/vos4-track-5 — system.tests
-- `tests/kernel_guards/README.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
-- `tests/kernel_guards/test_ai_guard_pf_hook.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
-- `tests/kernel_guards/test_smap_enabled.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
-- `tests/kernel_guards/test_smep_enabled.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
-- `user/musl/arch/aarch64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/aarch64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/aarch64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/aarch64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/arm/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/arm/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/arm/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/i386/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/i386/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/loongarch64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/loongarch64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/loongarch64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/loongarch64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/m68k/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/m68k/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/microblaze/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/microblaze/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/microblaze/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/mips/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/mips/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/mips64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/mips64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/mipsn32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/mipsn32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/or1k/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/or1k/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/or1k/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/powerpc/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/powerpc/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/powerpc/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/powerpc64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/powerpc64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/powerpc64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv32/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/riscv64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/s390x/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/s390x/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/s390x/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/sh/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/sh/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/x32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/x32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/x86_64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/arch/x86_64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `user/musl/src/thread/aarch64/__set_thread_area.s` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
-- `vOS_Product_Specification_Long.pdf` — vos.v1 — documentation
-- `vOS_Product_Specification_Short.pdf` — vos.v1 — documentation
+- `out/vos-cyber-v21.0-vdr-20260426T142004Z.manifest.txt` — VOS3-Cyber — documentation — **archive-provenance / resolved-source-choice**
+- `out/vos-cyber-v21.0-vdr-20260426T142004Z.tar.gz` — VOS3-Cyber — root.configuration — **archive-provenance / resolved-source-choice**
+- `out/vos-cyber-v21.0-vdr-20260426T142004Z.tar.gz.sha512` — VOS3-Cyber — root.configuration — **archive-provenance / resolved-source-choice**
+- `requirements-experimental.txt` — VOS3 — documentation — **archive-provenance / resolved-source-choice**
+- `scripts/apply_spdx_headers.py` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `scripts/check_tailwind_v4.py` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `scripts/generate_requirements_lock.py` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `scripts/harden_api.sh` — VOS3-Cyber — tooling — **reject-stub / resolved-source-choice**
+- `scripts/release_build.sh` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `scripts/remove_frontend_console.py` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `scripts/verify_pcr_stability.py` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `scripts/verify_sha_isolation.sh` — VOS3 — tooling — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-js/README.md` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-js/package-lock.json` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-js/package.json` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-js/src/index.ts` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-js/tsconfig.json` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-python/README.md` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-python/pyproject.toml` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-mcp-python/vos_mcp/__init__.py` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-windows-bridge/README.md` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-windows-bridge/VOS.WindowsBridge.csproj` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-windows-bridge/src/HyperVSocket.cs` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `sdk/vos-windows-bridge/src/VOS.cs` — VOS3 — sdk.clients — **reject-stub / resolved-source-choice**
+- `tests/fuzz/EXECUTOR_DESIGN.md` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/README.md` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/.gitignore` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/README.md` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/dispatch.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/go.mod` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/main.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/program.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/protocol.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/protocol_test.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/executor-mve/syscall_table.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/lint_stanzas.py` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/sys-vos3-prototype/README.md` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/sys-vos3-prototype/init.go` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/sys-vos3-prototype/manager.cfg.template` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/sys-vos3-prototype/vos3.txt` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/sys-vos3-prototype/vos3_amd64.txt` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/syzlang/vos3.txt` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/fuzz/triage/.gitkeep` — vos/vos4, vos/vos4-track-5 — system.tests — **reject-stub / resolved-source-choice**
+- `tests/kernel_guards/README.md` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests — **needs-experiment / validation-open**
+- `tests/kernel_guards/test_ai_guard_pf_hook.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests — **needs-experiment / validation-open**
+- `tests/kernel_guards/test_smap_enabled.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests — **needs-experiment / validation-open**
+- `tests/kernel_guards/test_smep_enabled.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests — **needs-experiment / validation-open**
+- `user/musl/arch/aarch64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/aarch64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/aarch64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/aarch64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/arm/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/arm/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/arm/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/i386/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/i386/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/loongarch64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/loongarch64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/loongarch64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/loongarch64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/m68k/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/m68k/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/microblaze/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/microblaze/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/microblaze/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/mips/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/mips/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/mips64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/mips64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/mipsn32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/mipsn32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/or1k/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/or1k/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/or1k/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/powerpc/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/powerpc/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/powerpc/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/powerpc64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/powerpc64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/powerpc64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv32/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/riscv64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/s390x/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/s390x/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/s390x/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/sh/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/sh/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/x32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/x32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/x86_64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/arch/x86_64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `user/musl/src/thread/aarch64/__set_thread_area.s` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc — **superseded / resolved-source-choice**
+- `vOS_Product_Specification_Long.pdf` — vos.v1 — documentation — **archive-provenance / resolved-source-choice**
+- `vOS_Product_Specification_Short.pdf` — vos.v1 — documentation — **archive-provenance / resolved-source-choice**
