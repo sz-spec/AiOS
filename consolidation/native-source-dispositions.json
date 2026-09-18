@@ -125,12 +125,12 @@
     {
       "id": "ai-oom-policy",
       "component": "native.memory",
-      "source_status": "missing-from-canonical",
+      "source_status": "canonical-diverged-review",
       "disposition": "integrate-semantics",
       "state": "implementation-open",
-      "paths": ["kernel/src/mm/ai_oom.c"],
-      "rationale": "The overflow-safe quota idea is useful, but the donor references an absent heap API, reads mutable accounting without synchronization and can overflow its global-reserve expression.",
-      "validation": "Port the predicate into real allocation paths; property-test full size_t boundaries, concurrent writers, PMM failures and no mutation on rejection."
+      "paths": ["kernel/src/mm/ai_oom.c", "kernel/src/mm/ai_slots.c"],
+      "rationale": "The donor predicate was replaced by a canonical reservation ledger with checked arithmetic and replay-resistant handles. Integration into the real guard and KV allocation lifecycles remains open; ai_slots also carries the full-page KV confidentiality scrub required before that integration.",
+      "validation": "The primitive passes sanitizer, optimized, release and contract checks. Still required: wire it into both real allocation paths; qualify cancellation, rollback, concurrent writers, PMM/VMM failures, region lifetime and 1/2/4-vCPU behavior."
     },
     {
       "id": "pcid-old-scaffold",

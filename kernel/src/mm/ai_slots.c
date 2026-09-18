@@ -1792,13 +1792,12 @@ int vos3_ai_kv_cache_alloc(uint8_t slot_id, uint32_t hp_count)
         }
     }
 
-    /* Zero-fill KV-cache pages for deterministic state */
+    /* Full zero-fill is mandatory: HugePages are recycled by the PMM and are
+     * not zeroed on allocation.  Sampling one byte per cache line would leak
+     * almost all KV data from the previous owner. */
     for (uint32_t i = 0; i < hp_count; i++) {
-        uint8_t *pg = (uint8_t *)(kv_vbase + (uintptr_t)i * VOS3_PAGE_SIZE_2M);
-        for (uint32_t b = 0; b < VOS3_PAGE_SIZE_2M; b += 64) {
-            pg[b] = 0;
-        }
-        /* Full zero-fill: rely on HugePage being zeroed by alloc (PMM convention) */
+        void *page = (void *)(kv_vbase + (uintptr_t)i * VOS3_PAGE_SIZE_2M);
+        scrub_zero_fill(page, VOS3_PAGE_SIZE_2M);
     }
 
     slot->kv_base     = kv_vbase;
@@ -1847,6 +1846,9 @@ void vos3_ai_kv_cache_free(uint8_t slot_id)
 
     for (uint32_t i = 0; i < slot->kv_hp_count; i++) {
         uintptr_t vaddr = slot->kv_base + (uintptr_t)i * VOS3_PAGE_SIZE_2M;
+        /* Scrub while the mapping is still owned and writable, before the
+         * physical page can return to the shared HugePage pool. */
+        scrub_zero_fill((void *)vaddr, VOS3_PAGE_SIZE_2M);
         vos3_vmm_unmap_large(vaddr);
         vos3_pmm_free_huge(slot->kv_hp_phys[i]);
         slot->kv_hp_phys[i] = 0;

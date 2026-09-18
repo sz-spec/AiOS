@@ -25,7 +25,7 @@ EXPECTED_CATEGORIES = {
     "vendor": 951,
     "documentation-history": 315,
     "hosted": 156,
-    "tests": 63,
+    "tests": 64,
     "release-operations": 42,
 }
 HOSTED_COMPONENTS = {

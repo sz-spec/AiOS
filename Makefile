@@ -26,6 +26,8 @@ native-build-check:
 	@python3 scripts/test_native_build_config.py
 	@python3 scripts/test_build_invariants.py
 	@python3 scripts/test_iso_publication.py
+	@python3 scripts/test_ai_oom_host.py
+	@python3 scripts/test_ai_kv_zeroing.py
 
 consolidation-check:
 	@python3 consolidation/reconcile_sources.py

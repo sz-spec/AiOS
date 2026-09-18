@@ -1,149 +1,201 @@
-"""
-v20.1.5 — Z3 SMT proof: kernel/src/mm/ai_oom.c::vos3_ai_slot_oom_guard is
-bypass-proof + overflow-safe.
+"""SMT contract checks for the canonical AI quota state machine.
 
-Invariants proven (each over the full [0, 2^63) size_t range):
-
-    (C1) requested == 0                      → guard returns 0
-    (C2) slot->offset > slot->size (corrupt) → guard returns 0
-    (C3) requested + offset > size (would-overflow-quota)
-                                             → guard returns 0
-    (C4) requested > size - offset (won't-fit)
-                                             → guard returns 0
-    (C5) all preconditions met (fits inside quota, heap has headroom)
-                                             → guard returns 1
-
-Notably: we prove **no integer-overflow path produces a false-allow**.
-The C code writes ``quota - current`` only after ``quota >= current``
-is checked; the Z3 encoding mirrors that order so any overflow in the
-negation produces ``sat`` (counterexample), failing the proof.
-
-Encoding uses 64-bit BitVec to match size_t on x86_64. We do NOT model
-``vos3_heap_free_bytes()`` — that's an external allocator query; the
-proof treats it as an unconstrained nondeterministic value and shows
-the guard is safe *regardless* of its return value.
+This model uses mathematical integers bounded to uint64_t, so conservation is
+proved without modular wraparound. It is a contract proof, not a refinement
+proof of compiled C; host, fault-injection and SMP tests remain mandatory.
 """
 
 from __future__ import annotations
+
 import sys
 import z3
 
-W = 64  # size_t width
-MIN_FREE = z3.BitVecVal(16 * 1024 * 1024, W)
+MAX = (1 << 64) - 1
+FREE, RESERVED, COMMITTED = 0, 1, 2
 
 
-def guard(requested, offset, quota, free_bytes):
-    """Port of the C logic. Returns a Z3 Bool (True=allow, False=deny)."""
-    zero = z3.BitVecVal(0, W)
-    # C1: zero-byte request
-    allow = z3.If(
-        requested == zero,
-        z3.BoolVal(False),
-        # C2: corrupt state (offset > quota) → fail-closed
-        z3.If(
-            z3.UGT(offset, quota),
-            z3.BoolVal(False),
-            z3.If(
-                z3.UGT(requested, quota - offset),
-                z3.BoolVal(False),
-                # Global heap reserve check; ULT for unsigned compare
-                z3.If(
-                    z3.ULT(free_bytes, MIN_FREE + requested),
-                    z3.BoolVal(False),
-                    z3.BoolVal(True),
-                ),
-            ),
-        ),
-    )
-    return allow
-
-
-def prove(title, violation) -> int:
-    s = z3.Solver()
-    s.add(violation)
-    r = s.check()
-    if r == z3.unsat:
-        print(f"  ✓ {title:<60} UNSAT (proven)")
+def prove(title: str, domain, violation) -> int:
+    solver = z3.Solver()
+    solver.add(*domain, violation)
+    result = solver.check()
+    if result == z3.unsat:
+        print(f"  ✓ {title:<70} UNSAT (proven)")
         return 0
-    if r == z3.sat:
-        m = s.model()
-        print(f"  ✗ {title:<60} SAT — counterexample:")
-        print(f"      {m}")
+    if result == z3.sat:
+        print(f"  ✗ {title:<70} SAT — {solver.model()}")
         return 1
-    print(f"  ? {title:<60} {r}")
+    print(f"  ? {title:<70} {result}")
     return 2
 
 
+def sat_increment(value):
+    return z3.If(value == MAX, MAX, value + 1)
+
+
 def main() -> int:
-    print(f"Z3 {z3.get_version_string()}  —  OOM guard proof (size_t = {W} bit)")
-    req = z3.BitVec("requested", W)
-    offset = z3.BitVec("offset", W)
-    quota = z3.BitVec("quota", W)
-    freeb = z3.BitVec("free_bytes", W)
-    allow = guard(req, offset, quota, freeb)
+    used, reserved, requested, limit = z3.Ints(
+        "used reserved requested limit"
+    )
+    enforce = z3.Bool("enforce")
+    domain = [
+        used >= 0,
+        used <= MAX,
+        reserved >= 0,
+        reserved <= MAX,
+        requested >= 0,
+        requested <= MAX,
+        limit >= 0,
+        limit <= MAX,
+    ]
+    ledger_valid = used + reserved <= MAX
+    arithmetic_valid = z3.And(requested > 0, used + reserved + requested <= MAX)
+    over_limit = z3.And(limit != 0, used + reserved + requested > limit)
+    reserve_ok = z3.And(
+        ledger_valid,
+        arithmetic_valid,
+        z3.Not(z3.And(enforce, over_limit)),
+    )
+    new_used = used
+    new_reserved = z3.If(reserve_ok, reserved + requested, reserved)
 
     failures = 0
-
-    # C1. Zero-byte request must be denied.
+    print(f"Z3 {z3.get_version_string()} — AI quota contract (uint64_t domain)")
     failures += prove(
-        "C1: requested == 0 → deny",
-        z3.And(req == 0, allow),
+        "Q1 successful reserve cannot overflow charged accounting",
+        domain,
+        z3.And(reserve_ok, new_used + new_reserved > MAX),
+    )
+    failures += prove(
+        "Q2 successful hard reserve cannot exceed a nonzero limit",
+        domain,
+        z3.And(reserve_ok, enforce, limit != 0,
+               new_used + new_reserved > limit),
+    )
+    failures += prove(
+        "Q3 rejected reserve leaves used/reserved unchanged",
+        domain,
+        z3.And(z3.Not(reserve_ok),
+               z3.Or(new_used != used, new_reserved != reserved)),
+    )
+    failures += prove(
+        "Q4 soft reserve admits every arithmetically valid request",
+        domain,
+        z3.And(ledger_valid, arithmetic_valid, z3.Not(enforce),
+               z3.Not(reserve_ok)),
     )
 
-    # C2. Corrupt state (offset > quota) must be denied.
+    bytes_, generation, handle_generation, state = z3.Ints(
+        "bytes generation handle_generation state"
+    )
+    transition_domain = domain + [
+        bytes_ > 0,
+        bytes_ <= MAX,
+        generation > 0,
+        generation <= MAX,
+        handle_generation > 0,
+        handle_generation <= MAX,
+        state >= FREE,
+        state <= COMMITTED,
+    ]
+    handle_matches = handle_generation == generation
+
+    commit_ok = z3.And(
+        ledger_valid,
+        state == RESERVED,
+        handle_matches,
+        reserved >= bytes_,
+        used + bytes_ <= MAX,
+    )
+    commit_used = z3.If(commit_ok, used + bytes_, used)
+    commit_reserved = z3.If(commit_ok, reserved - bytes_, reserved)
+    commit_state = z3.If(commit_ok, COMMITTED, state)
     failures += prove(
-        "C2: offset > quota → deny",
-        z3.And(z3.UGT(offset, quota), allow),
+        "Q5 commit preserves exact charged total",
+        transition_domain,
+        z3.And(commit_ok,
+               commit_used + commit_reserved != used + reserved),
+    )
+    failures += prove(
+        "Q6 copied committed handle cannot commit a second time",
+        transition_domain,
+        z3.And(commit_ok, commit_state == RESERVED,
+               handle_generation == generation),
     )
 
-    # C3. Would-overflow-quota: requested + offset > quota must be denied.
-    # Z3's BitVec handles the overflow naturally; we express the condition
-    # as "doesn't fit" using unsigned compare.
+    cancel_ok = z3.And(
+        ledger_valid,
+        state == RESERVED,
+        handle_matches,
+        reserved >= bytes_,
+    )
+    cancel_used = used
+    cancel_reserved = z3.If(cancel_ok, reserved - bytes_, reserved)
+    cancel_state = z3.If(cancel_ok, FREE, state)
     failures += prove(
-        "C3: requested > (quota - offset) → deny",
-        z3.And(z3.ULE(offset, quota), z3.UGT(req, quota - offset), allow),
+        "Q7 cancel decreases charged total by exactly token bytes",
+        transition_domain,
+        z3.And(cancel_ok,
+               cancel_used + cancel_reserved != used + reserved - bytes_),
+    )
+    failures += prove(
+        "Q8 copied cancelled handle cannot cancel a second time",
+        transition_domain,
+        z3.And(cancel_ok, cancel_state == RESERVED,
+               handle_generation == generation),
     )
 
-    # C4. Insufficient heap headroom must be denied.
+    release_ok = z3.And(
+        ledger_valid,
+        state == COMMITTED,
+        handle_matches,
+        used >= bytes_,
+    )
+    release_used = z3.If(release_ok, used - bytes_, used)
+    release_reserved = reserved
+    release_state = z3.If(release_ok, FREE, state)
     failures += prove(
-        "C4: free_bytes < 16 MiB + requested → deny",
-        z3.And(
-            req > 0,
-            z3.ULE(offset, quota),
-            z3.ULE(req, quota - offset),
-            z3.ULT(freeb, MIN_FREE + req),
-            allow,
-        ),
+        "Q9 release decreases charged total by exactly token bytes",
+        transition_domain,
+        z3.And(release_ok,
+               release_used + release_reserved != used + reserved - bytes_),
+    )
+    failures += prove(
+        "Q10 copied released handle cannot release a second time",
+        transition_domain,
+        z3.And(release_ok, release_state == COMMITTED,
+               handle_generation == generation),
+    )
+    failures += prove(
+        "Q11 corrupt charged total permits no terminal transition",
+        transition_domain,
+        z3.And(z3.Not(ledger_valid),
+               z3.Or(commit_ok, cancel_ok, release_ok)),
     )
 
-    # C5. Completeness: when all preconditions hold, the guard allows.
-    # Phrase as: if ALL preconditions hold and the guard DENIES → sat.
+    counter = z3.Int("counter")
+    counter_domain = [counter >= 0, counter <= MAX]
     failures += prove(
-        "C5: valid request → allow (completeness)",
-        z3.And(
-            req > 0,
-            z3.ULE(offset, quota),
-            z3.ULE(req, quota - offset),
-            z3.UGE(freeb, MIN_FREE + req),
-            z3.Not(allow),
-        ),
+        "Q12 saturating increment is monotonic over uint64_t",
+        counter_domain,
+        sat_increment(counter) < counter,
     )
-
-    # C6. Extra integer-overflow safety check: we should never be forced
-    # to compute ``offset + requested`` (which could wrap). Prove the
-    # guard is correct even when ``offset + requested`` in 64-bit
-    # arithmetic would overflow.
     failures += prove(
-        "C6: offset + requested overflows 64-bit → deny",
-        z3.And(z3.BVAddNoOverflow(offset, req, signed=False) == False, allow),
+        "Q13 saturating increment fixes UINT64_MAX",
+        counter_domain,
+        z3.And(counter == MAX, sat_increment(counter) != MAX),
+    )
+    failures += prove(
+        "Q14 nonmax saturating increment advances exactly once",
+        counter_domain,
+        z3.And(counter < MAX, sat_increment(counter) != counter + 1),
     )
 
     print()
     if failures == 0:
-        print("RESULT: 6/6 clauses proven over the full 64-bit size_t range.")
-        print("        vos3_ai_slot_oom_guard is bypass-proof and overflow-safe.")
+        print("RESULT: 14/14 quota-contract obligations proven.")
+        print("This is not a compiled-C refinement or runtime concurrency proof.")
         return 0
-    print(f"RESULT: {failures} clause(s) failed — fix the guard.")
+    print(f"RESULT: {failures} obligation(s) failed.")
     return 1
 
 

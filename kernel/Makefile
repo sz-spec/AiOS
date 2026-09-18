@@ -122,6 +122,7 @@ C_SOURCES := \
     $(SRC_DIR)/arch/x86_64/tlb_shootdown.c \
     $(SRC_DIR)/arch/x86_64/kpti_roots.c \
     $(SRC_DIR)/mm/heap.c \
+    $(SRC_DIR)/mm/ai_oom.c \
     $(SRC_DIR)/mm/ai_guard.c \
     $(SRC_DIR)/mm/ai_pte.c \
     $(SRC_DIR)/mm/ai_slots.c \

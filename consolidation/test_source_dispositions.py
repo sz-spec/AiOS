@@ -13,14 +13,14 @@ import check_source_dispositions as csd
 class SourceDispositionTests(unittest.TestCase):
     def test_every_open_path_has_one_typed_disposition(self):
         result = csd.validate()
-        self.assertEqual(result["open_ledger_paths"], 1645)
-        self.assertEqual(result["native_paths"], 118)
-        self.assertEqual(result["non_native_paths"], 1527)
+        self.assertEqual(result["open_ledger_paths"], 1647)
+        self.assertEqual(result["native_paths"], 119)
+        self.assertEqual(result["non_native_paths"], 1528)
         self.assertEqual(result["categories"], {
             "documentation-history": 315,
             "hosted": 156,
             "release-operations": 42,
-            "tests": 63,
+            "tests": 64,
             "vendor": 951,
         })
 
@@ -31,8 +31,8 @@ class SourceDispositionTests(unittest.TestCase):
             if row["status"] in counts:
                 counts[row["status"]] += 1
         self.assertEqual(counts, {
-            "canonical-diverged-review": 494,
-            "missing-from-canonical": 1151,
+            "canonical-diverged-review": 497,
+            "missing-from-canonical": 1150,
         })
         self.assertEqual(sum(counts.values()), csd.validate()["open_ledger_paths"])
 
@@ -113,14 +113,14 @@ class SourceDispositionTests(unittest.TestCase):
         variants = json.loads(
             (csd.ROOT / "consolidation/reconciliation/variant-review.json").read_text()
         )
-        self.assertEqual(len(ledger["canonical_only_files"]), 1515)
-        self.assertEqual(len(variants), 2722)
+        self.assertEqual(len(ledger["canonical_only_files"]), 1519)
+        self.assertEqual(len(variants), 2724)
         for relative in (
             "consolidation/reconciliation/README.md",
             "docs/design/UNIFICATION_STATUS_2026-09-18_HE.md",
         ):
             text = (csd.ROOT / relative).read_text()
-            for value in ("1,645", "1,527", "1,565", "1,515", "2,722"):
+            for value in ("1,647", "1,528", "1,566", "1,519", "2,724"):
                 self.assertIn(value, text, (relative, value))
             for value in ("1,510", "2,719"):
                 self.assertNotIn(value, text, (relative, value))

@@ -1042,7 +1042,6 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/src/crypto/mmr.c` — VOS3 — native.crypto — **superseded / resolved-source-choice**
 - `kernel/src/drivers/hyperv_vsock.c` — VOS3 — native.drivers — **reject-stub / resolved-source-choice**
 - `kernel/src/drivers/pci_ecam.c` — vos/vos4, vos/vos4-track-2 — native.drivers — **superseded / resolved-source-choice**
-- `kernel/src/mm/ai_oom.c` — VOS3-Cyber — native.memory — **integrate-semantics / implementation-open**
 - `kernel/src/mm/pcid.c` — VOS3 — native.memory — **reject-stub / resolved-source-choice**
 - `kernel/src/net/egress_policy.c` — VOS3-Cyber — native.network — **reject-stub / resolved-source-choice**
 - `kernel/src/tests/harness.c` — VOS3, VOS3-Cyber — native.tests — **reject-stub / resolved-source-choice**

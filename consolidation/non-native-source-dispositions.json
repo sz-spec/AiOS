@@ -2,7 +2,7 @@
   "schema_version": 1,
   "review_date": "2026-09-18",
   "review_base_commit": "b26ba60916816f0ba1c5e411764d2943d1a97e3b",
-  "ledger_scope_sha256": "95996c1682428680b11d1cfba06d43b22c3b2fca617a6b2ac9d7424a56dc6b10",
+  "ledger_scope_sha256": "b0a3ca01954ff32b2b6ea8658fde8276cd7589c420da8fcdf205393a48be1b4b",
   "scope": "Every missing or canonically diverged source path not covered by native-source-dispositions.json: hosted product, tests, release/operations, third-party vendor and documentation/history.",
   "decision_semantics": "A disposition resolves source selection only when state is resolved-source-choice. implementation-open, validation-open and legal-review-open remain explicit integration work and do not claim runtime capability.",
   "release_operations_additional_paths": [
@@ -9017,6 +9017,36 @@
       "classification_basis": "Open paths under user/musl.",
       "selected_source": "canonical",
       "source_fingerprint": "ecdb170cc37a7684fc3b017ffeaeaabc17bff22c72606b09e39b49dbba6245c0"
+    },
+    {
+      "id": "tests-ai-oom-contract-proof",
+      "category": "tests",
+      "component": "backend.tests",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "backend/tests/benchmarks/ai_oom_z3_proof.py"
+      ],
+      "selected_source": "canonical",
+      "rationale": "The canonical proof models the new reservation-ledger contract with exact bounded integers and explicitly limits its claim to the abstract transition contract. Donor proofs model the rejected offset/heap predicate and contain overflow obligations unrelated to the canonical primitive.",
+      "license": "No donor bytes are incorporated. The canonical test is a clean reimplementation of the mathematical obligations against the MIT kernel interface.",
+      "security": "Keeping a donor proof would create false assurance because it proves a predicate that is not used by the kernel. The canonical model is retained together with sanitizer, release-mode and runtime gates.",
+      "validation": "Run the 14 Z3 contract obligations and the production C host test. Do not treat either as a substitute for fault-injection, cancellation, SMP or physical-memory evidence.",
+      "classification_basis": "The ledger classifies this path under backend.tests; it is a formal validation artifact for native.memory.",
+      "review_disposition": "retain-canonical-reject-obsolete-proof-models",
+      "review_state": "resolved-no-merge",
+      "source_evidence": {
+        "ledger": "consolidation/reconciliation/file-ledger.json",
+        "ledger_state": "canonical-diverged-review",
+        "canonical_path": "backend/tests/benchmarks/ai_oom_z3_proof.py",
+        "canonical_sha256": "67f6ccdb566b3c2083799d3a71be56cbb4c3935a50df06b949c6e8a3b397adaa",
+        "donor_trees": [
+          "VOS3-Cyber",
+          "vos.v1"
+        ]
+      },
+      "source_fingerprint": "ba033422b2e9758f8735848f6c395213fa230cd38f4f8eea737594efea38e541"
     }
   ]
 }
