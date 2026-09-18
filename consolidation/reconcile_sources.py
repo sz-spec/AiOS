@@ -126,6 +126,18 @@ def component(path):
 
 def generate():
     OUT.mkdir(parents=True,exist_ok=True)
+    disposition_file=ROOT/'consolidation/native-source-dispositions.json'
+    path_dispositions={}
+    if disposition_file.exists():
+        disposition_doc=json.loads(disposition_file.read_text())
+        for group in disposition_doc['dispositions']:
+            for decided_path in group['paths']:
+                if decided_path in path_dispositions:
+                    raise ValueError('duplicate source disposition: '+decided_path)
+                path_dispositions[decided_path]={
+                    'id':group['id'], 'disposition':group['disposition'],
+                    'state':group['state'], 'rationale':group['rationale'],
+                    'validation':group['validation']}
     canonical,_=scan(ROOT)
     canonical={p:v for p,v in canonical.items() if not p.startswith(('consolidation/','docs/handoff/'))}
     by_hash=defaultdict(list)
@@ -156,6 +168,9 @@ def generate():
              'decision':'retain canonical implementation; review unretained variants' if current else
                         'retain relocated content; validate references' if alt else
                         'open: evaluate donor implementation before integration'}
+        if p in path_dispositions:
+            row['path_disposition']=path_dispositions[p]
+            row['decision']=path_dispositions[p]['disposition']+': '+path_dispositions[p]['state']
         rows.append(row);groups[row['component']].append(row)
     lookup={r['path']:r for r in rows}
     for source,g in sources.items():
@@ -199,7 +214,10 @@ def generate():
     gaps=['# Source files absent from canonical content','',
           'Excludes files retained under another path. Each item remains an integration decision, not an instruction to copy it blindly.','']
     for r in rows:
-        if r['status']=='missing-from-canonical':gaps.append('- `'+r['path']+'` — '+', '.join(r['sources'])+' — '+r['component'])
+        if r['status']=='missing-from-canonical':
+            decided=r.get('path_disposition')
+            suffix=(' — **'+decided['disposition']+' / '+decided['state']+'**') if decided else ''
+            gaps.append('- `'+r['path']+'` — '+', '.join(r['sources'])+' — '+r['component']+suffix)
     (OUT/'MISSING_FILES.md').write_text('\n'.join(gaps)+'\n')
     local=['# Local source changes','', 'Compared working bytes with each source HEAD without altering donor metadata. Exclusions are recorded in file-ledger.json.','']
     for source,g in sources.items():

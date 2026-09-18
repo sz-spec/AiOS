@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-18",
+  "review_base_commit": "c313452",
+  "scope": "All missing or canonically diverged native OS and user-program paths, excluding third-party bootloader/libc trees",
+  "dispositions": [
+    {
+      "id": "architecture-current",
+      "component": "native.architecture",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/arch/x86_64/interrupts.c",
+        "kernel/src/arch/x86_64/isr_stubs.S",
+        "kernel/src/arch/x86_64/kpti.c",
+        "kernel/src/arch/x86_64/percpu.c",
+        "kernel/src/arch/x86_64/smp.c",
+        "kernel/src/arch/x86_64/syscall.c",
+        "kernel/src/arch/x86_64/syscall_entry.S",
+        "kernel/src/arch/x86_64/trampoline.S",
+        "kernel/src/arch/x86_64/user.c",
+        "kernel/src/arch/x86_64/user_entry.S"
+      ],
+      "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+      "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+    },
+    {
+      "id": "portable-platform-stubs",
+      "component": "native.architecture",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/arch/platform_hooks.h",
+        "kernel/src/arch/portable/linux_ebpf_stub.c",
+        "kernel/src/arch/portable/platform_dispatch.c",
+        "kernel/src/arch/portable/win_vbs_stub.c"
+      ],
+      "rationale": "The files expose unsupported VBS, eBPF, IOMMU and attestation surfaces without a trustworthy backend, ownership model or synchronized registration.",
+      "validation": "Reconsider only with a real backend, authenticated immutable selection, failure cleanup and platform-specific CI."
+    },
+    {
+      "id": "attestation-hal-old",
+      "component": "native.architecture",
+      "source_status": "missing-from-canonical",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/arch/x86_64/hal_attestation.c"],
+      "rationale": "Canonical TEE, TPM and core-cookie modules replace the donor's mixed real/no-op paths; a duplicate HAL could report software behavior as hardware-backed.",
+      "validation": "Real TDX/TPM quote and PCR validation plus SMT sibling-exclusion tests remain release gates."
+    },
+    {
+      "id": "boot-current",
+      "component": "native.boot",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/boot/boot_fs.c",
+        "kernel/src/boot/kmain.c",
+        "kernel/src/boot/multiboot2_entry.S",
+        "kernel/src/boot/multiboot2_stub.c"
+      ],
+      "rationale": "Canonical boot preserves Multiboot2 magic, uses the bounded parser, orders current mitigation/KPTI initialization and removes destructive production diagnostics.",
+      "validation": "Clean BIOS/UEFI x 1/4 CPU, wrong-magic and malformed-tag negatives, production disk sentinel and setup wizard."
+    },
+    {
+      "id": "baremetal-preflight",
+      "component": "native.boot",
+      "source_status": "missing-from-canonical",
+      "disposition": "integrate-semantics",
+      "state": "implementation-open",
+      "paths": ["kernel/src/boot/baremetal_preflight.c"],
+      "rationale": "Early refusal without mandatory FPU/TSC/SSE/SSE2/NX is valuable, but the donor duplicates CPU detection, does not bound every CPUID leaf and does not restore EFLAGS.ID.",
+      "validation": "Implement through canonical CPU detection; test QEMU CPU masks, BIOS/UEFI refusal, leaf bounds and exact failure logs."
+    },
+    {
+      "id": "memory-current",
+      "component": "native.memory",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/mm/ai_guard.c",
+        "kernel/src/mm/ai_guard_internal.h",
+        "kernel/src/mm/ai_telemetry.c",
+        "kernel/src/mm/pmm.c",
+        "kernel/src/mm/user_copy.c",
+        "kernel/src/mm/vmm.c"
+      ],
+      "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+      "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+    },
+    {
+      "id": "ai-oom-policy",
+      "component": "native.memory",
+      "source_status": "missing-from-canonical",
+      "disposition": "integrate-semantics",
+      "state": "implementation-open",
+      "paths": ["kernel/src/mm/ai_oom.c"],
+      "rationale": "The overflow-safe quota idea is useful, but the donor references an absent heap API, reads mutable accounting without synchronization and can overflow its global-reserve expression.",
+      "validation": "Port the predicate into real allocation paths; property-test full size_t boundaries, concurrent writers, PMM failures and no mutation on rejection."
+    },
+    {
+      "id": "pcid-old-scaffold",
+      "component": "native.memory",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/mm/pcid.c"],
+      "rationale": "The donor explicitly lacks production callers and has no ASID allocator, reuse generation, remote invalidation or lifetime protocol; no-flush reuse could expose stale translations.",
+      "validation": "Any future PCID implementation needs ASID exhaustion/reuse, destroy/page reuse, SMP shootdown, global mapping, errata and non-PCID fallback tests."
+    },
+    {
+      "id": "scheduler-current",
+      "component": "native.scheduler",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/sched/scheduler.c",
+        "kernel/src/sched/sync.c",
+        "kernel/src/sched/task.c"
+      ],
+      "rationale": "Canonical scheduling owns CPU-local entry state, safe deferred reaping, immutable identities and lost-wakeup/cancellation repairs.",
+      "validation": "Concurrent AP workloads, blocking/preempted syscalls, synchronization destroy/cancel races and task/SHM/AI teardown."
+    },
+    {
+      "id": "execution-current",
+      "component": "native.execution",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/exec/elf.c",
+        "kernel/src/exec/exec.c",
+        "kernel/src/init/init.c"
+      ],
+      "rationale": "Canonical code retains NX copy aliases, transactional exec state, FD/address-space ownership, safe fork publication and explicit diagnostic-build routing.",
+      "validation": "Malformed ELF and W^X matrix, injected exec/fork failures, signal/FD lifecycle and release build-config checks."
+    },
+    {
+      "id": "exec-brk-tid-hardening",
+      "component": "native.execution",
+      "source_status": "canonical-diverged-review",
+      "disposition": "integrate-semantics",
+      "state": "implementation-open",
+      "paths": ["kernel/src/exec/exec_syscall.c"],
+      "rationale": "VOS3-Cyber uniquely identifies partial brk-growth rollback and clone TID-pointer validation, but its rollback can unmap pre-existing holes and its clone-time range check does not prevent exit-time TOCTOU.",
+      "validation": "Reimplement transactionally; inject failure on every page/gap, verify exact rollback, test overflow/user-end and invalid/read-only/unmapped-after-clone TID pointers."
+    },
+    {
+      "id": "embedded-bins-generated",
+      "component": "native.execution",
+      "source_status": "canonical-diverged-review",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/init/embedded_bins.c"],
+      "rationale": "The checked-in blob is stale; the active build generates build/generated/embedded_bins.c from user/programs.mk.",
+      "validation": "Assert the normal build never consumes the tracked blob and generated entries/hashes equal current program ELFs."
+    },
+    {
+      "id": "filesystems-current",
+      "component": "native.filesystems",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/fs/fd.c", "kernel/src/fs/posix_syscall.c"],
+      "rationale": "Canonical code owns retained FD-table cloning and the versioned, bounded SYSINFO ABI; donor syscall 99 can overwrite smaller callers.",
+      "validation": "Concurrent clone/close/ref failures plus SYSINFO canary, cross-page, read-only and musl ENOSYS tests."
+    },
+    {
+      "id": "ipc-current",
+      "component": "native.ipc",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/ipc/dispatcher.c",
+        "kernel/src/ipc/ipc.c",
+        "kernel/src/ipc/msgqueue.c",
+        "kernel/src/ipc/shm.c",
+        "kernel/src/ipc/signal.c",
+        "kernel/src/ipc/signal_syscall.c"
+      ],
+      "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+      "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+    },
+    {
+      "id": "user-build-and-programs-current",
+      "component": "user.programs",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "user/Makefile",
+        "user/lib/signal.c",
+        "user/src/bench_ai_scale.c",
+        "user/src/bench_ai_throughput.c",
+        "user/src/bench_csw_1ms.c",
+        "user/src/bench_hugepage_tlb.c",
+        "user/src/bench_phase13_test.c",
+        "user/src/bench_sigpipe_test.c",
+        "user/src/bench_soak_5min.c",
+        "user/src/diag_shm_stress.c",
+        "user/src/init.c",
+        "user/src/test_advanced_chaos.c",
+        "user/src/test_agent_chaos.c",
+        "user/src/test_agent_cluster.c",
+        "user/src/test_env_musl.c",
+        "user/src/test_health_check.c",
+        "user/src/test_max_saturation.c",
+        "user/src/test_model_load.c",
+        "user/src/test_posix_core.c",
+        "user/src/test_shm_dispatch.c",
+        "user/src/test_sustained.c",
+        "user/src/test_torture.c",
+        "user/src/test_vmm_soak.c"
+      ],
+      "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+      "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+    },
+    {
+      "id": "npu-positive-benchmark-scaffolds",
+      "component": "user.programs",
+      "source_status": "canonical-diverged-review",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": [
+        "user/src/bench_2026_frontier.c",
+        "user/src/test_npu_direct.c"
+      ],
+      "rationale": "Donors hard-code an unowned physical address, fall back to ordinary RAM MOVNTDQ and report NPU/WC success without a device. Canonical denial/unavailable behavior is honest.",
+      "validation": "Keep denial tests; a future positive path requires enumerated BAR ownership, IOMMU policy and a real device or explicit device fixture without fallback scoring."
+    },
+    {
+      "id": "kernel-build-current",
+      "component": "native.build-and-support",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/Makefile", "kernel/linker.ld", "kernel/run_tests.sh"],
+      "rationale": "Canonical build isolates outputs, tracks configuration, loads at 32 MiB for firmware compatibility and fails closed through the current ISO runner.",
+      "validation": "Clean/no-op/flag-change builds, parallel build directories, section/W^X map, BIOS/UEFI and missing-tool failure."
+    },
+    {
+      "id": "native-abi-current",
+      "component": "native.abi",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/include/arch/x86_64/kpti.h",
+        "kernel/include/arch/x86_64/smp.h",
+        "kernel/include/vos/ai_guard.h",
+        "kernel/include/vos/console.h",
+        "kernel/include/vos/ipc.h",
+        "kernel/include/vos/pmm.h",
+        "kernel/include/vos/scheduler.h",
+        "kernel/include/vos/sync.h",
+        "kernel/include/vos/syscall.h",
+        "kernel/include/vos/task.h",
+        "kernel/include/vos/uaccess.h",
+        "kernel/include/vos/vfs.h",
+        "kernel/include/vos/vmm.h"
+      ],
+      "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+      "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+    },
+    {
+      "id": "abi-stubs-rejected",
+      "component": "native.abi",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/include/hal/npu_abstraction.h",
+        "kernel/include/vos/ahci.h",
+        "kernel/include/vos/cr4_pin.h",
+        "kernel/include/vos/hal_attestation.h",
+        "kernel/include/vos/hyperv_vsock.h"
+      ],
+      "rationale": "These interfaces promise NPU, AHCI, CR4 pinning, attestation or Hyper-V behavior that their paired donor implementations do not enforce.",
+      "validation": "Add APIs only with a real implementation, fail-closed feature detection, cleanup and target hardware tests."
+    },
+    {
+      "id": "preflight-abi-design",
+      "component": "native.abi",
+      "source_status": "missing-from-canonical",
+      "disposition": "needs-experiment",
+      "state": "implementation-open",
+      "paths": ["kernel/include/vos/baremetal_preflight.h"],
+      "rationale": "The required-feature contract is useful, but the paired implementation needs redesign through canonical CPU detection before an ABI is frozen.",
+      "validation": "CPU feature matrix and boot-refusal experiment must define the final internal contract."
+    },
+    {
+      "id": "abi-superseded",
+      "component": "native.abi",
+      "source_status": "missing-from-canonical",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/include/vos/mmr.h",
+        "kernel/include/vos/pci_ecam.h",
+        "kernel/include/vos/pcid.h",
+        "kernel/include/vos/smap_smep.h"
+      ],
+      "rationale": "Canonical MMR audit, architecture ECAM, safe PCID-0 KPTI and per-CPU silicon hardening replace these older contracts.",
+      "validation": "Qualify the canonical replacements; do not restore duplicate ABIs."
+    },
+    {
+      "id": "cr4-pin-stub",
+      "component": "native.build-and-support",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/core/cr4_pin.c"],
+      "rationale": "The donor has no periodic verification, does not mediate all CR4 writes and stores global rather than per-CPU state.",
+      "validation": "A replacement needs a per-CPU model, one audited CR4 write API and tamper tests on every CPU."
+    },
+    {
+      "id": "smap-smep-old",
+      "component": "native.build-and-support",
+      "source_status": "missing-from-canonical",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/core/smap_smep.c"],
+      "rationale": "Canonical per-CPU silicon hardening and conditional SMAP usercopy replace the old helper, which can execute STAC/CLAC on unsupported CPUs.",
+      "validation": "Test SMEP/SMAP present and absent on BSP/AP, plus usercopy fault recovery."
+    },
+    {
+      "id": "mmr-old",
+      "component": "native.crypto",
+      "source_status": "missing-from-canonical",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/crypto/mmr.c"],
+      "rationale": "The donor uses a weak TPM no-op, allocates under a spinlock and can leave partial appends; canonical sec/mmr_audit is the selected implementation.",
+      "validation": "Canonical MMR still needs known vectors, synchronized parallel append/finalize and PCR checks before release."
+    },
+    {
+      "id": "drivers-current",
+      "component": "native.drivers",
+      "source_status": "canonical-diverged-review",
+      "disposition": "retain-canonical",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/drivers/acpi.c",
+        "kernel/src/drivers/console.c",
+        "kernel/src/drivers/tty.c",
+        "kernel/src/drivers/vbus_app_cmds.c",
+        "kernel/src/drivers/vbus_fs_cmds.c"
+      ],
+      "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
+      "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+    },
+    {
+      "id": "hyperv-vsock-stub",
+      "component": "native.drivers",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/drivers/hyperv_vsock.c"],
+      "rationale": "No VMBus transport exists and the donor reports len as sent when no transmit hook is installed.",
+      "validation": "Require real Hyper-V channel offer/open/send/receive/close with timeout, error and host interoperability tests."
+    },
+    {
+      "id": "pci-ecam-old",
+      "component": "native.drivers",
+      "source_status": "missing-from-canonical",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/drivers/pci_ecam.c"],
+      "rationale": "The architecture ECAM implementation is already selected; the donor silently aligns offsets and accepts the first MCFG allocation regardless of segment.",
+      "validation": "Fix canonical segment selection/init synchronization and test multiple MCFG allocations before physical qualification."
+    },
+    {
+      "id": "egress-policy-stub",
+      "component": "native.network",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/src/net/egress_policy.c"],
+      "rationale": "The donor ignores port and principal capabilities, permits all private/link-local/CGNAT destinations and is not connected to connect/sendto.",
+      "validation": "Design a deny-first per-principal policy and test socket entry points, ports, revocation, IPv4/IPv6 and lateral-movement negatives."
+    },
+    {
+      "id": "native-tests-rejected",
+      "component": "native.tests",
+      "source_status": "missing-from-canonical",
+      "disposition": "reject-stub",
+      "state": "resolved-source-choice",
+      "paths": [
+        "kernel/src/tests/harness.c",
+        "kernel/src/tests/vbus_latency_bench.c",
+        "kernel/tests/sizeof_address_space.c",
+        "kernel/tests/sq_atomic_stress.c",
+        "kernel/tests/test_mmr_purity.c",
+        "kernel/tests/zero_copy_audit.md"
+      ],
+      "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+      "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+    },
+    {
+      "id": "native-tests-superseded",
+      "component": "native.tests",
+      "source_status": "missing-from-canonical",
+      "disposition": "superseded",
+      "state": "resolved-source-choice",
+      "paths": ["kernel/tests/bench_pcid_csw.md", "kernel/tests/test_tpm_mock.c"],
+      "rationale": "The documents target old single-address-space PCID and password-session TPM formats, while canonical roots and salted HMAC sessions differ.",
+      "validation": "Use current KPTI/TLB and TPM protocol tests."
+    },
+    {
+      "id": "pcr-stability-plan",
+      "component": "native.tests",
+      "source_status": "missing-from-canonical",
+      "disposition": "needs-experiment",
+      "state": "implementation-open",
+      "paths": ["kernel/tests/test_pcr_stability.c"],
+      "rationale": "The 100-cold-boot idea is valid, but the test depends on an unimplemented PCR read and therefore is not currently executable evidence.",
+      "validation": "Implement real TPM PCR read and run 100 independent cold boots on qualified hardware with a signed expected-event manifest."
+    }
+  ],
+  "current_code_findings": [
+    "kernel/src/mm/ai_slots.c enables CR4.PCIDE without complete CPUID/ASID-lifecycle integration; audit before any PCID claim",
+    "kernel/src/boot/uefi_bridge.c advertises tagged no-flush switching but has no qualified ASID lifecycle or active call path",
+    "kernel/src/sec/mmr_audit.c has unsynchronized global peaks, scratch storage and leaf count; SMP append/finalize is unqualified",
+    "kernel/src/crypto/mlkem768.c still marks keygen, encapsulation and decapsulation as STUBBED",
+    "canonical ECAM still needs explicit segment selection and synchronized initialization",
+    "AHCI, authorized NPU MMIO, real Hyper-V transport and per-principal egress enforcement remain new implementation work"
+  ]
+}

@@ -3,7 +3,7 @@ BUILD_DIR ?= build/native-unified
 PRODUCTION ?= 1
 HEADLESS_AUDIT ?= 0
 
-.PHONY: native native-bootloader native-build-check help
+.PHONY: native native-bootloader native-build-check consolidation-check help
 help:
 	@echo 'make native             Build the standalone BIOS/UEFI ISO'
 	@echo 'make native-bootloader  Rebuild vendored Limine explicitly'
@@ -11,6 +11,7 @@ help:
 	@echo 'make dependencies-check Verify generated profiles and Python/Node locks'
 	@echo 'make python-lock        Refresh compatible Python locks from registries'
 	@echo 'make hosted-build-check Build/type-check installed Node components'
+	@echo 'make consolidation-check Validate 11-source and native disposition ledgers'
 
 native:
 	@for tool in x86_64-elf-gcc x86_64-elf-ld python3 xorriso mformat; do \
@@ -25,6 +26,10 @@ native-build-check:
 	@python3 scripts/test_native_build_config.py
 	@python3 scripts/test_build_invariants.py
 	@python3 scripts/test_iso_publication.py
+
+consolidation-check:
+	@python3 consolidation/reconcile_sources.py
+	@cd consolidation && python3 -m unittest test_import_baseline.py test_reconcile_sources.py test_native_dispositions.py
 
 .PHONY: python-requirements python-lock dependencies-check
 python-requirements:

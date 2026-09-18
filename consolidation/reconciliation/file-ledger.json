@@ -181272,7 +181272,14 @@
           "git_blob": "c6c1f6d41f1ac7e31ac4c01b7bbc00b384609ab0"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "kernel-build-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical build isolates outputs, tracks configuration, loads at 32 MiB for firmware compatibility and fails closed through the current ISO runner.",
+        "validation": "Clean/no-op/flag-change builds, parallel build directories, section/W^X map, BIOS/UEFI and missing-tool failure."
+      }
     },
     {
       "path": "kernel/VOS3_AI_CERTIFICATION.md",
@@ -209634,7 +209641,14 @@
           "git_blob": "70391709630148e33f74fd84b646e14ac9208357"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/arch/x86_64/memory_map.h",
@@ -210010,7 +210024,14 @@
           "git_blob": "f963200e210a62694f660afabfc838f5b9726c4a"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/hal/npu_abstraction.h",
@@ -210030,7 +210051,14 @@
           "git_blob": "f359fa87233086af9679ba3fee07cf189036c78a"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-stubs-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These interfaces promise NPU, AHCI, CR4 pinning, attestation or Hyper-V behavior that their paired donor implementations do not enforce.",
+        "validation": "Add APIs only with a real implementation, fail-closed feature detection, cleanup and target hardware tests."
+      }
     },
     {
       "path": "kernel/include/ipc/slots.h",
@@ -210582,7 +210610,14 @@
           "git_blob": "4abc4d1221442689a58708c325ce7c1b7c5bf16f"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-stubs-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These interfaces promise NPU, AHCI, CR4 pinning, attestation or Hyper-V behavior that their paired donor implementations do not enforce.",
+        "validation": "Add APIs only with a real implementation, fail-closed feature detection, cleanup and target hardware tests."
+      }
     },
     {
       "path": "kernel/include/vos/ai_guard.h",
@@ -210662,7 +210697,14 @@
           "git_blob": "ff2883224bf764b7b559491eeeaf58e567800fde"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/ai_kim.h",
@@ -211592,7 +211634,14 @@
           "git_blob": "3eaef625e1f30223c9002365e04de2e38ad3dcd7"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "needs-experiment: implementation-open",
+      "path_disposition": {
+        "id": "preflight-abi-design",
+        "disposition": "needs-experiment",
+        "state": "implementation-open",
+        "rationale": "The required-feature contract is useful, but the paired implementation needs redesign through canonical CPU detection before an ABI is frozen.",
+        "validation": "CPU feature matrix and boot-refusal experiment must define the final internal contract."
+      }
     },
     {
       "path": "kernel/include/vos/bench.h",
@@ -212791,7 +212840,14 @@
           "git_blob": "7266fbc8108b1baae8712d834b59ea2b1624768b"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/cr4_pin.h",
@@ -212847,7 +212903,14 @@
           "git_blob": "0cac8d233cac06d2930841816c40cc4f729007b8"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-stubs-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These interfaces promise NPU, AHCI, CR4 pinning, attestation or Hyper-V behavior that their paired donor implementations do not enforce.",
+        "validation": "Add APIs only with a real implementation, fail-closed feature detection, cleanup and target hardware tests."
+      }
     },
     {
       "path": "kernel/include/vos/crc32c.h",
@@ -214457,7 +214520,14 @@
           "git_blob": "9dc3dd4f7ea7b49066e4ae4f539fbc5a7eb0e260"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-stubs-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These interfaces promise NPU, AHCI, CR4 pinning, attestation or Hyper-V behavior that their paired donor implementations do not enforce.",
+        "validation": "Add APIs only with a real implementation, fail-closed feature detection, cleanup and target hardware tests."
+      }
     },
     {
       "path": "kernel/include/vos/hcs.h",
@@ -214840,7 +214910,14 @@
           "git_blob": "1fab1f37528136b9b95c3f24618fc96f4118af02"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-stubs-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These interfaces promise NPU, AHCI, CR4 pinning, attestation or Hyper-V behavior that their paired donor implementations do not enforce.",
+        "validation": "Add APIs only with a real implementation, fail-closed feature detection, cleanup and target hardware tests."
+      }
     },
     {
       "path": "kernel/include/vos/immutable_lock.h",
@@ -215225,7 +215302,14 @@
           "git_blob": "78fc5f1d7c1590a6ea4b5495781cd4bc6fa5b87b"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/ivshmem.h",
@@ -215716,7 +215800,14 @@
           "git_blob": "b2764c1290ba90f7b78a6badb00c952ba8fe4817"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-superseded",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical MMR audit, architecture ECAM, safe PCID-0 KPTI and per-CPU silicon hardening replace these older contracts.",
+        "validation": "Qualify the canonical replacements; do not restore duplicate ABIs."
+      }
     },
     {
       "path": "kernel/include/vos/model_registry.h",
@@ -216526,7 +216617,14 @@
           "git_blob": "40349f2081ff4b5ac23d28b35354cbe94c306573"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-superseded",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical MMR audit, architecture ECAM, safe PCID-0 KPTI and per-CPU silicon hardening replace these older contracts.",
+        "validation": "Qualify the canonical replacements; do not restore duplicate ABIs."
+      }
     },
     {
       "path": "kernel/include/vos/pcid.h",
@@ -216546,7 +216644,14 @@
           "git_blob": "9ab0b7c0ae5a90c8d6629b1535c16c4585c0fc68"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-superseded",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical MMR audit, architecture ECAM, safe PCID-0 KPTI and per-CPU silicon hardening replace these older contracts.",
+        "validation": "Qualify the canonical replacements; do not restore duplicate ABIs."
+      }
     },
     {
       "path": "kernel/include/vos/per_cpu_rq.h",
@@ -216844,7 +216949,14 @@
           "git_blob": "b0dbea104cbc23038c5f81c3bc1153ba84d7b7bb"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/procfs.h",
@@ -217308,7 +217420,14 @@
           "git_blob": "5daf5f54952466e24154f9a004f36447502b8430"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/sha256.h",
@@ -217645,7 +217764,14 @@
           "git_blob": "7e3c68bbdcca064de14ede5f6f3000a270be5af6"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "abi-superseded",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical MMR audit, architecture ECAM, safe PCID-0 KPTI and per-CPU silicon hardening replace these older contracts.",
+        "validation": "Qualify the canonical replacements; do not restore duplicate ABIs."
+      }
     },
     {
       "path": "kernel/include/vos/sni.h",
@@ -218279,7 +218405,14 @@
           "git_blob": "14ecea67f34ba75c727aa9331c7a57307ae45376"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/syscall.h",
@@ -218359,7 +218492,14 @@
           "git_blob": "88b7727305801d682abd1ec712f1aa8a794dec4c"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/taint_maps.h",
@@ -218463,7 +218603,14 @@
           "git_blob": "b2bdc6431ba68a4d8084c107a80f04fa1b55e754"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/tcp.h",
@@ -218995,7 +219142,14 @@
           "git_blob": "26899bef40947f802b932969e98e536d897cd884"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/uefi_boot.h",
@@ -219634,7 +219788,14 @@
           "git_blob": "ac398deed0b849869f78890da6981f44dd1891f7"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/virtio_blk.h",
@@ -220247,7 +220408,14 @@
           "git_blob": "9ed9068ad00cfc3ec6db2c6d9bf9bf43fb6e2714"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-abi-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Headers match the selected CPU-local roots, lifetime ownership, exact uaccess, versioned ABI and synchronization implementations.",
+        "validation": "Compile and runtime gates for the paired implementations; restore missing SPDX metadata separately without rolling back code."
+      }
     },
     {
       "path": "kernel/include/vos/vos3_config.h",
@@ -221107,7 +221275,14 @@
           "git_blob": "c987d56bc58694f197161c0073a7603c676987c3"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "kernel-build-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical build isolates outputs, tracks configuration, loads at 32 MiB for firmware compatibility and fails closed through the current ISO runner.",
+        "validation": "Clean/no-op/flag-change builds, parallel build directories, section/W^X map, BIOS/UEFI and missing-tool failure."
+      }
     },
     {
       "path": "kernel/pro/README.md",
@@ -221361,7 +221536,14 @@
           "git_blob": "6755e2b6d2ca8b11a2c8c442681eaa9ca5d10942"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "kernel-build-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical build isolates outputs, tracks configuration, loads at 32 MiB for firmware compatibility and fails closed through the current ISO runner.",
+        "validation": "Clean/no-op/flag-change builds, parallel build directories, section/W^X map, BIOS/UEFI and missing-tool failure."
+      }
     },
     {
       "path": "kernel/src/ai/agent_mesh.c",
@@ -222714,7 +222896,14 @@
           "git_blob": "cf23b1b8db75e1430b57a0edfb3ce04a7c2751be"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "portable-platform-stubs",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The files expose unsupported VBS, eBPF, IOMMU and attestation surfaces without a trustworthy backend, ownership model or synchronized registration.",
+        "validation": "Reconsider only with a real backend, authenticated immutable selection, failure cleanup and platform-specific CI."
+      }
     },
     {
       "path": "kernel/src/arch/portable/linux_ebpf_stub.c",
@@ -222734,7 +222923,14 @@
           "git_blob": "ff6a37f03cbb28591e901a70f3903261958f2922"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "portable-platform-stubs",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The files expose unsupported VBS, eBPF, IOMMU and attestation surfaces without a trustworthy backend, ownership model or synchronized registration.",
+        "validation": "Reconsider only with a real backend, authenticated immutable selection, failure cleanup and platform-specific CI."
+      }
     },
     {
       "path": "kernel/src/arch/portable/platform_dispatch.c",
@@ -222754,7 +222950,14 @@
           "git_blob": "cbd72d783854dd9983ce600c0c203a32b30bc02b"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "portable-platform-stubs",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The files expose unsupported VBS, eBPF, IOMMU and attestation surfaces without a trustworthy backend, ownership model or synchronized registration.",
+        "validation": "Reconsider only with a real backend, authenticated immutable selection, failure cleanup and platform-specific CI."
+      }
     },
     {
       "path": "kernel/src/arch/portable/win_vbs_stub.c",
@@ -222774,7 +222977,14 @@
           "git_blob": "81a4143461eb52126bb9eb1a56c2c8a5108f427d"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "portable-platform-stubs",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The files expose unsupported VBS, eBPF, IOMMU and attestation surfaces without a trustworthy backend, ownership model or synchronized registration.",
+        "validation": "Reconsider only with a real backend, authenticated immutable selection, failure cleanup and platform-specific CI."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/apic.c",
@@ -223080,7 +223290,14 @@
           "git_blob": "759dcd785aa48019862184b9a3fc45d28dc0802c"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "attestation-hal-old",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical TEE, TPM and core-cookie modules replace the donor's mixed real/no-op paths; a duplicate HAL could report software behavior as hardware-backed.",
+        "validation": "Real TDX/TPM quote and PCR validation plus SMT sibling-exclusion tests remain release gates."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/idt.c",
@@ -223274,7 +223491,14 @@
           "git_blob": "4db1e0e7db80654bd5f4b7cb8a327ad4e26165c5"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/ioapic.c",
@@ -223441,7 +223665,14 @@
           "git_blob": "8347979bb9f6080f56915850b1e5b2f901c823af"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/kpti.c",
@@ -223461,7 +223692,14 @@
           "git_blob": "76062ba5616037c7e9ab99356f4b0e88407b6359"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/microcode_check.c",
@@ -223719,7 +223957,14 @@
           "git_blob": "38a6da04ff0ef42b723d40a1a58e88fc306e8289"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/pic.c",
@@ -223913,7 +224158,14 @@
           "git_blob": "17cbcc49714d1e5e43db731bf9a115f7ace64991"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/smp_telemetry.c",
@@ -224107,7 +224359,14 @@
           "git_blob": "c2bafb099fef68120b1bd644975f2d06afe8e4f2"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/syscall_entry.S",
@@ -224187,7 +224446,14 @@
           "git_blob": "5422db7070f8b817b8ba8ac8634c7d08e05ffaf2"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/trampoline.S",
@@ -224267,7 +224533,14 @@
           "git_blob": "f048d0e75bad3432802796d497deb2a837c9bbaa"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/user.c",
@@ -224347,7 +224620,14 @@
           "git_blob": "c37167bb8deabc61bb8c1e27757b759c7ac3fd17"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/user_entry.S",
@@ -224427,7 +224707,14 @@
           "git_blob": "53c0b941b3a2f89626a67db4979de3fcc7af0767"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "architecture-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns CPU-local process roots, entry stacks, bounded boot data, AP readiness and precise user-copy recovery; donor variants rely on older global-root or lifecycle assumptions.",
+        "validation": "BIOS/UEFI x 1/4 CPU, concurrent CPL3/syscalls/IRQs, malformed boot data, process isolation, remote revocation and nested-entry review."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/xsave.c",
@@ -224648,7 +224935,14 @@
           "git_blob": "efcc624bbfc3f1868dbcb8dca6da3f53e013348f"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "integrate-semantics: implementation-open",
+      "path_disposition": {
+        "id": "baremetal-preflight",
+        "disposition": "integrate-semantics",
+        "state": "implementation-open",
+        "rationale": "Early refusal without mandatory FPU/TSC/SSE/SSE2/NX is valuable, but the donor duplicates CPU detection, does not bound every CPUID leaf and does not restore EFLAGS.ID.",
+        "validation": "Implement through canonical CPU detection; test QEMU CPU masks, BIOS/UEFI refusal, leaf bounds and exact failure logs."
+      }
     },
     {
       "path": "kernel/src/boot/boot_ai.c",
@@ -224898,7 +225192,14 @@
           "git_blob": "c045722e8c5c6eedcd1a854ea5ab68ea58e98fa4"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "boot-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical boot preserves Multiboot2 magic, uses the bounded parser, orders current mitigation/KPTI initialization and removes destructive production diagnostics.",
+        "validation": "Clean BIOS/UEFI x 1/4 CPU, wrong-magic and malformed-tag negatives, production disk sentinel and setup wizard."
+      }
     },
     {
       "path": "kernel/src/boot/boot_mm.c",
@@ -225428,7 +225729,14 @@
           "git_blob": "637e09256fa3fa5c2356f74a5a4d72b33395bb9b"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "boot-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical boot preserves Multiboot2 magic, uses the bounded parser, orders current mitigation/KPTI initialization and removes destructive production diagnostics.",
+        "validation": "Clean BIOS/UEFI x 1/4 CPU, wrong-magic and malformed-tag negatives, production disk sentinel and setup wizard."
+      }
     },
     {
       "path": "kernel/src/boot/limine_stub.c",
@@ -225614,7 +225922,14 @@
           "git_blob": "491b49af07b3672382f0eaea40bad8e29bf1ba60"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "boot-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical boot preserves Multiboot2 magic, uses the bounded parser, orders current mitigation/KPTI initialization and removes destructive production diagnostics.",
+        "validation": "Clean BIOS/UEFI x 1/4 CPU, wrong-magic and malformed-tag negatives, production disk sentinel and setup wizard."
+      }
     },
     {
       "path": "kernel/src/boot/multiboot2_stub.c",
@@ -225694,7 +226009,14 @@
           "git_blob": "9a51f018ce45087d953c2ef7bfbbee42d047fc18"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "boot-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical boot preserves Multiboot2 magic, uses the bounded parser, orders current mitigation/KPTI initialization and removes destructive production diagnostics.",
+        "validation": "Clean BIOS/UEFI x 1/4 CPU, wrong-magic and malformed-tag negatives, production disk sentinel and setup wizard."
+      }
     },
     {
       "path": "kernel/src/boot/uefi_boot.c",
@@ -226061,7 +226383,14 @@
           "git_blob": "1722d78cfbe939f220e6ef89861f0dd6e82151b8"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "cr4-pin-stub",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The donor has no periodic verification, does not mediate all CR4 writes and stores global rather than per-CPU state.",
+        "validation": "A replacement needs a per-CPU model, one audited CR4 write API and tamper tests on every CPU."
+      }
     },
     {
       "path": "kernel/src/core/crc32c.c",
@@ -226573,7 +226902,14 @@
           "git_blob": "64b62f0c0e598ad74f25e1c2c9462e227ac02078"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "smap-smep-old",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical per-CPU silicon hardening and conditional SMAP usercopy replace the old helper, which can execute STAC/CLAC on unsupported CPUs.",
+        "validation": "Test SMEP/SMAP present and absent on BSP/AP, plus usercopy fault recovery."
+      }
     },
     {
       "path": "kernel/src/core/stack_protector.c",
@@ -227176,7 +227512,14 @@
           "git_blob": "c303e413c261481da575d27f96fc405885ca37e9"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "mmr-old",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "The donor uses a weak TPM no-op, allocates under a spinlock and can leave partial appends; canonical sec/mmr_audit is the selected implementation.",
+        "validation": "Canonical MMR still needs known vectors, synchronized parallel append/finalize and PCR checks before release."
+      }
     },
     {
       "path": "kernel/src/crypto/sha256.c",
@@ -227821,7 +228164,14 @@
           "git_blob": "af464d824438a0a6e29a3fcf53ce166acfb9d871"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "drivers-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
+        "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+      }
     },
     {
       "path": "kernel/src/drivers/console.c",
@@ -227901,7 +228251,14 @@
           "git_blob": "37a78434e03a1b6dc18b4cbc441395d30ebadd28"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "drivers-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
+        "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+      }
     },
     {
       "path": "kernel/src/drivers/dev_init.c",
@@ -228680,7 +229037,14 @@
           "git_blob": "ed870127e2573086111b5a520de7ba56c8e3103f"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "hyperv-vsock-stub",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "No VMBus transport exists and the donor reports len as sent when no transmit hook is installed.",
+        "validation": "Require real Hyper-V channel offer/open/send/receive/close with timeout, error and host interoperability tests."
+      }
     },
     {
       "path": "kernel/src/drivers/ivshmem.c",
@@ -229451,7 +229815,14 @@
           "git_blob": "0e7cab6f16a865a1b21ffc5e86af593766d515a4"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "pci-ecam-old",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "The architecture ECAM implementation is already selected; the donor silently aligns offsets and accepts the first MCFG allocation regardless of segment.",
+        "validation": "Fix canonical segment selection/init synchronization and test multiple MCFG allocations before physical qualification."
+      }
     },
     {
       "path": "kernel/src/drivers/storage_hal.c",
@@ -229749,7 +230120,14 @@
           "git_blob": "b1b663f214973b30a73fab02b374e47176bb3f07"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "drivers-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
+        "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+      }
     },
     {
       "path": "kernel/src/drivers/vbus_ai_cmds.c",
@@ -229914,7 +230292,14 @@
           "git_blob": "89c0c5f3fb2fb8228ff255aa38027d092cbef045"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "drivers-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
+        "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+      }
     },
     {
       "path": "kernel/src/drivers/vbus_bridge_internal.h",
@@ -230191,7 +230576,14 @@
           "git_blob": "0e7698fc0c9cc03baf9882c13fbac98665bf4020"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "drivers-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
+        "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+      }
     },
     {
       "path": "kernel/src/drivers/vbus_transport.c",
@@ -231146,7 +231538,14 @@
           "git_blob": "0c3dd8ee3a5d912cd51856f1d004791f271f7174"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "execution-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code retains NX copy aliases, transactional exec state, FD/address-space ownership, safe fork publication and explicit diagnostic-build routing.",
+        "validation": "Malformed ELF and W^X matrix, injected exec/fork failures, signal/FD lifecycle and release build-config checks."
+      }
     },
     {
       "path": "kernel/src/exec/exec.c",
@@ -231226,7 +231625,14 @@
           "git_blob": "7db1a315e9dc6e545ed11bc146aa5d39a80faa41"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "execution-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code retains NX copy aliases, transactional exec state, FD/address-space ownership, safe fork publication and explicit diagnostic-build routing.",
+        "validation": "Malformed ELF and W^X matrix, injected exec/fork failures, signal/FD lifecycle and release build-config checks."
+      }
     },
     {
       "path": "kernel/src/exec/exec_syscall.c",
@@ -231306,7 +231712,14 @@
           "git_blob": "644f1301b1f531dd168184c1e67aae30dfa52cbe"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "integrate-semantics: implementation-open",
+      "path_disposition": {
+        "id": "exec-brk-tid-hardening",
+        "disposition": "integrate-semantics",
+        "state": "implementation-open",
+        "rationale": "VOS3-Cyber uniquely identifies partial brk-growth rollback and clone TID-pointer validation, but its rollback can unmap pre-existing holes and its clone-time range check does not prevent exit-time TOCTOU.",
+        "validation": "Reimplement transactionally; inject failure on every page/gap, verify exact rollback, test overflow/user-end and invalid/read-only/unmapped-after-clone TID pointers."
+      }
     },
     {
       "path": "kernel/src/fs/dir.c",
@@ -231614,7 +232027,14 @@
           "git_blob": "179693d045a277a14d269ab2aadf479da83a5573"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "filesystems-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns retained FD-table cloning and the versioned, bounded SYSINFO ABI; donor syscall 99 can overwrite smaller callers.",
+        "validation": "Concurrent clone/close/ref failures plus SYSINFO canary, cross-page, read-only and musl ENOSYS tests."
+      }
     },
     {
       "path": "kernel/src/fs/file.c",
@@ -232010,7 +232430,14 @@
           "git_blob": "9fc006c13c0b60b66d06f5a0052e0392509ed590"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "filesystems-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code owns retained FD-table cloning and the versioned, bounded SYSINFO ABI; donor syscall 99 can overwrite smaller callers.",
+        "validation": "Concurrent clone/close/ref failures plus SYSINFO canary, cross-page, read-only and musl ENOSYS tests."
+      }
     },
     {
       "path": "kernel/src/fs/procfs.c",
@@ -233204,7 +233631,14 @@
           "git_blob": "2a3244075c4b35fca15b6c2bfde90dc05e956cc8"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "embedded-bins-generated",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "The checked-in blob is stale; the active build generates build/generated/embedded_bins.c from user/programs.mk.",
+        "validation": "Assert the normal build never consumes the tracked blob and generated entries/hashes equal current program ELFs."
+      }
     },
     {
       "path": "kernel/src/init/embedded_bins.h",
@@ -233398,7 +233832,14 @@
           "git_blob": "3b8205f385f0674637efc16de45ca083ed3f99a1"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "execution-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code retains NX copy aliases, transactional exec state, FD/address-space ownership, safe fork publication and explicit diagnostic-build routing.",
+        "validation": "Malformed ELF and W^X matrix, injected exec/fork failures, signal/FD lifecycle and release build-config checks."
+      }
     },
     {
       "path": "kernel/src/init/init_binaries.c",
@@ -233592,7 +234033,14 @@
           "git_blob": "a41244df800acf0e380451467a4e7720567f1ad2"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "ipc-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+        "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+      }
     },
     {
       "path": "kernel/src/ipc/futex.c",
@@ -233786,7 +234234,14 @@
           "git_blob": "be43c2c68afc191f4d4d4fda6d61f0aefdb512ae"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "ipc-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+        "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+      }
     },
     {
       "path": "kernel/src/ipc/msgqueue.c",
@@ -233866,7 +234321,14 @@
           "git_blob": "505323c9299b8d336c1d5f26412217fd4bba8892"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "ipc-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+        "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+      }
     },
     {
       "path": "kernel/src/ipc/pipe.c",
@@ -234060,7 +234522,14 @@
           "git_blob": "0423df76153658f779f0e6454b073214c6bee71b"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "ipc-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+        "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+      }
     },
     {
       "path": "kernel/src/ipc/signal.c",
@@ -234140,7 +234609,14 @@
           "git_blob": "59f9df8e7d13fa17a8041b357b9b254270293643"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "ipc-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+        "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+      }
     },
     {
       "path": "kernel/src/ipc/signal_syscall.c",
@@ -234220,7 +234696,14 @@
           "git_blob": "974ef1e9c4cb2013a838f66fcba4bf29fbddb04c"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "ipc-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical IPC adds generational handles, immutable owner identity, operation pins, address-space-owned mappings and task-owned signal state.",
+        "validation": "Stale-handle reuse, blocked-waiter destroy, creator/mapper exit orders, fork/clone/exec signals, forged frames and SMP races."
+      }
     },
     {
       "path": "kernel/src/mm/ai_context_manager.c",
@@ -234412,7 +234895,14 @@
           "git_blob": "bba6a1f25f205f3217a4517e4b15287cd9fc2115"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "memory-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+        "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+      }
     },
     {
       "path": "kernel/src/mm/ai_guard_internal.h",
@@ -234492,7 +234982,14 @@
           "git_blob": "4b5d89a5216e57f9152a23834258324f2f6b16e3"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "memory-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+        "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+      }
     },
     {
       "path": "kernel/src/mm/ai_isc.c",
@@ -235178,7 +235675,14 @@
           "git_blob": "9aa1181a39a8ef6d6fffb2c784fa109977fcb67f"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "integrate-semantics: implementation-open",
+      "path_disposition": {
+        "id": "ai-oom-policy",
+        "disposition": "integrate-semantics",
+        "state": "implementation-open",
+        "rationale": "The overflow-safe quota idea is useful, but the donor references an absent heap API, reads mutable accounting without synchronization and can overflow its global-reserve expression.",
+        "validation": "Port the predicate into real allocation paths; property-test full size_t boundaries, concurrent writers, PMM failures and no mutation on rejection."
+      }
     },
     {
       "path": "kernel/src/mm/ai_prefetch.c",
@@ -235646,7 +236150,14 @@
           "git_blob": "0909280f03af71a3f3327c431ec16992fc2293da"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "memory-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+        "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+      }
     },
     {
       "path": "kernel/src/mm/audit_ring.c",
@@ -236171,7 +236682,14 @@
           "git_blob": "0e6aa95f31f8188a45b053efbedec1494b5508c9"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "pcid-old-scaffold",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The donor explicitly lacks production callers and has no ASID allocator, reuse generation, remote invalidation or lifetime protocol; no-flush reuse could expose stale translations.",
+        "validation": "Any future PCID implementation needs ASID exhaustion/reuse, destroy/page reuse, SMP shootdown, global mapping, errata and non-PCID fallback tests."
+      }
     },
     {
       "path": "kernel/src/mm/pmm.c",
@@ -236251,7 +236769,14 @@
           "git_blob": "b9643403196e116470fd49ba76e4544a80223c42"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "memory-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+        "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+      }
     },
     {
       "path": "kernel/src/mm/tee.c",
@@ -236364,7 +236889,14 @@
           "git_blob": "68377d00396bfde23db0036f651813f3f6dd1085"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "memory-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+        "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+      }
     },
     {
       "path": "kernel/src/mm/vmm.c",
@@ -236444,7 +236976,14 @@
           "git_blob": "91aaf12ef74ac5498eeee0a7ec592c8b5ce9298b"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "memory-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical code adds retained AI-context readers, transactional PMM/VMA work, effective permission checks, per-process roots and generation-bound TLB acknowledgements.",
+        "validation": "Concurrent context lifetime, PMM failure injection, COW/VMA transitions, cross-process isolation and remote TLB revocation."
+      }
     },
     {
       "path": "kernel/src/net/arp.c",
@@ -236920,7 +237459,14 @@
           "git_blob": "9b3970e9faf033a4b11c972765cedf6269578c71"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "egress-policy-stub",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "The donor ignores port and principal capabilities, permits all private/link-local/CGNAT destinations and is not connected to connect/sendto.",
+        "validation": "Design a deny-first per-principal policy and test socket entry points, ports, revocation, IPv4/IPv6 and lateral-movement negatives."
+      }
     },
     {
       "path": "kernel/src/net/ethernet.c",
@@ -238181,7 +238727,14 @@
           "git_blob": "42e8bb8f643c5376d01842e2fff142f0c49f45a7"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "scheduler-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical scheduling owns CPU-local entry state, safe deferred reaping, immutable identities and lost-wakeup/cancellation repairs.",
+        "validation": "Concurrent AP workloads, blocking/preempted syscalls, synchronization destroy/cancel races and task/SHM/AI teardown."
+      }
     },
     {
       "path": "kernel/src/sched/sync.c",
@@ -238261,7 +238814,14 @@
           "git_blob": "247840775bb4c81e1c67a83283264e098aa25deb"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "scheduler-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical scheduling owns CPU-local entry state, safe deferred reaping, immutable identities and lost-wakeup/cancellation repairs.",
+        "validation": "Concurrent AP workloads, blocking/preempted syscalls, synchronization destroy/cancel races and task/SHM/AI teardown."
+      }
     },
     {
       "path": "kernel/src/sched/task.c",
@@ -238341,7 +238901,14 @@
           "git_blob": "f7337d37736da8a31e3f6a5c7b0b2461a590390e"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "scheduler-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical scheduling owns CPU-local entry state, safe deferred reaping, immutable identities and lost-wakeup/cancellation repairs.",
+        "validation": "Concurrent AP workloads, blocking/preempted syscalls, synchronization destroy/cancel races and task/SHM/AI teardown."
+      }
     },
     {
       "path": "kernel/src/sched/xsave_ctx.c",
@@ -239801,7 +240368,14 @@
           "git_blob": "eb7b09bda6444ba0cd57e6b227fed6892ad2894c"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+        "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+      }
     },
     {
       "path": "kernel/src/tests/test_phase10_omega.c",
@@ -242499,7 +243073,14 @@
           "git_blob": "3e6d171093331279bba01e42019695869bda168c"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+        "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+      }
     },
     {
       "path": "kernel/src/tests/vbus_replay_test.c",
@@ -243710,7 +244291,14 @@
           "git_blob": "4bc9ee42d9d7a6d74f33f98f1eb61b1d7ce17389"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-superseded",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "The documents target old single-address-space PCID and password-session TPM formats, while canonical roots and salted HMAC sessions differ.",
+        "validation": "Use current KPTI/TLB and TPM protocol tests."
+      }
     },
     {
       "path": "kernel/tests/chaos_buddy_stress.py",
@@ -245034,7 +245622,14 @@
           "git_blob": "80f05b042f919b8b9001638feddb54f2d8e9232a"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+        "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+      }
     },
     {
       "path": "kernel/tests/spectre_ghost_probe.c",
@@ -245166,7 +245761,14 @@
           "git_blob": "e71713fb63a17c970395e54b5fe48af9f336e2e7"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+        "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+      }
     },
     {
       "path": "kernel/tests/test_interrupt_storm_jitter.c",
@@ -245385,7 +245987,14 @@
           "git_blob": "98a5164e9c17c0f470fa676ddd3a55bb6d43ed1b"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+        "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+      }
     },
     {
       "path": "kernel/tests/test_pcr_stability.c",
@@ -245405,7 +246014,14 @@
           "git_blob": "c0bf988f37d0d0c9fc2c04a94d1f1a02166fa214"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "needs-experiment: implementation-open",
+      "path_disposition": {
+        "id": "pcr-stability-plan",
+        "disposition": "needs-experiment",
+        "state": "implementation-open",
+        "rationale": "The 100-cold-boot idea is valid, but the test depends on an unimplemented PCR read and therefore is not currently executable evidence.",
+        "validation": "Implement real TPM PCR read and run 100 independent cold boots on qualified hardware with a signed expected-event manifest."
+      }
     },
     {
       "path": "kernel/tests/test_tpm_mock.c",
@@ -245425,7 +246041,14 @@
           "git_blob": "e5cc8efc3c7e8bb799ea3de4e6738916e8612e91"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "superseded: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-superseded",
+        "disposition": "superseded",
+        "state": "resolved-source-choice",
+        "rationale": "The documents target old single-address-space PCID and password-session TPM formats, while canonical roots and salted HMAC sessions differ.",
+        "validation": "Use current KPTI/TLB and TPM protocol tests."
+      }
     },
     {
       "path": "kernel/tests/vbus_replay_test.c",
@@ -246789,7 +247412,14 @@
           "git_blob": "bc56871f0e41056e00b639cb4fe990da3ddb8bff"
         }
       },
-      "decision": "open: evaluate donor implementation before integration"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "native-tests-rejected",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "These tests contain vacuous passes, copied structures, reimplemented algorithms or false zero-copy/latency claims and do not exercise production behavior.",
+        "validation": "Replace only with production-linked tests that contain negative controls and exact safety/performance assertions."
+      }
     },
     {
       "path": "kernel/tools/embed_binaries.sh",
@@ -252486,7 +253116,14 @@
           "git_blob": "ec3ce10138d90132e4c39c72ba565a57a5db46d7"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/include/ioctl.h",
@@ -254030,7 +254667,14 @@
           "git_blob": "87033c2d5a37328e9bc6357e01854a4db3f26b80"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/lib/stdio.c",
@@ -550499,7 +551143,14 @@
           "git_blob": "2b766e22f3260eff816d612c8b36dc8318189387"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "npu-positive-benchmark-scaffolds",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "Donors hard-code an unowned physical address, fall back to ordinary RAM MOVNTDQ and report NPU/WC success without a device. Canonical denial/unavailable behavior is honest.",
+        "validation": "Keep denial tests; a future positive path requires enumerated BAR ownership, IOMMU policy and a real device or explicit device fixture without fallback scoring."
+      }
     },
     {
       "path": "user/src/bench_ai_scale.c",
@@ -550573,7 +551224,14 @@
           "git_blob": "bae7ed325012364033c0045dcf5bb966e7a91f34"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_ai_throughput.c",
@@ -550647,7 +551305,14 @@
           "git_blob": "a6929c84da6e6fc667a23d84a7a580c68f740610"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_app_isolation_test.c",
@@ -551036,7 +551701,14 @@
           "git_blob": "d9b29ab71caabd199c5bfbe74a54416df3c232a0"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_fs_test.c",
@@ -551320,7 +551992,14 @@
           "git_blob": "0c81ac0826bb924fe65b71515f984baf1e56b4fd"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_isolate.c",
@@ -551814,7 +552493,14 @@
           "git_blob": "1fc47ef3fd9559206b88eb85cf25325da62c3d71"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_poll_test.c",
@@ -552203,7 +552889,14 @@
           "git_blob": "720bb624ac9b672d9c34bbd41b3fc31126f4dfde"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_soak_5min.c",
@@ -552277,7 +552970,14 @@
           "git_blob": "030bc6ec9012d0e198b83e014ee9e4c7f4471b12"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/bench_stress_test.c",
@@ -552876,7 +553576,14 @@
           "git_blob": "458b25412071f2fa25dcd7d23514795bad91a22c"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/disk_test.c",
@@ -554000,7 +554707,14 @@
           "git_blob": "5d4c330333206f7105721bb1327826aec1bc4ff4"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/ps.c",
@@ -554599,7 +555313,14 @@
           "git_blob": "3714a0908c1100170697f3718709e71ae41af39d"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_agent_chaos.c",
@@ -554673,7 +555394,14 @@
           "git_blob": "368a6992cf22d72ff8693b7df1692aa80b2e727a"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_agent_cluster.c",
@@ -554747,7 +555475,14 @@
           "git_blob": "a2a868f46045369d96b83d79883801d66961230a"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_ai_exploit_v2.c",
@@ -555241,7 +555976,14 @@
           "git_blob": "b17697c02a6521ee62e1f614921d75e8c7853482"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_env_musl.ld",
@@ -556170,7 +556912,14 @@
           "git_blob": "33d959ce00a721e996aa5c9beb7b032b6723258b"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_integration.c",
@@ -556599,7 +557348,14 @@
           "git_blob": "6f0640ad5bdf901628561022a730ece173b3e77e"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_model_load.c",
@@ -556673,7 +557429,14 @@
           "git_blob": "47ef55e0fe654fd2201cf802c698fcebeac0b839"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_net_dispatch.c",
@@ -556957,7 +557720,14 @@
           "git_blob": "4d4d2fe62c1fc4e2578aa8106d8bb3e2983048f3"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "reject-stub: resolved-source-choice",
+      "path_disposition": {
+        "id": "npu-positive-benchmark-scaffolds",
+        "disposition": "reject-stub",
+        "state": "resolved-source-choice",
+        "rationale": "Donors hard-code an unowned physical address, fall back to ordinary RAM MOVNTDQ and report NPU/WC success without a device. Canonical denial/unavailable behavior is honest.",
+        "validation": "Keep denial tests; a future positive path requires enumerated BAR ownership, IOMMU policy and a real device or explicit device fixture without fallback scoring."
+      }
     },
     {
       "path": "user/src/test_pipe_musl.c",
@@ -557281,7 +558051,14 @@
           "git_blob": "1715473b0b1afd42d1b50ae0e0053d1c3df8bfb1"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_posix_fs.c",
@@ -557880,7 +558657,14 @@
           "git_blob": "31b056e053b63b83fb6b622259d8496a5ddd11e1"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_signal_musl.c",
@@ -558584,7 +559368,14 @@
           "git_blob": "87ebf73595adafacce54ecf3717922464b2aa1d8"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_torture.c",
@@ -558658,7 +559449,14 @@
           "git_blob": "464abc8614a7ab32a7dc784329a8696b7e1a2870"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/test_vmm_soak.c",
@@ -558732,7 +559530,14 @@
           "git_blob": "d61a3cecd72f1684614ad28691191d9611200ea0"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "retain-canonical: resolved-source-choice",
+      "path_disposition": {
+        "id": "user-build-and-programs-current",
+        "disposition": "retain-canonical",
+        "state": "resolved-source-choice",
+        "rationale": "Canonical programs use the versioned telemetry ABI, checked process/SHM cleanup, current fork restrictions and complete build dependency tracking.",
+        "validation": "Clean/no-op/config-change builds, exact program inventory, injected fork/map/wait/telemetry failures and full native program ordering/status."
+      }
     },
     {
       "path": "user/src/udp_test.c",

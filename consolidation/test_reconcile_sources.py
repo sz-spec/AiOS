@@ -61,4 +61,11 @@ class ReconciliationTests(unittest.TestCase):
                 for source in row['exact_source_matches']:
                     self.assertEqual(row['canonical_sha256'],row['sources'][source]['sha256'])
 
+    def test_generated_ledger_embeds_native_path_dispositions(self):
+        report=json.loads((rs.OUT/'file-ledger.json').read_text())
+        decisions=json.loads((rs.ROOT/'consolidation/native-source-dispositions.json').read_text())
+        expected={path for group in decisions['dispositions'] for path in group['paths']}
+        embedded={row['path'] for row in report['files'] if 'path_disposition' in row}
+        self.assertEqual(embedded,expected)
+
 if __name__=='__main__':unittest.main()

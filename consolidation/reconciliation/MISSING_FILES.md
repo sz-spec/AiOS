@@ -1023,39 +1023,39 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/boot/limine/tinf/tools/genzlibtest.py` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/tools/mkzdata.c` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/toolchain-files/bios-i686-toolchain.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
-- `kernel/include/hal/npu_abstraction.h` — VOS3 — native.abi
-- `kernel/include/vos/ahci.h` — vos/vos4, vos/vos4-track-2 — native.abi
-- `kernel/include/vos/baremetal_preflight.h` — VOS3 — native.abi
-- `kernel/include/vos/cr4_pin.h` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.abi
-- `kernel/include/vos/hal_attestation.h` — VOS3 — native.abi
-- `kernel/include/vos/hyperv_vsock.h` — VOS3 — native.abi
-- `kernel/include/vos/mmr.h` — VOS3 — native.abi
-- `kernel/include/vos/pci_ecam.h` — vos/vos4, vos/vos4-track-2 — native.abi
-- `kernel/include/vos/pcid.h` — VOS3 — native.abi
-- `kernel/include/vos/smap_smep.h` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.abi
-- `kernel/src/arch/platform_hooks.h` — VOS3-Cyber — native.architecture
-- `kernel/src/arch/portable/linux_ebpf_stub.c` — VOS3-Cyber — native.architecture
-- `kernel/src/arch/portable/platform_dispatch.c` — VOS3-Cyber — native.architecture
-- `kernel/src/arch/portable/win_vbs_stub.c` — VOS3-Cyber — native.architecture
-- `kernel/src/arch/x86_64/hal_attestation.c` — VOS3 — native.architecture
-- `kernel/src/boot/baremetal_preflight.c` — VOS3 — native.boot
-- `kernel/src/core/cr4_pin.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.build-and-support
-- `kernel/src/core/smap_smep.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.build-and-support
-- `kernel/src/crypto/mmr.c` — VOS3 — native.crypto
-- `kernel/src/drivers/hyperv_vsock.c` — VOS3 — native.drivers
-- `kernel/src/drivers/pci_ecam.c` — vos/vos4, vos/vos4-track-2 — native.drivers
-- `kernel/src/mm/ai_oom.c` — VOS3-Cyber — native.memory
-- `kernel/src/mm/pcid.c` — VOS3 — native.memory
-- `kernel/src/net/egress_policy.c` — VOS3-Cyber — native.network
-- `kernel/src/tests/harness.c` — VOS3, VOS3-Cyber — native.tests
-- `kernel/src/tests/vbus_latency_bench.c` — VOS3-Cyber — native.tests
-- `kernel/tests/bench_pcid_csw.md` — VOS3 — native.tests
-- `kernel/tests/sizeof_address_space.c` — VOS3 — native.tests
-- `kernel/tests/sq_atomic_stress.c` — VOS3 — native.tests
-- `kernel/tests/test_mmr_purity.c` — VOS3 — native.tests
-- `kernel/tests/test_pcr_stability.c` — VOS3 — native.tests
-- `kernel/tests/test_tpm_mock.c` — VOS3 — native.tests
-- `kernel/tests/zero_copy_audit.md` — VOS3 — native.tests
+- `kernel/include/hal/npu_abstraction.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
+- `kernel/include/vos/ahci.h` — vos/vos4, vos/vos4-track-2 — native.abi — **reject-stub / resolved-source-choice**
+- `kernel/include/vos/baremetal_preflight.h` — VOS3 — native.abi — **needs-experiment / implementation-open**
+- `kernel/include/vos/cr4_pin.h` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.abi — **reject-stub / resolved-source-choice**
+- `kernel/include/vos/hal_attestation.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
+- `kernel/include/vos/hyperv_vsock.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
+- `kernel/include/vos/mmr.h` — VOS3 — native.abi — **superseded / resolved-source-choice**
+- `kernel/include/vos/pci_ecam.h` — vos/vos4, vos/vos4-track-2 — native.abi — **superseded / resolved-source-choice**
+- `kernel/include/vos/pcid.h` — VOS3 — native.abi — **superseded / resolved-source-choice**
+- `kernel/include/vos/smap_smep.h` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.abi — **superseded / resolved-source-choice**
+- `kernel/src/arch/platform_hooks.h` — VOS3-Cyber — native.architecture — **reject-stub / resolved-source-choice**
+- `kernel/src/arch/portable/linux_ebpf_stub.c` — VOS3-Cyber — native.architecture — **reject-stub / resolved-source-choice**
+- `kernel/src/arch/portable/platform_dispatch.c` — VOS3-Cyber — native.architecture — **reject-stub / resolved-source-choice**
+- `kernel/src/arch/portable/win_vbs_stub.c` — VOS3-Cyber — native.architecture — **reject-stub / resolved-source-choice**
+- `kernel/src/arch/x86_64/hal_attestation.c` — VOS3 — native.architecture — **superseded / resolved-source-choice**
+- `kernel/src/boot/baremetal_preflight.c` — VOS3 — native.boot — **integrate-semantics / implementation-open**
+- `kernel/src/core/cr4_pin.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.build-and-support — **reject-stub / resolved-source-choice**
+- `kernel/src/core/smap_smep.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.build-and-support — **superseded / resolved-source-choice**
+- `kernel/src/crypto/mmr.c` — VOS3 — native.crypto — **superseded / resolved-source-choice**
+- `kernel/src/drivers/hyperv_vsock.c` — VOS3 — native.drivers — **reject-stub / resolved-source-choice**
+- `kernel/src/drivers/pci_ecam.c` — vos/vos4, vos/vos4-track-2 — native.drivers — **superseded / resolved-source-choice**
+- `kernel/src/mm/ai_oom.c` — VOS3-Cyber — native.memory — **integrate-semantics / implementation-open**
+- `kernel/src/mm/pcid.c` — VOS3 — native.memory — **reject-stub / resolved-source-choice**
+- `kernel/src/net/egress_policy.c` — VOS3-Cyber — native.network — **reject-stub / resolved-source-choice**
+- `kernel/src/tests/harness.c` — VOS3, VOS3-Cyber — native.tests — **reject-stub / resolved-source-choice**
+- `kernel/src/tests/vbus_latency_bench.c` — VOS3-Cyber — native.tests — **reject-stub / resolved-source-choice**
+- `kernel/tests/bench_pcid_csw.md` — VOS3 — native.tests — **superseded / resolved-source-choice**
+- `kernel/tests/sizeof_address_space.c` — VOS3 — native.tests — **reject-stub / resolved-source-choice**
+- `kernel/tests/sq_atomic_stress.c` — VOS3 — native.tests — **reject-stub / resolved-source-choice**
+- `kernel/tests/test_mmr_purity.c` — VOS3 — native.tests — **reject-stub / resolved-source-choice**
+- `kernel/tests/test_pcr_stability.c` — VOS3 — native.tests — **needs-experiment / implementation-open**
+- `kernel/tests/test_tpm_mock.c` — VOS3 — native.tests — **superseded / resolved-source-choice**
+- `kernel/tests/zero_copy_audit.md` — VOS3 — native.tests — **reject-stub / resolved-source-choice**
 - `out/vos-cyber-v21.0-vdr-20260426T142004Z.manifest.txt` — VOS3-Cyber — documentation
 - `out/vos-cyber-v21.0-vdr-20260426T142004Z.tar.gz` — VOS3-Cyber — root.configuration
 - `out/vos-cyber-v21.0-vdr-20260426T142004Z.tar.gz.sha512` — VOS3-Cyber — root.configuration
