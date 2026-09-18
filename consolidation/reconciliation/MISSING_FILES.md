@@ -1025,7 +1025,6 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/boot/limine/toolchain-files/bios-i686-toolchain.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/include/hal/npu_abstraction.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
 - `kernel/include/vos/ahci.h` — vos/vos4, vos/vos4-track-2 — native.abi — **reject-stub / resolved-source-choice**
-- `kernel/include/vos/baremetal_preflight.h` — VOS3 — native.abi — **needs-experiment / implementation-open**
 - `kernel/include/vos/cr4_pin.h` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.abi — **reject-stub / resolved-source-choice**
 - `kernel/include/vos/hal_attestation.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
 - `kernel/include/vos/hyperv_vsock.h` — VOS3 — native.abi — **reject-stub / resolved-source-choice**
@@ -1038,7 +1037,6 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/src/arch/portable/platform_dispatch.c` — VOS3-Cyber — native.architecture — **reject-stub / resolved-source-choice**
 - `kernel/src/arch/portable/win_vbs_stub.c` — VOS3-Cyber — native.architecture — **reject-stub / resolved-source-choice**
 - `kernel/src/arch/x86_64/hal_attestation.c` — VOS3 — native.architecture — **superseded / resolved-source-choice**
-- `kernel/src/boot/baremetal_preflight.c` — VOS3 — native.boot — **integrate-semantics / implementation-open**
 - `kernel/src/core/cr4_pin.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.build-and-support — **reject-stub / resolved-source-choice**
 - `kernel/src/core/smap_smep.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — native.build-and-support — **superseded / resolved-source-choice**
 - `kernel/src/crypto/mmr.c` — VOS3 — native.crypto — **superseded / resolved-source-choice**

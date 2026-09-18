@@ -46,6 +46,7 @@
 #include "../../include/vos/boot_fs.h"
 #include "../../include/vos/boot_ai.h"
 #include "../../include/vos/boot_net.h"
+#include "../../include/vos/baremetal_preflight.h"
 
 /* M4 (v21.3) — Certification assertion harness.
  * VOS3_ASSERT_CERT() is a no-op when VOS3_ASSERT_HARNESS is undefined,
@@ -347,6 +348,8 @@ void kernel_main(const vos3_boot_info_t* raw_boot_info)
 {
     int result;
     const vos3_boot_info_t* boot_info;
+    vos3_cpu_info_t cpu_info;
+    vos3_preflight_features_t preflight_features;
 
     /* ===== Phase 1: Early Console ===== */
     vos3_console_init(VOS3_CONSOLE_BOTH, 0U);
@@ -358,6 +361,22 @@ void kernel_main(const vos3_boot_info_t* raw_boot_info)
     print_banner();
 
     VOS3_INFO("Kernel starting...");
+
+    /* Reject unsupported silicon before memory, interrupts or drivers can
+     * rely on features that are part of the native kernel contract.  CPUID
+     * collection is centralized in cpu.c and bounds every queried leaf. */
+    vos3_cpu_detect_features(&cpu_info);
+    result = vos3_baremetal_preflight_evaluate(&cpu_info,
+                                                &preflight_features);
+    if (result != VOS3_PREFLIGHT_OK) {
+        VOS3_PANIC("CPU preflight failed: %s (%d)",
+                   vos3_preflight_status_str(result), result);
+    }
+    VOS3_INFO("CPU preflight OK: pcid=%u invpcid=%u sha_ni=%u x2apic=%u",
+              preflight_features.pcid_supported,
+              preflight_features.invpcid_supported,
+              preflight_features.sha_ni_supported,
+              preflight_features.x2apic_supported);
 
     /* ===== Phase 2: Get/Validate Boot Info ===== */
     VOS3_INFO("Validating boot information");
@@ -433,8 +452,8 @@ void kernel_main(const vos3_boot_info_t* raw_boot_info)
 
     /* ===== Phase 10: CPU Detection ===== */
     VOS3_INFO("Detecting CPU features");
-    vos3_cpu_info_t cpu_info;
-    vos3_cpu_detect(&cpu_info);
+    /* Preserve the exact CPUID snapshot admitted by the early gate. */
+    vos3_cpu_detect_microcode(&cpu_info);
     vos3_cpu_print_info(&cpu_info);
 
     /* P1 · Adaptive Mitigation Factory — pick KPTI tier from CPUID and

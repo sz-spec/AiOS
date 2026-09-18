@@ -28,6 +28,11 @@
 
 .section .rodata
 
+.set AP_BASIC_REQUIRED, ((1 << 0) | (1 << 4) | (1 << 5) | (1 << 6) | \
+                         (1 << 13) | (1 << 16) | (1 << 24) | \
+                         (1 << 25) | (1 << 26))
+.set AP_EXT_REQUIRED,   ((1 << 11) | (1 << 20) | (1 << 29))
+
 /* ============================================================================
  * 16-BIT REAL MODE CODE
  * ============================================================================ */
@@ -76,6 +81,31 @@ trampoline_32bit:
     movw %ax, %gs
     movw %ax, %ss
 
+    /* Do not infer an AP's capabilities from the BSP.  Heterogeneous or
+     * filtered virtual CPUs must satisfy the same bootstrap contract before
+     * CR4 or EFER is changed. */
+    xorl %ecx, %ecx
+    movl $0, %eax
+    cpuid
+    cmpl $1, %eax
+    jb trampoline_feature_halt
+    movl $1, %eax
+    cpuid
+    movl %edx, %eax
+    andl $AP_BASIC_REQUIRED, %eax
+    cmpl $AP_BASIC_REQUIRED, %eax
+    jne trampoline_feature_halt
+    movl $0x80000000, %eax
+    cpuid
+    cmpl $0x80000001, %eax
+    jb trampoline_feature_halt
+    movl $0x80000001, %eax
+    cpuid
+    movl %edx, %eax
+    andl $AP_EXT_REQUIRED, %eax
+    cmpl $AP_EXT_REQUIRED, %eax
+    jne trampoline_feature_halt
+
     /* Enable PAE (CR4.PAE = 1) and PGE (CR4.PGE = 1) */
     movl %cr4, %eax
     orl $0x000000A0, %eax           /* PAE (bit 5) | PGE (bit 7) */
@@ -99,6 +129,21 @@ trampoline_32bit:
 
     /* Far jump to 64-bit code segment */
     ljmpl $0x18, $(trampoline_64bit - vos3_trampoline_start + 0x1000)
+
+trampoline_feature_halt:
+    movw $0x3F8, %dx
+    movb $'A', %al
+    outb %al, %dx
+    movb $'P', %al
+    outb %al, %dx
+    movb $'F', %al
+    outb %al, %dx
+    movb $'\r', %al
+    outb %al, %dx
+    movb $'\n', %al
+    outb %al, %dx
+1:  hlt
+    jmp 1b
 
 /* ============================================================================
  * 64-BIT LONG MODE CODE

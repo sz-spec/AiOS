@@ -34,11 +34,18 @@ def validate():
         assert group["component"] in COMPONENTS, group["id"]
         assert group["source_status"] in OPEN_STATUSES, group["id"]
         assert group["disposition"] in ALLOWED, group["id"]
-        assert group["state"] in {"resolved-source-choice", "implementation-open"}, group["id"]
+        assert group["state"] in {
+            "resolved-source-choice", "implementation-open",
+            "integrated-validation-open",
+        }, group["id"]
         assert group["paths"], group["id"]
         assert group["rationale"] and group["validation"], group["id"]
-        if group["disposition"] in {"integrate-semantics", "needs-experiment"}:
+        if group["disposition"] == "needs-experiment":
             assert group["state"] == "implementation-open", group["id"]
+        if group["disposition"] == "integrate-semantics":
+            assert group["state"] in {
+                "implementation-open", "integrated-validation-open",
+            }, group["id"]
         for path in group["paths"]:
             assert path not in seen, f"duplicate disposition: {path}"
             assert path in expected, f"out-of-scope disposition: {path}"

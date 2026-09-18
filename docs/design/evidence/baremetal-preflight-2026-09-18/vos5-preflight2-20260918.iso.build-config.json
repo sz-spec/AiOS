@@ -1,0 +1,8 @@
+{
+  "VOS_ISO_LIMINE_BUILD_DIR": "../build/preflight-check/limine",
+  "VOS_ISO_XORRISO": "GNU xorriso 1.5.8.pl01",
+  "files": {
+    "../build/preflight-check2/iso-config.json": "4b71a927bcc9be361f6aedd95e67d16bb46084a79142c7d3a626bb47f65bccec",
+    "../build/preflight-check2/vos3.elf": "043ad30c2878494eee5d015d6dbaecfc647ddee5ba2294658d822569723816a6"
+  }
+}

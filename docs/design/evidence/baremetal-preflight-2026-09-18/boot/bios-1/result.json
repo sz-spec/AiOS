@@ -1,0 +1,20 @@
+{
+  "firmware": "bios",
+  "cpu": "max",
+  "smp": 1,
+  "ram_mb": 1024,
+  "acceleration": "tcg",
+  "observation_seconds": 25,
+  "exit_status": "observation_timeout",
+  "pmm": true,
+  "vmm": true,
+  "scheduler": true,
+  "wizard_output": true,
+  "online_cpus": 1,
+  "failures": [],
+  "passed": true,
+  "scope": "VM boot to user-space setup; not installation, AI inference, or physical hardware qualification",
+  "iso_sha256": "b141e7f171f5b5bbbaefd3cfc6680eadccd57cc25ebfdadef02e1592421347c3",
+  "iso_sha256_after": "b141e7f171f5b5bbbaefd3cfc6680eadccd57cc25ebfdadef02e1592421347c3",
+  "artifact_unchanged": true
+}

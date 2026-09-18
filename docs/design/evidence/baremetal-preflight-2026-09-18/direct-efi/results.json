@@ -1,0 +1,72 @@
+{
+  "passed": false,
+  "classification": "open: standalone vos3.efi is rejected by OVMF before an observable preflight result",
+  "results": [
+    {
+      "case": "normal",
+      "cpu": "max",
+      "exit_status": "observation_timeout",
+      "efi_banner": false,
+      "firmware_unsupported": true,
+      "command": [
+        "qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-smp",
+        "1",
+        "-m",
+        "1024",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-drive",
+        "if=pflash,format=raw,readonly=on,file=/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+        "-cpu",
+        "max",
+        "-drive",
+        "if=pflash,format=raw,file=/private/tmp/vos5-preflight2-direct-normal-vars-evidence.fd",
+        "-drive",
+        "file=/private/tmp/vos5-preflight2-efi-fat.img,format=raw,if=virtio"
+      ]
+    },
+    {
+      "case": "no-nx",
+      "cpu": "max,-nx",
+      "exit_status": "observation_timeout",
+      "efi_banner": false,
+      "firmware_unsupported": true,
+      "command": [
+        "qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-smp",
+        "1",
+        "-m",
+        "1024",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-drive",
+        "if=pflash,format=raw,readonly=on,file=/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+        "-cpu",
+        "max,-nx",
+        "-drive",
+        "if=pflash,format=raw,file=/private/tmp/vos5-preflight2-direct-no-nx-vars-evidence.fd",
+        "-drive",
+        "file=/private/tmp/vos5-preflight2-efi-fat.img,format=raw,if=virtio"
+      ]
+    }
+  ]
+}

@@ -31841,7 +31841,7 @@
         {
           "path": "kernel/include/arch/x86_64/cpu.h",
           "state": "history-unavailable",
-          "canonical_content_status": "selected-content-retained",
+          "canonical_content_status": "canonical-diverged-review",
           "working_bytes_retained": false
         },
         {
@@ -32483,7 +32483,7 @@
         {
           "path": "kernel/src/arch/x86_64/cpu.c",
           "state": "history-unavailable",
-          "canonical_content_status": "selected-content-retained",
+          "canonical_content_status": "canonical-diverged-review",
           "working_bytes_retained": false
         },
         {
@@ -32609,8 +32609,8 @@
         {
           "path": "kernel/src/boot/efi_stub.c",
           "state": "history-unavailable",
-          "canonical_content_status": "selected-content-retained",
-          "working_bytes_retained": true
+          "canonical_content_status": "canonical-diverged-review",
+          "working_bytes_retained": false
         },
         {
           "path": "kernel/src/boot/entry.S",
@@ -45272,9 +45272,9 @@
     }
   },
   "file_status_counts": {
-    "missing-from-canonical": 1153,
-    "canonical-diverged-review": 489,
-    "selected-content-retained": 4504,
+    "missing-from-canonical": 1151,
+    "canonical-diverged-review": 494,
+    "selected-content-retained": 4501,
     "content-retained-at-other-path": 92
   },
   "component_counts": {
@@ -45369,22 +45369,21 @@
       "missing-from-canonical": 1
     },
     "native.abi": {
-      "selected-content-retained": 115,
-      "canonical-diverged-review": 13,
-      "missing-from-canonical": 10
+      "selected-content-retained": 114,
+      "canonical-diverged-review": 15,
+      "missing-from-canonical": 9
     },
     "native.ai": {
       "selected-content-retained": 12
     },
     "native.architecture": {
       "missing-from-canonical": 5,
-      "selected-content-retained": 12,
-      "canonical-diverged-review": 10
+      "selected-content-retained": 11,
+      "canonical-diverged-review": 11
     },
     "native.boot": {
-      "missing-from-canonical": 1,
-      "selected-content-retained": 9,
-      "canonical-diverged-review": 4
+      "canonical-diverged-review": 6,
+      "selected-content-retained": 8
     },
     "native.bootloader": {
       "selected-content-retained": 31,
@@ -181198,7 +181197,7 @@
       "path": "kernel/Makefile",
       "component": "native.build-and-support",
       "canonical_path": "kernel/Makefile",
-      "canonical_sha256": "55724d1a63218b6eaf0e990e9ed1efbe4c9194af23dfe0b0d96252fe850c97da",
+      "canonical_sha256": "5361da2b9b2fe98a8361c11b738fddbf6b9cc54d5e4c219ce78a8d663e389efe",
       "status": "canonical-diverged-review",
       "exact_source_matches": [],
       "exact_matches_elsewhere": {},
@@ -209318,20 +209317,15 @@
       "path": "kernel/include/arch/x86_64/cpu.h",
       "component": "native.abi",
       "canonical_path": "kernel/include/arch/x86_64/cpu.h",
-      "canonical_sha256": "c555f92612f4dd406111a768db9fb46b76f272cb36249659e5107fcc8548202e",
-      "status": "selected-content-retained",
-      "exact_source_matches": [
-        "vos.v1"
-      ],
-      "exact_matches_elsewhere": {
-        "vos.v1": [
-          "kernel/include/arch/x86_64/cpu.h"
-        ]
-      },
+      "canonical_sha256": "dd674e637e90fa2dae4d29b8c1dc5f16e39492ac6be26d2e6cb6979abd1bef9f",
+      "status": "canonical-diverged-review",
+      "exact_source_matches": [],
+      "exact_matches_elsewhere": {},
       "unretained_source_variants": [
         "VOS3",
         "VOS3-Cyber",
         "VOS-Cyber-Standard",
+        "vos.v1",
         "vos/vos4",
         "vos/vos4-ci-triggers",
         "vos/vos4-kernel-bugfix",
@@ -209397,7 +209391,14 @@
           "git_blob": "2fbfb39df5c1e722eacb0797969ca32c7c59af88"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "integrate-semantics: integrated-validation-open",
+      "path_disposition": {
+        "id": "preflight-cpu-abi-integration",
+        "disposition": "integrate-semantics",
+        "state": "integrated-validation-open",
+        "rationale": "The CPU API now separates bounded feature collection from the later microcode MSR read so early boot cannot fault on an MSR before exception handling exists.",
+        "validation": "Production build, source-order test and independent security review passed; runtime limits match the paired preflight implementation."
+      }
     },
     {
       "path": "kernel/include/arch/x86_64/gdt.h",
@@ -211619,9 +211620,9 @@
     {
       "path": "kernel/include/vos/baremetal_preflight.h",
       "component": "native.abi",
-      "canonical_path": null,
-      "canonical_sha256": null,
-      "status": "missing-from-canonical",
+      "canonical_path": "kernel/include/vos/baremetal_preflight.h",
+      "canonical_sha256": "af9398cb178f84a95f7abf2cdd621d7f37161f9a622869310e3377497fcd14f8",
+      "status": "canonical-diverged-review",
       "exact_source_matches": [],
       "exact_matches_elsewhere": {},
       "unretained_source_variants": [
@@ -211634,13 +211635,13 @@
           "git_blob": "3eaef625e1f30223c9002365e04de2e38ad3dcd7"
         }
       },
-      "decision": "needs-experiment: implementation-open",
+      "decision": "integrate-semantics: integrated-validation-open",
       "path_disposition": {
         "id": "preflight-abi-design",
-        "disposition": "needs-experiment",
-        "state": "implementation-open",
-        "rationale": "The required-feature contract is useful, but the paired implementation needs redesign through canonical CPU detection before an ABI is frozen.",
-        "validation": "CPU feature matrix and boot-refusal experiment must define the final internal contract."
+        "disposition": "integrate-semantics",
+        "state": "integrated-validation-open",
+        "rationale": "The internal contract is implemented with explicit failure codes for the twelve mandatory facilities and a bounded optional-feature result. It remains an internal kernel ABI while runtime coverage is completed.",
+        "validation": "Compile and evaluator coverage passed; a drift test enforces identical bootstrap masks. Direct EFI and heterogeneous-AP negative runtime validation remain open."
       }
     },
     {
@@ -223077,20 +223078,15 @@
       "path": "kernel/src/arch/x86_64/cpu.c",
       "component": "native.architecture",
       "canonical_path": "kernel/src/arch/x86_64/cpu.c",
-      "canonical_sha256": "727f398d8caf37a0b3c4562a9e7d17e7f50caec63124062e5adedb95a24be597",
-      "status": "selected-content-retained",
-      "exact_source_matches": [
-        "vos.v1"
-      ],
-      "exact_matches_elsewhere": {
-        "vos.v1": [
-          "kernel/src/arch/x86_64/cpu.c"
-        ]
-      },
+      "canonical_sha256": "8991cd84ee05d5c6cc145a4f7f75a8205d1b9e3c93cffbe11e12fa63512d9bed",
+      "status": "canonical-diverged-review",
+      "exact_source_matches": [],
+      "exact_matches_elsewhere": {},
       "unretained_source_variants": [
         "VOS3",
         "VOS3-Cyber",
         "VOS-Cyber-Standard",
+        "vos.v1",
         "vos/vos4",
         "vos/vos4-ci-triggers",
         "vos/vos4-kernel-bugfix",
@@ -223156,7 +223152,14 @@
           "git_blob": "088ad806983c81a9a6c7b8496af015f30a3cb5ed"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "integrate-semantics: integrated-validation-open",
+      "path_disposition": {
+        "id": "preflight-canonical-integration",
+        "disposition": "integrate-semantics",
+        "state": "integrated-validation-open",
+        "rationale": "Canonical CPU detection was split so early feature collection performs bounded CPUID only, while the validated snapshot is later enriched with microcode data without being replaced.",
+        "validation": "Production build and snapshot-order tests passed. Direct EFI negative execution and heterogeneous-AP runtime validation remain open."
+      }
     },
     {
       "path": "kernel/src/arch/x86_64/gdt.c",
@@ -224459,7 +224462,7 @@
       "path": "kernel/src/arch/x86_64/trampoline.S",
       "component": "native.architecture",
       "canonical_path": "kernel/src/arch/x86_64/trampoline.S",
-      "canonical_sha256": "3032c2c16d84940b99dbcd24f2e25fef580aac942288461595ae3bc61bad2f91",
+      "canonical_sha256": "aee2879ed58c3942276a517e9f4aa2f61fdbbd5d4800dd14b33d294846761e25",
       "status": "canonical-diverged-review",
       "exact_source_matches": [],
       "exact_matches_elsewhere": {},
@@ -224920,9 +224923,9 @@
     {
       "path": "kernel/src/boot/baremetal_preflight.c",
       "component": "native.boot",
-      "canonical_path": null,
-      "canonical_sha256": null,
-      "status": "missing-from-canonical",
+      "canonical_path": "kernel/src/boot/baremetal_preflight.c",
+      "canonical_sha256": "14179a35b2c223c0b8d74ea7292d863896bd779bbf92dc6843fb57d640dc6e75",
+      "status": "canonical-diverged-review",
       "exact_source_matches": [],
       "exact_matches_elsewhere": {},
       "unretained_source_variants": [
@@ -224935,13 +224938,13 @@
           "git_blob": "efcc624bbfc3f1868dbcb8dca6da3f53e013348f"
         }
       },
-      "decision": "integrate-semantics: implementation-open",
+      "decision": "integrate-semantics: integrated-validation-open",
       "path_disposition": {
         "id": "baremetal-preflight",
         "disposition": "integrate-semantics",
-        "state": "implementation-open",
-        "rationale": "Early refusal without mandatory FPU/TSC/SSE/SSE2/NX is valuable, but the donor duplicates CPU detection, does not bound every CPUID leaf and does not restore EFLAGS.ID.",
-        "validation": "Implement through canonical CPU detection; test QEMU CPU masks, BIOS/UEFI refusal, leaf bounds and exact failure logs."
+        "state": "integrated-validation-open",
+        "rationale": "The donor's early-refusal semantics were reimplemented through bounded canonical CPU detection. The canonical gate now covers every facility used unconditionally by the bootstrap and kernel, preserves the admitted snapshot and avoids pre-IDT MSR access.",
+        "validation": "Host matrix 4/4, production ELF and EFI compile, canonical Limine BIOS/UEFI boot at 1/4 CPUs, and twelve Multiboot2 QEMU feature-mask refusals passed. Direct EFI negative execution and a heterogeneous AP refusal remain open; see docs/design/evidence/baremetal-preflight-2026-09-18/."
       }
     },
     {
@@ -225429,9 +225432,12 @@
       "path": "kernel/src/boot/efi_stub.c",
       "component": "native.boot",
       "canonical_path": "kernel/src/boot/efi_stub.c",
-      "canonical_sha256": "7ea766521f0813ffc38f0ca0db6f61d723fcbd053aa7c617935916ffebddbd18",
-      "status": "selected-content-retained",
-      "exact_source_matches": [
+      "canonical_sha256": "237d4efaa52703c8be22035a7dda55aca5ce4acbff7b5b5c351a4c681a1110f2",
+      "status": "canonical-diverged-review",
+      "exact_source_matches": [],
+      "exact_matches_elsewhere": {},
+      "unretained_source_variants": [
+        "VOS3",
         "VOS3-Cyber",
         "VOS-Cyber-Standard",
         "vos.v1",
@@ -225442,41 +225448,6 @@
         "vos/vos4-track-2",
         "vos/vos4-track-5",
         "vos/vos4-track-7"
-      ],
-      "exact_matches_elsewhere": {
-        "VOS3-Cyber": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "VOS-Cyber-Standard": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos.v1": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4-ci-triggers": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4-kernel-bugfix": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4-track-1": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4-track-2": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4-track-5": [
-          "kernel/src/boot/efi_stub.c"
-        ],
-        "vos/vos4-track-7": [
-          "kernel/src/boot/efi_stub.c"
-        ]
-      },
-      "unretained_source_variants": [
-        "VOS3"
       ],
       "sources": {
         "VOS3": {
@@ -225535,7 +225506,14 @@
           "git_blob": "262131d64a7435d8be66319fb0e045c5e67a6a36"
         }
       },
-      "decision": "retain canonical implementation; review unretained variants"
+      "decision": "integrate-semantics: integrated-validation-open",
+      "path_disposition": {
+        "id": "preflight-efi-integration",
+        "disposition": "integrate-semantics",
+        "state": "integrated-validation-open",
+        "rationale": "The standalone EFI entry now checks the same mandatory CPU contract before constructing NX mappings or writing EFER and PAT.",
+        "validation": "The EFI object compiles and mask/order review passed. The current standalone vos3.efi artifact is rejected by OVMF before its banner, so direct-EFI runtime validation remains open."
+      }
     },
     {
       "path": "kernel/src/boot/entry.S",
@@ -225655,7 +225633,7 @@
       "path": "kernel/src/boot/kmain.c",
       "component": "native.boot",
       "canonical_path": "kernel/src/boot/kmain.c",
-      "canonical_sha256": "c4d8f8dbbc21feb2cfe0a3bf60fd171caf9ef3325c08bda6283492beea052bbf",
+      "canonical_sha256": "ae69500b400e153b0207ec27a953f66a6365c189de8d00117339642fa41e7680",
       "status": "canonical-diverged-review",
       "exact_source_matches": [],
       "exact_matches_elsewhere": {},
@@ -225848,7 +225826,7 @@
       "path": "kernel/src/boot/multiboot2_entry.S",
       "component": "native.boot",
       "canonical_path": "kernel/src/boot/multiboot2_entry.S",
-      "canonical_sha256": "40e75066fbb8863862492b2443d2ac0389e02e8c62c267560146052948cd4bcc",
+      "canonical_sha256": "7ec48bbd8813090d8705e6cdea9f2c16f0aec8040120906f2becd54e70a1f5a8",
       "status": "canonical-diverged-review",
       "exact_source_matches": [],
       "exact_matches_elsewhere": {},
@@ -560430,6 +560408,17 @@
     "docs/design/evidence/backend-runtime-invariants.md",
     "docs/design/evidence/backend-runtime-qualification.md",
     "docs/design/evidence/backend-runtime-security-review.md",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/SHA256SUMS",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/boot/bios-1/result.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/boot/bios-4/result.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/boot/uefi-1/result.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/boot/uefi-4/result.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/direct-efi/results.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/feature-matrix-runner/results.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/feature-matrix/results.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/manifest.json",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/vos5-preflight2-20260918.iso.boot-catalog.txt",
+    "docs/design/evidence/baremetal-preflight-2026-09-18/vos5-preflight2-20260918.iso.build-config.json",
     "docs/design/evidence/build-invariants-review.md",
     "docs/design/evidence/council-failure-research-2026-09-17/ai-context-review/hash-index.json",
     "docs/design/evidence/council-failure-research-2026-09-17/ai-context-review/result.json",
@@ -561563,6 +561552,8 @@
     "docs/reports/vos-performance-failure-2026-09-18-v1.1.pdf",
     "docs/reports/vos-performance-failure-2026-09-18.html",
     "docs/reports/vos-performance-failure-2026-09-18.pdf",
+    "docs/reports/vos-system-unification-status-2026-09-18.html",
+    "docs/reports/vos-system-unification-status-2026-09-18.pdf",
     "frontend/components/bmad/ViewModeSelector.test.tsx",
     "frontend/components/bmad/ViewModeSelector.tsx",
     "frontend/hooks/useBMAD-loading.test.ts",
@@ -561766,6 +561757,8 @@
     "scripts/test_ai_context_lifetime.py",
     "scripts/test_ai_throughput_protocol.py",
     "scripts/test_backend_runtime_smoke.py",
+    "scripts/test_baremetal_preflight.py",
+    "scripts/test_baremetal_preflight_qemu.py",
     "scripts/test_bench_ai_scale.py",
     "scripts/test_bench_csw_exchange.py",
     "scripts/test_build_invariants.py",

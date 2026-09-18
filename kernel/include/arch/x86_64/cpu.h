@@ -138,6 +138,7 @@ extern "C" {
 #define VOS3_CPU_EXT7_SMEP          (1U << 7)   /**< SMEP (Supervisor Mode Execution Prevention) */
 #define VOS3_CPU_EXT7_SMAP          (1U << 20)  /**< SMAP */
 #define VOS3_CPU_EXT7_AVX512F       (1U << 16)  /**< AVX-512 Foundation */
+#define VOS3_CPU_EXT7_SHA           (1U << 29)  /**< SHA instruction extensions */
 
 /** @brief CPUID.07H:ECX feature bits */
 #define VOS3_CPU_EXT7C_UMIP         (1U << 2)   /**< UMIP (User-Mode Instruction Prevention) */
@@ -255,7 +256,19 @@ void vos3_cpuid(uint32_t leaf, uint32_t subleaf,
                 uint32_t* ecx, uint32_t* edx);
 
 /**
- * @brief Initialize CPU info structure
+ * @brief Populate bounded CPUID-derived fields without accessing MSRs.
+ * @param[out] info CPU info structure to fill
+ *
+ * Safe for the pre-IDT boot feature gate.  Call vos3_cpu_detect() after
+ * exception handling is installed when the microcode MSR is also required.
+ */
+void vos3_cpu_detect_features(vos3_cpu_info_t* info);
+
+/** Enrich an already validated snapshot with the microcode revision only. */
+void vos3_cpu_detect_microcode(vos3_cpu_info_t* info);
+
+/**
+ * @brief Initialize CPU info and read the microcode revision MSR.
  * @param[out] info CPU info structure to fill
  */
 void vos3_cpu_detect(vos3_cpu_info_t* info);

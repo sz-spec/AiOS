@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-18",
+  "scope": "CPU prerequisite gate; QEMU TCG only; not physical-hardware qualification",
+  "git_base": "54a7bb08a8fef99ad079c9af36851b1a007f4f4f",
+  "host": {
+    "platform": "macOS-26.3.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "qemu": "QEMU emulator version 10.2.2"
+  },
+  "artifacts": {
+    "iso": {
+      "path": "/private/tmp/vos5-preflight2-20260918.iso",
+      "sha256": "b141e7f171f5b5bbbaefd3cfc6680eadccd57cc25ebfdadef02e1592421347c3"
+    },
+    "elf": {
+      "path": "build/preflight-check2/vos3.elf",
+      "sha256": "043ad30c2878494eee5d015d6dbaecfc647ddee5ba2294658d822569723816a6"
+    },
+    "efi": {
+      "path": "build/preflight-check2/vos3.efi",
+      "sha256": "aa4e0d522d9370125788ea51bdae32ef392e824503164b4884149c876f366c7e"
+    }
+  },
+  "results": {
+    "host_tests": "4/4 pass",
+    "positive_boots": "4/4 pass",
+    "multiboot_feature_refusals": "12/12 pass",
+    "direct_efi": "open: OVMF rejected artifact as Unsupported before banner",
+    "heterogeneous_ap": "open: no suitable emulator model"
+  },
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_baremetal_preflight.py -v",
+    "make -C kernel BUILD_DIR=../build/preflight-check2 PRODUCTION=1 HEADLESS_AUDIT=0 all",
+    "make -C kernel BUILD_DIR=../build/preflight-check2 PRODUCTION=1 HEADLESS_AUDIT=0 kernel-baremetal",
+    "make -C kernel BUILD_DIR=../build/preflight-check2 LIMINE_BUILD_DIR=../build/preflight-check/limine INSTALLER_ISO=/private/tmp/vos5-preflight2-20260918.iso PRODUCTION=1 HEADLESS_AUDIT=0 iso",
+    "python3 scripts/native_boot_smoke.py --iso <iso> --cpu max --smp <1|4> --seconds 25 [--firmware-code ... --firmware-vars ...]",
+    "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_baremetal_preflight_qemu.py --iso <iso> --output <new-dir> --seconds 2"
+  ],
+  "source_sha256": {
+    "kernel/Makefile": "5361da2b9b2fe98a8361c11b738fddbf6b9cc54d5e4c219ce78a8d663e389efe",
+    "kernel/include/arch/x86_64/cpu.h": "dd674e637e90fa2dae4d29b8c1dc5f16e39492ac6be26d2e6cb6979abd1bef9f",
+    "kernel/include/vos/baremetal_preflight.h": "af9398cb178f84a95f7abf2cdd621d7f37161f9a622869310e3377497fcd14f8",
+    "kernel/src/arch/x86_64/cpu.c": "8991cd84ee05d5c6cc145a4f7f75a8205d1b9e3c93cffbe11e12fa63512d9bed",
+    "kernel/src/arch/x86_64/trampoline.S": "aee2879ed58c3942276a517e9f4aa2f61fdbbd5d4800dd14b33d294846761e25",
+    "kernel/src/boot/baremetal_preflight.c": "14179a35b2c223c0b8d74ea7292d863896bd779bbf92dc6843fb57d640dc6e75",
+    "kernel/src/boot/efi_stub.c": "237d4efaa52703c8be22035a7dda55aca5ce4acbff7b5b5c351a4c681a1110f2",
+    "kernel/src/boot/kmain.c": "ae69500b400e153b0207ec27a953f66a6365c189de8d00117339642fa41e7680",
+    "kernel/src/boot/multiboot2_entry.S": "7ec48bbd8813090d8705e6cdea9f2c16f0aec8040120906f2becd54e70a1f5a8",
+    "scripts/test_baremetal_preflight.py": "a6a151f80aabffa1a925c8a36b27773afca880b27b53ed6c62b86ca8076e9d47",
+    "scripts/test_baremetal_preflight_qemu.py": "e41d85716db2eef173ffc8666b47a900910938a704d529f0ef8e2bd701abca85"
+  }
+}

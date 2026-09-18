@@ -72227,6 +72227,25 @@
   {
     "path": "kernel/include/arch/x86_64/cpu.h",
     "component": "native.abi",
+    "representative_source": "vos.v1",
+    "sha256": "c555f92612f4dd406111a768db9fb46b76f272cb36249659e5107fcc8548202e",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "PMU",
+      "vos3_flush_tlb",
+      "vos3_invlpg",
+      "vos3_pmu_version",
+      "vos3_rdtsc",
+      "vos3_rdtscp"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/include/arch/x86_64/cpu.h",
+    "component": "native.abi",
     "representative_source": "vos/vos4",
     "sha256": "4796978b25351ee9b8229c35468df179e0e3d814077e25e82f149c7aeeaacf43",
     "equivalent_source_copies": [
@@ -74483,6 +74502,24 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/arch/x86_64/cpu.c",
+    "component": "native.architecture",
+    "representative_source": "vos.v1",
+    "sha256": "727f398d8caf37a0b3c4562a9e7d17e7f50caec63124062e5adedb95a24be597",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "copy_reg_to_str",
+      "detect_vendor",
+      "vos3_cpu_detect",
+      "vos3_cpu_has_feature",
+      "vos3_cpu_print_info"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/arch/x86_64/hal_attestation.c",
     "component": "native.architecture",
     "representative_source": "VOS3",
@@ -75082,8 +75119,7 @@
     ],
     "symbols_not_in_selected_file": [
       "bit",
-      "preflight_cpuid",
-      "vos3_baremetal_preflight"
+      "preflight_cpuid"
     ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -75272,6 +75308,42 @@
       "efi_tpm_measure_self",
       "through"
     ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/boot/efi_stub.c",
+    "component": "native.boot",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "7ea766521f0813ffc38f0ca0db6f61d723fcbd053aa7c617935916ffebddbd18",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "__attribute__",
+      "convention",
+      "efi_build_page_tables",
+      "efi_ctz32",
+      "efi_find_rsdp",
+      "efi_get_memory_map",
+      "efi_memzero",
+      "efi_popcount32",
+      "efi_print",
+      "efi_query_gop",
+      "efi_to_vos3_mmap_type",
+      "format",
+      "guid_match",
+      "kernel"
+    ],
+    "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {

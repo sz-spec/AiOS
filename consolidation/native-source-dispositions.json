@@ -68,12 +68,42 @@
     {
       "id": "baremetal-preflight",
       "component": "native.boot",
-      "source_status": "missing-from-canonical",
+      "source_status": "canonical-diverged-review",
       "disposition": "integrate-semantics",
-      "state": "implementation-open",
+      "state": "integrated-validation-open",
       "paths": ["kernel/src/boot/baremetal_preflight.c"],
-      "rationale": "Early refusal without mandatory FPU/TSC/SSE/SSE2/NX is valuable, but the donor duplicates CPU detection, does not bound every CPUID leaf and does not restore EFLAGS.ID.",
-      "validation": "Implement through canonical CPU detection; test QEMU CPU masks, BIOS/UEFI refusal, leaf bounds and exact failure logs."
+      "rationale": "The donor's early-refusal semantics were reimplemented through bounded canonical CPU detection. The canonical gate now covers every facility used unconditionally by the bootstrap and kernel, preserves the admitted snapshot and avoids pre-IDT MSR access.",
+      "validation": "Host matrix 4/4, production ELF and EFI compile, canonical Limine BIOS/UEFI boot at 1/4 CPUs, and twelve Multiboot2 QEMU feature-mask refusals passed. Direct EFI negative execution and a heterogeneous AP refusal remain open; see docs/design/evidence/baremetal-preflight-2026-09-18/."
+    },
+    {
+      "id": "preflight-canonical-integration",
+      "component": "native.architecture",
+      "source_status": "canonical-diverged-review",
+      "disposition": "integrate-semantics",
+      "state": "integrated-validation-open",
+      "paths": ["kernel/src/arch/x86_64/cpu.c"],
+      "rationale": "Canonical CPU detection was split so early feature collection performs bounded CPUID only, while the validated snapshot is later enriched with microcode data without being replaced.",
+      "validation": "Production build and snapshot-order tests passed. Direct EFI negative execution and heterogeneous-AP runtime validation remain open."
+    },
+    {
+      "id": "preflight-cpu-abi-integration",
+      "component": "native.abi",
+      "source_status": "canonical-diverged-review",
+      "disposition": "integrate-semantics",
+      "state": "integrated-validation-open",
+      "paths": ["kernel/include/arch/x86_64/cpu.h"],
+      "rationale": "The CPU API now separates bounded feature collection from the later microcode MSR read so early boot cannot fault on an MSR before exception handling exists.",
+      "validation": "Production build, source-order test and independent security review passed; runtime limits match the paired preflight implementation."
+    },
+    {
+      "id": "preflight-efi-integration",
+      "component": "native.boot",
+      "source_status": "canonical-diverged-review",
+      "disposition": "integrate-semantics",
+      "state": "integrated-validation-open",
+      "paths": ["kernel/src/boot/efi_stub.c"],
+      "rationale": "The standalone EFI entry now checks the same mandatory CPU contract before constructing NX mappings or writing EFER and PAT.",
+      "validation": "The EFI object compiles and mask/order review passed. The current standalone vos3.efi artifact is rejected by OVMF before its banner, so direct-EFI runtime validation remains open."
     },
     {
       "id": "memory-current",
@@ -287,12 +317,12 @@
     {
       "id": "preflight-abi-design",
       "component": "native.abi",
-      "source_status": "missing-from-canonical",
-      "disposition": "needs-experiment",
-      "state": "implementation-open",
+      "source_status": "canonical-diverged-review",
+      "disposition": "integrate-semantics",
+      "state": "integrated-validation-open",
       "paths": ["kernel/include/vos/baremetal_preflight.h"],
-      "rationale": "The required-feature contract is useful, but the paired implementation needs redesign through canonical CPU detection before an ABI is frozen.",
-      "validation": "CPU feature matrix and boot-refusal experiment must define the final internal contract."
+      "rationale": "The internal contract is implemented with explicit failure codes for the twelve mandatory facilities and a bounded optional-feature result. It remains an internal kernel ABI while runtime coverage is completed.",
+      "validation": "Compile and evaluator coverage passed; a drift test enforces identical bootstrap masks. Direct EFI and heterogeneous-AP negative runtime validation remain open."
     },
     {
       "id": "abi-superseded",

@@ -77,6 +77,11 @@
  *  Default: 0x0007040600070406 → Changed PAT4 from 0x06→0x01 */
 #define VOS3_PAT_VALUE  0x0007040100070406ULL
 
+#define VOS3_EFI_BASIC_REQUIRED ((1U << 0) | (1U << 4) | (1U << 5) | \
+                                 (1U << 6) | (1U << 13) | (1U << 16) | \
+                                 (1U << 24) | (1U << 25) | (1U << 26))
+#define VOS3_EFI_EXT_REQUIRED   ((1U << 11) | (1U << 20) | (1U << 29))
+
 /** @brief Number of entries in the Guard IDT (all 256 vectors) */
 #define GUARD_IDT_ENTRIES  256U
 
@@ -151,6 +156,35 @@ static void efi_memzero(void *dst, UINTN size)
     for (UINTN i = 0; i < size; i++) {
         p[i] = 0;
     }
+}
+
+/** Validate every CPU facility used unconditionally by the EFI handoff. */
+static int efi_cpu_preflight(void)
+{
+    uint32_t eax, ebx, ecx, edx;
+
+    __asm__ volatile("cpuid"
+                     : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
+                     : "a"(0U), "c"(0U));
+    if (eax < 1U) {
+        return -1;
+    }
+    __asm__ volatile("cpuid"
+                     : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
+                     : "a"(1U), "c"(0U));
+    if ((edx & VOS3_EFI_BASIC_REQUIRED) != VOS3_EFI_BASIC_REQUIRED) {
+        return -1;
+    }
+    __asm__ volatile("cpuid"
+                     : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
+                     : "a"(0x80000000U), "c"(0U));
+    if (eax < 0x80000001U) {
+        return -1;
+    }
+    __asm__ volatile("cpuid"
+                     : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
+                     : "a"(0x80000001U), "c"(0U));
+    return ((edx & VOS3_EFI_EXT_REQUIRED) == VOS3_EFI_EXT_REQUIRED) ? 0 : -1;
 }
 
 /**
@@ -638,6 +672,13 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
     EFI_BOOT_SERVICES *bs = SystemTable->BootServices;
 
     efi_print(SystemTable, "VOS3 UEFI Boot Stub v8.1\r\n");
+
+    /* This path builds NX page tables and writes EFER/PAT before the kernel
+     * owns exception handling.  Reject while firmware diagnostics still work. */
+    if (efi_cpu_preflight() != 0) {
+        efi_print(SystemTable, "CPUF: missing required x86-64 feature\r\n");
+        return EFI_UNSUPPORTED;
+    }
 
     /* ---- Initialize boot info ---- */
     efi_memzero(&g_efi_boot_info, sizeof(g_efi_boot_info));

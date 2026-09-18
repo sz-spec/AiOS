@@ -47,6 +47,12 @@
 .set EFER_LME,  (1 << 8)
 .set EFER_NXE,  (1 << 11)
 
+/* Features used unconditionally before the C runtime can install an IDT. */
+.set BASIC_REQUIRED, ((1 << 0) | (1 << 4) | (1 << 5) | (1 << 6) | \
+                      (1 << 13) | (1 << 16) | (1 << 24) | \
+                      (1 << 25) | (1 << 26))
+.set EXT_REQUIRED,   ((1 << 11) | (1 << 20) | (1 << 29))
+
 /* ============================================================================
  * PVH ELF NOTE (for QEMU -kernel direct boot)
  * ============================================================================
@@ -184,18 +190,36 @@ _multiboot2_start:
     pushl %ecx
     popfl
     cmpl %ecx, %eax
-    je no_long_mode
+    je cpu_preflight_fail
 
-    /* Check for long mode support */
+    /* The bootstrap itself uses MSRs, PAE and NX, while the kernel later
+     * unconditionally uses PAT, PGE, FXSAVE, SSE and the TSC.  Refuse before
+     * executing any of those instructions when the contract is absent. */
+    xorl %ecx, %ecx
+    movl $0, %eax
+    cpuid
+    cmpl $1, %eax
+    jb cpu_preflight_fail
+
+    movl $1, %eax
+    cpuid
+    movl %edx, %eax
+    andl $BASIC_REQUIRED, %eax
+    cmpl $BASIC_REQUIRED, %eax
+    jne cpu_preflight_fail
+
+    /* Check the complete extended contract before touching EFER.NXE. */
     movl $0x80000000, %eax
     cpuid
     cmpl $0x80000001, %eax
-    jb no_long_mode
+    jb cpu_preflight_fail
 
     movl $0x80000001, %eax
     cpuid
-    testl $(1 << 29), %edx   /* LM bit */
-    jz no_long_mode
+    movl %edx, %eax
+    andl $EXT_REQUIRED, %eax
+    cmpl $EXT_REQUIRED, %eax
+    jne cpu_preflight_fail
 
     /* Set up identity mapping for first 4GB and higher-half mapping */
     call setup_page_tables
@@ -242,12 +266,25 @@ _multiboot2_start:
     /* Jump to 64-bit code */
     ljmp $0x08, $long_mode_start
 
-no_long_mode:
-    /* Display error and halt */
+cpu_preflight_fail:
+    /* Emit a machine-readable serial marker, display an error and halt. */
+    movw $0x3F8, %dx
+    movb $'C', %al
+    outb %al, %dx
+    movb $'P', %al
+    outb %al, %dx
+    movb $'U', %al
+    outb %al, %dx
+    movb $'F', %al
+    outb %al, %dx
+    movb $'\r', %al
+    outb %al, %dx
+    movb $'\n', %al
+    outb %al, %dx
     movl $0xB8000, %edi
-    movl $0x4F454F4E, (%edi)    /* "NE" in red */
-    movl $0x4F204F4F, 4(%edi)   /* "O " */
-    movl $0x4F4D4F4C, 8(%edi)   /* "LM" */
+    movl $0x4F504F43, (%edi)    /* "CP" in red */
+    movl $0x4F204F55, 4(%edi)   /* "U " */
+    movl $0x4F414F46, 8(%edi)   /* "FA" */
 1:  hlt
     jmp 1b
 

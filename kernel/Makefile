@@ -108,6 +108,7 @@ C_SOURCES := \
     $(SRC_DIR)/boot/multiboot2_stub.c \
     $(SRC_DIR)/boot/multiboot2_parse.c \
     $(SRC_DIR)/boot/limine_stub.c \
+    $(SRC_DIR)/boot/baremetal_preflight.c \
     $(SRC_DIR)/boot/kmain.c \
     $(SRC_DIR)/boot/boot_mm.c \
     $(SRC_DIR)/boot/boot_drivers.c \

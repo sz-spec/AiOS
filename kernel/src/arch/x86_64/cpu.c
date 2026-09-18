@@ -63,7 +63,7 @@ static vos3_cpu_vendor_t detect_vendor(const char* vendor_string)
  * PUBLIC FUNCTIONS
  * ============================================================================ */
 
-void vos3_cpu_detect(vos3_cpu_info_t* info)
+void vos3_cpu_detect_features(vos3_cpu_info_t* info)
 {
     uint32_t eax, ebx, ecx, edx;
 
@@ -164,10 +164,25 @@ void vos3_cpu_detect(vos3_cpu_info_t* info)
         info->virt_addr_bits = (uint8_t)((eax >> 8U) & 0xFFU);
     }
 
-    /* P4.2 — capture microcode revision. The MSR is read AFTER all
-     * other CPUID-dependent state is populated so vendor + family +
-     * model are settled before microcode_check.c needs them. */
+}
+
+void vos3_cpu_detect_microcode(vos3_cpu_info_t* info)
+{
+    if (info == NULL) {
+        return;
+    }
+
+    /* P4.2 — access the microcode MSR only in the full detector.  The early
+     * preflight path deliberately uses vos3_cpu_detect_features() before an
+     * IDT exists, so a hypervisor MSR policy cannot turn a feature check into
+     * a triple fault. */
     info->microcode_revision = vos3_microcode_read_revision(info);
+}
+
+void vos3_cpu_detect(vos3_cpu_info_t* info)
+{
+    vos3_cpu_detect_features(info);
+    vos3_cpu_detect_microcode(info);
 }
 
 int vos3_cpu_has_feature(const vos3_cpu_info_t* info, uint32_t feature)

@@ -1,0 +1,86 @@
+[
+  {
+    "feature": "fpu",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "tsc",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "msr",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "pae",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "pge",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "pat",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "fxsr",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "sse",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "sse2",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "syscall",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "nx",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  },
+  {
+    "feature": "lm",
+    "status": "timeout",
+    "cpuf": true,
+    "qemu_error": false,
+    "tail": "multiboot2: Loading executable `boot():/boot/vos3.elf`...\r\nMB\r\nCPUF\r\n"
+  }
+]
