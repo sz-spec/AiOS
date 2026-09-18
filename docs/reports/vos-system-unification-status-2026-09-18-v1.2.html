@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>vOS 5 — מצב המערכת והאיחוד v1.2 — 18.9.2026</title>
+<style>
+@page { size: A4; margin: 13mm 13mm 14mm; }
+* { box-sizing: border-box; }
+body { margin: 0; color: #122033; background: white; font-family: Arial, "Noto Sans Hebrew", sans-serif; font-size: 12.2px; line-height: 1.48; }
+.page { page-break-after: always; min-height: 267mm; position: relative; padding-bottom: 10mm; }
+.page:last-child { page-break-after: auto; }
+.mast { direction: ltr; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #17324d; padding-bottom: 6px; margin-bottom: 13px; color: #52677d; font-size: 10px; letter-spacing: .03em; }
+.brand { color: #0b6f7d; font-weight: 700; font-size: 12px; }
+h1 { margin: 2px 0 4px; font-size: 30px; line-height: 1.12; color: #112d45; }
+h2 { margin: 13px 0 6px; font-size: 19px; color: #123c57; border-bottom: 1px solid #bdd1da; padding-bottom: 3px; }
+h3 { margin: 9px 0 4px; font-size: 14px; color: #176578; }
+p { margin: 4px 0 8px; }
+.lead { font-size: 15px; line-height: 1.55; color: #203c52; }
+.status { margin: 12px 0; padding: 11px 13px; border-right: 5px solid #b45a12; background: #fff6e8; font-size: 15px; font-weight: 700; }
+.ok { color: #116849; font-weight: 700; }
+.open { color: #a34a08; font-weight: 700; }
+.blocked { color: #a32b35; font-weight: 700; }
+.muted { color: #5d6f7f; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin: 13px 0; direction: rtl; }
+.card { border: 1px solid #c8d6dd; border-top: 4px solid #19768a; border-radius: 4px; padding: 8px; background: #f7fbfc; min-height: 72px; }
+.card b { display: block; direction: ltr; text-align: right; font-size: 24px; color: #123c57; line-height: 1.05; }
+.card span { font-size: 10.8px; color: #52677d; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.box { border: 1px solid #c8d6dd; border-radius: 4px; padding: 8px 10px; background: #fbfdfe; }
+.box h3 { margin-top: 0; }
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 11.2px; }
+th { background: #173b55; color: white; font-weight: 700; }
+th, td { border: 1px solid #c7d2d9; padding: 5px 6px; vertical-align: top; text-align: right; }
+tbody tr:nth-child(even) { background: #f3f7f9; }
+ul, ol { margin: 5px 0 8px; padding-right: 20px; }
+li { margin: 3px 0; }
+code { direction: ltr; unicode-bidi: embed; font-family: Menlo, Consolas, monospace; font-size: .88em; color: #173f59; }
+.ltr { direction: ltr; unicode-bidi: embed; text-align: left; }
+.small { font-size: 10.4px; }
+.callout { border-right: 4px solid #22778b; padding: 7px 10px; background: #eef8fa; margin: 8px 0; }
+.risk { border-right-color: #a52c39; background: #fff1f2; }
+.footer { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; direction: ltr; color: #6a7a87; font-size: 9px; border-top: 1px solid #d6e0e5; padding-top: 4px; }
+.badge { display: inline-block; border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700; color: white; background: #617787; }
+.badge.green { background: #197250; } .badge.orange { background: #b05a13; } .badge.red { background: #a62c39; }
+.tight td, .tight th { padding: 4px 5px; }
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="mast"><span class="brand">vOS 5 · Engineering Status · v1.2</span><span>18 September 2026 · controlled snapshot</span></div>
+  <h1>מצב המערכת והאיחוד</h1>
+  <p class="lead">דוח הנהלה והנדסה על מצב מערכת ההפעלה העצמאית, איחוד 11 מקורות הקוד, הראיות שכבר התקבלו והחסמים להכרזה על גרסה סופית.</p>
+
+  <div class="status">סטטוס כולל: <span class="open">אינטגרציה ובדיקת שחרור בתהליך</span>. קיים עץ קנוני עובד וניתן לבנייה; אין עדיין בסיס ראייתי להכריז על ISO סופי, בידוד מלא או תמיכה בכל חומרת PC.</div>
+
+  <div class="cards">
+    <div class="card"><b>11</b><span>מקורות קוד הושוו ברמת הנתיב והתוכן</span></div>
+    <div class="card"><b>6,238</b><span>נתיבי donor תועדו ביומן האיחוד</span></div>
+    <div class="card"><b>1,565 / 1,645</b><span>בחירות מקור נסגרו; 80 נתיבים נשארו בשערי מימוש, אימות או רישוי</span></div>
+    <div class="card"><b>1</b><span>עץ אינטגרציה קנוני: <code>vos 5/</code></span></div>
+  </div>
+
+  <h2>תמונת מצב ניהולית</h2>
+  <table>
+    <thead><tr><th>תחום</th><th>מצב</th><th>המשמעות</th></tr></thead>
+    <tbody>
+      <tr><td>השוואת 11 המקורות</td><td><span class="badge green">הושלמה</span></td><td>קיימים manifest, יומן 6,238 נתיבים ו־disposition יחיד לכל 1,645 נתיב חסר או שונה.</td></tr>
+      <tr><td>גל מערכת ההפעלה העצמאית</td><td><span class="badge orange">110/118</span></td><td>לכל 118 הנתיבים יש disposition: ‏110 החלטות מקור סגורות, 5 שילובים ממתינים לאימות ו־3 מימושים פתוחים.</td></tr>
+      <tr><td>בנייה ו־QEMU</td><td><span class="badge orange">מוגבל</span></td><td>אותו ISO עבר BIOS/UEFI עם 1 ו־4 vCPU; שער CPU מוקדם עבר 12 מסכות שליליות. אין עדיין קבלה על חומרה פיזית.</td></tr>
+      <tr><td>אבטחה ובידוד</td><td><span class="badge orange">חלקי</span></td><td>שורשי זיכרון לתהליך, COW/VMA, usercopy ומספר בדיקות תקיפה קיימים. KPTI, revocation ומרוצי SMP אינם סגורים.</td></tr>
+      <tr><td>שער ביצועי SPSC</td><td><span class="badge red">פתוח</span></td><td>הסף נשאר 80,000. תוצאות תלויות מאוד בתנאי המארח; אין מטריצת קבלה נקייה וזהה לכל מסלולי האתחול.</td></tr>
+      <tr><td>שחרור מוצר</td><td><span class="badge red">חסום</span></td><td>אין ISO יחיד חתום וממופה ל־tag, התקנה מתמשכת, שחזור עצמאי וחבילת קבלה פיזית.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout risk"><b>גבול הטענה:</b> המערכת מוכיחה התקדמות הנדסית משמעותית, אך עדיין אינה מוכיחה שהיא פועלת על כל מחשב קיים או שהיא המאובטחת והיעילה ביותר. טענות כאלה ידרשו מטריצת חומרה, מדדי השוואה וביקורת עצמאית.</div>
+
+  <h2>נקודת Git של הדוח</h2>
+  <p>הדוח מתאר את הקוד ב־<code>66cf123e90541d27af2edddca2614af32bffbf04</code> — <span class="ltr">docs: resolve all remaining source dispositions</span>. ‏v1.0 ו־v1.1 נשמרו ללא שינוי; v1.2 מוסיף את המיפוי המלא וביקורות האבטחה והחשבונאות.</p>
+  <div class="footer"><span>vOS 5 · System and Unification Status</span><span>1 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="mast"><span class="brand">vOS 5 · Source Unification</span><span>evidence-based reconciliation</span></div>
+  <h1>מצב איחוד המקורות</h1>
+  <p>כל 11 המקורות נסרקו ונקראו כפי שהיו, כולל שינויים מקומיים וקבצים לא מנוהלים. העץ <code>vos 5/</code> נבחר כעץ הקנוני, אך החלטות האיחוד נשענות על התנהגות, ABI, רישוי ובדיקות — לא על העתקה בלבד.</p>
+
+  <h2>תוצאת ההשוואה</h2>
+  <table class="tight">
+    <thead><tr><th>סיווג</th><th>מספר נתיבים</th><th>פירוש</th></tr></thead>
+    <tbody>
+      <tr><td><code>selected-content-retained</code></td><td>4,501</td><td>גרסת תוכן נבחרת קיימת באותו נתיב בעץ הקנוני.</td></tr>
+      <tr><td><code>content-retained-at-other-path</code></td><td>92</td><td>תוכן זהה נשמר במקום אחר; נדרש לוודא שהחיבור בזמן ריצה נשמר.</td></tr>
+      <tr><td><code>canonical-diverged-review</code></td><td>494</td><td>הקובץ הקנוני שונה מכל גרסאות המקור ולכן נדרש נימוק סמנטי.</td></tr>
+      <tr><td><code>missing-from-canonical</code></td><td>1,151</td><td>נתיב donor אינו קיים בעץ; הוא עשוי להיות ישן, מוחלף, תוצר או יכולת חסרה.</td></tr>
+      <tr><td>קנוני בלבד</td><td>1,515</td><td>קבצים חדשים שאין להם מקבילה באחד מעצי המקור.</td></tr>
+      <tr><td>נתיבים עם וריאנט שלא נבחר</td><td>1,542</td><td>ביחד נרשמו 2,722 וריאנטים ייחודיים לביקורת.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid2">
+    <div class="box">
+      <h3>גל הליבה: 118 נתיבים</h3>
+      <table class="tight">
+        <tbody>
+          <tr><td>שמירת canonical</td><td>78</td></tr>
+          <tr><td>דחיית stub</td><td>21</td></tr>
+          <tr><td>superseded</td><td>11</td></tr>
+          <tr><td>שילוב סמנטיקה ממוקד</td><td>7</td></tr>
+          <tr><td>דורש ניסוי</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p class="small">מצב סגירה: 110 החלטות מקור נפתרו; 5 נתיבים שולבו אך האימות שלהם פתוח; 3 נתיבים עדיין במימוש.</p>
+    </div>
+    <div class="box">
+      <h3>כל הגלים הלא־native: ‏1,527</h3>
+      <table class="tight">
+        <tbody>
+          <tr><td>מוצר hosted</td><td>156</td></tr>
+          <tr><td>קלטי בדיקה נוספים</td><td>63</td></tr>
+          <tr><td>שחרור ותפעול</td><td>42</td></tr>
+          <tr><td>vendor: Limine/musl</td><td>951</td></tr>
+          <tr><td>תיעוד/היסטוריה/תוצרים</td><td>315</td></tr>
+        </tbody>
+      </table>
+      <p class="small">כל ההחלטות קודדו ונבדקו: 1,455 מקור סגור, 23 במימוש, 29 בניסוי ו־20 ברישוי. ‏951 vendor ו־315 היסטוריה קיבלו טיפול מפורש ללא העתקה עיוורת.</p>
+    </div>
+  </div>
+
+  <h2>עבודות פתוחות בגל הליבה</h2>
+  <ol>
+    <li><b>משולב, אימות פתוח:</b> שער CPU מוקדם וחוזה CPUID אחיד שולבו בחמישה נתיבים. QEMU עבר; direct EFI ו־AP שלילי עדיין פתוחים.</li>
+    <li><code>ai_oom.c</code> — לשלב מדיניות OOM של AI עם בעלות, quota ו־reclaim אמיתיים.</li>
+    <li><code>exec_syscall.c</code> — הקשחת clone/TID מוזגה; תיקון <code>brk()</code> נשאר פתוח עד קיום transaction של בעלות כתובות ו־fault.</li>
+    <li><code>test_pcr_stability.c</code> — נדרש ניסוי PCR/TPM אמיתי; בדיקת host אינה מוכיחה יציבות מדידה.</li>
+  </ol>
+
+  <div class="callout"><b>סטטוס כלל המקורות:</b> אין עוד נתיב חסר או שונה ללא החלטה. בסיכום שני הגלים: 1,565 בחירות מקור סגורות, 26 במימוש, 5 משולבות באימות, 29 בניסוי ו־20 בשער משפטי.</div>
+
+  <div class="callout"><b>החלטה בטיחותית:</b> שני אבות טיפוס לתיקון <code>brk()</code> נדחו לאחר ביקורת. rollback לפי כתובת עלול למחוק מיפוי זר במרוץ, ומעבר ל־demand paging אינו אטומי מול page fault. לא מוזג תיקון שמציג מעבר מלאכותי.</div>
+
+  <h2>מסמכי הסמכות</h2>
+  <p class="small"><code>consolidation/reconciliation/file-ledger.json</code> · <code>consolidation/native-source-dispositions.json</code> · <code>consolidation/non-native-source-dispositions.json</code> · <code>consolidation/check_source_dispositions.py</code></p>
+  <div class="footer"><span>vOS 5 · System and Unification Status</span><span>2 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="mast"><span class="brand">vOS 5 · Independent OS</span><span>runtime capability map</span></div>
+  <h1>מצב מערכת ההפעלה</h1>
+  <table>
+    <thead><tr><th>רכיב</th><th>מה קיים ונבדק</th><th>הפער לפני קבלה</th></tr></thead>
+    <tbody>
+      <tr><td><b>אתחול</b></td><td>Limine/Multiboot2 עבר BIOS ו־UEFI עם 1 ו־4 vCPU מאותו ISO.</td><td>direct EFI נדחה ב־OVMF לפני banner; התקנה לדיסק, persistence, Secure Boot, KASLR וחומרה פיזית.</td></tr>
+      <tr><td><b>CPU / SMP</b></td><td>שער מוקדם דורש FPU/TSC/MSR/PAE/PGE/PAT/FXSR/SSE/SSE2/SYSCALL/NX/LM; ‏12/12 מסכות QEMU נעצרו ב־CPUF.</td><td>AP שלילי הטרוגני, עומס production, ‏x2APIC רחב, NMI/SWAPGS ו־PCID.</td></tr>
+      <tr><td><b>זיכרון</b></td><td>שורש לכל תהליך, VMA, COW, usercopy ו־TLB shootdown מתוחם.</td><td>KPTI מלא, revocation אטומי, בעלות כתובות משותפת ל־heap/mmap/SHM ומרוצי SMP.</td></tr>
+      <tr><td><b>תהליכים</b></td><td>scheduler, fork/clone/exec/signals בסיסיים. הקשחת lifecycle של TID ו־clear-child-tid נמצאת ב־HEAD.</td><td>בדיקת pthread/fault/SMP native, רישום דו־שלבי, <code>brk</code> בטוח ו־cancellation/cleanup מלא.</td></tr>
+      <tr><td><b>IPC</b></td><td>queues, SHM, futex, signals וטבעת SPSC.</td><td>מרוצי wakeup/fork ו־SHM; שער SPSC אינו סגור בתנאים מבוקרים.</td></tr>
+      <tr><td><b>קבצים ואחסון</b></td><td>VFS, initramfs ומספר נתיבי POSIX.</td><td>כתיבה אמיתית לדיסק, mount מלא, התאוששות והתקנה שנשמרת לאחר reboot.</td></tr>
+      <tr><td><b>דרייברים ורשת</b></td><td>ACPI/APIC/PCI, console/input ו־virtio בסיסי; Ethernet/IPv4 בסיסיים.</td><td>AHCI/NVMe/USB/NIC פיזיים, כתיבת virtio-blk, IPv6 ו־egress policy מחוברת לכל socket.</td></tr>
+      <tr><td><b>אבטחה</b></td><td>capabilities, manifests, deny precedence, taint, AI Guard ומספר בדיקות בידוד עוינות.</td><td>audit מלא לכל syscall/driver, KPTI מלא, revocation, Secure Boot ושרשרת attestation פיזית.</td></tr>
+      <tr><td><b>AI / NPU</b></td><td>slots, GGUF/וקטורים ונתיבי NPU מותנים; היעדר NPU מדווח כ־UNAVAILABLE.</td><td>inference מבודד אמיתי ב־air-gap, BAR מורשה, quota/reclaim פיזיים ו־ML-KEM שאינו stub.</td></tr>
+      <tr><td><b>Hosted</b></td><td>backend, frontend, desktop ו־SDK קיימים באותו עץ.</td><td>חוזה VBus אחד, זהות/data model אחידים ובדיקות Windows/macOS/Linux אמיתיות.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>מה אומת לאחרונה</h2>
+  <div class="grid2">
+    <div class="box"><h3>CPU preflight</h3><ul><li>4/4 בדיקות host עברו.</li><li>12/12 מסכות תכונה שליליות עצרו לפני EFER.</li><li>4/4 מסלולי BIOS/UEFI × ‏1/4 vCPU הגיעו ל־user space.</li><li>גיבוב ISO: <code>b141e7f1…1347c3</code>.</li></ul></div>
+    <div class="box"><h3>ביקורות</h3><ul><li>מסכות זהות ב־BSP/AP/EFI/C.</li><li>snapshot CPUID נשמר ללא איסוף חוזר.</li><li>ביקורת אבטחה ומתמטיקה סגרה שני blockers.</li><li>בדיקות reconciliation: ‏12/12 עברו.</li></ul></div>
+  </div>
+
+  <div class="callout risk"><b>פערים ידועים:</b> ה־EFI העצמאי נדחה ב־OVMF כ־<code>Unsupported</code> לפני banner; נתיב AP שלילי לא הורץ. בנוסף, אם כתיבת <code>parent_tid</code> מצליחה ורישום משימה נכשל, ערך ישן עשוי להישאר אצל ההורה. מסלולים אלה אינם סגורים.</div>
+  <div class="footer"><span>vOS 5 · System and Unification Status</span><span>3 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="mast"><span class="brand">vOS 5 · Verification</span><span>what the evidence proves</span></div>
+  <h1>ראיות, ביצועים וגבולות אימות</h1>
+
+  <h2>שער SPSC נשאר פתוח</h2>
+  <p>הבדיקה הקנונית נשארה ללא שינוי: סף 80,000 הודעות לשנייה, חלון 1,000ms וקיבולת טבעת 1,024. ב־18.9 נצפו שתי אוכלוסיות תוצאה:</p>
+  <table>
+    <thead><tr><th>תנאי מארח</th><th>תוצאות שנשמרו</th><th>מסקנה מותרת</th></tr></thead>
+    <tbody>
+      <tr><td>Battery</td><td>בערך 40K–43K</td><td>כשל עקבי מתחת לסף; ISO ישן וחדש הושפעו.</td></tr>
+      <tr><td>AC</td><td>בערך 81K–101K</td><td>עבר בנקודות שנמדדו, אך אין מטריצה מלאה וזהה ל־BIOS/UEFI ולשני המקורות.</td></tr>
+      <tr><td>אבחון: yield לצרכן</td><td>81,542–82,712 לעומת controls סביב 40K–43K</td><td>מחזק אינטראקציה busy-wait/tick; זו גרסת אבחון ואינה שינוי קנוני או סגירת שער.</td></tr>
+      <tr><td><code>-icount</code></td><td>לא הגיע ל־SPSC</td><td><code>test_model_load</code> נתקע קודם; אין תוצאת A/B דטרמיניסטית.</td></tr>
+    </tbody>
+  </table>
+  <p class="small">הבדלים בחיבור לחשמל מתואמים עם התוצאה אך אינם מוכיחים סיבתיות יחידה. ריצות שחצו מצב חשמל אינן נספרות כקבלת תצורה נקייה.</p>
+
+  <h2>רמת ההוכחה הנוכחית</h2>
+  <table>
+    <thead><tr><th>טענה</th><th>מצב ראיות</th><th>מה חסר</th></tr></thead>
+    <tbody>
+      <tr><td>בנייה נקייה והפקת ISO</td><td class="ok">הודגם לקלט/toolchain מתועדים</td><td>builder עצמאי, release manifest ו־tag חתום יחיד.</td></tr>
+      <tr><td>אתחול BIOS/UEFI</td><td class="ok">הודגם ב־QEMU</td><td>חזרת קבלה מלאה לאחר כל שינוי ו־firmware פיזי מגוון.</td></tr>
+      <tr><td>מעבד יחיד ו־4 vCPU</td><td class="ok">הודגם בתחום מוגבל</td><td>עומס production מקבילי, מרוצי זיכרון וחומרה מרובת ליבות.</td></tr>
+      <tr><td>בידוד בין תהליכים</td><td class="open">בדיקות תקיפה ממוקדות עברו</td><td>restricted root מלא, revocation, page-table races ו־DMA/IOMMU.</td></tr>
+      <tr><td>57 תוכניות</td><td class="open">עבר בתנאים מסוימים; לא יציב כשער</td><td>57/57 עקבי בכל מסלולי הקבלה ובתנאי מארח קבועים.</td></tr>
+      <tr><td>חומרה פיזית</td><td class="blocked">לא אומת</td><td>לפחות שתי פלטפורמות שונות, התקנה, storage, NIC, USB, ACPI ו־reboot.</td></tr>
+      <tr><td>ISO זהה בבתים</td><td class="open">הודגם לבנייה מתועדת מסוימת</td><td>שחזור עצמאי, כל artifacts, חתימה ו־provenance מאותו run.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>ראיית preflight חדשה</h2>
+  <p>ה־ISO הקנוני <code>b141e7f171f5b5bbbaefd3cfc6680eadccd57cc25ebfdadef02e1592421347c3</code> עבר ארבעה מסלולי אתחול. מטריצת 12 תכונות חסרות הפיקה <code>MB → CPUF</code> ללא כניסה לליבה. הראיות נשמרו ולא נספרו כהוכחת חומרה פיזית.</p>
+
+  <h2>תיקון SYSINFO</h2>
+  <p>תיקון ABI של <code>SYSINFO</code> מוזג ואומת בתחום מתוחם, כולל usercopy והתנהגות musl. הוא אינו סוגר את שער הביצועים ואינו מהווה אישור כללי ל־SMP או לחומרה פיזית.</p>
+
+  <div class="callout"><b>הפרדת שערים:</b> בניית host, בדיקות extraction ותיקון ABI מספקים ראיות לרכיב שנבדק. הם אינם מחליפים אתחול ISO, בדיקות בידוד native או קבלה פיזית.</div>
+  <div class="footer"><span>vOS 5 · System and Unification Status</span><span>4 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="mast"><span class="brand">vOS 5 · Path to Release</span><span>ordered closure plan</span></div>
+  <h1>השלבים שנותרו</h1>
+
+  <h2>P0 — סגירת ליבה ואיחוד סמנטי</h2>
+  <ol>
+    <li>לבנות API אטומי של address-space claim/commit/no-replace ובעלות משותפת ל־heap, ‏VMA ו־SHM; לאחר מכן לתקן <code>brk()</code> עם fault injection ומרוצי SMP.</li>
+    <li>להשלים רישום משימות דו־שלבי ולבדוק clone/pthread/fault/exit על SMP, כולל כשל בכל נקודת פרסום.</li>
+    <li>להשלים את אימות preflight ב־direct EFI וב־AP שלילי; לסגור AI OOM ו־PCR stability באמצעות ניסויים אמיתיים.</li>
+    <li>לממש 26 נתיבים פתוחים, להשלים אימות ל־5, להריץ 29 ניסויים ולהכריע 20 שערי רישוי; המיפוי עצמו הושלם.</li>
+    <li>לסגור את אבחון SPSC בלי להוריד סף ובלי להסתיר ריצות שנכשלו.</li>
+  </ol>
+
+  <h2>P1 — קבלה מערכתית</h2>
+  <ol>
+    <li>בנייה מ־checkout נקי בפקודה אחת ויצירת BIOS/UEFI ISO מאותו commit.</li>
+    <li>מטריצת 1/4 CPU: אתחול, זיכרון, מתזמן, user program, fork/exec, IPC, revocation ו־crash/reap.</li>
+    <li>בדיקות בידוד עוינות בין תהליכים, ליבה, SHM ו־DMA; אימות KPTI ו־TLB תחת SMP.</li>
+    <li>התקנה וחזרה לאחר reboot על לפחות שתי מכונות פיזיות שונות; AHCI/NVMe, USB, NIC, ACPI/APIC ו־UEFI/legacy.</li>
+    <li>מצב hosted מלא ב־Windows, macOS ו־Linux עם VBus וזהות אחידים; AI מקומי ב־air-gap.</li>
+  </ol>
+
+  <h2>P1 — שרשרת שחרור</h2>
+  <ul>
+    <li>release candidate יחיד מ־commit/tag חתום; תוצרי אבחון מופרדים בשם ובגיבוב.</li>
+    <li>SBOM, locks, סריקות, signing, provenance ו־artifact manifest מאותה ריצה.</li>
+    <li>שחזור byte-identical אצל builder בלתי תלוי, עם גרסאות כלים ולוגים מלאים.</li>
+    <li>אין הכרזת תאימות או אבטחה מעבר לחומרה ולתרחישים שנבדקו בפועל.</li>
+  </ul>
+
+  <h2>תנאי יציאה מוצע לשער השחרור</h2>
+  <div class="box">
+    <p><b>המערכת תוגדר מועמדת שחרור רק כאשר:</b> 80 הנתיבים שאחרי בחירת המקור נסגרו בראיות; BIOS ו־UEFI עוברים בנייה נקייה על 1 ו־4 CPU; ‏57/57 עוברים ברצף מוגדר בתנאי מארח מתועדים; בידוד ו־revocation עוברים תחת SMP; שתי מכונות פיזיות מתקינות, מאתחלות ושומרות מידע; וה־ISO שוחזר זהה ונחתם מ־tag יחיד.</p>
+  </div>
+
+  <h2>קבצי ראיות מרכזיים</h2>
+  <p class="small"><code>docs/design/UNIFICATION_STATUS_2026-09-18_HE.md</code><br>
+  <code>consolidation/reconciliation/file-ledger.json</code><br>
+  <code>consolidation/native-source-dispositions.json</code><br>
+  <code>consolidation/non-native-source-dispositions.json</code><br>
+  <code>docs/reports/vos-performance-failure-2026-09-18-v1.1.pdf</code><br>
+  <code>docs/design/evidence/spsc-council-2026-09-18/</code><br>
+  <code>docs/design/evidence/baremetal-preflight-2026-09-18/</code><br>
+  <code>scripts/test_child_tid_release.py</code></p>
+
+  <div class="status">החלטת מצב: <span class="blocked">אין עדיין גרסה סופית.</span> יש בסיס קנוני מתקדם, מסלול סגירה ברור וראיות הנדסיות טובות, אך השחרור נשאר חסום עד השלמת שערי הליבה, הבידוד, החומרה והשחזור.</div>
+  <div class="footer"><span>vOS 5 · System and Unification Status</span><span>5 / 5</span></div>
+</section>
+
+</body>
+</html>

@@ -113,14 +113,14 @@ class SourceDispositionTests(unittest.TestCase):
         variants = json.loads(
             (csd.ROOT / "consolidation/reconciliation/variant-review.json").read_text()
         )
-        self.assertEqual(len(ledger["canonical_only_files"]), 1513)
+        self.assertEqual(len(ledger["canonical_only_files"]), 1515)
         self.assertEqual(len(variants), 2722)
         for relative in (
             "consolidation/reconciliation/README.md",
             "docs/design/UNIFICATION_STATUS_2026-09-18_HE.md",
         ):
             text = (csd.ROOT / relative).read_text()
-            for value in ("1,645", "1,527", "1,565", "1,513", "2,722"):
+            for value in ("1,645", "1,527", "1,565", "1,515", "2,722"):
                 self.assertIn(value, text, (relative, value))
             for value in ("1,510", "2,719"):
                 self.assertNotIn(value, text, (relative, value))
