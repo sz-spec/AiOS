@@ -20,6 +20,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 #include <stdint.h>
 
 #include "spsc.h"
@@ -49,7 +50,6 @@ static int g_tests_failed = 0;
 #define SYS_GETTIME         40
 #define SYS_CLONE           56
 #define SYS_EXIT            60
-#define SYS_SYSINFO         99
 
 #define SYS_SHM_CREATE      410
 #define SYS_SHM_DESTROY     411
@@ -72,17 +72,9 @@ static inline unsigned long get_uptime_ms(void)
     return (unsigned long)syscall0(SYS_GETTIME);
 }
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
-
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 /* ============================================================================
@@ -101,7 +93,10 @@ static void memory_health(void)
     printf("\n--- Check 1: memory_health ---\n");
 
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("memory_health: telemetry unavailable");
+        return;
+    }
 
     unsigned long used = info.total_pages - info.free_pages;
 
@@ -136,7 +131,10 @@ static void zombie_audit(void)
     syscall0(SYS_YIELD);
 
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("zombie_audit: telemetry unavailable");
+        return;
+    }
 
     printf("  nr_zombies = %u\n", info.nr_zombies);
 

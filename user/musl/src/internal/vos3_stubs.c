@@ -32,8 +32,6 @@ hidden int __setxid(int nr, int a, int b, int c)
     return (int)ret;
 }
 
-/* __lsysinfo: vDSO entry point (not available on VOS3) */
-hidden long __lsysinfo = 0;
 
 /* __membarrier: memory barrier (no-op on single-core) */
 hidden void __membarrier(int cmd, unsigned flags)
@@ -134,12 +132,7 @@ weak int prctl(int option, ...)
     return -38; /* ENOSYS */
 }
 
-struct sysinfo_s { long uptime; unsigned long loads[3]; unsigned long totalram; };
-weak int sysinfo(struct sysinfo_s *info)
-{
-    (void)info;
-    return -38; /* ENOSYS */
-}
+/* sysinfo/__lsysinfo use src/linux/sysinfo.c and its errno convention. */
 
 weak int nftw(const char *path, void *fn, int fd_limit, int flags)
 {

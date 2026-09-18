@@ -1,0 +1,7 @@
+{
+  "base_commit": "cfd23f6a8595b13da005c59f1efacb6744e53832",
+  "source_files": 6392,
+  "all_manifest_hashes_reconstructed": true,
+  "source_patch_sha256": "9c8c82e2e15f4bb04c35e60e09f2e5b39f36aa8a8d416bf6421d9ce13c265b92",
+  "scope": "Archive base commit, apply recorded patch and frozen additions; every manifest input matches. No build performed here."
+}

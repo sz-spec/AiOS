@@ -21,6 +21,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 #include <stdint.h>
 
 /* ============================================================================
@@ -46,7 +47,6 @@ static int g_fail = 0;
 
 #define SYS_YIELD           24
 #define SYS_EXIT            60
-#define SYS_SYSINFO         99
 
 #define SYS_SHM_CREATE      410
 #define SYS_SHM_DESTROY     411
@@ -56,22 +56,12 @@ static int g_fail = 0;
 #define VOS3_SHM_FLAG_HUGETLB   (1U << 4)
 
 /* ============================================================================
- * SYSINFO — matches kernel vos3_sysinfo_t (with hugepage extension)
+ * SYSINFO — shared versioned ABI, including hugepage telemetry
  * ============================================================================ */
-
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-    unsigned int  hugepage_total;
-    unsigned int  hugepage_used;
-} vos3_sysinfo_t;
 
 static int get_sysinfo(vos3_sysinfo_t *info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 /* ============================================================================
@@ -329,7 +319,11 @@ int main(void)
      * ================================================================ */
 
     while (1) {
-        get_sysinfo(&info);
+        if (get_sysinfo(&info) != 0) {
+            TEST_FAIL("telemetry", "sysinfo failed");
+            shm_cleanup_all();
+            return 1;
+        }
         unsigned long elapsed = info.uptime_ms - start_ms;
         if (elapsed >= TEST_DURATION_MS) break;
 
@@ -351,7 +345,11 @@ int main(void)
         total_faults += (unsigned int)(faults_a + faults_b);
 
         /* Telemetry sample every 10 seconds */
-        get_sysinfo(&info);
+        if (get_sysinfo(&info) != 0) {
+            TEST_FAIL("telemetry", "sysinfo failed");
+            shm_cleanup_all();
+            return 1;
+        }
         if (info.uptime_ms >= next_sample) {
             elapsed = info.uptime_ms - start_ms;
             long delta = (long)baseline_fp - (long)info.free_pages;
@@ -369,7 +367,10 @@ int main(void)
     shm_cleanup_all();
     for (int y = 0; y < 30; y++) syscall0(SYS_YIELD);
 
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("final_telemetry", "sysinfo failed");
+        return 1;
+    }
     long final_delta = (long)baseline_fp - (long)info.free_pages;
     if (final_delta < 0) final_delta = -final_delta;
 

@@ -531,6 +531,7 @@ static int64_t check_app_syscall_permission(uint64_t syscall_num)
         case 97:   /* SYS_GETRLIMIT */
         case 98:   /* SYS_GETRUSAGE */
         case 99:   /* SYS_SYSINFO */
+        case VOS3_SYS_SYSINFO: /* Size/version checked native telemetry */
         case 202:  /* SYS_FUTEX */
         case 231:  /* SYS_EXIT_GROUP */
         case 200:  /* SYS_TKILL */

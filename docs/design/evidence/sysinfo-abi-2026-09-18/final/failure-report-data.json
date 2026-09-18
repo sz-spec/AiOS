@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-18",
+  "base_commit": "cfd23f6a8595b13da005c59f1efacb6744e53832",
+  "source_patch_sha256": "9c8c82e2e15f4bb04c35e60e09f2e5b39f36aa8a8d416bf6421d9ce13c265b92",
+  "source_manifest_sha256": "ac36f6a5bf65dab033f43696a21c571beb79d7ce3f1bd3db3b8a7d946a01d019",
+  "cases": [
+    {
+      "label": "ISO קודם — ריצת ביקורת, BIOS",
+      "pending": false,
+      "pushed": 41556,
+      "consumed": 41556,
+      "elapsed_ms": 1010,
+      "rate": 41144,
+      "zero_exits": 56,
+      "exits": 57,
+      "passed": false,
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "sysinfo_native": false,
+      "sysinfo_musl": false
+    },
+    {
+      "label": "תיקון ABI — גרסת ביניים, BIOS",
+      "pending": false,
+      "pushed": 41465,
+      "consumed": 41465,
+      "elapsed_ms": 1010,
+      "rate": 41054,
+      "zero_exits": 56,
+      "exits": 57,
+      "passed": false,
+      "iso_sha256": "87822641ed337759d93cf0d8045201effec1315a5e447ba07a5224387fc1fb9b",
+      "sysinfo_native": true,
+      "sysinfo_musl": true
+    },
+    {
+      "label": "מקורות סופיים — BIOS",
+      "pending": false,
+      "pushed": 41931,
+      "consumed": 41931,
+      "elapsed_ms": 1000,
+      "rate": 41931,
+      "zero_exits": 56,
+      "exits": 57,
+      "passed": false,
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "sysinfo_native": true,
+      "sysinfo_musl": true
+    },
+    {
+      "label": "מקורות סופיים — UEFI",
+      "pending": false,
+      "pushed": 43279,
+      "consumed": 43279,
+      "elapsed_ms": 1010,
+      "rate": 42850,
+      "zero_exits": 56,
+      "exits": 57,
+      "passed": false,
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "sysinfo_native": true,
+      "sysinfo_musl": true
+    }
+  ],
+  "threshold": 80000,
+  "host_tests": 110,
+  "historical_rates": [
+    86575,
+    90635,
+    88460,
+    87786
+  ],
+  "scope": "QEMU TCG x86_64, one vCPU, 3072 MiB, BIOS and UEFI; physical hardware unqualified"
+}

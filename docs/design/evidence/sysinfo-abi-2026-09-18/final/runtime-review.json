@@ -1,0 +1,73 @@
+{
+  "scope": "Independent final serial reclassification; preserves observed performance failure",
+  "iso_sha256_actual": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+  "inputs_sha256": {
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/scripts/native_bench.py": "70df3612378cab2da8b1eeccdda11e473f2af96edb51134ff900480fb3549743",
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/user/src/init.c": "415366eba81c55122fffd9bc45aa77c3695006ba46f7b14d88e22ab41efb3591",
+    "/private/tmp/vos-sysinfo-qualified-20260918/bios/result.json": "8c98e558b2660501db5063151e1c6accca08c9cee23a3247a46bdba7edc0dc7d",
+    "/private/tmp/vos-sysinfo-qualified-20260918/bios/serial.log": "803bb68c6759fc3002e121516891e4e7a381216ea18e86d7d28a025387da7cf1",
+    "/private/tmp/vos-sysinfo-qualified-20260918/uefi/result.json": "c8175171bdee8c4a9af32e6d80ae9d6df65549d2696d890c2fa88ed3716f1a27",
+    "/private/tmp/vos-sysinfo-qualified-20260918/uefi/serial.log": "4ebfa48652967172dc1611e3ca6eae7584bde2e521a8b9b95ee520269ff2b0b7"
+  },
+  "cases": {
+    "bios": {
+      "full_suite_passed": false,
+      "result_matches_independent_classifier": true,
+      "ordered_complete_57": true,
+      "zero_exits": 56,
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          "1"
+        ]
+      ],
+      "dedicated_markers_exactly_once": {
+        "[PASS] sysinfo_versioned_abi": true,
+        "[PASS] test_env: sysinfo_errno_no_write": true
+      },
+      "health": {
+        "pushed": 41931,
+        "consumed": 41931,
+        "elapsed": 1000,
+        "throughput": 41931,
+        "matched_counts_and_rate": true
+      },
+      "iso_before_after_matches_actual": true,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ]
+    },
+    "uefi": {
+      "full_suite_passed": false,
+      "result_matches_independent_classifier": true,
+      "ordered_complete_57": true,
+      "zero_exits": 56,
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          "1"
+        ]
+      ],
+      "dedicated_markers_exactly_once": {
+        "[PASS] sysinfo_versioned_abi": true,
+        "[PASS] test_env: sysinfo_errno_no_write": true
+      },
+      "health": {
+        "pushed": 43279,
+        "consumed": 43279,
+        "elapsed": 1010,
+        "throughput": 42850,
+        "matched_counts_and_rate": true
+      },
+      "iso_before_after_matches_actual": true,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ]
+    }
+  },
+  "conclusion": "Dedicated SYSINFO ABI and musl safe-failure checks pass in both boots; full benchmark qualification FAILS in both because health throughput is below unchanged80000/sec threshold."
+}

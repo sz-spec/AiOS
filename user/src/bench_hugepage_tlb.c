@@ -14,6 +14,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 
 /* Syscall numbers */
 #define SYS_READ        0
@@ -22,7 +23,6 @@
 #define SYS_EXIT        60
 #define SYS_WAIT4       61
 #define SYS_GETTIME     40
-#define SYS_SYSINFO     99
 #define SYS_SHM_CREATE  410
 #define SYS_SHM_DESTROY 411
 #define SYS_SHM_MAP     412
@@ -43,13 +43,6 @@ static int g_fail = 0;
 #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
 
 /* Sysinfo struct */
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
 
 static unsigned long long rdtsc(void)
 {
@@ -65,7 +58,7 @@ static unsigned long get_uptime_ms(void)
 
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 /* ============================================================================

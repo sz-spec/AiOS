@@ -10,6 +10,31 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
+#include <sys/sysinfo.h>
+
+static int test_sysinfo_unavailable(void)
+{
+    struct sysinfo info;
+    memset(&info, 0xa5, sizeof(info));
+    errno = 0;
+    if (sysinfo(&info) != -1 || errno != ENOSYS) return 1;
+    for (size_t i = 0; i < sizeof(info); ++i)
+        if (((unsigned char *)&info)[i] != 0xa5) return 1;
+    errno = 0;
+    if (sysconf(_SC_PHYS_PAGES) != -1 || errno != ENOSYS) return 1;
+    errno = 0;
+    if (sysconf(_SC_AVPHYS_PAGES) != -1 || errno != ENOSYS) return 1;
+    errno = 0;
+    if (get_phys_pages() != -1 || errno != ENOSYS) return 1;
+    errno = 0;
+    if (get_avphys_pages() != -1 || errno != ENOSYS) return 1;
+    double loads[3] = {17.0, 23.0, 31.0};
+    errno = 0;
+    if (getloadavg(loads, 3) != -1 || errno != ENOSYS ||
+        loads[0] != 17.0 || loads[1] != 23.0 || loads[2] != 31.0) return 1;
+    return 0;
+}
 
 int main(void)
 {
@@ -63,5 +88,7 @@ int main(void)
         printf("[FAIL] test_env: proc_self_maps (fopen failed)\n");
     }
 
-    return 0;
+    int sysinfo_failed = test_sysinfo_unavailable();
+    printf("[%s] test_env: sysinfo_errno_no_write\n", sysinfo_failed ? "FAIL" : "PASS");
+    return sysinfo_failed;
 }

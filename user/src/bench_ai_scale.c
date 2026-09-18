@@ -22,6 +22,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 
 /* ============================================================================
  * SYSCALL NUMBERS
@@ -33,7 +34,6 @@
 #define SYS_GETPID      39
 #define SYS_CLONE       56
 #define SYS_EXIT        60
-#define SYS_SYSINFO     99
 #define SYS_SHM_CREATE  410
 #define SYS_SHM_DESTROY 411
 #define SYS_SHM_MAP     412
@@ -84,13 +84,6 @@ static int g_fail = 0;
  * SYSINFO STRUCT (must match kernel definition)
  * ============================================================================ */
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
 
 /* ============================================================================
  * HELPERS
@@ -715,10 +708,15 @@ static void test_csw_timing(void)
  * ============================================================================ */
 
 static vos3_sysinfo_t g_info_before;
+static int g_info_before_valid;
 
 static void mem_audit_before(void)
 {
-    syscall1(SYS_SYSINFO, (long)&g_info_before);
+    g_info_before_valid = vos3_get_sysinfo(&g_info_before) == 0;
+    if (!g_info_before_valid) {
+        TEST_FAIL("memory_leak_audit", "baseline telemetry unavailable");
+        return;
+    }
     printf("\n[AUDIT] Baseline: free=%lu total=%lu tasks=%u\n",
            g_info_before.free_pages, g_info_before.total_pages,
            g_info_before.nr_tasks);
@@ -729,7 +727,10 @@ static void test_memory_audit(void)
     printf("\n--- Test 4: Memory Leak Audit ---\n");
 
     vos3_sysinfo_t info_after;
-    syscall1(SYS_SYSINFO, (long)&info_after);
+    if (!g_info_before_valid || vos3_get_sysinfo(&info_after) != 0) {
+        TEST_FAIL("memory_leak_audit", "telemetry unavailable");
+        return;
+    }
 
     long delta = (long)g_info_before.free_pages - (long)info_after.free_pages;
 

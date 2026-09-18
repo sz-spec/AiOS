@@ -1,0 +1,8 @@
+test_versioned_copy_and_legacy_no_write (scripts.test_sysinfo_abi.SysinfoABI.test_versioned_copy_and_legacy_no_write) ... ok
+test_failure_errno_and_success_units (scripts.test_musl_sysinfo_failure.MuslSysinfoFailure.test_failure_errno_and_success_units) ... ok
+test_real_linux_wrapper_errno (scripts.test_musl_sysinfo_failure.MuslSysinfoFailure.test_real_linux_wrapper_errno) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.789s
+
+OK

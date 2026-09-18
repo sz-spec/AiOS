@@ -21,6 +21,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 #include <stdint.h>
 
 /* ============================================================================
@@ -57,7 +58,6 @@ static int g_tests_failed = 0;
 #define SYS_WAIT4           61
 #define SYS_MKDIR           83
 #define SYS_UNLINK          87
-#define SYS_SYSINFO         99
 
 /* SHM syscalls */
 #define SYS_SHM_CREATE      410
@@ -92,17 +92,9 @@ static inline unsigned long get_uptime_ms(void)
     return (unsigned long)syscall0(SYS_GETTIME);
 }
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
-
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 static uint64_t checksum(const void* buf, unsigned long len)
@@ -171,11 +163,21 @@ static void model_burst_shm(void)
            (unsigned long)ref_cksum);
 
     /* Unmap from parent */
-    syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
+    if (syscall2(SYS_SHM_UNMAP, shm_id, base_addr) != 0) {
+        TEST_FAIL("model_burst_shm: parent unmap failed");
+        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0)
+            TEST_FAIL("model_burst_shm: failed detach cleanup failed");
+        return;
+    }
 
     /* Record baseline sysinfo */
     vos3_sysinfo_t info_before;
-    get_sysinfo(&info_before);
+    if (get_sysinfo(&info_before) != 0) {
+        TEST_FAIL("model_burst_shm: baseline sysinfo unavailable");
+        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0)
+            TEST_FAIL("model_burst_shm: sysinfo failure cleanup failed");
+        return;
+    }
 
     /* Phase B: Fork 8 agent processes */
     unsigned long t_start = get_uptime_ms();
@@ -238,7 +240,10 @@ static void model_burst_shm(void)
     syscall1(SYS_SHM_DESTROY, shm_id);
 
     vos3_sysinfo_t info_after;
-    get_sysinfo(&info_after);
+    if (get_sysinfo(&info_after) != 0) {
+        TEST_FAIL("final sysinfo telemetry unavailable");
+        return;
+    }
     long page_delta = (long)info_before.free_pages - (long)info_after.free_pages;
     if (page_delta < 0) page_delta = -page_delta;
 
@@ -439,7 +444,14 @@ static void hugepage_dirty_audit(void)
     }
 
     vos3_sysinfo_t info_before;
-    get_sysinfo(&info_before);
+    if (get_sysinfo(&info_before) != 0) {
+        TEST_FAIL("hugepage_dirty_audit: baseline sysinfo unavailable");
+        if (syscall2(SYS_SHM_UNMAP, shm_id, addr) != 0)
+            TEST_FAIL("hugepage_dirty_audit: sysinfo failure unmap failed");
+        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0)
+            TEST_FAIL("hugepage_dirty_audit: sysinfo failure destroy failed");
+        return;
+    }
 
     /* Write patterns to first and last bytes */
     volatile uint8_t* p = (volatile uint8_t*)addr;
@@ -468,7 +480,10 @@ static void hugepage_dirty_audit(void)
     syscall1(SYS_SHM_DESTROY, shm_id);
 
     vos3_sysinfo_t info_after;
-    get_sysinfo(&info_after);
+    if (get_sysinfo(&info_after) != 0) {
+        TEST_FAIL("final sysinfo telemetry unavailable");
+        return;
+    }
     long page_delta = (long)info_before.free_pages - (long)info_after.free_pages;
     if (page_delta < 0) page_delta = -page_delta;
 

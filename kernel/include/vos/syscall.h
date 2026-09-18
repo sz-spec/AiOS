@@ -23,6 +23,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stddef.h>
+#include "../uapi/vos_sysinfo.h"
 #include "../arch/x86_64/cpu.h"  /* canonical MSR addresses and EFER flags */
 
 /* ============================================================================
@@ -150,6 +151,9 @@ typedef enum vos3_syscall_num {
     VOS3_SYS_GETTICKS       = 480,  /**< Get system tick count */
     VOS3_SYS_SLEEP          = 481,  /**< Sleep for milliseconds */
     VOS3_SYS_NANOSLEEP      = 482,  /**< Sleep with nanosecond precision */
+
+    /* Versioned native telemetry; Linux syscall 99 is unsupported. */
+    VOS3_SYS_SYSINFO        = VOS3_SYSINFO_SYSCALL,
 
     /* 490-499: Agent Dispatcher (Phase 3) */
     VOS3_SYS_AGENT_REGISTER    = 490,  /**< Register agent */

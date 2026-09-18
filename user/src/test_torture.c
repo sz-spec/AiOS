@@ -14,6 +14,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 #include <stdint.h>
 
 /* ============================================================================
@@ -42,7 +43,6 @@ static int g_tests_failed = 0;
 #define SYS_WAIT4           61
 #define SYS_YIELD           24
 #define SYS_GETPID          39
-#define SYS_SYSINFO         99
 
 #define SYS_SHM_CREATE      410
 #define SYS_SHM_DESTROY     411
@@ -59,17 +59,9 @@ static int g_tests_failed = 0;
  * HELPERS
  * ============================================================================ */
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
-
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 /* Pre-cleanup: destroy any SHM regions from prior tests */
@@ -97,7 +89,10 @@ static void hugepage_50x_loop(void)
     printf("\n--- Test: hugepage_50x_loop (50 iterations) ---\n");
 
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("sysinfo telemetry unavailable");
+        return;
+    }
     unsigned long baseline_free = info.free_pages;
     printf("  Baseline free_pages: %lu\n", baseline_free);
 
@@ -184,7 +179,10 @@ static void hugepage_50x_loop(void)
 
         /* Progress every 10 iterations */
         if ((iter + 1) % 10 == 0) {
-            get_sysinfo(&info);
+            if (get_sysinfo(&info) != 0) {
+                TEST_FAIL("sysinfo telemetry unavailable");
+                return;
+            }
             long drift = (long)baseline_free - (long)info.free_pages;
             printf("  Iter %d/%d: free_pages=%lu drift=%ld\n",
                    iter + 1, HP_LOOP_ITERATIONS, info.free_pages, drift);
@@ -196,7 +194,10 @@ static void hugepage_50x_loop(void)
     /* Yield to let any deferred cleanup happen */
     for (int y = 0; y < 10; y++) syscall0(SYS_YIELD);
 
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("sysinfo telemetry unavailable");
+        return;
+    }
     long final_drift = (long)baseline_free - (long)info.free_pages;
     if (final_drift < 0) final_drift = -final_drift;
 
@@ -225,7 +226,10 @@ static void shm_collision_50x(void)
     printf("\n--- Test: shm_collision_50x (20 iterations, 4 children) ---\n");
 
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("sysinfo telemetry unavailable");
+        return;
+    }
     unsigned int baseline_tasks = info.nr_tasks;
     printf("  Baseline nr_tasks: %u\n", baseline_tasks);
 
@@ -294,7 +298,10 @@ static void shm_collision_50x(void)
 
         /* Progress */
         if ((iter + 1) % 5 == 0) {
-            get_sysinfo(&info);
+            if (get_sysinfo(&info) != 0) {
+                TEST_FAIL("sysinfo telemetry unavailable");
+                return;
+            }
             printf("  Iter %d/%d: nr_tasks=%u zombies=%u\n",
                    iter + 1, COLLISION_ITERATIONS, info.nr_tasks, info.nr_zombies);
         }
@@ -302,7 +309,10 @@ static void shm_collision_50x(void)
 
     /* Final task count check */
     for (int y = 0; y < 30; y++) syscall0(SYS_YIELD);
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("sysinfo telemetry unavailable");
+        return;
+    }
     int task_drift = (int)info.nr_tasks - (int)baseline_tasks;
     if (task_drift < 0) task_drift = -task_drift;
 
@@ -336,7 +346,10 @@ static void oom_recovery(void)
     for (int y = 0; y < 10; y++) syscall0(SYS_YIELD);
 
     vos3_sysinfo_t info;
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("sysinfo telemetry unavailable");
+        return;
+    }
     unsigned long baseline_free = info.free_pages;
 
     int64_t ids[OOM_ATTEMPTS];
@@ -392,7 +405,10 @@ static void oom_recovery(void)
     shm_cleanup_all();
     for (int y = 0; y < 10; y++) syscall0(SYS_YIELD);
 
-    get_sysinfo(&info);
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("sysinfo telemetry unavailable");
+        return;
+    }
     long final_drift = (long)baseline_free - (long)info.free_pages;
     if (final_drift < 0) final_drift = -final_drift;
 

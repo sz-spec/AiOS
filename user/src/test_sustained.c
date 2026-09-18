@@ -6,13 +6,14 @@
  * printing [TELEMETRY] markers every 10s with free pages,
  * zombie count, and error metrics.
  *
- * Uses SYS_SYSINFO (99) for kernel telemetry.
+ * Uses versioned native SYSINFO (483) for kernel telemetry.
  */
 
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
 #include "unistd.h"
+#include "vos_sysinfo.h"
 
 /* Syscall numbers — Linux x86_64 ABI */
 #define SYS_READ        0
@@ -28,7 +29,6 @@
 #define SYS_WAIT4       61
 #define SYS_MKDIR       83
 #define SYS_UNLINK      87
-#define SYS_SYSINFO     99
 
 /* Open flags */
 #define O_RDONLY        0
@@ -47,59 +47,8 @@
 #define TEST_DURATION_MS    10000
 #define TELEMETRY_INTERVAL  5000
 
-/* ============================================================================
- * SYSCALL WRAPPERS
- * ============================================================================ */
-
-static inline long syscall0(long num) {
-    long ret;
-    __asm__ volatile("syscall" : "=a"(ret) : "a"(num) : "rcx","r11","memory");
-    return ret;
-}
-static inline long syscall1(long num, long a1) {
-    long ret;
-    __asm__ volatile("syscall" : "=a"(ret) : "a"(num), "D"(a1) : "rcx","r11","memory");
-    return ret;
-}
-static inline long syscall2(long num, long a1, long a2) {
-    long ret;
-    __asm__ volatile("syscall" : "=a"(ret) : "a"(num), "D"(a1), "S"(a2) : "rcx","r11","memory");
-    return ret;
-}
-static inline long syscall3(long num, long a1, long a2, long a3) {
-    long ret;
-    __asm__ volatile("syscall" : "=a"(ret) : "a"(num), "D"(a1), "S"(a2), "d"(a3) : "rcx","r11","memory");
-    return ret;
-}
-static inline long syscall4(long num, long a1, long a2, long a3, long a4) {
-    long ret;
-    register long r10 __asm__("r10") = a4;
-    __asm__ volatile("syscall" : "=a"(ret) : "a"(num), "D"(a1), "S"(a2), "d"(a3), "r"(r10) : "rcx","r11","memory");
-    return ret;
-}
-static inline long syscall6(long num, long a1, long a2, long a3, long a4, long a5, long a6) {
-    long ret;
-    register long r10 __asm__("r10") = a4;
-    register long r8  __asm__("r8")  = a5;
-    register long r9  __asm__("r9")  = a6;
-    __asm__ volatile("syscall" : "=a"(ret) : "a"(num), "D"(a1), "S"(a2), "d"(a3), "r"(r10), "r"(r8), "r"(r9) : "rcx","r11","memory");
-    return ret;
-}
-
-/* ============================================================================
- * SYSINFO STRUCT (must match kernel)
- * ============================================================================ */
-
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
-
 static int get_sysinfo(vos3_sysinfo_t* info) {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 static unsigned long get_uptime_ms(void) {
@@ -275,7 +224,11 @@ int main(int argc, char* argv[])
             elapsed = now - start_ms;
             unsigned long t_sec = elapsed / 1000;
 
-            if (get_sysinfo(&info) == 0) {
+            if (get_sysinfo(&info) != 0) {
+                TEST_FAIL("periodic_telemetry", "sysinfo failed after workload cleanup");
+                return 1;
+            }
+            {
                 printf("[TELEMETRY] T=%lu free=%lu total=%lu tasks=%u zombies=%u errors=%d\n",
                        t_sec, info.free_pages, info.total_pages,
                        info.nr_tasks, info.nr_zombies, total_errors);
@@ -286,7 +239,11 @@ int main(int argc, char* argv[])
     }
 
     /* Final telemetry */
-    if (get_sysinfo(&info) == 0) {
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("final_telemetry", "sysinfo failed after workload cleanup");
+        return 1;
+    }
+    {
         printf("[TELEMETRY] T=final free=%lu total=%lu tasks=%u zombies=%u errors=%d\n",
                info.free_pages, info.total_pages, info.nr_tasks, info.nr_zombies, total_errors);
     }

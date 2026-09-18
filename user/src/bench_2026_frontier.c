@@ -23,6 +23,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 #include <stdint.h>
 
 /* ============================================================================
@@ -54,7 +55,6 @@ static int g_scores[5] = {0, 0, 0, 0, 0};
 #define SYS_YIELD           24
 #define SYS_GETTIME         40
 #define SYS_GETPID          39
-#define SYS_SYSINFO         99
 
 /* SHM syscalls */
 #define SYS_SHM_CREATE      410
@@ -103,17 +103,9 @@ static inline unsigned long get_uptime_ms(void)
     return (unsigned long)syscall0(SYS_GETTIME);
 }
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
-
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 /* ============================================================================

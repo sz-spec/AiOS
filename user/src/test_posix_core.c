@@ -23,6 +23,7 @@
 #include "unistd.h"
 #include "syscall.h"
 #include <stdint.h>
+#include "vos_sysinfo.h"
 
 /* ============================================================================
  * TEST FRAMEWORK
@@ -336,6 +337,131 @@ cancel: ;
     syscall3(SYS_SETITIMER, ITIMER_REAL, (long)&cancel_itv, 0L);
 }
 
+
+/* The versioned telemetry ABI must never write beyond its declared object.
+ * A faulting cross-page copy may have written the accessible prefix. */
+static int sysinfo_bytes_equal(const unsigned char *p, size_t n, unsigned char v)
+{
+    for (size_t i = 0; i < n; ++i) if (p[i] != v) return 0;
+    return 1;
+}
+
+static void test_sysinfo_abi(void)
+{
+    struct {
+        uint64_t before;
+        vos3_sysinfo_t info;
+        uint64_t after;
+    } guarded;
+    const uint64_t canary = UINT64_C(0xa5a5a5a5a5a5a5a5);
+    const uint64_t sizes[] = {32, 0, 39, 41, UINT64_MAX};
+    const uintptr_t invalid[] = {
+        0, UINT64_C(0xffffffff80000000),
+        UINT64_C(0x0000800000000000), UINT64_MAX - 15
+    };
+    unsigned char legacy[48];
+    unsigned char *pages = NULL;
+    const size_t page = 4096;
+    int mapped_second = 1;
+    int initial_failures = g_tests_failed;
+    _Static_assert(sizeof(vos3_sysinfo_t) == 40, "telemetry ABI size");
+    printf("\n--- Test: versioned sysinfo ABI ---\n");
+
+    memset(&guarded, 0xa5, sizeof(guarded));
+    if (vos3_get_sysinfo(&guarded.info) != 0 ||
+        guarded.before != canary || guarded.after != canary ||
+        guarded.info.total_pages == 0 ||
+        guarded.info.free_pages > guarded.info.total_pages ||
+        guarded.info.nr_tasks == 0 ||
+        guarded.info.nr_zombies > guarded.info.nr_tasks ||
+        guarded.info.hugepage_used > guarded.info.hugepage_total) {
+        TEST_FAIL("sysinfo valid telemetry or object canaries");
+    }
+    for (size_t i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+        memset(&guarded, 0xa5, sizeof(guarded));
+        long ret = syscall3(VOS3_SYSINFO_SYSCALL, (long)&guarded.info,
+                            (long)sizes[i], VOS3_SYSINFO_VERSION);
+        if (ret != -22 || !sysinfo_bytes_equal((unsigned char *)&guarded,
+                                               sizeof(guarded), 0xa5))
+            TEST_FAIL("sysinfo invalid size must reject without writes");
+    }
+    memset(&guarded, 0xa5, sizeof(guarded));
+    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)&guarded.info, 40,
+                 VOS3_SYSINFO_VERSION + 1) != -22 ||
+        !sysinfo_bytes_equal((unsigned char *)&guarded, sizeof(guarded), 0xa5))
+        TEST_FAIL("sysinfo invalid version must reject without writes");
+    /* A legacy 32-byte object with an eight-byte guard on each side. */
+    memset(legacy, 0xa5, sizeof(legacy));
+    if (syscall1(99, (long)(legacy + 8)) != -38 ||
+        !sysinfo_bytes_equal(legacy, sizeof(legacy), 0xa5))
+        TEST_FAIL("legacy Linux sysinfo must return ENOSYS without writes");
+    for (size_t i = 0; i < sizeof(invalid)/sizeof(invalid[0]); ++i)
+        if (syscall3(VOS3_SYSINFO_SYSCALL, (long)invalid[i], 40,
+                     VOS3_SYSINFO_VERSION) != -14)
+            TEST_FAIL("sysinfo invalid pointer must return EFAULT");
+
+    long mapping = syscall6(9, 0, 2 * page, 3, 0x22, -1, 0);
+    if ((unsigned long)mapping >= (unsigned long)-4095 || mapping == 0) {
+        TEST_FAIL("sysinfo page test mmap failed");
+        goto live;
+    }
+    pages = (unsigned char *)(uintptr_t)mapping;
+    /* No user touch first: copy_to_user must populate writable lazy pages. */
+    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
+                 VOS3_SYSINFO_VERSION) != 0)
+        TEST_FAIL("sysinfo lazy writable crossing failed");
+    memset(pages, 0xa5, 2 * page);
+    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
+                 VOS3_SYSINFO_VERSION) != 0 ||
+        !sysinfo_bytes_equal(pages, page - 16, 0xa5) ||
+        !sysinfo_bytes_equal(pages + page + 24, page - 24, 0xa5))
+        TEST_FAIL("sysinfo writable page crossing or exterior canaries");
+    memset(pages, 0xa5, 2 * page);
+    if (syscall3(10, (long)(pages + page), page, 1) != 0) {
+        TEST_FAIL("sysinfo read-only page setup failed");
+        goto cleanup;
+    }
+    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
+                 VOS3_SYSINFO_VERSION) != -14 ||
+        !sysinfo_bytes_equal(pages, page - 16, 0xa5) ||
+        !sysinfo_bytes_equal(pages + page, page, 0xa5))
+        TEST_FAIL("sysinfo read-only crossing must fault without protected writes");
+    if (syscall3(10, (long)(pages + page), page, 0) != 0) {
+        TEST_FAIL("sysinfo PROT_NONE page setup failed");
+        goto cleanup;
+    }
+    memset(pages, 0xa5, page);
+    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
+                 VOS3_SYSINFO_VERSION) != -14 ||
+        !sysinfo_bytes_equal(pages, page - 16, 0xa5))
+        TEST_FAIL("sysinfo PROT_NONE crossing must return EFAULT");
+    if (syscall3(10, (long)(pages + page), page, 1) != 0) {
+        TEST_FAIL("sysinfo PROT_NONE inspection restore failed");
+        goto cleanup;
+    }
+    if (!sysinfo_bytes_equal(pages + page, page, 0xa5))
+        TEST_FAIL("sysinfo PROT_NONE page was modified");
+    if (syscall2(11, (long)(pages + page), page) != 0) {
+        TEST_FAIL("sysinfo unmapped page setup failed");
+        goto cleanup;
+    }
+    mapped_second = 0;
+    memset(pages, 0xa5, page);
+    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
+                 VOS3_SYSINFO_VERSION) != -14 ||
+        !sysinfo_bytes_equal(pages, page - 16, 0xa5))
+        TEST_FAIL("sysinfo unmapped crossing must return EFAULT");
+cleanup:
+    if (syscall2(11, (long)pages, mapped_second ? 2 * page : page) != 0)
+        TEST_FAIL("sysinfo mapping cleanup failed");
+live:
+    memset(&guarded, 0xa5, sizeof(guarded));
+    if (vos3_get_sysinfo(&guarded.info) != 0 || guarded.before != canary ||
+        guarded.after != canary || guarded.info.total_pages == 0)
+        TEST_FAIL("sysinfo final liveness or canaries");
+    if (g_tests_failed == initial_failures) TEST_PASS("sysinfo_versioned_abi");
+}
+
 /* ============================================================================
  * MAIN
  * ============================================================================ */
@@ -352,6 +478,7 @@ int main(void)
     test_getrusage();
     test_getitimer_empty();
     test_setitimer();
+    test_sysinfo_abi();
 
     printf("\n========================================\n");
     printf("  RESULTS: %d PASS, %d FAIL\n",

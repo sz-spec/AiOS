@@ -14,6 +14,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 
 /* ── Syscall numbers ────────────────────────────────────────────────── */
 #define SYS_WRITE       1
@@ -23,7 +24,6 @@
 #define SYS_EXIT        60
 #define SYS_WAIT4       61
 #define SYS_SCHED_YIELD 24
-#define SYS_SYSINFO     99
 
 /* ── Configuration ──────────────────────────────────────────────────── */
 #define MAX_TASKS           1024
@@ -39,13 +39,6 @@ static int g_fail = 0;
 #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
 
 /* ── Kernel sysinfo ─────────────────────────────────────────────────── */
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
 
 /* ── Static arrays (avoid stack overflow with 1023 children) ────────── */
 static pid_t              s_children[TARGET_FORKS];
@@ -67,7 +60,7 @@ static unsigned long get_uptime_ms(void)
 
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 /* ── Insertion sort for u64 array ───────────────────────────────────── */
@@ -263,11 +256,13 @@ int main(int argc, char* argv[])
 
     /* ── Phase 2: Verify Table Full ─────────────────────────────── */
     printf("\n--- Phase 2: Verify Table Full ---\n");
-    get_sysinfo(&info);
-    printf("[TELEMETRY] saturated tasks=%u free=%lu zombies=%u\n",
-           info.nr_tasks, info.free_pages, info.nr_zombies);
-
-    if (info.nr_tasks >= MAX_TASKS - 2) {
+    /* Continue to child cleanup on telemetry failure without reading a stale
+     * snapshot or abandoning the children already created. */
+    if (get_sysinfo(&info) < 0) {
+        TEST_FAIL("table_full", "sysinfo failed");
+    } else if (info.nr_tasks >= MAX_TASKS - 2) {
+        printf("[TELEMETRY] saturated tasks=%u free=%lu zombies=%u\n",
+               info.nr_tasks, info.free_pages, info.nr_zombies);
         TEST_PASS("table_full");
     } else {
         printf("  (expected ~%d tasks, got %u)\n", MAX_TASKS, info.nr_tasks);

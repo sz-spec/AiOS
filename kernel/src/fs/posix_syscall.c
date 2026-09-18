@@ -18,6 +18,7 @@
 #include "../../include/vos/console.h"
 #include "../../include/vos/string.h"
 #include "../../include/vos/pmm.h"
+#include "../../include/vos/uaccess.h"
 
 /* ============================================================================
  * SYSCALL NUMBERS
@@ -298,37 +299,23 @@ static int64_t sys_getitimer(int which, posix_itimerval_t* user_buf)
 }
 
 /* ============================================================================
- * SYS_SYSINFO (99) — kernel telemetry for sustained tests
+ * VOS3_SYS_SYSINFO (483) — versioned native telemetry
  * ============================================================================ */
 
-/** @brief VOS3 sysinfo structure (user-space ABI).
- *  NOTE: new fields appended at end for backward compatibility. */
-typedef struct {
-    uint64_t free_pages;
-    uint64_t total_pages;
-    uint32_t nr_tasks;
-    uint32_t nr_zombies;
-    uint64_t uptime_ms;
-    /* Added for VMM soak test — hugepage pool telemetry */
-    uint32_t hugepage_total;
-    uint32_t hugepage_used;
-} vos3_sysinfo_t;
-
-static int64_t sys_sysinfo(vos3_sysinfo_t* user_buf)
+static int64_t sys_vos_sysinfo(void* user_buf, uint64_t size, uint64_t version)
 {
-    if (!posix_access_ok(user_buf, sizeof(vos3_sysinfo_t))) {
-        return -14;  /* EFAULT */
+    if (size != sizeof(vos3_sysinfo_t) || version != VOS3_SYSINFO_VERSION) {
+        return -22;  /* EINVAL; no copy for an unknown contract */
     }
 
-    vos3_sysinfo_t info;
+    vos3_sysinfo_t info = {0};
     info.free_pages  = (uint64_t)vos3_pmm_free_pages_count();
     info.total_pages = (uint64_t)vos3_pmm_total_pages_count();
     vos3_task_count_stats(&info.nr_tasks, &info.nr_zombies);
     info.uptime_ms   = vos3_timer_get_uptime_ms();
     vos3_pmm_hugepage_stats(&info.hugepage_total, &info.hugepage_used);
 
-    memcpy(user_buf, &info, sizeof(vos3_sysinfo_t));
-    return 0;
+    return copy_to_user(user_buf, &info, sizeof(info)) == 0 ? 0 : -14;
 }
 
 /* ============================================================================
@@ -362,7 +349,13 @@ static int64_t posix_syscall_handler(vos3_syscall_frame_t* frame)
                                  (posix_itimerval_t*)frame->rsi);
 
         case SYS_SYSINFO:
-            return sys_sysinfo((vos3_sysinfo_t*)frame->rdi);
+            /* Historical native 32/40-byte callers and Linux sysinfo have
+             * incompatible layouts with no discriminator. Fail without
+             * writing; native callers must use the versioned interface. */
+            return -38;  /* ENOSYS: Linux sysinfo not implemented */
+
+        case VOS3_SYS_SYSINFO:
+            return sys_vos_sysinfo((void*)frame->rdi, frame->rsi, frame->rdx);
 
         default:
             return -38;  /* ENOSYS */
@@ -395,6 +388,7 @@ void vos3_posix_syscalls_init(void)
     vos3_syscall_register(SYS_GETRLIMIT, posix_syscall_handler);
     vos3_syscall_register(SYS_GETRUSAGE, posix_syscall_handler);
     vos3_syscall_register(SYS_SYSINFO,  posix_syscall_handler);
+    vos3_syscall_register(VOS3_SYS_SYSINFO, posix_syscall_handler);
     vos3_syscall_register(SYS_SETRLIMIT, posix_syscall_handler);
 
     VOS3_INFO("POSIX core syscalls registered (getrusage/getrlimit/setrlimit/setitimer/getitimer/sysinfo)");

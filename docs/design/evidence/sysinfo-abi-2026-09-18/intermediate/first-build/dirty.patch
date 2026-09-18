@@ -1,0 +1,1283 @@
+diff --git a/kernel/include/vos/syscall.h b/kernel/include/vos/syscall.h
+index 78aaf4e..ce34051 100644
+--- a/kernel/include/vos/syscall.h
++++ b/kernel/include/vos/syscall.h
+@@ -23,6 +23,7 @@ extern "C" {
+ 
+ #include <stdint.h>
+ #include <stddef.h>
++#include "../uapi/vos_sysinfo.h"
+ #include "../arch/x86_64/cpu.h"  /* canonical MSR addresses and EFER flags */
+ 
+ /* ============================================================================
+@@ -151,6 +152,9 @@ typedef enum vos3_syscall_num {
+     VOS3_SYS_SLEEP          = 481,  /**< Sleep for milliseconds */
+     VOS3_SYS_NANOSLEEP      = 482,  /**< Sleep with nanosecond precision */
+ 
++    /* Versioned native telemetry; Linux syscall 99 is unsupported. */
++    VOS3_SYS_SYSINFO        = VOS3_SYSINFO_SYSCALL,
++
+     /* 490-499: Agent Dispatcher (Phase 3) */
+     VOS3_SYS_AGENT_REGISTER    = 490,  /**< Register agent */
+     VOS3_SYS_AGENT_DEREGISTER  = 491,  /**< Deregister agent */
+diff --git a/kernel/src/arch/x86_64/syscall.c b/kernel/src/arch/x86_64/syscall.c
+index b2ffb50..c60c998 100644
+--- a/kernel/src/arch/x86_64/syscall.c
++++ b/kernel/src/arch/x86_64/syscall.c
+@@ -531,6 +531,7 @@ static int64_t check_app_syscall_permission(uint64_t syscall_num)
+         case 97:   /* SYS_GETRLIMIT */
+         case 98:   /* SYS_GETRUSAGE */
+         case 99:   /* SYS_SYSINFO */
++        case VOS3_SYS_SYSINFO: /* Size/version checked native telemetry */
+         case 202:  /* SYS_FUTEX */
+         case 231:  /* SYS_EXIT_GROUP */
+         case 200:  /* SYS_TKILL */
+diff --git a/kernel/src/fs/posix_syscall.c b/kernel/src/fs/posix_syscall.c
+index 9fc006c..f478d73 100644
+--- a/kernel/src/fs/posix_syscall.c
++++ b/kernel/src/fs/posix_syscall.c
+@@ -18,6 +18,7 @@
+ #include "../../include/vos/console.h"
+ #include "../../include/vos/string.h"
+ #include "../../include/vos/pmm.h"
++#include "../../include/vos/uaccess.h"
+ 
+ /* ============================================================================
+  * SYSCALL NUMBERS
+@@ -298,37 +299,23 @@ static int64_t sys_getitimer(int which, posix_itimerval_t* user_buf)
+ }
+ 
+ /* ============================================================================
+- * SYS_SYSINFO (99) — kernel telemetry for sustained tests
++ * VOS3_SYS_SYSINFO (483) — versioned native telemetry
+  * ============================================================================ */
+ 
+-/** @brief VOS3 sysinfo structure (user-space ABI).
+- *  NOTE: new fields appended at end for backward compatibility. */
+-typedef struct {
+-    uint64_t free_pages;
+-    uint64_t total_pages;
+-    uint32_t nr_tasks;
+-    uint32_t nr_zombies;
+-    uint64_t uptime_ms;
+-    /* Added for VMM soak test — hugepage pool telemetry */
+-    uint32_t hugepage_total;
+-    uint32_t hugepage_used;
+-} vos3_sysinfo_t;
+-
+-static int64_t sys_sysinfo(vos3_sysinfo_t* user_buf)
++static int64_t sys_vos_sysinfo(void* user_buf, uint64_t size, uint64_t version)
+ {
+-    if (!posix_access_ok(user_buf, sizeof(vos3_sysinfo_t))) {
+-        return -14;  /* EFAULT */
++    if (size != sizeof(vos3_sysinfo_t) || version != VOS3_SYSINFO_VERSION) {
++        return -22;  /* EINVAL; no copy for an unknown contract */
+     }
+ 
+-    vos3_sysinfo_t info;
++    vos3_sysinfo_t info = {0};
+     info.free_pages  = (uint64_t)vos3_pmm_free_pages_count();
+     info.total_pages = (uint64_t)vos3_pmm_total_pages_count();
+     vos3_task_count_stats(&info.nr_tasks, &info.nr_zombies);
+     info.uptime_ms   = vos3_timer_get_uptime_ms();
+     vos3_pmm_hugepage_stats(&info.hugepage_total, &info.hugepage_used);
+ 
+-    memcpy(user_buf, &info, sizeof(vos3_sysinfo_t));
+-    return 0;
++    return copy_to_user(user_buf, &info, sizeof(info)) == 0 ? 0 : -14;
+ }
+ 
+ /* ============================================================================
+@@ -362,7 +349,13 @@ static int64_t posix_syscall_handler(vos3_syscall_frame_t* frame)
+                                  (posix_itimerval_t*)frame->rsi);
+ 
+         case SYS_SYSINFO:
+-            return sys_sysinfo((vos3_sysinfo_t*)frame->rdi);
++            /* Historical native 32/40-byte callers and Linux sysinfo have
++             * incompatible layouts with no discriminator. Fail without
++             * writing; native callers must use the versioned interface. */
++            return -38;  /* ENOSYS: Linux sysinfo not implemented */
++
++        case VOS3_SYS_SYSINFO:
++            return sys_vos_sysinfo((void*)frame->rdi, frame->rsi, frame->rdx);
+ 
+         default:
+             return -38;  /* ENOSYS */
+@@ -395,6 +388,7 @@ void vos3_posix_syscalls_init(void)
+     vos3_syscall_register(SYS_GETRLIMIT, posix_syscall_handler);
+     vos3_syscall_register(SYS_GETRUSAGE, posix_syscall_handler);
+     vos3_syscall_register(SYS_SYSINFO,  posix_syscall_handler);
++    vos3_syscall_register(VOS3_SYS_SYSINFO, posix_syscall_handler);
+     vos3_syscall_register(SYS_SETRLIMIT, posix_syscall_handler);
+ 
+     VOS3_INFO("POSIX core syscalls registered (getrusage/getrlimit/setrlimit/setitimer/getitimer/sysinfo)");
+diff --git a/user/musl/Makefile.vos3 b/user/musl/Makefile.vos3
+index cf34424..fe6bab6 100644
+--- a/user/musl/Makefile.vos3
++++ b/user/musl/Makefile.vos3
+@@ -142,6 +142,10 @@ EXCLUDE_SRCS := \
+ # Apply exclusions
+ C_SRCS := $(filter-out $(EXCLUDE_SRCS),$(C_SRCS))
+ 
++# sysconf/getloadavg need the real errno-translating wrapper, even though
++# the broader Linux extensions are excluded from this port.
++C_SRCS += src/linux/sysinfo.c
++
+ # ============================================================================
+ # Build directories and objects
+ # ============================================================================
+diff --git a/user/musl/src/conf/sysconf.c b/user/musl/src/conf/sysconf.c
+index 8dd5c72..982362a 100644
+--- a/user/musl/src/conf/sysconf.c
++++ b/user/musl/src/conf/sysconf.c
+@@ -211,7 +211,8 @@ long sysconf(int name)
+ 	case JT_AVPHYS_PAGES & 255: ;
+ 		unsigned long long mem;
+ 		struct sysinfo si;
+-		__lsysinfo(&si);
++		/* vOS local delta: preserve syscall errno on unsupported sysinfo. */
++		if (__lsysinfo(&si) < 0) return -1;
+ 		if (!si.mem_unit) si.mem_unit = 1;
+ 		if (name==_SC_PHYS_PAGES) mem = si.totalram;
+ 		else mem = si.freeram + si.bufferram;
+diff --git a/user/musl/src/internal/vos3_stubs.c b/user/musl/src/internal/vos3_stubs.c
+index 0d21aee..62861bb 100644
+--- a/user/musl/src/internal/vos3_stubs.c
++++ b/user/musl/src/internal/vos3_stubs.c
+@@ -32,8 +32,6 @@ hidden int __setxid(int nr, int a, int b, int c)
+     return (int)ret;
+ }
+ 
+-/* __lsysinfo: vDSO entry point (not available on VOS3) */
+-hidden long __lsysinfo = 0;
+ 
+ /* __membarrier: memory barrier (no-op on single-core) */
+ hidden void __membarrier(int cmd, unsigned flags)
+@@ -134,12 +132,7 @@ weak int prctl(int option, ...)
+     return -38; /* ENOSYS */
+ }
+ 
+-struct sysinfo_s { long uptime; unsigned long loads[3]; unsigned long totalram; };
+-weak int sysinfo(struct sysinfo_s *info)
+-{
+-    (void)info;
+-    return -38; /* ENOSYS */
+-}
++/* sysinfo/__lsysinfo use src/linux/sysinfo.c and its errno convention. */
+ 
+ weak int nftw(const char *path, void *fn, int fd_limit, int flags)
+ {
+diff --git a/user/musl/src/legacy/getloadavg.c b/user/musl/src/legacy/getloadavg.c
+index ff06de0..e6bae31 100644
+--- a/user/musl/src/legacy/getloadavg.c
++++ b/user/musl/src/legacy/getloadavg.c
+@@ -6,7 +6,8 @@ int getloadavg(double *a, int n)
+ {
+ 	struct sysinfo si;
+ 	if (n <= 0) return n ? -1 : 0;
+-	sysinfo(&si);
++	/* vOS local delta: do not consume output after unsupported sysinfo. */
++	if (sysinfo(&si) < 0) return -1;
+ 	if (n > 3) n = 3;
+ 	for (int i=0; i<n; i++)
+ 		a[i] = 1.0/(1<<SI_LOAD_SHIFT) * si.loads[i];
+diff --git a/user/src/bench_2026_frontier.c b/user/src/bench_2026_frontier.c
+index 8d63e87..74b4751 100644
+--- a/user/src/bench_2026_frontier.c
++++ b/user/src/bench_2026_frontier.c
+@@ -23,6 +23,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ /* ============================================================================
+@@ -54,7 +55,6 @@ static int g_scores[5] = {0, 0, 0, 0, 0};
+ #define SYS_YIELD           24
+ #define SYS_GETTIME         40
+ #define SYS_GETPID          39
+-#define SYS_SYSINFO         99
+ 
+ /* SHM syscalls */
+ #define SYS_SHM_CREATE      410
+@@ -103,17 +103,9 @@ static inline unsigned long get_uptime_ms(void)
+     return (unsigned long)syscall0(SYS_GETTIME);
+ }
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ============================================================================
+diff --git a/user/src/bench_ai_scale.c b/user/src/bench_ai_scale.c
+index 40654f1..7aabab6 100644
+--- a/user/src/bench_ai_scale.c
++++ b/user/src/bench_ai_scale.c
+@@ -22,6 +22,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ 
+ /* ============================================================================
+  * SYSCALL NUMBERS
+@@ -33,7 +34,6 @@
+ #define SYS_GETPID      39
+ #define SYS_CLONE       56
+ #define SYS_EXIT        60
+-#define SYS_SYSINFO     99
+ #define SYS_SHM_CREATE  410
+ #define SYS_SHM_DESTROY 411
+ #define SYS_SHM_MAP     412
+@@ -84,13 +84,6 @@ static int g_fail = 0;
+  * SYSINFO STRUCT (must match kernel definition)
+  * ============================================================================ */
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ /* ============================================================================
+  * HELPERS
+@@ -715,10 +708,15 @@ static void test_csw_timing(void)
+  * ============================================================================ */
+ 
+ static vos3_sysinfo_t g_info_before;
++static int g_info_before_valid;
+ 
+ static void mem_audit_before(void)
+ {
+-    syscall1(SYS_SYSINFO, (long)&g_info_before);
++    g_info_before_valid = vos3_get_sysinfo(&g_info_before) == 0;
++    if (!g_info_before_valid) {
++        TEST_FAIL("memory_leak_audit", "baseline telemetry unavailable");
++        return;
++    }
+     printf("\n[AUDIT] Baseline: free=%lu total=%lu tasks=%u\n",
+            g_info_before.free_pages, g_info_before.total_pages,
+            g_info_before.nr_tasks);
+@@ -729,7 +727,10 @@ static void test_memory_audit(void)
+     printf("\n--- Test 4: Memory Leak Audit ---\n");
+ 
+     vos3_sysinfo_t info_after;
+-    syscall1(SYS_SYSINFO, (long)&info_after);
++    if (!g_info_before_valid || vos3_get_sysinfo(&info_after) != 0) {
++        TEST_FAIL("memory_leak_audit", "telemetry unavailable");
++        return;
++    }
+ 
+     long delta = (long)g_info_before.free_pages - (long)info_after.free_pages;
+ 
+diff --git a/user/src/bench_ai_throughput.c b/user/src/bench_ai_throughput.c
+index a9862d0..9fb2bb6 100644
+--- a/user/src/bench_ai_throughput.c
++++ b/user/src/bench_ai_throughput.c
+@@ -14,6 +14,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ 
+ /* Syscall numbers */
+ #define SYS_READ        0
+@@ -22,7 +23,6 @@
+ #define SYS_EXIT        60
+ #define SYS_WAIT4       61
+ #define SYS_GETTIME     40
+-#define SYS_SYSINFO     99
+ #define SYS_SHM_CREATE  410
+ #define SYS_SHM_DESTROY 411
+ #define SYS_SHM_MAP     412
+@@ -43,13 +43,6 @@ static int g_fail = 0;
+ #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
+ 
+ /* Sysinfo struct */
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ static unsigned long long rdtsc(void)
+ {
+@@ -65,7 +58,7 @@ static unsigned long get_uptime_ms(void)
+ 
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /**
+diff --git a/user/src/bench_csw_1ms.c b/user/src/bench_csw_1ms.c
+index ee357ff..aa85b11 100644
+--- a/user/src/bench_csw_1ms.c
++++ b/user/src/bench_csw_1ms.c
+@@ -18,13 +18,13 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ 
+ /* Syscall numbers */
+ #define SYS_FORK        57
+ #define SYS_EXIT        60
+ #define SYS_WAIT4       61
+ #define SYS_GETTIME     40
+-#define SYS_SYSINFO     99
+ #define SYS_BENCH_READ  222
+ #define SYS_GETPID      39
+ #define SYS_YIELD       24    /* VOS3_SYS_YIELD */
+@@ -47,13 +47,6 @@ typedef struct {
+     unsigned long long tsc_freq_khz;
+ } bench_summary_t;
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ static unsigned long long rdtsc(void)
+ {
+diff --git a/user/src/bench_hugepage_tlb.c b/user/src/bench_hugepage_tlb.c
+index 0c81ac0..d731c03 100644
+--- a/user/src/bench_hugepage_tlb.c
++++ b/user/src/bench_hugepage_tlb.c
+@@ -14,6 +14,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ 
+ /* Syscall numbers */
+ #define SYS_READ        0
+@@ -22,7 +23,6 @@
+ #define SYS_EXIT        60
+ #define SYS_WAIT4       61
+ #define SYS_GETTIME     40
+-#define SYS_SYSINFO     99
+ #define SYS_SHM_CREATE  410
+ #define SYS_SHM_DESTROY 411
+ #define SYS_SHM_MAP     412
+@@ -43,13 +43,6 @@ static int g_fail = 0;
+ #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
+ 
+ /* Sysinfo struct */
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ static unsigned long long rdtsc(void)
+ {
+@@ -65,7 +58,7 @@ static unsigned long get_uptime_ms(void)
+ 
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ============================================================================
+diff --git a/user/src/bench_soak_5min.c b/user/src/bench_soak_5min.c
+index 030bc6e..d5c204d 100644
+--- a/user/src/bench_soak_5min.c
++++ b/user/src/bench_soak_5min.c
+@@ -7,7 +7,7 @@
+  * internal fragmentation, and zombie accumulation over
+  * thousands of task cycles.
+  *
+- * Uses SYS_SYSINFO (99) for kernel telemetry.
++ * Uses versioned native SYSINFO (483) for kernel telemetry.
+  * Run with: TEST_ONLY=bench_soak_5min bash run_tests.sh
+  */
+ 
+@@ -16,6 +16,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ 
+ /* Syscall numbers */
+ #define SYS_READ        0
+@@ -30,7 +31,6 @@
+ #define SYS_GETTIME     40
+ #define SYS_MKDIR       83
+ #define SYS_UNLINK      87
+-#define SYS_SYSINFO     99
+ #define SYS_SHM_CREATE  410
+ #define SYS_SHM_DESTROY 411
+ #define SYS_SHM_MAP     412
+@@ -59,13 +59,6 @@ static int g_fail = 0;
+ #define TEST_PASS(name) do { printf("[PASS] %s\n", name); g_pass++; } while(0)
+ #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ /* Telemetry history for leak rate analysis */
+ typedef struct {
+@@ -80,7 +73,7 @@ static int g_telem_count = 0;
+ 
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ static unsigned long get_uptime_ms(void)
+diff --git a/user/src/test_advanced_chaos.c b/user/src/test_advanced_chaos.c
+index 2d2f04a..f03bdcb 100644
+--- a/user/src/test_advanced_chaos.c
++++ b/user/src/test_advanced_chaos.c
+@@ -21,6 +21,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include "signal.h"
+ #include <stdint.h>
+ 
+@@ -55,7 +56,6 @@ static int g_tests_failed = 0;
+ #define SYS_YIELD           24
+ #define SYS_GETTIME         40
+ #define SYS_GETPID          39
+-#define SYS_SYSINFO         99
+ 
+ /* SHM syscalls */
+ #define SYS_SHM_CREATE      410
+@@ -79,17 +79,9 @@ static inline unsigned long get_uptime_ms(void)
+     return (unsigned long)syscall0(SYS_GETTIME);
+ }
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ============================================================================
+@@ -242,7 +234,10 @@ static void hugepage_hard_wall(void)
+     printf("\n--- Test: hugepage_hard_wall ---\n");
+ 
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     unsigned long baseline_free = info.free_pages;
+     int created = 0;
+     int exhaustion_error = 0;
+@@ -354,7 +349,10 @@ static void hugepage_hard_wall(void)
+         syscall1(SYS_SHM_DESTROY, hp_ids[i]);
+     }
+ 
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     long final_delta = (long)baseline_free - (long)info.free_pages;
+     if (final_delta < 0) final_delta = -final_delta;
+ 
+diff --git a/user/src/test_agent_chaos.c b/user/src/test_agent_chaos.c
+index 12971e2..2650ca2 100644
+--- a/user/src/test_agent_chaos.c
++++ b/user/src/test_agent_chaos.c
+@@ -24,6 +24,7 @@
+ #include "unistd.h"
+ #include "signal.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ #include "spsc.h"
+@@ -57,7 +58,6 @@ static int g_tests_failed = 0;
+ #define SYS_YIELD           24
+ #define SYS_GETTIME         40
+ #define SYS_GETPID          39
+-#define SYS_SYSINFO         99
+ 
+ /* SHM syscalls */
+ #define SYS_SHM_CREATE      410
+@@ -92,17 +92,9 @@ static inline unsigned long get_uptime_ms(void)
+     return (unsigned long)syscall0(SYS_GETTIME);
+ }
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ============================================================================
+diff --git a/user/src/test_agent_cluster.c b/user/src/test_agent_cluster.c
+index 1de27f5..8344002 100644
+--- a/user/src/test_agent_cluster.c
++++ b/user/src/test_agent_cluster.c
+@@ -21,6 +21,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ /* ============================================================================
+@@ -47,7 +48,6 @@ static int g_tests_failed = 0;
+ #define SYS_YIELD           24
+ #define SYS_GETTIME         40
+ #define SYS_EXIT            60
+-#define SYS_SYSINFO         99
+ 
+ #define SYS_SHM_CREATE      410
+ #define SYS_SHM_DESTROY     411
+@@ -95,13 +95,6 @@ typedef struct {
+     uint64_t    total_steals;
+ } dispatch_status_t;
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ /* ============================================================================
+  * HELPERS
+@@ -114,7 +107,7 @@ static inline unsigned long get_uptime_ms(void)
+ 
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ static long agent_register(const char* name, uint32_t caps)
+diff --git a/user/src/test_env_musl.c b/user/src/test_env_musl.c
+index b17697c..88464ad 100644
+--- a/user/src/test_env_musl.c
++++ b/user/src/test_env_musl.c
+@@ -10,6 +10,31 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <errno.h>
++#include <sys/sysinfo.h>
++
++static int test_sysinfo_unavailable(void)
++{
++    struct sysinfo info;
++    memset(&info, 0xa5, sizeof(info));
++    errno = 0;
++    if (sysinfo(&info) != -1 || errno != ENOSYS) return 1;
++    for (size_t i = 0; i < sizeof(info); ++i)
++        if (((unsigned char *)&info)[i] != 0xa5) return 1;
++    errno = 0;
++    if (sysconf(_SC_PHYS_PAGES) != -1 || errno != ENOSYS) return 1;
++    errno = 0;
++    if (sysconf(_SC_AVPHYS_PAGES) != -1 || errno != ENOSYS) return 1;
++    errno = 0;
++    if (get_phys_pages() != -1 || errno != ENOSYS) return 1;
++    errno = 0;
++    if (get_avphys_pages() != -1 || errno != ENOSYS) return 1;
++    double loads[3] = {17.0, 23.0, 31.0};
++    errno = 0;
++    if (getloadavg(loads, 3) != -1 || errno != ENOSYS ||
++        loads[0] != 17.0 || loads[1] != 23.0 || loads[2] != 31.0) return 1;
++    return 0;
++}
+ 
+ int main(void)
+ {
+@@ -63,5 +88,7 @@ int main(void)
+         printf("[FAIL] test_env: proc_self_maps (fopen failed)\n");
+     }
+ 
+-    return 0;
++    int sysinfo_failed = test_sysinfo_unavailable();
++    printf("[%s] test_env: sysinfo_errno_no_write\n", sysinfo_failed ? "FAIL" : "PASS");
++    return sysinfo_failed;
+ }
+diff --git a/user/src/test_health_check.c b/user/src/test_health_check.c
+index 33d959c..97fbff3 100644
+--- a/user/src/test_health_check.c
++++ b/user/src/test_health_check.c
+@@ -20,6 +20,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ #include "spsc.h"
+@@ -49,7 +50,6 @@ static int g_tests_failed = 0;
+ #define SYS_GETTIME         40
+ #define SYS_CLONE           56
+ #define SYS_EXIT            60
+-#define SYS_SYSINFO         99
+ 
+ #define SYS_SHM_CREATE      410
+ #define SYS_SHM_DESTROY     411
+@@ -72,17 +72,9 @@ static inline unsigned long get_uptime_ms(void)
+     return (unsigned long)syscall0(SYS_GETTIME);
+ }
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ============================================================================
+@@ -101,7 +93,10 @@ static void memory_health(void)
+     printf("\n--- Check 1: memory_health ---\n");
+ 
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("memory_health: telemetry unavailable");
++        return;
++    }
+ 
+     unsigned long used = info.total_pages - info.free_pages;
+ 
+@@ -136,7 +131,10 @@ static void zombie_audit(void)
+     syscall0(SYS_YIELD);
+ 
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("zombie_audit: telemetry unavailable");
++        return;
++    }
+ 
+     printf("  nr_zombies = %u\n", info.nr_zombies);
+ 
+diff --git a/user/src/test_max_saturation.c b/user/src/test_max_saturation.c
+index f53933c..692911c 100644
+--- a/user/src/test_max_saturation.c
++++ b/user/src/test_max_saturation.c
+@@ -14,6 +14,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ 
+ /* ── Syscall numbers ────────────────────────────────────────────────── */
+ #define SYS_WRITE       1
+@@ -23,7 +24,6 @@
+ #define SYS_EXIT        60
+ #define SYS_WAIT4       61
+ #define SYS_SCHED_YIELD 24
+-#define SYS_SYSINFO     99
+ 
+ /* ── Configuration ──────────────────────────────────────────────────── */
+ #define MAX_TASKS           1024
+@@ -39,13 +39,6 @@ static int g_fail = 0;
+ #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
+ 
+ /* ── Kernel sysinfo ─────────────────────────────────────────────────── */
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+ 
+ /* ── Static arrays (avoid stack overflow with 1023 children) ────────── */
+ static pid_t              s_children[TARGET_FORKS];
+@@ -67,7 +60,7 @@ static unsigned long get_uptime_ms(void)
+ 
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ── Insertion sort for u64 array ───────────────────────────────────── */
+@@ -263,11 +256,13 @@ int main(int argc, char* argv[])
+ 
+     /* ── Phase 2: Verify Table Full ─────────────────────────────── */
+     printf("\n--- Phase 2: Verify Table Full ---\n");
+-    get_sysinfo(&info);
+-    printf("[TELEMETRY] saturated tasks=%u free=%lu zombies=%u\n",
+-           info.nr_tasks, info.free_pages, info.nr_zombies);
+-
+-    if (info.nr_tasks >= MAX_TASKS - 2) {
++    /* Continue to child cleanup on telemetry failure without reading a stale
++     * snapshot or abandoning the children already created. */
++    if (get_sysinfo(&info) < 0) {
++        TEST_FAIL("table_full", "sysinfo failed");
++    } else if (info.nr_tasks >= MAX_TASKS - 2) {
++        printf("[TELEMETRY] saturated tasks=%u free=%lu zombies=%u\n",
++               info.nr_tasks, info.free_pages, info.nr_zombies);
+         TEST_PASS("table_full");
+     } else {
+         printf("  (expected ~%d tasks, got %u)\n", MAX_TASKS, info.nr_tasks);
+diff --git a/user/src/test_model_load.c b/user/src/test_model_load.c
+index 47ef55e..3302554 100644
+--- a/user/src/test_model_load.c
++++ b/user/src/test_model_load.c
+@@ -21,6 +21,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ /* ============================================================================
+@@ -57,7 +58,6 @@ static int g_tests_failed = 0;
+ #define SYS_WAIT4           61
+ #define SYS_MKDIR           83
+ #define SYS_UNLINK          87
+-#define SYS_SYSINFO         99
+ 
+ /* SHM syscalls */
+ #define SYS_SHM_CREATE      410
+@@ -92,17 +92,9 @@ static inline unsigned long get_uptime_ms(void)
+     return (unsigned long)syscall0(SYS_GETTIME);
+ }
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ static uint64_t checksum(const void* buf, unsigned long len)
+@@ -171,11 +163,21 @@ static void model_burst_shm(void)
+            (unsigned long)ref_cksum);
+ 
+     /* Unmap from parent */
+-    syscall2(SYS_SHM_UNMAP, shm_id, base_addr);
++    if (syscall2(SYS_SHM_UNMAP, shm_id, base_addr) != 0) {
++        TEST_FAIL("model_burst_shm: parent unmap failed");
++        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0)
++            TEST_FAIL("model_burst_shm: failed detach cleanup failed");
++        return;
++    }
+ 
+     /* Record baseline sysinfo */
+     vos3_sysinfo_t info_before;
+-    get_sysinfo(&info_before);
++    if (get_sysinfo(&info_before) != 0) {
++        TEST_FAIL("model_burst_shm: baseline sysinfo unavailable");
++        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0)
++            TEST_FAIL("model_burst_shm: sysinfo failure cleanup failed");
++        return;
++    }
+ 
+     /* Phase B: Fork 8 agent processes */
+     unsigned long t_start = get_uptime_ms();
+@@ -238,7 +240,10 @@ static void model_burst_shm(void)
+     syscall1(SYS_SHM_DESTROY, shm_id);
+ 
+     vos3_sysinfo_t info_after;
+-    get_sysinfo(&info_after);
++    if (get_sysinfo(&info_after) != 0) {
++        TEST_FAIL("final sysinfo telemetry unavailable");
++        return;
++    }
+     long page_delta = (long)info_before.free_pages - (long)info_after.free_pages;
+     if (page_delta < 0) page_delta = -page_delta;
+ 
+@@ -439,7 +444,14 @@ static void hugepage_dirty_audit(void)
+     }
+ 
+     vos3_sysinfo_t info_before;
+-    get_sysinfo(&info_before);
++    if (get_sysinfo(&info_before) != 0) {
++        TEST_FAIL("hugepage_dirty_audit: baseline sysinfo unavailable");
++        if (syscall2(SYS_SHM_UNMAP, shm_id, addr) != 0)
++            TEST_FAIL("hugepage_dirty_audit: sysinfo failure unmap failed");
++        if (syscall1(SYS_SHM_DESTROY, shm_id) != 0)
++            TEST_FAIL("hugepage_dirty_audit: sysinfo failure destroy failed");
++        return;
++    }
+ 
+     /* Write patterns to first and last bytes */
+     volatile uint8_t* p = (volatile uint8_t*)addr;
+@@ -468,7 +480,10 @@ static void hugepage_dirty_audit(void)
+     syscall1(SYS_SHM_DESTROY, shm_id);
+ 
+     vos3_sysinfo_t info_after;
+-    get_sysinfo(&info_after);
++    if (get_sysinfo(&info_after) != 0) {
++        TEST_FAIL("final sysinfo telemetry unavailable");
++        return;
++    }
+     long page_delta = (long)info_before.free_pages - (long)info_after.free_pages;
+     if (page_delta < 0) page_delta = -page_delta;
+ 
+diff --git a/user/src/test_posix_core.c b/user/src/test_posix_core.c
+index 1715473..e29e11b 100644
+--- a/user/src/test_posix_core.c
++++ b/user/src/test_posix_core.c
+@@ -23,6 +23,7 @@
+ #include "unistd.h"
+ #include "syscall.h"
+ #include <stdint.h>
++#include "vos_sysinfo.h"
+ 
+ /* ============================================================================
+  * TEST FRAMEWORK
+@@ -336,6 +337,131 @@ cancel: ;
+     syscall3(SYS_SETITIMER, ITIMER_REAL, (long)&cancel_itv, 0L);
+ }
+ 
++
++/* The versioned telemetry ABI must never write beyond its declared object.
++ * A faulting cross-page copy may have written the accessible prefix. */
++static int sysinfo_bytes_equal(const unsigned char *p, size_t n, unsigned char v)
++{
++    for (size_t i = 0; i < n; ++i) if (p[i] != v) return 0;
++    return 1;
++}
++
++static void test_sysinfo_abi(void)
++{
++    struct {
++        uint64_t before;
++        vos3_sysinfo_t info;
++        uint64_t after;
++    } guarded;
++    const uint64_t canary = UINT64_C(0xa5a5a5a5a5a5a5a5);
++    const uint64_t sizes[] = {32, 0, 39, 41, UINT64_MAX};
++    const uintptr_t invalid[] = {
++        0, UINT64_C(0xffffffff80000000),
++        UINT64_C(0x0000800000000000), UINT64_MAX - 15
++    };
++    unsigned char legacy[48];
++    unsigned char *pages = NULL;
++    const size_t page = 4096;
++    int mapped_second = 1;
++    int initial_failures = g_tests_failed;
++    _Static_assert(sizeof(vos3_sysinfo_t) == 40, "telemetry ABI size");
++    printf("\n--- Test: versioned sysinfo ABI ---\n");
++
++    memset(&guarded, 0xa5, sizeof(guarded));
++    if (vos3_get_sysinfo(&guarded.info) != 0 ||
++        guarded.before != canary || guarded.after != canary ||
++        guarded.info.total_pages == 0 ||
++        guarded.info.free_pages > guarded.info.total_pages ||
++        guarded.info.nr_tasks == 0 ||
++        guarded.info.nr_zombies > guarded.info.nr_tasks ||
++        guarded.info.hugepage_used > guarded.info.hugepage_total) {
++        TEST_FAIL("sysinfo valid telemetry or object canaries");
++    }
++    for (size_t i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
++        memset(&guarded, 0xa5, sizeof(guarded));
++        long ret = syscall3(VOS3_SYSINFO_SYSCALL, (long)&guarded.info,
++                            (long)sizes[i], VOS3_SYSINFO_VERSION);
++        if (ret != -22 || !sysinfo_bytes_equal((unsigned char *)&guarded,
++                                               sizeof(guarded), 0xa5))
++            TEST_FAIL("sysinfo invalid size must reject without writes");
++    }
++    memset(&guarded, 0xa5, sizeof(guarded));
++    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)&guarded.info, 40,
++                 VOS3_SYSINFO_VERSION + 1) != -22 ||
++        !sysinfo_bytes_equal((unsigned char *)&guarded, sizeof(guarded), 0xa5))
++        TEST_FAIL("sysinfo invalid version must reject without writes");
++    /* A legacy 32-byte object with an eight-byte guard on each side. */
++    memset(legacy, 0xa5, sizeof(legacy));
++    if (syscall1(99, (long)(legacy + 8)) != -38 ||
++        !sysinfo_bytes_equal(legacy, sizeof(legacy), 0xa5))
++        TEST_FAIL("legacy Linux sysinfo must return ENOSYS without writes");
++    for (size_t i = 0; i < sizeof(invalid)/sizeof(invalid[0]); ++i)
++        if (syscall3(VOS3_SYSINFO_SYSCALL, (long)invalid[i], 40,
++                     VOS3_SYSINFO_VERSION) != -14)
++            TEST_FAIL("sysinfo invalid pointer must return EFAULT");
++
++    long mapping = syscall6(9, 0, 2 * page, 3, 0x22, -1, 0);
++    if ((unsigned long)mapping >= (unsigned long)-4095 || mapping == 0) {
++        TEST_FAIL("sysinfo page test mmap failed");
++        goto live;
++    }
++    pages = (unsigned char *)(uintptr_t)mapping;
++    /* No user touch first: copy_to_user must populate writable lazy pages. */
++    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
++                 VOS3_SYSINFO_VERSION) != 0)
++        TEST_FAIL("sysinfo lazy writable crossing failed");
++    memset(pages, 0xa5, 2 * page);
++    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
++                 VOS3_SYSINFO_VERSION) != 0 ||
++        !sysinfo_bytes_equal(pages, page - 16, 0xa5) ||
++        !sysinfo_bytes_equal(pages + page + 24, page - 24, 0xa5))
++        TEST_FAIL("sysinfo writable page crossing or exterior canaries");
++    memset(pages, 0xa5, 2 * page);
++    if (syscall3(10, (long)(pages + page), page, 1) != 0) {
++        TEST_FAIL("sysinfo read-only page setup failed");
++        goto cleanup;
++    }
++    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
++                 VOS3_SYSINFO_VERSION) != -14 ||
++        !sysinfo_bytes_equal(pages, page - 16, 0xa5) ||
++        !sysinfo_bytes_equal(pages + page, page, 0xa5))
++        TEST_FAIL("sysinfo read-only crossing must fault without protected writes");
++    if (syscall3(10, (long)(pages + page), page, 0) != 0) {
++        TEST_FAIL("sysinfo PROT_NONE page setup failed");
++        goto cleanup;
++    }
++    memset(pages, 0xa5, page);
++    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
++                 VOS3_SYSINFO_VERSION) != -14 ||
++        !sysinfo_bytes_equal(pages, page - 16, 0xa5))
++        TEST_FAIL("sysinfo PROT_NONE crossing must return EFAULT");
++    if (syscall3(10, (long)(pages + page), page, 1) != 0) {
++        TEST_FAIL("sysinfo PROT_NONE inspection restore failed");
++        goto cleanup;
++    }
++    if (!sysinfo_bytes_equal(pages + page, page, 0xa5))
++        TEST_FAIL("sysinfo PROT_NONE page was modified");
++    if (syscall2(11, (long)(pages + page), page) != 0) {
++        TEST_FAIL("sysinfo unmapped page setup failed");
++        goto cleanup;
++    }
++    mapped_second = 0;
++    memset(pages, 0xa5, page);
++    if (syscall3(VOS3_SYSINFO_SYSCALL, (long)(pages + page - 16), 40,
++                 VOS3_SYSINFO_VERSION) != -14 ||
++        !sysinfo_bytes_equal(pages, page - 16, 0xa5))
++        TEST_FAIL("sysinfo unmapped crossing must return EFAULT");
++cleanup:
++    if (syscall2(11, (long)pages, mapped_second ? 2 * page : page) != 0)
++        TEST_FAIL("sysinfo mapping cleanup failed");
++live:
++    memset(&guarded, 0xa5, sizeof(guarded));
++    if (vos3_get_sysinfo(&guarded.info) != 0 || guarded.before != canary ||
++        guarded.after != canary || guarded.info.total_pages == 0)
++        TEST_FAIL("sysinfo final liveness or canaries");
++    if (g_tests_failed == initial_failures) TEST_PASS("sysinfo_versioned_abi");
++}
++
+ /* ============================================================================
+  * MAIN
+  * ============================================================================ */
+@@ -352,6 +478,7 @@ int main(void)
+     test_getrusage();
+     test_getitimer_empty();
+     test_setitimer();
++    test_sysinfo_abi();
+ 
+     printf("\n========================================\n");
+     printf("  RESULTS: %d PASS, %d FAIL\n",
+diff --git a/user/src/test_sustained.c b/user/src/test_sustained.c
+index 87ebf73..5a0f7fc 100644
+--- a/user/src/test_sustained.c
++++ b/user/src/test_sustained.c
+@@ -6,7 +6,7 @@
+  * printing [TELEMETRY] markers every 10s with free pages,
+  * zombie count, and error metrics.
+  *
+- * Uses SYS_SYSINFO (99) for kernel telemetry.
++ * Uses versioned native SYSINFO (483) for kernel telemetry.
+  */
+ 
+ #include "stdio.h"
+@@ -28,7 +28,6 @@
+ #define SYS_WAIT4       61
+ #define SYS_MKDIR       83
+ #define SYS_UNLINK      87
+-#define SYS_SYSINFO     99
+ 
+ /* Open flags */
+ #define O_RDONLY        0
+@@ -90,16 +89,8 @@ static inline long syscall6(long num, long a1, long a2, long a3, long a4, long a
+  * SYSINFO STRUCT (must match kernel)
+  * ============================================================================ */
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info) {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ static unsigned long get_uptime_ms(void) {
+diff --git a/user/src/test_torture.c b/user/src/test_torture.c
+index 464abc8..5462848 100644
+--- a/user/src/test_torture.c
++++ b/user/src/test_torture.c
+@@ -14,6 +14,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ /* ============================================================================
+@@ -42,7 +43,6 @@ static int g_tests_failed = 0;
+ #define SYS_WAIT4           61
+ #define SYS_YIELD           24
+ #define SYS_GETPID          39
+-#define SYS_SYSINFO         99
+ 
+ #define SYS_SHM_CREATE      410
+ #define SYS_SHM_DESTROY     411
+@@ -59,17 +59,9 @@ static int g_tests_failed = 0;
+  * HELPERS
+  * ============================================================================ */
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t* info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* Pre-cleanup: destroy any SHM regions from prior tests */
+@@ -97,7 +89,10 @@ static void hugepage_50x_loop(void)
+     printf("\n--- Test: hugepage_50x_loop (50 iterations) ---\n");
+ 
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     unsigned long baseline_free = info.free_pages;
+     printf("  Baseline free_pages: %lu\n", baseline_free);
+ 
+@@ -184,7 +179,10 @@ static void hugepage_50x_loop(void)
+ 
+         /* Progress every 10 iterations */
+         if ((iter + 1) % 10 == 0) {
+-            get_sysinfo(&info);
++            if (get_sysinfo(&info) != 0) {
++                TEST_FAIL("sysinfo telemetry unavailable");
++                return;
++            }
+             long drift = (long)baseline_free - (long)info.free_pages;
+             printf("  Iter %d/%d: free_pages=%lu drift=%ld\n",
+                    iter + 1, HP_LOOP_ITERATIONS, info.free_pages, drift);
+@@ -196,7 +194,10 @@ static void hugepage_50x_loop(void)
+     /* Yield to let any deferred cleanup happen */
+     for (int y = 0; y < 10; y++) syscall0(SYS_YIELD);
+ 
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     long final_drift = (long)baseline_free - (long)info.free_pages;
+     if (final_drift < 0) final_drift = -final_drift;
+ 
+@@ -225,7 +226,10 @@ static void shm_collision_50x(void)
+     printf("\n--- Test: shm_collision_50x (20 iterations, 4 children) ---\n");
+ 
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     unsigned int baseline_tasks = info.nr_tasks;
+     printf("  Baseline nr_tasks: %u\n", baseline_tasks);
+ 
+@@ -294,7 +298,10 @@ static void shm_collision_50x(void)
+ 
+         /* Progress */
+         if ((iter + 1) % 5 == 0) {
+-            get_sysinfo(&info);
++            if (get_sysinfo(&info) != 0) {
++                TEST_FAIL("sysinfo telemetry unavailable");
++                return;
++            }
+             printf("  Iter %d/%d: nr_tasks=%u zombies=%u\n",
+                    iter + 1, COLLISION_ITERATIONS, info.nr_tasks, info.nr_zombies);
+         }
+@@ -302,7 +309,10 @@ static void shm_collision_50x(void)
+ 
+     /* Final task count check */
+     for (int y = 0; y < 30; y++) syscall0(SYS_YIELD);
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     int task_drift = (int)info.nr_tasks - (int)baseline_tasks;
+     if (task_drift < 0) task_drift = -task_drift;
+ 
+@@ -336,7 +346,10 @@ static void oom_recovery(void)
+     for (int y = 0; y < 10; y++) syscall0(SYS_YIELD);
+ 
+     vos3_sysinfo_t info;
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     unsigned long baseline_free = info.free_pages;
+ 
+     int64_t ids[OOM_ATTEMPTS];
+@@ -392,7 +405,10 @@ static void oom_recovery(void)
+     shm_cleanup_all();
+     for (int y = 0; y < 10; y++) syscall0(SYS_YIELD);
+ 
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("sysinfo telemetry unavailable");
++        return;
++    }
+     long final_drift = (long)baseline_free - (long)info.free_pages;
+     if (final_drift < 0) final_drift = -final_drift;
+ 
+diff --git a/user/src/test_vmm_soak.c b/user/src/test_vmm_soak.c
+index d61a3ce..38a56a8 100644
+--- a/user/src/test_vmm_soak.c
++++ b/user/src/test_vmm_soak.c
+@@ -21,6 +21,7 @@
+ #include "string.h"
+ #include "unistd.h"
+ #include "syscall.h"
++#include "vos_sysinfo.h"
+ #include <stdint.h>
+ 
+ /* ============================================================================
+@@ -46,7 +47,6 @@ static int g_fail = 0;
+ 
+ #define SYS_YIELD           24
+ #define SYS_EXIT            60
+-#define SYS_SYSINFO         99
+ 
+ #define SYS_SHM_CREATE      410
+ #define SYS_SHM_DESTROY     411
+@@ -56,22 +56,12 @@ static int g_fail = 0;
+ #define VOS3_SHM_FLAG_HUGETLB   (1U << 4)
+ 
+ /* ============================================================================
+- * SYSINFO — matches kernel vos3_sysinfo_t (with hugepage extension)
++ * SYSINFO — shared versioned ABI, including hugepage telemetry
+  * ============================================================================ */
+ 
+-typedef struct {
+-    unsigned long free_pages;
+-    unsigned long total_pages;
+-    unsigned int  nr_tasks;
+-    unsigned int  nr_zombies;
+-    unsigned long uptime_ms;
+-    unsigned int  hugepage_total;
+-    unsigned int  hugepage_used;
+-} vos3_sysinfo_t;
+-
+ static int get_sysinfo(vos3_sysinfo_t *info)
+ {
+-    return (int)syscall1(SYS_SYSINFO, (long)info);
++    return vos3_get_sysinfo(info);
+ }
+ 
+ /* ============================================================================
+@@ -329,7 +319,11 @@ int main(void)
+      * ================================================================ */
+ 
+     while (1) {
+-        get_sysinfo(&info);
++        if (get_sysinfo(&info) != 0) {
++            TEST_FAIL("telemetry", "sysinfo failed");
++            shm_cleanup_all();
++            return 1;
++        }
+         unsigned long elapsed = info.uptime_ms - start_ms;
+         if (elapsed >= TEST_DURATION_MS) break;
+ 
+@@ -351,7 +345,11 @@ int main(void)
+         total_faults += (unsigned int)(faults_a + faults_b);
+ 
+         /* Telemetry sample every 10 seconds */
+-        get_sysinfo(&info);
++        if (get_sysinfo(&info) != 0) {
++            TEST_FAIL("telemetry", "sysinfo failed");
++            shm_cleanup_all();
++            return 1;
++        }
+         if (info.uptime_ms >= next_sample) {
+             elapsed = info.uptime_ms - start_ms;
+             long delta = (long)baseline_fp - (long)info.free_pages;
+@@ -369,7 +367,10 @@ int main(void)
+     shm_cleanup_all();
+     for (int y = 0; y < 30; y++) syscall0(SYS_YIELD);
+ 
+-    get_sysinfo(&info);
++    if (get_sysinfo(&info) != 0) {
++        TEST_FAIL("final_telemetry", "sysinfo failed");
++        return 1;
++    }
+     long final_delta = (long)baseline_fp - (long)info.free_pages;
+     if (final_delta < 0) final_delta = -final_delta;
+ 

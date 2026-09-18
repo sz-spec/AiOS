@@ -7,7 +7,7 @@
  * internal fragmentation, and zombie accumulation over
  * thousands of task cycles.
  *
- * Uses SYS_SYSINFO (99) for kernel telemetry.
+ * Uses versioned native SYSINFO (483) for kernel telemetry.
  * Run with: TEST_ONLY=bench_soak_5min bash run_tests.sh
  */
 
@@ -16,6 +16,7 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 
 /* Syscall numbers */
 #define SYS_READ        0
@@ -30,7 +31,6 @@
 #define SYS_GETTIME     40
 #define SYS_MKDIR       83
 #define SYS_UNLINK      87
-#define SYS_SYSINFO     99
 #define SYS_SHM_CREATE  410
 #define SYS_SHM_DESTROY 411
 #define SYS_SHM_MAP     412
@@ -59,13 +59,6 @@ static int g_fail = 0;
 #define TEST_PASS(name) do { printf("[PASS] %s\n", name); g_pass++; } while(0)
 #define TEST_FAIL(name, msg) do { printf("[FAIL] %s: %s\n", name, msg); g_fail++; } while(0)
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
 
 /* Telemetry history for leak rate analysis */
 typedef struct {
@@ -80,7 +73,7 @@ static int g_telem_count = 0;
 
 static int get_sysinfo(vos3_sysinfo_t* info)
 {
-    return (int)syscall1(SYS_SYSINFO, (long)info);
+    return vos3_get_sysinfo(info);
 }
 
 static unsigned long get_uptime_ms(void)
@@ -260,7 +253,11 @@ int main(int argc, char* argv[])
         if (now >= next_telemetry) {
             elapsed = now - start_ms;
             unsigned long t_sec = elapsed / 1000;
-            if (get_sysinfo(&info) == 0) {
+            if (get_sysinfo(&info) != 0) {
+                TEST_FAIL("periodic_telemetry", "sysinfo failed after workload cleanup");
+                return 1;
+            }
+            {
                 long delta = (long)baseline_fp - (long)info.free_pages;
                 printf("[TELEMETRY] T=%lu free=%lu delta=%ld tasks=%u zombies=%u errors=%d\n",
                        t_sec, info.free_pages, delta,
@@ -272,7 +269,11 @@ int main(int argc, char* argv[])
     }
 
     /* Final telemetry */
-    if (get_sysinfo(&info) == 0) {
+    if (get_sysinfo(&info) != 0) {
+        TEST_FAIL("final_telemetry", "sysinfo failed after workload cleanup");
+        return 1;
+    }
+    {
         long delta = (long)baseline_fp - (long)info.free_pages;
         printf("[TELEMETRY] T=final free=%lu delta=%ld tasks=%u zombies=%u errors=%d\n",
                info.free_pages, delta, info.nr_tasks, info.nr_zombies, total_errors);

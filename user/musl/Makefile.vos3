@@ -142,6 +142,10 @@ EXCLUDE_SRCS := \
 # Apply exclusions
 C_SRCS := $(filter-out $(EXCLUDE_SRCS),$(C_SRCS))
 
+# sysconf/getloadavg need the real errno-translating wrapper, even though
+# the broader Linux extensions are excluded from this port.
+C_SRCS += src/linux/sysinfo.c
+
 # ============================================================================
 # Build directories and objects
 # ============================================================================

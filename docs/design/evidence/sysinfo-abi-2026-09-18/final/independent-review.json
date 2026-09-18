@@ -1,0 +1,69 @@
+{
+  "scope": "Independent static review; final native runtime not certified by this report",
+  "input_sha256": {
+    "/private/tmp/vos-sysinfo-qualified-20260918/musl-symbols.txt": "fdd39ba29d654a044d7594e64764a6b8689d8e366a4ce9610a66c623aa68ca01",
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/user/src/test_sustained.c": "2f6d79b87bac004223ef40fdfece26be3ca51b456a386d199fec414cf7ae3188",
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/user/src/bench_soak_5min.c": "aa4721af9078a5bd1c94c462c2e6b05f7e87684f727612fda35bef2d5f338c00",
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/user/src/bench_ai_throughput.c": "7e36a400a0093ad66c98b99626513907e0ee2e0c2511d2c4e6f23c66e64a528b",
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/user/src/test_health_check.c": "651b7d84e6eb32d833ab315437d9465e9a4a5a816fc4a5186ac40f4ec5e22977",
+    "/private/tmp/vos-health-final-20260917/source/user/src/test_health_check.c": "9d38806f5823262249e0fbd01d3555e785fea464eeb2825308c4b9a0bf29abae",
+    "/private/tmp/vos-sysinfo-control-20260918/result.json": "c7ed2c077eb831b697adb392d0246a697e7151eda7e4a42695e4cecd99f0c81b",
+    "/private/tmp/vos-sysinfo-control-20260918/serial.log": "a6aa740bb7b6887e438d51410ec6206f7df39d3b511a9beb13fcbc094bb9839e",
+    "/private/tmp/vos-sysinfo-final-20260918/bios/serial.log": "6ef43b08e61d630333550ebe4e22d056fdde6d4f7cf2c20bb68b6cee5e7d96b1",
+    "/private/tmp/vos-health-final-20260917/bios-1/serial.log": "bd83bf4db683e63a9b2f5d817b3226a1cfdadf923245f188db0d6e96c966e0ec",
+    "/private/tmp/vos-sysinfo-qualified-20260918/source/kernel/build/native-full-final/user/bin/test_health_check": "c3f1f11c1eec11a5f07c0020b44fb7b62c1f4eebd095dcb9b808b2a5436a9970",
+    "/private/tmp/vos-health-final-20260917/source/kernel/build/native-full-final/user/bin/test_health_check": "28cac8eb9131f7f9c9bcac756542f5eb3d6af79d51de51a200085b239aa7b56a",
+    "/private/tmp/vos-sysinfo-final-20260918/source/kernel/build/native-full-final/user/bin/test_health_check": "c3f1f11c1eec11a5f07c0020b44fb7b62c1f4eebd095dcb9b808b2a5436a9970"
+  },
+  "musl_symbols": {
+    "records": [
+      "342: 00000000000688a0    24 FUNC    WEAK   DEFAULT    5 sysinfo",
+      "1670: 00000000000688a0    24 FUNC    LOCAL  DEFAULT    5 __lsysinfo",
+      "1872: 00000000000a21d8     8 OBJECT  LOCAL  DEFAULT   12 __sysinfo",
+      "2218: 00000000000688a0    24 FUNC    WEAK   DEFAULT    5 sysinfo"
+    ],
+    "public_and_internal_are_defined_FUNC_same_address_size": true,
+    "auxv___sysinfo_remains_distinct_OBJECT": true
+  },
+  "caller_failure_handling": {
+    "test_sustained": "Periodic/final failure records FAIL then returns1 before stale stats use; checks follow workload batches.",
+    "bench_soak_5min": "Periodic/final failure records FAIL then returns1 before stale stats use; checks follow workload batches.",
+    "bench_ai_throughput": "Validity boolean guards final telemetry and zombie verdict; SHM cleanup remains reachable before later checked snapshot."
+  },
+  "health": {
+    "final_elf_identical_initial_abi_elf": true,
+    "producer_loop_normalized_instructions_identical_previous_qualified": true,
+    "old_loop_range": "0x4002e0..0x400355",
+    "new_loop_range": "0x400300..0x400375",
+    "normalization": "RIP displacement and direct branch target relocation only; retains resolved global comments",
+    "global_addresses_unchanged": true,
+    "threshold_unchanged": 80000,
+    "old_main_stack_bytes": 80,
+    "new_main_stack_bytes": 96
+  },
+  "control": {
+    "previous_qualified_same_iso_rerun_health_rate": 41144,
+    "pushed": 41556,
+    "consumed": 41556,
+    "elapsed_ms": 1010,
+    "complete_program_exits": 57,
+    "nonzero_programs": [
+      "test_health_check"
+    ],
+    "initial_abi_rate": 41054,
+    "prior_qualified_bios1_rate": 86575,
+    "interpretation": "Performance variability also affects unchanged old ISO; this prevents attributing the drop solely to the ABI migration. Exact cause not established."
+  },
+  "earlier_metrics": {
+    "qualified_bios1_getpid_avg_cycles": 8317,
+    "initial_abi_getpid_avg_cycles": 12170,
+    "qualified_bios1_first_csw_avg_cycles": 65488,
+    "initial_abi_first_csw_avg_cycles": 94254
+  },
+  "limits": [
+    "No new builds/VM/tests performed.",
+    "No full-suite PASS claimed for final artifact; coordinator runtime still in progress.",
+    "Failure-path cleanup checks do not certify unrelated historical workload cleanup behavior.",
+    "Initial full ABI run and unchanged control both retain actual health failure; no threshold reduction."
+  ]
+}

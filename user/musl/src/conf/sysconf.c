@@ -211,7 +211,8 @@ long sysconf(int name)
 	case JT_AVPHYS_PAGES & 255: ;
 		unsigned long long mem;
 		struct sysinfo si;
-		__lsysinfo(&si);
+		/* vOS local delta: preserve syscall errno on unsupported sysinfo. */
+		if (__lsysinfo(&si) < 0) return -1;
 		if (!si.mem_unit) si.mem_unit = 1;
 		if (name==_SC_PHYS_PAGES) mem = si.totalram;
 		else mem = si.freeram + si.bufferram;

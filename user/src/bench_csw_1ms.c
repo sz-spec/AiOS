@@ -18,13 +18,13 @@
 #include "string.h"
 #include "unistd.h"
 #include "syscall.h"
+#include "vos_sysinfo.h"
 
 /* Syscall numbers */
 #define SYS_FORK        57
 #define SYS_EXIT        60
 #define SYS_WAIT4       61
 #define SYS_GETTIME     40
-#define SYS_SYSINFO     99
 #define SYS_BENCH_READ  222
 #define SYS_GETPID      39
 #define SYS_YIELD       24    /* VOS3_SYS_YIELD */
@@ -47,13 +47,6 @@ typedef struct {
     unsigned long long tsc_freq_khz;
 } bench_summary_t;
 
-typedef struct {
-    unsigned long free_pages;
-    unsigned long total_pages;
-    unsigned int  nr_tasks;
-    unsigned int  nr_zombies;
-    unsigned long uptime_ms;
-} vos3_sysinfo_t;
 
 static unsigned long long rdtsc(void)
 {
