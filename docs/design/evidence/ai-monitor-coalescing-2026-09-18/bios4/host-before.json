@@ -1,0 +1,74 @@
+{
+  "time_utc": "2026-09-18T19:20:51Z",
+  "iso_sha256": "ab445cd6ee1c0f0aaeb14a7109b158408052cf20dc5c5747a460954e99e5d4c4",
+  "qemu_binary": "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+  "qemu_sha256": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+  "checks": [
+    {
+      "argv": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "--version"
+      ],
+      "status": 0,
+      "output": "QEMU emulator version 10.2.2\nCopyright (c) 2003-2025 Fabrice Bellard and the QEMU Project developers\n"
+    },
+    {
+      "argv": [
+        "uptime"
+      ],
+      "status": 0,
+      "output": "22:20  11 users, load averages: 3.24 3.20 3.25\n"
+    },
+    {
+      "argv": [
+        "ps",
+        "-axo",
+        "pid,ppid,etime,pcpu,comm"
+      ],
+      "unavailable": "[Errno 1] Operation not permitted: 'ps'"
+    },
+    {
+      "argv": [
+        "pmset",
+        "-g",
+        "batt"
+      ],
+      "status": 0,
+      "output": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=22151267)\t98%; discharging; 10:58 remaining present: true\n"
+    },
+    {
+      "argv": [
+        "pmset",
+        "-g",
+        "therm"
+      ],
+      "status": 0,
+      "output": "Error:Failed to get thermal warning level with error code 0xe00002bc\nError: Failed to get performance warning level with error code 0xe00002bc\nError: No CPU power status with error code 0xe00002bc\n"
+    },
+    {
+      "argv": [
+        "pmset",
+        "-g",
+        "custom"
+      ],
+      "status": 0,
+      "output": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         180\n womp                 1\n networkoversleep     0\n sleep                1\n tcpkeepalive         1\n disksleep            10\n"
+    },
+    {
+      "argv": [
+        "sw_vers"
+      ],
+      "status": 0,
+      "output": "ProductName:\t\tmacOS\nProductVersion:\t\t26.3.1\nBuildVersion:\t\t25D2128\n"
+    },
+    {
+      "argv": [
+        "sysctl",
+        "machdep.cpu.brand_string",
+        "hw.ncpu"
+      ],
+      "status": 1,
+      "output": "sysctl: sysctl fmt -1 1024 1: Operation not permitted\n"
+    }
+  ]
+}

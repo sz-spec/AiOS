@@ -393,7 +393,7 @@
       "state": "integrated-validation-open",
       "paths": ["kernel/src/drivers/timer.c"],
       "rationale": "The canonical timer IRQ now publishes only atomic deferred work. Integrity hashing, pressure reclaim, callbacks and page-table work execute at a scheduler process-context safe point using the absolute timer clock.",
-      "validation": "Production-source regression, native build, BIOS/1-vCPU and UEFI/4-vCPU boot-to-userland pass on QEMU TCG. Still required: the complementary BIOS/4 and UEFI/1 matrix plus instrumented proof that deadlines fire, coalescing is bounded and no AI allocator/VMM/callback runs on the IRQ stack."
+      "validation": "Production monitor/drain extraction tests pass in UP and NATIVE_SMP_TEST with ASan/UBSan, including skipped telemetry period boundaries. Native build and BIOS/UEFI x 1/4-vCPU boot-to-userland pass on one ISO from fedcfc895b1cc499dcb183fa1978be25c996075d (docs/design/evidence/ai-monitor-coalescing-2026-09-18/). One observation per configuration, not performance acceptance. Still required: instrumented guest proof that deadlines fire, execution is bounded and no AI allocator/VMM/callback runs on the IRQ stack; safe cancellation and production SMP synchronization."
     },
     {
       "id": "hyperv-vsock-stub",

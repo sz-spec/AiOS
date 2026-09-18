@@ -1,0 +1,11 @@
+{
+  "reviewed_commit": "fedcfc895b1cc499dcb183fa1978be25c996075d",
+  "previous_scope_sha256": "285dd4980840cf921ecb0c0b3fc938622fe3969081ebb6299cb107cff76330c3",
+  "current_scope_sha256": "b3455775287594154f796bf2b55e5c8bcf8e319923dbe48388d48bdf01e02e86",
+  "changed_canonical_paths": [
+    "kernel/src/mm/ai_monitor.c"
+  ],
+  "donor_content_and_status_unchanged": true,
+  "source_decisions_unchanged": true,
+  "reason": "Reviewed telemetry coalescing change alters canonical content hash only; source selection remains valid."
+}
