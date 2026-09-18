@@ -232,6 +232,23 @@ static int64_t sys_fork(vos3_syscall_frame_t* frame)
 /* vos3_fork_child_return: defined in user.c, used as thread entry trampoline */
 extern void vos3_fork_child_return(void);
 
+static void destroy_unpublished_clone(vos3_task_t* child)
+{
+    if (child == NULL) return;
+    vos3_signal_task_destroy(child);
+    if (child->fd_table != NULL &&
+        __atomic_sub_fetch(&child->fd_table->ref_count, 1U,
+                           __ATOMIC_ACQ_REL) == 0U) {
+        vos3_fd_table_destroy(child->fd_table);
+        vos3_kfree(child->fd_table);
+    }
+    if (child->address_space != NULL)
+        vos3_vmm_destroy_address_space(child->address_space);
+    if (child->kernel_stack != NULL)
+        vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
+    vos3_kfree(child);
+}
+
 /**
  * @brief sys_clone - Create thread or process
  *
@@ -241,8 +258,8 @@ extern void vos3_fork_child_return(void);
  * Thread syscall args (Linux convention):
  *   rdi = flags
  *   rsi = child_stack (top of new thread's stack)
- *   rdx = parent_tidptr  (ignored for now)
- *   r10 = child_tidptr   (ignored for now)
+ *   rdx = parent_tidptr  (used by CLONE_PARENT_SETTID)
+ *   r10 = child_tidptr   (used by CLONE_CHILD_CLEARTID)
  *   r8  = tls            (used if CLONE_SETTLS)
  */
 static int64_t sys_clone(vos3_syscall_frame_t* frame)
@@ -251,11 +268,18 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     uint64_t child_stack = frame->rsi;   /* top of new thread stack */
     uint64_t tls        = frame->r8;     /* TLS base if CLONE_SETTLS */
 
+    /* This implementation has no child-first store trampoline yet.  Reject
+     * the flag rather than returning a child that violates the clone ABI. */
+    if ((flags & CLONE_CHILD_SETTID) != 0U) return -95;  /* EOPNOTSUPP */
+
     if (((flags & CLONE_SIGHAND) && !(flags & CLONE_VM)) ||
         ((flags & CLONE_THREAD) && !(flags & CLONE_SIGHAND))) return -22;
 
     /* If not sharing VM, just fork */
     if (!(flags & CLONE_VM)) {
+        if ((flags & (CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
+                      CLONE_SETTLS)) != 0U)
+            return -95;
         uint64_t user_rsp = frame->user_rsp;
         return (int64_t)vos3_fork_with_frame(frame, user_rsp);
     }
@@ -277,6 +301,12 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         }
     }
 
+    uint32_t* parent_tidptr = (uint32_t*)(uintptr_t)frame->rdx;
+    if ((flags & CLONE_PARENT_SETTID) != 0U &&
+        (parent_tidptr == NULL ||
+         !access_ok(parent_tidptr, sizeof(*parent_tidptr))))
+        return -14;  /* EFAULT */
+
     vos3_task_t* parent = vos3_sched_current();
     if (parent == NULL) {
         return -1;
@@ -297,6 +327,10 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         return -12;  /* ENOMEM */
     }
     memcpy(child, parent, sizeof(vos3_task_t));
+    /* Never publish the parent's userspace exit-futex registration through
+     * the memcpy window.  The child's own pointer is opaque until exit. */
+    child->clear_child_tid = (flags & CLONE_CHILD_CLEARTID)
+        ? (volatile uint32_t*)(uintptr_t)frame->r10 : NULL;
     child->signal_state = NULL; /* Never alias the copied per-task signal state. */
     child->wait_cleanup = NULL;
     child->wait_cleanup_context = NULL;
@@ -305,8 +339,11 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     child->wq_entry.queue = NULL;
 
     /* Assign new TID; PID = parent's PID for CLONE_THREAD (Linux TGID semantics) */
-    static uint32_t s_thread_pid = 300U;
-    child->tid = s_thread_pid++;
+    child->tid = vos3_task_alloc_tid();
+    if (child->tid == VOS3_TID_INVALID) {
+        vos3_kfree(child);
+        return -11;  /* EAGAIN: task identifiers exhausted */
+    }
     child->pid = (flags & CLONE_THREAD) ? parent->pid : child->tid;
 
     /* Thread name: "<parent>/t" */
@@ -461,19 +498,22 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
     child->next  = NULL;
     child->prev  = NULL;
 
-    /* Register and schedule */
-    if (vos3_signal_task_clone(child, parent, (flags & CLONE_SIGHAND) != 0) != VOS3_IPC_OK ||
-        vos3_task_register(child) != 0) {
-        vos3_signal_task_destroy(child);
-        VOS3_ERROR("sys_clone: failed to register thread in task table");
-        if (child->fd_table != NULL &&
-            __atomic_sub_fetch(&child->fd_table->ref_count, 1U, __ATOMIC_ACQ_REL) == 0) {
-            vos3_fd_table_destroy(child->fd_table);
-            vos3_kfree(child->fd_table);
+    /* Complete all user-visible stores before task-table publication. */
+    if (vos3_signal_task_clone(child, parent,
+                               (flags & CLONE_SIGHAND) != 0) != VOS3_IPC_OK) {
+        destroy_unpublished_clone(child);
+        return -12;
+    }
+    if ((flags & CLONE_PARENT_SETTID) != 0U) {
+        uint32_t tid_value = child->tid;
+        if (copy_to_user(parent_tidptr, &tid_value, sizeof(tid_value)) != 0) {
+            destroy_unpublished_clone(child);
+            return -14;
         }
-        vos3_vmm_destroy_address_space(child->address_space);
-        vos3_vmap_stack_free(child->kernel_stack, child->kernel_stack_guard);
-        vos3_kfree(child);
+    }
+    if (vos3_task_register(child) != 0) {
+        VOS3_ERROR("sys_clone: failed to register thread in task table");
+        destroy_unpublished_clone(child);
         return -12;  /* ENOMEM */
     }
 
@@ -483,18 +523,6 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         child->thread_next = parent->thread_next;
         parent->thread_next = child;
     }
-    /* Set all child-visible state before the scheduler can run it. */
-    child->clear_child_tid = (flags & CLONE_CHILD_CLEARTID)
-        ? (volatile uint32_t*)frame->r10 : NULL;
-    /* CLONE_PARENT_SETTID: write child TID to parent's *ptid (rdx) */
-    if (flags & CLONE_PARENT_SETTID) {
-        uint32_t* ptid = (uint32_t*)frame->rdx;
-        if (ptid != NULL && (uintptr_t)ptid < 0xFFFF800000000000ULL) {
-            uint32_t tid_val = child->tid;
-            copy_to_user(ptid, &tid_val, sizeof(uint32_t));
-        }
-    }
-
     uint32_t tid = child->tid;
     VOS3_INFO("sys_clone: created task '%s' tid=%u from parent '%s' pid=%u",
               child->name, tid, parent->name, parent->pid);

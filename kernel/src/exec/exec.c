@@ -583,9 +583,12 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
     child->xsave_area_size = 0;
     child->ai_guard_ctx = NULL;
 
-    /* Allocate new TID/PID */
-    static uint32_t next_pid = 100U;
-    child->tid = next_pid++;
+    /* Allocate from the same atomic sequence used by tasks and threads. */
+    child->tid = vos3_task_alloc_tid();
+    if (child->tid == VOS3_TID_INVALID) {
+        vos3_kfree(child);
+        return -11;  /* EAGAIN: task identifiers exhausted */
+    }
     child->pid = child->tid;
 
     /* Copy name */

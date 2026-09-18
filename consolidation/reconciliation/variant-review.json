@@ -81580,6 +81580,8 @@
       "waitpid"
     ],
     "symbols_not_in_selected_file": [
+      "alloc_tid",
+      "pthread_join",
       "vos3_vmm_destroy_address_space"
     ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
@@ -81629,6 +81631,8 @@
       "waitpid"
     ],
     "symbols_not_in_selected_file": [
+      "alloc_tid",
+      "pthread_join",
       "vos3_vmm_destroy_address_space"
     ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
@@ -81684,6 +81688,8 @@
       "waitpid"
     ],
     "symbols_not_in_selected_file": [
+      "alloc_tid",
+      "pthread_join",
       "vos3_vmm_destroy_address_space"
     ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"

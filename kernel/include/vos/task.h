@@ -451,6 +451,9 @@ vos3_task_t* vos3_task_current(void);
  */
 int vos3_task_register(vos3_task_t* task);
 
+/** Allocate a system-wide task/thread ID using the shared atomic sequence. */
+vos3_tid_t vos3_task_alloc_tid(void);
+
 /**
  * @brief Get task by ID
  * @param[in] tid Task ID
@@ -516,6 +519,14 @@ void vos3_task_wake(vos3_task_t* task);
  */
 __attribute__((noreturn))
 void vos3_task_exit(int exit_code);
+
+/**
+ * Consume a task's CLONE_CHILD_CLEARTID registration exactly once.
+ * When usercopy is unsafe (for example while handling a user page fault),
+ * pass allow_usercopy=0; waiters are still notified without dereferencing
+ * the user pointer.
+ */
+void vos3_task_release_clear_child_tid(vos3_task_t* task, int allow_usercopy);
 
 /**
  * @brief Kill a task with a signal

@@ -75,15 +75,7 @@ fault_kill_current(vos3_task_t* task, int exit_code)
      * Skip the copy_to_user write (could recurse if page is unmapped);
      * the futex_wake alone is sufficient — musl's clear_child_tid points
      * to __thread_list_lock which holds lock-state, not TID. */
-    if (task->clear_child_tid != NULL) {
-        volatile uint32_t* tidptr = task->clear_child_tid;
-        if ((uintptr_t)tidptr < 0xFFFF800000000000ULL &&
-            ((uintptr_t)tidptr & 3U) == 0U) {
-            extern int64_t vos3_futex_wake_addr(volatile uint32_t* uaddr, int count);
-            vos3_futex_wake_addr(tidptr, 0x7FFFFFFF);
-        }
-        task->clear_child_tid = NULL;
-    }
+    vos3_task_release_clear_child_tid(task, 0);
 
     /* Wake parent if it's blocked in waitpid() or pthread_join() */
     vos3_task_t* parent = task->parent;

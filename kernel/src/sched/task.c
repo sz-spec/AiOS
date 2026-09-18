@@ -86,9 +86,19 @@ extern void vos3_task_entry_trampoline(void);
 /**
  * @brief Allocate a task ID
  */
-static vos3_tid_t alloc_tid(void)
+vos3_tid_t vos3_task_alloc_tid(void)
 {
-    return (vos3_tid_t)vos3_atomic32_fetch_add(&g_next_tid, 1);
+    uint32_t current = vos3_atomic_load32(&g_next_tid.value);
+    for (;;) {
+        /* Never publish the reserved invalid value and never wrap to a live
+         * identifier. Exhaustion is permanent until reboot. */
+        if (current == VOS3_TID_INVALID) return VOS3_TID_INVALID;
+        uint32_t next = current + 1U;
+        uint32_t observed = vos3_atomic_cas32(&g_next_tid.value,
+                                              current, next);
+        if (observed == current) return (vos3_tid_t)current;
+        current = observed;
+    }
 }
 
 /**
@@ -381,7 +391,13 @@ vos3_task_t* vos3_task_create(const char* name,
     task->kernel_rsp = (uint64_t)(uintptr_t)task->context;
 
     /* Initialize task identity */
-    task->tid = alloc_tid();
+    task->tid = vos3_task_alloc_tid();
+    if (task->tid == VOS3_TID_INVALID) {
+        vos3_kfree(task->xsave_area_raw);
+        vos3_vmap_stack_free(task->kernel_stack, task->kernel_stack_guard);
+        vos3_kfree(task);
+        return NULL;
+    }
     task->pid = task->tid;  /* For kernel tasks, pid == tid */
 
     if (name != NULL) {
@@ -994,6 +1010,36 @@ void vos3_task_wake(vos3_task_t* task)
     vos3_irq_restore(flags);
 }
 
+void vos3_task_release_clear_child_tid(vos3_task_t* task, int allow_usercopy)
+{
+    if (task == NULL) return;
+
+    volatile uint32_t* tidptr = __atomic_exchange_n(&task->clear_child_tid,
+                                                     NULL,
+                                                     __ATOMIC_ACQ_REL);
+    if (tidptr == NULL) return;
+
+    uintptr_t addr = (uintptr_t)tidptr;
+    if ((addr & (sizeof(uint32_t) - 1U)) != 0U ||
+        !access_ok((const void*)tidptr, sizeof(uint32_t)))
+        return;
+
+    if (allow_usercopy != 0) {
+        uint32_t current_value = 0U;
+        if (copy_from_user(&current_value, (const void*)tidptr,
+                           sizeof(current_value)) == 0 &&
+            current_value == (uint32_t)task->tid) {
+            const uint32_t zero = 0U;
+            (void)copy_to_user((void*)tidptr, &zero, sizeof(zero));
+        }
+    }
+
+    /* Preserve the existing musl compatibility contract: its registration
+     * may name __thread_list_lock rather than a word containing the TID. */
+    extern int64_t vos3_futex_wake_addr(volatile uint32_t* uaddr, int count);
+    (void)vos3_futex_wake_addr(tidptr, 0x7FFFFFFF);
+}
+
 __attribute__((noreturn))
 void vos3_task_exit(int exit_code)
 {
@@ -1087,20 +1133,7 @@ void vos3_task_exit(int exit_code)
          *
          * Always wake ALL waiters (INT_MAX) to compensate for any missed
          * user-space wakes caused by previous lock-state corruption. */
-        if (current->clear_child_tid != NULL) {
-            volatile uint32_t* tidptr = current->clear_child_tid;
-            if ((uintptr_t)tidptr < 0xFFFF800000000000ULL &&
-                ((uintptr_t)tidptr & 3U) == 0U) {
-                uint32_t cur_val = *(volatile uint32_t*)tidptr;
-                if (cur_val == (uint32_t)current->tid) {
-                    uint32_t zero = 0;
-                    copy_to_user((void*)tidptr, &zero, sizeof(zero));
-                }
-                extern int64_t vos3_futex_wake_addr(volatile uint32_t* uaddr, int count);
-                vos3_futex_wake_addr(tidptr, 0x7FFFFFFF);
-            }
-            current->clear_child_tid = NULL;
-        }
+        vos3_task_release_clear_child_tid(current, 1);
 
         /* Thread fallback: wake parent after CLONE_CHILD_CLEARTID.
          * The futex wake above fires on clear_child_tid (musl's __thread_list_lock),
