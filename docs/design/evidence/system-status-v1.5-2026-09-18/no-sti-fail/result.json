@@ -1,0 +1,198 @@
+{
+  "started_utc": "2026-09-18T20:39:14Z",
+  "scope": "Functional real-stack assembly oracle; not vOS boot or performance acceptance",
+  "context_source": "/private/tmp/vos-handoff-trampoline-mutations/context-no-sti.S",
+  "context_sha256": "56ea8c7df02d46e415822b02537cf82fcd42bfdeb4e398ec6355961f23cd0118",
+  "diagnostic_override": true,
+  "commands": [
+    {
+      "argv": [
+        "x86_64-elf-gcc",
+        "-ffreestanding",
+        "-fno-pie",
+        "-fno-pic",
+        "-mcmodel=kernel",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-mno-sse2",
+        "-fno-stack-protector",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/private/tmp/vos-scheduler-handoff/scripts/native_handoff/harness.c",
+        "-o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/harness.o"
+      ],
+      "log": "compile-0.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "x86_64-elf-gcc",
+        "-ffreestanding",
+        "-fno-pie",
+        "-fno-pic",
+        "-mcmodel=kernel",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-mno-sse2",
+        "-fno-stack-protector",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/private/tmp/vos-scheduler-handoff/scripts/native_handoff/boot64.S",
+        "-o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/boot.o"
+      ],
+      "log": "compile-1.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "x86_64-elf-gcc",
+        "-ffreestanding",
+        "-fno-pie",
+        "-fno-pic",
+        "-mcmodel=kernel",
+        "-mno-red-zone",
+        "-mno-sse",
+        "-mno-sse2",
+        "-fno-stack-protector",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-c",
+        "/private/tmp/vos-handoff-trampoline-mutations/context-no-sti.S",
+        "-o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/context.o"
+      ],
+      "log": "compile-2.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "x86_64-elf-ld",
+        "-nostdlib",
+        "-z",
+        "max-page-size=0x1000",
+        "-T",
+        "/private/tmp/vos-scheduler-handoff/scripts/native_handoff/link.ld",
+        "-o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/handoff.elf",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/boot.o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/harness.o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/context.o"
+      ],
+      "log": "link.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "x86_64-elf-objdump",
+        "-dr",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/context.o"
+      ],
+      "log": "context.disasm",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "xorriso",
+        "-as",
+        "mkisofs",
+        "-R",
+        "-r",
+        "-J",
+        "-b",
+        "boot/limine/limine-bios-cd.bin",
+        "-no-emul-boot",
+        "-boot-load-size",
+        "4",
+        "-boot-info-table",
+        "-hfsplus",
+        "-apm-block-size",
+        "2048",
+        "--efi-boot",
+        "boot/limine/limine-uefi-cd.bin",
+        "-efi-boot-part",
+        "--efi-boot-image",
+        "--protective-msdos-label",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/iso-root",
+        "-o",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/handoff.iso"
+      ],
+      "log": "iso.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "/Users/sz/Desktop/vos/vos 5/kernel/build/limine/bin/limine",
+        "bios-install",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/handoff.iso"
+      ],
+      "log": "limine-install.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "--version"
+      ],
+      "log": "qemu-version.log",
+      "exit_status": 0
+    },
+    {
+      "argv": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-cpu",
+        "qemu64",
+        "-m",
+        "64",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "file:/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/serial.log",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-nic",
+        "none",
+        "-device",
+        "isa-debug-exit,iobase=0xf4,iosize=0x04",
+        "-cdrom",
+        "/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/handoff.iso"
+      ],
+      "log": "qemu.log",
+      "exit_status": 165
+    }
+  ],
+  "passed": false,
+  "source_sha256": {
+    "scripts/native_handoff/boot64.S": "d9e78e1315b37313d85ae5310ea73e6a94bed0f3748f20547a177201bf4496c0",
+    "scripts/native_handoff/harness.c": "892d21f201aab2d3e1a198ceda40b5352fd6e78b7ab2ba82edda470451ae57c1",
+    "scripts/native_handoff/link.ld": "b28eec36f13ec9bbbb53ace9132f87d990a71ac27c5a3cd1d24114a0e090e05e"
+  },
+  "limine_sha256": {
+    "limine-bios.sys": "ff8cc6554f45e4ff254c806aeaa0af057f217b03c8a78eac6a68a422de25c1da",
+    "limine-bios-cd.bin": "d01ca09699a0e6404e1d37d44fdb811cf5e153c348a728ec30023d6e1a17bf32",
+    "limine-uefi-cd.bin": "319bafaff9b6ea6f50dc7fb1d0079ea579a5f8552588176b7ecd783bbdfc9428",
+    "BOOTX64.EFI": "5020dbb11a99c0dd24c7115af3d930320face8146f4d44922813a4d27b9c8298",
+    "BOOTIA32.EFI": "b4a560bf1a985dc813cea5375a24bd66c520edf0a9cf501f1a04c3daa40543f9"
+  },
+  "qemu_binary": "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+  "qemu_sha256": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+  "elf_sha256": "2cb7e04e2b4122fc411817532d92e282b163c4dbc9edd019a48d17431aec82d0",
+  "iso_sha256": "77dd590a3aba208df189e86e1b9a460ceac2a08f3b752c7770bea7ac827a2ff6",
+  "serial_sha256": "da214f9ab238fae93c5a9a35e481c33b37f7a3d26be1328949659b8b2801baee",
+  "context_unchanged": true,
+  "iso_unchanged": true
+}

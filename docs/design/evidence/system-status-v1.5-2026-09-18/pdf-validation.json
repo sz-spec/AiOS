@@ -1,0 +1,14 @@
+{
+  "pdf": "docs/reports/vos-system-unification-status-2026-09-18-v1.5.pdf",
+  "sha256": "e27de940ed586b9688a8163dd704072090902ec2315ec52fbf46f712e22e0a14",
+  "pages": 6,
+  "bytes": 533457,
+  "snapshot_time": "2026-09-18T23:41:26+03:00",
+  "checked_at": "2026-09-19T00:12:29.489767+03:00",
+  "checks": [
+    "6 pages",
+    "key figures and complete ISO hash extract correctly",
+    "all 6 pages visually reviewed using rendered contact sheet"
+  ],
+  "scope": "Status report only; no new OS acceptance or performance run."
+}

@@ -1,0 +1,20 @@
+{
+  "captured_at": "2026-09-18T23:41:26.021677+03:00",
+  "main": "b2b4b5dc4ac58950cf4baa8b8d05ec46e1a45b15",
+  "origin_main_local_tracking": "b2b4b5dc4ac58950cf4baa8b8d05ec46e1a45b15",
+  "main_status_before_report": "",
+  "canonical_iso_sha256": "ab445cd6ee1c0f0aaeb14a7109b158408052cf20dc5c5747a460954e99e5d4c4",
+  "ledger_counts": {
+    "missing-from-canonical": 1150,
+    "canonical-diverged-review": 499,
+    "selected-content-retained": 4497,
+    "content-retained-at-other-path": 92
+  },
+  "canonical_only": 1563,
+  "candidate_branch": "integration/scheduler-handoff",
+  "candidate_base": "b2b4b5dc4ac58950cf4baa8b8d05ec46e1a45b15",
+  "candidate_status": "M Makefile\n M kernel/include/vos/scheduler.h\n M kernel/include/vos/task.h\n M kernel/src/arch/x86_64/interrupts.c\n M kernel/src/exec/exec.c\n M kernel/src/exec/exec_syscall.c\n M kernel/src/sched/context.S\n M kernel/src/sched/scheduler.c\n M kernel/src/sched/task.c\n M scripts/test_msgqueue_lifetime.py\n M scripts/test_scheduler_initial_placement.py\n M scripts/test_sync_waitqueue_protocol.py\n?? consolidation/handoff-checkpoint/\n?? scripts/native_handoff/\n?? scripts/run_native_handoff.py\n?? scripts/test_scheduler_handoff.py",
+  "candidate_iso_sha256": "75000bfce4927f87112b0505fa41d4cf3f2da05980e8e213efe380849d13edf9",
+  "candidate_tracked_diff_sha256": "9cd918d0cc656c73f5457707dbe53f88a1f473d9e5609223c978954de265edcb",
+  "note": "Candidate has untracked files too; diff hash alone does not identify entire candidate."
+}
