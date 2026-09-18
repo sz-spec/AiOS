@@ -45,14 +45,15 @@ typedef int64_t (*vos3_syscall_handler_t)(vos3_syscall_frame_t*);
 static vos3_syscall_handler_t g_syscall_table[VOS3_SYS_MAX];
 static uint64_t mock_rflags=512;
 static uint32_t g_deferred_active[256],g_deferred_pending[256],cpu;
-static int g_reap_pending,g_ai_guard_dirty,g_tcp_work_pending;
-static int shm,spaces,tasks,ai,contexts,tcp,recursion,handler_done,signals,lock_held;
+static int g_reap_pending,g_ai_guard_dirty,g_tcp_work_pending,g_ai_monitor_pending;
+static int shm,spaces,tasks,ai,contexts,tcp,monitor,recursion,handler_done,signals,lock_held;
 static uint32_t get_cpu_id(void){return cpu;}
 void vos3_sched_process_deferred(void);
 static void vos3_shm_reap_creators(void){assert(!lock_held);shm++;if(recursion){recursion=0;vos3_sched_process_deferred();}}
 static void vos3_vmm_reap_address_spaces(void){assert(!lock_held);spaces++;}
 static void vos3_ai_guard_reap_contexts(void){assert(!lock_held&&(mock_rflags&512));contexts++;}
 static void vos3_task_reap(void){assert(!lock_held);tasks++;}
+static void vos3_ai_monitor_tick(void){assert(!lock_held&&(mock_rflags&512));monitor++;}
 static void vos3_ai_guard_reprotect_tick(void){assert(!lock_held);ai++;}
 static void vos3_tcp_timer_tick(void){assert(!lock_held);tcp++;}
 static void vos3_console_puts(const char*s){(void)s;}
@@ -60,11 +61,11 @@ static int64_t check_app_syscall_permission(uint64_t n){(void)n;return 0;}
 static int64_t handler(vos3_syscall_frame_t*f){(void)f;assert(!handler_done);lock_held=1;handler_done=1;lock_held=0;return 42;}
 void vos3_signal_deliver(vos3_syscall_frame_t*f,int64_t result){(void)f;assert(handler_done&&!lock_held&&result==42);assert(shm==((mock_rflags&512)?1:0));signals++;}
 ''' + request_cpu+'\n'+request+'\n'+drain+'\n'+function(source,'int64_t vos3_syscall_dispatch(')+r'''
-static void reset(void){shm=spaces=tasks=ai=contexts=tcp=signals=handler_done=0;cpu=0;mock_rflags=512;for(int i=0;i<256;i++)g_deferred_active[i]=g_deferred_pending[i]=0;}
+static void reset(void){shm=spaces=tasks=ai=contexts=tcp=monitor=signals=handler_done=0;g_ai_monitor_pending=0;cpu=0;mock_rflags=512;for(int i=0;i<256;i++)g_deferred_active[i]=g_deferred_pending[i]=0;}
 int main(void){
- reset();mock_rflags=0;g_reap_pending=g_ai_guard_dirty=g_tcp_work_pending=1;
+ reset();mock_rflags=0;g_reap_pending=g_ai_guard_dirty=g_tcp_work_pending=g_ai_monitor_pending=1;
  vos3_sched_request_deferred();
- vos3_sched_process_deferred();assert(!(shm|spaces|tasks|ai|contexts|tcp));assert(g_reap_pending&&g_ai_guard_dirty&&g_tcp_work_pending);
+ vos3_sched_process_deferred();assert(!(shm|spaces|tasks|ai|contexts|tcp|monitor));assert(g_reap_pending&&g_ai_guard_dirty&&g_tcp_work_pending&&g_ai_monitor_pending);
  mock_rflags=512;recursion=1;vos3_sched_process_deferred();
  assert(shm==1&&spaces==1&&contexts==1&&ai==1&&tcp==1&&!g_deferred_active[0]);
 #ifdef NATIVE_SMP_TEST
@@ -72,7 +73,7 @@ int main(void){
 #else
  assert(tasks==1);
 #endif
- assert(!g_reap_pending&&!g_ai_guard_dirty&&!g_tcp_work_pending);
+ assert(!g_reap_pending&&!g_ai_guard_dirty&&!g_tcp_work_pending&&!g_ai_monitor_pending&&monitor==1);
  reset();vos3_sched_process_deferred();assert(!shm&&!spaces&&!contexts&&!ai&&!tcp);
  vos3_sched_request_deferred();vos3_sched_process_deferred();assert(shm==1&&spaces==1&&contexts==1&&!ai&&!tcp);
 #ifdef NATIVE_SMP_TEST
@@ -84,9 +85,9 @@ int main(void){
  cpu=3;vos3_sched_process_deferred();assert(shm==1&&spaces==1&&contexts==1);
  reset();cpu=256;vos3_sched_process_deferred();assert(!(shm|spaces|tasks|ai|tcp));
 #ifdef NATIVE_SMP_TEST
- reset();cpu=3;g_reap_pending=g_ai_guard_dirty=g_tcp_work_pending=1;vos3_sched_request_deferred();vos3_sched_process_deferred();
+ reset();cpu=3;g_reap_pending=g_ai_guard_dirty=g_tcp_work_pending=g_ai_monitor_pending=1;vos3_sched_request_deferred();vos3_sched_process_deferred();
  assert(shm==1&&spaces==1&&tasks==1&&!ai&&!tcp&&!g_deferred_active[3]);
- assert(g_reap_pending&&g_ai_guard_dirty&&g_tcp_work_pending);
+ assert(g_reap_pending&&g_ai_guard_dirty&&g_tcp_work_pending&&g_ai_monitor_pending&&!monitor);
 #endif
  reset();g_reap_pending=g_ai_guard_dirty=g_tcp_work_pending=1;recursion=1;vos3_sched_request_deferred();
  g_syscall_table[1]=handler;vos3_syscall_frame_t frame={1,0};

@@ -21,6 +21,7 @@ class DeferredEmptyPath(unittest.TestCase):
 #include <assert.h>
 static uint32_t g_deferred_active[256],g_deferred_pending[256],cpu;
 static int g_reap_pending,g_ai_guard_dirty,g_tcp_work_pending;
+static volatile int g_ai_monitor_pending;
 static uint64_t mock_flags=512;
 static unsigned exchanges,loads,drains,reentry,late_publish;
 static uint32_t get_cpu_id(void){return cpu;}
@@ -29,11 +30,10 @@ static uint32_t observed_load(uint32_t *p,int order){
  if(late_publish){late_publish=0;__atomic_store_n(p,1,__ATOMIC_RELEASE);}
  return value;
 }
-static uint32_t observed_exchange(uint32_t *p,uint32_t value,int order){
- exchanges++;return __atomic_exchange_n(p,value,order);
-}
 #define __atomic_load_n observed_load
-#define __atomic_exchange_n observed_exchange
+/* Keep each production operand's type/volatile qualifier intact. The macro
+ * does not recursively expand its own name, so this still calls the builtin. */
+#define __atomic_exchange_n(p,value,order) (++exchanges, __atomic_exchange_n((p),(value),(order)))
 void vos3_sched_request_deferred_cpu(uint32_t);
 void vos3_sched_process_deferred(void);
 static void vos3_shm_reap_creators(void){
@@ -44,6 +44,7 @@ static void vos3_shm_reap_creators(void){
 static void vos3_vmm_reap_address_spaces(void){}
 static void vos3_ai_guard_reap_contexts(void){}
 static void vos3_task_reap(void){}
+static void vos3_ai_monitor_tick(void){}
 static void vos3_ai_guard_reprotect_tick(void){}
 static void vos3_tcp_timer_tick(void){}
 ''' + function(source,'void vos3_sched_request_deferred_cpu(') + '\n' + drain + r'''

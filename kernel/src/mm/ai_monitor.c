@@ -482,7 +482,12 @@ void vos3_ai_monitor_tick(void)
 
     /* Periodic telemetry report */
     uint32_t interval = g_config.telemetry_interval;
-    if (interval > 0U && (current_tick % interval) == 0ULL) {
+    /* Deferred runs can skip the exact boundary (e.g. 999 -> 1001). Report
+     * once when crossing a period, without replaying every missed interval.
+     * Division preserves the original absolute period boundaries and avoids
+     * an overflowing last_report_tick + interval deadline. */
+    if (interval > 0U &&
+        current_tick / interval > g_monitor_stats.last_report_tick / interval) {
         /* Only report if there's activity */
         if (g_monitor_stats.total_accesses > 0ULL ||
             g_monitor_stats.anomaly_count > 0ULL) {
