@@ -33,6 +33,7 @@ native-build-check:
 	@python3 scripts/test_deferred_empty_path.py
 	@python3 scripts/test_ai_context_lifetime.py
 	@python3 scripts/test_ai_context_external_callers.py
+	@python3 scripts/test_scheduler_handoff.py
 
 consolidation-check:
 	@python3 consolidation/reconcile_sources.py

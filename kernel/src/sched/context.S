@@ -65,6 +65,17 @@ vos3_context_switch:
     /* rsp = new_ctx */
     movq %rsi, %rsp
 
+    /* The outgoing stack is no longer executing. A C continuation after
+     * context_switch would belong to an earlier switch, so acknowledge here
+     * on every path, including first dispatch. Incoming r12 is still saved
+     * on the context frame; use it to preserve the exact frame address.
+     * Align dynamically: synthetic and suspended contexts need not share
+     * the same alignment. The callback preserves r12 by the SysV ABI. */
+    movq %rsp, %r12
+    andq $-16, %rsp
+    call vos3_sched_switch_stack_ack
+    movq %r12, %rsp
+
     /* Pop callee-saved registers */
     popq %r15
     popq %r14
@@ -114,7 +125,11 @@ vos3_task_entry_trampoline:
 
     /* Align stack to 16 bytes before call (required by ABI) */
     andq $~0xF, %rsp
-    subq $8, %rsp
+
+    /* Scheduler selection/handoff runs with IF clear. New kernel entries
+     * have no suspended irq_restore continuation, so enable interrupts only
+     * after the stack acknowledgement and complete entry-frame setup. */
+    sti
 
     /* Call the entry function: entry(arg) */
     call *%rax

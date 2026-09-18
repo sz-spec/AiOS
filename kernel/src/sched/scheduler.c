@@ -142,6 +142,10 @@ static vos3_task_t* g_idle_task[256] __attribute__((aligned(VOS3_CACHE_LINE_SIZE
 /** @brief Scheduler lock */
 static vos3_spinlock_t g_sched_lock = VOS3_SPINLOCK_INIT;
 
+/* Published under g_sched_lock; consumed only on the incoming stack.
+ * A CPU may own both current and outgoing during a switch. */
+static vos3_task_t* g_switch_outgoing[256];
+
 /** @brief Sleep queue lock */
 static vos3_spinlock_t g_sleep_lock = VOS3_SPINLOCK_INIT;
 
@@ -246,32 +250,6 @@ static void rq_enqueue(vos3_run_queue_t* rq, vos3_task_t* task)
 }
 
 /**
- * @brief Remove task from front of run queue
- */
-static vos3_task_t* rq_dequeue(vos3_run_queue_t* rq)
-{
-    vos3_task_t* task = rq->head;
-
-    if (task == NULL) {
-        return NULL;
-    }
-
-    rq->head = task->next;
-    if (rq->head != NULL) {
-        rq->head->prev = NULL;
-    } else {
-        rq->tail = NULL;
-    }
-
-    task->next = NULL;
-    task->prev = NULL;
-    rq->count--;
-    task->flags &= ~VOS3_TASK_FLAG_QUEUED;
-
-    return task;
-}
-
-/**
  * @brief Remove specific task from run queue
  */
 static void rq_remove(vos3_run_queue_t* rq, vos3_task_t* task)
@@ -294,14 +272,6 @@ static void rq_remove(vos3_run_queue_t* rq, vos3_task_t* task)
     task->flags &= ~VOS3_TASK_FLAG_QUEUED;
 }
 
-/**
- * @brief Check if run queue is empty
- */
-static int rq_empty(const vos3_run_queue_t* rq)
-{
-    return (rq->head == NULL) ? 1 : 0;
-}
-
 /* ============================================================================
  * SCHEDULER CORE
  * ============================================================================ */
@@ -310,55 +280,101 @@ static int rq_empty(const vos3_run_queue_t* rq)
  * @brief Select next task to run (SMP-aware)
  * @return Next task, or idle task if none available
  */
+static int sched_task_selectable_locked(vos3_task_t* task, uint32_t cpu)
+{
+    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    if (state != VOS3_TASK_READY && state != VOS3_TASK_RUNNING)
+        return 0;
+    if ((task->flags & (VOS3_TASK_FLAG_IDLE | VOS3_TASK_FLAG_PINNED)) &&
+        task->cpu_id != cpu)
+        return 0;
+#ifdef NATIVE_SMP_TEST
+    if (task->sched_owner_plus_one != 0 &&
+        task->sched_owner_plus_one != cpu + 1U)
+        return 0;
+#endif
+    uint32_t owner = __atomic_load_n(&task->sched_execution_owner, __ATOMIC_ACQUIRE);
+    return owner == 0U ||
+        (owner == cpu + 1U && task == g_current_task[cpu] &&
+         __atomic_load_n(&g_switch_outgoing[cpu], __ATOMIC_ACQUIRE) == NULL);
+}
+
+/* Caller holds g_sched_lock with local IRQs disabled. Selection alone must
+ * not expose a window where a reaper or another CPU can claim next. */
+static void sched_reserve_switch_locked(vos3_task_t* prev, vos3_task_t* next,
+                                        uint32_t cpu)
+{
+    if (next == NULL || !sched_task_selectable_locked(next, cpu) ||
+        __atomic_load_n(&g_switch_outgoing[cpu], __ATOMIC_ACQUIRE) != NULL)
+        VOS3_PANIC("Invalid scheduler handoff reservation");
+    if (prev != NULL &&
+        __atomic_load_n(&prev->sched_execution_owner, __ATOMIC_ACQUIRE) != cpu + 1U)
+        VOS3_PANIC("Outgoing task lacks CPU reservation");
+    if (prev == next)
+        return;
+    uint32_t expected = 0U;
+    if (!__atomic_compare_exchange_n(&next->sched_execution_owner, &expected,
+                                     cpu + 1U, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        VOS3_PANIC("Incoming task already reserved");
+    __atomic_store_n(&g_switch_outgoing[cpu], prev, __ATOMIC_RELEASE);
+}
+
+/* Called by context.S after moving RSP, before restoring registers/returning.
+ * Do not reference the outgoing task after releasing its reservation. */
+void vos3_sched_switch_stack_ack(void)
+{
+    uint32_t cpu = get_cpu_id();
+    vos3_task_t* prev = __atomic_exchange_n(&g_switch_outgoing[cpu], NULL,
+                                           __ATOMIC_ACQ_REL);
+#ifdef VOS3_HW_XSAVE
+    extern void vos3_xsave_restore_for_task(vos3_task_t*);
+    vos3_xsave_restore_for_task(g_current_task[cpu]);
+#endif
+    if (prev != NULL) {
+        if (__atomic_load_n(&prev->sched_execution_owner, __ATOMIC_ACQUIRE) != cpu + 1U)
+            VOS3_PANIC("Stack acknowledgement owner mismatch");
+        __atomic_store_n(&prev->sched_execution_owner, 0U, __ATOMIC_RELEASE);
+    }
+}
+
+/* Serializes the last execution check with every incoming reservation.
+ * Retired tasks must already be detached from task/wait/sleep ownership. */
+int vos3_sched_claim_task_reap(vos3_task_t* task)
+{
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_sched_lock);
+    int claimed = 0;
+    if (__atomic_load_n(&task->state, __ATOMIC_ACQUIRE) == VOS3_TASK_DEAD &&
+        !(task->flags & (VOS3_TASK_FLAG_QUEUED | VOS3_TASK_FLAG_IDLE)) &&
+        !vos3_fpu_task_owned(task)) {
+        uint32_t expected = 0U;
+        claimed = __atomic_compare_exchange_n(&task->sched_execution_owner,
+                    &expected, UINT32_MAX, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE);
+    }
+    vos3_spinlock_unlock(&g_sched_lock);
+    vos3_irq_restore(flags);
+    return claimed;
+}
+
 static vos3_task_t* pick_next_task(void)
 {
-    uint32_t cpu_id = get_cpu_id();
-#ifdef NATIVE_SMP_TEST
-    /* A queued previous task may still be saving its stack. Only its owner
-     * may select it; local IRQ exclusion closes the same-CPU handoff gap.
-     * There is deliberately no migration until handoff/FPU migration is qualified. */
+    uint32_t cpu = get_cpu_id();
     for (int prio = (int)VOS3_PRIORITY_COUNT; prio >= 0; prio--) {
-        vos3_run_queue_t *rq = prio == (int)VOS3_PRIORITY_COUNT ?
+        vos3_run_queue_t* rq = prio == (int)VOS3_PRIORITY_COUNT ?
                               &g_interactive_rq : &g_run_queues[prio];
-        for (vos3_task_t *task = rq->head; task != NULL; task = task->next) {
-            if (task->sched_owner_plus_one != 0 &&
-                task->sched_owner_plus_one != cpu_id + 1)
+        for (vos3_task_t* task = rq->head; task != NULL; task = task->next) {
+            if (!sched_task_selectable_locked(task, cpu))
                 continue;
-            task->sched_owner_plus_one = cpu_id + 1;
+#ifdef NATIVE_SMP_TEST
+            task->sched_owner_plus_one = cpu + 1U;
+#endif
             rq_remove(rq, task);
             return task;
         }
     }
-    return g_idle_task[cpu_id];
-#else
-
-    /* [QUANTUM-LEAP v21.0.1] Two-Plane fast path: any LC_INTERACTIVE
-     * task wins over every priority queue. This implements the
-     * "human-facing agents bypass round-robin" contract from the
-     * dispatch_hint taxonomy without changing the existing 5-priority
-     * sweep — when the interactive queue is empty (the common case
-     * during background batch runs), behavior is identical to v20.x.
-     *
-     * [OLYMPUS-FIX P-06] Single read of g_interactive_rq.head. The
-     * previous form called rq_empty() then rq_dequeue() — both load
-     * head and rq_dequeue loads it again. Inline the empty check on
-     * the head pointer we already have.
-     * [OLYMPUS-FIX P-05] unlikely() — the typical case is empty.
-     */
-    if (unlikely(g_interactive_rq.head != NULL)) {
-        return rq_dequeue(&g_interactive_rq);
-    }
-
-    /* Check queues from highest to lowest priority */
-    for (int prio = (int)VOS3_PRIORITY_COUNT - 1; prio >= 0; prio--) {
-        if (rq_empty(&g_run_queues[prio]) == 0) {
-            return rq_dequeue(&g_run_queues[prio]);
-        }
-    }
-
-    /* No runnable tasks - return idle task for this CPU */
-    return g_idle_task[cpu_id];
-#endif
+    if (!sched_task_selectable_locked(g_idle_task[cpu], cpu))
+        VOS3_PANIC("Idle task unavailable for scheduler handoff");
+    return g_idle_task[cpu];
 }
 
 /**
@@ -405,6 +421,10 @@ static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
                    next->name, next->tid,
                    (unsigned long long)(next->context ? next->context->rip : 0));
     }
+
+    /* Detach lazy hardware ownership while prev is still current and its
+     * CPU reservation prevents migration/reclamation. */
+    vos3_fpu_switch_out(prev);
 
     /* Update current task for this CPU */
     g_current_task[cpu_id] = next;
@@ -524,10 +544,8 @@ static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
         vos3_context_switch(NULL, next->context);
     }
 
-#ifdef VOS3_HW_XSAVE
-    /* Restore runs on the NEW task's stack — `next` is already current. */
-    vos3_xsave_restore_for_task(next);
-#endif
+    /* Incoming extended state is restored by the assembly acknowledgement.
+     * The local next here belongs to a suspended, earlier invocation. */
 
     /* Benchmark: record CSW end timestamp (runs on new task) */
     vos3_bench_csw_end();
@@ -554,6 +572,7 @@ int vos3_sched_init(void)
     for (size_t i = 0U; i < 256U; i++) {
         g_current_task[i] = NULL;
         g_idle_task[i] = NULL;
+        g_switch_outgoing[i] = NULL;
     }
 
     /* Clear sleep queue */
@@ -611,25 +630,19 @@ void vos3_sched_start(void)
 
     VOS3_INFO("Starting scheduler (SMP-aware)");
 
-#ifdef NATIVE_SMP_TEST
-    /* First context takes over interrupt state; no IRQ may interrupt the
-     * initial locked selection while there is no valid current task. */
+    /* First context takes over interrupt state in every build. */
     (void)vos3_irq_save();
-#endif
     g_sched_running = 1;
 
     /* Initialize BSP scheduler state */
     g_cpu_sched_state[0].need_reschedule = 0;
     g_cpu_sched_state[0].task_count = 0;
 
-    /* Pick first task */
-#ifdef NATIVE_SMP_TEST
+    /* Reserve bootstrap ownership before publishing the first task. */
     vos3_spinlock_lock(&g_sched_lock);
-#endif
     vos3_task_t* first = pick_next_task();
-#ifdef NATIVE_SMP_TEST
+    sched_reserve_switch_locked(NULL, first, 0U);
     vos3_spinlock_unlock(&g_sched_lock);
-#endif
 
     g_current_task[0] = first;
     first->state = VOS3_TASK_RUNNING;
@@ -725,7 +738,10 @@ void vos3_sched_add_task(vos3_task_t* task)
     /* Guard: prevent double-add list corruption.
      * VOS3_TASK_FLAG_QUEUED is set/cleared atomically inside rq_enqueue,
      * rq_dequeue, and rq_remove — definitive queue membership tracking. */
-    if (task->flags & VOS3_TASK_FLAG_QUEUED) {
+    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    if (state == VOS3_TASK_ZOMBIE || state == VOS3_TASK_DEAD ||
+        __atomic_load_n(&task->sched_execution_owner, __ATOMIC_ACQUIRE) == UINT32_MAX ||
+        (task->flags & VOS3_TASK_FLAG_QUEUED)) {
         vos3_spinlock_unlock(&g_sched_lock);
         vos3_irq_restore(flags);
         return;
@@ -990,6 +1006,8 @@ void vos3_sched_reschedule(void)
     put_prev_task(prev);
 
     vos3_task_t* next = pick_next_task();
+    sched_reserve_switch_locked(prev, next, cpu_id);
+    g_cpu_sched_state[cpu_id].need_reschedule = 0;
 
     vos3_spinlock_unlock(&g_sched_lock);
 
@@ -1014,8 +1032,8 @@ void vos3_sched_reschedule(void)
         }
     }
 
-    g_cpu_sched_state[cpu_id].need_reschedule = 0;
-
+    /* This continuation may have resumed on another CPU. The serviced
+     * request was cleared before the switch, not through stale cpu_id here. */
     vos3_irq_restore(flags);
 
     /* K-R2/K-R3: Process deferred ISR work (reap + AI Guard reprotect)
@@ -1047,13 +1065,6 @@ vos3_task_t* vos3_sched_current(void)
 {
     uint32_t cpu_id = get_cpu_id();
     return g_current_task[cpu_id];
-}
-
-void vos3_sched_set_current(vos3_task_t* task)
-{
-    uint32_t cpu_id = get_cpu_id();
-    g_current_task[cpu_id] = task;
-    percpu_set_current(task);
 }
 
 vos3_task_t* vos3_sched_get_idle(void)
@@ -1142,6 +1153,23 @@ void vos3_sched_sleep_until(vos3_task_t* task, uint64_t wake_time)
 
     /* Remove from run queue (has its own irq_save) */
     vos3_sched_remove_task(task);
+}
+
+void vos3_sched_cancel_sleep(vos3_task_t* task)
+{
+    vos3_irqflags_t flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_sleep_lock);
+    vos3_task_t** link = &g_sleep_queue;
+    while (*link != NULL && *link != task)
+        link = &(*link)->next;
+    if (*link == task) {
+        *link = task->next;
+        task->next = NULL;
+        task->wake_time = 0;
+        g_sched_stats.sleeping_count--;
+    }
+    vos3_spinlock_unlock(&g_sleep_lock);
+    vos3_irq_restore(flags);
 }
 
 void vos3_sched_process_sleepers(void)
@@ -1234,13 +1262,19 @@ int vos3_sched_init_ap(uint32_t cpu_id)
         }
     }
 
-    /* Initialize per-CPU state */
+    /* The AP bootstrap stack initially executes as its idle task. Keep
+     * that identity reserved until the first real stack-switch ack. */
+    vos3_irqflags_t init_flags = vos3_irq_save();
+    vos3_spinlock_lock(&g_sched_lock);
+    sched_reserve_switch_locked(NULL, g_idle_task[cpu_id], cpu_id);
     g_current_task[cpu_id] = g_idle_task[cpu_id];
+    vos3_spinlock_unlock(&g_sched_lock);
     g_cpu_sched_state[cpu_id].need_reschedule = 0;
     g_cpu_sched_state[cpu_id].task_count = 0;
 
     /* Set initial current task in percpu structure */
     percpu_set_current(g_idle_task[cpu_id]);
+    vos3_irq_restore(init_flags);
 
     VOS3_INFO("[SCHED] CPU %u scheduler initialized", cpu_id);
 

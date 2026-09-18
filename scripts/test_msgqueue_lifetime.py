@@ -15,10 +15,18 @@ ROOT = Path(__file__).resolve().parents[1]
 class MessageQueueLifetimeTests(unittest.TestCase):
     def test_task_lifetime_paths_reset_and_run_wait_cleanup(self):
         task_source = (ROOT / "kernel/src/sched/task.c").read_text()
-        self.assertIn("vos3_task_run_wait_cleanup(task);",
-                      function(task_source, "void vos3_task_destroy("))
-        self.assertIn("vos3_task_run_wait_cleanup(task);",
-                      function(task_source, "void vos3_task_reap("))
+        destroy = function(task_source, "int vos3_task_destroy(")
+        defer = function(task_source, "void vos3_task_defer_destroy(")
+        reap = function(task_source, "void vos3_task_reap(")
+        # Published tasks always take the deferred route: wait cleanup may own
+        # queue state and therefore must run only after the scheduler reaper
+        # has claimed execution/stack ownership.
+        self.assertIn("vos3_task_defer_destroy(task);", destroy)
+        self.assertNotIn("vos3_task_run_wait_cleanup(task);", destroy)
+        self.assertIn("vos3_wq_cancel(task)", defer)
+        self.assertIn("vos3_sched_claim_task_reap(task)", reap)
+        self.assertLess(reap.index("vos3_sched_claim_task_reap(task)"),
+                        reap.index("vos3_task_run_wait_cleanup(task);"))
         for relative in ("kernel/src/exec/exec.c",
                          "kernel/src/exec/exec_syscall.c"):
             source = (ROOT / relative).read_text()

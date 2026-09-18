@@ -1,0 +1,53 @@
+
+/private/tmp/vos-handoff-trampoline-no-sti-fail-20260918-1/context.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <vos3_context_switch>:
+   0:	48 85 ff             	test   %rdi,%rdi
+   3:	74 0d                	je     12 <vos3_context_switch+0x12>
+   5:	55                   	push   %rbp
+   6:	53                   	push   %rbx
+   7:	41 54                	push   %r12
+   9:	41 55                	push   %r13
+   b:	41 56                	push   %r14
+   d:	41 57                	push   %r15
+   f:	48 89 27             	mov    %rsp,(%rdi)
+  12:	48 89 f4             	mov    %rsi,%rsp
+  15:	49 89 e4             	mov    %rsp,%r12
+  18:	48 83 e4 f0          	and    $0xfffffffffffffff0,%rsp
+  1c:	e8 00 00 00 00       	call   21 <vos3_context_switch+0x21>
+			1d: R_X86_64_PLT32	vos3_sched_switch_stack_ack-0x4
+  21:	4c 89 e4             	mov    %r12,%rsp
+  24:	41 5f                	pop    %r15
+  26:	41 5e                	pop    %r14
+  28:	41 5d                	pop    %r13
+  2a:	41 5c                	pop    %r12
+  2c:	5b                   	pop    %rbx
+  2d:	5d                   	pop    %rbp
+  2e:	c3                   	ret
+
+000000000000002f <vos3_task_entry_trampoline>:
+  2f:	58                   	pop    %rax
+  30:	5f                   	pop    %rdi
+  31:	48 83 e4 f0          	and    $0xfffffffffffffff0,%rsp
+  35:	90                   	nop
+  36:	ff d0                	call   *%rax
+  38:	31 ff                	xor    %edi,%edi
+  3a:	e8 00 00 00 00       	call   3f <vos3_task_entry_trampoline+0x10>
+			3b: R_X86_64_PLT32	vos3_task_exit-0x4
+  3f:	0f 0b                	ud2
+
+0000000000000041 <vos3_idle_loop>:
+  41:	fb                   	sti
+  42:	f4                   	hlt
+  43:	eb fc                	jmp    41 <vos3_idle_loop>
+
+0000000000000045 <vos3_get_rsp>:
+  45:	48 89 e0             	mov    %rsp,%rax
+  48:	c3                   	ret
+
+0000000000000049 <vos3_get_rbp>:
+  49:	48 89 e8             	mov    %rbp,%rax
+  4c:	c3                   	ret

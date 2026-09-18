@@ -645,15 +645,16 @@ static void handle_device_na(vos3_int_frame_t* frame)
 
     uint32_t cpu = get_cpu_id();
 
+    vos3_task_t* owner = __atomic_load_n(&g_fpu_owner[cpu], __ATOMIC_ACQUIRE);
     /* If current task already owns the FPU, nothing to do */
-    if (g_fpu_owner[cpu] == current) {
+    if (owner == current) {
         return;
     }
 
     /* Save previous owner's FPU state */
-    if (g_fpu_owner[cpu] != NULL && g_fpu_owner[cpu]->fpu_state != NULL) {
-        fpu_save(g_fpu_owner[cpu]->fpu_state);
-        g_fpu_owner[cpu]->fpu_initialized = 1;
+    if (owner != NULL && owner->fpu_state != NULL) {
+        fpu_save(owner->fpu_state);
+        owner->fpu_initialized = 1;
     }
 
     /* Allocate FPU state buffer on first use (lazy allocation) */
@@ -700,7 +701,7 @@ static void handle_device_na(vos3_int_frame_t* frame)
         current->fpu_initialized = 1;
     }
 
-    g_fpu_owner[cpu] = current;
+    __atomic_store_n(&g_fpu_owner[cpu], current, __ATOMIC_RELEASE);
 
     VOS3_DEBUG("FPU Context Restored for PID %d", (int)current->pid);
 }
@@ -768,22 +769,39 @@ void vos3_fpu_init(void)
 /**
  * @brief Release FPU ownership for a dying task
  */
+int vos3_fpu_task_owned(const vos3_task_t* task)
+{
+    for (uint32_t cpu = 0; cpu < VOS3_MAX_CPUS; cpu++)
+        if (__atomic_load_n(&g_fpu_owner[cpu], __ATOMIC_ACQUIRE) == task)
+            return 1;
+    return 0;
+}
+
+/* Called with IRQs disabled before publishing an incoming current task.
+ * Keeping lazy restore is safe; retaining an outgoing owner on another CPU
+ * is not safe once that task becomes migratable/reclaimable. */
+void vos3_fpu_switch_out(vos3_task_t* task)
+{
+    uint32_t cpu = get_cpu_id();
+    vos3_task_t* owner = __atomic_load_n(&g_fpu_owner[cpu], __ATOMIC_ACQUIRE);
+    if (owner == NULL)
+        return;
+    if (owner != task || task->fpu_state == NULL)
+        VOS3_PANIC("Invalid outgoing FPU owner");
+    uint64_t cr0 = vos3_read_cr0();
+    vos3_write_cr0(cr0 & ~(1ULL << 3));
+    fpu_save(task->fpu_state);
+    task->fpu_initialized = 1;
+    __atomic_store_n(&g_fpu_owner[cpu], NULL, __ATOMIC_RELEASE);
+    vos3_write_cr0(cr0);
+}
+
 void vos3_fpu_release_owner(vos3_task_t* task)
 {
-#ifdef NATIVE_SMP_TEST
-    /* Fixed scheduler ownership permits only local reclamation. */
-    vos3_irqflags_t flags = vos3_irq_save();
-    uint32_t cpu = get_cpu_id();
-    if (g_fpu_owner[cpu] == task)
-        g_fpu_owner[cpu] = NULL;
-    vos3_irq_restore(flags);
-#else
-    for (uint32_t i = 0; i < VOS3_MAX_CPUS; i++) {
-        if (g_fpu_owner[i] == task) {
-            g_fpu_owner[i] = NULL;
-        }
-    }
-#endif
+    /* Reclamation never writes another CPU's hardware-owner slot. The
+     * switch-out release and stack acknowledgement must precede this call. */
+    if (vos3_fpu_task_owned(task))
+        VOS3_PANIC("Reclaiming task with live FPU ownership");
 }
 
 /**

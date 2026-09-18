@@ -442,7 +442,7 @@ int main(void){
         task_source = (ROOT / "kernel/src/sched/task.c").read_text()
         wake = function(task_source, "void vos3_task_wake(")
         unblock = function(task_source, "void vos3_task_unblock(")
-        destroy = function(task_source, "void vos3_task_destroy(")
+        destroy = function(task_source, "int vos3_task_destroy(")
         defer = function(task_source, "void vos3_task_defer_destroy(")
         kill = function(task_source, "void vos3_task_kill(")
         self.assertLess(wake.index("vos3_wq_cancel(task)"),
@@ -453,7 +453,12 @@ int main(void){
                         wake.index("vos3_irq_restore(flags)"))
         self.assertIn("vos3_task_wake(task);", unblock)
         self.assertNotIn("task->state = VOS3_TASK_READY", unblock)
-        for body in (destroy, defer, kill):
+        # Direct destruction is now a strict deferred wrapper.  Membership is
+        # cancelled by the deferred route; terminal kill still cancels before
+        # publishing/removing a blocked task.
+        self.assertIn("vos3_task_defer_destroy(task);", destroy)
+        self.assertNotIn("vos3_wq_cancel(task)", destroy)
+        for body in (defer, kill):
             self.assertIn("vos3_wq_cancel(task)", body)
         self.assertLess(kill.index("vos3_irq_save()"),
                         kill.index("vos3_wq_cancel(task)"))

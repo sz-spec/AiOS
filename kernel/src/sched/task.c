@@ -537,106 +537,16 @@ vos3_task_t* vos3_task_create_idle(uint32_t cpu_id)
     return task;
 }
 
-void vos3_task_destroy(vos3_task_t* task)
+int vos3_task_destroy(vos3_task_t* task)
 {
-    if (task == NULL) {
-        return;
-    }
-
-    /* Cannot destroy current task */
-#ifdef NATIVE_SMP_TEST
-    if (task->sched_owner_plus_one != 0 &&
-        task->sched_owner_plus_one != get_cpu_id() + 1) {
-        VOS3_ERROR("Cannot directly destroy a remote-owned task");
-        return;
-    }
-#endif
-    if (task == vos3_sched_current()) {
-        VOS3_ERROR("Cannot destroy current task");
-        return;
-    }
-
-    /* Rendezvous with any queue wake and remove stale embedded membership
-     * before this task can be retired or freed. */
-    (void)vos3_wq_cancel(task);
-
-    vos3_spinlock_lock(&g_task_lock);
-
-    /* Remove from task table — set TOMBSTONE for hash probe continuity */
-    size_t d_start = (size_t)task->tid & (VOS3_MAX_TASKS - 1U);
-    for (size_t i = 0U; i < VOS3_MAX_TASKS; i++) {
-        size_t idx = (d_start + i) & (VOS3_MAX_TASKS - 1U);
-        if (g_task_table[idx] == task) {
-            g_task_table[idx] = VOS3_TASK_TOMBSTONE;
-            break;
-        }
-        if (g_task_table[idx] == NULL) {
-            break;  /* Not found — probe chain ended */
-        }
-    }
-
-    vos3_spinlock_unlock(&g_task_lock);
-
-    __atomic_store_n(&task->state, VOS3_TASK_DEAD, __ATOMIC_RELEASE);
-    vos3_shm_owner_exit(task->identity_cookie);
-    vos3_task_run_wait_cleanup(task);
-
-    /* Free resources */
-    if (task->kernel_stack != NULL) {
-        vos3_vmap_stack_free(task->kernel_stack, task->kernel_stack_guard);
-    }
-    if (task->user_stack != NULL) {
-        vos3_kfree(task->user_stack);
-    }
-    /* Decrement fd_table ref_count with CAS; destroy only on 1→0 transition */
-    if (task->fd_table != NULL) {
-        uint32_t expected = __atomic_load_n(&task->fd_table->ref_count, __ATOMIC_ACQUIRE);
-        while (expected > 0U) {
-            uint32_t desired = expected - 1U;
-            if (__atomic_compare_exchange_n(&task->fd_table->ref_count, &expected, desired,
-                                            0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) {
-                if (desired == 0U) {
-                    vos3_fd_table_destroy(task->fd_table);
-                    vos3_kfree(task->fd_table);
-                }
-                break;
-            }
-            /* CAS failed — expected was reloaded, retry */
-        }
-    }
-
-    /* Cleanup AI Guard context */
-    if (task->ai_guard_ctx != NULL) {
-        vos3_ai_guard_ctx_t* ctx = task->ai_guard_ctx;
-        task->ai_guard_ctx = NULL;
-        vos3_ai_guard_ctx_put(ctx);
-    }
-
-    /* Release FPU ownership and free state buffer */
-    vos3_fpu_release_owner(task);
-    if (task->fpu_state_raw != NULL) {
-        vos3_kfree(task->fpu_state_raw);
-        task->fpu_state_raw = NULL;
-        task->fpu_state = NULL;
-    }
-
-    /* [OLYMPUS-FIX APEX-HOME E1] free the per-task XSAVE area. */
-    if (task->xsave_area_raw != NULL) {
-        vos3_kfree(task->xsave_area_raw);
-        task->xsave_area_raw  = NULL;
-        task->xsave_area      = NULL;
-        task->xsave_area_size = 0u;
-    }
-
-    /* Every task owns one reference, including CLONE_VM children. */
-    vos3_vmm_destroy_address_space(task->address_space);
-    task->address_space = NULL;
-
-    vos3_signal_task_destroy(task);
-
-    VOS3_DEBUG("Destroyed task '%s' (tid=%u)", task->name, task->tid);
-
-    vos3_kfree(task);
+    /* No published task may bypass the shared execution/reaper claim. */
+    if (task == NULL)
+        return VOS3_TASK_ERR_INVALID;
+    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    if (state != VOS3_TASK_ZOMBIE && state != VOS3_TASK_DEAD)
+        return VOS3_TASK_ERR_INVALID;
+    vos3_task_defer_destroy(task);
+    return VOS3_TASK_OK;
 }
 
 void vos3_task_defer_destroy(vos3_task_t* task)
@@ -645,6 +555,15 @@ void vos3_task_defer_destroy(vos3_task_t* task)
         return;
     }
 
+    vos3_task_state_t state = __atomic_load_n(&task->state, __ATOMIC_ACQUIRE);
+    if (state != VOS3_TASK_ZOMBIE && state != VOS3_TASK_DEAD)
+        return; /* Off-CPU does not mean safe to terminate. */
+    uint32_t expected = 0U;
+    if (!__atomic_compare_exchange_n(&task->retirement_started, &expected, 1U,
+                                     0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        return;
+    vos3_sched_remove_task(task);
+    vos3_sched_cancel_sleep(task);
     (void)vos3_wq_cancel(task);
 
     /* Remove from task table so no new lookups find it — TOMBSTONE for probe continuity */
@@ -673,7 +592,7 @@ void vos3_task_defer_destroy(vos3_task_t* task)
     vos3_irqflags_t flags = vos3_irq_save();
     vos3_spinlock_lock(&g_reaper_lock);
 
-    task->next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
+    task->reaper_next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
     __atomic_store_n(&g_reaper_head, task, __ATOMIC_RELEASE);
 
     vos3_spinlock_unlock(&g_reaper_lock);
@@ -713,7 +632,7 @@ void vos3_task_reap(void)
     /* Free resources for each dead task (outside lock) */
     while (list != NULL) {
         vos3_task_t* task = list;
-        list = list->next;
+        list = list->reaper_next;
 
         /* Not ready yet or still current — re-defer */
         if (now < task->reap_after_tick || task == current
@@ -721,13 +640,14 @@ void vos3_task_reap(void)
             || (task->sched_owner_plus_one != 0 &&
                 task->sched_owner_plus_one != get_cpu_id() + 1)
 #endif
+            || !vos3_sched_claim_task_reap(task)
         ) {
-            task->next = deferred;
+            task->reaper_next = deferred;
             deferred = task;
             continue;
         }
 
-        task->next = NULL;
+        task->reaper_next = NULL;
         vos3_shm_owner_exit(task->identity_cookie);
         vos3_task_run_wait_cleanup(task);
 
@@ -764,6 +684,8 @@ void vos3_task_reap(void)
         if (task->fpu_state_raw != NULL) {
             vos3_kfree(task->fpu_state_raw);
         }
+        if (task->xsave_area_raw != NULL)
+            vos3_kfree(task->xsave_area_raw);
         /* Final address-space release owns SHM mapping cleanup. */
         vos3_vmm_destroy_address_space(task->address_space);
         task->address_space = NULL;
@@ -778,8 +700,8 @@ void vos3_task_reap(void)
         vos3_spinlock_lock(&g_reaper_lock);
 
         vos3_task_t* tail = deferred;
-        while (tail->next != NULL) { tail = tail->next; }
-        tail->next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
+        while (tail->reaper_next != NULL) { tail = tail->reaper_next; }
+        tail->reaper_next = __atomic_load_n(&g_reaper_head, __ATOMIC_RELAXED);
         __atomic_store_n(&g_reaper_head, deferred, __ATOMIC_RELEASE);
 
         vos3_spinlock_unlock(&g_reaper_lock);

@@ -560,6 +560,9 @@ int vos3_fork_with_frame(vos3_syscall_frame_t* frame, uint64_t user_rsp)
 
     /* Copy parent task */
     memcpy(child, parent, sizeof(vos3_task_t));
+    child->sched_execution_owner = 0;
+    child->retirement_started = 0;
+    child->reaper_next = NULL;
     child->signal_state = NULL; /* Never alias the copied per-task signal state. */
     child->wait_cleanup = NULL;
     child->wait_cleanup_context = NULL;

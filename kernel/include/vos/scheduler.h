@@ -149,10 +149,13 @@ void vos3_sched_yield(void);
 vos3_task_t* vos3_sched_current(void);
 
 /**
- * @brief Set current running task
- * @param[in] task Task to set as current
+ * @brief Acknowledge stack handoff from context.S, with local IRQs disabled.
+ * @note Never call from the outgoing stack or a resumed C switch invocation.
  */
-void vos3_sched_set_current(vos3_task_t* task);
+void vos3_sched_switch_stack_ack(void);
+/* Reclaimer precondition only; not permission to abandon a continuation. */
+int vos3_sched_claim_task_reap(vos3_task_t* task);
+void vos3_sched_cancel_sleep(vos3_task_t* task);
 
 /**
  * @brief Get idle task for current CPU

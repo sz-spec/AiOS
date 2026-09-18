@@ -358,6 +358,12 @@ typedef struct vos3_task {
     struct vos3_signal_state* signal_state; /**< Owned; appended to preserve assembly offsets. */
     vos3_task_wait_cleanup_t wait_cleanup;  /**< Claimed once by resume or final reaper. */
     void* wait_cleanup_context;             /**< Context published before wait_cleanup. */
+    /* CPU/stack reservation, not a cancellation or lifetime reference.
+     * Zero: not executing; cpu+1: reserved/running/switching out;
+     * UINT32_MAX: reclamation claimed. Mutated by scheduler protocol only. */
+    uint32_t sched_execution_owner;
+    uint32_t retirement_started;             /**< At most one reaper publication. */
+    struct vos3_task* reaper_next;           /**< Never aliases run/sleep links. */
 } __attribute__((aligned(VOS3_CACHE_LINE_SIZE))) vos3_task_t;
 
 /* ============================================================================
@@ -394,7 +400,9 @@ vos3_task_t* vos3_task_create_idle(uint32_t cpu_id);
  * @brief Destroy a task
  * @param[in] task Task to destroy
  */
-void vos3_task_destroy(vos3_task_t* task);
+/* Terminal tasks are deferred, never freed synchronously. Live/unpublished
+ * objects require their construction/exit owner, and return ERR_INVALID. */
+int vos3_task_destroy(vos3_task_t* task);
 
 /**
  * @brief Defer destruction of a task (reaper pattern)
@@ -640,6 +648,8 @@ void vos3_fpu_init(void);
  * Must be called before freeing a task that may own FPU state.
  */
 void vos3_fpu_release_owner(struct vos3_task* task);
+void vos3_fpu_switch_out(struct vos3_task* task);
+int vos3_fpu_task_owned(const struct vos3_task* task);
 
 /**
  * @brief Set CR0.TS bit for lazy FPU switching

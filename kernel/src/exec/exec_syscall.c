@@ -327,6 +327,9 @@ static int64_t sys_clone(vos3_syscall_frame_t* frame)
         return -12;  /* ENOMEM */
     }
     memcpy(child, parent, sizeof(vos3_task_t));
+    child->sched_execution_owner = 0;
+    child->retirement_started = 0;
+    child->reaper_next = NULL;
     /* Never publish the parent's userspace exit-futex registration through
      * the memcpy window.  The child's own pointer is opaque until exit. */
     child->clear_child_tid = (flags & CLONE_CHILD_CLEARTID)

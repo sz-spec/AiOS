@@ -24,10 +24,13 @@ class InitialPlacementTests(unittest.TestCase):
 #define NATIVE_SMP_TEST 1
 #define VOS3_TASK_FLAG_QUEUED 1U
 #define VOS3_TASK_READY 2
+#define VOS3_TASK_ZOMBIE 4
+#define VOS3_TASK_DEAD 5
 #define VOS3_LC_INTERACTIVE 3
 #define VOS3_DEBUG(...) ((void)0)
 typedef uint64_t vos3_irqflags_t;
-typedef struct {uint32_t sched_owner_plus_one,cpu_id,flags;int state,latency_class,priority;char name[8];} vos3_task_t;
+typedef int vos3_task_state_t;
+typedef struct {uint32_t sched_owner_plus_one,sched_execution_owner,cpu_id,flags;int state,latency_class,priority;char name[8];} vos3_task_t;
 typedef struct {volatile uint32_t started;} vos3_smp_cpu_info_t;
 static vos3_smp_cpu_info_t topology[256];
 static unsigned absent[256],topology_count,lookups;
@@ -67,6 +70,12 @@ int main(void){
  topology_reset(0);vos3_task_t empty=fresh();vos3_sched_add_task(&empty);assert(empty.cpu_id==0);
  topology_reset(4);topology[0].started=1;vos3_task_t offline=fresh();vos3_sched_add_task(&offline);assert(offline.cpu_id==0);
  topology_reset(4);vos3_task_t unavailable=fresh();vos3_sched_add_task(&unavailable);assert(unavailable.cpu_id==0);
+ /* Terminal and reaper-claimed tasks must not enter a run queue. */
+ int rejected_before=queue_count;
+ vos3_task_t zombie=fresh();zombie.state=VOS3_TASK_ZOMBIE;vos3_sched_add_task(&zombie);
+ vos3_task_t dead=fresh();dead.state=VOS3_TASK_DEAD;vos3_sched_add_task(&dead);
+ vos3_task_t claimed=fresh();claimed.state=VOS3_TASK_READY;claimed.sched_execution_owner=UINT32_MAX;vos3_sched_add_task(&claimed);
+ assert(queue_count==rejected_before&&zombie.state==VOS3_TASK_ZOMBIE&&dead.state==VOS3_TASK_DEAD&&claimed.sched_execution_owner==UINT32_MAX);
  assert(!irq_off&&!g_sched_lock);vos3_sched_add_task(NULL);return 0;
 }
 '''
