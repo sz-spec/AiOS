@@ -1,0 +1,11 @@
+--- a/user/src/test_health_check.c
++++ b/user/src/test_health_check.c
+@@ -224,6 +224,8 @@
+             if (slot.msg_type == SPSC_MSG_DONE)
+                 break;
+             count++;
++        } else {
++            syscall0(SYS_YIELD);
+         }
+     }
+ 

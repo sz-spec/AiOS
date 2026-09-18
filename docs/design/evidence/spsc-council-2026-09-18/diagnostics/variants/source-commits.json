@@ -1,0 +1,29 @@
+[
+  {
+    "variant": "e4-yield",
+    "commit": "0e77dacce21a1b6a308b22eaaf65233932e002ed",
+    "ref": "refs/heads/diagnostics/spsc-e4-yield-20260918",
+    "source": "/private/tmp/vos-council-e4-yield-20260918/source",
+    "source_file_sha256": "59b6dbefed7e62cb551df41a4542553bc77fbf0b84be6ddfdc970612d2e9b28d",
+    "base": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "release_eligible": false
+  },
+  {
+    "variant": "e5-512",
+    "commit": "28640579bfbd4219323950310300faf89257be93",
+    "ref": "refs/heads/diagnostics/spsc-e5-512-20260918",
+    "source": "/private/tmp/vos-council-e5-512-20260918/source",
+    "source_file_sha256": "1af16a6790655108cc83c68b0f2152429142cf64fe4256c13dcdc034acd77912",
+    "base": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "release_eligible": false
+  },
+  {
+    "variant": "e5-2048",
+    "commit": "9c1b67a196ebbc93a6c744810f9a073e8d4d37ff",
+    "ref": "refs/heads/diagnostics/spsc-e5-2048-20260918",
+    "source": "/private/tmp/vos-council-e5-2048-20260918/source",
+    "source_file_sha256": "ce1ab3072510da0b88e369292eef40b26d4b30ecea52e16516bf0d5d4636b34e",
+    "base": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "release_eligible": false
+  }
+]

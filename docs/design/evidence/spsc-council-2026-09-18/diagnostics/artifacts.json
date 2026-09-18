@@ -1,0 +1,77 @@
+[
+  {
+    "variant": "e4-yield",
+    "source": "/private/tmp/vos-council-e4-yield-20260918/source",
+    "source_commit": "0e77dacce21a1b6a308b22eaaf65233932e002ed",
+    "iso": "/private/tmp/vos-council-e4-yield-20260918/source/dist/final-full.iso",
+    "iso_sha256": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+    "changed_sources_match_commit": true,
+    "gate_eligible": false,
+    "build_logs": [
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e4-yield-build-2.log",
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e4-yield-build.log"
+    ]
+  },
+  {
+    "variant": "e5-512",
+    "source": "/private/tmp/vos-council-e5-512-20260918/source",
+    "source_commit": "28640579bfbd4219323950310300faf89257be93",
+    "iso": "/private/tmp/vos-council-e5-512-20260918/source/dist/final-full.iso",
+    "iso_sha256": "8f84c656673894d6c9e98964164db5054aafef281c0176ca7ba8971f2ae36ee7",
+    "changed_sources_match_commit": true,
+    "gate_eligible": false,
+    "build_logs": [
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e5-512-build-1.log"
+    ]
+  },
+  {
+    "variant": "e5-2048",
+    "source": "/private/tmp/vos-council-e5-2048-20260918/source",
+    "source_commit": "9c1b67a196ebbc93a6c744810f9a073e8d4d37ff",
+    "iso": "/private/tmp/vos-council-e5-2048-20260918/source/dist/final-full.iso",
+    "iso_sha256": "7f3be3647746dffba81f0a9f0d2fcf7bebd46c0640f3437514322be0edebfc92",
+    "changed_sources_match_commit": true,
+    "gate_eligible": false,
+    "build_logs": [
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e5-2048-build-1.log"
+    ]
+  },
+  {
+    "variant": "e6",
+    "source": "/private/tmp/vos-council-e6-20260918/source",
+    "source_commit": "bfafd919a167f16125077a5c786178aa75d99d7c",
+    "iso": "/private/tmp/vos-council-e6-20260918/source/dist/e6-v2.iso",
+    "iso_sha256": "f76d494b855d2aedf31f1efe98a18e97fb28f461778757bfd40b94b2e99a2943",
+    "changed_sources_match_commit": true,
+    "gate_eligible": false,
+    "build_logs": [
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e6-build-1.log",
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e6-build-2.log"
+    ]
+  },
+  {
+    "variant": "e7",
+    "source": "/private/tmp/vos-council-instrument-20260918/source",
+    "source_commit": "cca5dab59cb6dca2967c36f2f135b71ceca8d4d7",
+    "iso": "/private/tmp/vos-council-instrument-20260918/source/dist/e7-v2.iso",
+    "iso_sha256": "99153bbdb24137d5a6014d301fc522bfd831aef672766446739a4ed526dc9688",
+    "changed_sources_match_commit": true,
+    "gate_eligible": false,
+    "build_logs": [
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e7-build-1.log",
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e7-build-2.log"
+    ]
+  },
+  {
+    "variant": "e8",
+    "source": "/private/tmp/vos-council-e8-20260918/source",
+    "source_commit": "a8c2d8b3c178224f22764d7d3ba6d3463537ab09",
+    "iso": "/private/tmp/vos-council-e8-20260918/source/dist/final-full.iso",
+    "iso_sha256": "dd6ddd0d59add480c410d84b558ad514f0e63c6ba00fbe0368486445136bae0d",
+    "changed_sources_match_commit": true,
+    "gate_eligible": false,
+    "build_logs": [
+      "docs/design/evidence/spsc-council-2026-09-18/diagnostics/e8-build-1.log"
+    ]
+  }
+]

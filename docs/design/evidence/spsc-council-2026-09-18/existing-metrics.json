@@ -1,0 +1,340 @@
+[
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/baseline-replay/serial.log",
+    "sha256": "eaf61a85664f130b5df07a382504859c18b8f4eeab6ab5ec0b390766158982b8",
+    "metrics": [
+      {
+        "line": 9614,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8295 max=68000 cycles"
+      },
+      {
+        "line": 10125,
+        "text": "[PERF]   Write cycles:      32664000"
+      },
+      {
+        "line": 10126,
+        "text": "[PERF]   Read+verify cycles: 27583000"
+      },
+      {
+        "line": 11083,
+        "text": "throughput:  74227 msgs/sec"
+      },
+      {
+        "line": 11622,
+        "text": "Filled 64 MB in 27976000 cycles (~437125 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/bios-1/serial.log",
+    "sha256": "bd83bf4db683e63a9b2f5d817b3226a1cfdadf923245f188db0d6e96c966e0ec",
+    "metrics": [
+      {
+        "line": 9553,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8317 max=146000 cycles"
+      },
+      {
+        "line": 10064,
+        "text": "[PERF]   Write cycles:      43055000"
+      },
+      {
+        "line": 10065,
+        "text": "[PERF]   Read+verify cycles: 26750000"
+      },
+      {
+        "line": 11019,
+        "text": "throughput:  86575 msgs/sec"
+      },
+      {
+        "line": 11559,
+        "text": "Filled 64 MB in 28476000 cycles (~444937 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/bios-2/serial.log",
+    "sha256": "68f08d28ce0ed4e4ed1dabf80d5871cff985a4a9166bd4d51db60c62afe93f5f",
+    "metrics": [
+      {
+        "line": 9494,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8165 max=101000 cycles"
+      },
+      {
+        "line": 10005,
+        "text": "[PERF]   Write cycles:      35468000"
+      },
+      {
+        "line": 10006,
+        "text": "[PERF]   Read+verify cycles: 29865000"
+      },
+      {
+        "line": 10963,
+        "text": "throughput:  88460 msgs/sec"
+      },
+      {
+        "line": 11503,
+        "text": "Filled 64 MB in 28509000 cycles (~445453 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/diagnostic-current/serial.log",
+    "sha256": "94059c2c82443e5e851c7150be881ecd65ccb9e1614ce836ae6db0a3a2d65d4d",
+    "metrics": [
+      {
+        "line": 9874,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8013 max=108000 cycles"
+      },
+      {
+        "line": 10385,
+        "text": "[PERF]   Write cycles:      41182000"
+      },
+      {
+        "line": 10386,
+        "text": "[PERF]   Read+verify cycles: 27019000"
+      },
+      {
+        "line": 11345,
+        "text": "throughput:  86577 msgs/sec"
+      },
+      {
+        "line": 11885,
+        "text": "Filled 64 MB in 27917000 cycles (~436203 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/diagnostic-old/serial.log",
+    "sha256": "372ccfeae1e3cb8310aa48daeb13a06a2cd02d34a66d64be6c944134a6003dff",
+    "metrics": [
+      {
+        "line": 9816,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8188 max=59000 cycles"
+      },
+      {
+        "line": 10353,
+        "text": "[PERF]   Write cycles:      31937000"
+      },
+      {
+        "line": 10354,
+        "text": "[PERF]   Read+verify cycles: 28091000"
+      },
+      {
+        "line": 11324,
+        "text": "throughput:  89713 msgs/sec"
+      },
+      {
+        "line": 11864,
+        "text": "Filled 64 MB in 27606000 cycles (~431343 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/pending-only/serial.log",
+    "sha256": "f4eb7686aed685c4f525a32656a18066dd7b315deaf312370bbf2fc248379865",
+    "metrics": [
+      {
+        "line": 9743,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8610 max=99000 cycles"
+      },
+      {
+        "line": 10254,
+        "text": "[PERF]   Write cycles:      31654000"
+      },
+      {
+        "line": 10255,
+        "text": "[PERF]   Read+verify cycles: 27924000"
+      },
+      {
+        "line": 11209,
+        "text": "throughput:  91225 msgs/sec"
+      },
+      {
+        "line": 11749,
+        "text": "Filled 64 MB in 28487000 cycles (~445109 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/rejected-compare/serial.log",
+    "sha256": "5ab5a7b48d49727bca211059ea2e3d302d7c8518820d8b19fd30ee6e7f18ecc2",
+    "metrics": [
+      {
+        "line": 8084,
+        "text": "[PERF] Null syscall (getpid): min=13000 avg=14204 max=102000 cycles"
+      },
+      {
+        "line": 8595,
+        "text": "[PERF]   Write cycles:      57682000"
+      },
+      {
+        "line": 8596,
+        "text": "[PERF]   Read+verify cycles: 43087000"
+      },
+      {
+        "line": 9553,
+        "text": "throughput:  34970 msgs/sec"
+      },
+      {
+        "line": 10092,
+        "text": "Filled 64 MB in 42786000 cycles (~668531 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/uefi-1/serial.log",
+    "sha256": "4f38493e5d862685288ecc38ae43b18ac226715c07767f6617d6ee65e4a81319",
+    "metrics": [
+      {
+        "line": 9629,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8708 max=1455000 cycles"
+      },
+      {
+        "line": 10140,
+        "text": "[PERF]   Write cycles:      44244000"
+      },
+      {
+        "line": 10141,
+        "text": "[PERF]   Read+verify cycles: 34483000"
+      },
+      {
+        "line": 11098,
+        "text": "throughput:  90635 msgs/sec"
+      },
+      {
+        "line": 11638,
+        "text": "Filled 64 MB in 29108000 cycles (~454812 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/health-performance-2026-09-17/runs/uefi-2/serial.log",
+    "sha256": "bdd0c358c28728f89a07118c49f2ec72265d5dea388b3286f9329d60e7125e79",
+    "metrics": [
+      {
+        "line": 9619,
+        "text": "[PERF] Null syscall (getpid): min=7000 avg=8326 max=249000 cycles"
+      },
+      {
+        "line": 10130,
+        "text": "[PERF]   Write cycles:      41931000"
+      },
+      {
+        "line": 10131,
+        "text": "[PERF]   Read+verify cycles: 26028000"
+      },
+      {
+        "line": 11088,
+        "text": "throughput:  87786 msgs/sec"
+      },
+      {
+        "line": 11628,
+        "text": "Filled 64 MB in 28650000 cycles (~447656 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/sysinfo-abi-2026-09-18/runs/bios/serial.log",
+    "sha256": "803bb68c6759fc3002e121516891e4e7a381216ea18e86d7d28a025387da7cf1",
+    "metrics": [
+      {
+        "line": 8159,
+        "text": "[PERF] Null syscall (getpid): min=11000 avg=12084 max=166000 cycles"
+      },
+      {
+        "line": 8670,
+        "text": "[PERF]   Write cycles:      57299000"
+      },
+      {
+        "line": 8671,
+        "text": "[PERF]   Read+verify cycles: 41199000"
+      },
+      {
+        "line": 9628,
+        "text": "throughput:  41931 msgs/sec"
+      },
+      {
+        "line": 10167,
+        "text": "Filled 64 MB in 42978000 cycles (~671531 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/sysinfo-abi-2026-09-18/runs/old-iso-control/serial.log",
+    "sha256": "a6aa740bb7b6887e438d51410ec6206f7df39d3b511a9beb13fcbc094bb9839e",
+    "metrics": [
+      {
+        "line": 8144,
+        "text": "[PERF] Null syscall (getpid): min=11000 avg=11899 max=52000 cycles"
+      },
+      {
+        "line": 8655,
+        "text": "[PERF]   Write cycles:      58969000"
+      },
+      {
+        "line": 8656,
+        "text": "[PERF]   Read+verify cycles: 40345000"
+      },
+      {
+        "line": 9613,
+        "text": "throughput:  41144 msgs/sec"
+      },
+      {
+        "line": 10152,
+        "text": "Filled 64 MB in 43715000 cycles (~683046 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/sysinfo-abi-2026-09-18/runs/uefi/serial.log",
+    "sha256": "4ebfa48652967172dc1611e3ca6eae7584bde2e521a8b9b95ee520269ff2b0b7",
+    "metrics": [
+      {
+        "line": 8245,
+        "text": "[PERF] Null syscall (getpid): min=11000 avg=11866 max=157000 cycles"
+      },
+      {
+        "line": 8756,
+        "text": "[PERF]   Write cycles:      46129000"
+      },
+      {
+        "line": 8757,
+        "text": "[PERF]   Read+verify cycles: 42213000"
+      },
+      {
+        "line": 9714,
+        "text": "throughput:  42850 msgs/sec"
+      },
+      {
+        "line": 10253,
+        "text": "Filled 64 MB in 42757000 cycles (~668078 cycles/MB)"
+      }
+    ]
+  },
+  {
+    "path": "docs/design/evidence/sysinfo-abi-2026-09-18/intermediate/before-caller-review/bios/serial.log",
+    "sha256": "6ef43b08e61d630333550ebe4e22d056fdde6d4f7cf2c20bb68b6cee5e7d96b1",
+    "metrics": [
+      {
+        "line": 8159,
+        "text": "[PERF] Null syscall (getpid): min=11000 avg=12170 max=182000 cycles"
+      },
+      {
+        "line": 8670,
+        "text": "[PERF]   Write cycles:      49150000"
+      },
+      {
+        "line": 8671,
+        "text": "[PERF]   Read+verify cycles: 44474000"
+      },
+      {
+        "line": 9628,
+        "text": "throughput:  41054 msgs/sec"
+      },
+      {
+        "line": 10167,
+        "text": "Filled 64 MB in 43036000 cycles (~672437 cycles/MB)"
+      }
+    ]
+  }
+]

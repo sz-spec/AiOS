@@ -1,0 +1,50 @@
+[
+  {
+    "variant": "e4-yield",
+    "source": "/private/tmp/vos-council-e4-yield-20260918/source",
+    "base_commit": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "only_override": "user/src/test_health_check.c",
+    "base_file_sha256": "651b7d84e6eb32d833ab315437d9465e9a4a5a816fc4a5186ac40f4ec5e22977",
+    "variant_file_sha256": "59b6dbefed7e62cb551df41a4542553bc77fbf0b84be6ddfdc970612d2e9b28d",
+    "patch_sha256": "732ef1f3df4e7453a5354816e47069bbbca0e7864d1836c77e26bcbae844d00c",
+    "manifest_sha256": "216d3ebd88198e1732870c0f19187ba29b3e1067065785c2f7cb632753e56c26",
+    "file_count": 6440,
+    "canonical_threshold": 80000,
+    "canonical_window_ms": 1000,
+    "diagnostic_only": true,
+    "build_run_status": "not built or run",
+    "unique_commit": "not created; base commit plus exact patch/manifest recorded"
+  },
+  {
+    "variant": "e5-512",
+    "source": "/private/tmp/vos-council-e5-512-20260918/source",
+    "base_commit": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "only_override": "user/src/test_health_check.c",
+    "base_file_sha256": "651b7d84e6eb32d833ab315437d9465e9a4a5a816fc4a5186ac40f4ec5e22977",
+    "variant_file_sha256": "1af16a6790655108cc83c68b0f2152429142cf64fe4256c13dcdc034acd77912",
+    "patch_sha256": "1a8bfc57381f93d2bcef19ad430aa4e875ac018dbbb150aeccd0657603323ab9",
+    "manifest_sha256": "c8cc0930f881cb35bef6b0b182e6ad335a08656e99fc77a12098fc81fc514a1a",
+    "file_count": 6440,
+    "canonical_threshold": 80000,
+    "canonical_window_ms": 1000,
+    "diagnostic_only": true,
+    "build_run_status": "not built or run",
+    "unique_commit": "not created; base commit plus exact patch/manifest recorded"
+  },
+  {
+    "variant": "e5-2048",
+    "source": "/private/tmp/vos-council-e5-2048-20260918/source",
+    "base_commit": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "only_override": "user/src/test_health_check.c",
+    "base_file_sha256": "651b7d84e6eb32d833ab315437d9465e9a4a5a816fc4a5186ac40f4ec5e22977",
+    "variant_file_sha256": "ce1ab3072510da0b88e369292eef40b26d4b30ecea52e16516bf0d5d4636b34e",
+    "patch_sha256": "5fcc82968969ed7cf9246d26b98b1d68332a586bb37b9db2cc7c92cdfd9b72d3",
+    "manifest_sha256": "42151a5e007e8e18c67b1bdd1b1ac698f698b750e77d286f270308ff7b66e39c",
+    "file_count": 6440,
+    "canonical_threshold": 80000,
+    "canonical_window_ms": 1000,
+    "diagnostic_only": true,
+    "build_run_status": "not built or run",
+    "unique_commit": "not created; base commit plus exact patch/manifest recorded"
+  }
+]

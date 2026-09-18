@@ -1,0 +1,418 @@
+{
+  "a": {
+    "spsc": {
+      "n": 5,
+      "values": [
+        41255,
+        40696,
+        40684,
+        40966,
+        40298
+      ],
+      "min": 40298,
+      "median": 40696,
+      "max": 41255,
+      "sample_sd": 356.65697806155424
+    },
+    "compute_fill_tsc": {
+      "n": 5,
+      "values": [
+        42469000,
+        43694000,
+        42649000,
+        42432000,
+        42416000
+      ],
+      "min": 42416000,
+      "median": 42469000,
+      "max": 43694000,
+      "sample_sd": 545746.7361331627
+    },
+    "host_seconds": {
+      "n": 5,
+      "values": [
+        153.78305541584268,
+        153.03277404187247,
+        152.90080404095352,
+        153.59003825020045,
+        152.83869175007567
+      ],
+      "min": 152.83869175007567,
+      "median": 153.03277404187247,
+      "max": 153.78305541584268,
+      "sample_sd": 0.4289183312830707
+    },
+    "runs": [
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-a-1",
+        "spsc": 41255,
+        "compute_fill_tsc": 42469000,
+        "getpid_min_avg_max": [
+          11000,
+          12363,
+          169000
+        ],
+        "host_seconds": 153.78305541584268,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            1.91162109375,
+            2.93359375,
+            3.18603515625
+          ],
+          [
+            3.69775390625,
+            3.1728515625,
+            3.23046875
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-a-2",
+        "spsc": 40696,
+        "compute_fill_tsc": 43694000,
+        "getpid_min_avg_max": [
+          11000,
+          11701,
+          60000
+        ],
+        "host_seconds": 153.03277404187247,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            3.4736328125,
+            3.70849609375,
+            3.4775390625
+          ],
+          [
+            3.5751953125,
+            3.6591796875,
+            3.49609375
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-a-3",
+        "spsc": 40684,
+        "compute_fill_tsc": 42649000,
+        "getpid_min_avg_max": [
+          11000,
+          12078,
+          81000
+        ],
+        "host_seconds": 152.90080404095352,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            4.26416015625,
+            3.66064453125,
+            3.5068359375
+          ],
+          [
+            4.0244140625,
+            3.66845703125,
+            3.5234375
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-a-4",
+        "spsc": 40966,
+        "compute_fill_tsc": 42432000,
+        "getpid_min_avg_max": [
+          11000,
+          11706,
+          53000
+        ],
+        "host_seconds": 153.59003825020045,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            3.23095703125,
+            3.44287109375,
+            3.4501953125
+          ],
+          [
+            4.05419921875,
+            3.68994140625,
+            3.546875
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-a-5",
+        "spsc": 40298,
+        "compute_fill_tsc": 42416000,
+        "getpid_min_avg_max": [
+          11000,
+          11820,
+          224000
+        ],
+        "host_seconds": 152.83869175007567,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            3.357421875,
+            3.5107421875,
+            3.4892578125
+          ],
+          [
+            3.65771484375,
+            3.54150390625,
+            3.4990234375
+          ]
+        ]
+      }
+    ]
+  },
+  "b": {
+    "spsc": {
+      "n": 5,
+      "values": [
+        42722,
+        40230,
+        41618,
+        40450,
+        40510
+      ],
+      "min": 40230,
+      "median": 40510,
+      "max": 42722,
+      "sample_sd": 1051.9657789110822
+    },
+    "compute_fill_tsc": {
+      "n": 5,
+      "values": [
+        42465000,
+        43340000,
+        42688000,
+        42474000,
+        45463000
+      ],
+      "min": 42465000,
+      "median": 42688000,
+      "max": 45463000,
+      "sample_sd": 1268191.0345054485
+    },
+    "host_seconds": {
+      "n": 5,
+      "values": [
+        152.47001783316955,
+        152.34393966710195,
+        152.91852883296087,
+        153.21315525006503,
+        153.26747924974188
+      ],
+      "min": 152.34393966710195,
+      "median": 152.91852883296087,
+      "max": 153.26747924974188,
+      "sample_sd": 0.4216273098403151
+    },
+    "runs": [
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-b-1",
+        "spsc": 42722,
+        "compute_fill_tsc": 42465000,
+        "getpid_min_avg_max": [
+          11000,
+          11829,
+          78000
+        ],
+        "host_seconds": 152.47001783316955,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            5.31005859375,
+            3.7177734375,
+            3.42724609375
+          ],
+          [
+            3.75732421875,
+            3.775390625,
+            3.4951171875
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-b-2",
+        "spsc": 40230,
+        "compute_fill_tsc": 43340000,
+        "getpid_min_avg_max": [
+          11000,
+          11912,
+          102000
+        ],
+        "host_seconds": 152.34393966710195,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            3.5751953125,
+            3.6591796875,
+            3.49609375
+          ],
+          [
+            4.26416015625,
+            3.66064453125,
+            3.5068359375
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-b-3",
+        "spsc": 41618,
+        "compute_fill_tsc": 42688000,
+        "getpid_min_avg_max": [
+          11000,
+          11822,
+          123000
+        ],
+        "host_seconds": 152.91852883296087,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            4.0244140625,
+            3.66845703125,
+            3.5234375
+          ],
+          [
+            3.23095703125,
+            3.44287109375,
+            3.4501953125
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-b-4",
+        "spsc": 40450,
+        "compute_fill_tsc": 42474000,
+        "getpid_min_avg_max": [
+          11000,
+          11808,
+          55000
+        ],
+        "host_seconds": 153.21315525006503,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            4.05419921875,
+            3.68994140625,
+            3.546875
+          ],
+          [
+            3.357421875,
+            3.5107421875,
+            3.4892578125
+          ]
+        ]
+      },
+      {
+        "run": "docs/design/evidence/spsc-council-2026-09-18/runs/e12-b-5",
+        "spsc": 40510,
+        "compute_fill_tsc": 45463000,
+        "getpid_min_avg_max": [
+          11000,
+          12154,
+          136000
+        ],
+        "host_seconds": 153.26747924974188,
+        "power_sources": [
+          "Now drawing from 'Battery Power'",
+          "Now drawing from 'Battery Power'"
+        ],
+        "qemu_sha256": [
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+          "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a"
+        ],
+        "load_before_after": [
+          [
+            3.52490234375,
+            3.515625,
+            3.490234375
+          ],
+          [
+            6.4306640625,
+            4.52978515625,
+            3.88671875
+          ]
+        ]
+      }
+    ]
+  },
+  "paired_log_rate": {
+    "values": [
+      0.03494169247917641,
+      -0.011516821558767017,
+      0.02269787122723811,
+      -0.012675810873963264,
+      0.005247017285024759
+    ],
+    "sample_sd": 0.02096136595658265,
+    "mean": 0.0077387897117418,
+    "approx_n_pairs_for_5pct_effect_80pct_power": 2,
+    "warning": "Planning approximation with only five pilot pairs; normality/independence unproven, not equivalence or closure."
+  },
+  "scope": "BIOS/TCG/1vCPU on battery with recorded background applications. Agents idle throughout each VM. E2 fully quiet host requirement NOT established. No firmware pooling."
+}

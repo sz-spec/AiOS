@@ -1,0 +1,254 @@
+{
+  "elapsed_seconds": 152.83869175007567,
+  "events": [
+    {
+      "host_seconds": 1.8986937920562923,
+      "line": "=== Running: bench_csw ==="
+    },
+    {
+      "host_seconds": 2.045775667298585,
+      "line": "=== Running: test_max_saturation ==="
+    },
+    {
+      "host_seconds": 6.874948667362332,
+      "line": "=== Running: bench_isolate ==="
+    },
+    {
+      "host_seconds": 6.920428084209561,
+      "line": "=== Running: bench_persist ==="
+    },
+    {
+      "host_seconds": 7.059107792098075,
+      "line": "=== Running: bench_overhead ==="
+    },
+    {
+      "host_seconds": 7.1377123752608895,
+      "line": "=== Running: bench_sigpipe_test ==="
+    },
+    {
+      "host_seconds": 7.196193542331457,
+      "line": "=== Running: ai_exploit ==="
+    },
+    {
+      "host_seconds": 7.361630750354379,
+      "line": "=== Running: bench_bugfix_test ==="
+    },
+    {
+      "host_seconds": 7.494197166990489,
+      "line": "=== Running: bench_phase13_test ==="
+    },
+    {
+      "host_seconds": 7.572800084017217,
+      "line": "=== Running: bench_procfs_test ==="
+    },
+    {
+      "host_seconds": 7.614127625245601,
+      "line": "=== Running: bench_poll_test ==="
+    },
+    {
+      "host_seconds": 7.652916667051613,
+      "line": "=== Running: bench_fs_test ==="
+    },
+    {
+      "host_seconds": 7.725707083940506,
+      "line": "=== Running: bench_net_test ==="
+    },
+    {
+      "host_seconds": 7.797989750280976,
+      "line": "=== Running: bench_stress_test ==="
+    },
+    {
+      "host_seconds": 8.197050584014505,
+      "line": "=== Running: bench_fuzz_test ==="
+    },
+    {
+      "host_seconds": 8.26051566703245,
+      "line": "=== Running: test_usercopy ==="
+    },
+    {
+      "host_seconds": 8.303176625166088,
+      "line": "=== Running: bench_sched_test ==="
+    },
+    {
+      "host_seconds": 8.565856792032719,
+      "line": "=== Running: bench_app_isolation_test ==="
+    },
+    {
+      "host_seconds": 8.640490374993533,
+      "line": "=== Running: test_posix_fs ==="
+    },
+    {
+      "host_seconds": 8.713653333950788,
+      "line": "=== Running: test_epoll ==="
+    },
+    {
+      "host_seconds": 8.758028417360038,
+      "line": "=== Running: test_posix_core ==="
+    },
+    {
+      "host_seconds": 8.805359292309731,
+      "line": "=== Running: test_futex ==="
+    },
+    {
+      "host_seconds": 8.84834995912388,
+      "line": "=== Running: bench_thread_test ==="
+    },
+    {
+      "host_seconds": 8.885065750218928,
+      "line": "=== Running: stress_thread ==="
+    },
+    {
+      "host_seconds": 9.231871125288308,
+      "line": "=== Running: test_net_dispatch ==="
+    },
+    {
+      "host_seconds": 9.323297917377204,
+      "line": "=== Running: test_shm_dispatch ==="
+    },
+    {
+      "host_seconds": 9.382037334144115,
+      "line": "=== Running: diag_shm_stress ==="
+    },
+    {
+      "host_seconds": 11.638152875006199,
+      "line": "=== Running: bench_hugepage_tlb ==="
+    },
+    {
+      "host_seconds": 11.770398875232786,
+      "line": "=== Running: test_pt_interp ==="
+    },
+    {
+      "host_seconds": 11.800461375154555,
+      "line": "=== Running: test_dynlink ==="
+    },
+    {
+      "host_seconds": 11.987512750085443,
+      "line": "=== Running: test_signal_musl ==="
+    },
+    {
+      "host_seconds": 12.040951292030513,
+      "line": "=== Running: test_signal_lifetime ==="
+    },
+    {
+      "host_seconds": 12.108906917273998,
+      "line": "=== Running: test_env_musl ==="
+    },
+    {
+      "host_seconds": 12.160850584041327,
+      "line": "=== Running: test_fileio_musl ==="
+    },
+    {
+      "host_seconds": 12.233913250267506,
+      "line": "=== Running: test_malloc_musl ==="
+    },
+    {
+      "host_seconds": 12.337701292242855,
+      "line": "=== Running: test_fork_musl ==="
+    },
+    {
+      "host_seconds": 12.379316000267863,
+      "line": "=== Running: test_pipe_musl ==="
+    },
+    {
+      "host_seconds": 12.450065084267408,
+      "line": "=== Running: test_stat_musl ==="
+    },
+    {
+      "host_seconds": 12.543739625252783,
+      "line": "=== Running: test_pthread_musl ==="
+    },
+    {
+      "host_seconds": 12.662983417045325,
+      "line": "=== Running: test_ai_guard ==="
+    },
+    {
+      "host_seconds": 12.688231500331312,
+      "line": "=== Running: test_integration ==="
+    },
+    {
+      "host_seconds": 12.745740042068064,
+      "line": "=== Running: test_sustained ==="
+    },
+    {
+      "host_seconds": 22.78755541704595,
+      "line": "=== Running: bench_ai_throughput ==="
+    },
+    {
+      "host_seconds": 23.195723167154938,
+      "line": "=== Running: bench_csw_1ms ==="
+    },
+    {
+      "host_seconds": 23.33313075033948,
+      "line": "[PERF] Null syscall (getpid): min=11000 avg=11820 max=224000 cycles"
+    },
+    {
+      "host_seconds": 24.908028667327017,
+      "line": "=== Running: test_npu_direct ==="
+    },
+    {
+      "host_seconds": 24.927045417018235,
+      "line": "=== Running: test_ai_latency ==="
+    },
+    {
+      "host_seconds": 34.75492200022563,
+      "line": "=== Running: bench_2026_frontier ==="
+    },
+    {
+      "host_seconds": 47.19291904196143,
+      "line": "=== Running: test_agent_chaos ==="
+    },
+    {
+      "host_seconds": 125.42043020902202,
+      "line": "=== Running: test_advanced_chaos ==="
+    },
+    {
+      "host_seconds": 127.61269412515685,
+      "line": "=== Running: test_model_load ==="
+    },
+    {
+      "host_seconds": 136.31413270905614,
+      "line": "=== Running: test_health_check ==="
+    },
+    {
+      "host_seconds": 136.34495979221538,
+      "line": "--- Check 4: spsc_responsive ---"
+    },
+    {
+      "host_seconds": 137.3534284592606,
+      "line": "  throughput:  40298 msgs/sec"
+    },
+    {
+      "host_seconds": 137.36078187497333,
+      "line": "=== test_health_check: exit=1 ==="
+    },
+    {
+      "host_seconds": 137.36252162512392,
+      "line": "=== Running: test_agent_cluster ==="
+    },
+    {
+      "host_seconds": 142.87880337517709,
+      "line": "=== Running: test_torture ==="
+    },
+    {
+      "host_seconds": 149.25709133408964,
+      "line": "=== Running: test_ai_exploit_v2 ==="
+    },
+    {
+      "host_seconds": 149.36211841693148,
+      "line": "=== Running: test_security_check ==="
+    },
+    {
+      "host_seconds": 149.39677716698498,
+      "line": "=== Running: bench_ai_scale ==="
+    },
+    {
+      "host_seconds": 150.35985104227439,
+      "line": "  Filled 64 MB in 42416000 cycles (~662750 cycles/MB)"
+    },
+    {
+      "host_seconds": 150.6105959173292,
+      "line": "=== Running: test_stress_mt ==="
+    }
+  ],
+  "scope": "Host serial receipt timestamps; not exact guest window boundaries"
+}

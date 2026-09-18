@@ -1,0 +1,18 @@
+[
+  {
+    "variant": "e6-v2",
+    "commit": "bfafd919a167f16125077a5c786178aa75d99d7c",
+    "source": "/private/tmp/vos-council-e6-20260918/source",
+    "parent": "c57961bd31ee274d243ea1e6eeff21c029b71812",
+    "ref": "refs/heads/diagnostics/spsc-e6-v2-20260918",
+    "release_eligible": false
+  },
+  {
+    "variant": "e7-v2",
+    "commit": "cca5dab59cb6dca2967c36f2f135b71ceca8d4d7",
+    "source": "/private/tmp/vos-council-instrument-20260918/source",
+    "parent": "09d3f4bb301e95b0e0ae69f02e427cab5afd8c81",
+    "ref": "refs/heads/diagnostics/spsc-e7-v2-20260918",
+    "release_eligible": false
+  }
+]

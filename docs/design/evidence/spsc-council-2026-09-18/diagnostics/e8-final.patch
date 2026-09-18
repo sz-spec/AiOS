@@ -1,0 +1,260 @@
+diff --git a/kernel/include/vos/council_e8.h b/kernel/include/vos/council_e8.h
+new file mode 100644
+index 0000000..22fa376
+--- /dev/null
++++ b/kernel/include/vos/council_e8.h
+@@ -0,0 +1,10 @@
++#ifndef VOS_COUNCIL_E8_H
++#define VOS_COUNCIL_E8_H
++#include "vos/task.h"
++#include "vos/syscall.h"
++/* Diagnostic only: single BSP, bounded storage, no user pointers. */
++void vos3_council_e8_begin(vos3_syscall_frame_t *frame);
++void vos3_council_e8_stamp(unsigned phase);
++void vos3_council_e8_switch(const vos3_task_t *prev, const vos3_task_t *next);
++void vos3_council_e8_control(vos3_syscall_frame_t *frame);
++#endif
+diff --git a/kernel/src/arch/x86_64/kpti.c b/kernel/src/arch/x86_64/kpti.c
+index 4250729..1bbb06c 100644
+--- a/kernel/src/arch/x86_64/kpti.c
++++ b/kernel/src/arch/x86_64/kpti.c
+@@ -15,6 +15,7 @@
+ #include "vos/scheduler.h"
+ #include "vos/atomic.h"
+ #include "vos/entry_state.h"
++#include "vos/council_e8.h"
+ 
+ #include <stdint.h>
+ #include <stddef.h>
+@@ -41,12 +42,15 @@ void vos3_kpti_prepare_user_return(void)
+      * entry/descriptor/IST mappings must replace these two broad entries
+      * before full Meltdown isolation can be claimed. Dynamic task stacks
+      * are NOT mapped; entry/exit use the CPU-local trampoline instead. */
++    vos3_council_e8_stamp(4);
+     if (vos3_kpti_sync_root(as->user_pml4, as->pml4) != 0) {
+         VOS3_PANIC("Invalid process root storage");
+     }
++    vos3_council_e8_stamp(5);
+     vos3_spinlock_release(&as->lock);
+     vos3_entry_bind_roots(as->pml4_phys, as->user_pml4_phys);
+     vos3_irq_restore(flags);
++    vos3_council_e8_stamp(6);
+ }
+ 
+ /* ============================================================================
+diff --git a/kernel/src/arch/x86_64/syscall.c b/kernel/src/arch/x86_64/syscall.c
+index c60c998..d950c60 100644
+--- a/kernel/src/arch/x86_64/syscall.c
++++ b/kernel/src/arch/x86_64/syscall.c
+@@ -14,6 +14,7 @@
+  */
+ 
+ #include "../../../include/vos/syscall.h"
++#include "vos/council_e8.h"
+ #include "../../../include/vos/task.h"
+ #include "../../../include/vos/scheduler.h"
+ #include "../../../include/vos/timer.h"
+@@ -25,6 +26,71 @@
+ #include "../../../include/arch/x86_64/cpu.h"
+ #include "../../../include/arch/x86_64/gdt.h"
+ 
++
++/* E8 bounded UP diagnostic. Only explicit Linux GETPID sample tags record. */
++#define CE8_SAMPLE 0x434F554E45380001ULL
++#define CE8_START  0x434F554E45380002ULL
++#define CE8_STOP   0x434F554E45380003ULL
++#define CE8_N 10000U
++struct ce8_row { uint64_t user_start, t[7], wait, wait_start; uint32_t switches; };
++static struct ce8_row ce8_rows[CE8_N];
++static uint32_t ce8_n, ce8_owner, ce8_dropped;
++static int ce8_active, ce8_inflight;
++static uint64_t ce8_clock(void) {
++    uint32_t lo,hi;
++    __asm__ volatile("rdtsc" : "=a"(lo), "=d"(hi) : : "memory");
++    return ((uint64_t)hi<<32)|lo;
++}
++static struct ce8_row *ce8_current(void) {
++    if (!ce8_active || !ce8_inflight || ce8_n==0 || ce8_n>CE8_N) return NULL;
++    vos3_task_t *cur=vos3_task_current();
++    return cur && cur->tid==ce8_owner ? &ce8_rows[ce8_n-1U] : NULL;
++}
++void vos3_council_e8_control(vos3_syscall_frame_t *frame) {
++    vos3_task_t *cur=vos3_task_current();
++    if (!cur) return;
++    if (frame->rdi==CE8_START && (!ce8_active || ce8_owner==cur->tid)) {
++        ce8_active=0; ce8_inflight=0; ce8_n=0; ce8_dropped=0;
++        ce8_owner=cur->tid; ce8_active=1;
++    } else if (frame->rdi==CE8_STOP && ce8_owner==cur->tid) {
++        ce8_active=0; ce8_inflight=0;
++        vos3_console_printf("[COUNCIL-E8-K] n=%u dropped=%u owner=%u\n",ce8_n,ce8_dropped,ce8_owner);
++        for (uint32_t i=0;i<ce8_n;i++) {
++            struct ce8_row *r=&ce8_rows[i];
++            vos3_console_printf("[COUNCIL-E8-KR] %u %llu %llu %llu %llu %llu %llu %llu %llu %llu %u\n",
++                i,(unsigned long long)r->user_start,(unsigned long long)r->t[0],
++                (unsigned long long)r->t[1],(unsigned long long)r->t[2],
++                (unsigned long long)r->t[3],(unsigned long long)r->t[4],
++                (unsigned long long)r->t[5],(unsigned long long)r->t[6],
++                (unsigned long long)r->wait,r->switches);
++        }
++    }
++}
++void vos3_council_e8_begin(vos3_syscall_frame_t *frame) {
++    if (!ce8_active) return;
++    vos3_task_t *cur=vos3_task_current();
++    if (!cur || cur->tid!=ce8_owner) return;
++    ce8_inflight=0;
++    if (frame->rax!=39 || frame->rdi!=CE8_SAMPLE) return;
++    if (ce8_n>=CE8_N) { ce8_dropped++; return; }
++    struct ce8_row *r=&ce8_rows[ce8_n++];
++    r->user_start=frame->rsi; r->wait=0; r->wait_start=0; r->switches=0;
++    for (unsigned i=0;i<7;i++) r->t[i]=0;
++    r->t[0]=ce8_clock(); ce8_inflight=1;
++}
++void vos3_council_e8_stamp(unsigned phase) {
++    struct ce8_row *r=ce8_current();
++    if (r && phase<7U) { r->t[phase]=ce8_clock(); if (phase==6U) ce8_inflight=0; }
++}
++void vos3_council_e8_switch(const vos3_task_t *prev,const vos3_task_t *next) {
++    if (!ce8_active || !ce8_inflight || !ce8_n || ce8_n>CE8_N || prev==next) return;
++    struct ce8_row *r=&ce8_rows[ce8_n-1U];
++    if (prev && prev->tid==ce8_owner) { r->wait_start=ce8_clock(); r->switches++; }
++    if (next && next->tid==ce8_owner && r->wait_start) {
++        r->wait+=ce8_clock()-r->wait_start; r->wait_start=0;
++    }
++}
++
+ /* syscall_entry.S restores these slots by fixed byte offsets. */
+ _Static_assert(offsetof(vos3_syscall_frame_t, rax) == 96, "syscall return-value slot");
+ _Static_assert(offsetof(vos3_syscall_frame_t, user_rsp) == 120, "syscall saved user stack");
+@@ -722,6 +788,7 @@ int vos3_syscall_register(vos3_syscall_num_t num, vos3_syscall_handler_t handler
+  */
+ int64_t vos3_syscall_dispatch(vos3_syscall_frame_t* frame)
+ {
++    vos3_council_e8_begin(frame);
+     uint64_t syscall_num = frame->rax;
+ 
+     /* Debug: log blkdev syscalls */
+@@ -760,7 +827,10 @@ int64_t vos3_syscall_dispatch(vos3_syscall_frame_t* frame)
+     }
+ 
+     /* Call handler */
++    if (syscall_num == 39) vos3_council_e8_control(frame);
++    vos3_council_e8_stamp(1);
+     int64_t result = handler(frame);
++    vos3_council_e8_stamp(2);
+ 
+     /* The handler released subsystem locks; syscall_entry still has IF set.
+      * Blocking wait/exit and timer continuations can all reschedule IRQ-off,
+@@ -770,6 +840,7 @@ int64_t vos3_syscall_dispatch(vos3_syscall_frame_t* frame)
+     /* Deliver pending signals before returning to user space */
+     extern void vos3_signal_deliver(vos3_syscall_frame_t *frame, int64_t result);
+     vos3_signal_deliver(frame, result);
++    vos3_council_e8_stamp(3);
+ 
+     return result;
+ }
+diff --git a/kernel/src/sched/scheduler.c b/kernel/src/sched/scheduler.c
+index dc827c7..4185525 100644
+--- a/kernel/src/sched/scheduler.c
++++ b/kernel/src/sched/scheduler.c
+@@ -1,3 +1,4 @@
++#include "vos/council_e8.h"
+ /**
+  * @file scheduler.c
+  * @brief VOS3 Round-Robin Scheduler
+@@ -400,6 +401,8 @@ static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
+                    (unsigned long long)(next->context ? next->context->rip : 0));
+     }
+ 
++    vos3_council_e8_switch(prev, next);
++
+     /* Update current task for this CPU */
+     g_current_task[cpu_id] = next;
+     next->cpu_id = cpu_id;
+diff --git a/user/include/council_getpid_diag.h b/user/include/council_getpid_diag.h
+new file mode 100644
+index 0000000..2591058
+--- /dev/null
++++ b/user/include/council_getpid_diag.h
+@@ -0,0 +1,49 @@
++#ifndef COUNCIL_GETPID_DIAG_H
++#define COUNCIL_GETPID_DIAG_H
++/* E8 diagnostic only. TSC units are not physical CPU cycles. */
++#define CE8_SAMPLE 0x434F554E45380001ULL
++#define CE8_START  0x434F554E45380002ULL
++#define CE8_STOP   0x434F554E45380003ULL
++#define CE8_N 10000
++static volatile unsigned long long ce8_samples[2][CE8_N][2];
++static unsigned long long ce8_overhead[1000];
++static inline unsigned long long ce8_tsc(void) {
++    unsigned lo, hi;
++    __asm__ volatile("rdtsc" : "=a"(lo), "=d"(hi) : : "memory");
++    return ((unsigned long long)hi << 32) | lo;
++}
++static inline long ce8_call(unsigned long long tag, unsigned long long t0) {
++    long r;
++    __asm__ volatile("syscall" : "=a"(r) : "a"(39L), "D"(tag), "S"(t0)
++                     : "rcx", "r11", "memory");
++    return r;
++}
++static void ce8_run(const char *stage) {
++    /* Touch all result storage before sampling. */
++    for (unsigned m=0;m<2;m++) for (unsigned i=0;i<CE8_N;i++) {
++        ce8_samples[m][i][0]=0; ce8_samples[m][i][1]=0;
++    }
++    printf("[COUNCIL-E8] begin stage=%s n=10000 warmup=100 order=off,on\n",stage);
++    for (unsigned i=0;i<1000;i++) {
++        unsigned long long a=ce8_tsc(), b=ce8_tsc(); ce8_overhead[i]=b-a;
++    }
++    for (unsigned m=0;m<2;m++) {
++        for (unsigned i=0;i<100;i++) (void)ce8_call(0,0);
++        if (m) (void)ce8_call(CE8_START,0);
++        for (unsigned i=0;i<CE8_N;i++) {
++            unsigned long long a=ce8_tsc();
++            (void)ce8_call(CE8_SAMPLE,a);
++            unsigned long long b=ce8_tsc();
++            ce8_samples[m][i][0]=a; ce8_samples[m][i][1]=b;
++        }
++        if (m) (void)ce8_call(CE8_STOP,0);
++    }
++    /* Printing occurs only after all samples; kernel dump also follows sampling. */
++    for (unsigned i=0;i<1000;i++)
++        printf("[COUNCIL-E8-O] %s %u %llu\n",stage,i,ce8_overhead[i]);
++    for (unsigned m=0;m<2;m++) for (unsigned i=0;i<CE8_N;i++)
++        printf("[COUNCIL-E8-U] %s %u %u %llu %llu\n",stage,m,i,
++               ce8_samples[m][i][0],ce8_samples[m][i][1]);
++    printf("[COUNCIL-E8] end stage=%s\n",stage);
++}
++#endif
+diff --git a/user/src/bench_csw.c b/user/src/bench_csw.c
+index c459a62..145704e 100644
+--- a/user/src/bench_csw.c
++++ b/user/src/bench_csw.c
+@@ -73,8 +73,11 @@ static unsigned long long rdtsc(void)
+  * MAIN
+  * ============================================================================ */
+ 
++#include "../include/council_getpid_diag.h"
++
+ int main(int argc, char *argv[])
+ {
++    ce8_run("early");
+     (void)argc;
+     (void)argv;
+ 
+diff --git a/user/src/test_stress_mt.c b/user/src/test_stress_mt.c
+index bee77cb..c93b53e 100644
+--- a/user/src/test_stress_mt.c
++++ b/user/src/test_stress_mt.c
+@@ -191,8 +191,11 @@ static void* thread_malloc_stress(void* arg)
+ 
+ /* ============ Main ============ */
+ 
++#include "../include/council_getpid_diag.h"
++
+ int main(void)
+ {
++    ce8_run("late");
+     int pass = 0, fail = 0;
+ 
+     /* --- Test 1: 50-thread parallel file ops --- */

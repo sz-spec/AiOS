@@ -1,0 +1,815 @@
+{
+  "scope": "Existing completed result files only; independent raw program-scoped parsing, not reruns",
+  "reviewer": "/root/mcp_upgrade",
+  "runs": [
+    {
+      "run": "e12-a-1",
+      "raw_sha256": "0aaf2a13f3463ebcdcc1e175b175762c554e1a80dfb3b86b8b8e59b6ccdc16b1",
+      "result_sha256": "df76e776b27c754701c2d58bcb053f3ea613b1582c803c3caacbe5153eca45bb",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9634,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 41255 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "41255",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-a-2",
+      "raw_sha256": "929cfdd9599a962d49cacf1da27fe7aede12252c11164affa60d6605cfe1b1b9",
+      "result_sha256": "13cd2f834f003baa631031a89dd49fdec325a8cb7e937b2c01c481fdc0ca0883",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9674,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40696 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40696",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-a-3",
+      "raw_sha256": "7a54d9c2337a7198a2acf3f0101a6d70fc6331de283d2eddfc50b0805c41b7ee",
+      "result_sha256": "fac0d963c861edab27625df0dc9b3d09bf0e7e6a0f9f31126f425dadb3666d7a",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9713,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40684 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40684",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-a-4",
+      "raw_sha256": "6a8fbd562ce3431e4bcc6de9e388a199618351594aa341ae1d63af43901acd99",
+      "result_sha256": "5d97054e3b4bb5f5f8411e4b9dd98bd0a08c7cda0c15e39258693c8991b3c50d",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9704,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40966 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40966",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-a-5",
+      "raw_sha256": "0b2ce9682f889cf39de1e8dd296c62084af0f30951691c77ac80f802d5c1b32e",
+      "result_sha256": "d6c4d66bce2bb731b4cc3ceb530c57177b026921abf8c96bef2bba177f748b4e",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9744,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40298 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40298",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-a-1",
+      "raw_sha256": "5d95d971fde3c17be4a3295e477e559b74dfaef408d5e2c51ad0b2efddb2b351",
+      "result_sha256": "07298c006b7d815685d92a428eff343785d71cfb394e5da2fe0e0ca841941175",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-a-2",
+      "raw_sha256": "6774cd7f551c3ecc734ae317bdcf226a16b83bccceb6787218dd9d22b2e56595",
+      "result_sha256": "0b48d9816658f4c8cf65f1574a501b252c6bd97de8324d520e545a47a2aa38de",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-a-3",
+      "raw_sha256": "afb27b80ec0e904a08b0b8f067fa6bff9b5267d1be2f8c16ec2a1e04fb8dc2de",
+      "result_sha256": "1022ef21acb2d8eca36c169dd037b7abd5aca0100f2cdb6f893ef564f717dda5",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-a-4",
+      "raw_sha256": "f821896d99cd450831b4d27f5d56a50f782d5ebfa16c0df46438b3b2d6fca6fe",
+      "result_sha256": "be86bf462f79a987851adf2fcb6cb52d805bda5eaad256803497616de96939dd",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-a-5",
+      "raw_sha256": "e2a9d64c7d1c189c5821f3a5f7ca48085e1f23332cbb36939379335c1c184d4b",
+      "result_sha256": "76ebdf042fc96921fbf1edcc31f8953251a144517d02260c0b224d07d5b5166f",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-a-6",
+      "raw_sha256": "e80929d4480cf8751f9d0c0a43a48579d2a35a719ea0cc12d84f4e7870372674",
+      "result_sha256": "3bdae8ce5ccf0499236ac11597d6774fd8eec73b58c532952c04f9f672d9e9af",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-b-1",
+      "raw_sha256": "1bccbfee8a7a6556e1c2090f3fa2fc641cd302ab3f24fcf2afa11e269f53c6e3",
+      "result_sha256": "104b9aa394f0efa13fa2d2375f21342520c95388522556c8816e08ddba779b47",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-b-2",
+      "raw_sha256": "ef2007dcb709bf20597668d0df25dc4b3c10659e70a38cea5b69c11e159b6ef6",
+      "result_sha256": "0f7a8c78f2f2620eaf61913cb02f7c0d7bbf80210fce4216107c690ee343e1cc",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-b-3",
+      "raw_sha256": "e5ae9acbc841187b82f6df6f09a7339f37b394c930ecaf6fa15b9457f1737ba6",
+      "result_sha256": "d2b9dc193230b14550e3e7a969cd8d20df649ac136ca7ee3bfe3db8548220009",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 11412,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 42409 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "42409",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-b-4",
+      "raw_sha256": "644398a711b7fcf11cd82edf2b6b06ae4c49fe0a34e846cc6258e2cb3d6baf34",
+      "result_sha256": "d5941674114a3bb395610a4e678fad1a48e3d368b3fbfa9582df662708bde3f1",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-ac-b-5",
+      "raw_sha256": "e4f0db8f32b951d2f2add3c1892d94842a2070a2ff093f415c28702417f4d60e",
+      "result_sha256": "fb84f78382c5a5bd88c561c0c36d33cc25afd9111a5d406b6e9b268a3602ac20",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-b-1",
+      "raw_sha256": "be3b6c81ac239871de4416ef43ba309c3d34e97e75e1e8743e1b618991da33fd",
+      "result_sha256": "65900e5303735398483d243764396cdc6f973ed15be567947e9805c02497d7ec",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9742,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 42722 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "42722",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-b-2",
+      "raw_sha256": "e9fb1000fc75fc2245f17954bc9491a56556f40bf010a644fd158079c6feedcf",
+      "result_sha256": "49318639d35ace0ef8a35e2eab0ccf79f605a05df88909a0ca2ad6f0701b666e",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9748,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40230 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40230",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-b-3",
+      "raw_sha256": "250de3d9e0995931c4903bf87df162a05db51fa583d5e48bb0cf492a95cb2b12",
+      "result_sha256": "bb9b68823f3b9850a47a156c689312979c0ee266814e9f277b58666f81dc8b54",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9759,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 41618 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "41618",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-b-4",
+      "raw_sha256": "1bb651bb555dc8c166e46d262611d0f82c83ae6fbf704f332c23a2585e758ff4",
+      "result_sha256": "3c266191cd2fc78091b8d8dd77017bce7e6a2f3044a0d7e14df0bdb49b19f3f6",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9699,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40450 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40450",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e12-b-5",
+      "raw_sha256": "b11ea015e054e3a517c925ea29de1233923daaf0c718c7892f74de6a2ccfa4f9",
+      "result_sha256": "75627628f0c4390cd034e225351381ecbb9583fc5e550502b7ef533607d4d0f6",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9712,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40510 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40510",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e3-a-1",
+      "raw_sha256": "aca5d765b03e6c23d18bda89dd882eb6c1c7f11583e5cca83e5e609d27ff6e63",
+      "result_sha256": "acbeccb2c40625e98c7c4fe8e901dfec7c7f75aab003ce02ae2221dafad870c3",
+      "stored_passed": false,
+      "starts": 51,
+      "exits": 50,
+      "zero_exits": 49,
+      "full_order_match": false,
+      "start_sequence_match": false,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_model_load",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 6867,
+          "program": "test_model_load",
+          "text": "  [FAIL] vfs_thread_stress: done=0/16 files=190 errs=0"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": false,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": true
+    },
+    {
+      "run": "e4-control-1",
+      "raw_sha256": "e89e792fffb41b54941121ebbe35114e54e8f38d0017b04d3017ad39b4d33d1e",
+      "result_sha256": "82f0e77312dc85487b6b6bddfbe302c40220e0cf7728feabada3a6b693e698a2",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9739,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 43395 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "43395",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-control-2",
+      "raw_sha256": "ed371821be67cccc6bd22a3489f1ba4c3ba47df64b282291fe96abbc214eed3b",
+      "result_sha256": "980753e68bd71e1bfaf9986331ece61630a106ee7cce6b520e760ff63724170c",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9749,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 39997 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "39997",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-control-3",
+      "raw_sha256": "eb8301969e50609edf282d3591f257bbbe0a7220e53fe9852103d65f94517f9e",
+      "result_sha256": "6c898d6cc99b0a084e25090d6196893e1f9bf3c2fe5a2c90bb93c0376d72865d",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9689,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 42545 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "42545",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-control-4",
+      "raw_sha256": "eda0dc61faf780c6ab7e86c2316a3e208a124a2a98f601a88b61980f1574ab7a",
+      "result_sha256": "7269f23710258c2f514de2037c1d74c880d6bebb4f0b69800a7976d5e43560fe",
+      "stored_passed": false,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 56,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [
+        [
+          "test_health_check",
+          1
+        ]
+      ],
+      "fail_records": [
+        {
+          "line": 9709,
+          "program": "test_health_check",
+          "text": "  [FAIL] spsc_responsive: 40545 msgs/sec (need >=80K)"
+        }
+      ],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [
+        [
+          "40545",
+          ""
+        ]
+      ],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-control-5",
+      "raw_sha256": "d31212ba3440a6bac07a43eaad7c2d7f4f6ba105e0903413745aed973d31b5d2",
+      "result_sha256": "e89c15bde1f03d8535de6d5015549324c21f23964c2c5d22d34c6675d5ab0042",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-yield-1",
+      "raw_sha256": "660da354bb5ef29829e1d304f7bb3a8a15eb764f2e80ad42b87571cb263a507b",
+      "result_sha256": "c7a47767f79615f260fae81f5a67e73b4ce035760c249a3c315a469941d19aa5",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-yield-2",
+      "raw_sha256": "e1908c4c9cf2f79a60c2579839572be6b061867f4a9c885cc4c57b53ff2b330c",
+      "result_sha256": "a6fbd72d08775d02648b72caeb89cdc9d6aebb467c5818b1fe94298b7621feb9",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-yield-3",
+      "raw_sha256": "46b95b39ec085399f0a67a4dc747bc6222434f1e20157868e7818c2425d1282c",
+      "result_sha256": "531d26423236efe568d83c9d63405e5de0d69b89b0db5e43ee885d4627869c90",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    },
+    {
+      "run": "e4-yield-4",
+      "raw_sha256": "b33020cba45e546bc0143b7f25196ebcb252a20d5c3d9d4786fadc750f0e6bc3",
+      "result_sha256": "8f9c53cfe0a81d0c3e448b2b0f5ae40f6b0341d6ee5cf622230532c50c206b13",
+      "stored_passed": true,
+      "starts": 57,
+      "exits": 57,
+      "zero_exits": 57,
+      "full_order_match": true,
+      "start_sequence_match": true,
+      "parse_errors": [],
+      "nonzero_exits": [],
+      "fail_records": [],
+      "fail_with_zero_exit": [],
+      "suite_complete": true,
+      "spsc_rates": [],
+      "incomplete_not_spsc_failure": false
+    }
+  ]
+}

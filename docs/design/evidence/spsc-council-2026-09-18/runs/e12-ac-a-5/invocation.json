@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+    "-machine",
+    "q35,accel=tcg",
+    "-m",
+    "3072",
+    "-cpu",
+    "qemu64,+rdrand,+rdseed",
+    "-smp",
+    "1",
+    "-display",
+    "none",
+    "-serial",
+    "stdio",
+    "-monitor",
+    "none",
+    "-no-reboot",
+    "-boot",
+    "d",
+    "-nic",
+    "user,model=virtio-net-pci",
+    "-cdrom",
+    "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+    "-snapshot"
+  ],
+  "source": "/private/tmp/vos-health-final-20260917/source",
+  "diagnostic": "",
+  "test_only": "",
+  "seconds_limit": 500,
+  "canonical_gate_eligible": true,
+  "observer_sha256": "98a85fafc86efc33a193fc8bc8f1b3a7e05af240e492cfa5dc6c2b5ee6c6a0e5"
+}

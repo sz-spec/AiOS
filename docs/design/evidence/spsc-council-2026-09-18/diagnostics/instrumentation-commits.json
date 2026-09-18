@@ -1,0 +1,50 @@
+[
+  {
+    "variant": "e7",
+    "commit": "09d3f4bb301e95b0e0ae69f02e427cab5afd8c81",
+    "ref": "refs/heads/diagnostics/spsc-e7-20260918",
+    "source": "/private/tmp/vos-council-instrument-20260918/source",
+    "base": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "files": {
+      "kernel/include/vos/scheduler.h": "6090103152134de91fb07af49a836202f0587752b97ecad70f97de69242d475f",
+      "kernel/src/sched/scheduler.c": "9a02645281dafd2657d4d14fe3a1505440e224c52c730c0bfa31a73b32bb3dba",
+      "kernel/src/arch/x86_64/interrupts.c": "41542f5209de3f432411f619697f3e62131cea5b54cba448ce43e10582779981",
+      "kernel/src/arch/x86_64/syscall.c": "51563f9f97e87035ba877a63fcd82c576c888a2af95a18644a34421f47d4822b",
+      "user/src/test_health_check.c": "2735676927a424216500b71d35ca006f6f3132b3769316d6c5ca92db684aae19"
+    },
+    "release_eligible": false
+  },
+  {
+    "variant": "e6",
+    "commit": "c57961bd31ee274d243ea1e6eeff21c029b71812",
+    "ref": "refs/heads/diagnostics/spsc-e6-20260918",
+    "source": "/private/tmp/vos-council-e6-20260918/source",
+    "base": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "files": {
+      "kernel/include/vos/scheduler.h": "6090103152134de91fb07af49a836202f0587752b97ecad70f97de69242d475f",
+      "kernel/src/sched/scheduler.c": "9a02645281dafd2657d4d14fe3a1505440e224c52c730c0bfa31a73b32bb3dba",
+      "kernel/src/arch/x86_64/interrupts.c": "41542f5209de3f432411f619697f3e62131cea5b54cba448ce43e10582779981",
+      "kernel/src/arch/x86_64/syscall.c": "51563f9f97e87035ba877a63fcd82c576c888a2af95a18644a34421f47d4822b",
+      "user/src/test_health_check.c": "75e45a0e9d41b8a316b2a18ee0eec596c96c9a04b6c691c16849130ff6fd8f51",
+      "user/src/init.c": "49237e277c625918af4b62855f0152fa3a9492fe69f55355ac2db6660fb23754"
+    },
+    "release_eligible": false
+  },
+  {
+    "variant": "e8",
+    "commit": "a8c2d8b3c178224f22764d7d3ba6d3463537ab09",
+    "ref": "refs/heads/diagnostics/spsc-e8-20260918",
+    "source": "/private/tmp/vos-council-e8-20260918/source",
+    "base": "0324521a2494b25c29a01b055ff8b38029819fb9",
+    "files": {
+      "kernel/include/vos/council_e8.h": "207bb94f40ece9371b846930c1ce3261bba10a1e4703657beae6d5794a711895",
+      "kernel/src/arch/x86_64/syscall.c": "e8486191b02cb0205afe75710615f8f297b96a72e1e247b62818e164bf4d8d45",
+      "kernel/src/arch/x86_64/kpti.c": "cf70b0e4531943a1b8dd0ab6d36d3468fc51612143460ce2d399d5a34d3b2584",
+      "kernel/src/sched/scheduler.c": "bd853773b3afa991ef12ce612ff5cf025553283090093dd154cfecf0dbc5db17",
+      "user/include/council_getpid_diag.h": "db4e6163b1ed4154a9414497537d97e471f71d268bd58c5b211fc335e3049523",
+      "user/src/bench_csw.c": "afac7edf0469d195d61fa0b41abb209d4126fea6bcc2c633697237b1f1d71eb3",
+      "user/src/test_stress_mt.c": "aed377bae2d6646c780a86daa35a54bab9c8bce575afed19a4e96483c2830644"
+    },
+    "release_eligible": false
+  }
+]

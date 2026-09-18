@@ -1,0 +1,305 @@
+diff --git a/kernel/include/vos/scheduler.h b/kernel/include/vos/scheduler.h
+index ec3305f..377466f 100644
+--- a/kernel/include/vos/scheduler.h
++++ b/kernel/include/vos/scheduler.h
+@@ -40,6 +40,10 @@ extern "C" {
+ #define VOS3_SCHED_SLICE_REALTIME   ((uint64_t)50U)
+ 
+ /** @brief Timer frequency (Hz) - 100Hz = 10ms tick */
++/* E7 DIAGNOSTIC ONLY: CPU0, one vCPU, process-owned recorder. */
++int64_t vos3_diag_control(uint64_t op);
++void vos3_diag_tick(void);
++void vos3_diag_reschedule(unsigned reason);
+ #define VOS3_TIMER_FREQ             ((uint32_t)100U)
+ 
+ /** @brief Ticks per second */
+diff --git a/kernel/src/arch/x86_64/interrupts.c b/kernel/src/arch/x86_64/interrupts.c
+index f846ebb..d67d809 100644
+--- a/kernel/src/arch/x86_64/interrupts.c
++++ b/kernel/src/arch/x86_64/interrupts.c
+@@ -851,6 +851,7 @@ static void handle_timer_irq(vos3_int_frame_t* frame)
+     (void)frame;
+ 
+     /* Call timer handler (handles ticks and scheduler) */
++    vos3_diag_tick();
+     vos3_timer_irq_handler();
+ 
+     vos3_pic_eoi(0U);
+@@ -869,7 +870,7 @@ static void handle_timer_irq(vos3_int_frame_t* frame)
+      * but without actually calling reschedule here, the idle loop (sti;hlt;jmp)
+      * never yields to the woken task. */
+     if (vos3_sched_is_running() != 0 && vos3_sched_need_reschedule() != 0) {
+-        vos3_sched_reschedule();
++        vos3_diag_reschedule(1);
+     }
+ }
+ 
+diff --git a/kernel/src/arch/x86_64/syscall.c b/kernel/src/arch/x86_64/syscall.c
+index c60c998..1927b79 100644
+--- a/kernel/src/arch/x86_64/syscall.c
++++ b/kernel/src/arch/x86_64/syscall.c
+@@ -760,7 +760,8 @@ int64_t vos3_syscall_dispatch(vos3_syscall_frame_t* frame)
+     }
+ 
+     /* Call handler */
+-    int64_t result = handler(frame);
++    /* Diagnostic-only GETPID control; retain permission and return paths. */
++    int64_t result = (syscall_num == 39 && frame->rdi == 0x5350534344494147ULL && frame->rdx == 0x453745364f4e4c59ULL) ? vos3_diag_control(frame->rsi) : handler(frame);
+ 
+     /* The handler released subsystem locks; syscall_entry still has IF set.
+      * Blocking wait/exit and timer continuations can all reschedule IRQ-off,
+diff --git a/kernel/src/sched/scheduler.c b/kernel/src/sched/scheduler.c
+index dc827c7..3c41a62 100644
+--- a/kernel/src/sched/scheduler.c
++++ b/kernel/src/sched/scheduler.c
+@@ -213,6 +213,113 @@ static volatile uint32_t g_tcp_timer_acc = 0;
+ /**
+  * @brief Initialize a run queue
+  */
++
++/* E7 diagnostic recorder. UP only. Fixed buffers, no allocation/printing armed.
++ * Events count actual next!=prev selections, not expired time slices.
++ * reason: 0 other, 1 timer IRQ, 2 voluntary yield. */
++#define DIAG_N 2048U
++#define DIAG_CENSUS 64U
++static unsigned d_on, d_used, d_lost;
++static uint32_t d_owner;
++static uint64_t d_irq, d_calls[3], d_switch[3], d_begin, d_end;
++struct d_event { uint64_t tsc, slice, granted; uint32_t prev, next, reason, priority; };
++static struct d_event d_events[DIAG_N];
++struct d_member { uint32_t tid, pid, state, priority; uint64_t slice; };
++static struct d_member d_members[DIAG_CENSUS];
++static unsigned d_members_n, d_members_lost;
++static struct d_member d_seen[DIAG_CENSUS];
++static unsigned d_seen_n,d_seen_drop,d_scan_drop,d_samples,d_run_min,d_run_max;
++static uint32_t d_scan_tids[DIAG_CENSUS];
++static unsigned d_scan_n;
++static void d_scan_add(vos3_task_t *t) {
++    if(!t) return;
++    for(unsigned i=0;i<d_scan_n;i++) if(d_scan_tids[i]==t->tid) return;
++    if(d_scan_n==DIAG_CENSUS) { d_scan_drop++; return; }
++    d_scan_tids[d_scan_n++]=t->tid;
++    for(unsigned i=0;i<d_seen_n;i++) if(d_seen[i].tid==t->tid) return;
++    if(d_seen_n==DIAG_CENSUS) { d_seen_drop++; return; }
++    d_seen[d_seen_n++]=(struct d_member){t->tid,t->pid,t->state,t->priority,t->time_slice};
++}
++static void d_sample_runqueue(vos3_task_t *next) {
++    d_scan_n=0; d_scan_add(next);
++    for(int q=-1;q<(int)VOS3_PRIORITY_COUNT;q++) {
++        vos3_task_t *t=q<0?g_interactive_rq.head:g_run_queues[q].head;
++        unsigned walked=0;
++        while(t && walked++<DIAG_CENSUS) { d_scan_add(t); t=t->next; }
++        if(t) d_scan_drop++;
++    }
++    if(!d_samples || d_scan_n<d_run_min) d_run_min=d_scan_n;
++    if(!d_samples || d_scan_n>d_run_max) d_run_max=d_scan_n;
++    d_samples++;
++}
++static uint64_t d_clock(void) {
++    uint32_t lo, hi;
++    __asm__ volatile("lfence; rdtsc" : "=a"(lo), "=d"(hi) :: "memory");
++    return ((uint64_t)hi << 32) | lo;
++}
++static void d_member_add(vos3_task_t *t) {
++    if (!t) return;
++    if (d_members_n == DIAG_CENSUS) { d_members_lost++; return; }
++    d_members[d_members_n++] = (struct d_member){t->tid,t->pid,t->state,t->priority,t->time_slice};
++}
++static int d_record(vos3_task_t *prev, vos3_task_t *next, unsigned reason) {
++    if (!d_on) return -1;
++    d_sample_runqueue(next);
++    if (reason > 2) reason=0;
++    d_calls[reason]++;
++    if (prev == next) return -1;
++    d_switch[reason]++;
++    if (d_used == DIAG_N) { d_lost++; return -1; }
++    d_events[d_used] = (struct d_event){d_clock(),next->time_slice,0,
++        prev ? prev->tid : 0,next->tid,reason,next->priority};
++    return (int)d_used++;
++}
++void vos3_diag_tick(void) { if (d_on) d_irq++; }
++static void d_reschedule_impl(unsigned diag_reason);
++void vos3_diag_reschedule(unsigned reason) {
++    d_reschedule_impl(reason);
++}
++int64_t vos3_diag_control(uint64_t op) {
++    vos3_task_t *cur=vos3_sched_current();
++    if (!cur || get_cpu_id()!=0 || vos3_smp_cpu_count()>1) return -22;
++    vos3_irqflags_t f=vos3_irq_save();
++    if (op==1) {
++        if (d_on) { vos3_irq_restore(f); return -16; }
++        d_seen_n=d_seen_drop=d_scan_drop=d_samples=d_run_min=d_run_max=0;
++        d_owner=cur->tid; d_used=d_lost=d_members_n=d_members_lost=0;
++        d_irq=0; for (unsigned i=0;i<3;i++) d_calls[i]=d_switch[i]=0;
++        vos3_spinlock_lock(&g_sched_lock);
++        d_member_add(cur);
++        for (int q=-1;q<(int)VOS3_PRIORITY_COUNT;q++) {
++            vos3_task_t *t=(q<0 ? g_interactive_rq.head : g_run_queues[q].head);
++            unsigned walked=0;
++            while(t && walked++<DIAG_CENSUS) { d_member_add(t); t=t->next; }
++            if(t) d_members_lost++;
++        }
++        vos3_spinlock_unlock(&g_sched_lock);
++        d_begin=d_clock(); d_on=1;
++        vos3_irq_restore(f); return 0;
++    }
++    if (op==2) {
++        if (!d_on || cur->tid!=d_owner) { vos3_irq_restore(f); return -22; }
++        d_end=d_clock(); d_on=0;
++        vos3_irq_restore(f); return 0;
++    }
++    if (op!=3 || d_on || cur->tid!=d_owner) { vos3_irq_restore(f); return -22; }
++    vos3_irq_restore(f);
++    VOS3_INFO("SPSC_DIAG kernel begin=%llu end=%llu irq=%llu events=%u lost=%u census=%u census_lost=%u",
++       (unsigned long long)d_begin,(unsigned long long)d_end,(unsigned long long)d_irq,d_used,d_lost,d_members_n,d_members_lost);
++    for(unsigned i=0;i<3;i++) VOS3_INFO("SPSC_DIAG reason=%u calls=%llu switches=%llu",i,(unsigned long long)d_calls[i],(unsigned long long)d_switch[i]);
++    for(unsigned i=0;i<d_members_n;i++) { struct d_member *m=&d_members[i];
++       VOS3_INFO("SPSC_DIAG member tid=%u pid=%u state=%u priority=%u slice=%llu",m->tid,m->pid,m->state,m->priority,(unsigned long long)m->slice); }
++    VOS3_INFO("SPSC_DIAG runnable samples=%u min=%u max=%u scan_drop=%u seen=%u seen_drop=%u",d_samples,d_run_min,d_run_max,d_scan_drop,d_seen_n,d_seen_drop);
++    for(unsigned i=0;i<d_seen_n;i++) { struct d_member *m=&d_seen[i];
++       VOS3_INFO("SPSC_DIAG seen tid=%u pid=%u state=%u priority=%u first_slice=%llu",m->tid,m->pid,m->state,m->priority,(unsigned long long)m->slice); }
++    for(unsigned i=0;i<d_used;i++) { struct d_event *e=&d_events[i];
++       VOS3_INFO("SPSC_DIAG switch i=%u tsc=%llu prev=%u next=%u reason=%u prior_slice=%llu granted_slice=%llu priority=%u",i,(unsigned long long)e->tsc,e->prev,e->next,e->reason,(unsigned long long)e->slice,(unsigned long long)e->granted,e->priority); }
++    return 0;
++}
++
+ static void rq_init(vos3_run_queue_t* rq)
+ {
+     rq->head = NULL;
+@@ -381,7 +488,7 @@ static void put_prev_task(vos3_task_t* task)
+ /**
+  * @brief Perform the actual context switch (SMP-aware)
+  */
+-static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
++static void do_context_switch(vos3_task_t* prev, vos3_task_t* next, int diag_event)
+ {
+     uint32_t cpu_id = get_cpu_id();
+ 
+@@ -436,6 +543,7 @@ static void do_context_switch(vos3_task_t* prev, vos3_task_t* next)
+     }
+ 
+     next->last_scheduled = g_tick_count;
++    if (diag_event >= 0) d_events[diag_event].granted=next->time_slice;
+     next->context_switches++;
+ 
+     g_sched_stats.total_switches++;
+@@ -958,7 +1066,8 @@ out:
+     __atomic_store_n(&g_deferred_active[cpu], 0U, __ATOMIC_RELEASE);
+ }
+ 
+-void vos3_sched_reschedule(void)
++void vos3_sched_reschedule(void) { d_reschedule_impl(0); }
++static void d_reschedule_impl(unsigned diag_reason)
+ {
+     uint32_t cpu_id = get_cpu_id();
+ 
+@@ -977,11 +1086,12 @@ void vos3_sched_reschedule(void)
+     put_prev_task(prev);
+ 
+     vos3_task_t* next = pick_next_task();
++    int diag_event=d_record(prev,next,diag_reason);
+ 
+     vos3_spinlock_unlock(&g_sched_lock);
+ 
+     if (next != prev) {
+-        do_context_switch(prev, next);
++        do_context_switch(prev, next, diag_event);
+     } else {
+         /* Same task re-selected: put_prev_task changed state to READY and
+          * pick_next_task dequeued it.  Restore RUNNING state and reset the
+@@ -1027,7 +1137,7 @@ void vos3_sched_yield(void)
+         g_sched_stats.voluntary_switches++;
+     }
+ 
+-    vos3_sched_reschedule();
++    vos3_diag_reschedule(2);
+ }
+ 
+ vos3_task_t* vos3_sched_current(void)
+diff --git a/user/src/test_health_check.c b/user/src/test_health_check.c
+index 97fbff3..bb9dc27 100644
+--- a/user/src/test_health_check.c
++++ b/user/src/test_health_check.c
+@@ -214,6 +214,31 @@ static volatile int g_consumer_done = 0;
+ 
+ static char g_consumer_stack[65536] __attribute__((aligned(16)));
+ 
++
++#define D_N 512U
++struct d_user_event { uint64_t tsc,head,tail; unsigned kind; };
++static struct d_user_event d_prod[D_N],d_cons[D_N];
++static unsigned d_np,d_nc,d_lp,d_lc;
++static uint64_t d_full,d_empty;
++static int d_was_full,d_was_empty;
++static volatile int d_user_on;
++static uint64_t d_clock(void) { unsigned lo,hi; __asm__ volatile("lfence; rdtsc":"=a"(lo),"=d"(hi)::"memory"); return ((uint64_t)hi<<32)|lo; }
++static void d_user_event(int consumer,unsigned kind) {
++    unsigned *n=consumer?&d_nc:&d_np,*lost=consumer?&d_lc:&d_lp;
++    if(*n==D_N) { (*lost)++; return; }
++    struct d_user_event *e=consumer?&d_cons[(*n)++]:&d_prod[(*n)++];
++    e->tsc=d_clock(); e->head=__atomic_load_n(&g_hc_ring.head,__ATOMIC_ACQUIRE);
++    e->tail=__atomic_load_n(&g_hc_ring.tail,__ATOMIC_ACQUIRE); e->kind=kind;
++}
++static long d_control(unsigned op) { return syscall3(39,0x5350534344494147ULL,op,0x453745364f4e4c59ULL); }
++static void d_dump(void) {
++    printf("SPSC_DIAG user full_yields=%lu empty_periods=%lu prod_events=%u cons_events=%u prod_lost=%u cons_lost=%u\n",d_full,d_empty,d_np,d_nc,d_lp,d_lc);
++    for(unsigned c=0;c<2;c++) for(unsigned i=0;i<(c?d_nc:d_np);i++) {
++        struct d_user_event *e=c?&d_cons[i]:&d_prod[i];
++        printf("SPSC_DIAG transition role=%u i=%u kind=%u tsc=%lu head=%lu tail=%lu\n",c,i,e->kind,e->tsc,e->head,e->tail);
++    }
++}
++
+ static void consumer_thread(void)
+ {
+     spsc_slot_t slot;
+@@ -221,10 +246,11 @@ static void consumer_thread(void)
+ 
+     while (1) {
+         if (spsc_pop(&g_hc_ring, &slot) == 0) {
++            if(d_user_on && d_was_empty) { d_user_event(1,2); d_was_empty=0; }
+             if (slot.msg_type == SPSC_MSG_DONE)
+                 break;
+             count++;
+-        }
++        } else if(d_user_on && !d_was_empty) { d_empty++; d_user_event(1,1); d_was_empty=1; }
+     }
+ 
+     g_consumer_count = count;
+@@ -258,8 +284,12 @@ static void spsc_responsive(void)
+         return;
+     }
+ 
++    printf("[COUNCIL-SPSC] begin\n");
++    d_user_on=1;
++    long d_arm=d_control(1);
+     /* Producer: push for 1 second */
+     unsigned long t_start = get_uptime_ms();
++    uint64_t d_start_tsc = d_clock();
+     uint64_t pushed = 0;
+ 
+     while (get_uptime_ms() - t_start < SPSC_TEST_MS) {
+@@ -270,7 +300,9 @@ static void spsc_responsive(void)
+ 
+         if (spsc_push(&g_hc_ring, &slot) == 0) {
+             pushed++;
++            if(d_was_full) { d_user_event(0,2); d_was_full=0; }
+         } else {
++            d_full++; if(!d_was_full) { d_user_event(0,1); d_was_full=1; }
+             /* Ring full — yield to let consumer drain */
+             syscall0(SYS_YIELD);
+         }
+@@ -289,6 +321,14 @@ static void spsc_responsive(void)
+         syscall0(SYS_YIELD);
+ 
+     unsigned long t_end = get_uptime_ms();
++    uint64_t d_end_tsc = d_clock();
++    d_user_on=0;
++    long d_stop=d_control(2);
++    printf("[COUNCIL-SPSC] end start_tsc=%lu end_tsc=%lu guest_start=%lu guest_end=%lu\n",d_start_tsc,d_end_tsc,t_start,t_end);
++    long d_print=d_control(3);
++    printf("SPSC_DIAG control arm=%ld stop=%ld dump=%ld\n",d_arm,d_stop,d_print);
++    /* Dump only after canonical t_end. */
++    if(g_consumer_done) d_dump();
+     unsigned long elapsed = t_end - t_start;
+     uint64_t consumed = g_consumer_count;
+     unsigned long msgs_per_sec = elapsed > 0 ? (consumed * 1000UL) / elapsed : 0;

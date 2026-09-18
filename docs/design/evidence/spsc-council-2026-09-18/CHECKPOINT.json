@@ -1,0 +1,28 @@
+{
+  "state": "measurements_paused_for_stable_host_coordination",
+  "date": "2026-09-18",
+  "active_vm_sessions": [],
+  "canonical_modified": false,
+  "e12_battery": {
+    "A": 5,
+    "B": 5,
+    "all_failed": true
+  },
+  "e12_ac_unchanged_endpoints": {
+    "A": 5,
+    "B": 4,
+    "all_passed": true
+  },
+  "separate_conditions": [
+    "e4-control-5",
+    "e12-ac-b-3",
+    "e12-ac-a-6"
+  ],
+  "e3": "blocked_prerequisite_n0",
+  "e4": "four_battery_pairs_exploratory",
+  "e5_e8": "built_reviewed_not_run",
+  "next": "Coordinate fixed power/profile, preregister continuation, complete deficientsamples; thenE4-E8serialexclusive. Do notoverwriteexistingruns.",
+  "pending_report": null,
+  "report": "docs/reports/vos-performance-failure-2026-09-18-v1.1.pdf",
+  "report_scope": "Current evidence, not completion of E1-E8"
+}

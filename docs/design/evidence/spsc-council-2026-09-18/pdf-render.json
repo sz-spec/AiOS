@@ -1,0 +1,30 @@
+{
+  "work": "/private/tmp/vos-council-pdf-v11-hdoxkkj2",
+  "command": [
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "--headless",
+    "--disable-gpu",
+    "--disable-background-networking",
+    "--disable-component-update",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--user-data-dir=/private/tmp/vos-council-pdf-v11-hdoxkkj2/profile",
+    "--no-pdf-header-footer",
+    "--print-to-pdf=/private/tmp/vos-council-pdf-v11-hdoxkkj2/report.pdf",
+    "file:///Users/sz/Desktop/vos/vos%205/docs/reports/vos-performance-failure-2026-09-18-v1.1.html"
+  ],
+  "renderer_exit": "timeout_after_25s",
+  "pdf": "/Users/sz/Desktop/vos/vos 5/docs/reports/vos-performance-failure-2026-09-18-v1.1.pdf",
+  "pages": 18,
+  "questions": 54,
+  "html_sha256": "372a0012775160a835bff647b696d55546922acd0a879c30cb09f75455e355a9",
+  "pdf_sha256": "63409af88317df7f5b89399aacba83a5a2cd6f8be527445a73603c612dcb513b",
+  "log": "/private/tmp/vos-council-pdf-v11-hdoxkkj2/renderer.log",
+  "text_checks": "54 IDs and key data present; visual review pending",
+  "visual_review": {
+    "pages": 18,
+    "method": "All-page contact sheet plus full-size pages 1,2,3,10; no clipping/overlap seen; Hebrew and tables readable. Individual question blocks continue on pages14/17.",
+    "preview_directory": "/private/tmp/vos-council-pdf-v11-hdoxkkj2",
+    "alpha_preview_note": "sips transparent page previews composited on white for inspection only; PDF unchanged."
+  }
+}

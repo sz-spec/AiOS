@@ -1,0 +1,11 @@
+--- a/user/src/test_health_check.c
++++ b/user/src/test_health_check.c
+@@ -203,7 +203,7 @@
+  * Must exceed 150K msgs/sec in QEMU.
+  * ============================================================================ */
+ 
+-#define SPSC_CAP        1024
++#define SPSC_CAP        512
+ #define SPSC_TEST_MS    1000
+ 
+ static spsc_ring_t g_hc_ring __attribute__((aligned(128)));

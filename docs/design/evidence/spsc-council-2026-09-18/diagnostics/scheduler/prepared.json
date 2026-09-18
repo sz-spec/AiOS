@@ -1,0 +1,29 @@
+{
+  "base": "/private/tmp/vos-sysinfo-qualified-20260918/source",
+  "output": "/private/tmp/vos-council-instrument-20260918/source",
+  "mode": "E7; apply e6-overlay.patch only for E6",
+  "changed": {
+    "kernel/include/vos/scheduler.h": {
+      "before": "01e49e72f419a96b5ed84853642fab56461d8bffe25617bb8176c189eecddb58",
+      "after": "6090103152134de91fb07af49a836202f0587752b97ecad70f97de69242d475f"
+    },
+    "kernel/src/sched/scheduler.c": {
+      "before": "fb2f47ab4c0d443d24390bca83d90192d5a6494f30c5f34bc14a5f070a5f6c6d",
+      "after": "9a02645281dafd2657d4d14fe3a1505440e224c52c730c0bfa31a73b32bb3dba"
+    },
+    "kernel/src/arch/x86_64/interrupts.c": {
+      "before": "21461a1e42782d96726a3de5bb1e7d673f5b100a7f9353c7bf56ae010771ba7e",
+      "after": "41542f5209de3f432411f619697f3e62131cea5b54cba448ce43e10582779981"
+    },
+    "kernel/src/arch/x86_64/syscall.c": {
+      "before": "f003297575ffa4e70f04ea8dd21e193d1bf5a34d31e0b698dfb1077b0812e2b7",
+      "after": "51563f9f97e87035ba877a63fcd82c576c888a2af95a18644a34421f47d4822b"
+    },
+    "user/src/test_health_check.c": {
+      "before": "651b7d84e6eb32d833ab315437d9465e9a4a5a816fc4a5186ac40f4ec5e22977",
+      "after": "2735676927a424216500b71d35ca006f6f3132b3769316d6c5ca92db684aae19"
+    }
+  },
+  "compiled": false,
+  "executed": false
+}

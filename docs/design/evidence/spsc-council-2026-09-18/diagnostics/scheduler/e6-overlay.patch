@@ -1,0 +1,105 @@
+--- a/user/src/init.c
++++ b/user/src/init.c
+@@ -328,76 +328,8 @@
+     #define _TEST_MAYBE_SKIP(name)
+ #endif
+ 
+-    /* Run each benchmark */
+-    RUN_BENCH("bench_csw", BENCH_CSW_PATH);
+-    /* test_max_saturation runs early — needs 1024 task slots before
+-     * heavy tests consume memory and saturate the scheduler. */
+-    RUN_BENCH("test_max_saturation", TEST_MAX_SATURATION_PATH);
+-    RUN_BENCH("bench_isolate", BENCH_ISOLATE_PATH);
+-    RUN_BENCH("bench_persist", BENCH_PERSIST_PATH);
+-    RUN_BENCH("bench_overhead", BENCH_OVERHEAD_PATH);
+-    RUN_BENCH("bench_sigpipe_test", BENCH_SIGPIPE_PATH);
+-    RUN_BENCH("ai_exploit", AI_EXPLOIT_PATH);
+-    RUN_BENCH("bench_bugfix_test", BENCH_BUGFIX_PATH);
+-    RUN_BENCH("bench_phase13_test", BENCH_PHASE13_PATH);
+-    RUN_BENCH("bench_procfs_test", BENCH_PROCFS_PATH);
+-    RUN_BENCH("bench_poll_test", BENCH_POLL_PATH);
+-    RUN_BENCH("bench_fs_test", BENCH_FS_PATH);
+-    RUN_BENCH("bench_net_test", BENCH_NET_PATH);
+-    /* Re-enabled for debugging */
+-    RUN_BENCH("bench_stress_test", BENCH_STRESS_PATH);
+-    RUN_BENCH("bench_fuzz_test", BENCH_FUZZ_PATH);
+-    RUN_BENCH("test_usercopy", "/bin/test_usercopy");
+-    RUN_BENCH("bench_sched_test", BENCH_SCHED_PATH);
+-    /* Re-enabled for debugging */
+-    RUN_BENCH("bench_app_isolation_test", BENCH_APP_ISOLATION_PATH);
+-    RUN_BENCH("test_posix_fs", TEST_POSIX_FS_PATH);
+-    RUN_BENCH("test_epoll", TEST_EPOLL_PATH);
+-    RUN_BENCH("test_posix_core",   TEST_POSIX_CORE_PATH);
+-    RUN_BENCH("test_futex",        TEST_FUTEX_PATH);
+-    RUN_BENCH("bench_thread_test", BENCH_THREAD_PATH);
+-    RUN_BENCH("stress_thread",     STRESS_THREAD_PATH);
+-    RUN_BENCH("test_net_dispatch", TEST_NET_DISPATCH_PATH);
+-    RUN_BENCH("test_shm_dispatch", TEST_SHM_DISPATCH_PATH);
+-    RUN_BENCH("diag_shm_stress",  DIAG_SHM_STRESS_PATH);
+-    RUN_BENCH("bench_hugepage_tlb", BENCH_HUGEPAGE_TLB_PATH);
+-    RUN_BENCH("test_pt_interp",  TEST_PT_INTERP_PATH);
+-    RUN_BENCH("test_dynlink",   TEST_DYNLINK_PATH);
+-    RUN_BENCH("test_signal_musl", TEST_SIGNAL_MUSL_PATH);
+-    RUN_BENCH("test_signal_lifetime", "/bin/test_signal_lifetime");
+-    RUN_BENCH("test_env_musl",    TEST_ENV_MUSL_PATH);
+-    RUN_BENCH("test_fileio_musl", TEST_FILEIO_MUSL_PATH);
+-    RUN_BENCH("test_malloc_musl", TEST_MALLOC_MUSL_PATH);
+-    RUN_BENCH("test_fork_musl",  TEST_FORK_MUSL_PATH);
+-    RUN_BENCH("test_pipe_musl",  TEST_PIPE_MUSL_PATH);
+-    RUN_BENCH("test_stat_musl",    TEST_STAT_MUSL_PATH);
+-    RUN_BENCH("test_pthread_musl", TEST_PTHREAD_MUSL_PATH);
+-    RUN_BENCH("test_ai_guard",    TEST_AI_GUARD_PATH);
+-    RUN_BENCH("test_integration", TEST_INTEGRATION_PATH);
+-    RUN_BENCH("test_sustained",   TEST_SUSTAINED_PATH);
+-    RUN_BENCH("bench_ai_throughput", BENCH_AI_THROUGHPUT_PATH);
+-    RUN_BENCH("bench_csw_1ms",   BENCH_CSW_1MS_PATH);
+-    /* bench_soak_5min excluded from auto-run (300s duration).
+-       Run via: TEST_ONLY=bench_soak_5min bash run_tests.sh */
+-    RUN_BENCH("test_npu_direct", TEST_NPU_DIRECT_PATH);
+-    RUN_BENCH("test_ai_latency", TEST_AI_LATENCY_PATH);
+-    RUN_BENCH("bench_2026_frontier", BENCH_2026_FRONTIER_PATH);
+-    RUN_BENCH("test_agent_chaos", TEST_AGENT_CHAOS_PATH);
+-    RUN_BENCH("test_advanced_chaos", TEST_ADVANCED_CHAOS_PATH);
+-    RUN_BENCH("test_model_load", TEST_MODEL_LOAD_PATH);
++    /* E6 diagnostic only: health is the first benchmark. */
+     RUN_BENCH("test_health_check", TEST_HEALTH_CHECK_PATH);
+-    RUN_BENCH("test_agent_cluster", TEST_AGENT_CLUSTER_PATH);
+-    RUN_BENCH("test_torture", TEST_TORTURE_PATH);
+-    RUN_BENCH("test_ai_exploit_v2", TEST_AI_EXPLOIT_V2_PATH);
+-    RUN_BENCH("test_security_check", TEST_SECURITY_CHECK_PATH);
+-    /* test_vmm_soak excluded from auto-run (300s duration).
+-       Run via: TEST_ONLY=test_vmm_soak bash run_tests.sh */
+-#ifdef VOS3_TEST_ONLY
+-    RUN_BENCH("test_vmm_soak", TEST_VMM_SOAK_PATH);
+-#endif
+-    /* bench_ai_scale and test_stress_mt last — may hang in QEMU */
+-    RUN_BENCH("bench_ai_scale", BENCH_AI_SCALE_PATH);
+-    RUN_BENCH("test_stress_mt",   TEST_STRESS_MT_PATH);
+ 
+     #undef RUN_BENCH
+ 
+--- a/user/src/test_health_check.c
++++ b/user/src/test_health_check.c
+@@ -258,6 +258,14 @@
+     syscall1(SYS_EXIT, 0);
+ }
+ 
++
++static void d_getpid_probe(void) {
++    for(unsigned i=0;i<100;i++) (void)syscall0(39);
++    uint64_t total=0,lo=~0ULL,hi=0;
++    for(unsigned i=0;i<10000;i++) { uint64_t a=d_clock(); (void)syscall0(39); uint64_t v=d_clock()-a; total+=v; if(v<lo)lo=v;if(v>hi)hi=v; }
++    printf("SPSC_DIAG early_getpid warmup=100 n=10000 min=%lu mean=%lu max=%lu units=raw_tsc\n",lo,total/10000,hi);
++}
++
+ static void spsc_responsive(void)
+ {
+     printf("\n--- Check 4: spsc_responsive ---\n");
+@@ -284,6 +292,7 @@
+         return;
+     }
+ 
++    d_getpid_probe();
+     d_user_on=1;
+     long d_arm=d_control(1);
+     /* Producer: push for 1 second */

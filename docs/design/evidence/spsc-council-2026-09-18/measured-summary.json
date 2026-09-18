@@ -1,0 +1,5316 @@
+{
+  "schema": 1,
+  "method": "Preserved result/serial/host/invocation only; endpoint power observations, not continuous monitoring. Missing/duplicate health is not zero throughput. Groups retain explicit series, artifact identities and complete parsed before/after power profiles; any profile value change separates groups. No n<5 conclusions.",
+  "runs": [
+    {
+      "run": "e12-a-1",
+      "series": "e12-a",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 41255,
+          "consumed": 41255,
+          "elapsed_ms": 1000,
+          "rate": 41255,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12363,
+          "max": 169000
+        }
+      ],
+      "compute_fill_tsc": [
+        42469000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "0aaf2a13f3463ebcdcc1e175b175762c554e1a80dfb3b86b8b8e59b6ccdc16b1",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-a-2",
+      "series": "e12-a",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40696,
+          "consumed": 40696,
+          "elapsed_ms": 1000,
+          "rate": 40696,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11701,
+          "max": 60000
+        }
+      ],
+      "compute_fill_tsc": [
+        43694000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "929cfdd9599a962d49cacf1da27fe7aede12252c11164affa60d6605cfe1b1b9",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-a-3",
+      "series": "e12-a",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40684,
+          "consumed": 40684,
+          "elapsed_ms": 1000,
+          "rate": 40684,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12078,
+          "max": 81000
+        }
+      ],
+      "compute_fill_tsc": [
+        42649000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "7a54d9c2337a7198a2acf3f0101a6d70fc6331de283d2eddfc50b0805c41b7ee",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-a-4",
+      "series": "e12-a",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40966,
+          "consumed": 40966,
+          "elapsed_ms": 1000,
+          "rate": 40966,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11706,
+          "max": 53000
+        }
+      ],
+      "compute_fill_tsc": [
+        42432000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "6a8fbd562ce3431e4bcc6de9e388a199618351594aa341ae1d63af43901acd99",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-a-5",
+      "series": "e12-a",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40701,
+          "consumed": 40701,
+          "elapsed_ms": 1010,
+          "rate": 40298,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11820,
+          "max": 224000
+        }
+      ],
+      "compute_fill_tsc": [
+        42416000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "0b2ce9682f889cf39de1e8dd296c62084af0f30951691c77ac80f802d5c1b32e",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-a-1",
+      "series": "e12-ac-a",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 99833,
+          "consumed": 99833,
+          "elapsed_ms": 1000,
+          "rate": 99833,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7735,
+          "max": 96000
+        }
+      ],
+      "compute_fill_tsc": [
+        26836000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "5d95d971fde3c17be4a3295e477e559b74dfaef408d5e2c51ad0b2efddb2b351",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-a-2",
+      "series": "e12-ac-a",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 99257,
+          "consumed": 99257,
+          "elapsed_ms": 1000,
+          "rate": 99257,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 8071,
+          "max": 121000
+        }
+      ],
+      "compute_fill_tsc": [
+        27275000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "6774cd7f551c3ecc734ae317bdcf226a16b83bccceb6787218dd9d22b2e56595",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-a-3",
+      "series": "e12-ac-a",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 101105,
+          "consumed": 101105,
+          "elapsed_ms": 1000,
+          "rate": 101105,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7841,
+          "max": 63000
+        }
+      ],
+      "compute_fill_tsc": [
+        27327000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "afb27b80ec0e904a08b0b8f067fa6bff9b5267d1be2f8c16ec2a1e04fb8dc2de",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-a-4",
+      "series": "e12-ac-a",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 99450,
+          "consumed": 99450,
+          "elapsed_ms": 1000,
+          "rate": 99450,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7716,
+          "max": 115000
+        }
+      ],
+      "compute_fill_tsc": [
+        27568000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "f821896d99cd450831b4d27f5d56a50f782d5ebfa16c0df46438b3b2d6fca6fe",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-a-5",
+      "series": "e12-ac-a",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 81384,
+          "consumed": 81384,
+          "elapsed_ms": 1000,
+          "rate": 81384,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7663,
+          "max": 55000
+        }
+      ],
+      "compute_fill_tsc": [
+        26921000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e2a9d64c7d1c189c5821f3a5f7ca48085e1f23332cbb36939379335c1c184d4b",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-a-6",
+      "series": "e12-ac-a",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": true,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "180",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "180",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [
+        {
+          "profile": "AC Power",
+          "key": "displaysleep",
+          "before": "10",
+          "after": "180"
+        },
+        {
+          "profile": "Battery Power",
+          "key": "displaysleep",
+          "before": "30",
+          "after": "180"
+        }
+      ],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 100284,
+          "consumed": 100284,
+          "elapsed_ms": 1000,
+          "rate": 100284,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 8034,
+          "max": 216000
+        }
+      ],
+      "compute_fill_tsc": [
+        27495000
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e80929d4480cf8751f9d0c0a43a48579d2a35a719ea0cc12d84f4e7870372674",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-b-1",
+      "series": "e12-ac-b",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 100535,
+          "consumed": 100535,
+          "elapsed_ms": 1000,
+          "rate": 100535,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7900,
+          "max": 66000
+        }
+      ],
+      "compute_fill_tsc": [
+        27370000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "1bccbfee8a7a6556e1c2090f3fa2fc641cd302ab3f24fcf2afa11e269f53c6e3",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-b-2",
+      "series": "e12-ac-b",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 98612,
+          "consumed": 98612,
+          "elapsed_ms": 1000,
+          "rate": 98612,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 8051,
+          "max": 90000
+        }
+      ],
+      "compute_fill_tsc": [
+        26895000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "ef2007dcb709bf20597668d0df25dc4b3c10659e70a38cea5b69c11e159b6ef6",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-b-3",
+      "series": "e12-ac-b",
+      "power_before": "AC",
+      "power_after": "Battery",
+      "power_class": "mixed:AC->Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 42834,
+          "consumed": 42834,
+          "elapsed_ms": 1010,
+          "rate": 42409,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7726,
+          "max": 74000
+        }
+      ],
+      "compute_fill_tsc": [
+        42513000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e5ae9acbc841187b82f6df6f09a7339f37b394c930ecaf6fa15b9457f1737ba6",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-b-4",
+      "series": "e12-ac-b",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 100253,
+          "consumed": 100253,
+          "elapsed_ms": 1000,
+          "rate": 100253,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 8016,
+          "max": 69000
+        }
+      ],
+      "compute_fill_tsc": [
+        26998000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "644398a711b7fcf11cd82edf2b6b06ae4c49fe0a34e846cc6258e2cb3d6baf34",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-ac-b-5",
+      "series": "e12-ac-b",
+      "power_before": "AC",
+      "power_after": "AC",
+      "power_class": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 87971,
+          "consumed": 87971,
+          "elapsed_ms": 1000,
+          "rate": 87971,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 6000,
+          "avg": 7928,
+          "max": 56000
+        }
+      ],
+      "compute_fill_tsc": [
+        26998000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e4f0db8f32b951d2f2add3c1892d94842a2070a2ff093f415c28702417f4d60e",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-b-1",
+      "series": "e12-b",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 43150,
+          "consumed": 43150,
+          "elapsed_ms": 1010,
+          "rate": 42722,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11829,
+          "max": 78000
+        }
+      ],
+      "compute_fill_tsc": [
+        42465000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "be3b6c81ac239871de4416ef43ba309c3d34e97e75e1e8743e1b618991da33fd",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-b-2",
+      "series": "e12-b",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40230,
+          "consumed": 40230,
+          "elapsed_ms": 1000,
+          "rate": 40230,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11912,
+          "max": 102000
+        }
+      ],
+      "compute_fill_tsc": [
+        43340000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e9fb1000fc75fc2245f17954bc9491a56556f40bf010a644fd158079c6feedcf",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-b-3",
+      "series": "e12-b",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 42035,
+          "consumed": 42035,
+          "elapsed_ms": 1010,
+          "rate": 41618,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11822,
+          "max": 123000
+        }
+      ],
+      "compute_fill_tsc": [
+        42688000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "250de3d9e0995931c4903bf87df162a05db51fa583d5e48bb0cf492a95cb2b12",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-b-4",
+      "series": "e12-b",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40450,
+          "consumed": 40450,
+          "elapsed_ms": 1000,
+          "rate": 40450,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11808,
+          "max": 55000
+        }
+      ],
+      "compute_fill_tsc": [
+        42474000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "1bb651bb555dc8c166e46d262611d0f82c83ae6fbf704f332c23a2585e758ff4",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e12-b-5",
+      "series": "e12-b",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40510,
+          "consumed": 40510,
+          "elapsed_ms": 1000,
+          "rate": 40510,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12154,
+          "max": 136000
+        }
+      ],
+      "compute_fill_tsc": [
+        45463000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "b11ea015e054e3a517c925ea29de1233923daaf0c718c7892f74de6a2ccfa4f9",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e3-a-1",
+      "series": "e3-a",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Started benchmark sequence differs from selected full workload",
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Benchmark starts/exits do not alternate in order",
+        "Missing or duplicated suite completion/halting marker",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b",
+        "QEMU exited or timed out before bounded post-completion observation"
+      ],
+      "health": [],
+      "getpid_tsc": [
+        {
+          "min": 19304,
+          "avg": 19357,
+          "max": 43040
+        }
+      ],
+      "compute_fill_tsc": [],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "iso_sha256_after": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "aca5d765b03e6c23d18bda89dd882eb6c1c7f11583e5cca83e5e609d27ff6e63",
+      "serial_hash_matches": true,
+      "diagnostic": "fixed-icount-shift3",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-health-final-20260917/source/dist/final-full.iso",
+        "-snapshot",
+        "-icount",
+        "shift=3,sleep=off"
+      ],
+      "health_sample_valid": false
+    },
+    {
+      "run": "e4-control-1",
+      "series": "e4-control",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 43829,
+          "consumed": 43829,
+          "elapsed_ms": 1010,
+          "rate": 43395,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11726,
+          "max": 72000
+        }
+      ],
+      "compute_fill_tsc": [
+        42487000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e89e792fffb41b54941121ebbe35114e54e8f38d0017b04d3017ad39b4d33d1e",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-control-2",
+      "series": "e4-control",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 39997,
+          "consumed": 39997,
+          "elapsed_ms": 1000,
+          "rate": 39997,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11932,
+          "max": 63000
+        }
+      ],
+      "compute_fill_tsc": [
+        46885000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "ed371821be67cccc6bd22a3489f1ba4c3ba47df64b282291fe96abbc214eed3b",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-control-3",
+      "series": "e4-control",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 42971,
+          "consumed": 42971,
+          "elapsed_ms": 1010,
+          "rate": 42545,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11693,
+          "max": 70000
+        }
+      ],
+      "compute_fill_tsc": [
+        43241000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "eb8301969e50609edf282d3591f257bbbe0a7220e53fe9852103d65f94517f9e",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-control-4",
+      "series": "e4-control",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": false,
+      "failures": [
+        "Missing, nonzero, duplicated or reordered benchmark exit status",
+        "Failure diagnostic: \\[FAIL\\]",
+        "Failure diagnostic: \\b[1-9][0-9]* FAIL\\b"
+      ],
+      "health": [
+        {
+          "pushed": 40951,
+          "consumed": 40951,
+          "elapsed_ms": 1010,
+          "rate": 40545,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12097,
+          "max": 134000
+        }
+      ],
+      "compute_fill_tsc": [
+        42980000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "eda0dc61faf780c6ab7e86c2316a3e208a124a2a98f601a88b61980f1574ab7a",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-control-5",
+      "series": "e4-control",
+      "power_before": "Battery",
+      "power_after": "AC",
+      "power_class": "mixed:Battery->AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 102400,
+          "consumed": 102400,
+          "elapsed_ms": 1000,
+          "rate": 102400,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12194,
+          "max": 143000
+        }
+      ],
+      "compute_fill_tsc": [
+        27053000
+      ],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "iso_sha256_after": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "d31212ba3440a6bac07a43eaad7c2d7f4f6ba105e0903413745aed973d31b5d2",
+      "serial_hash_matches": true,
+      "diagnostic": "",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-sysinfo-qualified-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-yield-1",
+      "series": "e4-yield",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 81816,
+          "consumed": 81816,
+          "elapsed_ms": 1000,
+          "rate": 81816,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12104,
+          "max": 136000
+        }
+      ],
+      "compute_fill_tsc": [
+        42355000
+      ],
+      "iso_sha256": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "iso_sha256_after": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "660da354bb5ef29829e1d304f7bb3a8a15eb764f2e80ad42b87571cb263a507b",
+      "serial_hash_matches": true,
+      "diagnostic": "E4-consumer-yield",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-council-e4-yield-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-yield-2",
+      "series": "e4-yield",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 82056,
+          "consumed": 82056,
+          "elapsed_ms": 1000,
+          "rate": 82056,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12114,
+          "max": 83000
+        }
+      ],
+      "compute_fill_tsc": [
+        42509000
+      ],
+      "iso_sha256": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "iso_sha256_after": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "e1908c4c9cf2f79a60c2579839572be6b061867f4a9c885cc4c57b53ff2b330c",
+      "serial_hash_matches": true,
+      "diagnostic": "E4-consumer-yield",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-council-e4-yield-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-yield-3",
+      "series": "e4-yield",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 81542,
+          "consumed": 81542,
+          "elapsed_ms": 1000,
+          "rate": 81542,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 12201,
+          "max": 65000
+        }
+      ],
+      "compute_fill_tsc": [
+        42418000
+      ],
+      "iso_sha256": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "iso_sha256_after": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "46b95b39ec085399f0a67a4dc747bc6222434f1e20157868e7818c2425d1282c",
+      "serial_hash_matches": true,
+      "diagnostic": "E4-consumer-yield",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-council-e4-yield-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    },
+    {
+      "run": "e4-yield-4",
+      "series": "e4-yield",
+      "power_before": "Battery",
+      "power_after": "Battery",
+      "power_class": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "passed": true,
+      "failures": [],
+      "health": [
+        {
+          "pushed": 82712,
+          "consumed": 82712,
+          "elapsed_ms": 1000,
+          "rate": 82712,
+          "floor_math_matches": true
+        }
+      ],
+      "getpid_tsc": [
+        {
+          "min": 11000,
+          "avg": 11847,
+          "max": 77000
+        }
+      ],
+      "compute_fill_tsc": [
+        42389000
+      ],
+      "iso_sha256": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "iso_sha256_after": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "iso_unchanged": true,
+      "qemu_unchanged": true,
+      "serial_sha256": "b33020cba45e546bc0143b7f25196ebcb252a20d5c3d9d4786fadc750f0e6bc3",
+      "serial_hash_matches": true,
+      "diagnostic": "E4-consumer-yield",
+      "command": [
+        "/opt/homebrew/Cellar/qemu/10.2.2/bin/qemu-system-x86_64",
+        "-machine",
+        "q35,accel=tcg",
+        "-m",
+        "3072",
+        "-cpu",
+        "qemu64,+rdrand,+rdseed",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-no-reboot",
+        "-boot",
+        "d",
+        "-nic",
+        "user,model=virtio-net-pci",
+        "-cdrom",
+        "/private/tmp/vos-council-e4-yield-20260918/source/dist/final-full.iso",
+        "-snapshot"
+      ],
+      "health_sample_valid": true
+    }
+  ],
+  "groups": [
+    {
+      "series": "e12-a",
+      "power": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e12-a-1",
+        "e12-a-2",
+        "e12-a-3",
+        "e12-a-4",
+        "e12-a-5"
+      ],
+      "rates": {
+        "n": 5,
+        "values": [
+          41255,
+          40696,
+          40684,
+          40966,
+          40298
+        ],
+        "min": 40298,
+        "median": 40696,
+        "max": 41255
+      },
+      "compute": {
+        "n": 5,
+        "values": [
+          42469000,
+          43694000,
+          42649000,
+          42432000,
+          42416000
+        ],
+        "min": 42416000,
+        "median": 42469000,
+        "max": 43694000
+      },
+      "getpid_avg": {
+        "n": 5,
+        "values": [
+          12363,
+          11701,
+          12078,
+          11706,
+          11820
+        ],
+        "min": 11701,
+        "median": 11820,
+        "max": 12363
+      },
+      "n_packets": 5,
+      "conclusions_allowed": false,
+      "status": "חמש ומעלה: תיאור בלבד; לא מבחן סיבתי או שקילות"
+    },
+    {
+      "series": "e12-ac-a",
+      "power": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e12-ac-a-1",
+        "e12-ac-a-2",
+        "e12-ac-a-3",
+        "e12-ac-a-4",
+        "e12-ac-a-5"
+      ],
+      "rates": {
+        "n": 5,
+        "values": [
+          99833,
+          99257,
+          101105,
+          99450,
+          81384
+        ],
+        "min": 81384,
+        "median": 99450,
+        "max": 101105
+      },
+      "compute": {
+        "n": 5,
+        "values": [
+          26836000,
+          27275000,
+          27327000,
+          27568000,
+          26921000
+        ],
+        "min": 26836000,
+        "median": 27275000,
+        "max": 27568000
+      },
+      "getpid_avg": {
+        "n": 5,
+        "values": [
+          7735,
+          8071,
+          7841,
+          7716,
+          7663
+        ],
+        "min": 7663,
+        "median": 7735,
+        "max": 8071
+      },
+      "n_packets": 5,
+      "conclusions_allowed": false,
+      "status": "חמש ומעלה: תיאור בלבד; לא מבחן סיבתי או שקילות"
+    },
+    {
+      "series": "e12-ac-a",
+      "power": "AC",
+      "power_settings_changed": true,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "180",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "180",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [
+        {
+          "profile": "AC Power",
+          "key": "displaysleep",
+          "before": "10",
+          "after": "180"
+        },
+        {
+          "profile": "Battery Power",
+          "key": "displaysleep",
+          "before": "30",
+          "after": "180"
+        }
+      ],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e12-ac-a-6"
+      ],
+      "rates": {
+        "n": 1,
+        "values": [
+          100284
+        ],
+        "min": 100284,
+        "median": 100284,
+        "max": 100284
+      },
+      "compute": {
+        "n": 1,
+        "values": [
+          27495000
+        ],
+        "min": 27495000,
+        "median": 27495000,
+        "max": 27495000
+      },
+      "getpid_avg": {
+        "n": 1,
+        "values": [
+          8034
+        ],
+        "min": 8034,
+        "median": 8034,
+        "max": 8034
+      },
+      "n_packets": 1,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    },
+    {
+      "series": "e12-ac-b",
+      "power": "AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e12-ac-b-1",
+        "e12-ac-b-2",
+        "e12-ac-b-4",
+        "e12-ac-b-5"
+      ],
+      "rates": {
+        "n": 4,
+        "values": [
+          100535,
+          98612,
+          100253,
+          87971
+        ],
+        "min": 87971,
+        "median": 99432.5,
+        "max": 100535
+      },
+      "compute": {
+        "n": 4,
+        "values": [
+          27370000,
+          26895000,
+          26998000,
+          26998000
+        ],
+        "min": 26895000,
+        "median": 26998000.0,
+        "max": 27370000
+      },
+      "getpid_avg": {
+        "n": 4,
+        "values": [
+          7900,
+          8051,
+          8016,
+          7928
+        ],
+        "min": 7900,
+        "median": 7972.0,
+        "max": 8051
+      },
+      "n_packets": 4,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    },
+    {
+      "series": "e12-ac-b",
+      "power": "mixed:AC->Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e12-ac-b-3"
+      ],
+      "rates": {
+        "n": 1,
+        "values": [
+          42409
+        ],
+        "min": 42409,
+        "median": 42409,
+        "max": 42409
+      },
+      "compute": {
+        "n": 1,
+        "values": [
+          42513000
+        ],
+        "min": 42513000,
+        "median": 42513000,
+        "max": 42513000
+      },
+      "getpid_avg": {
+        "n": 1,
+        "values": [
+          7726
+        ],
+        "min": 7726,
+        "median": 7726,
+        "max": 7726
+      },
+      "n_packets": 1,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    },
+    {
+      "series": "e12-b",
+      "power": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e12-b-1",
+        "e12-b-2",
+        "e12-b-3",
+        "e12-b-4",
+        "e12-b-5"
+      ],
+      "rates": {
+        "n": 5,
+        "values": [
+          42722,
+          40230,
+          41618,
+          40450,
+          40510
+        ],
+        "min": 40230,
+        "median": 40510,
+        "max": 42722
+      },
+      "compute": {
+        "n": 5,
+        "values": [
+          42465000,
+          43340000,
+          42688000,
+          42474000,
+          45463000
+        ],
+        "min": 42465000,
+        "median": 42688000,
+        "max": 45463000
+      },
+      "getpid_avg": {
+        "n": 5,
+        "values": [
+          11829,
+          11912,
+          11822,
+          11808,
+          12154
+        ],
+        "min": 11808,
+        "median": 11829,
+        "max": 12154
+      },
+      "n_packets": 5,
+      "conclusions_allowed": false,
+      "status": "חמש ומעלה: תיאור בלבד; לא מבחן סיבתי או שקילות"
+    },
+    {
+      "series": "e3-a",
+      "power": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "a473dfabbbc0bb10973327a256febd809d1399cd8efc6766d25086987827ba05",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e3-a-1"
+      ],
+      "rates": {
+        "n": 0,
+        "values": [],
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "compute": {
+        "n": 0,
+        "values": [],
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "getpid_avg": {
+        "n": 1,
+        "values": [
+          19357
+        ],
+        "min": 19357,
+        "median": 19357,
+        "max": 19357
+      },
+      "n_packets": 1,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    },
+    {
+      "series": "e4-control",
+      "power": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e4-control-1",
+        "e4-control-2",
+        "e4-control-3",
+        "e4-control-4"
+      ],
+      "rates": {
+        "n": 4,
+        "values": [
+          43395,
+          39997,
+          42545,
+          40545
+        ],
+        "min": 39997,
+        "median": 41545.0,
+        "max": 43395
+      },
+      "compute": {
+        "n": 4,
+        "values": [
+          42487000,
+          46885000,
+          43241000,
+          42980000
+        ],
+        "min": 42487000,
+        "median": 43110500.0,
+        "max": 46885000
+      },
+      "getpid_avg": {
+        "n": 4,
+        "values": [
+          11726,
+          11932,
+          11693,
+          12097
+        ],
+        "min": 11693,
+        "median": 11829.0,
+        "max": 12097
+      },
+      "n_packets": 4,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    },
+    {
+      "series": "e4-control",
+      "power": "mixed:Battery->AC",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "90cc28eeef42290b10fa0a4f4bc443bed40dae54358bcb7a9127fbe499378a64",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e4-control-5"
+      ],
+      "rates": {
+        "n": 1,
+        "values": [
+          102400
+        ],
+        "min": 102400,
+        "median": 102400,
+        "max": 102400
+      },
+      "compute": {
+        "n": 1,
+        "values": [
+          27053000
+        ],
+        "min": 27053000,
+        "median": 27053000,
+        "max": 27053000
+      },
+      "getpid_avg": {
+        "n": 1,
+        "values": [
+          12194
+        ],
+        "min": 12194,
+        "median": 12194,
+        "max": 12194
+      },
+      "n_packets": 1,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    },
+    {
+      "series": "e4-yield",
+      "power": "Battery",
+      "power_settings_changed": false,
+      "power_profiles_before": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profiles_after": {
+        "Battery Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "1",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "30",
+          "womp": "0",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "lessbright": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        },
+        "AC Power": {
+          "Sleep": "On Power Button 1",
+          "powermode": "0",
+          "standby": "1",
+          "ttyskeepawake": "1",
+          "hibernatemode": "3",
+          "powernap": "1",
+          "hibernatefile": "/var/vm/sleepimage",
+          "displaysleep": "10",
+          "womp": "1",
+          "networkoversleep": "0",
+          "sleep": "1",
+          "tcpkeepalive": "1",
+          "disksleep": "10"
+        }
+      },
+      "power_profile_changes": [],
+      "iso_sha256": "4543ef39ea5ea002c247dd718adf428e7a5bdaf0821c16df20969f4cc40144fe",
+      "qemu_sha256_before": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "qemu_sha256_after": "44a9a411a38b9664954fbb1d197ec003fd4c666075112166e5fc1f94a29f399a",
+      "runs": [
+        "e4-yield-1",
+        "e4-yield-2",
+        "e4-yield-3",
+        "e4-yield-4"
+      ],
+      "rates": {
+        "n": 4,
+        "values": [
+          81816,
+          82056,
+          81542,
+          82712
+        ],
+        "min": 81542,
+        "median": 81936.0,
+        "max": 82712
+      },
+      "compute": {
+        "n": 4,
+        "values": [
+          42355000,
+          42509000,
+          42418000,
+          42389000
+        ],
+        "min": 42355000,
+        "median": 42403500.0,
+        "max": 42509000
+      },
+      "getpid_avg": {
+        "n": 4,
+        "values": [
+          12104,
+          12114,
+          12201,
+          11847
+        ],
+        "min": 11847,
+        "median": 12109.0,
+        "max": 12201
+      },
+      "n_packets": 4,
+      "conclusions_allowed": false,
+      "status": "פחות מחמש דגימות: תיאור בלבד"
+    }
+  ],
+  "errors": []
+}

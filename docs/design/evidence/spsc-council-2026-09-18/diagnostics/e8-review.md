@@ -1,0 +1,27 @@
+# E8 diagnostic source review — 2026-09-18
+
+Reviewer: `/root/mcp_upgrade`, independent security/evidence review of the isolated `/private/tmp/vos-council-e8-20260918/source` diagnostic additions to baseline `0324521`. No canonical production changes, compilation, host tests or VM execution were performed for this review. The final source patch, rather than the earlier preparation generator, must identify the experiment actually built.
+
+**Scoped verdict:** suitable for a controlled single-BSP diagnostic with normally completing, non-nested GETPID calls. No immediate memory-safety blocker was found in that scope. This is not approval for production, SMP, hostile control callers, asynchronous cancellation or precise physical-cycle accounting. Runtime results remain pending.
+
+## Checked mechanics
+
+* `kernel/src/arch/x86_64/syscall.c:30–92`: fixed 10,000-row array; insertion checks capacity before indexing and counts dropped requests. Start resets counters, stop disables recording before dumping. Only syscall 39 with the explicit sample tag creates a row; the normal GETPID handler still executes. The supplied timestamp is a scalar, never a dereferenced user pointer.
+* `syscall.c:69–83`: owner check precedes clearing inflight, so a sibling syscall cannot invalidate a preempted owner's row. Phase stamping also requires the current owner. The final KPTI stamp clears inflight. These globals are deliberately UP-only; no synchronization supports simultaneous CPUs.
+* `syscall.c:791,830–843` supplies C-entry, pre-handler, post-handler and C-exit timestamps. Entry is after instrumentation lookup/row initialization, not the first CPU instruction of the syscall. C-exit is before the C epilogue and assembly return path.
+* `kernel/src/arch/x86_64/kpti.c:45–53` brackets root synchronization inside the existing AS lock, then records the binding/cleanup endpoint. Root contents, lock order and switching decisions remain unchanged. `syscall_entry.S:114–127` disables IRQs before this call; the final stamp is not the eventual user-return timestamp.
+* `kernel/src/sched/scheduler.c:389–404`: switch hook follows the identical-task early return and target validity checks, before current-task replacement. Only transitions away from/to the owner accumulate wait. It does not count timer interrupts that select the same task.
+* `user/include/council_getpid_diag.h:21–48`: 100 warmup calls precede each 10,000-call interval, disabled control precedes enabled recording, and measured-loop output occurs afterward. Kernel dump follows the enabled interval. `bench_csw.c:80` and `test_stress_mt.c:198` position early/late probes before their respective program workloads.
+
+## Required interpretation and validation limits
+
+1. **Off is recording-disabled, not instrumentation-free.** Hook calls and inactive tests still execute; added static buffers/code can affect layout and caches. On/off comparison estimates diagnostic recording overhead under this ordering, not the canonical syscall cost without instrumentation.
+2. **Wait is hook-to-hook attribution.** The outgoing hook precedes actual architectural switching; the incoming hook also precedes restoring the owner. Therefore this is a scheduling interval proxy. Preemption between user timestamp and C-entry, or after the final KPTI stamp, remains in user elapsed time but is absent from recorded wait. Do not label elapsed-minus-wait pure syscall execution time.
+3. **Plain RDTSC is not a serialized physical benchmark.** Memory compiler clobbers constrain compiler motion, not hardware execution ordering. Report guest TSC units, require monotonic phase/order checks, retain invalid samples visibly and do not transfer these numbers to physical CPU cycles. IRQ servicing without task switching also remains in phase costs.
+4. **Controlled ownership only.** TID ownership, global start/stop state and output storage are not protected from another deliberately tagged task starting while an old stop dump runs. A killed owner can leave recording active and prevent the late owner from starting. Nested owner syscalls through a signal handler can terminate inflight attribution. The intended workload must demonstrate one normal recorder, complete 10,000 rows per stage, zero drops, matching user/kernel start timestamps and all seven phases. Reject incomplete evidence rather than infer completion.
+5. **Touching storage is not a compiler guarantee.** The ordinary zero stores before overwriting samples may be optimized away; generated code or runtime fault evidence is needed before claiming all pages were prefaulted. First-use effects must remain visible in sample distributions.
+6. **Ordering confounds remain.** Control always precedes recording, and early dumping adds substantial serial output before the late program. Report this fixed order and cumulative suite state; the late probe is not an isolated repetition. Two stage labels do not establish causation for SPSC throughput.
+
+No source edits were needed for this scoped review. Preserve exact final patch/source hashes and configuration (one CPU) with the eventual sample packet. The current preparation generator is not sufficient replay evidence after manual corrections.
+
+Root follow-up before execution: sample/result storage was made volatile to retain prefault writes; final commit a8c2d8b3c178224f22764d7d3ba6d3463537ab09 and e8-final.patch are authoritative. Compilation succeeded. All measurement limits above remain; no runtime result exists yet.
