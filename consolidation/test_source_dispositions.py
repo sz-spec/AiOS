@@ -13,8 +13,8 @@ import check_source_dispositions as csd
 class SourceDispositionTests(unittest.TestCase):
     def test_every_open_path_has_one_typed_disposition(self):
         result = csd.validate()
-        self.assertEqual(result["open_ledger_paths"], 1647)
-        self.assertEqual(result["native_paths"], 119)
+        self.assertEqual(result["open_ledger_paths"], 1649)
+        self.assertEqual(result["native_paths"], 121)
         self.assertEqual(result["non_native_paths"], 1528)
         self.assertEqual(result["categories"], {
             "documentation-history": 315,
@@ -31,7 +31,7 @@ class SourceDispositionTests(unittest.TestCase):
             if row["status"] in counts:
                 counts[row["status"]] += 1
         self.assertEqual(counts, {
-            "canonical-diverged-review": 497,
+            "canonical-diverged-review": 499,
             "missing-from-canonical": 1150,
         })
         self.assertEqual(sum(counts.values()), csd.validate()["open_ledger_paths"])
@@ -113,14 +113,15 @@ class SourceDispositionTests(unittest.TestCase):
         variants = json.loads(
             (csd.ROOT / "consolidation/reconciliation/variant-review.json").read_text()
         )
-        self.assertEqual(len(ledger["canonical_only_files"]), 1519)
-        self.assertEqual(len(variants), 2724)
+        self.assertEqual(len(ledger["canonical_only_files"]), 1520)
+        self.assertEqual(len(variants), 2726)
+        self.assertEqual(len({item["path"] for item in variants}), 1542)
         for relative in (
             "consolidation/reconciliation/README.md",
             "docs/design/UNIFICATION_STATUS_2026-09-18_HE.md",
         ):
             text = (csd.ROOT / relative).read_text()
-            for value in ("1,647", "1,528", "1,566", "1,519", "2,724"):
+            for value in ("1,649", "1,528", "1,566", "1,520", "2,726"):
                 self.assertIn(value, text, (relative, value))
             for value in ("1,510", "2,719"):
                 self.assertNotIn(value, text, (relative, value))

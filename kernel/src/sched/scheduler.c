@@ -195,6 +195,12 @@ static volatile int g_reap_pending = 0;
 /** @brief Deferred AI Guard reprotect flag — set in ISR, processed in process context (K-R3) */
 static volatile int g_ai_guard_dirty = 0;
 
+/** @brief Deferred AI monitor work. The monitor performs integrity hashing,
+ * pressure reclaim, callbacks and PTE work and therefore must never execute
+ * on the timer interrupt stack. Multiple timer IRQs may coalesce; the worker
+ * consumes the current absolute timer tick. */
+static volatile int g_ai_monitor_pending = 0;
+
 /** @brief Deferred TCP timer work flag — set every 10 ticks (100ms) in ISR,
  *  processed in process context. K-R4: vos3_tcp_timer_tick() acquires
  *  g_tcp_lock which must never be taken from ISR context. */
@@ -794,6 +800,9 @@ void vos3_sched_tick(void)
         /* K-R2: Defer task reaping to process context — task_reap() acquires
          * g_reaper_lock which must never be taken from ISR context. */
         g_reap_pending = 1;
+        /* The old timer path ran the complete AI monitor in hard-IRQ context.
+         * Only publish work here; the process-context safe point below runs it. */
+        __atomic_store_n(&g_ai_monitor_pending, 1, __ATOMIC_RELEASE);
         /* K-R3: Defer AI Guard reprotect to process context — modifies PTEs
          * via vos3_vmm_update_flags() which must not run in ISR context. */
         g_ai_guard_dirty = 1;
@@ -941,6 +950,10 @@ void vos3_sched_process_deferred(void)
     if (g_reap_pending != 0) {
         g_reap_pending = 0;
         vos3_task_reap();
+    }
+    if (__atomic_exchange_n(&g_ai_monitor_pending, 0,
+                            __ATOMIC_ACQ_REL) != 0) {
+        vos3_ai_monitor_tick();
     }
     if (g_ai_guard_dirty != 0) {
         g_ai_guard_dirty = 0;

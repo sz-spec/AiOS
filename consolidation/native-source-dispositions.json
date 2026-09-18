@@ -128,9 +128,9 @@
       "source_status": "canonical-diverged-review",
       "disposition": "integrate-semantics",
       "state": "implementation-open",
-      "paths": ["kernel/src/mm/ai_oom.c", "kernel/src/mm/ai_slots.c"],
-      "rationale": "The donor predicate was replaced by a canonical reservation ledger with checked arithmetic and replay-resistant handles. Integration into the real guard and KV allocation lifecycles remains open; ai_slots also carries the full-page KV confidentiality scrub required before that integration.",
-      "validation": "The primitive passes sanitizer, optimized, release and contract checks. Still required: wire it into both real allocation paths; qualify cancellation, rollback, concurrent writers, PMM/VMM failures, region lifetime and 1/2/4-vCPU behavior."
+      "paths": ["kernel/src/mm/ai_monitor.c", "kernel/src/mm/ai_oom.c", "kernel/src/mm/ai_slots.c"],
+      "rationale": "The donor predicate was replaced by a canonical reservation ledger with checked arithmetic and replay-resistant handles. Heavy monitor work was moved out of timer IRQ context, and ai_slots now fully scrubs KV pages. Integration into the real guard and KV allocation lifecycles remains open.",
+      "validation": "The primitive passes sanitizer, optimized, release and contract checks; source and build gates prove monitor deferral. Still required: retained region handles, cancellation-safe rollback/reclaim, generation-safe slot teardown, PMM/VMM fault injection and 1/2/4-vCPU runtime evidence."
     },
     {
       "id": "pcid-old-scaffold",
@@ -384,6 +384,16 @@
       ],
       "rationale": "Canonical code preserves wide APIC IDs, SMP/IRQ-safe I/O, disables unsafe APPLOAD and cleans VBus filesystem SHM by immutable identity.",
       "validation": "Wide/sparse MADT, concurrent serial/TTY IRQ, APPLOAD denial and exec-failure cleanup."
+    },
+    {
+      "id": "ai-monitor-irq-deferral",
+      "component": "native.drivers",
+      "source_status": "canonical-diverged-review",
+      "disposition": "integrate-semantics",
+      "state": "integrated-validation-open",
+      "paths": ["kernel/src/drivers/timer.c"],
+      "rationale": "The canonical timer IRQ now publishes only atomic deferred work. Integrity hashing, pressure reclaim, callbacks and page-table work execute at a scheduler process-context safe point using the absolute timer clock.",
+      "validation": "Production-source regression, native build, BIOS/1-vCPU and UEFI/4-vCPU boot-to-userland pass on QEMU TCG. Still required: the complementary BIOS/4 and UEFI/1 matrix plus instrumented proof that deadlines fire, coalescing is bounded and no AI allocator/VMM/callback runs on the IRQ stack."
     },
     {
       "id": "hyperv-vsock-stub",

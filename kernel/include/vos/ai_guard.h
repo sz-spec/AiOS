@@ -801,7 +801,10 @@ void vos3_ai_monitor_record_fault(vos3_ai_guard_region_t* region, uintptr_t addr
 void vos3_ai_monitor_report(vos3_ai_guard_region_t* region);
 
 /**
- * @brief Periodic monitor tick (called from timer interrupt)
+ * @brief Run periodic monitor work from a process-context scheduler safe point
+ *
+ * Timer IRQ code must only request this work; this function may hash memory,
+ * reclaim regions, invoke callbacks and update page tables.
  */
 void vos3_ai_monitor_tick(void);
 

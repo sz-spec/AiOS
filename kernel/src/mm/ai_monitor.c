@@ -449,7 +449,7 @@ extern void vos3_ai_drift_watchdog_tick(uint64_t current_tick);
 extern void vos3_nmi_watchdog_tick(uint64_t current_tick);
 
 /**
- * @brief Periodic monitor tick (called from timer interrupt)
+ * @brief Periodic monitor work (called from a scheduler process-context safe point)
  */
 void vos3_ai_monitor_tick(void)
 {
@@ -457,8 +457,13 @@ void vos3_ai_monitor_tick(void)
         return;
     }
 
-    g_monitor_stats.tick_count++;
-    uint64_t current_tick = g_monitor_stats.tick_count;
+    /* Timer IRQs only publish a pending bit. Read the absolute timer clock so
+     * coalesced work still expires deadlines at the correct logical time. */
+    uint64_t current_tick = vos3_timer_get_ticks();
+    if (current_tick <= g_monitor_stats.tick_count) {
+        return;
+    }
+    g_monitor_stats.tick_count = current_tick;
 
     /* Phase 17.5.1: Integrity automation tick */
     vos3_ai_guard_integrity_tick(current_tick);

@@ -20,9 +20,6 @@
 #include "../../include/arch/x86_64/cpu.h"
 #include "../../include/arch/x86_64/idt.h"
 
-/* AI Monitor tick hook - declared in ai_monitor.c */
-extern void vos3_ai_monitor_tick(void);
-
 /* ============================================================================
  * I/O PORT ACCESS
  * ============================================================================ */
@@ -174,9 +171,6 @@ void vos3_timer_irq_handler(void)
 {
     g_tick_count++;
     g_interrupt_count++;
-
-    /* AI Monitor periodic tick */
-    vos3_ai_monitor_tick();
 
     /* Notify scheduler */
     if (vos3_sched_is_running() != 0) {

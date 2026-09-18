@@ -2,7 +2,7 @@
   "schema_version": 1,
   "review_date": "2026-09-18",
   "review_base_commit": "b26ba60916816f0ba1c5e411764d2943d1a97e3b",
-  "ledger_scope_sha256": "b0a3ca01954ff32b2b6ea8658fde8276cd7589c420da8fcdf205393a48be1b4b",
+  "ledger_scope_sha256": "285dd4980840cf921ecb0c0b3fc938622fe3969081ebb6299cb107cff76330c3",
   "scope": "Every missing or canonically diverged source path not covered by native-source-dispositions.json: hosted product, tests, release/operations, third-party vendor and documentation/history.",
   "decision_semantics": "A disposition resolves source selection only when state is resolved-source-choice. implementation-open, validation-open and legal-review-open remain explicit integration work and do not claim runtime capability.",
   "release_operations_additional_paths": [

@@ -77059,6 +77059,39 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/drivers/timer.c",
+    "component": "native.drivers",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "5292917691aa928628935e2cb57eab7004286a54722fcdc71e0175ae222dc177",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "inb",
+      "outb",
+      "vos3_timer_delay_ms",
+      "vos3_timer_delay_us",
+      "vos3_timer_get_stats",
+      "vos3_timer_get_ticks",
+      "vos3_timer_get_uptime_ms",
+      "vos3_timer_get_uptime_sec",
+      "vos3_timer_init",
+      "vos3_timer_irq_handler",
+      "vos3_timer_set_frequency"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/drivers/tty.c",
     "component": "native.drivers",
     "representative_source": "VOS3",
@@ -79689,6 +79722,48 @@
     "sha256": "155041412c41c53e1aa5060fc55ed5dd82cc201d0823a7b669dfc0ba56b1b6d1",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [
+      "access_log_push",
+      "check_anomaly",
+      "get_threshold_for_type",
+      "get_window_for_type",
+      "monitor_lock",
+      "monitor_unlock",
+      "vos3_ai_monitor_fire_alert",
+      "vos3_ai_monitor_get_config",
+      "vos3_ai_monitor_get_stats",
+      "vos3_ai_monitor_init",
+      "vos3_ai_monitor_is_initialized",
+      "vos3_ai_monitor_record_access",
+      "vos3_ai_monitor_record_fault",
+      "vos3_ai_monitor_report",
+      "vos3_ai_monitor_set_alert_callback",
+      "vos3_ai_monitor_set_config",
+      "vos3_ai_monitor_set_threshold",
+      "vos3_ai_monitor_start",
+      "vos3_ai_monitor_stop",
+      "vos3_ai_monitor_tick"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/mm/ai_monitor.c",
+    "component": "native.memory",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "0db1647bf5ab3674294c4f5e2ce8a175ebb6498dcb12652bd621ccc536d0dc05",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "access_log_push",
