@@ -46,8 +46,10 @@ hardware validation are distinct gates. Passing macOS tests does not satisfy the
 
 - The canonical code is in `vos 5/`; source repositories remain outside it.
 - A file-level baseline import manifest records 5,072 imported paths from
-  `vos.v1`. Other sources still require reconciliation; importing the baseline
-  is not completion of CORE-13.
+  `vos.v1`. The current reconciliation ledger now covers all eleven source
+  trees, but 262 product code/config paths, 72 test inputs and 42 release or
+  operations paths still require semantic disposition. Completing a byte-level
+  comparison is not completion of CORE-13.
 - The kernel builds in the final directory, including its space in the path.
   Generated embedded binaries now belong to each build directory, so audit
   flavors do not rewrite source or clean another build's objects.

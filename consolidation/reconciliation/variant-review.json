@@ -27,6 +27,18 @@
   {
     "path": ".env.example",
     "component": "root.configuration",
+    "representative_source": "vos.v1",
+    "sha256": "04b1c0db7214816de2b53384976ac0b3fcb1965f7e586f9dfde3fc25182951c3",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": ".env.example",
+    "component": "root.configuration",
     "representative_source": "vos/vos4",
     "sha256": "4d0f400b67c03fa1d491f4fd24db60b2e6cf0a9d63ce7debc4639af7f9d6a7da",
     "equivalent_source_copies": [
@@ -592,6 +604,25 @@
     "sha256": "3ad15b52fbf77408e02db7b481e1f9359d63ee1a054e92dd38bb728eaf6dc4c9",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "Dockerfile.kernel",
+    "component": "root.configuration",
+    "representative_source": "vos.v1",
+    "sha256": "e1ae9b1fe2030c39222a0c4fef36e88e6a2d90a5746753e8436308ddd5fa3944",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -5463,14 +5494,22 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
-    "path": "backend/.coverage",
+    "path": "backend/.dockerignore",
     "component": "backend.extensions",
     "representative_source": "VOS3",
-    "sha256": "dd8197d48a86ac9917772ba873ba030746e66c15014a422a8bb2fc10b3387ee4",
+    "sha256": "d8e4952796728dd84715d295ee8bc6d09297d404f13f1d503ec18978cffd927f",
     "equivalent_source_copies": [
       "VOS3",
       "VOS3-Cyber",
-      "VOS-Cyber-Standard"
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -5483,6 +5522,27 @@
     "sha256": "510c68ad35464976645f8027e49d1bdcee8f6fa05dde303cb735fa57a9b9ad97",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/Dockerfile",
+    "component": "backend.extensions",
+    "representative_source": "VOS3",
+    "sha256": "f2ec1c498a6f6035ca4bbae83cce9f178d24baa55bab82a6b88a42e5607bee23",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -11117,6 +11177,44 @@
   {
     "path": "backend/api/billing_routes.py",
     "component": "backend.api",
+    "representative_source": "vos.v1",
+    "sha256": "9e1c389d57b1207cd858cbd6595f5d7683772e6525266f60f594e03ce77fdfc1",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "AddCreditsRequest",
+      "CreateCheckoutRequest",
+      "CreateTokenCheckoutRequest",
+      "PortalSessionRequest",
+      "RefundCreditsRequest",
+      "UseCreditsRequest",
+      "add_credits_admin",
+      "cancel_subscription",
+      "check_quota",
+      "create_checkout_session",
+      "create_portal_session",
+      "create_token_checkout",
+      "get_credit_transactions",
+      "get_credits",
+      "get_plans",
+      "get_quota",
+      "get_quota_alerts",
+      "get_quota_tiers",
+      "get_subscription",
+      "get_token_balance",
+      "record_quota_usage",
+      "refund_credits",
+      "resume_subscription",
+      "stripe_webhook",
+      "use_credits"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/api/billing_routes.py",
+    "component": "backend.api",
     "representative_source": "vos/vos4",
     "sha256": "04e8f6dcde23b64300b4eea0edea9d717d1b42a753f5221e2464655c75e73be8",
     "equivalent_source_copies": [
@@ -13281,6 +13379,45 @@
   {
     "path": "backend/api/memory_routes.py",
     "component": "backend.api",
+    "representative_source": "vos.v1",
+    "sha256": "1d2c1bce6bdc6909edfe59a0739e79e5105db7def5c9831d5bd81e3ac0bcf1ee",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "AddMemoryRequest",
+      "BulkDeleteRequest",
+      "ImportRequest",
+      "QueryMemoryRequest",
+      "StoreMemoryRequest",
+      "UpdateInsightRequest",
+      "add_memory",
+      "auto_generate_tags",
+      "bulk_delete_insights",
+      "clear_memories",
+      "consolidate_similar_memories",
+      "delete_insight",
+      "export_insights",
+      "find_similar_memories",
+      "get_insight",
+      "get_memory_stats",
+      "get_memory_types",
+      "get_recent_memories",
+      "get_similar_memories",
+      "import_insights",
+      "query_memory",
+      "quick_recall",
+      "quick_remember",
+      "store_memory",
+      "suggest_tags",
+      "update_insight"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/api/memory_routes.py",
+    "component": "backend.api",
     "representative_source": "vos/vos4",
     "sha256": "81c018f6721b41b2cc8497863b39da236a89f6b32a9af98349c02810099b62eb",
     "equivalent_source_copies": [
@@ -15275,6 +15412,34 @@
   {
     "path": "backend/app.py",
     "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "6c40e1392024a02ab5984a0de66270ce0cb98ed92e4a0cd6c614b92d48cfd430",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "_report_error",
+      "_setup_sentry",
+      "api_key_middleware",
+      "attestation_denied_handler",
+      "authentication_middleware",
+      "circuit_breaker_handler",
+      "create_app",
+      "egress_denied_handler",
+      "global_exception_handler",
+      "health",
+      "m3_gate_rejected_handler",
+      "root",
+      "starlette_http_exception_handler",
+      "validation_error_handler",
+      "vos3_error_handler"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/app.py",
+    "component": "backend.extensions",
     "representative_source": "vos/vos4",
     "sha256": "611180fdbc32014ce62700c102ce696130b1d2da7b79973ab6f7e5b157ab47c1",
     "equivalent_source_copies": [
@@ -16273,6 +16438,28 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/code_review/docker-compose.webhook.yml",
+    "component": "backend.extensions",
+    "representative_source": "VOS3",
+    "sha256": "a6d8346915e4a69de546ed15c921496cd39812889d11dab27575f97eaa69457c",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/code_review/github_webhook.py",
     "component": "backend.extensions",
     "representative_source": "VOS3",
@@ -16525,6 +16712,57 @@
       "ReviewResult",
       "ReviewSeverity"
     ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/code_review/multi_provider.ts",
+    "component": "backend.extensions",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "91a152ee93b2961aec28ce548024b50b7e01d2c6ccd8fb4c87374f9dd7dff94f",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "AIProvider",
+      "MultiProviderCodeReview",
+      "ReviewCategory",
+      "ReviewConfig",
+      "ReviewFinding",
+      "ReviewResult",
+      "ReviewSeverity"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/code_review/package.json",
+    "component": "backend.extensions",
+    "representative_source": "VOS3",
+    "sha256": "2c33d52e2a437608867c338590ae10bee1c53f61692bb2093c449cc9e89c670c",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -16832,6 +17070,27 @@
     "sha256": "81ae5873b8f30f922ecad4d09d15fd28f91d5ebf72982795e16cd3c49b9569a5",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/code_review/webhook_server.ts",
+    "component": "backend.extensions",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "ce93b1c34ea4d5cd69b95b364b5b32ed5bb554a10e863145632972611f95d33b",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -17269,6 +17528,18 @@
       "VOS3Settings",
       "_convex_must_be_https_in_prod"
     ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/constraints.txt",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "51018ff2f4e1169b35b54b1194d1d4a78efeb38fd9238cefb729a8415a3db49b",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -22573,6 +22844,72 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/Dockerfile",
+    "component": "backend.mcp",
+    "representative_source": "VOS3",
+    "sha256": "4e706a943963625bc4aa683f8d5559241cdea5c2f00822e98f67ef1932702dc5",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/README.md",
+    "component": "backend.mcp",
+    "representative_source": "VOS3",
+    "sha256": "92c4418a6076aa5f9afe9c0533aa95aeb8eb7d3be1e46895b649561c7a2f14f3",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/docker-compose.yml",
+    "component": "backend.mcp",
+    "representative_source": "VOS3",
+    "sha256": "dd9e4edf9f26d3a378652de939bb6230ec5758358651c6be407f418a96e9ac95",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/docs/PIPELINE_ARCHITECTURE.md",
     "component": "backend.mcp",
     "representative_source": "VOS3",
@@ -22606,12 +22943,54 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/package-lock.json",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "2a3d32bc95839b4373262f21d6211eb8a75a36645f3c9b95c8f68f7a83f83234",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/package.json",
     "component": "backend.mcp",
     "representative_source": "VOS3",
     "sha256": "609adab46c367648aa5bf34b9471edff8b8ed7b96d1d31d929dbc1a24b6537bf",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/package.json",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "9ebc69c00d817870f940014d1d1120355afb7d9b8b3ca13489552516518a3c2a",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -22744,6 +23123,32 @@
     "sha256": "4bb6687fff0c312814cd94fb741d8b990f4518d97da41131b45f5a75f2c01e3f",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [
+      "RequestCache",
+      "SessionCache",
+      "ToolRegistryCacheManager",
+      "createCachedToolRegistry"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/src/framework/caching/tool-registry-cache.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "95da4c8e9bd2b850999797299df07161020248ed231dee4b58e20e55c7af3c2c",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "RequestCache",
@@ -22960,12 +23365,69 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/src/orchestration/cost-aware-router.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "1d68877c9058729a07c20e94a1d3007109c8e76794cbc319120a716242ff919f",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "COMPLEXITY_THRESHOLD",
+      "ComplexityAnalysis",
+      "CostAwareRouter",
+      "MODEL_REGISTRY",
+      "ModelConfig",
+      "ROLE_MODEL_MAPPING",
+      "RoutingDecision",
+      "RoutingDecisionSchema",
+      "costAwareRouter"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/src/orchestration/model-registry.ts",
     "component": "backend.mcp",
     "representative_source": "VOS3",
     "sha256": "47087828a62cd297836a197b8b3bb359aff780145b12635a168a3bd99819915a",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [
+      "COMPLEXITY_THRESHOLD",
+      "MODEL_REGISTRY",
+      "ModelConfig",
+      "getModelForRole"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/src/orchestration/model-registry.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "e62eeded0a7c776761a7f9d44badc7401cbad2b6ad4ab30cee08c3031c40b64e",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "COMPLEXITY_THRESHOLD",
@@ -22991,12 +23453,62 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/src/orchestration/pipeline-runner.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "4a054370665927b59b45a50ddc4f2069a7a920b0e703cf239bc0596b9e7f4db3",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "PipelineRunner"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/src/orchestration/router/smart-orchestrator.ts",
     "component": "backend.mcp",
     "representative_source": "VOS3",
     "sha256": "b1516c571c9325c610116a0c8030d57de9ce50ee54016bf44da73e18ee9266b4",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [
+      "RoutingResult",
+      "determineOptimalAgent",
+      "getModelForRole",
+      "getRoutingDetails",
+      "listAvailableModels"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/src/orchestration/router/smart-orchestrator.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "655d840372581169ddf010443e6d17d1b4c0562e1149f0e1667d0d415a027140",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "RoutingResult",
@@ -23039,12 +23551,72 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/src/orchestration/smart-router-bridge.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "cb90b12873395dcd8c5b25e1c1c03bef0c5aa4d0afcfd07807c5d73e774c4c9a",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "RoutingDecision",
+      "SmartRouterBridge",
+      "SmartRouterModel",
+      "SmartRouterResult",
+      "calculateStateContext",
+      "createSmartRouter",
+      "extractRequiredModels",
+      "filterRelevantSchema",
+      "getModelForPipelinePhase",
+      "getModelForPipelineStep",
+      "getModelForTask",
+      "getModelForTaskAsync",
+      "isPathAllowed",
+      "prepareBackendContext",
+      "safeWriteFile",
+      "safeWriteFiles",
+      "smartRouter"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/src/orchestration/tests/test-context-escalation.ts",
     "component": "backend.mcp",
     "representative_source": "VOS3",
     "sha256": "e3189a69e4eb149d60969e15c0b6c3a1f033e6eec7db0b9ef90eb6dcb797d359",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/src/orchestration/tests/test-context-escalation.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "b4c3a93eb7f31145a8d54e3da735cbba619202047deaa578cc31cfa4c8cd381b",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -23103,6 +23675,27 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/src/server-base.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "dbca9116154c59aa2cebf5f1715c77fcf505185c49220fd2d63216041288bdb0",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/src/server-v1.ts",
     "component": "backend.mcp",
     "representative_source": "VOS3",
@@ -23127,12 +23720,53 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/mcp-server/src/server-v1.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS-Cyber-Standard",
+    "sha256": "208a7624844300175714577b2d95d8634c78a7ffa811e90f63c5dcde8675749c",
+    "equivalent_source_copies": [
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/mcp-server/src/server.ts",
     "component": "backend.mcp",
     "representative_source": "VOS3",
     "sha256": "4bee45ea5238021a2ab7f37fd1aef085c358351472c404433d60585ed2464602",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/src/server.ts",
+    "component": "backend.mcp",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "23f5f3d66151a98e4245bdc4c272c1537b589130c4dff46174449f074ee90e4a",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -23165,6 +23799,28 @@
     "sha256": "eb7017f9d21763af2d7ee229d2bd7646d9088bd678afa232600757380e48dde4",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/mcp-server/tsconfig.json",
+    "component": "backend.mcp",
+    "representative_source": "VOS3",
+    "sha256": "393d6ace87edf907259b9fdee32ac5c070c0fde2bdd042210863a5d1ce3f433a",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -23477,6 +24133,49 @@
     "sha256": "4806b30bfd4dc2b7ca93c7bb55bb5c8576744c22bb5581923d22fbe63e590321",
     "equivalent_source_copies": [
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "DevMemory",
+      "MemoryEntry",
+      "UserNamespacedMemory",
+      "__init__",
+      "_detect_room",
+      "_detect_wing",
+      "_generate_id",
+      "_get_embedding",
+      "_get_recent_json",
+      "_init_chromadb",
+      "_init_embeddings",
+      "_query_json",
+      "_rebuild_bm25",
+      "_rrf_fuse",
+      "_save_to_json",
+      "add",
+      "clear",
+      "delete",
+      "delete_bulk",
+      "export_all",
+      "get_by_id",
+      "get_dev_memory",
+      "get_recent",
+      "get_stats",
+      "import_memories",
+      "query",
+      "recall",
+      "remember",
+      "to_dict",
+      "update"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/memory/dev_memory.py",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "0f9c22151b08fbc51fbcea99bbc5b28a9ea88a110f00a556d4a2277e074bc877",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "DevMemory",
@@ -23967,6 +24666,25 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/middleware/csrf.py",
+    "component": "backend.middleware",
+    "representative_source": "vos.v1",
+    "sha256": "d5b71b52f782388a8e5141b60ad3440ea0ad78fafcf35f80c19dbe75472d0c12",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "_is_exempt",
+      "_peek_csrf_token_for_tests",
+      "_peek_handshake_secret_for_tests",
+      "_resolve_handshake_secret",
+      "csrf_middleware",
+      "get_csrf_token"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/middleware/ownership.py",
     "component": "backend.middleware",
     "representative_source": "vos/vos4",
@@ -24294,12 +25012,55 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/package-lock.json",
+    "component": "backend.extensions",
+    "representative_source": "VOS3",
+    "sha256": "8f545495ff34bf4c672cc820c5c74b94deb0e22b7319cb68c664b650408055f2",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/package.json",
     "component": "backend.extensions",
     "representative_source": "VOS3",
     "sha256": "2f9306333acc3e8adec5bceb18df5cec7c8e143dac22cdcd34283809a7e16e89",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/package.json",
+    "component": "backend.extensions",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "9c852bb5c11c10bfd633c27ec29a7db177d23ccb65a59614ce0f9f5cb271fed9",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -24712,6 +25473,46 @@
       "update_config",
       "validate_config",
       "wrapper"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/pro/README.md",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "db44372e3c1792c3d65a6e10df5daa81d21bfbad01befefdc4668136198e20aa",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/pro/finetune_engine.py",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "a452e07cc3ebd7704c548cfe8d2d1b491f8064e798159eb168414cc0790c3b39",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "OrgFineTuneQuota",
+      "ProLicenseRequired",
+      "SovereignFineTunerPro",
+      "__init__",
+      "_pro_license_active",
+      "is_npu_cluster_available",
+      "quota_for_org",
+      "train"
     ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
@@ -25257,6 +26058,50 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/projects/OmniStock_Enterprise/backend/package-lock.json",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3",
+    "sha256": "e1f3d1b7a491f2bbe674f02dc21718adadd69c1ac4c0d33edf55a49291af9290",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/projects/OmniStock_Enterprise/backend/package.json",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3",
+    "sha256": "a7588eee6f7f90b0c3efb5a5c93ac42bfc651ec4ceb531993f6cd056216d66b5",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/projects/OmniStock_Enterprise/frontend/eslint.config.mjs",
     "component": "backend.example-projects",
     "representative_source": "VOS3",
@@ -25281,12 +26126,90 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/next-env.d.ts",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "7ad303e40d4fddf44f156129e397511953a71481c5cfd86b1862649aaaf240cc",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/projects/OmniStock_Enterprise/frontend/next.config.ts",
     "component": "backend.example-projects",
     "representative_source": "VOS3",
     "sha256": "44734352969e59608eecb21ec7fbb0c1ee532b4f3b94cbcec8b6c7f40773450d",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/next.config.ts",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/package-lock.json",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3",
+    "sha256": "3b7ac1057103e278807fa8cba5f52477db08a6b1718adcb5917251cdfbcabcaf",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/package.json",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3",
+    "sha256": "19a65b3a725d8563c3862384ba306924b2e3706dd5891115418f2cbd48f5be37",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -25379,12 +26302,54 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/src/app/products/page.tsx",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "95ed7a4f461c0bcfdc2a503b13b07ecc6a3fda2ddadb2eca03c709e280d9b126",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/projects/OmniStock_Enterprise/frontend/src/app/reports/page.tsx",
     "component": "backend.example-projects",
     "representative_source": "VOS3",
     "sha256": "89d6be63a2b8aaaff965d60cd8eed7bb54852156ec551e3b029cd4747eedd369",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/src/app/reports/page.tsx",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "179dbb628286c4fef5fdb8110e6d6aaefa859b0332d73a5ca82900027f4f2297",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -25415,6 +26380,27 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/src/app/suppliers/page.tsx",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "8751f66c1afde287077600f26122d533a830188c9c6ed13dfb57f185829d3a70",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/projects/OmniStock_Enterprise/frontend/src/components/inventory/dashboard.tsx",
     "component": "backend.example-projects",
     "representative_source": "VOS3",
@@ -25429,12 +26415,58 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/src/components/inventory/dashboard.tsx",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "3784acd613f22edbaa96de19241d91bf81a1e2cb79f3bea08fcb2263c2f7ef45",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "Dashboard"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/projects/OmniStock_Enterprise/frontend/src/components/inventory/product-table.tsx",
     "component": "backend.example-projects",
     "representative_source": "VOS3",
     "sha256": "f3cd2abf709f47a0ac6b81ef460f93e6bf63381710ab4b64bf6a3f85275e8da9",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [
+      "ProductTable"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/projects/OmniStock_Enterprise/frontend/src/components/inventory/product-table.tsx",
+    "component": "backend.example-projects",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "2e046a809ea323c81ae85b7c60143b4ba3608f861c71a46533cfbdfa4d4d67bf",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "ProductTable"
@@ -25773,6 +26805,25 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/requirements-full.txt",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "b071fd365525228b2e973a4810cfbb9c982098e8259947a12c7a81fd1e2c20c8",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/requirements.lock",
     "component": "backend.extensions",
     "representative_source": "VOS3",
@@ -25815,6 +26866,18 @@
     "sha256": "827d7b0a1cdf6bba698d3d20d6d52327935fced2db41258dd929d6f7bd21f543",
     "equivalent_source_copies": [
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/requirements.txt",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "ea255e817c4633dc6a81edd1013cafcc3bcc73080254ec77335231c799d7ee23",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -34056,6 +35119,64 @@
   {
     "path": "backend/tests/conftest.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "7e42def1220dfdda36e888a553d7b78de0ba49a0a2ab2f57e8c93917dcab5a69",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "_DeterministicFakeEmbeddings",
+      "_LCEmbeddings",
+      "_VOSLoopbackOnlySocket",
+      "__init__",
+      "_app",
+      "_assert",
+      "_default_api_auth",
+      "_fake_rag_llm",
+      "_isolate_dev_memory",
+      "_neutralize_convex_env_leak",
+      "_neutralize_offline_auth_leak",
+      "_neutralize_stripe_env_leak",
+      "_offline_embeddings",
+      "_patched_init",
+      "_vector",
+      "_vos_host_is_loopback",
+      "admin_client",
+      "assert_valid_state",
+      "assert_workflow_success",
+      "auth_manifest_cache",
+      "auth_template_cache",
+      "base_agent_state",
+      "client",
+      "connect",
+      "connect_ex",
+      "embed_documents",
+      "embed_query",
+      "mock_anthropic",
+      "mock_llm",
+      "mock_openai",
+      "pytest_addoption",
+      "pytest_collection_modifyitems",
+      "pytest_configure",
+      "research_state",
+      "reset_environment",
+      "reset_rate_limiters",
+      "reset_services",
+      "router_state",
+      "session_client",
+      "temp_dir",
+      "temp_file",
+      "test_config",
+      "unauthenticated_client",
+      "user_a_client",
+      "user_b_client"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/conftest.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "0e3548462ecd23fbdff2b85c28d4fd2e2ac320b8849e7b309ffa78ac940d9f29",
     "equivalent_source_copies": [
@@ -34922,6 +36043,39 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/tests/crypto/test_pqc_rotation.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "0ac84347cf72b7f067e5f6c9fb7e1ccfbfe7823ba71d262a0f83f50caed24dd9",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "_reset_rotation_state",
+      "boom",
+      "capturing_audit",
+      "fail_on_pqc_set",
+      "selective_fail",
+      "test_clear_hard_fail_requires_attestation",
+      "test_clear_hard_fail_restores_normal_operation",
+      "test_clear_hard_fail_when_inactive_emits_no_op_audit",
+      "test_concurrent_rotations_produce_distinct_serialized_fingerprints",
+      "test_hard_fail_starts_inactive",
+      "test_hard_fail_state_carries_originating_reason",
+      "test_rotate_hybrid_emits_failure_audit_on_keygen_error",
+      "test_rotate_hybrid_emits_single_audit_row_on_success",
+      "test_rotate_hybrid_persists_to_keyring",
+      "test_rotate_hybrid_produces_fresh_fingerprints_each_call",
+      "test_rotate_hybrid_returns_two_fingerprints",
+      "test_rotate_hybrid_rolls_back_on_pqc_keygen_failure",
+      "test_rotate_hybrid_rolls_back_on_pqc_write_failure",
+      "test_rotation_blocked_after_hard_fail_latched",
+      "worker"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/tests/death_battery_runner.py",
     "component": "backend.tests",
     "representative_source": "VOS3",
@@ -35709,6 +36863,42 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestMiddlewareChain",
+      "_build_test_app",
+      "api_test",
+      "api_test_post",
+      "health",
+      "slow_endpoint",
+      "test_content_size_before_rate_limit",
+      "test_content_size_rejection_preserves_rate_limit",
+      "test_cors_options_no_auth_required",
+      "test_health_bypasses_rate_limit",
+      "test_rate_limited_blocks_before_auth",
+      "test_request_id_passthrough",
+      "test_request_id_propagated",
+      "test_slow_request_logged",
+      "test_timing_header_on_error",
+      "test_timing_header_on_success"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/integration/test_middleware_chain.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "ee95a84d62cff311698e29ddca779b3ba7af75caeabbf0481bb5d0c12b446a49",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "TestMiddlewareChain",
@@ -37233,6 +38423,57 @@
   {
     "path": "backend/tests/owasp/test_owasp_rate_limit.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "da54c37ce0a5b152b88abdca3ec4098831edac2f23a249a23de18691259dd984",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestAuthLimiterExhaustion",
+      "TestCleanupIntegration",
+      "TestConcurrentRapidFire",
+      "TestGetClientIp",
+      "TestIsAuthPath",
+      "TestRateLimitMiddleware",
+      "TestStandardLimiterExhaustion",
+      "TestTokenBucketUnit",
+      "_make_request",
+      "test_429_includes_retry_after_header",
+      "test_allow_returns_true_until_burst_exhausted",
+      "test_auth_429_has_retry_after_60",
+      "test_auth_and_standard_limiters_are_independent",
+      "test_auth_path_blocks_after_5_requests",
+      "test_auth_path_returns_true",
+      "test_burst_exhaustion_boundary",
+      "test_burst_of_one",
+      "test_cleanup_preserves_fresh_entries",
+      "test_cleanup_removes_stale_buckets",
+      "test_cleanup_removes_stale_entries",
+      "test_cleanup_runs_after_1000_requests",
+      "test_different_ips_have_independent_buckets",
+      "test_different_keys_independent",
+      "test_health_endpoint_exempt",
+      "test_high_rate_sustained",
+      "test_ignores_xff_header",
+      "test_no_client_returns_unknown",
+      "test_non_auth_path_returns_false",
+      "test_normal_request_passes_within_limit",
+      "test_rapid_fire_auth_path",
+      "test_rapid_fire_respects_burst",
+      "test_replenishment_caps_at_burst",
+      "test_returns_client_host",
+      "test_root_endpoint_exempt",
+      "test_standard_burst_exhaustion_returns_429",
+      "test_token_replenishment",
+      "test_xff_spoofing_does_not_bypass_limit",
+      "test_zero_burst_denies_all"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/owasp/test_owasp_rate_limit.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "9427a2bf892837b6a36df496484c54bf72a95c50b9bb766936c2a4de89b703f2",
     "equivalent_source_copies": [
@@ -37738,6 +38979,33 @@
   {
     "path": "backend/tests/perf/test_memory_leaks.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "9f3af0a3a62887dfa064b944d4b229ecf46e6f74f118285d89439a16f9fd480d",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestMemoryLeaks",
+      "_measure_delta",
+      "test_authenticated_user_gc_collected",
+      "test_health_endpoint_no_leak",
+      "test_json_serialization_no_accumulation",
+      "test_large_body_memory_returns",
+      "test_middleware_import_stability",
+      "test_post_request_cycle_no_leak",
+      "test_rate_limiter_cleanup_removes_all",
+      "test_service_singleton_reimport",
+      "test_testclient_lifecycle",
+      "test_token_bucket_cleanup_returns_memory",
+      "test_token_bucket_stale_cleanup",
+      "test_user_id_cache_bounded"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/perf/test_memory_leaks.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "0b1e6ef522d712aa42c3b7d219bb30df7459592c67dbd5f1574f4bc0e69f3fa9",
     "equivalent_source_copies": [
@@ -38023,6 +39291,34 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/tests/red_team/test_hostile_tenant_leak.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "0581339012d57171f4b0688bb7a95b54612f9df73d82302c20040e662168905d",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestAttestationCrossTenantSessionRejected",
+      "TestKVCrossTenantProbe",
+      "TestVBusCrossTenantFrameIsolation",
+      "_make_user",
+      "_shm_name",
+      "populated_cache",
+      "test_attach_to_wrong_magic_segment_fails",
+      "test_attach_to_wrong_name_fails",
+      "test_attacker_cannot_fetch_victim_session",
+      "test_attacker_concatenated_prefix_returns_none",
+      "test_attacker_probe_returns_none",
+      "test_red_team_summary",
+      "test_trust_domain_invariant_self_consistent",
+      "test_two_distinct_rings_do_not_share_payload",
+      "test_unknown_third_tenant_sees_nothing"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/tests/run_10day_full.sh",
     "component": "backend.tests",
     "representative_source": "VOS3",
@@ -38031,6 +39327,31 @@
       "VOS3"
     ],
     "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/security/test_dns_pinning.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "a0e4bdc08b211a82856f3b5ba81698df924b1c088e78f31a38df99551bd0b4bd",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "_stub_resolver",
+      "fake",
+      "fresh_firewall",
+      "test_ip_literal_not_pinned",
+      "test_pin_disabled_via_env",
+      "test_pin_installs_on_first_resolve",
+      "test_pin_rebind_to_new_public_ip_rejected",
+      "test_pin_rebind_to_private_ip_rejected",
+      "test_pin_same_ips_subsequent_request_passes",
+      "test_pin_subset_of_pinned_set_passes",
+      "test_pin_ttl_expiry_allows_new_pin",
+      "test_reset_dns_pin_cache"
+    ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -41847,6 +43168,95 @@
   {
     "path": "backend/tests/test_api_billing.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "97ead432f196947ba9cfb1de3feda03ee59d826a876d929758d8ae8a57057c5f",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestAddCredits",
+      "TestCancelSubscription",
+      "TestCreateCheckout",
+      "TestCreditTransactions",
+      "TestGetCredits",
+      "TestGetPlans",
+      "TestGetSubscription",
+      "TestGetTokenBalance",
+      "TestPortalSession",
+      "TestRefundCredits",
+      "TestResumeSubscription",
+      "TestTokenCheckout",
+      "TestUseCredits",
+      "TestWebhook",
+      "client",
+      "mock_stripe",
+      "mock_user",
+      "test_add_credits_invalid_transaction_type_returns_400",
+      "test_add_credits_negative_amount_returns_400",
+      "test_add_credits_returns_200",
+      "test_add_credits_returns_full_payload",
+      "test_add_credits_valid_transaction_types",
+      "test_add_credits_zero_amount_returns_400",
+      "test_cancel_not_found_returns_404",
+      "test_cancel_returns_200",
+      "test_cancel_returns_result",
+      "test_checkout_invalid_interval_returns_400",
+      "test_checkout_invalid_plan_returns_400",
+      "test_checkout_returns_200",
+      "test_checkout_returns_session_id_and_url",
+      "test_checkout_service_error_returns_500",
+      "test_checkout_unauthenticated_returns_401",
+      "test_checkout_uses_default_urls",
+      "test_credits_returns_200",
+      "test_credits_returns_balance_and_user_id",
+      "test_credits_with_convex_includes_lifetime_stats",
+      "test_plans_contain_token_packages",
+      "test_plans_contains_plans_key",
+      "test_plans_contains_three_plans",
+      "test_plans_each_has_required_fields",
+      "test_plans_ids_are_free_pro_team",
+      "test_plans_pro_is_popular",
+      "test_plans_returns_200",
+      "test_portal_generic_error_returns_500",
+      "test_portal_returns_200",
+      "test_portal_returns_url",
+      "test_portal_value_error_returns_404",
+      "test_refund_negative_amount_returns_400",
+      "test_refund_returns_200",
+      "test_refund_returns_success_payload",
+      "test_refund_zero_amount_returns_400",
+      "test_resume_not_found_returns_404",
+      "test_resume_returns_200",
+      "test_resume_returns_result",
+      "test_subscription_active_returns_details",
+      "test_subscription_none_returns_free",
+      "test_token_checkout_generic_error_returns_500",
+      "test_token_checkout_returns_200",
+      "test_token_checkout_returns_session_data",
+      "test_token_checkout_value_error_returns_400",
+      "test_tokens_returns_200",
+      "test_tokens_returns_balance",
+      "test_transactions_no_convex_returns_empty",
+      "test_transactions_query_failure_returns_500",
+      "test_transactions_with_convex_returns_list",
+      "test_use_credits_insufficient_balance_returns_402",
+      "test_use_credits_negative_amount_returns_400",
+      "test_use_credits_returns_200",
+      "test_use_credits_returns_success_payload",
+      "test_use_credits_use_tokens_fails_returns_402",
+      "test_use_credits_zero_amount_returns_400",
+      "test_webhook_generic_error_returns_500",
+      "test_webhook_missing_signature_returns_400",
+      "test_webhook_returns_200",
+      "test_webhook_returns_event_data",
+      "test_webhook_value_error_returns_400"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_api_billing.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "fa038fe203a1fa8188a72107d5d724155316610547cf6f75cbc8c9131e22b310",
     "equivalent_source_copies": [
@@ -43106,6 +44516,29 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "backend/tests/test_api_compliance_firewall_integration.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "4f981183e34fca6f3f89495ac803c17fabd3113bc9dd109d5f79da3247cd9979",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestSemanticFirewallWiring",
+      "_echo_dispatcher",
+      "_payload",
+      "client",
+      "test_benign_prompt_not_blocked",
+      "test_benign_response_is_normal_chat_not_firewall_error",
+      "test_deny_fires_before_model_resolution",
+      "test_injection_rejected_on_stream_endpoint_too",
+      "test_injection_rejected_with_400",
+      "test_rejection_payload_is_firewall_tagged"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "backend/tests/test_api_database.py",
     "component": "backend.tests",
     "representative_source": "VOS3",
@@ -43495,6 +44928,33 @@
     "sha256": "5c44e2af0c9457fae4f8dd692ccb8784022e989e682141db280b72e666ba776f",
     "equivalent_source_copies": [
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestDeveloperRoutes",
+      "test_get_profile_404",
+      "test_register_developer_201",
+      "test_register_includes_optional_fields",
+      "test_register_minimal",
+      "test_register_missing_fields_422",
+      "test_register_returns_name_and_email"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_api_developer_routes.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "002ae50d57a7c8f10f4042f299129bcc8993f4cbce97cd49c8c58c56beac1071",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "TestDeveloperRoutes",
@@ -44633,6 +46093,99 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestAddMemory",
+      "TestBulkDelete",
+      "TestClearMemories",
+      "TestDeleteInsight",
+      "TestExportInsights",
+      "TestGetInsight",
+      "TestImportInsights",
+      "TestMemoryStats",
+      "TestMemoryTypes",
+      "TestQueryMemory",
+      "TestQuickRecall",
+      "TestQuickRemember",
+      "TestRecentMemories",
+      "TestUpdateInsight",
+      "_make_entry",
+      "_payload",
+      "client",
+      "mock_memory",
+      "test_add_accepts_valid_memory_types",
+      "test_add_auto_tags_applied",
+      "test_add_response_entry_has_id",
+      "test_add_response_has_entry",
+      "test_add_response_has_success_true",
+      "test_add_returns_200",
+      "test_add_returns_500_when_memory_add_fails",
+      "test_bulk_delete_calls_delete_bulk",
+      "test_bulk_delete_empty_list",
+      "test_bulk_delete_response_has_deleted_count",
+      "test_bulk_delete_returns_200",
+      "test_clear_failure_still_returns_200",
+      "test_clear_response_has_success",
+      "test_clear_returns_200",
+      "test_clear_with_memory_type",
+      "test_delete_calls_memory_delete",
+      "test_delete_not_found_returns_404",
+      "test_delete_response_has_success",
+      "test_delete_returns_200",
+      "test_export_count_matches_insights_length",
+      "test_export_has_count",
+      "test_export_has_exported_at_timestamp",
+      "test_export_has_insights",
+      "test_export_returns_200",
+      "test_get_insight_not_found_returns_404",
+      "test_get_insight_returns_200",
+      "test_get_insight_returns_correct_id",
+      "test_import_empty_list",
+      "test_import_response_has_imported_count",
+      "test_import_returns_200",
+      "test_query_count_matches_results_length",
+      "test_query_passes_top_k_to_memory",
+      "test_query_response_has_count",
+      "test_query_response_has_results",
+      "test_query_returns_200",
+      "test_query_with_memory_type_filter",
+      "test_recall_returns_200",
+      "test_recall_returns_list",
+      "test_recall_with_custom_k",
+      "test_recent_response_has_count",
+      "test_recent_response_has_memories",
+      "test_recent_returns_200",
+      "test_recent_with_custom_limit",
+      "test_recent_with_memory_type_filter",
+      "test_remember_response_has_success",
+      "test_remember_returns_200",
+      "test_remember_with_files",
+      "test_remember_with_tags",
+      "test_stats_calls_get_stats",
+      "test_stats_contains_total",
+      "test_stats_returns_200",
+      "test_stats_total_is_integer",
+      "test_types_contains_all_expected",
+      "test_types_contains_conversation",
+      "test_types_has_descriptions",
+      "test_types_response_has_types",
+      "test_types_returns_200",
+      "test_update_not_found_returns_404",
+      "test_update_response_has_success",
+      "test_update_returns_200",
+      "test_update_with_memory_type",
+      "test_update_with_tags"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_api_memory.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "c3ae0ef8f9806336c0e9696bef3b0de946329574ab3af214a9f17de4a5b06de1",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "TestAddMemory",
@@ -46523,6 +48076,45 @@
   {
     "path": "backend/tests/test_api_terminal.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "adb182122054d2de913cf3cc34f1b3147417e0775b10cac114f97fbbe4d10603",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestChatAPI",
+      "TestClearSession",
+      "TestGetSession",
+      "TestListModels",
+      "TestListTools",
+      "TestToolExecuteRemoved",
+      "_mock_user",
+      "clear_sessions",
+      "client",
+      "mock_auth",
+      "test_api_mode_model_selection",
+      "test_api_mode_no_api_key_returns_500",
+      "test_api_mode_session_persistence",
+      "test_api_mode_with_mock_client_returns_200",
+      "test_clear_nonexistent_session_still_succeeds",
+      "test_clear_session_returns_success",
+      "test_get_nonexistent_session_returns_empty",
+      "test_list_models_contains_default_key",
+      "test_list_models_contains_models_key",
+      "test_list_models_each_has_key_and_id",
+      "test_list_models_nonempty",
+      "test_list_models_returns_200",
+      "test_list_tools_contains_count",
+      "test_list_tools_contains_tools_key",
+      "test_list_tools_returns_200",
+      "test_tools_execute_endpoint_removed"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_api_terminal.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "fcc689f6b26e2e9054f317b4f0a7bb35942b02eb609b355e5b2b9620a6f2f4ed",
     "equivalent_source_copies": [
@@ -46614,6 +48206,47 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestChatRequestValidation",
+      "TestHistoryEdgeCases",
+      "TestModelSelection",
+      "TestProviderStatus",
+      "TestStreamingFormat",
+      "TestSummarizeEdgeCases",
+      "_tracker_ctx",
+      "client",
+      "test_content_over_100k_chars_rejected",
+      "test_delete_nonexistent_session_returns_deleted_true",
+      "test_empty_messages_array",
+      "test_explicit_valid_model_accepted",
+      "test_get_nonexistent_session_returns_empty_messages",
+      "test_invalid_model_falls_back_gracefully",
+      "test_max_tokens_128000_accepted",
+      "test_max_tokens_negative_rejected",
+      "test_max_tokens_one_accepted",
+      "test_max_tokens_zero_rejected",
+      "test_providers_status_has_provider_keys",
+      "test_providers_status_returns_200",
+      "test_stream_body_contains_done_event",
+      "test_stream_content_type_is_event_stream",
+      "test_summarize_already_summarized_skipped",
+      "test_summarize_whitespace_only_messages_skipped",
+      "test_summarize_with_empty_agent_ids",
+      "test_temperature_over_two_rejected",
+      "test_temperature_two_accepted",
+      "test_temperature_zero_accepted"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_api_terminal_extended.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "fa8338f4d58512d56f4dee6251667f11eb62b73b9d66054d02d6ab87fad8d5c7",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "TestChatRequestValidation",
@@ -47919,6 +49552,60 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestAuthInjection",
+      "TestDetectAuthStrategy",
+      "TestEndToEnd",
+      "TestManifestLoading",
+      "TestPipelineIntegration",
+      "TestTemplateFileLoading",
+      "TestTesterAgentPrompt",
+      "TestUtilityFunctions",
+      "_make_builder",
+      "capture_invoke",
+      "custom_jwt_scenarios",
+      "manifest",
+      "test_architect_node_no_auth_keywords",
+      "test_architect_node_sets_auth_strategy",
+      "test_authjs_explicit",
+      "test_backend_node_injects_custom_jwt_files",
+      "test_case_insensitive",
+      "test_clerk_env_vars",
+      "test_clerk_explicit",
+      "test_clerk_loads_all_files",
+      "test_clerk_priority_over_implicit",
+      "test_custom_jwt_dependencies",
+      "test_custom_jwt_has_6_test_scenarios",
+      "test_custom_jwt_loads_all_files",
+      "test_frontend_node_injects_clerk_files",
+      "test_implicit_login_keyword",
+      "test_implicit_register_keyword",
+      "test_injection_adds_new_files",
+      "test_injection_preserves_existing_files",
+      "test_manifest_loads",
+      "test_nextauth_explicit",
+      "test_no_auth_keywords",
+      "test_nonexistent_strategy_returns_empty",
+      "test_strategy_manifest_has_required_keys",
+      "test_template_overwrites_generated_files",
+      "test_tester_node_injects_auth_scenarios",
+      "test_tester_node_no_scenarios_without_auth",
+      "test_tester_prompt_includes_auth_scenarios",
+      "test_tester_prompt_no_auth_section_without_scenarios",
+      "test_todo_app_with_clerk_triggers_clerk",
+      "test_todo_app_with_login_triggers_custom_jwt"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_auth_injection.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "7de11eddfe49174d991588224f6d96ecb5099c74be91e3bb20d85614351babf6",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "TestAuthInjection",
@@ -50408,6 +52095,62 @@
   {
     "path": "backend/tests/test_e2e_vision_flow.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "0a82db76d9e5590280e98d3566f3633d5047224094a106345dd4936c813bb42e",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "ProjectResponse",
+      "TestACIDStyling",
+      "TestArchitectContextInjection",
+      "TestFrontendContextInjection",
+      "TestGraphWiring",
+      "TestStyleOnlyFlow",
+      "TestVisionAPIEndpoint",
+      "TestVisionNodeState",
+      "TestVisionRouting",
+      "_build_vision_theme",
+      "_chunk",
+      "_get_builder",
+      "_make_builder",
+      "_make_png_1x1",
+      "_mock_llm_returning",
+      "arch_invoke",
+      "capture_invoke",
+      "client",
+      "create_project_with_vision",
+      "front_invoke",
+      "test_acid_agent_generated_files_take_priority",
+      "test_acid_full_chain_neon_pink_e2e",
+      "test_acid_globals_css_contains_neon_pink",
+      "test_acid_tailwind_config_has_primary_mapping",
+      "test_architect_receives_vision_context",
+      "test_architect_without_vision_uses_original_requirements",
+      "test_frontend_receives_design_tokens",
+      "test_frontend_without_vision_uses_original_requirements",
+      "test_graph_has_vision_node",
+      "test_route_entry_returns_architect_without_image",
+      "test_route_entry_returns_vision_with_any_truthy_string",
+      "test_route_entry_returns_vision_with_image",
+      "test_style_descriptor_produces_theme",
+      "test_style_only_frontend_still_injects_theme",
+      "test_style_only_skips_vision_node",
+      "test_vision_endpoint_rejects_oversized_image",
+      "test_vision_endpoint_rejects_unsupported_mime",
+      "test_vision_endpoint_with_image",
+      "test_vision_endpoint_with_style_only",
+      "test_vision_node_edges_to_architect",
+      "test_vision_node_graceful_failure_returns_none",
+      "test_vision_node_populates_analysis_and_theme",
+      "test_vision_node_preserves_neon_pink_in_theme"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_e2e_vision_flow.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "d141d5b36c07e7def0e3591163f5d2033f2a9577e4129f7923cae7808d0e72cc",
     "equivalent_source_copies": [
@@ -51525,6 +53268,49 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestAgentLifecycle",
+      "TestChatLifecycle",
+      "TestKernelIntegration",
+      "TestMemoryRoundtrip",
+      "TestMetricsIntegration",
+      "TestVCoreLifecycle",
+      "client",
+      "test_agent_execute_dev_mode",
+      "test_chat_completions_requires_auth",
+      "test_chat_models_have_required_fields",
+      "test_chat_models_list",
+      "test_cost_breakdown_endpoint",
+      "test_create_and_delete_agent",
+      "test_entity_crud_flow",
+      "test_entity_fields_and_records",
+      "test_health_endpoint",
+      "test_kernel_filesystem_endpoint",
+      "test_kernel_status_endpoint",
+      "test_list_agents",
+      "test_memory_query",
+      "test_memory_stats",
+      "test_memory_types",
+      "test_metrics_endpoint"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_full_stack_integration.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "4430940e6e4d4a5a26efcefc453151ded1dbd1ab0e4d8950f8cf038b24368198",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "TestAgentLifecycle",
@@ -53145,6 +54931,65 @@
   {
     "path": "backend/tests/test_load_security.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "aa2731bcbff66352fb6ab34e733d0f330cd4424e0ae5e30ae05c9e5e45e5b848",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestEUCompliance",
+      "TestPerformance",
+      "TestReliability",
+      "TestSecurity",
+      "_Capture",
+      "_crash_if_anthropic_initialized",
+      "_dev_auth_headers",
+      "_get_app",
+      "_mock_post",
+      "anyio_backend",
+      "async_client",
+      "emit",
+      "test_500_never_returns_traceback",
+      "test_500_response_hides_pii",
+      "test_agent_prompts_have_version_field",
+      "test_asyncio_create_task_has_done_callbacks",
+      "test_auth_dependency_at_router_level",
+      "test_billing_route_logs_include_user_context",
+      "test_builds_completed_at_validated_on_status_transition",
+      "test_chat_falls_back_on_llm_failure",
+      "test_chat_p99_latency_dev_mode",
+      "test_chat_route_uses_async_llm_invoke",
+      "test_concurrent_credit_deduction_no_overdraft",
+      "test_convex_client_retries_on_occ_conflict",
+      "test_convex_client_retries_transient_errors",
+      "test_convex_client_uses_no_dynamic_query_strings",
+      "test_convex_find_deprecated_and_not_used_in_loops",
+      "test_convex_list_queries_avoid_full_prompthistory_docs",
+      "test_env_example_covers_critical_vars",
+      "test_eu_detection_from_headers",
+      "test_eu_user_force_local",
+      "test_insights_listing_scoped_to_user",
+      "test_israel_user_unaffected",
+      "test_jwt_strategy3_rejects_hs256_with_rsa_key",
+      "test_jwt_strategy3_restricts_hs256_in_production",
+      "test_kernel_exec_args_pipe_injection_rejected",
+      "test_kernel_interrupt_handler_no_blocking_sleep",
+      "test_llm_factory_imported_during_startup",
+      "test_no_pydantic_v1_class_config_in_routes",
+      "test_oversized_payload_rejected",
+      "test_proactive_service_insights_bounded",
+      "test_prompt_injection_via_agent_description",
+      "test_rate_limit_xff_spoof_ineffective",
+      "test_rate_limiter_has_redis_backend",
+      "test_requirements_have_no_known_bad_pins",
+      "test_stripe_webhook_idempotent_on_duplicate_event"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_load_security.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "c75c0b8f48e7bed293bc9faf2c66c1c37723864815e9f8abdcf45e7ccbb60400",
     "equivalent_source_copies": [
@@ -54339,6 +56184,33 @@
   {
     "path": "backend/tests/test_open_core_split.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "eeae3b5aa9076cf55b776b54319ae12cfe234e3e0583fea51fbeadc90185c9ad",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "_exists",
+      "_read",
+      "test_finetune_engine_imported_from_new_path",
+      "test_finetune_engine_relocated_to_backend_pro",
+      "test_kernel_pro_readme_explains_structural_compromise",
+      "test_license_check_implementation_is_honest_stub",
+      "test_makefile_supports_build_type_flag",
+      "test_open_core_licensing_strategy_documented",
+      "test_pmm_hugepage_pool_size_is_pro_gated",
+      "test_pro_directories_have_readmes",
+      "test_vos3_vmm_cas_pte_is_not_pro_gated"
+    ],
+    "symbols_not_in_selected_file": [
+      "test_finetune_engine_imported_from_new_path",
+      "test_finetune_engine_relocated_to_backend_pro"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_open_core_split.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "f2dc3b2770375210a772dc33cfa61c21b30dd0c3a63110e7b34965ebbcac543e",
     "equivalent_source_copies": [
@@ -54363,7 +56235,10 @@
       "test_pro_directories_have_readmes",
       "test_vos3_vmm_cas_pte_is_not_pro_gated"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "test_finetune_engine_imported_from_new_path",
+      "test_finetune_engine_relocated_to_backend_pro"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -58397,6 +60272,93 @@
   {
     "path": "backend/tests/test_sovereign_integration.py",
     "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "2ddf8f84422c5f00886eab58fab488a41788edbbaa9f6fa0d4de135439dbf417",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "TestAtomicGuardAudit",
+      "TestContextSnapshotEndurance",
+      "TestCrossLayerIntegration",
+      "TestSpatialScopingBreachAttempt",
+      "TestVBusBinaryProtocolCompliance",
+      "_build_crc32c_table",
+      "_crc32c",
+      "_make_test_memory",
+      "build_vbus_frame",
+      "check_permissions",
+      "create_provider",
+      "decode_telemetry_to_json",
+      "generate_telemetry_frame",
+      "hot_increment",
+      "increment",
+      "increment_counters",
+      "parse_vbus_frame",
+      "reader",
+      "take_snapshot",
+      "test_100_rapid_breach_attempts_all_blocked",
+      "test_10_consecutive_handoffs_uuid_recall",
+      "test_aaak_compression_forbidden",
+      "test_atomic_relaxed_stats_counter",
+      "test_auto_detected_wing_breach",
+      "test_cache_contention_hot_counter",
+      "test_cloud_unrestricted_all_wings",
+      "test_concurrent_frame_operations_1000",
+      "test_concurrent_provider_creation",
+      "test_concurrent_spatial_scoping_500_writes",
+      "test_corrupted_frame_detection",
+      "test_crc32c_concurrent_consistency",
+      "test_escalate_provider_to_70b",
+      "test_escalation_preserves_vbus_context",
+      "test_escalation_reason_recorded_in_snapshot",
+      "test_escalation_trigger_context_overflow",
+      "test_escalation_trigger_malformed_calls",
+      "test_frame_roundtrip_crc_integrity",
+      "test_full_frame_lifecycle",
+      "test_header_corruption_detection",
+      "test_highspeed_telemetry_decode_500_frames",
+      "test_kernel_data_via_snappy_blocked",
+      "test_kernel_memory_dump_breach_blocked",
+      "test_local_default_can_write_kernel",
+      "test_lost_in_middle_resistance",
+      "test_memory_provenance_concurrent",
+      "test_message_count_growth_across_handoffs",
+      "test_multi_slot_telemetry_interleave",
+      "test_no_lockup_mixed_rw_1000_ops",
+      "test_non_snappy_no_escalation",
+      "test_openai_compat_tool_format_json_schema",
+      "test_p99_latency_snappy_decode_under_40ms",
+      "test_parallel_tool_calls_tier2",
+      "test_pte_data_breach_blocked",
+      "test_router_yaml_snappy_config",
+      "test_rrf_fusion_deterministic",
+      "test_single_handoff_preserves_messages",
+      "test_snappy_can_write_infra_wing",
+      "test_snappy_cannot_write_backend_wing",
+      "test_snappy_cannot_write_frontend_wing",
+      "test_snappy_cannot_write_kernel_wing",
+      "test_snappy_provider_metadata_tier2_local",
+      "test_snapshot_isolation_concurrent",
+      "test_snapshot_metadata_fields",
+      "test_structured_json_block_compliance",
+      "test_tag_allocation_monotonic",
+      "test_telemetry_to_snappy_pipeline",
+      "test_tool_state_preserved_across_handoffs",
+      "test_v194_bottleneck_prevention",
+      "test_wing_detection_infra_content",
+      "test_wing_detection_kernel_content",
+      "test_write_permissions_thread_safe",
+      "test_zero_drop_burst_2000_frames",
+      "worker",
+      "writer"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_sovereign_integration.py",
+    "component": "backend.tests",
     "representative_source": "vos/vos4",
     "sha256": "187c7af6e0052c72dcf458fcad7bd487df6570a5662ed5fa5e726575136c3b73",
     "equivalent_source_copies": [
@@ -59461,6 +61423,101 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "TestCrossLayerIntegration",
+      "TestMemorySyncSpatialScoping",
+      "TestSovereignFastPath",
+      "TestSystemStability",
+      "TestToolUseProviderAbstraction",
+      "_make_test_memory",
+      "test_aaak_forbidden_in_system_prompt",
+      "test_anthropic_metadata_model_id",
+      "test_anthropic_metadata_processing_locality",
+      "test_anthropic_sdk_lazy_import",
+      "test_atomic_write_default_model_origin",
+      "test_atomic_write_has_global_timestamp",
+      "test_atomic_write_has_model_origin",
+      "test_auto_detect_anthropic",
+      "test_auto_detect_openai",
+      "test_chat_routes_has_provider_status",
+      "test_chat_service_env_configurable",
+      "test_cloud_unrestricted_write",
+      "test_code_review_multi_provider_uses_factory",
+      "test_code_review_service_uses_factory",
+      "test_config_no_providers_raises",
+      "test_config_ollama_fallback",
+      "test_context_snapshot_capture",
+      "test_context_snapshot_handoff",
+      "test_context_snapshot_restore",
+      "test_env_example_has_locality_vars",
+      "test_escalation_falls_to_anthropic",
+      "test_escalation_non_snappy_no_trigger",
+      "test_escalation_trigger_context_overflow",
+      "test_escalation_trigger_malformed_calls",
+      "test_explicit_anthropic_preference",
+      "test_explicit_local_preference",
+      "test_factory_local_model_mappings",
+      "test_kernel_reasoning_spec_content",
+      "test_kernel_reasoning_spec_exists",
+      "test_local_default_allowed_logic_wings",
+      "test_local_first_heavy_tasks",
+      "test_low_complexity_routes_to_snappy",
+      "test_medium_complexity_skips_snappy",
+      "test_message_conversion_tool_results",
+      "test_model_selector_fetches_status",
+      "test_no_direct_anthropic_sdk_outside_provider",
+      "test_no_from_anthropic_import",
+      "test_no_providers_raises_runtime_error",
+      "test_openai_compat_cloud_locality",
+      "test_openai_compat_metadata_processing_locality",
+      "test_openai_compat_tool_format_is_json_schema",
+      "test_openai_response_malformed_json_args",
+      "test_openai_response_parsing",
+      "test_parallel_tool_calls_tier1_disabled",
+      "test_parallel_tool_calls_tier2",
+      "test_requirements_has_rank_bm25",
+      "test_room_autodetect_architecture",
+      "test_room_autodetect_debugging",
+      "test_room_autodetect_general",
+      "test_room_autodetect_security",
+      "test_room_autodetect_testing",
+      "test_router_bridge_model_agnostic",
+      "test_router_yaml_fallback_chain",
+      "test_router_yaml_local_models_defined",
+      "test_router_yaml_min_params_enforcement",
+      "test_router_yaml_tier_annotations",
+      "test_rrf_fusion_basic",
+      "test_rrf_fusion_bm25_keyword_boost",
+      "test_rrf_fusion_single_source",
+      "test_snappy_allowed_infra_wing",
+      "test_snappy_availability_check",
+      "test_snappy_not_available_no_gemma",
+      "test_snappy_rejected_from_backend_wing",
+      "test_snappy_rejected_from_frontend_wing",
+      "test_snappy_rejected_from_kernel_wing",
+      "test_snappy_structured_json_enabled",
+      "test_snappy_task_types",
+      "test_terminal_routes_uses_tool_provider",
+      "test_tool_conversion_anthropic_to_openai",
+      "test_tool_conversion_passthrough_openai_format",
+      "test_tool_use_provider_is_abstract",
+      "test_wing_autodetect_backend",
+      "test_wing_autodetect_frontend",
+      "test_wing_autodetect_infra",
+      "test_wing_autodetect_kernel",
+      "test_write_permissions_defined"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tests/test_v32_stability.py",
+    "component": "backend.tests",
+    "representative_source": "vos.v1",
+    "sha256": "1b39ac1620fdec3a2c69a0f6fa0200dc1ab8dc34f6101766e225ab234adecff9",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "TestCrossLayerIntegration",
@@ -62167,6 +64224,50 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "AuthService",
+      "JWTService",
+      "TokenData",
+      "TokenResponse",
+      "User",
+      "UserCreate",
+      "UserLogin",
+      "UserRole",
+      "UserStore",
+      "__init__",
+      "authenticate",
+      "create_access_token",
+      "create_refresh_token",
+      "create_tokens",
+      "create_user",
+      "get_auth_service",
+      "get_current_user",
+      "get_current_user_dependency",
+      "get_user",
+      "get_user_by_email",
+      "hash_password",
+      "login",
+      "refresh",
+      "refresh_access_token",
+      "register",
+      "to_dict",
+      "update_password",
+      "verify_access_token",
+      "verify_password",
+      "verify_refresh_token",
+      "verify_token"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "backend/tools/auth.py",
+    "component": "backend.extensions",
+    "representative_source": "vos.v1",
+    "sha256": "505530923169e62b9b484a2a4516cbee5004ff5378d3a6bdd3832152f981b713",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "AuthService",
@@ -65080,6 +67181,63 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "desktop/package-lock.json",
+    "component": "desktop.host",
+    "representative_source": "vos.v1",
+    "sha256": "40d0344d183baa73de35993ddcb833e1565fa13a979342c5ab33f0cd10d7eac5",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/package.json",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "33f805b195483230847af16ec6f232cb39b0962db604f51ff0f3d5c64be53294",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/Cargo.lock",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "f8d5b50120a2a80fbb3e06e73e615ec10a38f3412ad12c561249491b0cb5876c",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "desktop/src-tauri/Cargo.toml",
     "component": "desktop.host",
     "representative_source": "VOS3",
@@ -65099,6 +67257,84 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/Cargo.toml",
+    "component": "desktop.host",
+    "representative_source": "vos.v1",
+    "sha256": "749e1dff784a172c9a2b412970821048f16fa558446f727612ca0d3392110567",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/gen/schemas/acl-manifests.json",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "60c509d162c3a25c5a38b4527bf425d3818d8f2deaf806ee4707422705459b34",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/gen/schemas/desktop-schema.json",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "2529d9c8626bedf453222828ff691e43b81277ea93a696046e0e69dc6390bbbb",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/gen/schemas/macOS-schema.json",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "2529d9c8626bedf453222828ff691e43b81277ea93a696046e0e69dc6390bbbb",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
       "vos/vos4",
       "vos/vos4-ci-triggers",
       "vos/vos4-kernel-bugfix",
@@ -65158,6 +67394,28 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "desktop/src-tauri/src/sidecar.rs",
+    "component": "desktop.host",
+    "representative_source": "vos.v1",
+    "sha256": "4acba26a3263028ea8b41e54202b2b58f6c4ac7fe2f87e34b97c3b89f0a121f5",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "Ok",
+      "Some",
+      "apply_env",
+      "apply_env_sets_pinned_values",
+      "drop",
+      "handshake_secret_is_64_hex_chars",
+      "handshake_secrets_are_unique",
+      "new_creates_app_data_dir_lazy",
+      "shutdown_without_child_is_ok"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "desktop/src-tauri/src/state.rs",
     "component": "desktop.host",
     "representative_source": "VOS3",
@@ -65175,6 +67433,108 @@
       "vos/vos4-track-7"
     ],
     "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/src/vbus/aaak.rs",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "772d8224c99dede89ba7d15e674dbb343b402cb03e54256f565dd15582428c9b",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "Some",
+      "test_aaak_ack_round_trip",
+      "test_aaak_decode_too_short",
+      "test_aaak_encode_decode_round_trip",
+      "test_aaak_encode_with_extra_data",
+      "test_extract_handshake_salt_embedded_hmac",
+      "test_extract_handshake_salt_no_hmac",
+      "test_extract_handshake_salt_no_salt_bytes",
+      "test_extract_handshake_salt_with_salt",
+      "test_hkdf_derive_different_info_produce_different_keys",
+      "test_hkdf_derive_different_salts_produce_different_keys",
+      "test_hkdf_derive_empty_salt",
+      "test_hkdf_derive_produces_32_bytes"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/src/vbus/client.rs",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "9c3d72a3e61de07c8a568a24733701d5852c7060d82c1911f3b7014a7bf6107e",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "Some",
+      "disconnect",
+      "test_connect_nonexistent_path",
+      "test_default_is_disconnected",
+      "test_disconnect_when_not_connected",
+      "test_new_client_is_disconnected",
+      "test_send_command_not_connected",
+      "test_tag_counter_wraps",
+      "test_token_frame_parse_combined_flags",
+      "test_token_frame_parse_empty",
+      "test_token_frame_parse_empty_text",
+      "test_token_frame_parse_error_flag",
+      "test_token_frame_parse_last_flag",
+      "test_token_frame_parse_too_short",
+      "test_token_frame_parse_valid"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/src/vbus/hmac.rs",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "3e8b2e9d3598e3b4ba7de1dbd150a4298dd2d8741fd956f9812d28756adbbc52",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "test_different_keys_produce_different_macs",
+      "test_sign_then_verify_succeeds",
+      "test_tampered_mac_fails",
+      "test_tampered_payload_fails",
+      "test_unsigned_frame_fails"
+    ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -65235,6 +67595,55 @@
     "sha256": "ab1fec1c8b262546ffc5932158ead2b1379b28c2e0abf2f8bd01d5db309b2bf7",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "desktop/src-tauri/tests/supply_chain_test.rs",
+    "component": "desktop.host",
+    "representative_source": "VOS3",
+    "sha256": "55350c4b7a808e07518f333c52f75cc9125a40fdf535fadfe3ca974ab24b1d2f",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "Some",
+      "test_memmap2_checksum",
+      "test_no_duplicate_crate_versions",
+      "test_subtle_checksum",
+      "test_typosquat_scan"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "docker-compose.yml",
+    "component": "root.configuration",
+    "representative_source": "VOS3",
+    "sha256": "7976872fcf3ff20c3016df8b038fee9604d76739ab4ef97df77adfca6a6e3826",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -66077,6 +68486,27 @@
   {
     "path": "frontend/Dockerfile",
     "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "a9316c0282821802d3f6c6081f8351dfd9a7af71fe0d112693136070ab434029",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/Dockerfile",
+    "component": "frontend.product",
     "representative_source": "VOS3-Cyber",
     "sha256": "6bfdd6bc24bc66692191a7113f370b20eddeb9531f8de6131893dd62ae5d2be2",
     "equivalent_source_copies": [
@@ -66340,6 +68770,27 @@
     "sha256": "1001253c347bb1125e48d4a43b826ac07d5eb88ccdd8f7c6e8692fb59b4f4efb",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/app/studio/[sessionId]/page.tsx",
+    "component": "frontend.product",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "c83c7332be662bca1ec53d0c2d5b83fe4f6295452a352c9bdc33e7b4c40d17a9",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -66793,6 +69244,30 @@
     ],
     "declared_symbols": [
       "ConvexClerkProvider"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/components/settings/ModelSelector.tsx",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "3b2e95954072ef682f2ee86d6b30cebb333a94e11c99e6f2e63568b963c82558",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "ModelSelector"
     ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
@@ -67811,9 +70286,43 @@
   {
     "path": "frontend/eslint.config.mjs",
     "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "e4e736b5e8678ef65543140259fb5c1e44b31b5fd040e806ef2a3c79cb15a46a",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/eslint.config.mjs",
+    "component": "frontend.product",
     "representative_source": "vos/vos4",
     "sha256": "742cd879262958a614c299f7c63ef00b860c4852e4affc575ba5cbb2b3b70a51",
     "equivalent_source_copies": [
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/hooks/__tests__/useChat.test.ts",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "c952acbfbce662f7695fe6f32e33eab8806daba3a069091de1bc0c9104770b73",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
       "vos/vos4",
       "vos/vos4-ci-triggers",
       "vos/vos4-kernel-bugfix",
@@ -67906,6 +70415,28 @@
     "sha256": "e11ecab6727153fcd27a568e568ceb159f6ee6a88c5ccd8abd83352a01346133",
     "equivalent_source_copies": [
       "VOS3-Cyber"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/hooks/__tests__/useKernel.test.ts",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "bede734c4b8bed68b538568c463c890588a6b2d2f592d3c6969aa3d79a4efe8b",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -68045,6 +70576,31 @@
       "vos/vos4-track-2",
       "vos/vos4-track-5",
       "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "Approval",
+      "Artifact",
+      "BMADAgent",
+      "BMADMode",
+      "BMADPhase",
+      "BMADSession",
+      "DeploymentState",
+      "GitState",
+      "PhaseState",
+      "PhaseStatus",
+      "WorkflowEvent",
+      "useBMAD"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/hooks/useBMAD.ts",
+    "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "2c68a5277aa2d96dd6a5577f7a399248dbd59138667c4085638e5e7aeda3a04f",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "Approval",
@@ -68385,6 +70941,25 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "frontend/hooks/useKernel.ts",
+    "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "cea681239954881c2f8d9d417e3f6a3d0a279389f3c35553042fbec98f7ca016",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "ExecResult",
+      "FilesystemInfo",
+      "KernelFile",
+      "KernelProcess",
+      "KernelStatus",
+      "useKernel"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "frontend/hooks/useMarketplace.ts",
     "component": "frontend.product",
     "representative_source": "VOS3",
@@ -68432,6 +71007,23 @@
       "vos/vos4-track-2",
       "vos/vos4-track-5",
       "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "AppReview",
+      "InstalledApp",
+      "MarketplaceApp",
+      "useMarketplace"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/hooks/useMarketplace.ts",
+    "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "a09fa144d303a5a10856269acaa75f5ebd83a0e75010c30635735562ff45838c",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "AppReview",
@@ -68940,6 +71532,28 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "frontend/lib/store/__tests__/wizardStore.test.ts",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "507fb0080eb59a2f8a9372828c620fac1e32cca1b9b7c996fa9c4a1e586cb470",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "frontend/lib/stores/agents-store.ts",
     "component": "frontend.product",
     "representative_source": "VOS3",
@@ -68971,6 +71585,30 @@
       "Model",
       "SendMessageOptions",
       "useChatStateStore"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/lib/stores/kernel-store.ts",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "cf32cfcbbf90f9d05dd198a686cbe1eb3f0c70e19be6d5c1de3634c437c82fa1",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "useKernelStore"
     ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
@@ -69087,6 +71725,20 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "frontend/middleware.ts",
+    "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "338cac824e60c0ae1114b08156eed34a9e2c1d21a77bffef425df223c8caebf5",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "config"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "frontend/next-env.d.ts",
     "component": "frontend.product",
     "representative_source": "VOS3",
@@ -69112,6 +71764,19 @@
       "vos/vos4-track-2",
       "vos/vos4-track-5",
       "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/next-env.d.ts",
+    "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "7ad303e40d4fddf44f156129e397511953a71481c5cfd86b1862649aaaf240cc",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -69263,6 +71928,28 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "frontend/test/setup.ts",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "e165355573d5bbc78cc78cdc4eb0593d4c0be7aa6b521a5509c7c3f0825a36fc",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "frontend/tsconfig.json",
     "component": "frontend.product",
     "representative_source": "VOS3",
@@ -69283,6 +71970,40 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/tsconfig.json",
+    "component": "frontend.product",
+    "representative_source": "vos.v1",
+    "sha256": "3e661cd4475461bea958ba73c0bb51bedc2f8ccebac742cde68d233475b7b9cb",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "frontend/vitest.config.ts",
+    "component": "frontend.product",
+    "representative_source": "VOS3",
+    "sha256": "b701288773d6e7f1459cdc18b807dfd0831554e2da04b20c28426b24863aabbe",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
       "vos/vos4-ci-triggers",
       "vos/vos4-kernel-bugfix",
       "vos/vos4-track-1",
@@ -69345,6 +72066,18 @@
     "component": "infra.operations",
     "representative_source": "vos.v1",
     "sha256": "5b86ab109792a42005777a6c8cb4608069db381b5f8bb56f48808fd199aa6c92",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "infra/runners/linux_ebpf_builder.Dockerfile",
+    "component": "infra.operations",
+    "representative_source": "vos.v1",
+    "sha256": "aea77bac50b7d1ff195beea58be97294ea3c802f03be4c067bfcde51f960d6bc",
     "equivalent_source_copies": [
       "vos.v1"
     ],
@@ -69622,6 +72355,25 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/include/arch/x86_64/smp.h",
+    "component": "native.abi",
+    "representative_source": "vos.v1",
+    "sha256": "4b8bf423edd744266495c7a7ea3fe77a88987e0c96afe945362054d8073c24da",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/include/hal/npu_abstraction.h",
     "component": "native.abi",
     "representative_source": "VOS3",
@@ -69762,6 +72514,26 @@
       "vos/vos4-track-2",
       "vos/vos4-track-5",
       "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "Directory",
+      "vos3_ai_check_wing",
+      "vos3_ai_guard_has_red_zones",
+      "vos3_ai_guard_is_read_only",
+      "vos3_ai_guard_state_name",
+      "vos3_ai_guard_type_name",
+      "vos3_ai_room_color_for_tid"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/include/vos/ai_guard.h",
+    "component": "native.abi",
+    "representative_source": "vos.v1",
+    "sha256": "6a92d8b34ea85da3cb4d5fa5fad51b0647ff25d51931ecd80d2974559415da95",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "Directory",
@@ -70065,6 +72837,27 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/include/vos/console.h",
+    "component": "native.abi",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "86a975775866f7ecc51ec3b722802cf0a0802ca8ff6f9aa32e1b7b2336963de4",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/include/vos/cr4_pin.h",
     "component": "native.abi",
     "representative_source": "vos/vos4",
@@ -70353,6 +73146,27 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/include/vos/ipc.h",
+    "component": "native.abi",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "0ad48b0afdae266495fd2fc59670a1bae1daa928434b1069e3c55057557633f6",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/include/vos/ivshmem.h",
     "component": "native.abi",
     "representative_source": "VOS3",
@@ -70576,6 +73390,34 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/include/vos/pmm.h",
+    "component": "native.abi",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "6158320364b0778ae9e746915cee9f2c4b4d47d472148c667439fd25b2fb710d",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "vos3_pmm_addr_to_page",
+      "vos3_pmm_page_to_addr",
+      "vos3_pmm_page_to_bit",
+      "vos3_pmm_page_to_elem",
+      "vos3_pmm_pages_to_size",
+      "vos3_pmm_size_to_pages"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/include/vos/procfs.h",
     "component": "native.abi",
     "representative_source": "VOS3",
@@ -70642,6 +73484,18 @@
     "sha256": "ebc09948b384361450982a90f24cc71147c015257e0aababcbf7f48d9441a897",
     "equivalent_source_copies": [
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/include/vos/scheduler.h",
+    "component": "native.abi",
+    "representative_source": "vos.v1",
+    "sha256": "057e622125c4e144e59c6c20980cafb910eb4d62640d387b1e2d4294f0090ab3",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -70824,6 +73678,27 @@
     "sha256": "a64469180f1ca414cff9ee2928cb217ad37ca4696b8817be3e3c0f3596cd7ee0",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/include/vos/sync.h",
+    "component": "native.abi",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "2d1084e4b0205b36429c2062b9894f2dec95c16b5b1b21bcd13ba28e712a5255",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -71062,6 +73937,27 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/include/vos/uaccess.h",
+    "component": "native.abi",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "f5439d45ddb1595a512231732102807b9e689d6e829a309b8b49f6901ee02e4e",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/include/vos/uefi_boot.h",
     "component": "native.abi",
     "representative_source": "VOS3",
@@ -71138,6 +74034,18 @@
       "vos/vos4-track-2",
       "vos/vos4-track-5",
       "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/include/vos/vfs.h",
+    "component": "native.abi",
+    "representative_source": "vos.v1",
+    "sha256": "ca4c1b45cf4da7ec39528d18c02abb4a953cabf1158cad82c0f208b987138315",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -71402,6 +74310,28 @@
     "representative_source": "vos.v1",
     "sha256": "1631f76421cb14b12061422d85031b60e0e8f2fc972314be872bdb5f9401e306",
     "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/run_tests.sh",
+    "component": "native.build-and-support",
+    "representative_source": "VOS3",
+    "sha256": "e4edc2350a576a9a72744e4c7f0e2f76becdadae92e388dbb5e346481377bcb6",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
       "vos.v1",
       "vos/vos4",
       "vos/vos4-ci-triggers",
@@ -73176,7 +76106,9 @@
       "vos3_log",
       "vos3_panic"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "port"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -73217,7 +76149,51 @@
       "vos3_log",
       "vos3_panic"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "port"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/drivers/console.c",
+    "component": "native.drivers",
+    "representative_source": "vos.v1",
+    "sha256": "9ddba460cc00846a3fc1328d8e9c4c0b945f65f02d4f40b70820a3a7197db0aa",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "IMPLEMENTATION",
+      "klog_store",
+      "port",
+      "port_outb",
+      "serial_init",
+      "serial_is_transmit_ready",
+      "serial_putc",
+      "vga_entry",
+      "vga_putc",
+      "vga_scroll",
+      "vga_update_cursor",
+      "vos3_console_clear",
+      "vos3_console_get_cursor",
+      "vos3_console_hexdump",
+      "vos3_console_init",
+      "vos3_console_printf",
+      "vos3_console_putc",
+      "vos3_console_putdec",
+      "vos3_console_puthex",
+      "vos3_console_puts",
+      "vos3_console_set_color",
+      "vos3_console_set_cursor",
+      "vos3_console_write",
+      "vos3_klog_init",
+      "vos3_klog_stats",
+      "vos3_log",
+      "vos3_panic"
+    ],
+    "symbols_not_in_selected_file": [
+      "port"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -73263,7 +76239,9 @@
       "vos3_log",
       "vos3_panic"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "port"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -74012,6 +76990,38 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/drivers/tty.c",
+    "component": "native.drivers",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "b64490ce2ab466f22b6688c8f1743b9d21a8a042ddd38d6bedb6c886c12068f3",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "console_close",
+      "console_ioctl",
+      "console_open",
+      "console_read",
+      "console_write",
+      "tty_send_signal",
+      "vos3_tty_init",
+      "vos3_tty_input_char",
+      "vos3_tty_input_string",
+      "vos3_tty_set_foreground"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/drivers/vbus_ai_cmds.c",
     "component": "native.drivers",
     "representative_source": "VOS3",
@@ -74385,7 +77395,40 @@
       "cmd_applogs",
       "cmd_appstat"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "appload_child_entry"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/drivers/vbus_app_cmds.c",
+    "component": "native.drivers",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "6c79117515eadabaa8b5e5e382d2fafaa53c14b129a1866a0158c1f44e309074",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "appload_child_entry",
+      "cmd_agent_kill_all",
+      "cmd_appkill",
+      "cmd_applist",
+      "cmd_appload",
+      "cmd_applogs",
+      "cmd_appstat"
+    ],
+    "symbols_not_in_selected_file": [
+      "appload_child_entry"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -74507,6 +77550,41 @@
     "equivalent_source_copies": [
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "cmd_append",
+      "cmd_exec",
+      "cmd_httpget",
+      "cmd_ls",
+      "cmd_lsm",
+      "cmd_mkdir",
+      "cmd_read",
+      "cmd_readc",
+      "cmd_rename",
+      "cmd_rmdir",
+      "cmd_stat",
+      "cmd_unlink",
+      "cmd_write",
+      "exec_child_entry",
+      "if"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/drivers/vbus_fs_cmds.c",
+    "component": "native.drivers",
+    "representative_source": "vos.v1",
+    "sha256": "31bce75b8881212b53f47b7268beaf7cfeddee122c1555bec3d667ac8306de0e",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "cmd_append",
@@ -75151,6 +78229,32 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/exec/exec.c",
+    "component": "native.execution",
+    "representative_source": "vos.v1",
+    "sha256": "0d875f9e372151d4864f66cca2556f7241f69964ae40d09be8b8b664194d867b",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "layout",
+      "vos3_exec",
+      "vos3_fork",
+      "vos3_fork_with_frame",
+      "vos3_wait",
+      "vos3_waitpid"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/exec/exec_syscall.c",
     "component": "native.execution",
     "representative_source": "VOS3",
@@ -75194,7 +78298,9 @@
       "vars",
       "vos3_exec_syscalls_init"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "task"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75244,7 +78350,8 @@
     ],
     "symbols_not_in_selected_file": [
       "installed",
-      "outright"
+      "outright",
+      "task"
     ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -75298,7 +78405,9 @@
       "vars",
       "vos3_exec_syscalls_init"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "task"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75310,6 +78419,33 @@
       "VOS3",
       "VOS3-Cyber",
       "VOS-Cyber-Standard"
+    ],
+    "declared_symbols": [
+      "close",
+      "vos3_dup",
+      "vos3_dup2",
+      "vos3_fd_alloc",
+      "vos3_fd_free",
+      "vos3_fd_put",
+      "vos3_fd_table_destroy"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/fs/fd.c",
+    "component": "native.filesystems",
+    "representative_source": "vos.v1",
+    "sha256": "ee4af085696305696e5c19ba83168d29e00d5340055ce5f641e952a7ac9fd3e2",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [
       "close",
@@ -75463,6 +78599,43 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/fs/posix_syscall.c",
+    "component": "native.filesystems",
+    "representative_source": "VOS3",
+    "sha256": "41fbe6802b7e1614dc9c35ea8de5cfc7b8dc50dfcd2a6949356c0de167907538",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "SYS_GETRLIMIT",
+      "SYS_GETRUSAGE",
+      "SYS_SETITIMER",
+      "ms_to_timeval",
+      "posix_access_ok",
+      "posix_syscall_handler",
+      "sys_getitimer",
+      "sys_setrlimit",
+      "sys_sysinfo",
+      "ticks_to_timeval",
+      "timeval_to_ticks",
+      "vos3_posix_syscalls_init"
+    ],
+    "symbols_not_in_selected_file": [
+      "sys_sysinfo"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/fs/vfs.c",
     "component": "native.filesystems",
     "representative_source": "VOS3",
@@ -75579,6 +78752,121 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/init/init.c",
+    "component": "native.execution",
+    "representative_source": "VOS3",
+    "sha256": "d2984ad5851b28ced1a71e39261134ba927f7273d7b4dc925b27dd647b3ff5b5",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "TASK",
+      "init_task_entry",
+      "vos3_kernel_idle",
+      "vos3_kernel_tasks_init",
+      "vos3_spawn_init",
+      "vos3_spawn_setup_wizard"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/ipc/dispatcher.c",
+    "component": "native.ipc",
+    "representative_source": "VOS3",
+    "sha256": "b661be2b4c2bd3d5ce9b861ba82d5d329e37c8a569fabb5d7568b4302107c99d",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "SYSCALL",
+      "agent_queue_depth",
+      "find_agent_by_tid",
+      "sys_agent_deregister",
+      "sys_agent_kill_all",
+      "sys_agent_register",
+      "sys_agent_status",
+      "sys_ai_get_time",
+      "sys_ai_yield_ex",
+      "sys_dispatch_complete",
+      "sys_dispatch_pull",
+      "sys_dispatch_submit",
+      "sys_vfs_prefetch",
+      "vos3_dispatch_balance_check",
+      "vos3_dispatch_balance_pending",
+      "vos3_dispatch_balance_request",
+      "vos3_dispatch_task",
+      "vos3_dispatcher_init",
+      "vos3_dispatcher_kill_all",
+      "vos3_vfs_prefetch"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/ipc/ipc.c",
+    "component": "native.ipc",
+    "representative_source": "VOS3",
+    "sha256": "6f437c0902d2d94906008d94f4f64dd79216c18b178fcb6565ebe622a4d5f24a",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "sys_kill",
+      "sys_msgq_create",
+      "sys_msgq_destroy",
+      "sys_msgq_recv",
+      "sys_msgq_send",
+      "sys_pipe_close",
+      "sys_pipe_create",
+      "sys_pipe_read",
+      "sys_pipe_write",
+      "sys_shm_create",
+      "sys_shm_create_device",
+      "sys_shm_destroy",
+      "sys_shm_map",
+      "sys_shm_size",
+      "sys_shm_unmap",
+      "sys_sigaction",
+      "sys_signal",
+      "sys_sigprocmask",
+      "sys_sigwait",
+      "vos3_ipc_init"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/ipc/msgqueue.c",
     "component": "native.ipc",
     "representative_source": "VOS3",
@@ -75598,7 +78886,39 @@
       "vos3_msgq_recv",
       "vos3_msgq_send"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "msgq_get"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/ipc/msgqueue.c",
+    "component": "native.ipc",
+    "representative_source": "vos.v1",
+    "sha256": "afc762d2720e17b08a8a95351f54432f8c874296ed7f8f4170b85289682b2489",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "msgq_alloc_id",
+      "msgq_get",
+      "vos3_msgq_count",
+      "vos3_msgq_create",
+      "vos3_msgq_destroy",
+      "vos3_msgq_find",
+      "vos3_msgq_recv",
+      "vos3_msgq_send"
+    ],
+    "symbols_not_in_selected_file": [
+      "msgq_get"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75628,7 +78948,46 @@
       "vos3_shm_unmap",
       "vos3_task_reap"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "vos3_task_reap"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/ipc/shm.c",
+    "component": "native.ipc",
+    "representative_source": "vos.v1",
+    "sha256": "b4a35a0d61bdf2c4f352fe34ba3df2979d1458f2196f31887609b176b350a1a4",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "shm_alloc_id",
+      "shm_get",
+      "shm_va_alloc",
+      "shm_va_free",
+      "shm_va_node_alloc",
+      "shm_va_node_free",
+      "shm_va_pool_init",
+      "vos3_shm_create",
+      "vos3_shm_create_device",
+      "vos3_shm_destroy",
+      "vos3_shm_find",
+      "vos3_shm_map",
+      "vos3_shm_size",
+      "vos3_shm_unmap",
+      "vos3_task_reap"
+    ],
+    "symbols_not_in_selected_file": [
+      "vos3_task_reap"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75693,7 +79052,9 @@
       "sys_rt_sigprocmask",
       "vos3_signal_syscalls_init"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "sig_check_permission"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75784,7 +79145,11 @@
       "vos3_simd_scrub_all",
       "vos3_wpg_tick"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "NOTE",
+      "vos3_ai_guard_get_app_ctx",
+      "vos3_ai_guard_get_global_ctx"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75858,7 +79223,11 @@
       "vos3_simd_scrub_all",
       "vos3_wpg_tick"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "NOTE",
+      "vos3_ai_guard_get_app_ctx",
+      "vos3_ai_guard_get_global_ctx"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75939,7 +79308,91 @@
       "vos3_simd_scrub_all",
       "vos3_wpg_tick"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "NOTE",
+      "vos3_ai_guard_get_app_ctx",
+      "vos3_ai_guard_get_global_ctx"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/mm/ai_guard.c",
+    "component": "native.memory",
+    "representative_source": "vos.v1",
+    "sha256": "e8554922b492e7b138e28d0c54060550ac7c89c7722d1cd445a079b72ec867d9",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "MANAGEMENT",
+      "NOTE",
+      "REGISTRATION",
+      "completed",
+      "context",
+      "create_guard_pages",
+      "find_eviction_candidate",
+      "fnv1a_hash",
+      "get_phys_addr",
+      "mismatch",
+      "region_alloc",
+      "region_free",
+      "remove_guard_pages",
+      "scrub_zero_fill",
+      "set_ai_pte_flags",
+      "shared_lock",
+      "shared_unlock",
+      "vos3_ai_guard_alloc",
+      "vos3_ai_guard_alloc_numa",
+      "vos3_ai_guard_check_app_access",
+      "vos3_ai_guard_check_hardware_access",
+      "vos3_ai_guard_compute_checksum",
+      "vos3_ai_guard_create_shared",
+      "vos3_ai_guard_ctx_create",
+      "vos3_ai_guard_ctx_destroy",
+      "vos3_ai_guard_destroy_app_ctx",
+      "vos3_ai_guard_find_region",
+      "vos3_ai_guard_find_shared",
+      "vos3_ai_guard_free",
+      "vos3_ai_guard_get_active_app_id",
+      "vos3_ai_guard_get_app_ctx",
+      "vos3_ai_guard_get_app_status",
+      "vos3_ai_guard_get_global_ctx",
+      "vos3_ai_guard_get_integrity_config",
+      "vos3_ai_guard_get_pressure_level",
+      "vos3_ai_guard_get_quota",
+      "vos3_ai_guard_get_stats",
+      "vos3_ai_guard_get_workload_hint",
+      "vos3_ai_guard_handle_fault",
+      "vos3_ai_guard_init",
+      "vos3_ai_guard_integrity_tick",
+      "vos3_ai_guard_is_guard_page",
+      "vos3_ai_guard_map_shared",
+      "vos3_ai_guard_numa_stats",
+      "vos3_ai_guard_pressure_tick",
+      "vos3_ai_guard_quota_available",
+      "vos3_ai_guard_reclaim",
+      "vos3_ai_guard_reprotect_tick",
+      "vos3_ai_guard_resume_region",
+      "vos3_ai_guard_scrub_model_regions",
+      "vos3_ai_guard_set_integrity_auto",
+      "vos3_ai_guard_set_pressure_config",
+      "vos3_ai_guard_set_protection",
+      "vos3_ai_guard_set_reclaim_callback",
+      "vos3_ai_guard_set_swap_hint",
+      "vos3_ai_guard_set_workload_hint",
+      "vos3_ai_guard_shared_refcount",
+      "vos3_ai_guard_suspend_region",
+      "vos3_ai_guard_switch_ctx",
+      "vos3_ai_guard_unmap_shared",
+      "vos3_ai_guard_verify_integrity",
+      "vos3_simd_scrub_all",
+      "vos3_wpg_tick"
+    ],
+    "symbols_not_in_selected_file": [
+      "NOTE",
+      "vos3_ai_guard_get_app_ctx",
+      "vos3_ai_guard_get_global_ctx"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -75984,6 +79437,20 @@
       "vos/vos4-track-2",
       "vos/vos4-track-5",
       "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "align_to_page"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/mm/ai_guard_internal.h",
+    "component": "native.memory",
+    "representative_source": "vos.v1",
+    "sha256": "9feceb626e4dda7ccc81e6c32c34578f53627a1f72757c13f040f25362005f6f",
+    "equivalent_source_copies": [
+      "vos.v1"
     ],
     "declared_symbols": [
       "align_to_page"
@@ -76738,6 +80205,43 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/mm/ai_telemetry.c",
+    "component": "native.memory",
+    "representative_source": "VOS3-Cyber",
+    "sha256": "f1b118a0f3eca49f4844da2526d0d69ec6f662d11149912cc5bb06a85a65eb59",
+    "equivalent_source_copies": [
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "ai_telemetry_close",
+      "ai_telemetry_dev_read",
+      "ai_telemetry_dev_write",
+      "ai_telemetry_ioctl",
+      "ai_telemetry_open",
+      "alert_queue_pop",
+      "alert_queue_push",
+      "telemetry_lock",
+      "telemetry_unlock",
+      "vos3_ai_telemetry_init",
+      "vos3_ai_telemetry_pending_alerts",
+      "vos3_ai_telemetry_queue_alert",
+      "vos3_ai_telemetry_read",
+      "vos3_ai_telemetry_set_mode",
+      "vos3_ai_telemetry_snapshot"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/mm/gpu_mem.c",
     "component": "native.memory",
     "representative_source": "VOS3",
@@ -77053,6 +80557,71 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "kernel/src/mm/pmm.c",
+    "component": "native.memory",
+    "representative_source": "vos.v1",
+    "sha256": "8e86246be5bb3181e952afdf34e2263fdfdce2c5659c0a5bd40366e29b959cff",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "COUNTING",
+      "SAFETY",
+      "XOR",
+      "buddy_count_order9_plus",
+      "buddy_list_add",
+      "buddy_list_pop",
+      "buddy_list_remove",
+      "buddy_node_alloc",
+      "buddy_order_for_count",
+      "buddy_order_pages",
+      "buddy_range_alloc",
+      "buddy_range_free",
+      "buddy_range_is_free",
+      "normal",
+      "order",
+      "pcpu_cache_pop",
+      "pcpu_cache_push",
+      "pcpu_cache_refill",
+      "pmm_bitmap_clear",
+      "pmm_bitmap_set",
+      "pmm_bitmap_test",
+      "pmm_find_free_in_elem",
+      "pmm_page_to_zone",
+      "pmm_stats_alloc",
+      "pmm_stats_free",
+      "tracked",
+      "vos3_pmm_alloc",
+      "vos3_pmm_alloc_colored_hugepage",
+      "vos3_pmm_alloc_huge",
+      "vos3_pmm_alloc_pages",
+      "vos3_pmm_alloc_zone",
+      "vos3_pmm_buddy_alloc",
+      "vos3_pmm_buddy_free",
+      "vos3_pmm_buddy_get_stats",
+      "vos3_pmm_buddy_init",
+      "vos3_pmm_frag_score",
+      "vos3_pmm_free",
+      "vos3_pmm_free_huge",
+      "vos3_pmm_free_pages",
+      "vos3_pmm_free_pages_count",
+      "vos3_pmm_get_stats",
+      "vos3_pmm_get_zone",
+      "vos3_pmm_hugepage_stats",
+      "vos3_pmm_init",
+      "vos3_pmm_is_allocated",
+      "vos3_pmm_ref_dec",
+      "vos3_pmm_ref_get",
+      "vos3_pmm_ref_set",
+      "vos3_pmm_reserve_hugepages",
+      "vos3_pmm_reserve_range",
+      "vos3_pmm_total_pages_count",
+      "vos3_pmm_unreserve_range"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "kernel/src/mm/user_copy.c",
     "component": "native.memory",
     "representative_source": "VOS3",
@@ -77083,7 +80652,9 @@
       "vos3_set_system_mode",
       "vos3_validate_business_unit"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "user_pages_writable"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77126,7 +80697,9 @@
       "vos3_set_system_mode",
       "vos3_validate_business_unit"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "user_pages_writable"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77192,7 +80765,9 @@
       "walk_page_tables",
       "zero_page"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "prot_to_vmm_flags"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77259,7 +80834,9 @@
       "walk_page_tables",
       "zero_page"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "prot_to_vmm_flags"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77327,7 +80904,9 @@
       "walk_page_tables",
       "zero_page"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "prot_to_vmm_flags"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77401,7 +80980,9 @@
       "walk_page_tables",
       "zero_page"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "prot_to_vmm_flags"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77672,6 +81253,7 @@
       "vos3_sched_yield"
     ],
     "symbols_not_in_selected_file": [
+      "context",
       "vos3_context_switch"
     ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
@@ -77722,7 +81304,9 @@
       "vos3_sched_tick",
       "vos3_sched_yield"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "context"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77771,7 +81355,9 @@
       "vos3_sched_tick",
       "vos3_sched_yield"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "context"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77823,7 +81409,9 @@
       "vos3_sched_tick",
       "vos3_sched_yield"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "context"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77881,6 +81469,67 @@
       "vos3_sched_tick",
       "vos3_sched_yield"
     ],
+    "symbols_not_in_selected_file": [
+      "context"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/sched/sync.c",
+    "component": "native.scheduler",
+    "representative_source": "VOS3",
+    "sha256": "7d657a85f23b1171fe7fac5cb6b0f7980edcb92ef6dea42a3bc68d2297b3c6fa",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "VOS-Cyber-Standard",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "vos3_barrier_destroy",
+      "vos3_barrier_init",
+      "vos3_barrier_wait",
+      "vos3_cond_broadcast",
+      "vos3_cond_destroy",
+      "vos3_cond_init",
+      "vos3_cond_signal",
+      "vos3_cond_timedwait",
+      "vos3_cond_wait",
+      "vos3_mutex_destroy",
+      "vos3_mutex_init",
+      "vos3_mutex_is_locked",
+      "vos3_mutex_is_owner",
+      "vos3_mutex_lock",
+      "vos3_mutex_trylock",
+      "vos3_mutex_unlock",
+      "vos3_rwlock_destroy",
+      "vos3_rwlock_init",
+      "vos3_rwlock_rdlock",
+      "vos3_rwlock_rdunlock",
+      "vos3_rwlock_tryrdlock",
+      "vos3_rwlock_trywrlock",
+      "vos3_rwlock_wrlock",
+      "vos3_rwlock_wrunlock",
+      "vos3_sem_destroy",
+      "vos3_sem_get_count",
+      "vos3_sem_init",
+      "vos3_sem_init_bounded",
+      "vos3_sem_post",
+      "vos3_sem_trywait",
+      "vos3_sem_wait",
+      "vos3_wq_empty",
+      "vos3_wq_init",
+      "vos3_wq_wait",
+      "vos3_wq_wake_all",
+      "vos3_wq_wake_one"
+    ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
@@ -77930,7 +81579,58 @@
       "vos3_vmm_destroy_address_space",
       "waitpid"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "vos3_vmm_destroy_address_space"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "kernel/src/sched/task.c",
+    "component": "native.scheduler",
+    "representative_source": "vos.v1",
+    "sha256": "aee648f02182e250dcacdbcb0efd1b3c53ee5f9d9c6f9e8def34488a39ab0b29",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [
+      "ISOLATION",
+      "alloc_tid",
+      "clear_child_tid",
+      "find_free_slot",
+      "get_time_slice",
+      "layout",
+      "pthread_join",
+      "queue",
+      "uint_to_str",
+      "vos3_task_block",
+      "vos3_task_check_cpu_quota",
+      "vos3_task_count_stats",
+      "vos3_task_create",
+      "vos3_task_create_idle",
+      "vos3_task_current",
+      "vos3_task_defer_destroy",
+      "vos3_task_destroy",
+      "vos3_task_exit",
+      "vos3_task_find_by_pid",
+      "vos3_task_get",
+      "vos3_task_init",
+      "vos3_task_kill",
+      "vos3_task_reap",
+      "vos3_task_register",
+      "vos3_task_set_cpu_limit",
+      "vos3_task_set_priority",
+      "vos3_task_set_state",
+      "vos3_task_sleep",
+      "vos3_task_sleep_ms",
+      "vos3_task_unblock",
+      "vos3_task_wake",
+      "vos3_task_yield",
+      "vos3_vmm_destroy_address_space",
+      "waitpid"
+    ],
+    "symbols_not_in_selected_file": [
+      "vos3_vmm_destroy_address_space"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -77983,7 +81683,9 @@
       "vos3_vmm_destroy_address_space",
       "waitpid"
     ],
-    "symbols_not_in_selected_file": [],
+    "symbols_not_in_selected_file": [
+      "vos3_vmm_destroy_address_space"
+    ],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
@@ -79212,6 +82914,18 @@
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
   },
   {
+    "path": "requirements.lock",
+    "component": "root.configuration",
+    "representative_source": "vos.v1",
+    "sha256": "99f19c1ddca2da0f0f07c8d08c0daf71ffe796f753dda559a78d94945e4fdb62",
+    "equivalent_source_copies": [
+      "vos.v1"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
     "path": "requirements.txt",
     "component": "documentation",
     "representative_source": "VOS3",
@@ -79284,6 +82998,46 @@
     "sha256": "6a3fca1c5cbbeaa181d7aafcd90f0c735771ec1d788a9a47ab868806a6171125",
     "equivalent_source_copies": [
       "VOS3-Cyber"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "requirements_win.txt",
+    "component": "documentation",
+    "representative_source": "vos.v1",
+    "sha256": "355451b64b2d90c972c7de3512262e8242e97e65f44e132ccf7c0d2940bc831c",
+    "equivalent_source_copies": [
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "run_all_tests.sh",
+    "component": "root.configuration",
+    "representative_source": "VOS3",
+    "sha256": "b4b072ab6d9efbfee54d840b2477ef49a0da91eba9fad405b7cd396c8fd8242b",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -79430,6 +83184,48 @@
     "sha256": "22201775122bbe0329a4436aa6cc2132a74d3894cf9bf0735eb26319b0a5a170",
     "equivalent_source_copies": [
       "VOS3"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "sdk/typescript/package.json",
+    "component": "sdk.clients",
+    "representative_source": "VOS3",
+    "sha256": "005e89db0f104ecaf81d0431831ce2d3697d220436e2117725e0e5bfa04a11db",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "sdk/typescript/tsconfig.json",
+    "component": "sdk.clients",
+    "representative_source": "VOS3",
+    "sha256": "b5205a8dbaba936d110316842922dba24725c907217ef7ab9c761afb2676e890",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
     ],
     "declared_symbols": [],
     "symbols_not_in_selected_file": [],
@@ -80031,6 +83827,782 @@
       "_render",
       "_ts_type",
       "main"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/Makefile",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "f9999cf5e79f66a431d5840540d364280129299ce36c3f03fb5ac1f3e92c3381",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/lib/signal.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "032a6b7309a7adf1450edee2678a14f4e9719297e601ac2e38bb2173bbc9d913",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "alarm",
+      "kill",
+      "pause",
+      "raise",
+      "sigaction",
+      "signal",
+      "sigprocmask"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_2026_frontier.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "bc11d87e3001104f5db3867004771777c812961e89bcc6dd08ac19cdc2f13670",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "BAR",
+      "__attribute__",
+      "access",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "movntdq_write_frame",
+      "rdtsc",
+      "spsc128_init",
+      "spsc128_pop",
+      "spsc128_push",
+      "spsc128_push_batch",
+      "t2_consumer_thread",
+      "test_agent_isolation",
+      "test_massive_context",
+      "test_npu_direct_stress",
+      "test_vision_latency",
+      "xmm_fill_all",
+      "xmm_read_xmm0",
+      "xmm_verify_all"
+    ],
+    "symbols_not_in_selected_file": [
+      "BAR",
+      "movntdq_write_frame"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_ai_scale.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "17955b397ccbc081e9acbd2f5649329a4806efdfee90a0f8eb3f49f1598488d3",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "__attribute__",
+      "available",
+      "csw_clean_body",
+      "csw_dirty_body",
+      "main",
+      "mem_audit_before",
+      "movdqa",
+      "rdtsc",
+      "test_agent_swarm",
+      "test_csw_timing",
+      "test_large_memory",
+      "test_memory_audit",
+      "xmm_verify_all",
+      "xorshift64"
+    ],
+    "symbols_not_in_selected_file": [
+      "rdtsc"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_ai_throughput.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "aff2fe18327863e3697f1e3f033942c3c33166f840b993745f33dc03a3045397",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "agent_work",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "rdtsc",
+      "verify_agent_data"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_csw_1ms.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "0285cbfed342cdc9d2d379bb89e4d9fdfb66c940b5726d8f0f906da29dab5419",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "main",
+      "rdtsc",
+      "test_fork_churn_rate",
+      "test_preemption_cost",
+      "test_syscall_overhead",
+      "test_yield_csw_cost"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_hugepage_tlb.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "5fa99aa96f48fde22e88a484c42ac9fb7f8888fe8db1c74f43bb3a6cc93132eb",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "rdtsc",
+      "test_hugepage_no_leak",
+      "test_hugepage_shm_create",
+      "test_hugepage_shm_map_write",
+      "test_hugepage_throughput",
+      "write_sequential"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_phase13_test.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "f55041bd975add445c8550573215506105855085962521e5b96686319fab2a8b",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "do_brk",
+      "do_mmap",
+      "do_munmap",
+      "htons",
+      "main",
+      "recvfrom",
+      "test_cow_fork_4k_isolation",
+      "test_demand_paging_heap",
+      "test_mmap_anon_basic",
+      "test_mmap_fixed_addr",
+      "test_munmap_and_remap",
+      "test_shm_cross_process",
+      "test_shm_user_map_readwrite",
+      "test_udp_send_broadcast"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_sigpipe_test.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "98bdea79b5986305dc3130c19a2d2a1f9fcb9d1411376df0bf54528ee831cd10",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "main",
+      "sigpipe_handler",
+      "test_normal_pipe_write",
+      "test_sigpipe_cross_process",
+      "test_sigpipe_with_handler"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/bench_soak_5min.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "993355e7c833c60dc3e27485c071c168818bdc916d20974484ca7039d22386bb",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "record_telemetry",
+      "workload_file_io",
+      "workload_fork_churn",
+      "workload_mmap",
+      "workload_shm_cycle"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/diag_shm_stress.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "a9e2df2b4e8d453eced25aa63d6307c1b2e8ddbcc82013da995315ee6a2ff7ed",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "compute_checksum",
+      "main",
+      "read_free_pages",
+      "test_256mb_resource_finalization",
+      "test_giant_context_window",
+      "test_legacy_leak_and_slots",
+      "test_linux_abi_giant",
+      "test_tlb_stress"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/init.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "f31095e651fc3f567465f8ce3af354ae6925a1542f58653904d5b9b2a7143c78",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "MODE",
+      "main",
+      "run_setup_wizard"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_advanced_chaos.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "64fdd1a3d706bd079738f759f853e5fcf6af3e6ee2d9baf038d4833bf390cb9c",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "get_sysinfo",
+      "get_uptime_ms",
+      "hugepage_hard_wall",
+      "main",
+      "sig_handler",
+      "spsc_signal_atomicity",
+      "succeed"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_agent_chaos.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "2cea928b003d048caa8fd17aaf46012dc95c4969e891ab5830e9c021397d19df",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "child",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "pressure_fragmentation",
+      "race_condition_stress",
+      "race_consumer_thread",
+      "race_producer_thread",
+      "rdtsc",
+      "soak_5min_leak_check",
+      "soak_one_iteration"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_agent_cluster.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "003b11a6a1ef37b31c6ed2ddf34cc60506fc207f369c607896f6595573b6602a",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "agent_deregister",
+      "agent_register",
+      "agent_register_deregister",
+      "agent_status",
+      "dispatch_complete",
+      "dispatch_pull",
+      "dispatch_submit",
+      "dispatch_work_stealing",
+      "distributed_bfs_32_agents",
+      "generate_graph",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "prefetch_memory",
+      "reference_bfs",
+      "scheduler_ai_boost"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_env_musl.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "569b03aea5b0dfda011d02103efd97bd499dd6dd42733ff640d43383b64cd6e3",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "main"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_health_check.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "9d38806f5823262249e0fbd01d3555e785fea464eeb2825308c4b9a0bf29abae",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "consumer_thread",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "ipc_sanity",
+      "main",
+      "memory_health",
+      "spsc_responsive",
+      "zombie_audit"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_max_saturation.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "95c9f905b5531d5b515586c5a41f7835af5b58d2075ee03e0f46652ee85a6a08",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "fpu_ai_simulate",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "rdtsc",
+      "sort_u64",
+      "yield"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_model_load.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "0b39e9bb57902be88de5eb7152c5bcde5af0aa5f2a49ece579cb0f4c1e0c8252",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "checksum",
+      "get_sysinfo",
+      "get_uptime_ms",
+      "hugepage_dirty_audit",
+      "itoa_simple",
+      "main",
+      "model_burst_shm",
+      "vfs_thread_stress",
+      "vfs_worker"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_npu_direct.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "b124c998075e63db50a6caba1cbd0d075113fde701b1ac9ae11924d99e417ab6",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "main",
+      "rdtsc",
+      "test_npu_bar_shm_create",
+      "test_npu_bar_shm_map",
+      "test_npu_ram_reject",
+      "test_npu_shm_cleanup",
+      "test_npu_wc_write_performance"
+    ],
+    "symbols_not_in_selected_file": [
+      "rdtsc",
+      "test_npu_bar_shm_create",
+      "test_npu_bar_shm_map",
+      "test_npu_ram_reject",
+      "test_npu_shm_cleanup",
+      "test_npu_wc_write_performance"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_posix_core.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "e8db026ba651069b4be5cec016b393dc66890223d657495c8fe015400150e7b6",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "main",
+      "test_getitimer_empty",
+      "test_getrlimit",
+      "test_getrusage",
+      "test_setitimer",
+      "test_setrlimit",
+      "test_uname"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_shm_dispatch.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "7a44b69694f09b01ca37b1066575338f1b132e82d864ad66156ce9be970cd093",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "main",
+      "test_cleanup_rebind",
+      "test_cross_process_context",
+      "test_large_context_window",
+      "test_linux_abi_cross_compat",
+      "test_linux_abi_shmat_shmdt",
+      "test_linux_abi_shmget",
+      "test_multi_agent_concurrent",
+      "test_shm_create_map_readwrite"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_sustained.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "720b7ba80aa2f9ab1083b8fb5cf328e3511a54fd5ad0307a0d6dfa4d4e0ccc00",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "get_sysinfo",
+      "get_uptime_ms",
+      "main",
+      "syscall1",
+      "syscall2",
+      "syscall3",
+      "syscall4",
+      "syscall6",
+      "workload",
+      "workload_file_io",
+      "workload_fork_churn",
+      "workload_mmap"
+    ],
+    "symbols_not_in_selected_file": [
+      "get_sysinfo",
+      "syscall1",
+      "syscall2",
+      "syscall3",
+      "syscall4",
+      "syscall6"
+    ],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_torture.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "87727b28616016dfa894408a711db750d3057d952b2b46190037b55885b5690e",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "baseline",
+      "get_sysinfo",
+      "hugepage_50x_loop",
+      "main",
+      "regions",
+      "sequentially",
+      "shm_cleanup_all"
+    ],
+    "symbols_not_in_selected_file": [],
+    "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"
+  },
+  {
+    "path": "user/src/test_vmm_soak.c",
+    "component": "user.programs",
+    "representative_source": "VOS3",
+    "sha256": "e84d5e72e93246f02cefdcfcdc1acdf554baec52c588ffc55db4517660a52600",
+    "equivalent_source_copies": [
+      "VOS3",
+      "VOS3-Cyber",
+      "vos.v1",
+      "vos/vos4",
+      "vos/vos4-ci-triggers",
+      "vos/vos4-kernel-bugfix",
+      "vos/vos4-track-1",
+      "vos/vos4-track-2",
+      "vos/vos4-track-5",
+      "vos/vos4-track-7"
+    ],
+    "declared_symbols": [
+      "get_sysinfo",
+      "main",
+      "print_csv_header",
+      "record_and_print",
+      "shm_cleanup_all",
+      "workload_hugepage_cycle",
+      "workload_va_cycle"
     ],
     "symbols_not_in_selected_file": [],
     "scope": "Symbol absence is a review lead, not proof that a capability is missing elsewhere"

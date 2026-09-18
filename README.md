@@ -113,6 +113,9 @@ are not runtime dependencies. The [eleven-source comparison](consolidation/recon
 now records file coverage, local modifications and implementation choices for
 43 components. Unretained variants and missing capabilities remain explicit
 integration work; this comparison does not certify their implementation.
+The [dated Hebrew unification status](docs/design/UNIFICATION_STATUS_2026-09-18_HE.md)
+separates retained bytes, semantic decisions and runtime qualification, and
+defines the remaining stages and exit criteria.
 
 `python3 consolidation/inventory.py` compares the eleven historical source
 trees by path and SHA-256. Its ignored JSON output is a comparison aid, not a

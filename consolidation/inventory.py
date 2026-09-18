@@ -17,7 +17,7 @@ SOURCES = ['VOS3', 'VOS3-Cyber', 'VOS-Cyber-Standard', 'vos.v1',
            'vos/vos4-track-7']
 EXCLUDED = {'.git', 'node_modules', '.next', '__pycache__', '.pytest_cache',
             '.mypy_cache', '.ruff_cache', 'venv', '.venv', '.venv_p312',
-            'target', 'build', 'dist', '.DS_Store', '.turbo'}
+            'target', 'build', 'dist', '.DS_Store', '.turbo', '.coverage'}
 
 
 def excluded(name):

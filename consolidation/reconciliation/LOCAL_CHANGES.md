@@ -6,7 +6,6 @@ Compared working bytes with each source HEAD without altering donor metadata. Ex
 
 HEAD: `a76787c30d44e4f1ad8b5b319aac667e67edf23d`. HEAD and working bytes compared; generated/credential exclusions apply
 
-- `backend/.coverage`: untracked
 - `backend/ai/agents/builder_agent.py`: untracked
 - `backend/projects/OmniStock_Enterprise/frontend/next-env.d.ts`: untracked
 - `frontend/convex/blueprints.ts`: untracked
@@ -893,7 +892,6 @@ HEAD: `a76787c30d44e4f1ad8b5b319aac667e67edf23d`. HEAD and working bytes compare
 
 HEAD: `5c7bcfe6706566dc861adc001aaeb0b03d460fc9`. HEAD and working bytes compared; generated/credential exclusions apply
 
-- `backend/.coverage`: untracked
 - `backend/projects/OmniStock_Enterprise/frontend/next-env.d.ts`: untracked
 - `backend/tests/benchmarks/native_audit_bench`: untracked
 - `kernel/boot/limine/.editorconfig`: untracked
@@ -1124,7 +1122,6 @@ HEAD: `5c7bcfe6706566dc861adc001aaeb0b03d460fc9`. HEAD and working bytes compare
 
 HEAD: `None`. No resolvable HEAD; all content is working-tree-only, not claimed clean
 
-- `backend/.coverage`: history-unavailable
 - `backend/.dockerignore`: history-unavailable
 - `backend/.gitignore`: history-unavailable
 - `backend/AI_App_Builder_Complete_Guide.js`: history-unavailable

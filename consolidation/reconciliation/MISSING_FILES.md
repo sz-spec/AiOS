@@ -265,7 +265,6 @@ Excludes files retained under another path. Each item remains an integration dec
 - `_bmad/utility/agent-components/handler-validate-workflow.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
 - `_bmad/utility/agent-components/handler-workflow.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
 - `_bmad/utility/agent-components/menu-handlers.txt` — VOS3, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — documentation
-- `backend/.coverage` — VOS3, VOS3-Cyber, VOS-Cyber-Standard — backend.extensions
 - `backend/ai/agents/builder_agent.py` — VOS3 — backend.agents
 - `backend/convex/_generated/api.d.ts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
 - `backend/convex/_generated/api.js` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.convex
@@ -298,7 +297,6 @@ Excludes files retained under another path. Each item remains an integration dec
 - `backend/mcp-server/src/framework/tools/internal-registry.ts` — VOS3 — backend.mcp
 - `backend/middleware/audit_logger.py` — VOS3 — backend.middleware
 - `backend/pyproject.toml` — VOS3-Cyber, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — backend.extensions
-- `backend/requirements.lock` — VOS3 — backend.extensions
 - `backend/scripts/bench_vault_pool.py` — VOS3-Cyber — backend.extensions
 - `backend/scripts/executive_demo.py` — VOS3-Cyber — backend.extensions
 - `backend/services/evidence_bundle.py` — VOS3 — backend.services
@@ -409,7 +407,229 @@ Excludes files retained under another path. Each item remains an integration dec
 - `infra/fix_ts_callback_params.py` — VOS3-Cyber — infra.operations
 - `infra/package_vdr.sh` — VOS3-Cyber — infra.operations
 - `infra/persistence/active_context/SESSION_HANDOVER_LOCK.md` — vos.v1 — infra.operations
+- `kernel/boot/limine/.github/dependabot.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/.github/workflows/check.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/.github/workflows/qa.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/.github/workflows/release.yml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/.typos.toml` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/PHILOSOPHY.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/PROTOCOL.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/README.md` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/bochsrc` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/cc-runtime/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/CREDITS.TXT` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/LICENSE.TXT` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/README` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/absvdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/absvsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/absvti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/adddf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/addsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/addtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/addvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/addvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/addvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ashldi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ashlti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ashrdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ashrti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/assembly.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/bswapdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/bswapsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/cc-runtime.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/clzdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/clzsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/clzti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/cmpdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/cmpti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/comparedf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/comparesf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/comparetf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ctzdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ctzsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ctzti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divdc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divdf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divmoddi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divmodsi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divmodti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divsc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divtc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/divxc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extendbfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extenddftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extendhfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extendhftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extendsfdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extendsftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/extendxftf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ffsdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ffssi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ffsti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixdfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixdfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixdfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixsfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixsfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixsfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixtfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixtfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixtfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunsdfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunsdfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunsdfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunssfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunssfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunssfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunstfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunstfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunstfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunsxfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunsxfsi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixunsxfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixxfdi.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fixxfti.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatdidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatdisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatditf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatdixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatsidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatsisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatsitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floattidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floattisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floattitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floattixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatundidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatundisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatunditf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatundixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatunsidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatunsisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatunsitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatuntidf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatuntisf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatuntitf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/floatuntixf.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_add_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_compare_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_div_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_extend.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_extend_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_fixint_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_fixuint_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_lib.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_mode.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_mode.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_mul_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_trunc.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/fp_trunc_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_div_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_endianness.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_lib.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_math.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_mulo_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_mulv_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_to_fp.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_to_fp_impl.inc` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_types.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_util.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/int_util.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/lshrdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/lshrti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/moddi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/modsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/modti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/muldc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/muldf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/muldi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulodi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulosi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/muloti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulsc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/multc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/multf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/multi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/mulxc3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negvdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negvsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/negvti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/paritydi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/paritysi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/parityti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/popcountdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/popcountsi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/popcountti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/powidf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/powisf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/powitf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/powixf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/subdf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/subsf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/subtf3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/subvdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/subvsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/subvti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/truncdfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/truncdfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/truncdfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/truncsfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/truncsfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/trunctfdf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/trunctfhf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/trunctfsf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/trunctfxf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/truncxfbf2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ucmpdi2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/ucmpti2.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/udivdi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/udivmoddi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/udivmodsi4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/udivmodti4.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/udivsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/udivti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/umoddi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/umodsi3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/cc-runtime/umodti3.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/backends/fb.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/backends/fb.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/flanterm.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/flanterm/flanterm.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/fs/ext2.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/common/fs/ext2.s2.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/common/lib/mem.asm_x86_64` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/common/lib/mem.s2.asm_ia32` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/common/lib/rand.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
 - `kernel/boot/limine/common/lib/stb_image.h.nopatch` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/libfdt/libfdt.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/common/protos/chainload_next.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/common/protos/chainload_next.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/decompressor.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/entry.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/linker.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/main.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/mem.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/tinf.patch` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/decompressor/tinf/tinf.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/decompressor/tinf/tinfgzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/decompressor/tinf/tinflate.c` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/.editorconfig` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/.github/workflows/build.yml` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
@@ -445,6 +665,7 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/boot/limine/dtc/libfdt/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/libfdt/Makefile.libfdt` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/libfdt/TODO` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/dtc/libfdt/libfdt.h` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/libfdt/meson.build` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/libfdt/version.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/livetree.c` — VOS3, VOS-Cyber-Standard — native.bootloader
@@ -725,11 +946,69 @@ Excludes files retained under another path. Each item remains an integration dec
 - `kernel/boot/limine/dtc/util.h` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/version_gen.h.in` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/dtc/yamltree.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/float.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/iso646.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/limits.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdalign.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdarg.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdbool.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stddef.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdint.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/freestnd-c-hdrs-0bsd/stdnoreturn.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/host/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/logo.png` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
 - `kernel/boot/limine/man/man1/limine.1` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/COPYING` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/README` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/README.efilib` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/efiapi.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/efidef.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/efiprot.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/elf.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/loongarch64/efibind.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/protocol/efidbg.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/inc/efi/riscv64/efibind.h` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-aarch64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-ia32.S` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-loongarch64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-riscv64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/crt0-efi-x86_64.S` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/elf_aarch64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/elf_ia32_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/elf_loongarch64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/elf_riscv64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/elf_x86_64_efi.lds` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/nyu-efi.mk` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/reloc_aarch64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/reloc_ia32.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/reloc_loongarch64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/reloc_riscv64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/nyu-efi/src/reloc_x86_64.c` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/screenshot.png` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/.gitignore` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/bg.jpg` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/device_tree.dts` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/e9print.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/e9print.h` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/limine.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/limine.conf` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/linker.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/memory.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/multiboot.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/multiboot.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/multiboot2.c` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/multiboot2.ld` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/multiboot2_trampoline.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/multiboot_trampoline.asm` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
+- `kernel/boot/limine/test/test.mk` — VOS3, VOS3-Cyber, VOS-Cyber-Standard, vos.v1, vos/vos4 — native.bootloader
 - `kernel/boot/limine/tinf/.editorconfig` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/.github/workflows/tinf-ci-workflow.yaml` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/.gitignore` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/CMakeLists.txt` — VOS3, VOS-Cyber-Standard — native.bootloader
+- `kernel/boot/limine/tinf/LICENSE` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/README.md` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/examples/tgunzip/tgunzip.c` — VOS3, VOS-Cyber-Standard — native.bootloader
 - `kernel/boot/limine/tinf/src/adler32.c` — VOS3, VOS-Cyber-Standard — native.bootloader
@@ -824,5 +1103,55 @@ Excludes files retained under another path. Each item remains an integration dec
 - `tests/kernel_guards/test_ai_guard_pf_hook.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
 - `tests/kernel_guards/test_smap_enabled.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
 - `tests/kernel_guards/test_smep_enabled.c` — vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — system.tests
+- `user/musl/arch/aarch64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/aarch64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/aarch64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/aarch64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/arm/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/arm/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/arm/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/i386/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/i386/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/loongarch64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/loongarch64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/loongarch64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/loongarch64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/m68k/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/m68k/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/microblaze/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/microblaze/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/microblaze/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/mips/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/mips/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/mips64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/mips64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/mipsn32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/mipsn32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/or1k/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/or1k/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/or1k/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/powerpc/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/powerpc/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/powerpc/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/powerpc64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/powerpc64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/powerpc64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv32/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv64/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv64/bits/stat.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/riscv64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/s390x/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/s390x/bits/reg.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/s390x/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/sh/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/sh/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/x32/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/x32/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/x86_64/bits/posix.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/arch/x86_64/bits/stdint.h` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
+- `user/musl/src/thread/aarch64/__set_thread_area.s` — VOS3, VOS3-Cyber, vos.v1, vos/vos4, vos/vos4-ci-triggers, vos/vos4-kernel-bugfix, vos/vos4-track-1, vos/vos4-track-2, vos/vos4-track-5, vos/vos4-track-7 — user.libc
 - `vOS_Product_Specification_Long.pdf` — vos.v1 — documentation
 - `vOS_Product_Specification_Short.pdf` — vos.v1 — documentation

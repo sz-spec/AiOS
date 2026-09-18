@@ -11,7 +11,7 @@ class ReconciliationTests(unittest.TestCase):
     def test_exclusions_preserve_templates_and_source(self):
         self.assertIsNone(rs.omission('.env.example'))
         self.assertIsNone(rs.omission('kernel/src/mm/build_policy.c'))
-        for path in ['.env.production','kernel/build-hyperv/object.o',
+        for path in ['.env.production','backend/.coverage','kernel/build-hyperv/object.o',
                      'backend/data/session.json','kernel/boot/limine/autom4te.cache/output.0']:
             self.assertIsNotNone(rs.omission(path))
 
